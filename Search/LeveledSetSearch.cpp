@@ -470,7 +470,7 @@ pair<bool,ConcreteTreeDecomposition> LeveledSetSearch::search(){
             auto duration = duration_cast<milliseconds>(stop - start);
             cout<< endl;
             cout<< "Iteration: " << iterationNumber<<  "  " ;
-            cout<<"T:"<<duration.count();
+            //cout<<"T:"<<duration.count();
             unsigned totalAllStates = 0;
             unsigned totalNewStates = 0;
             unsigned totalIntermediateStates = 0;
@@ -483,7 +483,7 @@ pair<bool,ConcreteTreeDecomposition> LeveledSetSearch::search(){
             cout<<"   AllStates: "<< totalAllStates;
             cout<<"   NewStates: "<< totalNewStates;
             cout<<"   IntermediateStates s: "<< totalIntermediateStates;
-            cout<<"   Average: " << (duration.count()/setIntermediateStates.size());
+            //cout<<"   Average: " << (duration.count()/setIntermediateStates.size());
             cout<<"   WitnessSize: ";
             for(size_t m=0; m < maxWitnessSetSize.size(); m++){
                 cout<<maxWitnessSetSize[m]<<",";

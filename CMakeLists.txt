@@ -11,6 +11,8 @@ else()
     # lots of warnings and all warnings as errors
     # add_compile_options(-Wall -Wextra -pedantic -Werror)
     #add_compile_options(-Wall)
+	# optimize
+    add_compile_options(-O2)
 endif()
 
 include_directories(.)
