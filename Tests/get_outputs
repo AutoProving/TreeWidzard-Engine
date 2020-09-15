@@ -1,0 +1,7 @@
+#!/bin/sh
+for i in $(seq 1 $1)
+do
+	echo "Generating output $i"
+	../Build/dp search in/input$i.txt leveledSetSearch > out/output$i.txt 
+done
+echo "Done!"

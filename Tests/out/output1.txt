@@ -1,4 +1,4 @@
-Configuration: input path: ../Tests/in/input1.txt printState: 0 printVector: 0 loopTime: 1 search method: leveledSetSearch
+Configuration: input path: in/input1.txt printState: 0 printVector: 0 loopTime: 1 search method: leveledSetSearch
 path_width 1
 Core 0 CliqueNumber > 4
 OR (1 , NOT (1 ) )
