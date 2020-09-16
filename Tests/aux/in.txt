@@ -1,6 +1,6 @@
-LST SearchStrat
-LST StateTree
-LST ConcreteTD
+LSS SearchStrat
+LSS StateTree
+LSS ConcreteTD
 StateTree bag
 StateTree state
 StateTree DynKernel

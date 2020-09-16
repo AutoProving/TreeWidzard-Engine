@@ -1,4 +1,6 @@
 #!/bin/sh
+make -C ../Build
+echo ""
 for i in $(seq 1 $1)
 do
 	echo "Generating output $i"
