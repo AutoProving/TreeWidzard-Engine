@@ -1,0 +1,12 @@
+#!/bin/sh
+for i in $(seq 1 $1)
+do
+	echo "Running instance $i"
+	start=`date +%s%N`
+	../Build/dp search in/input$i.txt leveledSetSearch
+	tt=$((($(date +%s%N) - $start)/1000000))
+	echo "\n\n\n\n\n\n"
+	echo "DONE"
+	echo "$tt milliseconds"
+done
+rm out.txt
