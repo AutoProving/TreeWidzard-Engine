@@ -15,7 +15,7 @@ unsigned int Width::get_value() const {
     return value;
 }
 
-void Width::set_value(int value) {
+void Width::set_value(unsigned int value) {
     Width::value = value;
 }
 

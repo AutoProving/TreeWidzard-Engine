@@ -119,13 +119,10 @@ StateTreeNode StateTreeNode::introVertex(unsigned i){
     if(this->S->get_bag().vertex_introducible(i)){
         shared_ptr<State> auxState(new State);
         Bag b = this->S->get_bag();
-        vector<shared_ptr<WitnessSet>> vectorWitnessSet;
-        vector<shared_ptr<WitnessSet>> vectorWitnessSetTemp = this->S->get_witnessSetVector();
-        for(size_t r = 0; r < vectorWitnessSetTemp.size(); r++){
-            vectorWitnessSet.push_back(this->kernel->pointerToCoreNumber(r)->intro_v(i,b,*(vectorWitnessSetTemp[r])));
+        for(size_t r = 0; r < this->S->numberOfComponents(); r++){
+            auxState->addWitnessSet(this->kernel->pointerToCoreNumber(r)->intro_v(i,b,*(this->S->getWitnessSet(r))));
         }
         auxState->set_bag(b.intro_v(i));
-        auxState->set_witnessSetVector(vectorWitnessSet);
         StateTreeNode stateTreeNode("IntroVertex_"+to_string(i), auxState);
         stateTreeNode.set_kernel(this->kernel);
         return stateTreeNode;
@@ -141,13 +138,10 @@ StateTreeNode StateTreeNode::forgetVertex(unsigned i){
     if(this->S->get_bag().vertex_forgettable(i)){
         shared_ptr<State> auxState(new State);
         Bag b = this->S->get_bag();
-        vector<shared_ptr<WitnessSet>> vectorWitnessSet;
-        vector<shared_ptr<WitnessSet>> vectorWitnessSetTemp = this->S->get_witnessSetVector();
-        for(size_t r = 0; r < vectorWitnessSetTemp.size(); r++){
-            vectorWitnessSet.push_back(this->kernel->pointerToCoreNumber(r)->forget_v(i,b,*(vectorWitnessSetTemp[r])));
+        for(size_t r = 0; r < this->S->numberOfComponents(); r++){
+            auxState->addWitnessSet(this->kernel->pointerToCoreNumber(r)->forget_v(i,b,*(this->S->getWitnessSet(r))));
         }
         auxState->set_bag(b.forget_v(i));
-        auxState->set_witnessSetVector(vectorWitnessSet);
         StateTreeNode stateTreeNode("ForgetVertex_"+to_string(i), auxState);
         stateTreeNode.set_kernel(this->kernel);
         return stateTreeNode;
@@ -163,13 +157,10 @@ StateTreeNode StateTreeNode::introEdge(unsigned i, unsigned j){
     if(this->S->get_bag().edge_introducible(i,j)){
         shared_ptr<State> auxState(new State);
         Bag b = this->S->get_bag();
-        vector<shared_ptr<WitnessSet>> vectorWitnessSet;
-        vector<shared_ptr<WitnessSet>> vectorWitnessSetTemp = this->S->get_witnessSetVector();
-        for(size_t r = 0; r < vectorWitnessSetTemp.size(); r++){
-            vectorWitnessSet.push_back(this->kernel->pointerToCoreNumber(r)->intro_e(i,j,b,*(vectorWitnessSetTemp[r])));
+        for(size_t r = 0; r < this->S->numberOfComponents(); r++){
+            auxState->addWitnessSet(this->kernel->pointerToCoreNumber(r)->intro_e(i,j,b,*(this->S->getWitnessSet(r))));
         }
         auxState->set_bag(b.intro_e(i,j));
-        auxState->set_witnessSetVector(vectorWitnessSet);
         StateTreeNode stateTreeNode("IntroEdge_"+to_string(i)+"_"+to_string(j), auxState);
         stateTreeNode.set_kernel(this->kernel);
         return stateTreeNode;
@@ -187,14 +178,10 @@ StateTreeNode join(StateTreeNode &left, StateTreeNode &right){
         set<unsigned> elements = left.get_S()->get_bag().get_elements();
         Bag b;
         b.set_elements(elements);
-        vector<shared_ptr<WitnessSet>> vectorWitnessSet;
-        vector<shared_ptr<WitnessSet>> vectorWitnessSet1 = left.get_S()->get_witnessSetVector();
-        vector<shared_ptr<WitnessSet>> vectorWitnessSet2 = right.get_S()->get_witnessSetVector();
-        for(size_t r=0; r < vectorWitnessSet2.size() ; r++){
-            vectorWitnessSet.push_back(left.get_kernel()->pointerToCoreNumber(r)->join(b, *vectorWitnessSet1[r],*vectorWitnessSet2[r]));
+        for(size_t r=0; r < left.get_S()->numberOfComponents(); r++){
+            auxState->addWitnessSet(left.get_kernel()->pointerToCoreNumber(r)->join(b, *(left.get_S()->getWitnessSet(r)),*(right.get_S()->getWitnessSet(r))));
         }
         auxState->set_bag(b);
-        auxState->set_witnessSetVector(vectorWitnessSet);
         StateTreeNode stateTreeNode("Join", auxState);
         stateTreeNode.set_kernel(left.get_kernel());
         return stateTreeNode;
@@ -488,12 +475,9 @@ shared_ptr<StateTreeNode> StateTree::readStateTreeExpressionRecursive(string::it
 
             StateTreeNode stateObj;
             State s;
-            vector<shared_ptr<WitnessSet> > vectorWitnessSet;
             for(int i = 0 ; i < (int)kernel.get_properties().size() ; i++){
-
-                vectorWitnessSet.push_back(kernel.pointerToCoreNumber(i)->get_initialSet());
+                s.addWitnessSet(kernel.pointerToCoreNumber(i)->get_initialSet());
             }
-            s.set_witnessSetVector(vectorWitnessSet);
             v[label] = stateObj.shared_from_this();
             if(it!=end){
                  readStateTreeExpressionRecursive(it,end,v, kernel);

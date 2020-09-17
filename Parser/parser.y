@@ -77,16 +77,16 @@ ATOMIC_PREDICATE        : NAME
                         ;
 VARIABLE                : NAME                                  
                         ;
-FORMULA                 : NOT FORMULA                               {$$ = new ConjectureNode(); $$->logicalOperator = $1; $$->children.push_back($2); } 
-                        | FORMULA AND FORMULA                       {$$ = new ConjectureNode(); $$->logicalOperator = $2; $$->children.push_back($1); $$->children.push_back($3);} 
-                        | FORMULA OR  FORMULA                       {$$ = new ConjectureNode(); $$->logicalOperator = $2; $$->children.push_back($1); $$->children.push_back($3);}
-                        | FORMULA IMPLIES FORMULA                   {$$ = new ConjectureNode(); $$->logicalOperator = $2; $$->children.push_back($1); $$->children.push_back($3);}
-                        | FORMULA IFF FORMULA                       {$$ = new ConjectureNode(); $$->logicalOperator = $2; $$->children.push_back($1); $$->children.push_back($3);}
+FORMULA                 : NOT FORMULA                               {$$ = new ConjectureNode(); $$->setLogicalOperator($1); $$->addChild($2); } 
+                        | FORMULA AND FORMULA                       {$$ = new ConjectureNode(); $$->setLogicalOperator($2); $$->addChild($1); $$->addChild($3);} 
+                        | FORMULA OR  FORMULA                       {$$ = new ConjectureNode(); $$->setLogicalOperator($2); $$->addChild($1); $$->addChild($3);}
+                        | FORMULA IMPLIES FORMULA                   {$$ = new ConjectureNode(); $$->setLogicalOperator($2); $$->addChild($1); $$->addChild($3);}
+                        | FORMULA IFF FORMULA                       {$$ = new ConjectureNode(); $$->setLogicalOperator($2); $$->addChild($1); $$->addChild($3);}
 
                         | LEFTP FORMULA RIGHTP                      {$$ = $2;}
-                        | TRUE                                      {$$ = new ConjectureNode(); $$->logicalOperator = $1; }
-                        | FALSE                                     {$$ = new ConjectureNode(); $$->logicalOperator = $1; }
-                        | VARIABLE                                  {$$ = new ConjectureNode() ; $$->propertyIndex = index_variable($1); }
+                        | TRUE                                      {$$ = new ConjectureNode(); $$->setLogicalOperator($1); }
+                        | FALSE                                     {$$ = new ConjectureNode(); $$->setLogicalOperator($1); }
+                        | VARIABLE                                  {$$ = new ConjectureNode() ; $$->setPropertyIndex(index_variable($1)); }
                         ;
 COMMENTS                : COMMENT COMMENTS                          {}
                         |

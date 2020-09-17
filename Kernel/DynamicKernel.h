@@ -17,11 +17,13 @@ class DynamicKernel: public std::enable_shared_from_this<DynamicKernel> {
         Width width;
         vector<PropertyAssignment> properties;
         vector<DynamicCore*> cores;
+
     public:
         void addCore(DynamicCore &core);
         Width &get_width();
         void set_width(Width &width);
-        void set_properties(vector<PropertyAssignment> &vectorProperties);
+        //void set_properties(vector<PropertyAssignment> &vectorProperties);
+		void addProperty(PropertyAssignment&);
         const vector<PropertyAssignment> &get_properties() const;
         shared_ptr<State> initialState();
         shared_ptr<State> intro_v(shared_ptr<State> q, unsigned i);

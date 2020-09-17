@@ -282,21 +282,21 @@ pair<bool,ConcreteTreeDecomposition> LeveledSetSearch::search(){
         //
 
         unsigned width = kernel->get_width().get_value();
-        if(flags->content["PrintStates"] == 1){
+        if(flags->get("PrintStates") == 1){
             cout << endl << "----------------- Begin Iteration: " << iterationNumber << " ----------------------------" << endl;
         }
 
         // PROCESSING PHASE
         for(size_t k=0; k < setNewStates.size(); k++ ){
             for (auto iteratorNewStates = setNewStates[k].begin(); iteratorNewStates != setNewStates[k].end(); iteratorNewStates++){
-                if(flags->content["PrintStates"] == 1){
+                if(flags->get("PrintStates") == 1){
                     cout << "Current State Being Processed: " << endl;
                     (*iteratorNewStates)->print();
                     cout <<  "---- **** ---" << endl;
                 }
                 // The next vector is for statistics purpose. It records the maximum size of a
                 // witness if the flag "LoopTime" is activated.
-                maxWitnessSetSize.resize((*iteratorNewStates)->get_witnessSetVector().size(),0);
+                maxWitnessSetSize.resize((*iteratorNewStates)->numberOfComponents(),0);
                 // introduce a vertex
                 // the +2 below comes from the fact that treewidth is size of bag minus one.
                 // So the loop iterates from 1 to number of elements inteh bag.
@@ -306,14 +306,14 @@ pair<bool,ConcreteTreeDecomposition> LeveledSetSearch::search(){
                         unsigned index =  bagSetToNumber(newState->get_bag().get_elements(), width);
                         setIntermediateStates[index].insert(newState);
                         // The next two ifs are for statistics
-                        if(flags->content["PrintStates"] == 1){
+                        if(flags->get("PrintStates") == 1){
                             cout << "intro_v_"<< i << endl;
                             newState->print();
                         }
-                        if(flags->content["LoopTime"] == 1){
-                            for(size_t m = 0 ; m < newState->get_witnessSetVector().size(); m++){
-                                if(maxWitnessSetSize[m] < static_cast<unsigned>(newState->get_witnessSetVector()[m]->container.size()) ) {
-                                    maxWitnessSetSize[m] = newState->get_witnessSetVector()[m]->container.size();
+                        if(flags->get("LoopTime") == 1){
+                            for(size_t m = 0 ; m < newState->numberOfComponents(); m++){
+                                if(maxWitnessSetSize[m] < static_cast<unsigned>(newState->getWitnessSet(m)->container.size()) ) {
+                                    maxWitnessSetSize[m] = newState->getWitnessSet(m)->container.size();
                                 }
                             }
                         }
@@ -334,14 +334,14 @@ pair<bool,ConcreteTreeDecomposition> LeveledSetSearch::search(){
                                     unsigned index =  bagSetToNumber(newState->get_bag().get_elements(), width);
                                     setIntermediateStates[index].insert(newState);
                                     // Statistics
-                                    if(flags->content["PrintStates"] == 1){
+                                    if(flags->get("PrintStates") == 1){
                                         cout << "intro_e_"<< *itBagEl1 << "_" << *itBagEl2 << endl;
                                         newState->print();
                                     }
-                                    if(flags->content["LoopTime"] == 1){
-                                        for(size_t m = 0 ; m < newState->get_witnessSetVector().size(); m++){
-                                            if(maxWitnessSetSize[m] < static_cast<unsigned>(newState->get_witnessSetVector()[m]->container.size()) ){
-                                                maxWitnessSetSize[m] = newState->get_witnessSetVector()[m]->container.size();
+                                    if(flags->get("LoopTime") == 1){
+                                        for(size_t m = 0 ; m < newState->numberOfComponents(); m++){
+                                            if(maxWitnessSetSize[m] < static_cast<unsigned>(newState->getWitnessSet(m)->container.size()) ){
+                                                maxWitnessSetSize[m] = newState->getWitnessSet(m)->container.size();
                                             }
                                         }
                                     }
@@ -358,14 +358,14 @@ pair<bool,ConcreteTreeDecomposition> LeveledSetSearch::search(){
                         unsigned index =  bagSetToNumber(newState->get_bag().get_elements(), width);
                         setIntermediateStates[index].insert(newState);
                         // Statistics
-                        if(flags->content["PrintStates"] == 1){
+                        if(flags->get("PrintStates") == 1){
                             cout << "forget_v_"<< i << endl;
                             newState->print();
                         }
-                        if(flags->content["LoopTime"] == 1){
-                            for(size_t m = 0 ; m < newState->get_witnessSetVector().size(); m++){
-                                if(maxWitnessSetSize[m] < static_cast<unsigned>(newState->get_witnessSetVector()[m]->container.size()) ){
-                                    maxWitnessSetSize[m] = newState->get_witnessSetVector()[m]->container.size();
+                        if(flags->get("LoopTime") == 1){
+                            for(size_t m = 0 ; m < newState->numberOfComponents(); m++){
+                                if(maxWitnessSetSize[m] < static_cast<unsigned>(newState->getWitnessSet(m)->container.size()) ){
+                                    maxWitnessSetSize[m] = newState->getWitnessSet(m)->container.size();
                                 }
                             }
                         }
@@ -383,17 +383,17 @@ pair<bool,ConcreteTreeDecomposition> LeveledSetSearch::search(){
                         int index =  bagSetToNumber(newState->get_bag().get_elements(), width);
                         setIntermediateStates[index].insert(newState);
                         // Statistics
-                        if(flags->content["PrintStates"] == 1){
+                        if(flags->get("PrintStates") == 1){
                             cout << "join" << endl;
                             cout<< "------picked state:"<<endl;
                             (*it)->print();
                             cout<< "------result state:"<<endl;
                             newState->print();
                         }
-                        if(flags->content["LoopTime"] == 1){
-                            for(size_t m = 0 ; m < newState->get_witnessSetVector().size(); m++){
-                                if(maxWitnessSetSize[m] < static_cast<unsigned>(newState->get_witnessSetVector()[m]->container.size()) ){
-                                    maxWitnessSetSize[m] = newState->get_witnessSetVector()[m]->container.size();
+                        if(flags->get("LoopTime") == 1){
+                            for(size_t m = 0 ; m < newState->numberOfComponents(); m++){
+                                if(maxWitnessSetSize[m] < static_cast<unsigned>(newState->getWitnessSet(m)->container.size()) ){
+                                    maxWitnessSetSize[m] = newState->getWitnessSet(m)->container.size();
                                 }
                             }
                         }
@@ -465,7 +465,7 @@ pair<bool,ConcreteTreeDecomposition> LeveledSetSearch::search(){
 
         iterationNumber++;
         // Print Statistics if "LoopTime" flag is activated
-        if(flags->content["LoopTime"]==1){
+        if(flags->get("LoopTime")==1){
             auto stop = high_resolution_clock::now();
             auto duration = duration_cast<milliseconds>(stop - start);
             cout<< endl;
@@ -504,7 +504,7 @@ pair<bool,ConcreteTreeDecomposition> LeveledSetSearch::search(){
          for (unsigned i = 0; i< numberBagSets; i++){
             newStatesCount = newStatesCount + setNewStates[i].size();
         }
-        if(flags->content["LoopTime"] == 1){
+        if(flags->get("LoopTime") == 1){
             cout << endl << "----------------- End Iteration: " << iterationNumber << " ----------------------------" << endl << endl;
         }
         // Remove the states from setIntermediateStates

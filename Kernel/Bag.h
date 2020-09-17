@@ -31,9 +31,9 @@ class Bag{
         bool edge_forgettable(int i, int j) const;
 */
         // Operations with Bags
-        Bag intro_v(unsigned i);
-        Bag intro_e(unsigned i, unsigned j);
-        Bag forget_v(unsigned i);
+        Bag intro_v(unsigned i); // add vertex
+        Bag intro_e(unsigned i, unsigned j); // add edge
+        Bag forget_v(unsigned i); // remove vertex
 };
 
 #endif

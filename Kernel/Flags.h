@@ -5,13 +5,18 @@
 
 #include <iostream>
 #include <map>
+#include <string>
 using namespace std;
 
 class Flags{
 
     public:
-        map<string,int> content;
         Flags();
+		int get(string);
+		void add_flag(string, int);
+
+	private:
+        map<string,int> content;
 };
 
 

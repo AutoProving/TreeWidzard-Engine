@@ -4,7 +4,7 @@
 bool ConjectureNode::evaluateState(State &q, DynamicKernel* kernel) {
     if(children.empty() and logicalOperator != "TRUE" and logicalOperator != "FALSE" ){
         Bag b = q.get_bag();
-        shared_ptr<WitnessSet> witnessSet = q.get_witnessSetVector()[propertyIndex-1];
+        shared_ptr<WitnessSet> witnessSet = q.getWitnessSet(propertyIndex-1);
         return kernel->pointerToCoreNumber(propertyIndex-1)->is_final_set_witness(b,*witnessSet);
     } else {
         if (logicalOperator == "AND") {
@@ -93,12 +93,12 @@ bool Conjecture::evaluateConjectureOnState(State &q, DynamicKernel *kernel) {
 }
 
 bool Conjecture::evaluatePremiseOnState(State &q, DynamicKernel *kernel) {
-	if (root->logicalOperator == "IMPLIES") {
-            if (root->children.size() != 2) {
+	if (root->getLogicalOperator() == "IMPLIES") {
+            if (root->getChildrenSize() != 2) {
                 cerr << "ERROR: In ConjectureNode::evaluateState, IMPLIES operator does not have 2 children";
                 exit(20);
             } else {
-                return (root->children[0]->evaluateState(q,kernel));
+                return root->evaluateChildState(0, q, kernel);
             }
 	}else{
 
@@ -108,12 +108,12 @@ bool Conjecture::evaluatePremiseOnState(State &q, DynamicKernel *kernel) {
 }
 
 bool Conjecture::evaluateConsequentOnState(State &q, DynamicKernel *kernel) {
-	if (root->logicalOperator == "IMPLIES") {
-            if (root->children.size() != 2) {
+	if (root->getLogicalOperator() == "IMPLIES") {
+            if (root->getChildrenSize() != 2) {
                 cerr << "ERROR: In ConjectureNode::evaluateState, IMPLIES operator does not have 2 children";
                 exit(20);
             } else {
-                return (root->children[1]->evaluateState(q,kernel));
+                return root->evaluateChildState(1, q, kernel);
             }
 	}else{
 
@@ -139,4 +139,40 @@ ConjectureNode *Conjecture::get_root(){
 
 void Conjecture::print(){
     root->print();
+}
+
+string ConjectureNode::getLogicalOperator() {
+	return logicalOperator;
+}
+
+int ConjectureNode::getPropertyIndex() {
+	return propertyIndex;
+}
+
+vector<ConjectureNode*> ConjectureNode::getChildren() {
+	return children;
+}
+
+void ConjectureNode::setLogicalOperator(string s) {
+	logicalOperator = s;
+}
+
+void ConjectureNode::setPropertyIndex(int p) {
+	propertyIndex = p;
+}
+
+void ConjectureNode::setChildren(vector<ConjectureNode*>& ch) {
+	children = ch;
+}
+
+bool ConjectureNode::evaluateChildState(int i, State& q, DynamicKernel* kernel) {
+	return children[i]->evaluateState(q, kernel);
+}
+
+int ConjectureNode::getChildrenSize() {
+	return children.size();
+}
+
+void ConjectureNode::addChild(ConjectureNode* ch) {
+	children.push_back(ch);
 }

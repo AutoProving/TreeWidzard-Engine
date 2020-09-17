@@ -92,8 +92,8 @@ int main(int argc,char* arg[])
         p.set_label(pl[i]->get_label());
         p.set_filePath(pl[i]->get_filePath());
         propertyList.push_back(p);
+		dynamicKernel.addProperty(p);
     }
-    dynamicKernel.set_properties(propertyList);
     cout<<dynamicKernel.get_width().get_name()<<" " <<dynamicKernel.get_width().get_value()<<endl;
     // adding Cores to dynamicKernel
     for (size_t j = 0; j <  propertyList.size(); ++j) {
@@ -115,9 +115,9 @@ int main(int argc,char* arg[])
         }
     }
     Flags flags;
-    flags.content.insert({"PrintStates",printStates});
-    flags.content.insert({"LoopTime",loopTime});
-    flags.content.insert({"PrintVectors",printVector});
+	flags.add_flag("PrintStates", printStates);
+	flags.add_flag("LoopTime", loopTime);
+	flags.add_flag("PrintVectors", printVector);
     conjecture.kernel = &dynamicKernel;
     conjecture.print();
     if(searchMethod == "leveledSetSearch"){

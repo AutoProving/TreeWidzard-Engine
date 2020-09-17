@@ -10,25 +10,21 @@ void State::set_bag(const Bag &bag) {
     State::bag = bag;
 }
 
-const std::vector<shared_ptr<WitnessSet>> State::get_witnessSetVector() const {
-    return witnessSetVector;
+void State::addWitnessSet(shared_ptr<WitnessSet> ws) {
+	witnessSetVector.push_back(ws);
 }
 
-void State::set_witnessSetVector(const std::vector<shared_ptr<WitnessSet>> &vector) {
-    State::witnessSetVector = vector;
-}
-
-bool State::operator<(const State& rhs) const {
+bool State::operator<(State& rhs) {
 
     if(this->get_bag() < rhs.get_bag()){
         return true;
-    }else if(State::get_witnessSetVector().size() != rhs.get_witnessSetVector().size()){
+    }else if(numberOfComponents() != rhs.numberOfComponents()){
         cout<< "ERROR: In State::operator< sizes are different! "<<endl;
         exit(20);
     }else if(this->get_bag() == rhs.get_bag()){
-        for(unsigned j=0 ; j < get_witnessSetVector().size(); j++){
-            shared_ptr<WitnessSet> temp1 = State::get_witnessSetVector()[j];
-            shared_ptr<WitnessSet> temp2 = rhs.get_witnessSetVector()[j];
+        for(unsigned j=0 ; j < numberOfComponents(); j++){
+            shared_ptr<WitnessSet> temp1 = getWitnessSet(j);
+            shared_ptr<WitnessSet> temp2 = rhs.getWitnessSet(j);
             if(*temp1 < *temp2){
                 return true;
             }else if(*temp2 < *temp1){
@@ -42,14 +38,14 @@ bool State::operator<(const State& rhs) const {
 
 }
 
-bool State::operator==(const State& rhs) const {
+bool State::operator==(State& rhs) {
     if (this->get_bag() == rhs.get_bag()){
-        if (this->get_witnessSetVector().size() != rhs.get_witnessSetVector().size()) {
+        if (numberOfComponents() != rhs.numberOfComponents()) {
             cout<< "ERROR: In State::operator== sizes are different! "<<endl;
             exit(20);
         } else{
-            for(size_t j=0 ; j < State::get_witnessSetVector().size(); j++){
-                if(!(*(rhs.get_witnessSetVector()[j]) == *(this->get_witnessSetVector()[j])) ){
+            for(size_t j=0 ; j < numberOfComponents(); j++){
+                if(!(*(rhs.getWitnessSet(j)) == *(getWitnessSet(j))) ){
                     return false;
                 }
             }
@@ -78,10 +74,20 @@ size_t State::operator()(const State &b) const {
 void State::print(){
     bag.print();
     int i = 1;
-    for (vector<shared_ptr<WitnessSet>>::iterator it = witnessSetVector.begin(); it != witnessSetVector.end() ; ++it) {
+	// TODO: replace all for's to:
+	// for (auto element : witnessSetVector) { ... }
+	for (auto it = witnessSetVector.begin(); it != witnessSetVector.end(); ++it) {
         cout<<"\nCore "<<i<< " WitnessSet \n";
         (*it)->print();
         i++;
     }
     cout<<"\n------------\n";
+}
+
+shared_ptr<WitnessSet> State::getWitnessSet(int i) {
+	return witnessSetVector[i];
+}
+
+int State::numberOfComponents() const {
+	return witnessSetVector.size();
 }

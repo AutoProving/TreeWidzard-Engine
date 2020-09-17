@@ -14,6 +14,7 @@ class PropertyAssignment {
         string type; // type can be numerical or file type
         string filePath; // if the type is file, filePath is location of the file
         string label; // label of the core
+
     public:
 
         void print();
