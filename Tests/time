@@ -5,8 +5,10 @@ for i in $(seq 1 $1)
 do
 	echo "Running instance $i"
 	start=`date +%s%N`
-	../Build/dp search in/input$i.txt leveledSetSearch > out.txt
+	mem=$( (time -f "%M" ../Build/dp search in/input$i.txt leveledSetSearch > out.txt) 2>&1)
 	tt=$((($(date +%s%N) - $start)/1000000))
+
+	echo "$(($mem/1024)) MB"
 	echo "$tt milliseconds"
 	if (! cmp out.txt out/output$i.txt) then
 		echo "WRONG OUTPUT\n"
