@@ -309,9 +309,6 @@ string StateTree::printAbstractRecursive(StateTreeNode &node, unsigned &label){
         label++;
         return s +to_string(label)+" "+node.printAbstract()+"("+to_string(label-1)+")""\n";
     }
-
-
-
 }
 
 void StateTree::printAbstract() {
@@ -476,7 +473,7 @@ shared_ptr<StateTreeNode> StateTree::readStateTreeExpressionRecursive(string::it
             StateTreeNode stateObj;
             State s;
             for(int i = 0 ; i < (int)kernel.get_properties().size() ; i++){
-                s.addWitnessSet(kernel.pointerToCoreNumber(i)->get_initialSet());
+                s.addWitnessSet(kernel.pointerToCoreNumber(i)->getInitialSet());
             }
             v[label] = stateObj.shared_from_this();
             if(it!=end){

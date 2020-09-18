@@ -1,11 +1,11 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 #include "LeveledSetSearch.h"
 
-bool check_lessThan_states_leveledSetSearch (const shared_ptr<State> &lhs, const shared_ptr<State> &rhs) {
+bool check_lessThan_states_leveledSetSearch (const StatePointer &lhs, const StatePointer &rhs) {
     return *lhs < *rhs;
 }
 
-bool check_equality_states_leveledSetSearch (const shared_ptr<State> &lhs, const shared_ptr<State> &rhs) {
+bool check_equality_states_leveledSetSearch (const StatePointer &lhs, const StatePointer &rhs) {
     return (*lhs == *rhs);
 }
 
@@ -24,7 +24,7 @@ unsigned LeveledSetSearch::bagSetToNumber(set<unsigned> bagSet,unsigned width){
     }
     return number;
 }
-shared_ptr<CTDNodeNew> LeveledSetSearch::extractCTDNode(unsigned level, shared_ptr<State> s, vector<vector<set<shared_ptr<State>, compare_less > > > &leveledSetAllStates ){
+shared_ptr<CTDNodeNew> LeveledSetSearch::extractCTDNode(unsigned level, StatePointer s, vector<vector<set<StatePointer, compareLessState > > > &leveledSetAllStates ){
     unsigned w  = this->kernel->get_width().get_value();
     shared_ptr<CTDNodeNew>  node (new CTDNodeNew());
     node->set_B(s->get_bag());
@@ -42,7 +42,7 @@ shared_ptr<CTDNodeNew> LeveledSetSearch::extractCTDNode(unsigned level, shared_p
             bagElementsPrime.erase(*element);
             unsigned bagNumberPrime = bagSetToNumber(bagElementsPrime,w);
             for (auto it = leveledSetAllStates[level-1][bagNumberPrime].begin(); it != leveledSetAllStates[level-1][bagNumberPrime].end(); it++){
-                shared_ptr<State> sprime = *it;
+                StatePointer sprime = *it;
                 if (*s == *(kernel->intro_v(sprime,*element))){
                     //this means that s is obtained from sprime by introudcing vertex *element
                     shared_ptr<CTDNodeNew> child = extractCTDNode(level-1,sprime, leveledSetAllStates);
@@ -60,7 +60,7 @@ shared_ptr<CTDNodeNew> LeveledSetSearch::extractCTDNode(unsigned level, shared_p
         pair<unsigned,unsigned> edge =  s->get_bag().get_edge();
         if ((edge.first !=0) and (edge.second != 0)){
             for (auto it = leveledSetAllStates[level-1][bagNumber].begin(); it != leveledSetAllStates[level-1][bagNumber].end(); it++){
-                shared_ptr<State> sprime = *it;
+                StatePointer sprime = *it;
                 if (*s == *kernel->intro_e(sprime,edge.first, edge.second)){
                     //this means that s is obained from sprime by introudcing vertex *element
                     shared_ptr<CTDNodeNew> child = extractCTDNode(level-1,sprime, leveledSetAllStates);
@@ -86,7 +86,7 @@ shared_ptr<CTDNodeNew> LeveledSetSearch::extractCTDNode(unsigned level, shared_p
             bagElementsPrime.insert(*element);
             unsigned bagNumberPrime = bagSetToNumber(bagElementsPrime,kernel->get_width().get_value());
             for (auto it = leveledSetAllStates[level-1][bagNumberPrime].begin(); it != leveledSetAllStates[level-1][bagNumberPrime].end(); it++){
-                shared_ptr<State> sprime = *it;
+                StatePointer sprime = *it;
                 if (*s == *kernel->forget_v(sprime,*element)){
                     //this means that s is obained from sprime by introudcing vertex *element
                     shared_ptr<CTDNodeNew>  child = extractCTDNode(level-1,sprime, leveledSetAllStates);
@@ -101,10 +101,10 @@ shared_ptr<CTDNodeNew> LeveledSetSearch::extractCTDNode(unsigned level, shared_p
         }
         //Join
         for (auto it1 = leveledSetAllStates[level-1][bagNumber].begin(); it1 != leveledSetAllStates[level-1][bagNumber].end(); it1++){
-            shared_ptr<State> sprime1 = *it1;
+            StatePointer sprime1 = *it1;
             for (unsigned j = level -1; j>=0; j--){
                 for (auto it2 = leveledSetAllStates[j][bagNumber].begin(); it2 != leveledSetAllStates[j][bagNumber].end(); it2++){
-                    shared_ptr<State> sprime2 = *it2;
+                    StatePointer sprime2 = *it2;
                     if (*s == *kernel->join(sprime1,sprime2)){
                         //this means that s is obained from sprime by introudcing vertex *element
                         shared_ptr<CTDNodeNew> child1 = extractCTDNode(level-1,sprime1, leveledSetAllStates);
@@ -124,13 +124,13 @@ shared_ptr<CTDNodeNew> LeveledSetSearch::extractCTDNode(unsigned level, shared_p
     }
 }
 
-ConcreteTreeDecomposition LeveledSetSearch::extractCTDDecomposition(unsigned level, shared_ptr<State> s, vector<vector<set<shared_ptr<State>, compare_less > > > &leveledSetAllStates){
+ConcreteTreeDecomposition LeveledSetSearch::extractCTDDecomposition(unsigned level, StatePointer s, vector<vector<set<StatePointer, compareLessState > > > &leveledSetAllStates){
     ConcreteTreeDecomposition T;
     T.root = extractCTDNode(level,s,leveledSetAllStates);
     return T;
 }
 
-shared_ptr<StateTreeNode> LeveledSetSearch::extractStateTreeNode(unsigned level, shared_ptr<State> s, vector<vector<set<shared_ptr<State>, compare_less> > > &leveledSetAllStates, bool tree_width){
+shared_ptr<StateTreeNode> LeveledSetSearch::extractStateTreeNode(unsigned level, StatePointer s, vector<vector<set<StatePointer, compareLessState> > > &leveledSetAllStates, bool tree_width){
     unsigned w  = this->kernel->get_width().get_value();
     shared_ptr<StateTreeNode>  node (new StateTreeNode());
     node->set_S(s);
@@ -152,9 +152,9 @@ shared_ptr<StateTreeNode> LeveledSetSearch::extractStateTreeNode(unsigned level,
             bagElementsPrime.erase(*element);
             unsigned bagNumberPrime = bagSetToNumber(bagElementsPrime,w);
             for (auto it = leveledSetAllStates[level-1][bagNumberPrime].begin(); it != leveledSetAllStates[level-1][bagNumberPrime].end(); it++){
-                shared_ptr<State> sprime = *it;
+                StatePointer sprime = *it;
 
-                shared_ptr<State> temp = kernel->intro_v(sprime,*element);
+                StatePointer temp = kernel->intro_v(sprime,*element);
                 if (*s == *temp){
                     //this means that s is obtained from sprime by introudcing vertex *element
                     shared_ptr<StateTreeNode> child = extractStateTreeNode(level-1,sprime, leveledSetAllStates,tree_width);
@@ -173,8 +173,8 @@ shared_ptr<StateTreeNode> LeveledSetSearch::extractStateTreeNode(unsigned level,
         pair<int,int> edge =  s->get_bag().get_edge();
         if ((edge.first !=0) and (edge.second != 0)){
             for (auto it = leveledSetAllStates[level-1][bagNumber].begin(); it != leveledSetAllStates[level-1][bagNumber].end(); it++){
-                shared_ptr<State> sprime = *it;
-                shared_ptr<State> temp = kernel->intro_e(sprime,edge.first, edge.second);
+                StatePointer sprime = *it;
+                StatePointer temp = kernel->intro_e(sprime,edge.first, edge.second);
                 if (*s == *temp){
                     //this means that s is obained from sprime by introudcing vertex *element
                     shared_ptr<StateTreeNode> child = extractStateTreeNode(level-1,sprime, leveledSetAllStates, tree_width);
@@ -203,8 +203,8 @@ shared_ptr<StateTreeNode> LeveledSetSearch::extractStateTreeNode(unsigned level,
             bagElementsPrime.insert(*element);
             unsigned bagNumberPrime = bagSetToNumber(bagElementsPrime,kernel->get_width().get_value());
             for (auto it = leveledSetAllStates[level-1][bagNumberPrime].begin(); it != leveledSetAllStates[level-1][bagNumberPrime].end(); it++){
-                shared_ptr<State> sprime = *it;
-                shared_ptr<State> temp = kernel->forget_v(sprime,*element);
+                StatePointer sprime = *it;
+                StatePointer temp = kernel->forget_v(sprime,*element);
                 if (*s == *temp){
                     //this means that s is obained from sprime by introudcing vertex *element
                     shared_ptr<StateTreeNode>  child = extractStateTreeNode(level-1,sprime, leveledSetAllStates, tree_width);
@@ -221,11 +221,11 @@ shared_ptr<StateTreeNode> LeveledSetSearch::extractStateTreeNode(unsigned level,
         //Join
         if(tree_width){
             for (auto it1 = leveledSetAllStates[level-1][bagNumber].begin(); it1 != leveledSetAllStates[level-1][bagNumber].end(); it1++){
-                shared_ptr<State> sprime1 = *it1;
+                StatePointer sprime1 = *it1;
                 for (unsigned j = level -1; j>=0; j--){
                     for (auto it2 = leveledSetAllStates[j][bagNumber].begin(); it2 != leveledSetAllStates[j][bagNumber].end(); it2++){
-                        shared_ptr<State> sprime2 = *it2;
-                        shared_ptr<State> temp = kernel->join(sprime1,sprime2);
+                        StatePointer sprime2 = *it2;
+                        StatePointer temp = kernel->join(sprime1,sprime2);
                         if (*s == *temp){
                             //this means that s is obained from sprime by introudcing vertex *element
                             shared_ptr<StateTreeNode> child1 = extractStateTreeNode(level-1,sprime1, leveledSetAllStates,tree_width);
@@ -250,7 +250,7 @@ shared_ptr<StateTreeNode> LeveledSetSearch::extractStateTreeNode(unsigned level,
 
 }
 
-StateTree LeveledSetSearch::extractStateTreeDecomposition(unsigned level, shared_ptr<State> s, vector<vector<set<shared_ptr<State>,compare_less> > > &leveledSetAllStates, bool tree_width){
+StateTree LeveledSetSearch::extractStateTreeDecomposition(unsigned level, StatePointer s, vector<vector<set<StatePointer,compareLessState> > > &leveledSetAllStates, bool tree_width){
     StateTree stateTree;
     stateTree.root = extractStateTreeNode(level, s, leveledSetAllStates, tree_width);
     return stateTree;
@@ -302,7 +302,7 @@ pair<bool,ConcreteTreeDecomposition> LeveledSetSearch::search(){
                 // So the loop iterates from 1 to number of elements inteh bag.
                 for (unsigned i = 1; i < width+2; ++i) {
                     if((*iteratorNewStates)->get_bag().vertex_introducible(i)){
-                        shared_ptr<State> newState = kernel->intro_v(*iteratorNewStates,i);
+                        StatePointer newState = kernel->intro_v(*iteratorNewStates,i);
                         unsigned index =  bagSetToNumber(newState->get_bag().get_elements(), width);
                         setIntermediateStates[index].insert(newState);
                         // The next two ifs are for statistics
@@ -330,7 +330,7 @@ pair<bool,ConcreteTreeDecomposition> LeveledSetSearch::search(){
                             for (auto itBagEl2 = it ; itBagEl2!= bagSet.end(); itBagEl2++){
                                 if((*iteratorNewStates)->get_bag().edge_introducible(*itBagEl1, *itBagEl2)){
 
-                                    shared_ptr<State> newState = kernel->intro_e(*iteratorNewStates,*itBagEl1,*itBagEl2);
+                                    StatePointer newState = kernel->intro_e(*iteratorNewStates,*itBagEl1,*itBagEl2);
                                     unsigned index =  bagSetToNumber(newState->get_bag().get_elements(), width);
                                     setIntermediateStates[index].insert(newState);
                                     // Statistics
@@ -354,7 +354,7 @@ pair<bool,ConcreteTreeDecomposition> LeveledSetSearch::search(){
                 // forget a vertex
                 for (size_t i = 1; i < kernel->get_width().get_value()+2; ++i) {
                     if((*iteratorNewStates)->get_bag().vertex_forgettable(i)){
-                        shared_ptr<State> newState = kernel->forget_v(*iteratorNewStates,i);
+                        StatePointer newState = kernel->forget_v(*iteratorNewStates,i);
                         unsigned index =  bagSetToNumber(newState->get_bag().get_elements(), width);
                         setIntermediateStates[index].insert(newState);
                         // Statistics
@@ -379,7 +379,7 @@ pair<bool,ConcreteTreeDecomposition> LeveledSetSearch::search(){
                         // But when constructing automata, we should consider two transitions, one where
                         // the new states come before the old states and one in which the old states come first
                         // Otherwise, we could potentially miss some terms (VERIFY IF THIS IS THE CASE).
-                        shared_ptr<State> newState = kernel->join(*iteratorNewStates,*it);
+                        StatePointer newState = kernel->join(*iteratorNewStates,*it);
                         int index =  bagSetToNumber(newState->get_bag().get_elements(), width);
                         setIntermediateStates[index].insert(newState);
                         // Statistics
@@ -399,7 +399,7 @@ pair<bool,ConcreteTreeDecomposition> LeveledSetSearch::search(){
                         }
                     }
                     for(auto itrJoin = setNewStates[k].begin() ; itrJoin != setNewStates[k].end() ; itrJoin++){
-                        shared_ptr<State> newState = kernel->join(*iteratorNewStates, *itrJoin);
+                        StatePointer newState = kernel->join(*iteratorNewStates, *itrJoin);
                         setIntermediateStates[k].insert(newState);
                     }
                     
@@ -456,7 +456,7 @@ pair<bool,ConcreteTreeDecomposition> LeveledSetSearch::search(){
         leveledSetAllStates.push_back(setNewStates);
 
         for (unsigned bagSetIndex = 0; bagSetIndex < numberBagSets; bagSetIndex++){
-            set<shared_ptr<State>,compare_less> temp;
+            set<StatePointer,compareLessState> temp;
             set_union(setAllStates[bagSetIndex].begin(),setAllStates[bagSetIndex].end(),setNewStates[bagSetIndex].begin(),setNewStates[bagSetIndex].end(),inserter(temp,temp.begin()),check_lessThan_states_leveledSetSearch);
             setAllStates[bagSetIndex].clear();
             setAllStates[bagSetIndex] = temp;

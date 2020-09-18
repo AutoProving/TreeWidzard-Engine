@@ -2,8 +2,6 @@
 
 #include "SearchStrategy.h"
 
-
-
 pair<bool, ConcreteTreeDecomposition> SearchStrategy::search() {
     cout<<"ERROR: Based class search function called!"<<endl;
     exit(20);

@@ -7,19 +7,19 @@ void DynamicKernel::addCore(DynamicCore &core) {
     cores.push_back(&core);
 }
 
-shared_ptr<State> DynamicKernel::initialState(){
-    shared_ptr<State> initialState(new State);
+StatePointer DynamicKernel::initialState(){
+    StatePointer initialState(new State);
     Bag emptyBag; //Empty
     for (size_t k = 0; k < cores.size() ; ++k) {
-		initialState->addWitnessSet(cores[k]->get_initialSet());
+		initialState->addWitnessSet(cores[k]->getInitialSet());
 	}
     initialState->set_bag(emptyBag);
     return initialState ;
 }
 
-shared_ptr<State> DynamicKernel::intro_v(shared_ptr<State> q, unsigned i) {
+StatePointer DynamicKernel::intro_v(StatePointer q, unsigned i) {
     if(q->get_bag().vertex_introducible(i)){
-        shared_ptr<State> aux(new State);
+        StatePointer aux(new State);
         Bag b = q->get_bag();
         for(size_t r = 0; r < cores.size(); r++){
             aux->addWitnessSet(cores[r]->intro_v(i,b,*(q->getWitnessSet(r))));
@@ -32,9 +32,9 @@ shared_ptr<State> DynamicKernel::intro_v(shared_ptr<State> q, unsigned i) {
     }
 }
 
-shared_ptr<State> DynamicKernel::intro_e(const shared_ptr<State> q, const unsigned i, const unsigned j) {
+StatePointer DynamicKernel::intro_e(const StatePointer q, const unsigned i, const unsigned j) {
      if(q->get_bag().edge_introducible(i,j)){
-        shared_ptr<State> aux(new State);
+        StatePointer aux(new State);
         Bag b = q->get_bag();
         for(size_t r = 0; r < cores.size(); r++){
             aux->addWitnessSet(cores[r]->intro_e(i,j, b,*(q->getWitnessSet(r))));
@@ -47,9 +47,9 @@ shared_ptr<State> DynamicKernel::intro_e(const shared_ptr<State> q, const unsign
     }
 }
 
-shared_ptr<State> DynamicKernel::forget_v(shared_ptr<State> q, unsigned i) {
+StatePointer DynamicKernel::forget_v(StatePointer q, unsigned i) {
     if(q->get_bag().vertex_forgettable(i)){
-        shared_ptr<State> aux(new State);
+        StatePointer aux(new State);
         Bag b = q->get_bag();
         for(size_t r = 0; r < cores.size(); r++){
             aux->addWitnessSet(cores[r]->forget_v(i,b,*(q->getWitnessSet(r))));
@@ -62,10 +62,10 @@ shared_ptr<State> DynamicKernel::forget_v(shared_ptr<State> q, unsigned i) {
     }
 }
 
-shared_ptr<State> DynamicKernel::join(shared_ptr<State> q1, shared_ptr<State> q2) {
+StatePointer DynamicKernel::join(StatePointer q1, StatePointer q2) {
     if(q1->get_bag().joinable(q2->get_bag()))
     {
-        shared_ptr<State> aux(new State);
+        StatePointer aux(new State);
         set<unsigned> elements = q1->get_bag().get_elements();
         Bag b;
         b.set_elements(elements);
@@ -100,10 +100,6 @@ void DynamicKernel::set_width(Width &width) {
     DynamicKernel::width = width;
 }
 
-//void DynamicKernel::set_properties(vector<PropertyAssignment> &vectorProperties) {
-//    properties = vectorProperties;
-//}
-
 void DynamicKernel::addProperty(PropertyAssignment& p) {
 	properties.push_back(p);
 }
@@ -111,8 +107,3 @@ void DynamicKernel::addProperty(PropertyAssignment& p) {
 const vector<PropertyAssignment> &DynamicKernel::get_properties() const {
     return properties;
 }
-
-
-
-
-

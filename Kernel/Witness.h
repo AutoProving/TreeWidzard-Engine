@@ -5,6 +5,8 @@
 
 #include <iostream>
 #include <algorithm>
+#include <memory>
+
 using namespace std;
 class Witness {
     protected:
@@ -19,5 +21,7 @@ class Witness {
         virtual Witness& operator=(Witness &rhs);
         bool operator!=(Witness &rhs);
 };
+
+typedef shared_ptr<Witness> WitnessPointer;
 
 #endif

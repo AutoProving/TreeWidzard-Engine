@@ -28,4 +28,40 @@ class State: public std::enable_shared_from_this<State>
 		
 };
 
+typedef shared_ptr<State> StatePointer;
+
+struct compareLessState {
+    bool operator() (const StatePointer lhs, const StatePointer rhs) const {
+        return *lhs < *rhs;
+    }
+};
+struct compareEqualityState {
+    bool operator() (const StatePointer lhs, const StatePointer rhs) const {
+        return *lhs == *rhs;
+    }
+};
+
+//class StatePointer {
+//	private:
+//		shared_ptr<State> pointer;
+//
+//	public:
+//
+//		StatePointer(State* pointer_) : pointer(pointer_) {}
+//
+//		State operator*() {
+//			return *pointer;
+//		}
+//
+//		bool operator<(StatePointer& rhs) {
+//			return *pointer < *rhs
+//		}
+//		bool operator==(StatePointer& rhs) {
+//			return *pointer < *rhs
+//		}
+//		void operator =(StatePointer rhs) {
+//			pointer = rhs;
+//		}
+//};
+
 #endif

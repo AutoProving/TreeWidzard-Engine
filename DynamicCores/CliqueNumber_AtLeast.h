@@ -24,7 +24,7 @@ class CliqueNumber_AtLeast_DynamicCore: public DynamicCore{
 public:
     unsigned cliqueSize;
     CliqueNumber_AtLeast_DynamicCore(unsigned cliqueSize);
-    shared_ptr<WitnessSet> createInitialWitnessSet();
+    void createInitialWitnessSet();
     virtual shared_ptr<WitnessSet> intro_v(unsigned i, Bag &b, Witness &witness);
     virtual shared_ptr<WitnessSet> intro_e(unsigned i, unsigned j, Bag &b, Witness &witness);
     virtual shared_ptr<WitnessSet> forget_v(unsigned i, Bag &b,Witness &witness);

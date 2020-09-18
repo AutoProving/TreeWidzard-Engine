@@ -6,6 +6,7 @@
 #include "Witness.h"
 #include <set>
 #include <memory>
+
 struct compare{
     bool operator()(const shared_ptr<Witness> lhs, const shared_ptr<Witness> rhs) const{
         return *lhs<*rhs;
@@ -23,5 +24,7 @@ class WitnessSet {
     bool operator<(WitnessSet &rhs);
 
 };
+
+typedef shared_ptr<WitnessSet> WitnessSetPointer;
 
 #endif

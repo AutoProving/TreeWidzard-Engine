@@ -109,12 +109,10 @@ CliqueNumber_AtLeast_DynamicCore::CliqueNumber_AtLeast_DynamicCore(unsigned cliq
     createInitialWitnessSet();
 }
 
-shared_ptr<WitnessSet> CliqueNumber_AtLeast_DynamicCore::createInitialWitnessSet() {
-    this->initialWitnessSet = shared_ptr<WitnessSet>(new WitnessSet);
+void CliqueNumber_AtLeast_DynamicCore::createInitialWitnessSet() {
     shared_ptr<CliqueNumber_AtLeast_Witness> witness(new CliqueNumber_AtLeast_Witness);
     witness->found = false;
-    this->initialWitnessSet->container.insert(witness);
-    return this->initialWitnessSet;
+	insertIntoInitialWitnessSet(witness);
 }
 
 shared_ptr<WitnessSet> CliqueNumber_AtLeast_DynamicCore::intro_v(unsigned i, Bag &b, Witness &witness) {

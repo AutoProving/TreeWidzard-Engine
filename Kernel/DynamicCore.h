@@ -15,21 +15,30 @@
 
 using namespace std;
 class DynamicCore{
-public:
-    shared_ptr<WitnessSet> initialWitnessSet;
-    virtual shared_ptr<WitnessSet> createInitialWitnessSet();
-    virtual shared_ptr<WitnessSet> intro_v(unsigned i, Bag &b, Witness &witness);
-    virtual shared_ptr<WitnessSet> intro_e(unsigned i, unsigned j, Bag &b , Witness &witness);
-    virtual shared_ptr<WitnessSet> forget_v(unsigned i, Bag &b, Witness &witness);
-    virtual shared_ptr<WitnessSet> join(Bag &b, Witness &witness1, Witness &witness2);
-    virtual bool is_final_witness(Witness &witness);
-    virtual shared_ptr<WitnessSet> clean(shared_ptr<WitnessSet> witnessSet);
-    shared_ptr<WitnessSet> intro_v(unsigned i, Bag &b, WitnessSet &witnessSet);
-    shared_ptr<WitnessSet> intro_e(unsigned i, unsigned j, Bag &b, WitnessSet &witnessSet);
-    shared_ptr<WitnessSet> forget_v(unsigned i, Bag &b, WitnessSet &witnessSet);
-    shared_ptr<WitnessSet> join(Bag &b, WitnessSet &witnessSet1, WitnessSet &witnessSet2);
-    shared_ptr<WitnessSet> get_initialSet(); // returns initialSet
-    bool is_final_set_witness(Bag &b,WitnessSet &witnessSet);
+	private:
+		WitnessSetPointer initialWitnessSet;
+
+	public:
+		DynamicCore() {
+			initialWitnessSet = WitnessSetPointer(new WitnessSet);
+		}
+
+		WitnessSetPointer getInitialSet(); // returns initialSet
+
+		void insertIntoInitialWitnessSet(WitnessPointer);
+
+		virtual void createInitialWitnessSet();
+		virtual WitnessSetPointer intro_v(unsigned i, Bag &b, Witness &witness);
+		virtual WitnessSetPointer intro_e(unsigned i, unsigned j, Bag &b , Witness &witness);
+		virtual WitnessSetPointer forget_v(unsigned i, Bag &b, Witness &witness);
+		virtual WitnessSetPointer join(Bag &b, Witness &witness1, Witness &witness2);
+		virtual bool is_final_witness(Witness &witness);
+		virtual WitnessSetPointer clean(WitnessSetPointer witnessSet);
+		WitnessSetPointer intro_v(unsigned i, Bag &b, WitnessSet &witnessSet);
+		WitnessSetPointer intro_e(unsigned i, unsigned j, Bag &b, WitnessSet &witnessSet);
+		WitnessSetPointer forget_v(unsigned i, Bag &b, WitnessSet &witnessSet);
+		WitnessSetPointer join(Bag &b, WitnessSet &witnessSet1, WitnessSet &witnessSet2);
+		bool is_final_set_witness(Bag &b,WitnessSet &witnessSet);
 };
 
 #endif

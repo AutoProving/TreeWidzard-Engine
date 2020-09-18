@@ -3,44 +3,48 @@
 #include "DynamicCore.h"
 
 
-shared_ptr<WitnessSet> DynamicCore::get_initialSet() {
-    return this->initialWitnessSet;
+WitnessSetPointer DynamicCore::getInitialSet() {
+    return initialWitnessSet;
 }
 
-shared_ptr<WitnessSet> DynamicCore::intro_v(unsigned i, Bag &b, WitnessSet &witnessSet)
+void DynamicCore::insertIntoInitialWitnessSet(WitnessPointer w) {
+	initialWitnessSet->container.insert(w);
+}
+
+WitnessSetPointer DynamicCore::intro_v(unsigned i, Bag &b, WitnessSet &witnessSet)
 {
-    shared_ptr<WitnessSet> aux(new WitnessSet); // aux initializes with empty set
-    for (set<shared_ptr<Witness>>::iterator it = witnessSet.container.begin();  it != witnessSet.container.end() ; ++it){
-        shared_ptr<Witness> temp = *it;
+    WitnessSetPointer aux(new WitnessSet); // aux initializes with empty set
+    for (set<WitnessPointer>::iterator it = witnessSet.container.begin();  it != witnessSet.container.end() ; ++it){
+        WitnessPointer temp = *it;
         aux->union_set_witness(intro_v(i,b,*temp));
     }
     return clean(aux);
 }
 
-shared_ptr<WitnessSet> DynamicCore::intro_e(unsigned i, unsigned j, Bag &b, WitnessSet &witnessSet) {
-    shared_ptr<WitnessSet> aux(new WitnessSet); // aux initializes with empty set
-    for (set<shared_ptr<Witness>>::iterator it = witnessSet.container.begin(); it != witnessSet.container.end(); ++it){
-        shared_ptr<Witness> temp = *it;
+WitnessSetPointer DynamicCore::intro_e(unsigned i, unsigned j, Bag &b, WitnessSet &witnessSet) {
+    WitnessSetPointer aux(new WitnessSet); // aux initializes with empty set
+    for (set<WitnessPointer>::iterator it = witnessSet.container.begin(); it != witnessSet.container.end(); ++it){
+        WitnessPointer temp = *it;
         aux->union_set_witness(intro_e(i,j, b,*temp));
     }
     return clean(aux);
 }
 
-shared_ptr<WitnessSet> DynamicCore::forget_v(unsigned i, Bag &b, WitnessSet &witnessSet) {
-    shared_ptr<WitnessSet> aux(new WitnessSet); // aux initializes with empty set
-    for (set<shared_ptr<Witness>>::iterator it = witnessSet.container.begin(); it!=witnessSet.container.end(); ++it){
-        shared_ptr<Witness> temp = *it;
+WitnessSetPointer DynamicCore::forget_v(unsigned i, Bag &b, WitnessSet &witnessSet) {
+    WitnessSetPointer aux(new WitnessSet); // aux initializes with empty set
+    for (set<WitnessPointer>::iterator it = witnessSet.container.begin(); it!=witnessSet.container.end(); ++it){
+        WitnessPointer temp = *it;
         aux->union_set_witness(forget_v(i,b,*temp));
     }
     return clean(aux);
 }
 
-shared_ptr<WitnessSet> DynamicCore::join(Bag &b, WitnessSet &witnessSet1, WitnessSet &witnessSet2) {
-    shared_ptr<WitnessSet> aux(new WitnessSet);
-    for (set<shared_ptr<Witness>>::iterator it = witnessSet1.container.begin(); it!=witnessSet1.container.end(); ++it){
-        shared_ptr<Witness> temp1 = *it;
-        for (set<shared_ptr<Witness>>::iterator itr = witnessSet2.container.begin(); itr!=witnessSet2.container.end(); ++itr){
-            shared_ptr<Witness> temp2 = *itr;
+WitnessSetPointer DynamicCore::join(Bag &b, WitnessSet &witnessSet1, WitnessSet &witnessSet2) {
+    WitnessSetPointer aux(new WitnessSet);
+    for (set<WitnessPointer>::iterator it = witnessSet1.container.begin(); it!=witnessSet1.container.end(); ++it){
+        WitnessPointer temp1 = *it;
+        for (set<WitnessPointer>::iterator itr = witnessSet2.container.begin(); itr!=witnessSet2.container.end(); ++itr){
+            WitnessPointer temp2 = *itr;
             aux->union_set_witness(join(b,*temp1, *temp2));
         }
     }
@@ -49,8 +53,8 @@ shared_ptr<WitnessSet> DynamicCore::join(Bag &b, WitnessSet &witnessSet1, Witnes
 
 bool DynamicCore::is_final_set_witness(Bag &b, WitnessSet &witnessSet) {
     bool flag = false;
-    for(set<shared_ptr<Witness>>::iterator it = witnessSet.container.begin(); it!=witnessSet.container.end(); ++it){
-        shared_ptr<Witness> temp = *it;
+    for(set<WitnessPointer>::iterator it = witnessSet.container.begin(); it!=witnessSet.container.end(); ++it){
+        WitnessPointer temp = *it;
         if(is_final_witness(*temp)){
             return true;
         }
@@ -58,24 +62,24 @@ bool DynamicCore::is_final_set_witness(Bag &b, WitnessSet &witnessSet) {
     return flag;
 }
 
-shared_ptr<WitnessSet> DynamicCore::clean(shared_ptr<WitnessSet> witnessSet) {
+WitnessSetPointer DynamicCore::clean(WitnessSetPointer witnessSet) {
     return witnessSet;
 }
 
-shared_ptr<WitnessSet> DynamicCore::intro_v(unsigned i, Bag &b, Witness &witness) {
+WitnessSetPointer DynamicCore::intro_v(unsigned i, Bag &b, Witness &witness) {
     cout<<"ERROR: DynamicCore::intro_v";
     exit(20);
 }
 
-shared_ptr<WitnessSet> DynamicCore::intro_e(unsigned i, unsigned j, Bag &b, Witness &witness) {
+WitnessSetPointer DynamicCore::intro_e(unsigned i, unsigned j, Bag &b, Witness &witness) {
     cout<<"ERROR: DynamicCore::intro_e";
     exit(20);}
 
-shared_ptr<WitnessSet> DynamicCore::forget_v(unsigned i, Bag &b, Witness &witness) {
+WitnessSetPointer DynamicCore::forget_v(unsigned i, Bag &b, Witness &witness) {
     cout<<"ERROR: DynamicCore::forget_v";
     exit(20);}
 
-shared_ptr<WitnessSet> DynamicCore::join(Bag &b, Witness &witness1, Witness &witness2) {
+WitnessSetPointer DynamicCore::join(Bag &b, Witness &witness1, Witness &witness2) {
     cout<<"ERROR: DynamicCore::join";
     exit(20);
 }
@@ -85,7 +89,7 @@ bool DynamicCore::is_final_witness(Witness &witness) {
     exit(20);
 }
 
-shared_ptr<WitnessSet> DynamicCore::createInitialWitnessSet() {
+void DynamicCore::createInitialWitnessSet() {
     cout<<"ERROR: DynamicCore::createInitialWitnessSet";
     exit(20);
 }

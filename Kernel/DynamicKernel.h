@@ -22,14 +22,13 @@ class DynamicKernel: public std::enable_shared_from_this<DynamicKernel> {
         void addCore(DynamicCore &core);
         Width &get_width();
         void set_width(Width &width);
-        //void set_properties(vector<PropertyAssignment> &vectorProperties);
 		void addProperty(PropertyAssignment&);
         const vector<PropertyAssignment> &get_properties() const;
-        shared_ptr<State> initialState();
-        shared_ptr<State> intro_v(shared_ptr<State> q, unsigned i);
-        shared_ptr<State> intro_e(shared_ptr<State> q, const unsigned i, const unsigned j);
-        shared_ptr<State> forget_v(shared_ptr<State> q, unsigned i);
-        shared_ptr<State> join(shared_ptr<State> q1, shared_ptr<State> q2);
+        StatePointer initialState();
+        StatePointer intro_v(StatePointer q, unsigned i);
+        StatePointer intro_e(StatePointer q, const unsigned i, const unsigned j);
+        StatePointer forget_v(StatePointer q, unsigned i);
+        StatePointer join(StatePointer q1, StatePointer q2);
         DynamicCore* pointerToCoreNumber(unsigned i);
         
 };
