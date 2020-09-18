@@ -312,8 +312,8 @@ pair<bool,ConcreteTreeDecomposition> LeveledSetSearch::search(){
                         }
                         if(flags->get("LoopTime") == 1){
                             for(size_t m = 0 ; m < newState->numberOfComponents(); m++){
-                                if(maxWitnessSetSize[m] < static_cast<unsigned>(newState->getWitnessSet(m)->container.size()) ) {
-                                    maxWitnessSetSize[m] = newState->getWitnessSet(m)->container.size();
+                                if(maxWitnessSetSize[m] < static_cast<unsigned>(newState->getWitnessSet(m)->size()) ) {
+                                    maxWitnessSetSize[m] = newState->getWitnessSet(m)->size();
                                 }
                             }
                         }
@@ -340,8 +340,8 @@ pair<bool,ConcreteTreeDecomposition> LeveledSetSearch::search(){
                                     }
                                     if(flags->get("LoopTime") == 1){
                                         for(size_t m = 0 ; m < newState->numberOfComponents(); m++){
-                                            if(maxWitnessSetSize[m] < static_cast<unsigned>(newState->getWitnessSet(m)->container.size()) ){
-                                                maxWitnessSetSize[m] = newState->getWitnessSet(m)->container.size();
+                                            if(maxWitnessSetSize[m] < static_cast<unsigned>(newState->getWitnessSet(m)->size()) ){
+                                                maxWitnessSetSize[m] = newState->getWitnessSet(m)->size();
                                             }
                                         }
                                     }
@@ -364,8 +364,8 @@ pair<bool,ConcreteTreeDecomposition> LeveledSetSearch::search(){
                         }
                         if(flags->get("LoopTime") == 1){
                             for(size_t m = 0 ; m < newState->numberOfComponents(); m++){
-                                if(maxWitnessSetSize[m] < static_cast<unsigned>(newState->getWitnessSet(m)->container.size()) ){
-                                    maxWitnessSetSize[m] = newState->getWitnessSet(m)->container.size();
+                                if(maxWitnessSetSize[m] < static_cast<unsigned>(newState->getWitnessSet(m)->size()) ){
+                                    maxWitnessSetSize[m] = newState->getWitnessSet(m)->size();
                                 }
                             }
                         }
@@ -392,8 +392,8 @@ pair<bool,ConcreteTreeDecomposition> LeveledSetSearch::search(){
                         }
                         if(flags->get("LoopTime") == 1){
                             for(size_t m = 0 ; m < newState->numberOfComponents(); m++){
-                                if(maxWitnessSetSize[m] < static_cast<unsigned>(newState->getWitnessSet(m)->container.size()) ){
-                                    maxWitnessSetSize[m] = newState->getWitnessSet(m)->container.size();
+                                if(maxWitnessSetSize[m] < static_cast<unsigned>(newState->getWitnessSet(m)->size()) ){
+                                    maxWitnessSetSize[m] = newState->getWitnessSet(m)->size();
                                 }
                             }
                         }

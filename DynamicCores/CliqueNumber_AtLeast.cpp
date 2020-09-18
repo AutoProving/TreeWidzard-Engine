@@ -119,7 +119,7 @@ shared_ptr<WitnessSet> CliqueNumber_AtLeast_DynamicCore::intro_v(unsigned i, Bag
     if (CliqueNumber_AtLeast_Witness *e = dynamic_cast<CliqueNumber_AtLeast_Witness *>(&witness)){
         shared_ptr<CliqueNumber_AtLeast_Witness> p = e->shared_from_this();
         shared_ptr<WitnessSet> witnessSet (new WitnessSet);
-        witnessSet->container.insert(p); 
+        witnessSet->insert(p); 
         return witnessSet;
     }else{
         cerr<<"ERROR: in Dynamic_Clique::intro_v cast error"<<endl;
@@ -135,7 +135,7 @@ shared_ptr<WitnessSet> CliqueNumber_AtLeast_DynamicCore::intro_e(unsigned i, uns
 
         shared_ptr<WitnessSet> witnessSet (new WitnessSet);
         if (p->found){
-            witnessSet->container.insert(p);
+            witnessSet->insert(p);
         } else {
             set<pair<unsigned,unsigned> > aux = p->edges;
             set<unsigned> vertices = verticesOnPartialClique(aux);
@@ -153,23 +153,23 @@ shared_ptr<WitnessSet> CliqueNumber_AtLeast_DynamicCore::intro_e(unsigned i, uns
                     // if the partial clique gets complete, we are done, meaning that we set found to true and the edgeset to empty.
                     shared_ptr<CliqueNumber_AtLeast_Witness> w(new CliqueNumber_AtLeast_Witness);
                     w->found = true;
-                    witnessSet->container.insert(w);
+                    witnessSet->insert(w);
                 } else {
                     // otherwise, found is still false and the edge set is equal to the augmented edge set.
                     shared_ptr<CliqueNumber_AtLeast_Witness> w(new CliqueNumber_AtLeast_Witness);
                     w->found = false;
                     w->edges = aux;
-                    witnessSet->container.insert(w);
+                    witnessSet->insert(w);
                 }   
             } else {
                 // If one of the endpoints is not in the partial clique, we can choose either to add the edge or not to add.
-                witnessSet->container.insert(p); // here we choose not to add the edge
+                witnessSet->insert(p); // here we choose not to add the edge
                 aux.insert(newedge);
                 if (verticesOnPartialClique(aux).size() <= cliqueSize) {
                     shared_ptr<CliqueNumber_AtLeast_Witness> w(new CliqueNumber_AtLeast_Witness);
                     w->found = false;
                     w->edges = aux;
-                    witnessSet->container.insert(w);
+                    witnessSet->insert(w);
                 }
              }
         }
@@ -189,12 +189,12 @@ shared_ptr<WitnessSet> CliqueNumber_AtLeast_DynamicCore::forget_v(unsigned i, Ba
             
 	    if (vertices.find(i) == vertices.end() or p->found){
 	 	// this means that i does not belong to the clique and therefore it does not affect the witness.
-		 witnessSet->container.insert(p); // MAKE SURE THAT p IS A SHARED POINTER
+		 witnessSet->insert(p); // MAKE SURE THAT p IS A SHARED POINTER
 	    } else {
                 // Otherwise the witness will be affected in some way.
                 set<unsigned> neighbors = neighborsOnPartialClique(p->edges, i);
                 if (neighbors.size() == cliqueSize-1){
-                    witnessSet->container.insert(p); // We don't change the witness. Edges containing is still remain there in.
+                    witnessSet->insert(p); // We don't change the witness. Edges containing is still remain there in.
                 } 
                 // Note that if the if condition is not satisfied, then the witness is deffective,
                 // because we tried to delete a vertex before adding all its neighbors on the clique.
@@ -218,19 +218,19 @@ shared_ptr<WitnessSet> CliqueNumber_AtLeast_DynamicCore::join(Bag &b, Witness &w
             set_union(p1->edges.begin(),p1->edges.end(),p2->edges.begin(),p2->edges.end(),std::inserter(aux,aux.begin()));
             set<unsigned> vertices = verticesOnPartialClique(aux);
             if (p1->found){
-                witnessSet->container.insert(p1);
+                witnessSet->insert(p1);
             } else if (p2->found){
-                witnessSet->container.insert(p2);
+                witnessSet->insert(p2);
             } else if (vertices.size() == cliqueSize  and aux.size() == cliqueSize*(cliqueSize-1)/2){
                 // In this case a clique was found.
                 shared_ptr<CliqueNumber_AtLeast_Witness> w(new CliqueNumber_AtLeast_Witness);
                 w->found = true;
-                witnessSet->container.insert(w); //
+                witnessSet->insert(w); //
             } else if (vertices.size() <=  cliqueSize and aux.size() != cliqueSize*(cliqueSize-1)/2){
                 shared_ptr<CliqueNumber_AtLeast_Witness> w(new CliqueNumber_AtLeast_Witness);
                 w->found = false;
                 w->edges = aux;
-                witnessSet->container.insert(w); //
+                witnessSet->insert(w); //
             } else{
                 // In this case, the partial clique has more vertices than required and the witness is deffective
                 // this implies that witnessSet is empty. (This else has no commands.)
