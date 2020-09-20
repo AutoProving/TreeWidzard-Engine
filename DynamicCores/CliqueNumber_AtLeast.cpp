@@ -1,6 +1,7 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 
 #include "CliqueNumber_AtLeast.h"
+#include <cassert>
 
 bool CliqueNumber_AtLeast_Witness::is_equal(const Witness &rhs) const{
     if (CliqueNumber_AtLeast_Witness const *e = dynamic_cast<CliqueNumber_AtLeast_Witness const *>(&rhs)) {
@@ -76,26 +77,53 @@ void CliqueNumber_AtLeast_Witness::print() {
     }
 }*/
 
+unsigned int countNumOfBits(unsigned int value)
+{
+    if(value == 0) 
+        return 1;
+    unsigned int cnt = 0;
+    while(value > 0)
+    {
+        value >>= 1;
+        cnt++;
+    }
+    return cnt;
+}
+
 // Auxiliary Function. Vertices seen in the partial clique.
-set<unsigned> verticesOnPartialClique(set<pair<unsigned,unsigned>> edges){
-	set<unsigned> aux;
-	for (set<pair<unsigned,unsigned>>::iterator it = edges.begin(); it!= edges.end(); it++){
-	    aux.insert(it->first);
-	    aux.insert(it->second); 
-	}
-	return aux;
+LargeBitVector<int> verticesOnPartialClique(set<pair<unsigned,unsigned>> edges){
+    unsigned int maxiNumber = 0;
+    for (set<pair<unsigned,unsigned>>::iterator it = edges.begin(); it!= edges.end(); it++){
+        maxiNumber = max(maxiNumber, it->first);
+        maxiNumber = max(maxiNumber, it->second);
+    }
+    LargeBitVector<int> aux(countNumOfBits(maxiNumber), 1);
+    for (set<pair<unsigned,unsigned>>::iterator it = edges.begin(); it!= edges.end(); it++){
+        aux.push_back(it->first);
+        aux.push_back(it->second);
+    }
+    aux.normalize();
+    return aux;
 }
 
 // Auxiliary Function. Neighbors of i seen in the clique. 
-set<unsigned> neighborsOnPartialClique(set<pair<unsigned,unsigned>> edges, int i){
-	set<unsigned> aux;
-	for (set<pair<unsigned,unsigned>>::iterator it = edges.begin(); it!= edges.end(); it++){
-	    if (it->first == i) {
-                aux.insert(it->second);
-            }else if (it->second == i){
-                aux.insert(it->first);
-	    }	
+LargeBitVector<int> neighborsOnPartialClique(set<pair<unsigned,unsigned>> edges, int i){
+	unsigned int maxiNumber = 0;
+
+    for(set<pair<unsigned,unsigned>>::iterator it = edges.begin(); it!= edges.end(); it++){
+	    if(it->first == i)
+            maxiNumber = max(maxiNumber, it->second);
+        else if(it->second == i)
+            maxiNumber = max(maxiNumber, it->first);
 	}
+    LargeBitVector<int> aux(countNumOfBits(maxiNumber), 1);
+    for(set<pair<unsigned,unsigned>>::iterator it = edges.begin(); it!= edges.end(); it++){
+	    if(it->first == i)
+            aux.push_back(it->second);
+        else if(it->second == i)
+            aux.push_back(it->first);
+	}
+    aux.normalize();
 	return aux;
 }
 
@@ -138,14 +166,14 @@ shared_ptr<WitnessSet> CliqueNumber_AtLeast_DynamicCore::intro_e(unsigned i, uns
             witnessSet->insert(p);
         } else {
             set<pair<unsigned,unsigned> > aux = p->edges;
-            set<unsigned> vertices = verticesOnPartialClique(aux);
+            LargeBitVector<int> vertices = verticesOnPartialClique(aux);
             pair<unsigned,unsigned> newedge;
             if (i<j){
                 newedge = make_pair(i,j);
             } else if (j<i) {
                 newedge = make_pair(j,i);
             }
-            if (vertices.find(i) != vertices.end() and vertices.find(j) != vertices.end()){
+            if (vertices.binarySearch(i) == true and vertices.binarySearch(j) == true){
                 // Suppose that both endpoints of the edge are in the partial clique.
                 // Then we have no choice. We need to add the edge to the partial clique.
                 aux.insert(newedge);
@@ -185,14 +213,14 @@ shared_ptr<WitnessSet> CliqueNumber_AtLeast_DynamicCore::forget_v(unsigned i, Ba
         shared_ptr<CliqueNumber_AtLeast_Witness> p = e->shared_from_this();
         shared_ptr<WitnessSet> witnessSet(new WitnessSet);
 
-	    set<unsigned> vertices = verticesOnPartialClique(p->edges);
+	    LargeBitVector<int> vertices = verticesOnPartialClique(p->edges);
             
-	    if (vertices.find(i) == vertices.end() or p->found){
+	    if (vertices.binarySearch(i) == false or p->found){
 	 	// this means that i does not belong to the clique and therefore it does not affect the witness.
 		 witnessSet->insert(p); // MAKE SURE THAT p IS A SHARED POINTER
 	    } else {
                 // Otherwise the witness will be affected in some way.
-                set<unsigned> neighbors = neighborsOnPartialClique(p->edges, i);
+                LargeBitVector<int> neighbors = neighborsOnPartialClique(p->edges, i);
                 if (neighbors.size() == cliqueSize-1){
                     witnessSet->insert(p); // We don't change the witness. Edges containing is still remain there in.
                 } 
@@ -216,7 +244,7 @@ shared_ptr<WitnessSet> CliqueNumber_AtLeast_DynamicCore::join(Bag &b, Witness &w
             shared_ptr<WitnessSet> witnessSet(new WitnessSet);
             set<pair<unsigned,unsigned> > aux;
             set_union(p1->edges.begin(),p1->edges.end(),p2->edges.begin(),p2->edges.end(),std::inserter(aux,aux.begin()));
-            set<unsigned> vertices = verticesOnPartialClique(aux);
+            LargeBitVector<int> vertices = verticesOnPartialClique(aux);
             if (p1->found){
                 witnessSet->insert(p1);
             } else if (p2->found){

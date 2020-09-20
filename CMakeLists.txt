@@ -11,9 +11,9 @@ else()
     # lots of warnings and all warnings as errors
     # add_compile_options(-Wall -Wextra -pedantic -Werror)
     #add_compile_options(-Wall)
-	# optimize
-    add_compile_options(-O2)
 endif()
+
+add_compile_options(-O2)
 
 include_directories(.)
 
@@ -64,5 +64,7 @@ add_executable(
         Parser/lexer.cpp
         Parser/parser.cpp
         Parser/parser.hpp
-
+    # BitVector files
+        BitVector/BitVector.cpp
+        BitVector/BitVector.h
 )
