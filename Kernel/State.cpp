@@ -56,12 +56,12 @@ bool State::operator==(State& rhs) {
     }
 }
 
-/// Implementation of this function should change regard to WitnessSet adn Witness
+/// Implementation of this function should change regard to WitnessSet and Witness
 size_t State::operator()(const State &b) const {
     string s;
     set<unsigned> bagSet = b.get_bag().get_elements();
-    for (set<unsigned>::iterator i = bagSet.begin(); i != bagSet.end() ; ++i) {
-        s = s + (char)(*i);
+	for (auto element : bagSet) {
+        s = s + (char) element;
     }
     s = s + 'a';
     if(b.get_bag().get_edge().first != 0 and b.get_bag().get_edge().second != 0 ){
@@ -74,11 +74,9 @@ size_t State::operator()(const State &b) const {
 void State::print(){
     bag.print();
     int i = 1;
-	// TODO: replace all for's to:
-	// for (auto element : witnessSetVector) { ... }
-	for (auto it = witnessSetVector.begin(); it != witnessSetVector.end(); ++it) {
+	for (auto element : witnessSetVector) {
         cout<<"\nCore "<<i<< " WitnessSet \n";
-        (*it)->print();
+        element->print();
         i++;
     }
     cout<<"\n------------\n";

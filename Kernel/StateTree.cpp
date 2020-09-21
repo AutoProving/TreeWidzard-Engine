@@ -318,8 +318,8 @@ void StateTree::printAbstract() {
 
 bool StateTree::readToken(string::iterator &it, string token){
     string::iterator tempIt = it;
-    for(string::iterator itr = token.begin() ; itr != token.end() ; ++itr){
-        if(!(*tempIt== *itr)){
+	for (auto element : token) {
+        if(!(*tempIt == element)){
             return false;
         }else{
             tempIt++;

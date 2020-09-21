@@ -38,9 +38,8 @@ Witness &CliqueNumber_AtLeast_Witness::set_equal(Witness &witness) {
 void CliqueNumber_AtLeast_Witness::print() {
     cout << "found = " << found << " ";
 	cout<<"E={";
-    for(set<pair<unsigned,unsigned>>::iterator it = edges.begin() ; it != edges.end() ; ++it){
-        cout<<"("<<it->first<<","<<it->second<<")";
-    }
+	for (auto edg : edges)
+        cout << "(" << edg.first << "," << edg.second << ")";
     cout<<"}"; 
 }
 
@@ -91,37 +90,37 @@ unsigned int countNumOfBits(unsigned int value)
 }
 
 // Auxiliary Function. Vertices seen in the partial clique.
-LargeBitVector<int> verticesOnPartialClique(set<pair<unsigned,unsigned>> edges){
+LargeBitVector<int> verticesOnPartialClique(set<pair<unsigned,unsigned>>& edges){
     unsigned int maxiNumber = 0;
-    for (set<pair<unsigned,unsigned>>::iterator it = edges.begin(); it!= edges.end(); it++){
-        maxiNumber = max(maxiNumber, it->first);
-        maxiNumber = max(maxiNumber, it->second);
+	for (auto edg : edges) {
+        maxiNumber = max(maxiNumber, edg.first);
+        maxiNumber = max(maxiNumber, edg.second);
     }
     LargeBitVector<int> aux(countNumOfBits(maxiNumber), 1);
-    for (set<pair<unsigned,unsigned>>::iterator it = edges.begin(); it!= edges.end(); it++){
-        aux.push_back(it->first);
-        aux.push_back(it->second);
+	for (auto edg : edges) {
+        aux.push_back(edg.first);
+        aux.push_back(edg.second);
     }
     aux.normalize();
     return aux;
 }
 
 // Auxiliary Function. Neighbors of i seen in the clique. 
-LargeBitVector<int> neighborsOnPartialClique(set<pair<unsigned,unsigned>> edges, int i){
+LargeBitVector<int> neighborsOnPartialClique(set<pair<unsigned,unsigned>>& edges, int i){
 	unsigned int maxiNumber = 0;
 
-    for(set<pair<unsigned,unsigned>>::iterator it = edges.begin(); it!= edges.end(); it++){
-	    if(it->first == i)
-            maxiNumber = max(maxiNumber, it->second);
-        else if(it->second == i)
-            maxiNumber = max(maxiNumber, it->first);
+	for (auto edg : edges) {
+	    if(edg.first == i)
+            maxiNumber = max(maxiNumber, edg.second);
+        else if(edg.second == i)
+            maxiNumber = max(maxiNumber, edg.first);
 	}
     LargeBitVector<int> aux(countNumOfBits(maxiNumber), 1);
-    for(set<pair<unsigned,unsigned>>::iterator it = edges.begin(); it!= edges.end(); it++){
-	    if(it->first == i)
-            aux.push_back(it->second);
-        else if(it->second == i)
-            aux.push_back(it->first);
+	for (auto edg : edges) {
+	    if(edg.first == i)
+            aux.push_back(edg.second);
+        else if(edg.second == i)
+            aux.push_back(edg.first);
 	}
     aux.normalize();
 	return aux;

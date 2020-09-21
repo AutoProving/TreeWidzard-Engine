@@ -12,19 +12,14 @@ void WitnessSet::insert(shared_ptr<Witness> ws) {
 
 void WitnessSet::union_set_witness(shared_ptr<WitnessSet> witnessSet) {
 
-    for (set<shared_ptr<Witness>,compare>::iterator it = witnessSet->container.begin(); it != witnessSet->container.end() ; ++it) {
-                this->container.insert(*it);
-    }
+	for (auto element : *witnessSet)
+		container.insert(element);
 }
 
 void WitnessSet::print() {
 
-    for (set<shared_ptr<Witness>,compare>::iterator it = container.begin();  it!=container.end() ; it++) {
-        (*it)->print();
-        if( (! container.empty()) and it != --container.end()  ){
-            cout<<endl;
-        }
-    }
+	for (auto element : *this)
+        element->print();
 }
 
 bool WitnessSet::operator==(WitnessSet &rhs){
@@ -33,8 +28,8 @@ bool WitnessSet::operator==(WitnessSet &rhs){
         return false;
     } else{
 		WitnessSet::iterator it = rhs.begin();
-		for (WitnessSet::iterator itr = begin(); itr != end(); itr++) {
-            if(!(**itr == **it)){
+		for (auto element : *this) {
+            if(!(*element == **it)){
                 return false;
             }
             it++;
@@ -51,10 +46,10 @@ bool WitnessSet::operator<(WitnessSet &rhs) {
         return false;
     } else{
 		WitnessSet::iterator it = rhs.begin();
-		for (WitnessSet::iterator itr = begin(); itr != end(); itr++) {
-            if(**it < **itr){
+		for (auto element : *this) {
+            if(**it < *element){
                 return false;
-            }else if(**itr < **it){
+            }else if(*element < **it){
                 return true;
             }
             it++;

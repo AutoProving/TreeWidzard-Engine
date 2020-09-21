@@ -25,8 +25,8 @@ void Bag::set_elements(const std::set<unsigned> &elements) {
 
 void Bag::print(){
     std::cout << "[{" ;
-    for (std::set<unsigned>::iterator it = elements.begin(); it != elements.end(); it++){
-        std::cout << (*it) << ", ";
+	for (auto element : elements) {
+        std::cout << element << ", ";
     }
     std::cout << "} , {" << i << ", " << j << "}]";
 }

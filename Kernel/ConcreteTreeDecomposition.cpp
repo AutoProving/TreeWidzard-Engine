@@ -84,8 +84,8 @@ void CTDNodeNew::set_children(vector<shared_ptr<CTDNodeNew> > children){
 string  CTDNodeNew::printCTDNode() {
     set<unsigned> bagElements = B.get_elements();
     string s =   "{";
-    for(set<unsigned>::iterator it = bagElements.begin() ; it != bagElements.end() ; it++){
-        s = s+to_string(*it)+",";
+	for (auto element : bagElements) {
+        s = s+to_string(element)+",";
     }
     s= s + "} ["+to_string(this->get_B().get_edge().first)+","+to_string(this->get_B().get_edge().second)+"]";
     return s;
@@ -316,8 +316,8 @@ void ConcreteTreeDecomposition::printAbstract() {
 
 bool ConcreteTreeDecomposition::readToken(string::iterator &it, string token) {
     string::iterator tempIt = it;
-    for(string::iterator itr = token.begin() ; itr != token.end() ; ++itr){
-        if(!(*tempIt== *itr)){
+	for (auto c : token) {
+        if(!(*tempIt == c)){
             return false;
         }else{
             tempIt++;

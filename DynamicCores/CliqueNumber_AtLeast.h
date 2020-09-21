@@ -17,8 +17,8 @@ public:
 	virtual bool is_less(const Witness &rhs)const;
 	virtual Witness& set_equal(Witness &witness);
 	virtual void print();
-	friend LargeBitVector<int> verticesOnPartialClique(set<pair<int,int>> edges); // Auxiliary Function. Vertices seen in the partial clique.
-	friend LargeBitVector<int> neighborsOnPartialClique(set<pair<int,int>> edges, int i); // Auxiliary Function. Neighbors of i seen in the clique.
+	friend LargeBitVector<int> verticesOnPartialClique(set<pair<int,int>>& edges); // Auxiliary Function. Vertices seen in the partial clique.
+	friend LargeBitVector<int> neighborsOnPartialClique(set<pair<int,int>>& edges, int i); // Auxiliary Function. Neighbors of i seen in the clique.
 	friend unsigned int countNumOfBits(unsigned int value);
 };
 
