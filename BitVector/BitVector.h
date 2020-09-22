@@ -3,13 +3,14 @@
 
 #include <vector>
 #include <utility>
+#include "Bitset.h"
 
 template <class Type>
 class LargeBitVector
 {
 private:
-    std::vector<bool> array;
-    
+    Bitset array;
+
     unsigned int writeOnHeader(unsigned int pointer, unsigned int value, unsigned int b);
     unsigned int readFromHeader(unsigned int pointer) const;
     unsigned int countNumberOfBits(unsigned int value) const;
@@ -23,11 +24,11 @@ private:
 
     void quickSort(int l, int r);
     
-    std::vector<bool> toBits(int value);
-    int fromBits(std::vector<bool> &v, int dummy) const;
+    Bitset toBits(int value);
+    int fromBits(Bitset &v, int dummy) const;
     
-    std::vector<bool> toBits(std::pair<int, int> value);
-    std::pair<int, int> fromBits(std::vector<bool> &v, std::pair<int, int> dummy) const;
+    Bitset toBits(std::pair<int, int> value);
+    std::pair<int, int> fromBits(Bitset &v, std::pair<int, int> dummy) const;
 
 public:
 

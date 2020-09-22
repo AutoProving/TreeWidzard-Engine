@@ -67,4 +67,6 @@ add_executable(
     # BitVector files
         BitVector/BitVector.cpp
         BitVector/BitVector.h
+        BitVector/Bitset.cpp
+        BitVector/Bitset.h
 )

@@ -7,7 +7,9 @@ LargeBitVector<Type>::LargeBitVector(unsigned int wordSize,  unsigned int maximu
     unsigned int wsBits = this->countNumberOfBits(wordSize);
     unsigned int mxBits = this->countNumberOfBits(maximumSize);
 
-    this->array.resize((wsBits << 1) + (mxBits << 2) + 6);
+    int sz = (wsBits << 1) + (mxBits << 2) + 6;
+    for(int i = 0; i < sz; i++)
+        this->array.push_back(0);
 
     unsigned int pointer = 0;
     pointer = writeOnHeader(pointer, wordSize, wsBits);
@@ -20,24 +22,25 @@ void LargeBitVector<Type>::doubleMaximumSize()
 {
     int p = this->jumpSpace(1);
 
-    this->array.push_back(false);
-    this->array.push_back(false);
+    this->array.push_back(0);
+    this->array.push_back(0);
 
     for(int i = (int)this->array.size() - 1; i > p + 1; i--)
-        this->array[i] = this->array[i - 2];
+        this->array.set(this->array.at(i - 2), i);
 
-    this->array[p] = false;
-    this->array[p + 1] = true;
+    this->array.set(0, p);
+    this->array.set(1, p + 1);
 
     p = this->jumpSpace(3);
-    this->array.push_back(false);
-    this->array.push_back(false);
+   
+    this->array.push_back(0);
+    this->array.push_back(0);
 
     for(int i = (int)this->array.size() - 1; i >= p; i--)
-        this->array[i] = this->array[i - 2];
+        this->array.set(this->array.at(i - 2), i);
 
-    this->array[p - 2] = false;
-    this->array[p - 1] = true;
+    this->array.set(0, p - 2);
+    this->array.set(1, p - 1);
 }
 
 template <class Type>
@@ -61,18 +64,18 @@ unsigned int LargeBitVector<Type>::writeOnHeader(unsigned int pointer, unsigned 
     {
         if(value & (1 << i))
         {
-            this->array[pointer] = 1;
-            this->array[pointer + 1] = 0;
+            this->array.set(1, pointer);
+            this->array.set(0, pointer + 1);
         }
         else
         {
-            this->array[pointer] = 0;
-            this->array[pointer + 1] = 1;
+            this->array.set(0, pointer);
+            this->array.set(1, pointer + 1);
         }
         pointer += 2;
     }
-    this->array[pointer] = 0;
-    this->array[pointer + 1] = 0;
+    this->array.set(0, pointer);
+    this->array.set(0, pointer + 1);
     pointer += 2;
     return pointer;
 }
@@ -81,9 +84,9 @@ template <class Type>
 unsigned int LargeBitVector<Type>::readFromHeader(unsigned int pointer) const
 {
     unsigned int value = 0, k = 0;
-    while(this->array[pointer] or this->array[pointer + 1])
+    while(this->array.at(pointer) or this->array.at(pointer + 1))
     {
-        if(this->array[pointer] == 1 and this->array[pointer + 1] == 0)
+        if(this->array.at(pointer) == 1 and this->array.at(pointer + 1) == 0)
             value += (1 << k);
         pointer += 2; 
         k++;
@@ -95,7 +98,7 @@ template <class Type>
 void LargeBitVector<Type>::print()
 {
     for(size_t i = 0; i < this->array.size(); i++)
-        std::cout << this->array[i];
+        std::cout << this->array.at(i);
     std::cout << std::endl;
 }
 
@@ -106,7 +109,7 @@ unsigned int LargeBitVector<Type>::jumpSpace(unsigned int n) const
     unsigned int cnt = 0;
     while(cnt < n)
     {
-        if(this->array[pointer] == 0 and this->array[pointer + 1] == 0)
+        if(this->array.at(pointer) == 0 and this->array.at(pointer + 1) == 0)
             cnt++;
         pointer += 2;
     }
@@ -155,65 +158,65 @@ void LargeBitVector<Type>::decrementSize()
 }
 
 template <class Type>
-std::vector<bool> LargeBitVector<Type>::toBits(int value)
+Bitset LargeBitVector<Type>::toBits(int value)
 {
     unsigned int sz = this->getWordSize();
-    std::vector<bool> v(sz, false);
+    Bitset v(sz);
 
     for(size_t i = 0; i < sz; i++)
     {
         if(value & (1 << i))
-            v[i] = 1;
+            v.set(1, i);
         else
-            v[i] = 0;
+            v.set(0, i);
     }
     return v;
 } 
 
 template <class Type>
-int LargeBitVector<Type>::fromBits(std::vector<bool> &v, int dummy) const
+int LargeBitVector<Type>::fromBits(Bitset &v, int dummy) const
 {
     unsigned int sz = this->getWordSize();
     int value = 0;
     for(size_t i = 0; i < sz; i++)
-        if(v[i] == 1)
+        if(v.at(i) == 1)
             value += (1 << i);
     return value;
 }
 
 template <class Type>
-std::vector<bool> LargeBitVector<Type>::toBits(std::pair<int, int> value)
+Bitset LargeBitVector<Type>::toBits(std::pair<int, int> value)
 {
     unsigned int sz = this->getWordSize() >> 1;
-    std::vector<bool> v(sz << 1, false);
+    Bitset v(sz << 1);
 
     for(size_t i = 0; i < sz; i++)
     {
         if(value.first & (1 << i))
-            v[i] = 1;
+            v.set(1, i);
         else
-            v[i] = 0;
+            v.set(0, i);
     }
     for(size_t i = 0; i < sz; i++)
     {
         if(value.second & (1 << i))
-            v[i + sz] = 1;
+            v.set(1, i + sz);
         else
-            v[i + sz] = 0;
+            v.set(0, i + sz);
     }
     return v;
 } 
 
 template <class Type>
-std::pair<int, int> LargeBitVector<Type>::fromBits(std::vector<bool> &v, std::pair<int, int> dummy) const
+std::pair<int, int> LargeBitVector<Type>::fromBits(Bitset &v, std::pair<int, int> dummy) const
 {
     std::pair<int, int> value = std::make_pair(0, 0);
     int sz = this->getWordSize() >> 1;
     for(size_t i = 0; i < sz; i++)
-        if(v[i] == 1)
+        if(v.at(i) == 1)
             value.first += (1 << i);
     for(size_t i = 0; i < sz; i++)
-        if(v[i + sz] == 1)
+        if(v.at(i + sz) == 1)
             value.second += (1 << i);
     return value;
 }
@@ -221,9 +224,9 @@ std::pair<int, int> LargeBitVector<Type>::fromBits(std::vector<bool> &v, std::pa
 template <class Type>
 void LargeBitVector<Type>::push_back(Type element)
 {
-    std::vector<bool> v = toBits(element);
+    Bitset v = toBits(element);
     for(size_t i = 0; i < v.size(); i++)
-        this->array.push_back(v[i]);
+        this->array.push_back(v.at(i));
     this->incrementSize();
 }
 
@@ -232,13 +235,10 @@ Type LargeBitVector<Type>::at(int index) const
 {
     int b = this->getFirstBit() + index * this->getWordSize();
 
-    std::vector<bool> v(this->getWordSize());
+    Bitset v(this->getWordSize());
     int sz = b + this->getWordSize();
     for(size_t i = b, j = 0; i < sz; i++, j++)
-    {
-        v[j] = this->array[i];
-    } 
-
+        v.set(this->array.at(i), j);
     Type dummy;
     return this->fromBits(v, dummy);
 }
@@ -248,10 +248,10 @@ template <class Type>
 void LargeBitVector<Type>::set(Type element, int index)
 {
     int b = this->getFirstBit() + index * this->getWordSize();
-    std::vector<bool> v = toBits(element);
+    Bitset v = toBits(element);
     int sz = b + this->getWordSize();
     for(size_t i = b, j = 0; i < sz; i++, j++)
-        this->array[i] = v[j];
+        this->array.set(v.at(j), i);
 }
 
 template <class Type>
@@ -312,7 +312,7 @@ void LargeBitVector<Type>::remove(unsigned int index)
     int b = this->getFirstBit() + index * this->getWordSize();
     int e = this->getFirstBit() + (this->size() - 1) * this->getWordSize();
     for(int i = b; i < e; i++)
-        this->array[i] = this->array[i + this->getWordSize()];
+        this->array.set(this->array.at(i + this->getWordSize()), i);
     this->decrementSize();
     for(int i = 0; i < this->getWordSize(); i++)
         this->array.pop_back();
@@ -425,7 +425,7 @@ void LargeBitVector<Type>::insertSorted(Type value)
             break;
         }
     for(int i = 0; i < this->getWordSize(); i++)
-        this->array.push_back(false);
+        this->array.push_back(0);
 
     this->incrementSize();
 
@@ -433,13 +433,13 @@ void LargeBitVector<Type>::insertSorted(Type value)
     int e = this->getFirstBit() + (this->size() - 1) * this->getWordSize();
 
     for(int i = e - 1; i >= b; i--)
-        this->array[i + this->getWordSize()] = this->array[i];
+        this->array.set(this->array.at(i), i + this->getWordSize());
 
-    std::vector<bool> v = this->toBits(value);
+    Bitset v = this->toBits(value);
 
     int sz = b + this->getWordSize();
     for(int i = b, j = 0; i < sz; i++, j++)
-        this->array[i] = v[j];
+        this->array.set(v.at(j), i);
 }
 
 template <class Type>
