@@ -1,12 +1,16 @@
 #ifndef BITSET_H
 #define BITSET_H_H
 
+#include <cstdint>
 #include <vector>
+
+#define BITSET_SIZE_LOG 3
+#define BITSET_TYPE uint8_t
 
 class BitSet {
   private:
 	unsigned int bitSetSize;
-	std::vector<unsigned int> array;
+	std::vector<BITSET_TYPE> array;
 	unsigned int getBlock(unsigned int x) const;
 	unsigned int getRem(unsigned int x) const;
 

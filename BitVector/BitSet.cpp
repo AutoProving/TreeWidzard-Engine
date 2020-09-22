@@ -9,9 +9,13 @@ BitSet::BitSet(int initialSize) {
 	for (int i = 0; i < initialSize; i++) this->push_back(false);
 }
 
-unsigned int BitSet::getBlock(unsigned int x) const { return x >> 5; }
+unsigned int BitSet::getBlock(unsigned int x) const {
+	return x >> BITSET_SIZE_LOG;
+}
 
-unsigned int BitSet::getRem(unsigned int x) const { return x & 31; }
+unsigned int BitSet::getRem(unsigned int x) const {
+	return x & ((1 << BITSET_SIZE_LOG) - 1);
+}
 
 bool BitSet::at(unsigned int i) const {
 	unsigned int blk = this->getBlock(i);
@@ -27,7 +31,11 @@ void BitSet::set(bool x, unsigned int i) {
 }
 
 void BitSet::push_back(bool value) {
-	if ((this->bitSetSize & 31) == 0) this->array.push_back(0);
+	if (this->getRem(this->bitSetSize) == 0) {
+		this->array.push_back(0);
+		if (this->array.size() != this->array.capacity())
+			this->array.shrink_to_fit();
+	}
 	unsigned int blk = this->getBlock(this->bitSetSize);
 	unsigned int pos = this->getRem(this->bitSetSize);
 	this->set(value, this->bitSetSize);
