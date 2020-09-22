@@ -2,40 +2,50 @@
 
 #ifndef DYNAMIC_CLIQUE_H
 #define DYNAMIC_CLIQUE_H
-#include "../BitVector/BitVector.h"
-#include "Kernel/DynamicCore.h"
-#include "../Kernel/WitnessSet.h"
-#include <utility>
 #include <algorithm>
+#include <utility>
+#include "../BitVector/BitVector.h"
+#include "../Kernel/WitnessSet.h"
+#include "Kernel/DynamicCore.h"
 using namespace std;
-class CliqueNumber_AtLeast_Witness: public Witness, public enable_shared_from_this<CliqueNumber_AtLeast_Witness>{
-public:
-	bool found; // Set to true if and only if a clique of the right size was found
+class CliqueNumber_AtLeast_Witness
+	: public Witness,
+	  public enable_shared_from_this<CliqueNumber_AtLeast_Witness> {
+  public:
+	bool found; // Set to true if and only if a clique of the right size was
+				// found
 	// set<pair<unsigned,unsigned>> edges;
 
-	LargeBitVector<pair<int, int>> edges = LargeBitVector<pair<int, int>>(2, 1); 
+	LargeBitVector<pair<int, int>> edges = LargeBitVector<pair<int, int>>(2, 1);
 
 	~CliqueNumber_AtLeast_Witness();
-	virtual bool is_equal(const Witness &rhs)const;
-	virtual bool is_less(const Witness &rhs)const;
-	virtual Witness& set_equal(Witness &witness);
+	virtual bool is_equal(const Witness &rhs) const;
+	virtual bool is_less(const Witness &rhs) const;
+	virtual Witness &set_equal(Witness &witness);
 	virtual void print();
-	friend LargeBitVector<int> verticesOnPartialClique(LargeBitVector<pair<int, int>>& edges); // Auxiliary Function. Vertices seen in the partial clique.
-	friend LargeBitVector<int> neighborsOnPartialClique(LargeBitVector<pair<int, int>>& edges, int i); // Auxiliary Function. Neighbors of i seen in the clique.
+	friend LargeBitVector<int> verticesOnPartialClique(
+		LargeBitVector<pair<int, int>>
+			&edges); // Auxiliary Function. Vertices seen in the partial clique.
+	friend LargeBitVector<int> neighborsOnPartialClique(
+		LargeBitVector<pair<int, int>> &edges,
+		int i); // Auxiliary Function. Neighbors of i seen in the clique.
 	friend unsigned int countNumOfBits(unsigned int value);
 };
 
-class CliqueNumber_AtLeast_DynamicCore: public DynamicCore{
-public:
-    unsigned cliqueSize;
-    CliqueNumber_AtLeast_DynamicCore(unsigned cliqueSize);
-    void createInitialWitnessSet();
-    virtual shared_ptr<WitnessSet> intro_v(unsigned i, Bag &b, Witness &witness);
-    virtual shared_ptr<WitnessSet> intro_e(unsigned i, unsigned j, Bag &b, Witness &witness);
-    virtual shared_ptr<WitnessSet> forget_v(unsigned i, Bag &b,Witness &witness);
-    virtual shared_ptr<WitnessSet> join(Bag &b, Witness &witness1, Witness &witness2);
-    virtual bool is_final_witness(Witness &witness);
+class CliqueNumber_AtLeast_DynamicCore : public DynamicCore {
+  public:
+	unsigned cliqueSize;
+	CliqueNumber_AtLeast_DynamicCore(unsigned cliqueSize);
+	void createInitialWitnessSet();
+	virtual shared_ptr<WitnessSet> intro_v(unsigned i, Bag &b,
+										   Witness &witness);
+	virtual shared_ptr<WitnessSet> intro_e(unsigned i, unsigned j, Bag &b,
+										   Witness &witness);
+	virtual shared_ptr<WitnessSet> forget_v(unsigned i, Bag &b,
+											Witness &witness);
+	virtual shared_ptr<WitnessSet> join(Bag &b, Witness &witness1,
+										Witness &witness2);
+	virtual bool is_final_witness(Witness &witness);
 };
-
 
 #endif

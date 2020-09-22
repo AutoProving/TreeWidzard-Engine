@@ -3,50 +3,51 @@
 #ifndef WITNESSSET_H
 #define WITNESSSET_H
 
-#include "Witness.h"
-#include <set>
 #include <memory>
+#include <set>
+#include "Witness.h"
 
 class WitnessSet { // data structure to store 'shared_ptr<Witness>'
-	private:
-		struct compare{
-			bool operator()(const shared_ptr<Witness> lhs, const shared_ptr<Witness> rhs) const{
-				return *lhs<*rhs;
-			}
-		};
-		std::set<shared_ptr<Witness>, compare> container;
+  private:
+	struct compare {
+		bool operator()(const shared_ptr<Witness> lhs,
+						const shared_ptr<Witness> rhs) const {
+			return *lhs < *rhs;
+		}
+	};
+	std::set<shared_ptr<Witness>, compare> container;
 
-    public:
-		class iterator {
-			private:
-				std::set<shared_ptr<Witness>>::iterator it;
+  public:
+	class iterator {
+	  private:
+		std::set<shared_ptr<Witness>>::iterator it;
 
-			public:
-				iterator(std::set<shared_ptr<Witness>>::iterator it_) : it(it_) {}
+	  public:
+		iterator(std::set<shared_ptr<Witness>>::iterator it_) : it(it_) {}
 
-				iterator& operator++() {
-					it++;
-					return *this;
-				}
-				iterator operator++(int) {
-					it++;
-					return *this;
-				}
-				bool operator !=(iterator rhs) { return it != rhs.it; }
-				shared_ptr<Witness> operator *() { return *it; }
-		};
+		iterator &operator++() {
+			it++;
+			return *this;
+		}
+		iterator operator++(int) {
+			it++;
+			return *this;
+		}
+		bool operator!=(iterator rhs) { return it != rhs.it; }
+		shared_ptr<Witness> operator*() { return *it; }
+	};
 
-		iterator begin() { return iterator(container.begin()); }
-		iterator end() { return iterator(container.end()); }
+	iterator begin() { return iterator(container.begin()); }
+	iterator end() { return iterator(container.end()); }
 
-		void insert(shared_ptr<Witness> w);
-		//void set_container(const set<shared_ptr<Witness>,compare> &witnessSet);
-		void union_set_witness(shared_ptr<WitnessSet> witnessSet);
-		void print();
-		bool operator==(WitnessSet &rhs);
-		bool operator!=(WitnessSet &rhs);
-		bool operator<(WitnessSet &rhs);
-		int size();
+	void insert(shared_ptr<Witness> w);
+	// void set_container(const set<shared_ptr<Witness>,compare> &witnessSet);
+	void union_set_witness(shared_ptr<WitnessSet> witnessSet);
+	void print();
+	bool operator==(WitnessSet &rhs);
+	bool operator!=(WitnessSet &rhs);
+	bool operator<(WitnessSet &rhs);
+	int size();
 };
 
 typedef shared_ptr<WitnessSet> WitnessSetPointer;

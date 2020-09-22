@@ -3,55 +3,41 @@
 #include "PropertyAssignment.h"
 
 void PropertyAssignment::print() {
-
-    cout<<name << " "<< operatorSign << " " << value<<endl;
+	cout << name << " " << operatorSign << " " << value << endl;
 }
 
-const string &PropertyAssignment::get_name() const {
-    return name;
-}
+const string &PropertyAssignment::get_name() const { return name; }
 
 void PropertyAssignment::set_name(const string &name) {
-    PropertyAssignment::name = name;
+	PropertyAssignment::name = name;
 }
 
 const string &PropertyAssignment::get_operatorSign() const {
-    return operatorSign;
+	return operatorSign;
 }
 
 void PropertyAssignment::set_operatorSign(const string &op) {
-
-    operatorSign = op;
+	operatorSign = op;
 }
 
-int PropertyAssignment::get_value() const {
-    return value;
-}
+int PropertyAssignment::get_value() const { return value; }
 
-void PropertyAssignment::set_value(int v) {
-    value = v;
-}
+void PropertyAssignment::set_value(int v) { value = v; }
 
-const string &PropertyAssignment::get_type() const {
-    return type;
-}
+const string &PropertyAssignment::get_type() const { return type; }
 
 void PropertyAssignment::set_type(const string &type) {
-    PropertyAssignment::type = type;
+	PropertyAssignment::type = type;
 }
 
-const string &PropertyAssignment::get_filePath() const {
-    return filePath;
-}
+const string &PropertyAssignment::get_filePath() const { return filePath; }
 
 void PropertyAssignment::set_filePath(const string &filePath) {
-    PropertyAssignment::filePath = filePath;
+	PropertyAssignment::filePath = filePath;
 }
 
-const string &PropertyAssignment::get_label() const {
-    return label;
-}
+const string &PropertyAssignment::get_label() const { return label; }
 
 void PropertyAssignment::set_label(const string &label) {
-    PropertyAssignment::label = label;
+	PropertyAssignment::label = label;
 }

@@ -3,12 +3,13 @@
 #include "SearchStrategy.h"
 
 pair<bool, ConcreteTreeDecomposition> SearchStrategy::search() {
-    cout<<"ERROR: Based class search function called!"<<endl;
-    exit(20);
+	cout << "ERROR: Based class search function called!" << endl;
+	exit(20);
 }
 
-SearchStrategy::SearchStrategy(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags) {
-    this->kernel = dynamicKernel;
-    this->conjecture = conjecture;
-    this->flags = flags;
+SearchStrategy::SearchStrategy(DynamicKernel *dynamicKernel,
+							   Conjecture *conjecture, Flags *flags) {
+	this->kernel = dynamicKernel;
+	this->conjecture = conjecture;
+	this->flags = flags;
 }
