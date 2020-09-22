@@ -1,7 +1,5 @@
 #include "BitVector.h"
 #include <iostream>
-#include <cassert>
-#include <set>
 
 template <class Type>
 LargeBitVector<Type>::LargeBitVector(unsigned int wordSize,  unsigned int maximumSize)
@@ -9,15 +7,12 @@ LargeBitVector<Type>::LargeBitVector(unsigned int wordSize,  unsigned int maximu
     unsigned int wsBits = this->countNumberOfBits(wordSize);
     unsigned int mxBits = this->countNumberOfBits(maximumSize);
 
-    this->array.resize((wsBits << 1) + (mxBits << 2) + 6/* + 1500*/);
+    this->array.resize((wsBits << 1) + (mxBits << 2) + 6);
 
     unsigned int pointer = 0;
     pointer = writeOnHeader(pointer, wordSize, wsBits);
     pointer = writeOnHeader(pointer, maximumSize, mxBits);
     pointer = writeOnHeader(pointer, 0, mxBits);
-
-    // while(this->array.size() > this->getFirstBit())
-    //     this->array.pop_back();
 }
 
 template <class Type>
@@ -46,7 +41,7 @@ void LargeBitVector<Type>::doubleMaximumSize()
 }
 
 template <class Type>
-unsigned int LargeBitVector<Type>::countNumberOfBits(unsigned int value)
+unsigned int LargeBitVector<Type>::countNumberOfBits(unsigned int value) const
 {
     if(value == 0)
         return 1;
@@ -83,7 +78,7 @@ unsigned int LargeBitVector<Type>::writeOnHeader(unsigned int pointer, unsigned 
 }
 
 template <class Type>
-unsigned int LargeBitVector<Type>::readFromHeader(unsigned int pointer)
+unsigned int LargeBitVector<Type>::readFromHeader(unsigned int pointer) const
 {
     unsigned int value = 0, k = 0;
     while(this->array[pointer] or this->array[pointer + 1])
@@ -105,7 +100,7 @@ void LargeBitVector<Type>::print()
 }
 
 template <class Type>
-unsigned int LargeBitVector<Type>::jumpSpace(unsigned int n)
+unsigned int LargeBitVector<Type>::jumpSpace(unsigned int n) const
 {
     unsigned int pointer = 0;
     unsigned int cnt = 0;
@@ -119,25 +114,25 @@ unsigned int LargeBitVector<Type>::jumpSpace(unsigned int n)
 }
 
 template <class Type>
-unsigned int LargeBitVector<Type>::getWordSize()
+unsigned int LargeBitVector<Type>::getWordSize() const
 {
     return this->readFromHeader(this->jumpSpace(0));
 }
 
 template <class Type>
-unsigned int LargeBitVector<Type>::getMaxSize()
+unsigned int LargeBitVector<Type>::getMaxSize() const
 {
     return this->readFromHeader(this->jumpSpace(1));
 }
 
 template <class Type>
-unsigned int LargeBitVector<Type>::size()
+unsigned int LargeBitVector<Type>::size() const
 {
     return this->readFromHeader(this->jumpSpace(2));
 }
 
 template <class Type>
-unsigned int LargeBitVector<Type>::getFirstBit()
+unsigned int LargeBitVector<Type>::getFirstBit() const
 {
     return this->jumpSpace(3);
 }
@@ -176,7 +171,7 @@ std::vector<bool> LargeBitVector<Type>::toBits(int value)
 } 
 
 template <class Type>
-int LargeBitVector<Type>::fromBits(std::vector<bool> v, int dummy)
+int LargeBitVector<Type>::fromBits(std::vector<bool> &v, int dummy) const
 {
     unsigned int sz = this->getWordSize();
     int value = 0;
@@ -210,7 +205,7 @@ std::vector<bool> LargeBitVector<Type>::toBits(std::pair<int, int> value)
 } 
 
 template <class Type>
-std::pair<int, int> LargeBitVector<Type>::fromBits(std::vector<bool> v, std::pair<int, int> dummy)
+std::pair<int, int> LargeBitVector<Type>::fromBits(std::vector<bool> &v, std::pair<int, int> dummy) const
 {
     std::pair<int, int> value = std::make_pair(0, 0);
     int sz = this->getWordSize() >> 1;
@@ -233,7 +228,7 @@ void LargeBitVector<Type>::push_back(Type element)
 }
 
 template <class Type>
-Type LargeBitVector<Type>::at(int index)
+Type LargeBitVector<Type>::at(int index) const
 {
     int b = this->getFirstBit() + index * this->getWordSize();
 
@@ -270,8 +265,6 @@ void LargeBitVector<Type>::swap(unsigned int i, unsigned int j)
 template <class Type>
 void LargeBitVector<Type>::quickSort(int l, int r)
 {
-    assert(l <= r);
-
     int j = l - 1;
 
     // MAYBE REMOVE RAND
@@ -332,10 +325,10 @@ void LargeBitVector<Type>::pop_back()
 }
 
 template <class Type>
-LargeBitVector<Type> LargeBitVector<Type>::unionSets(LargeBitVector<Type> aux)
+LargeBitVector<Type> LargeBitVector<Type>::unionSets(LargeBitVector<Type> &aux)
 {
-    this->sort(true);
-    aux.sort(true);
+    // this->sort(true);
+    // aux.sort(true);
 
     unsigned int ws = std::max(this->getWordSize(), aux.getWordSize());
 
@@ -402,10 +395,10 @@ bool LargeBitVector<Type>::find(Type value)
 }
 
 template <class Type>
-LargeBitVector<Type> LargeBitVector<Type>::intersetionSets(LargeBitVector<Type> aux)
+LargeBitVector<Type> LargeBitVector<Type>::intersetionSets(LargeBitVector<Type> &aux)
 {
-    this->sort(true);
-    aux.sort(true);
+    // this->sort(true);
+    // aux.sort(true);
 
     unsigned int ws = std::max(this->getWordSize(), aux.getWordSize());
     LargeBitVector<Type> interSets(ws, this->size() + aux.size());
@@ -450,12 +443,12 @@ void LargeBitVector<Type>::insertSorted(Type value)
 }
 
 template <class Type>
-bool LargeBitVector<Type>::operator==(LargeBitVector<Type> &aux)
+bool LargeBitVector<Type>::operator==(const LargeBitVector<Type> &aux) const
 {
     if(this->size() != aux.size())
          return false;
-    this->sort(true);
-    aux.sort(true);
+    // this->sort(true);
+    // aux.sort(true);
     for(int i = 0; i < this->size(); i++)
         if(this->at(i) != aux.at(i))
             return false;
@@ -463,11 +456,11 @@ bool LargeBitVector<Type>::operator==(LargeBitVector<Type> &aux)
 }
 
 template <class Type>
-bool LargeBitVector<Type>::operator<(LargeBitVector<Type> &aux)
+bool LargeBitVector<Type>::operator<(const LargeBitVector<Type> &aux) const
 {
     int sz = std::min(this->size(), aux.size());
-    this->sort(true);
-    aux.sort(true);
+    // this->sort(true);
+    // aux.sort(true);
 
     for(int i = 0; i < sz; i++)
         if(this->at(i) < aux.at(i))
@@ -486,4 +479,16 @@ void LargeBitVector<Type>::normalize()
         if(aux.size() == 0 or aux.back() != this->at(i))
             aux.push_back(this->at(i));
     this->array = aux.array;
+}
+
+template <class Type>
+LargeBitVector<Type> LargeBitVector<Type>::differenceSets(LargeBitVector<Type> &aux)
+{
+    this->sort(true);
+    aux.sort(true);
+    LargeBitVector<Type> diffSets(this->getWordSize(), 1);
+    for(int i = 0; i < this->size(); i++)
+        if(aux.binarySearch(this->at(i)) == false)
+            diffSets.push_back(this->at(i));
+    return diffSets;
 }

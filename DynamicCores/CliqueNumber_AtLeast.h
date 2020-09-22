@@ -11,14 +11,17 @@ using namespace std;
 class CliqueNumber_AtLeast_Witness: public Witness, public enable_shared_from_this<CliqueNumber_AtLeast_Witness>{
 public:
 	bool found; // Set to true if and only if a clique of the right size was found
-	set<pair<unsigned,unsigned>> edges;
+	// set<pair<unsigned,unsigned>> edges;
+
+	LargeBitVector<pair<int, int>> edges = LargeBitVector<pair<int, int>>(2, 1); 
+
 	~CliqueNumber_AtLeast_Witness();
 	virtual bool is_equal(const Witness &rhs)const;
 	virtual bool is_less(const Witness &rhs)const;
 	virtual Witness& set_equal(Witness &witness);
 	virtual void print();
-	friend LargeBitVector<int> verticesOnPartialClique(set<pair<int,int>>& edges); // Auxiliary Function. Vertices seen in the partial clique.
-	friend LargeBitVector<int> neighborsOnPartialClique(set<pair<int,int>>& edges, int i); // Auxiliary Function. Neighbors of i seen in the clique.
+	friend LargeBitVector<int> verticesOnPartialClique(LargeBitVector<pair<int, int>>& edges); // Auxiliary Function. Vertices seen in the partial clique.
+	friend LargeBitVector<int> neighborsOnPartialClique(LargeBitVector<pair<int, int>>& edges, int i); // Auxiliary Function. Neighbors of i seen in the clique.
 	friend unsigned int countNumOfBits(unsigned int value);
 };
 
