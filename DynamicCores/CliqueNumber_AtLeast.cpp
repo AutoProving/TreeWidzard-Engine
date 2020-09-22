@@ -93,14 +93,14 @@ unsigned int countNumOfBits(unsigned int value) {
 LargeBitVector<int> verticesOnPartialClique(
 	LargeBitVector<pair<int, int>> &edges) {
 	unsigned int maxiNumber = 0;
-	for (int i = 0; i < edges.size(); i++) {
-		maxiNumber = max((int)maxiNumber, edges.at(i).first);
-		maxiNumber = max((int)maxiNumber, edges.at(i).second);
+	for (auto edge : edges) {
+		maxiNumber = max((int)maxiNumber, edge.first);
+		maxiNumber = max((int)maxiNumber, edge.second);
 	}
 	LargeBitVector<int> aux(countNumOfBits(maxiNumber), 1);
-	for (int i = 0; i < edges.size(); i++) {
-		aux.push_back(edges.at(i).first);
-		aux.push_back(edges.at(i).second);
+	for (auto edge : edges) {
+		aux.push_back(edge.first);
+		aux.push_back(edge.second);
 	}
 	aux.normalize();
 	return aux;
@@ -110,19 +110,19 @@ LargeBitVector<int> verticesOnPartialClique(
 LargeBitVector<int> neighborsOnPartialClique(
 	LargeBitVector<pair<int, int>> &edges, int i) {
 	unsigned int maxiNumber = 0;
-	for (int j = 0; j < edges.size(); j++) {
-		if (edges.at(j).first == i)
-			maxiNumber = max((int)maxiNumber, edges.at(j).second);
-		else if (edges.at(j).second == i)
-			maxiNumber = max((int)maxiNumber, edges.at(j).first);
+	for (auto edge : edges) {
+		if (edge.first == i)
+			maxiNumber = max((int)maxiNumber, edge.second);
+		else if (edge.second == i)
+			maxiNumber = max((int)maxiNumber, edge.first);
 	}
 
 	LargeBitVector<int> aux(countNumOfBits(maxiNumber), 1);
-	for (int j = 0; j < edges.size(); j++) {
-		if (edges.at(j).first == i)
-			aux.push_back(edges.at(j).second);
-		else if (edges.at(j).second == i)
-			aux.push_back(edges.at(j).first);
+	for (auto edge : edges) {
+		if (edge.first == i)
+			aux.push_back(edge.second);
+		else if (edge.second == i)
+			aux.push_back(edge.first);
 	}
 	aux.normalize();
 	return aux;
@@ -189,8 +189,7 @@ shared_ptr<WitnessSet> CliqueNumber_AtLeast_DynamicCore::intro_e(
 								 countNumOfBits(newedge.second));
 					if ((ws << 1) > aux.getWordSize()) {
 						LargeBitVector<pair<int, int>> auxAux(ws << 1, 1);
-						for (int index = 0; index < aux.size(); index++)
-							auxAux.push_back(aux.at(index));
+						for (auto edge : aux) auxAux.push_back(edge);
 						aux = auxAux;
 					}
 					aux.insertSorted(newedge);
@@ -228,8 +227,7 @@ shared_ptr<WitnessSet> CliqueNumber_AtLeast_DynamicCore::intro_e(
 								 countNumOfBits(newedge.second));
 					if ((ws << 1) > aux.getWordSize()) {
 						LargeBitVector<pair<int, int>> auxAux(ws << 1, 1);
-						for (int index = 0; index < aux.size(); index++)
-							auxAux.push_back(aux.at(index));
+						for (auto edge : aux) auxAux.push_back(edge);
 						aux = auxAux;
 					}
 					aux.insertSorted(newedge);

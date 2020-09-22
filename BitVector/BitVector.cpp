@@ -139,9 +139,9 @@ void LargeBitVector<Type>::decrementSize() {
 }
 
 template <class Type>
-Bitset LargeBitVector<Type>::toBits(int value) {
+BitSet LargeBitVector<Type>::toBits(int value) {
 	unsigned int sz = this->getWordSize();
-	Bitset v(sz);
+	BitSet v(sz);
 
 	for (size_t i = 0; i < sz; i++) {
 		if (value & (1 << i))
@@ -153,7 +153,7 @@ Bitset LargeBitVector<Type>::toBits(int value) {
 }
 
 template <class Type>
-int LargeBitVector<Type>::fromBits(Bitset &v, int dummy) const {
+int LargeBitVector<Type>::fromBits(BitSet &v, int dummy) const {
 	unsigned int sz = this->getWordSize();
 	int value = 0;
 	for (size_t i = 0; i < sz; i++)
@@ -162,9 +162,9 @@ int LargeBitVector<Type>::fromBits(Bitset &v, int dummy) const {
 }
 
 template <class Type>
-Bitset LargeBitVector<Type>::toBits(std::pair<int, int> value) {
+BitSet LargeBitVector<Type>::toBits(std::pair<int, int> value) {
 	unsigned int sz = this->getWordSize() >> 1;
-	Bitset v(sz << 1);
+	BitSet v(sz << 1);
 
 	for (size_t i = 0; i < sz; i++) {
 		if (value.first & (1 << i))
@@ -183,7 +183,7 @@ Bitset LargeBitVector<Type>::toBits(std::pair<int, int> value) {
 
 template <class Type>
 std::pair<int, int> LargeBitVector<Type>::fromBits(
-	Bitset &v, std::pair<int, int> dummy) const {
+	BitSet &v, std::pair<int, int> dummy) const {
 	std::pair<int, int> value = std::make_pair(0, 0);
 	int sz = this->getWordSize() >> 1;
 	for (size_t i = 0; i < sz; i++)
@@ -195,7 +195,7 @@ std::pair<int, int> LargeBitVector<Type>::fromBits(
 
 template <class Type>
 void LargeBitVector<Type>::push_back(Type element) {
-	Bitset v = toBits(element);
+	BitSet v = toBits(element);
 	for (size_t i = 0; i < v.size(); i++) this->array.push_back(v.at(i));
 	this->incrementSize();
 }
@@ -204,7 +204,7 @@ template <class Type>
 Type LargeBitVector<Type>::at(int index) const {
 	int b = this->getFirstBit() + index * this->getWordSize();
 
-	Bitset v(this->getWordSize());
+	BitSet v(this->getWordSize());
 	int sz = b + this->getWordSize();
 	for (size_t i = b, j = 0; i < sz; i++, j++) v.set(this->array.at(i), j);
 	Type dummy;
@@ -214,7 +214,7 @@ Type LargeBitVector<Type>::at(int index) const {
 template <class Type>
 void LargeBitVector<Type>::set(Type element, int index) {
 	int b = this->getFirstBit() + index * this->getWordSize();
-	Bitset v = toBits(element);
+	BitSet v = toBits(element);
 	int sz = b + this->getWordSize();
 	for (size_t i = b, j = 0; i < sz; i++, j++) this->array.set(v.at(j), i);
 }
@@ -365,7 +365,7 @@ void LargeBitVector<Type>::insertSorted(Type value) {
 	for (int i = e - 1; i >= b; i--)
 		this->array.set(this->array.at(i), i + this->getWordSize());
 
-	Bitset v = this->toBits(value);
+	BitSet v = this->toBits(value);
 
 	int sz = b + this->getWordSize();
 	for (int i = b, j = 0; i < sz; i++, j++) this->array.set(v.at(j), i);

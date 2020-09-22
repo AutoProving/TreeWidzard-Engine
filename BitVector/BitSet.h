@@ -3,16 +3,16 @@
 
 #include <vector>
 
-class Bitset {
+class BitSet {
   private:
-	unsigned int bitsetSize;
+	unsigned int bitSetSize;
 	std::vector<unsigned int> array;
 	unsigned int getBlock(unsigned int x) const;
 	unsigned int getRem(unsigned int x) const;
 
   public:
-	Bitset();
-	Bitset(int initialSize);
+	BitSet();
+	BitSet(int initialSize);
 	unsigned int size() const;
 	void push_back(bool value);
 	void pop_back();

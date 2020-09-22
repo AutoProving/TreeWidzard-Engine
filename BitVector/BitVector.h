@@ -8,7 +8,7 @@
 template <class Type>
 class LargeBitVector {
   private:
-	Bitset array;
+	BitSet array;
 
 	unsigned int writeOnHeader(unsigned int pointer, unsigned int value,
 							   unsigned int b);
@@ -23,13 +23,36 @@ class LargeBitVector {
 
 	void quickSort(int l, int r);
 
-	Bitset toBits(int value);
-	int fromBits(Bitset &v, int dummy) const;
+	BitSet toBits(int value);
+	int fromBits(BitSet &v, int dummy) const;
 
-	Bitset toBits(std::pair<int, int> value);
-	std::pair<int, int> fromBits(Bitset &v, std::pair<int, int> dummy) const;
+	BitSet toBits(std::pair<int, int> value);
+	std::pair<int, int> fromBits(BitSet &v, std::pair<int, int> dummy) const;
 
   public:
+	class iterator {
+	  private:
+		int it;
+		LargeBitVector *bitVector;
+
+	  public:
+		iterator(LargeBitVector *bitVector_, int it_)
+			: bitVector(bitVector_), it(it_) {}
+		iterator &operator++() {
+			it++;
+			return *this;
+		}
+		iterator operator++(int) {
+			it++;
+			return *this;
+		}
+		bool operator!=(iterator rhs) { return it != rhs.it; }
+		Type operator*() { return bitVector->at(it); }
+	};
+
+	iterator begin() { return iterator(this, 0); }
+	iterator end() { return iterator(this, size()); }
+
 	LargeBitVector(unsigned int wordSize, unsigned int maximumSize);
 	unsigned int getMaxSize() const;
 	unsigned int size() const;
