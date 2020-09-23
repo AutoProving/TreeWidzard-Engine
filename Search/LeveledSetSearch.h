@@ -11,10 +11,10 @@ using namespace std::chrono;
 
 class LeveledSetSearch : public SearchStrategy {
   private:
-	vector<set<State::ptr, compareLessState> > setAllStates;
-	vector<set<State::ptr, compareLessState> > setIntermediateStates;
-	vector<set<State::ptr, compareLessState> > setNewStates;
-	vector<vector<set<State::ptr, compareLessState> > > leveledSetAllStates;
+	vector<set<State::ptr> > setAllStates;
+	vector<set<State::ptr> > setIntermediateStates;
+	vector<set<State::ptr> > setNewStates;
+	vector<vector<set<State::ptr> > > leveledSetAllStates;
 
   public:
 	LeveledSetSearch(DynamicKernel *dynamicKernel, Conjecture *conjecture,
@@ -23,21 +23,17 @@ class LeveledSetSearch : public SearchStrategy {
 	virtual pair<bool, ConcreteTreeDecomposition> search();
 	shared_ptr<CTDNodeNew> extractCTDNode(
 		unsigned level, State::ptr s,
-		vector<vector<set<State::ptr, compareLessState> > >
-			&leveledSetAllStates);
+		vector<vector<set<State::ptr> > > &leveledSetAllStates);
 	ConcreteTreeDecomposition extractCTDDecomposition(
 		unsigned level, State::ptr s,
-		vector<vector<set<State::ptr, compareLessState> > >
-			&leveledSetAllStates);
+		vector<vector<set<State::ptr> > > &leveledSetAllStates);
 	shared_ptr<StateTreeNode> extractStateTreeNode(
 		unsigned level, State::ptr s,
-		vector<vector<set<State::ptr, compareLessState> > >
-			&leveledSetAllStates,
+		vector<vector<set<State::ptr> > > &leveledSetAllStates,
 		bool tree_width);
 	StateTree extractStateTreeDecomposition(
 		unsigned level, State::ptr s,
-		vector<vector<set<State::ptr, compareLessState> > >
-			&leveledSetAllStates,
+		vector<vector<set<State::ptr> > > &leveledSetAllStates,
 		bool tree_width);
 };
 

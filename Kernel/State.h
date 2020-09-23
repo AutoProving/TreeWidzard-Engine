@@ -23,8 +23,8 @@ class State : private std::enable_shared_from_this<State> {
 		ptr(shared_ptr<State> pointer_) : pointer(pointer_) {}
 
 		State &operator*() const { return *pointer; }
-
 		State *operator->() const { return &*pointer; }
+		bool operator<(const ptr &rhs) const { return **this < *rhs; }
 	};
 
 	ptr get_ptr() { return ptr(this->shared_from_this()); }
@@ -39,17 +39,6 @@ class State : private std::enable_shared_from_this<State> {
 
 	shared_ptr<WitnessSet> getWitnessSet(int);
 	int numberOfComponents() const;
-};
-
-struct compareLessState {
-	bool operator()(const State::ptr lhs, const State::ptr rhs) const {
-		return *lhs < *rhs;
-	}
-};
-struct compareEqualityState {
-	bool operator()(const State::ptr lhs, const State::ptr rhs) const {
-		return *lhs == *rhs;
-	}
 };
 
 #endif

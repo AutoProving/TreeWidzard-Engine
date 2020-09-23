@@ -31,7 +31,7 @@ unsigned LeveledSetSearch::bagSetToNumber(set<unsigned> bagSet,
 }
 shared_ptr<CTDNodeNew> LeveledSetSearch::extractCTDNode(
 	unsigned level, State::ptr s,
-	vector<vector<set<State::ptr, compareLessState> > > &leveledSetAllStates) {
+	vector<vector<set<State::ptr> > > &leveledSetAllStates) {
 	unsigned w = this->kernel->get_width().get_value();
 	shared_ptr<CTDNodeNew> node(new CTDNodeNew());
 	node->set_B(s->get_bag());
@@ -158,7 +158,7 @@ shared_ptr<CTDNodeNew> LeveledSetSearch::extractCTDNode(
 
 ConcreteTreeDecomposition LeveledSetSearch::extractCTDDecomposition(
 	unsigned level, State::ptr s,
-	vector<vector<set<State::ptr, compareLessState> > > &leveledSetAllStates) {
+	vector<vector<set<State::ptr> > > &leveledSetAllStates) {
 	ConcreteTreeDecomposition T;
 	T.root = extractCTDNode(level, s, leveledSetAllStates);
 	return T;
@@ -166,8 +166,7 @@ ConcreteTreeDecomposition LeveledSetSearch::extractCTDDecomposition(
 
 shared_ptr<StateTreeNode> LeveledSetSearch::extractStateTreeNode(
 	unsigned level, State::ptr s,
-	vector<vector<set<State::ptr, compareLessState> > > &leveledSetAllStates,
-	bool tree_width) {
+	vector<vector<set<State::ptr> > > &leveledSetAllStates, bool tree_width) {
 	unsigned w = this->kernel->get_width().get_value();
 	shared_ptr<StateTreeNode> node(new StateTreeNode());
 	node->set_S(s);
@@ -312,8 +311,7 @@ shared_ptr<StateTreeNode> LeveledSetSearch::extractStateTreeNode(
 
 StateTree LeveledSetSearch::extractStateTreeDecomposition(
 	unsigned level, State::ptr s,
-	vector<vector<set<State::ptr, compareLessState> > > &leveledSetAllStates,
-	bool tree_width) {
+	vector<vector<set<State::ptr> > > &leveledSetAllStates, bool tree_width) {
 	StateTree stateTree;
 	stateTree.root =
 		extractStateTreeNode(level, s, leveledSetAllStates, tree_width);
@@ -597,7 +595,7 @@ pair<bool, ConcreteTreeDecomposition> LeveledSetSearch::search() {
 
 		for (unsigned bagSetIndex = 0; bagSetIndex < numberBagSets;
 			 bagSetIndex++) {
-			set<State::ptr, compareLessState> temp;
+			set<State::ptr> temp;
 			set_union(setAllStates[bagSetIndex].begin(),
 					  setAllStates[bagSetIndex].end(),
 					  setNewStates[bagSetIndex].begin(),
@@ -662,6 +660,7 @@ pair<bool, ConcreteTreeDecomposition> LeveledSetSearch::search() {
 				 << "----------------- End Iteration: " << iterationNumber
 				 << " ----------------------------" << endl
 				 << endl;
+			if (iterationNumber == 13) break;
 		}
 		// Remove the states from setIntermediateStates
 		for (unsigned bagSetIndex = 0; bagSetIndex < numberBagSets;
