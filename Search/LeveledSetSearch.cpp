@@ -660,7 +660,6 @@ pair<bool, ConcreteTreeDecomposition> LeveledSetSearch::search() {
 				 << "----------------- End Iteration: " << iterationNumber
 				 << " ----------------------------" << endl
 				 << endl;
-			if (iterationNumber == 13) break;
 		}
 		// Remove the states from setIntermediateStates
 		for (unsigned bagSetIndex = 0; bagSetIndex < numberBagSets;
