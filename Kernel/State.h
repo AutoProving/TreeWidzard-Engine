@@ -8,12 +8,27 @@
 #include "WitnessSet.h"
 
 using namespace std;
-class State : public std::enable_shared_from_this<State> {
+class State : private std::enable_shared_from_this<State> {
   private:
 	Bag bag;
 	std::vector<shared_ptr<WitnessSet>> witnessSetVector;
 
   public:
+	class ptr {
+	  private:
+		shared_ptr<State> pointer;
+
+	  public:
+		ptr() { pointer = make_shared<State>(); }
+		ptr(shared_ptr<State> pointer_) : pointer(pointer_) {}
+
+		State &operator*() const { return *pointer; }
+
+		State *operator->() const { return &*pointer; }
+	};
+
+	ptr get_ptr() { return ptr(this->shared_from_this()); }
+
 	Bag get_bag() const;
 	void set_bag(const Bag &bag);
 	void addWitnessSet(shared_ptr<WitnessSet>);
@@ -26,40 +41,15 @@ class State : public std::enable_shared_from_this<State> {
 	int numberOfComponents() const;
 };
 
-typedef shared_ptr<State> StatePointer;
-
 struct compareLessState {
-	bool operator()(const StatePointer lhs, const StatePointer rhs) const {
+	bool operator()(const State::ptr lhs, const State::ptr rhs) const {
 		return *lhs < *rhs;
 	}
 };
 struct compareEqualityState {
-	bool operator()(const StatePointer lhs, const StatePointer rhs) const {
+	bool operator()(const State::ptr lhs, const State::ptr rhs) const {
 		return *lhs == *rhs;
 	}
 };
-
-// class StatePointer {
-//	private:
-//		shared_ptr<State> pointer;
-//
-//	public:
-//
-//		StatePointer(State* pointer_) : pointer(pointer_) {}
-//
-//		State operator*() {
-//			return *pointer;
-//		}
-//
-//		bool operator<(StatePointer& rhs) {
-//			return *pointer < *rhs
-//		}
-//		bool operator==(StatePointer& rhs) {
-//			return *pointer < *rhs
-//		}
-//		void operator =(StatePointer rhs) {
-//			pointer = rhs;
-//		}
-//};
 
 #endif

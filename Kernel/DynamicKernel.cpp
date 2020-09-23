@@ -4,8 +4,8 @@
 
 void DynamicKernel::addCore(DynamicCore& core) { cores.push_back(&core); }
 
-StatePointer DynamicKernel::initialState() {
-	StatePointer initialState(new State);
+State::ptr DynamicKernel::initialState() {
+	State::ptr initialState;
 	Bag emptyBag; // Empty
 	for (size_t k = 0; k < cores.size(); ++k) {
 		initialState->addWitnessSet(cores[k]->getInitialSet());
@@ -14,9 +14,9 @@ StatePointer DynamicKernel::initialState() {
 	return initialState;
 }
 
-StatePointer DynamicKernel::intro_v(StatePointer q, unsigned i) {
+State::ptr DynamicKernel::intro_v(State::ptr q, unsigned i) {
 	if (q->get_bag().vertex_introducible(i)) {
-		StatePointer aux(new State);
+		State::ptr aux;
 		Bag b = q->get_bag();
 		for (size_t r = 0; r < cores.size(); r++) {
 			aux->addWitnessSet(cores[r]->intro_v(i, b, *(q->getWitnessSet(r))));
@@ -31,10 +31,10 @@ StatePointer DynamicKernel::intro_v(StatePointer q, unsigned i) {
 	}
 }
 
-StatePointer DynamicKernel::intro_e(const StatePointer q, const unsigned i,
-									const unsigned j) {
+State::ptr DynamicKernel::intro_e(const State::ptr q, const unsigned i,
+								  const unsigned j) {
 	if (q->get_bag().edge_introducible(i, j)) {
-		StatePointer aux(new State);
+		State::ptr aux;
 		Bag b = q->get_bag();
 		for (size_t r = 0; r < cores.size(); r++) {
 			aux->addWitnessSet(
@@ -50,9 +50,9 @@ StatePointer DynamicKernel::intro_e(const StatePointer q, const unsigned i,
 	}
 }
 
-StatePointer DynamicKernel::forget_v(StatePointer q, unsigned i) {
+State::ptr DynamicKernel::forget_v(State::ptr q, unsigned i) {
 	if (q->get_bag().vertex_forgettable(i)) {
-		StatePointer aux(new State);
+		State::ptr aux;
 		Bag b = q->get_bag();
 		for (size_t r = 0; r < cores.size(); r++) {
 			aux->addWitnessSet(
@@ -68,9 +68,9 @@ StatePointer DynamicKernel::forget_v(StatePointer q, unsigned i) {
 	}
 }
 
-StatePointer DynamicKernel::join(StatePointer q1, StatePointer q2) {
+State::ptr DynamicKernel::join(State::ptr q1, State::ptr q2) {
 	if (q1->get_bag().joinable(q2->get_bag())) {
-		StatePointer aux(new State);
+		State::ptr aux;
 		set<unsigned> elements = q1->get_bag().get_elements();
 		Bag b;
 		b.set_elements(elements);

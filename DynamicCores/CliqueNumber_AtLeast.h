@@ -9,7 +9,7 @@
 #include "Kernel/DynamicCore.h"
 using namespace std;
 class CliqueNumber_AtLeast_Witness
-	//CliqueNumber_AtLeast_WitnessFour
+	// CliqueNumber_AtLeast_WitnessFour
 	: public Witness,
 	  public enable_shared_from_this<CliqueNumber_AtLeast_Witness> {
   public:
@@ -19,7 +19,7 @@ class CliqueNumber_AtLeast_Witness
 
 	LargeBitVector<pair<int, int>> edges = LargeBitVector<pair<int, int>>(2, 1);
 	// array<bool> edges(k*(k-1)/2);
-	// k = 5 ; 12 13 14 15 16 23 24 25 34 35 45  
+	// k = 5 ; 12 13 14 15 16 23 24 25 34 35 45
 
 	~CliqueNumber_AtLeast_Witness();
 	virtual bool is_equal(const Witness &rhs) const;

@@ -16,7 +16,7 @@ using namespace std;
 class StateTreeNode : public std::enable_shared_from_this<StateTreeNode> {
   protected:
 	string nodeType;							// Default: "Empty"
-	StatePointer S;								// Default: Empty State
+	State::ptr S;								// Default: Empty State
 	shared_ptr<StateTreeNode> parent = nullptr; // Default Value
 	vector<shared_ptr<StateTreeNode>> children; // Default: no child
 	shared_ptr<DynamicKernel> kernel;
@@ -24,22 +24,22 @@ class StateTreeNode : public std::enable_shared_from_this<StateTreeNode> {
   public:
 	// Constructors
 	StateTreeNode();
-	StateTreeNode(string nodeType, StatePointer s);
-	StateTreeNode(string nodeType, StatePointer s,
+	StateTreeNode(string nodeType, State::ptr s);
+	StateTreeNode(string nodeType, State::ptr s,
 				  vector<shared_ptr<StateTreeNode>> children);
-	StateTreeNode(string nodeType, StatePointer s,
+	StateTreeNode(string nodeType, State::ptr s,
 				  vector<shared_ptr<StateTreeNode>> children,
 				  shared_ptr<DynamicKernel>);
 
 	// Get Functions
 	string get_nodeType();
-	StatePointer get_S();
+	State::ptr get_S();
 	shared_ptr<StateTreeNode> get_parent();
 	vector<shared_ptr<StateTreeNode>> get_children();
 	shared_ptr<DynamicKernel> get_kernel();
 	// Set Functions
 	void set_nodeType(string nodeType);
-	void set_S(StatePointer S);
+	void set_S(State::ptr S);
 	void set_parent(shared_ptr<StateTreeNode> parent);
 	void set_children(vector<shared_ptr<StateTreeNode>> children);
 	void set_kernel(shared_ptr<DynamicKernel> kernel);

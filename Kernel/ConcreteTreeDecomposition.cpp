@@ -607,16 +607,16 @@ void ConcreteTreeDecomposition::readAbstract(string s) {
 
 void ConcreteTreeDecomposition::printConcrete() {}
 
-pair<bool, shared_ptr<State>> ConcreteTreeDecomposition::constructWitnesses(
+pair<bool, State::ptr> ConcreteTreeDecomposition::constructWitnesses(
 	Conjecture &conjecture, shared_ptr<CTDNodeNew> node) {
 	// First, We check the type of the node
 	if (node->get_nodeType() == "Empty") {
 		// if it is an empty, then it is a leaf
-		shared_ptr<State> q = conjecture.kernel->initialState();
+		State::ptr q = conjecture.kernel->initialState();
 		return make_pair(
 			conjecture.evaluateConjectureOnState(*q, conjecture.kernel), q);
 	} else if (strstr(node->get_nodeType().c_str(), "IntroVertex")) {
-		pair<bool, shared_ptr<State>> childProcess =
+		pair<bool, State::ptr> childProcess =
 			constructWitnesses(conjecture, node->get_children()[0]);
 		if (!childProcess.first) {
 			return childProcess;
@@ -637,14 +637,14 @@ pair<bool, shared_ptr<State>> ConcreteTreeDecomposition::constructWitnesses(
 					<< endl;
 				exit(20);
 			}
-			shared_ptr<State> q = conjecture.kernel->intro_v(
+			State::ptr q = conjecture.kernel->intro_v(
 				childProcess.second, *bagSetDifference.begin());
 			bool conjectureEvaluationResult =
 				conjecture.evaluateConjectureOnState(*q, conjecture.kernel);
 			return make_pair(conjectureEvaluationResult, q);
 		}
 	} else if (strstr(node->get_nodeType().c_str(), "ForgetVertex")) {
-		pair<bool, shared_ptr<State>> childProcess =
+		pair<bool, State::ptr> childProcess =
 			constructWitnesses(conjecture, node->get_children()[0]);
 		if (!childProcess.first) {
 			return childProcess;
@@ -665,38 +665,38 @@ pair<bool, shared_ptr<State>> ConcreteTreeDecomposition::constructWitnesses(
 					 << endl;
 				exit(20);
 			}
-			shared_ptr<State> q = conjecture.kernel->forget_v(
+			State::ptr q = conjecture.kernel->forget_v(
 				childProcess.second, *bagSetDifference.begin());
 			bool conjectureEvaluationResult =
 				conjecture.evaluateConjectureOnState(*q, conjecture.kernel);
 			return make_pair(conjectureEvaluationResult, q);
 		}
 	} else if (strstr(node->get_nodeType().c_str(), "IntroEdge")) {
-		pair<bool, shared_ptr<State>> childProcess =
+		pair<bool, State::ptr> childProcess =
 			constructWitnesses(conjecture, node->get_children()[0]);
 		if (!childProcess.first) {
 			return childProcess;
 		} else {
 			pair<unsigned, unsigned> e =
 				childProcess.second->get_bag().get_edge();
-			shared_ptr<State> q = conjecture.kernel->intro_e(
-				childProcess.second, e.first, e.second);
+			State::ptr q = conjecture.kernel->intro_e(childProcess.second,
+													  e.first, e.second);
 			bool conjectureEvaluationResult =
 				conjecture.evaluateConjectureOnState(*q, conjecture.kernel);
 			return make_pair(conjectureEvaluationResult, q);
 		}
 	} else if (strstr(node->get_nodeType().c_str(), "Join")) {
-		pair<bool, shared_ptr<State>> childProcess1 =
+		pair<bool, State::ptr> childProcess1 =
 			constructWitnesses(conjecture, node->get_children()[0]);
-		pair<bool, shared_ptr<State>> childProcess2 =
+		pair<bool, State::ptr> childProcess2 =
 			constructWitnesses(conjecture, node->get_children()[1]);
 		if (!childProcess1.first) {
 			return childProcess1;
 		} else if (!childProcess2.first) {
 			return childProcess2;
 		} else {
-			shared_ptr<State> q = conjecture.kernel->join(childProcess1.second,
-														  childProcess2.second);
+			State::ptr q = conjecture.kernel->join(childProcess1.second,
+												   childProcess2.second);
 			bool conjectureEvaluationResult =
 				conjecture.evaluateConjectureOnState(*q, conjecture.kernel);
 			return make_pair(conjectureEvaluationResult, q);
@@ -712,7 +712,7 @@ pair<bool, shared_ptr<State>> ConcreteTreeDecomposition::constructWitnesses(
 }
 
 bool ConcreteTreeDecomposition::conjectureCheck(Conjecture &conjecture) {
-	pair<bool, shared_ptr<State>> concreteEvaluation =
+	pair<bool, State::ptr> concreteEvaluation =
 		constructWitnesses(conjecture, root);
 	if (!concreteEvaluation.first) {
 		cout << " Concrete Tree Decomposition does not satisfy the conjecture"
@@ -732,7 +732,7 @@ shared_ptr<StateTreeNode> ConcreteTreeDecomposition::generateStateTreeNode(
 	if (node->get_nodeType() == "Empty") {
 		shared_ptr<StateTreeNode> stateTreeNode(new StateTreeNode);
 		// if it is an empty, then it is a leaf
-		shared_ptr<State> q = kernel->initialState();
+		State::ptr q = kernel->initialState();
 		stateTreeNode->set_S(q);
 		stateTreeNode->set_kernel(kernel);
 		stateTreeNode->set_nodeType(node->get_nodeType());
@@ -757,7 +757,7 @@ shared_ptr<StateTreeNode> ConcreteTreeDecomposition::generateStateTreeNode(
 				 << endl;
 			exit(20);
 		}
-		shared_ptr<State> q =
+		State::ptr q =
 			kernel->intro_v(childNode->get_S(), *bagSetDifference.begin());
 		// set the class members of the state tree node
 		stateTreeNode->set_nodeType(node->get_nodeType());
@@ -791,7 +791,7 @@ shared_ptr<StateTreeNode> ConcreteTreeDecomposition::generateStateTreeNode(
 				 << endl;
 			exit(20);
 		}
-		shared_ptr<State> q =
+		State::ptr q =
 			kernel->forget_v(childNode->get_S(), *bagSetDifference.begin());
 		// set the class members of the state tree node
 		stateTreeNode->set_nodeType(node->get_nodeType());
@@ -816,8 +816,8 @@ shared_ptr<StateTreeNode> ConcreteTreeDecomposition::generateStateTreeNode(
 				 << endl;
 			exit(20);
 		}
-		shared_ptr<State> q = kernel->intro_e(
-			childNode->get_S(), introducedEdge.first, introducedEdge.second);
+		State::ptr q = kernel->intro_e(childNode->get_S(), introducedEdge.first,
+									   introducedEdge.second);
 		// set the class members of the state tree node
 		stateTreeNode->set_nodeType(node->get_nodeType());
 		stateTreeNode->set_S(q);
@@ -836,7 +836,7 @@ shared_ptr<StateTreeNode> ConcreteTreeDecomposition::generateStateTreeNode(
 			generateStateTreeNode(node->get_children()[0], kernel);
 		shared_ptr<StateTreeNode> child2 =
 			generateStateTreeNode(node->get_children()[1], kernel);
-		shared_ptr<State> q = kernel->join(child1->get_S(), child2->get_S());
+		State::ptr q = kernel->join(child1->get_S(), child2->get_S());
 		// set the class members of the state tree node
 		stateTreeNode->set_nodeType(node->get_nodeType());
 		stateTreeNode->set_S(q);

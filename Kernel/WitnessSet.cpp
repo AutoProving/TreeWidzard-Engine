@@ -5,12 +5,12 @@
 void WitnessSet::insert(shared_ptr<Witness> ws) { container.insert(ws); }
 
 void WitnessSet::union_set_witness(shared_ptr<WitnessSet> witnessSet) {
-	//	if (size() < witnessSet->size())
-	//	swap(container, witnessSet->container);
+	// if (size() < witnessSet->size())
+	// swap(container, witnessSet->container);
 
 	for (auto element : *witnessSet) container.insert(element);
 
-	//	witnessSet->container.clear();
+	// witnessSet->container.clear();
 }
 
 void WitnessSet::print() {

@@ -41,7 +41,6 @@ class WitnessSet { // data structure to store 'shared_ptr<Witness>'
 	iterator end() { return iterator(container.end()); }
 
 	void insert(shared_ptr<Witness> w);
-	// void set_container(const set<shared_ptr<Witness>,compare> &witnessSet);
 	void union_set_witness(shared_ptr<WitnessSet> witnessSet);
 	void print();
 	bool operator==(WitnessSet &rhs);

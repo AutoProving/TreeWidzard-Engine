@@ -12,7 +12,7 @@
 StateTreeNode::StateTreeNode() {
 	// Empty node is the default.
 	this->nodeType = "Empty";
-	shared_ptr<State> state(new State);
+	State::ptr state;
 	this->S = state;
 	// this->parent is NULL by default
 	// this->children is the empty vector by default.
@@ -20,7 +20,7 @@ StateTreeNode::StateTreeNode() {
 
 // Constructors that takes a node type and state as input. Used when retrieving
 // a state tree decomposition for a counter example.
-StateTreeNode::StateTreeNode(string nodeType, shared_ptr<State> s) {
+StateTreeNode::StateTreeNode(string nodeType, State::ptr s) {
 	this->set_nodeType(nodeType);
 	this->set_S(s);
 	// this->parent is NULL by default
@@ -29,7 +29,7 @@ StateTreeNode::StateTreeNode(string nodeType, shared_ptr<State> s) {
 
 // Constructors that takes a node type, a bag and a vector of children as input.
 // Used when constructing a state tree decomposition in a bottom-up fashion.
-StateTreeNode::StateTreeNode(string nodeType, shared_ptr<State> s,
+StateTreeNode::StateTreeNode(string nodeType, State::ptr s,
 							 vector<shared_ptr<StateTreeNode> > children) {
 	this->set_nodeType(nodeType);
 	this->set_S(s);
@@ -39,7 +39,7 @@ StateTreeNode::StateTreeNode(string nodeType, shared_ptr<State> s,
 // Constructors that takes a node type, a bag, vector of children and kernel as
 // input. Used when constructing a state tree decomposition in a bottom-up
 // fashion.
-StateTreeNode::StateTreeNode(string nodeType, shared_ptr<State> s,
+StateTreeNode::StateTreeNode(string nodeType, State::ptr s,
 							 vector<shared_ptr<StateTreeNode> > children,
 							 shared_ptr<DynamicKernel> kernel) {
 	this->set_nodeType(nodeType);
@@ -54,7 +54,7 @@ StateTreeNode::StateTreeNode(string nodeType, shared_ptr<State> s,
 //////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-shared_ptr<State> StateTreeNode::get_S() { return this->S; }
+State::ptr StateTreeNode::get_S() { return this->S; }
 
 string StateTreeNode::get_nodeType() { return this->nodeType; }
 
@@ -71,7 +71,7 @@ shared_ptr<DynamicKernel> StateTreeNode::get_kernel() { return kernel; }
 //////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void StateTreeNode::set_S(shared_ptr<State> s) { this->S = s; }
+void StateTreeNode::set_S(State::ptr s) { this->S = s; }
 
 void StateTreeNode::set_nodeType(string nodeType) { this->nodeType = nodeType; }
 
@@ -108,7 +108,7 @@ string StateTreeNode::printAbstract() { return this->get_nodeType(); }
 // parent and children are not set here
 StateTreeNode StateTreeNode::introVertex(unsigned i) {
 	if (this->S->get_bag().vertex_introducible(i)) {
-		shared_ptr<State> auxState(new State);
+		State::ptr auxState;
 		Bag b = this->S->get_bag();
 		for (size_t r = 0; r < this->S->numberOfComponents(); r++) {
 			auxState->addWitnessSet(
@@ -128,7 +128,7 @@ StateTreeNode StateTreeNode::introVertex(unsigned i) {
 
 StateTreeNode StateTreeNode::forgetVertex(unsigned i) {
 	if (this->S->get_bag().vertex_forgettable(i)) {
-		shared_ptr<State> auxState(new State);
+		State::ptr auxState;
 		Bag b = this->S->get_bag();
 		for (size_t r = 0; r < this->S->numberOfComponents(); r++) {
 			auxState->addWitnessSet(
@@ -148,7 +148,7 @@ StateTreeNode StateTreeNode::forgetVertex(unsigned i) {
 
 StateTreeNode StateTreeNode::introEdge(unsigned i, unsigned j) {
 	if (this->S->get_bag().edge_introducible(i, j)) {
-		shared_ptr<State> auxState(new State);
+		State::ptr auxState;
 		Bag b = this->S->get_bag();
 		for (size_t r = 0; r < this->S->numberOfComponents(); r++) {
 			auxState->addWitnessSet(
@@ -169,7 +169,7 @@ StateTreeNode StateTreeNode::introEdge(unsigned i, unsigned j) {
 
 StateTreeNode join(StateTreeNode &left, StateTreeNode &right) {
 	if (left.get_S()->get_bag().joinable(right.get_S()->get_bag())) {
-		shared_ptr<State> auxState(new State);
+		State::ptr auxState;
 		set<unsigned> elements = left.get_S()->get_bag().get_elements();
 		Bag b;
 		b.set_elements(elements);
@@ -504,7 +504,7 @@ shared_ptr<StateTreeNode> StateTree::readStateTreeExpressionRecursive(
 			if (it != end) {
 				readStateTreeExpressionRecursive(it, end, v, kernel);
 			}
-			stateObj.set_S(s.shared_from_this());
+			stateObj.set_S(s.get_ptr());
 			stateObj.set_kernel(kernel.shared_from_this());
 			return stateObj.shared_from_this();
 

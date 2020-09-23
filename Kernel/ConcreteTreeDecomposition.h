@@ -81,8 +81,8 @@ class ConcreteTreeDecomposition {
 	void readConcrete();		 // Reads Concrete Tree Decomposition
 	// take a conjecture as an input and check that the concrete tree
 	// decomposition satisfies the conjecture or not
-	pair<bool, shared_ptr<State>> constructWitnesses(
-		Conjecture &conjecture, shared_ptr<CTDNodeNew> node);
+	pair<bool, State::ptr> constructWitnesses(Conjecture &conjecture,
+											  shared_ptr<CTDNodeNew> node);
 	bool conjectureCheck(Conjecture &conjecture);
 	shared_ptr<StateTreeNode> generateStateTreeNode(
 		shared_ptr<CTDNodeNew> node, shared_ptr<DynamicKernel> kernel);

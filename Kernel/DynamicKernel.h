@@ -24,11 +24,11 @@ class DynamicKernel : public std::enable_shared_from_this<DynamicKernel> {
 	void set_width(Width &width);
 	void addProperty(PropertyAssignment &);
 	const vector<PropertyAssignment> &get_properties() const;
-	StatePointer initialState();
-	StatePointer intro_v(StatePointer q, unsigned i);
-	StatePointer intro_e(StatePointer q, const unsigned i, const unsigned j);
-	StatePointer forget_v(StatePointer q, unsigned i);
-	StatePointer join(StatePointer q1, StatePointer q2);
+	State::ptr initialState();
+	State::ptr intro_v(State::ptr q, unsigned i);
+	State::ptr intro_e(State::ptr q, const unsigned i, const unsigned j);
+	State::ptr forget_v(State::ptr q, unsigned i);
+	State::ptr join(State::ptr q1, State::ptr q2);
 	DynamicCore *pointerToCoreNumber(unsigned i);
 };
 
