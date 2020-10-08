@@ -1,0 +1,4 @@
+path_width 4
+x := CliqueNumber > 2
+c := HasMultipleEdges = 1
+c OR NOT c

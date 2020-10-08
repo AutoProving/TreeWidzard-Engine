@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <iostream>
 #include "DynamicCores/CliqueNumber_AtLeast.h"
+#include "DynamicCores/HasMultipleEdges.h"
 #include "Kernel/ConcreteTreeDecomposition.h"
 #include "Parser/parser.hpp"
 #include "Search/LeveledSetSearch.h"
@@ -107,22 +108,34 @@ int main(int argc, char *arg[]) {
 		 << dynamicKernel.get_width().get_value() << endl;
 	// adding Cores to dynamicKernel
 	for (size_t j = 0; j < propertyList.size(); ++j) {
-		if (propertyList[j].get_name() == "CliqueNumber") {
+		if (propertyList[j].get_name() == "HasMultipleEdges") {
+			cout << "Core " << j << " " << propertyList[j].get_name() << " "
+				 << propertyList[j].get_operatorSign() << " "
+				 << propertyList[j].get_value() << endl;
+			if (propertyList[j].get_operatorSign() == "=") {
+				HasMultipleEdges_DynamicCore *hasMultipleEdgesDynamicCore =
+					new HasMultipleEdges_DynamicCore();
+				dynamicKernel.addCore(*hasMultipleEdgesDynamicCore);
+			} else {
+				cout << "Error of core sign!" << endl;
+				exit(20);
+			}
+		}else 	if (propertyList[j].get_name() == "CliqueNumber") {
 			cout << "Core " << j << " " << propertyList[j].get_name() << " "
 				 << propertyList[j].get_operatorSign() << " "
 				 << propertyList[j].get_value() << endl;
 			if (propertyList[j].get_operatorSign() == ">") {
 				CliqueNumber_AtLeast_DynamicCore
 					*cliqueNumberGreaterThanOrEqualDynamicCore =
-						new CliqueNumber_AtLeast_DynamicCore(
-							propertyList[j].get_value() + 1);
+					new CliqueNumber_AtLeast_DynamicCore(
+						propertyList[j].get_value() + 1);
 				dynamicKernel.addCore(
 					*cliqueNumberGreaterThanOrEqualDynamicCore);
 			} else if (propertyList[j].get_operatorSign() == ">=") {
 				CliqueNumber_AtLeast_DynamicCore
 					*cliqueNumberGreaterThanOrEqualDynamicCore =
-						new CliqueNumber_AtLeast_DynamicCore(
-							propertyList[j].get_value());
+					new CliqueNumber_AtLeast_DynamicCore(
+						propertyList[j].get_value());
 				dynamicKernel.addCore(
 					*cliqueNumberGreaterThanOrEqualDynamicCore);
 			} else {

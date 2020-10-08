@@ -27,6 +27,8 @@ add_executable(
 	# DynamicCore files
 		DynamicCores/CliqueNumber_AtLeast.cpp
 		DynamicCores/CliqueNumber_AtLeast.h
+		DynamicCores/HasMultipleEdges.cpp
+		DynamicCores/HasMultipleEdges.h
 	# Kernel files
         Kernel/Witness.cpp
         Kernel/Witness.h
