@@ -1,0 +1,6 @@
+path_width 4
+c := TriangleFreeWidthFour > 2
+m := MaxDegree > 3
+x := ChromaticNumber < 4
+h := HasMultipleEdges
+NOT c AND NOT m AND NOT h IMPLIES x
