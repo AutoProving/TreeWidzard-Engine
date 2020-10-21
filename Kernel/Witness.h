@@ -1,8 +1,6 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
-
 #ifndef WITNESS_H
 #define WITNESS_H
-
 #include <algorithm>
 #include <iostream>
 #include <memory>
@@ -13,7 +11,6 @@ protected:
     virtual bool is_equal(const Witness &rhs) const;
     virtual bool is_less(const Witness &rhs) const;
     virtual Witness &set_equal(Witness &witness);
-
 public:
     virtual void print();
     virtual ~Witness();
