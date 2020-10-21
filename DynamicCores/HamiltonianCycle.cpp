@@ -402,7 +402,7 @@ void HamiltonianCycle_DynamicCore::join_implementation(Bag &b, HamiltonianCycle_
     //*****************************
     //*****************************
 }
-shared_ptr<WitnessSet> HamiltonianCycle_DynamicCore::clean(shared_ptr<WitnessSet> witnessSet) {
+WitnessSetPointer HamiltonianCycle_DynamicCore::clean(WitnessSetPointer witnessSet) {
     //*****************************
     //*****************************
     // In most cases, you will not need to change this function.

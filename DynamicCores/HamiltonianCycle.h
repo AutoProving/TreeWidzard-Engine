@@ -51,11 +51,11 @@ public:
     unsigned parameter;
     HamiltonianCycle_DynamicCore();
     void createInitialWitnessSet();
-    virtual shared_ptr<WitnessSet> intro_v(unsigned i, Bag &b, Witness &witness);
-    virtual shared_ptr<WitnessSet> intro_e(unsigned i, unsigned j, Bag &b, Witness &witness);
-    virtual shared_ptr<WitnessSet> forget_v(unsigned i, Bag &b,Witness &witness);
-    virtual shared_ptr<WitnessSet> join(Bag &b, Witness &witness1, Witness &witness2);
-    virtual shared_ptr<WitnessSet> clean(shared_ptr<WitnessSet> witnessSet);
+    virtual WitnessSetPointer intro_v(unsigned i, Bag &b, Witness &witness);
+    virtual WitnessSetPointer intro_e(unsigned i, unsigned j, Bag &b, Witness &witness);
+    virtual WitnessSetPointer forget_v(unsigned i, Bag &b,Witness &witness);
+    virtual WitnessSetPointer join(Bag &b, Witness &witness1, Witness &witness2);
+    virtual WitnessSetPointer clean(WitnessSetPointer witnessSet);
     virtual bool is_final_witness(Witness &witness);
     //*****************************
     //*****************************
