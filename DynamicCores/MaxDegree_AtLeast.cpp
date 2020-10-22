@@ -267,7 +267,6 @@ WitnessSetPointer MaxDegree_AtLeast_DynamicCore::clean(WitnessSetPointer witness
     return witnessSet;
 }
 
-
 MaxDegree_AtLeast_WitnessPointer MaxDegree_AtLeast_DynamicCore::createWitness() {
     MaxDegree_AtLeast_WitnessPointer w(new MaxDegree_AtLeast_Witness);
     return w;

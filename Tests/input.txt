@@ -1,3 +1,4 @@
-path_width 3
-c := CycleGirth < 3
-TRUE
+path_width 5
+c := MaxDegree > 2
+d := CliqueNumber > 4
+d IMPLIES NOT c
