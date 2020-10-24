@@ -25,10 +25,8 @@ extern FILE *td_in;
 namespace fs = std::experimental::filesystem;
 
 int main(int argc, char *arg[]) {
-
     char* path = "../Tests/input.txt";
     char* functionType="../Tests/treedecomposition.td";
-
 	if (argc < 2) {
 		cout << "Input command was not correct." << endl;
 		exit(20);

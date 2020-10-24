@@ -12,21 +12,17 @@ class State : private std::enable_shared_from_this<State> {
   private:
 	Bag bag;
 	std::vector<shared_ptr<WitnessSet>> witnessSetVector;
-
   public:
 	class ptr {
 	  private:
 		shared_ptr<State> pointer;
-
 	  public:
 		ptr() { pointer = make_shared<State>(); }
 		ptr(shared_ptr<State> pointer_) : pointer(pointer_) {}
-
 		State &operator*() const { return *pointer; }
 		State *operator->() const { return &*pointer; }
 		bool operator<(const ptr &rhs) const { return **this < *rhs; }
 	};
-
 	ptr get_ptr() { return ptr(this->shared_from_this()); }
 	Bag get_bag() const;
 	void set_bag(const Bag &bag);
@@ -35,7 +31,6 @@ class State : private std::enable_shared_from_this<State> {
 	bool operator==(State &rhs);
 	size_t operator()(const State &b) const;
 	void print();
-
 	shared_ptr<WitnessSet> getWitnessSet(int);
 	int numberOfComponents() const;
 };

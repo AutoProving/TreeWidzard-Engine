@@ -1,12 +1,13 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 
-#ifndef RANDOMLEVELEDSETSEARCH_H
-#define RANDOMLEVELEDSETSEARCH_H
+#ifndef RANDOMLEVELEDSETSEARCHPREMISE_H
+#define RANDOMLEVELEDSETSEARCHPREMISE_H
+
 #include "../Kernel/SearchStrategy.h"
 #include "../Kernel/StateTree.h"
 #include <math.h>
 
-class RandomLeveledSetSearch: public SearchStrategy{
+class RandomLeveledSetSearchPremise: public SearchStrategy{
     private:
         vector<pair<State::ptr,string> > generatedVector;
         map<State::ptr, unsigned> mapState;
@@ -14,8 +15,8 @@ class RandomLeveledSetSearch: public SearchStrategy{
         vector<set<State::ptr > > setNewStates;
         vector<vector<set<State::ptr > > > leveledSetAllStates;
     public:
-        RandomLeveledSetSearch();
-        RandomLeveledSetSearch(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags);
+        RandomLeveledSetSearchPremise();
+        RandomLeveledSetSearchPremise(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags);
         static unsigned bagSetToNumber(set<unsigned> bagSet,unsigned width);
         virtual pair<bool,ConcreteTreeDecomposition> search();
         shared_ptr<CTDNodeNew> extractCTDNode(unsigned index);

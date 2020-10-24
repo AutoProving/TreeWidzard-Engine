@@ -1,24 +1,25 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 
-#include "RandomLeveledSetSearch.h"
+#include "RandomLeveledSetSearchPremise.h"
 extern "C" {
-RandomLeveledSetSearch * create() {
-    return new RandomLeveledSetSearch();
+RandomLeveledSetSearchPremise * create() {
+    return new RandomLeveledSetSearchPremise();
 }
-RandomLeveledSetSearch * create_parameter(DynamicKernel* dynamicKernel, Conjecture* conjecture,Flags* flags) {
-        return new RandomLeveledSetSearch(dynamicKernel,conjecture,flags);
-    }
+RandomLeveledSetSearchPremise * create_parameter(DynamicKernel* dynamicKernel, Conjecture* conjecture,Flags* flags) {
+    return new RandomLeveledSetSearchPremise(dynamicKernel,conjecture,flags);
 }
-RandomLeveledSetSearch::RandomLeveledSetSearch() {
-    addAttribute("SearchName","RandomLeveledSetSearch");
 }
-RandomLeveledSetSearch::RandomLeveledSetSearch(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags) : SearchStrategy(dynamicKernel, conjecture, flags) {
-    addAttribute("SearchName","RandomLeveledSetSearch");
+RandomLeveledSetSearchPremise::RandomLeveledSetSearchPremise() {
+    addAttribute("SearchName","RandomLeveledSetSearchPremise");
+}
+RandomLeveledSetSearchPremise::RandomLeveledSetSearchPremise(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags) : SearchStrategy(dynamicKernel, conjecture, flags) {
+    addAttribute("SearchName","RandomLeveledSetSearchPremise");
     this->kernel = kernel;
     this->conjecture = conjecture;
     this->flags = flags;
 }
-unsigned RandomLeveledSetSearch::bagSetToNumber(set<unsigned> bagSet,unsigned width){
+
+unsigned RandomLeveledSetSearchPremise::bagSetToNumber(set<unsigned> bagSet,unsigned width){
     unsigned number = 0;
     for (unsigned i = 1; i<= width+1; i++){
         if (bagSet.find(i)!=bagSet.end()){
@@ -27,7 +28,8 @@ unsigned RandomLeveledSetSearch::bagSetToNumber(set<unsigned> bagSet,unsigned wi
     }
     return number;
 }
-shared_ptr<CTDNodeNew> RandomLeveledSetSearch::extractCTDNode( unsigned index){
+shared_ptr<CTDNodeNew> RandomLeveledSetSearchPremise::extractCTDNode( unsigned index){
+
     shared_ptr<CTDNodeNew>  node (new CTDNodeNew());
     node->set_B(generatedVector[index].first->get_bag());
     node->set_parent(nullptr);
@@ -41,14 +43,17 @@ shared_ptr<CTDNodeNew> RandomLeveledSetSearch::extractCTDNode( unsigned index){
     }
     return node;
 }
-ConcreteTreeDecomposition RandomLeveledSetSearch::extractCTDDecomposition(){
+
+ConcreteTreeDecomposition RandomLeveledSetSearchPremise::extractCTDDecomposition(){
     ConcreteTreeDecomposition T;
     T.root = extractCTDNode(generatedVector.size()-1);
     return T;
 }
 
-shared_ptr<StateTreeNode> RandomLeveledSetSearch::extractStateTreeNode(unsigned index){
-    shared_ptr<StateTreeNode> node (new StateTreeNode);
+
+shared_ptr<StateTreeNode> RandomLeveledSetSearchPremise::extractStateTreeNode(unsigned index){
+
+    shared_ptr<StateTreeNode> node (new StateTreeNode());
     node->set_S(generatedVector[index].first);
     node->set_parent(nullptr);
     shared_ptr<DynamicKernel> sharedKernel(kernel);
@@ -63,9 +68,10 @@ shared_ptr<StateTreeNode> RandomLeveledSetSearch::extractStateTreeNode(unsigned 
         node->set_children(children);
     }
     return node;
+
 }
 
-StateTree RandomLeveledSetSearch::extractStateTreeDecomposition(){
+StateTree RandomLeveledSetSearchPremise::extractStateTreeDecomposition(){
 
     StateTree stateTree;
     stateTree.root = extractStateTreeNode(generatedVector.size()-1);
@@ -73,15 +79,12 @@ StateTree RandomLeveledSetSearch::extractStateTreeDecomposition(){
 
 }
 
-pair<bool,ConcreteTreeDecomposition> RandomLeveledSetSearch::search(){
-
+pair<bool,ConcreteTreeDecomposition> RandomLeveledSetSearchPremise::search(){
     // Add Initial state to vector
-    generatedVector.push_back(make_pair(kernel->initialState(),"Empty"));
+    generatedVector.push_back({kernel->initialState(),"Empty"});
     bool foundCounterexample = false;
     unsigned iterationNumber = 1;
-    int counter = 0;
     while (!foundCounterexample) {
-        counter++;
         string typeState;
         State::ptr q = generatedVector[generatedVector.size()-1].first;
         if(flags->get("PrintStates")==1){
@@ -98,41 +101,59 @@ pair<bool,ConcreteTreeDecomposition> RandomLeveledSetSearch::search(){
         if (bagSet.size() < kernel->get_width().get_value() + 1) {
             for (size_t i = 1; i < kernel->get_width().get_value() + 2; ++i) {
                 if (bag.vertex_introducible(i)) {
-                    introducibleVertices.push_back(i);
+                    State::ptr aux = kernel->intro_v(q,i);
+                    if (conjecture->evaluatePremiseOnState(*aux,kernel)){
+                        introducibleVertices.push_back(i);
+                    }
                 }
             }
         }
         // introduce an edge
         for (set<unsigned>::iterator it = bagSet.begin(); it != bagSet.end(); it++) {
-             set<unsigned>::iterator tempit = it;
-             tempit++;
-             for (set<unsigned>::iterator itr = tempit; itr != bagSet.end(); ++itr) {
-                 if (q->get_bag().edge_introducible(*it, *itr)) {
-                     pair<unsigned, unsigned> p = make_pair(*it, *itr);
-                     introducibleEdges.push_back(p);
-                 }
-             }
+            set<unsigned>::iterator tempit = it;
+            tempit++;
+            for (set<unsigned>::iterator itr = tempit; itr != bagSet.end(); ++itr) {
+                if (q->get_bag().edge_introducible(*it, *itr)){
+                    pair<unsigned, unsigned> p = make_pair(*it, *itr);
+		    State::ptr aux = kernel->intro_e(q,*it,*itr);
+		    if (conjecture->evaluatePremiseOnState(*aux,kernel)){
+		            introducibleEdges.push_back(p);
+		    }
+		}
+            }
         }
         // forget a vertex
         for (size_t i = 1; i < kernel->get_width().get_value() + 2; ++i) {
             if (q->get_bag().vertex_forgettable(i)) {
-                forgettableVertices.push_back(i);
+		State::ptr aux = kernel->forget_v(q,i);
+		if (conjecture->evaluatePremiseOnState(*aux,kernel)){
+	                forgettableVertices.push_back(i);
+		}
             }
         }
+
         unsigned numberPossibilities = introducibleVertices.size() + introducibleEdges.size() + forgettableVertices.size();
         if(generatedVector.size() > 1){
             numberPossibilities++;
         }
-        unsigned r = random() % numberPossibilities; // select one of the possibiitlies
+        if(numberPossibilities==0){
+            cerr<<"There is not a generated state"<<endl;
+            exit(20);
+        }
+        unsigned r = random() % numberPossibilities; // select one of the possibilities
+        cout<<" before random number"<<endl;
+
         //cout<<"introducibleVertices.size(): "<< introducibleVertices.size()<< " introducibleEdges.size(): "<<introducibleEdges.size()<<" forgettableVertices.size(): "<<forgettableVertices.size()<<" r:"<<r<<endl;
         if (r < introducibleVertices.size()) {
             s = kernel->intro_v(q, introducibleVertices[r]);
             typeState = "IntroVertex_"+to_string(introducibleVertices[r]);
+
         } else {
             r = r - introducibleVertices.size();
             if (r < introducibleEdges.size()) {
                 s = kernel->intro_e(q, introducibleEdges[r].first, introducibleEdges[r].second);
                 typeState = "IntroEdge_"+to_string(introducibleEdges[r].first)+"_"+to_string(introducibleEdges[r].second);
+
             } else {
                 r = r - introducibleEdges.size();
                 if (r < forgettableVertices.size()) {
@@ -172,16 +193,18 @@ pair<bool,ConcreteTreeDecomposition> RandomLeveledSetSearch::search(){
         if(foundCounterexample){
             cout<<"COUNTER EXAMPLE FOUND"<<endl;
             s->print();
-            //ConcreteTreeDecomposition *concreteDecomposition = new ConcreteTreeDecomposition;
-            //*concreteDecomposition = extractCTDDecomposition();
-            //concreteDecomposition->printAbstract();
-            //concreteDecomposition->extractMultiGraph().printGraph();
+            ConcreteTreeDecomposition *concreteDecomposition = new ConcreteTreeDecomposition;
+            *concreteDecomposition = extractCTDDecomposition();
+            concreteDecomposition->printAbstract();
+            concreteDecomposition->extractMultiGraph().printGraph();
+            cout<< "\n convert to gml " <<concreteDecomposition->extractMultiGraph().convertToGML();
             StateTree *stateTree = new StateTree();
             *stateTree = extractStateTreeDecomposition();
-            stateTree->printStateTree();
+            stateTree->printAbstract();
             stateTree->extractMultiGraph().printGraph();
             exit(20);
         }
+
         if(flags->get("PrintVectors")==1){
             cout<<"*******generated vector print"<<endl;
             for (unsigned i = 1; i < generatedVector.size(); ++i) {
@@ -195,10 +218,11 @@ pair<bool,ConcreteTreeDecomposition> RandomLeveledSetSearch::search(){
             }
             cout<<"*******"<<endl;
         }
-        if(flags->get("LoopTime")==1 and counter == 300000){
-            counter=0; // Reset the counter
+        if(flags->get("LoopTime")==1){
             cout<<"----------Vector Size:"<<generatedVector.size()<<"---- Iteration number:"<<iterationNumber <<endl;
         }
         iterationNumber++;
     }
+
+
 }
