@@ -185,43 +185,44 @@ void EdgeColoring_AtMost_DynamicCore::intro_e_implementation(unsigned int i, uns
                                                              EdgeColoring_AtMost_WitnessSetPointer witnessSet) {
     //*****************************
     //*****************************
-    //Getting iterators for keys i and j in the edgesPerVertex map.
-    auto iItr = w->edgesPerVertex.find(i);
-    auto jItr = w->edgesPerVertex.find(j);
+    if (w->edgesPerVertex.count(i) && w->edgesPerVertex.count(j)) { // if i and j are present, make the new witnesses.
+        //Getting iterators for keys i and j in the edgesPerVertex map.
+        auto iItr = w->edgesPerVertex.find(i);
+        auto jItr = w->edgesPerVertex.find(j);
 
-    set<unsigned> possibleEdgeColors;
-    set<unsigned> aux; // will hold colors that can't be assigned to the new edge.
+        set<unsigned> possibleEdgeColors;
+        set<unsigned> aux; // will hold colors that can't be assigned to the new edge.
 
-    // Getting all possible colors:
-    for (auto &edge: iItr->second) {
-        aux.insert(edge.second);
-    }
-    for (auto &edge: jItr->second) {
-        aux.insert(edge.second);
-    }
-    for (int k = 1; k <= this->parameter; ++k) {
-        if (!aux.count(k)) possibleEdgeColors.insert(k);
-    }
-
-    // If there are possible colors:
-    if (!possibleEdgeColors.empty()) {
-        // The number of this edge will be the next available in p:
-        unsigned edgeNumber = w->next_available_edge_number();
-        // For each possible color, introduce an edge colored with
-        // this color in w1 and insert it into the witness set:
-        for (auto &color: possibleEdgeColors) {
-            EdgeColoring_AtMost_WitnessPointer w1 = createWitness();
-            w1->set_equal(*w);
-            auto iItr1 = w1->edgesPerVertex.find(i);
-            auto jItr1 = w1->edgesPerVertex.find(j);
-            // Introducing edge <i,j>:
-            iItr1->second.insert(pair<unsigned,unsigned>(edgeNumber,color));
-            jItr1->second.insert(pair<unsigned,unsigned>(edgeNumber,color));
-            w1->availableEdgeNumbers.insert(pair<unsigned,unsigned>(edgeNumber, 2));
-            witnessSet->insert(w1);
+        // Getting all possible colors:
+        for (auto &edge: iItr->second) {
+            aux.insert(edge.second);
         }
-    }
-    // Else, there is no possible witness.
+        for (auto &edge: jItr->second) {
+            aux.insert(edge.second);
+        }
+        for (int k = 1; k <= this->parameter; ++k) {
+            if (!aux.count(k)) possibleEdgeColors.insert(k);
+        }
+
+        // If there are possible colors:
+        if (!possibleEdgeColors.empty()) {
+            // The number of this edge will be the next available in p:
+            unsigned edgeNumber = w->next_available_edge_number();
+            // For each possible color, introduce an edge colored with
+            // this color in w1 and insert it into the witness set:
+            for (auto &color: possibleEdgeColors) {
+                EdgeColoring_AtMost_WitnessPointer w1 = createWitness();
+                w1->set_equal(*w);
+                auto iItr1 = w1->edgesPerVertex.find(i);
+                auto jItr1 = w1->edgesPerVertex.find(j);
+                // Introducing edge <i,j>:
+                iItr1->second.insert(pair<unsigned,unsigned>(edgeNumber,color));
+                jItr1->second.insert(pair<unsigned,unsigned>(edgeNumber,color));
+                w1->availableEdgeNumbers.insert(pair<unsigned,unsigned>(edgeNumber, 2));
+                witnessSet->insert(w1);
+            }
+        }// Else, there is no possible witness.
+    }// Else, there is no way to intro_e_i_j.
     //*****************************
     //*****************************
 }
@@ -246,25 +247,28 @@ void EdgeColoring_AtMost_DynamicCore::forget_v_implementation(unsigned int i, Ba
     // Unique witness: equals to p, but with i vertex removed from edgesPerVertex. If i is the
     // only endpoint of an edge, this edge should be removed from availableEdgeNumbers as well.
 
-    EdgeColoring_AtMost_WitnessPointer w1 = createWitness();
-    w1->set_equal(*w);
+    if (w->edgesPerVertex.count(i)) { // if i is present, forget it.
 
-    // Saving the edges related to the forgotten vertex:
-    auto forgottenVertexIterator = w1->edgesPerVertex.find(i);
-    map<unsigned,unsigned> forgottenEdges(forgottenVertexIterator->second);
+        EdgeColoring_AtMost_WitnessPointer w1 = createWitness();
+        w1->set_equal(*w);
 
-    // Deleting vertex i:
-    w1->edgesPerVertex.erase(i);
+        // Saving the edges related to the forgotten vertex:
+        auto forgottenVertexIterator = w1->edgesPerVertex.find(i);
+        map<unsigned,unsigned> forgottenEdges(forgottenVertexIterator->second);
 
-    // Fixing the number of endpoints of an edge related to the forgotten vertex:
-    for (auto &forgottenEdge: forgottenEdges) {
-        w1->availableEdgeNumbers[forgottenEdge.first]--;
-        // If this edge has no endpoints anymore, it should not be represented in availableEdgeNumbers.
-        // Thus, delete it:
-        if(w1->availableEdgeNumbers[forgottenEdge.first] == 0) w1->availableEdgeNumbers.erase(forgottenEdge.first);
-    }
+        // Deleting vertex i:
+        w1->edgesPerVertex.erase(i);
 
-    witnessSet->insert(w1);
+        // Fixing the number of endpoints of an edge related to the forgotten vertex:
+        for (auto &forgottenEdge: forgottenEdges) {
+            w1->availableEdgeNumbers[forgottenEdge.first]--;
+            // If this edge has no endpoints anymore, it should not be represented in availableEdgeNumbers.
+            // Thus, delete it:
+            if(w1->availableEdgeNumbers[forgottenEdge.first] == 0) w1->availableEdgeNumbers.erase(forgottenEdge.first);
+        }
+
+        witnessSet->insert(w1);
+    } // else i cannot be removed, because it's not present.
     //*****************************
     //*****************************
 }
@@ -295,7 +299,7 @@ void EdgeColoring_AtMost_DynamicCore::join_implementation(Bag &b, EdgeColoring_A
     bool contradiction = false;
 
     // Checking colors:
-    while (it1 != w1->edgesPerVertex.end() and !contradiction) {
+    while (it1 != w1->edgesPerVertex.end() && !contradiction) {
         for (auto edge1: it1->second) {
             for (auto edge2: it2->second) {
                 // If there is an edge with same color in the same vertex, join is impossible.

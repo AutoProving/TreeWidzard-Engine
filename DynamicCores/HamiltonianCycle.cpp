@@ -235,7 +235,6 @@ void HamiltonianCycle_DynamicCore::join_implementation(Bag &b, HamiltonianCycle_
     bool impossible = false;
     //We have copied the input witness1 into w1 and the input witness2 into w2.
     //The final witness will be w1.
-
     //Treating vertices of degree 0 in p1
     for (unsigned i: w1->degree_0)
     {
@@ -247,7 +246,6 @@ void HamiltonianCycle_DynamicCore::join_implementation(Bag &b, HamiltonianCycle_
             wPrime1->degree_2.insert(i);
         }
     }
-
     //Treating vertices of degree 2 in p1
     for (unsigned i: w1->degree_2)
     {

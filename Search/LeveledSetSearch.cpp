@@ -454,7 +454,6 @@ maxWitnessSetSize[m] =
 						}
 					}
 				}
-
 				// forget a vertex
 				for (size_t i = 1; i < kernel->get_width().get_value() + 2;
 					 ++i) {

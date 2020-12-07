@@ -137,91 +137,89 @@ pair<bool,ConcreteTreeDecomposition> RandomLeveledSetSearchPremise::search(){
             numberPossibilities++;
         }
         if(numberPossibilities==0){
-            cerr<<"There is not a generated state"<<endl;
-            exit(20);
-        }
-        unsigned r = random() % numberPossibilities; // select one of the possibilities
-        cout<<" before random number"<<endl;
+            unsigned r = random() % numberPossibilities; // select one of the possibilities
+            cout<<" before random number"<<endl;
 
-        //cout<<"introducibleVertices.size(): "<< introducibleVertices.size()<< " introducibleEdges.size(): "<<introducibleEdges.size()<<" forgettableVertices.size(): "<<forgettableVertices.size()<<" r:"<<r<<endl;
-        if (r < introducibleVertices.size()) {
-            s = kernel->intro_v(q, introducibleVertices[r]);
-            typeState = "IntroVertex_"+to_string(introducibleVertices[r]);
-
-        } else {
-            r = r - introducibleVertices.size();
-            if (r < introducibleEdges.size()) {
-                s = kernel->intro_e(q, introducibleEdges[r].first, introducibleEdges[r].second);
-                typeState = "IntroEdge_"+to_string(introducibleEdges[r].first)+"_"+to_string(introducibleEdges[r].second);
+            //cout<<"introducibleVertices.size(): "<< introducibleVertices.size()<< " introducibleEdges.size(): "<<introducibleEdges.size()<<" forgettableVertices.size(): "<<forgettableVertices.size()<<" r:"<<r<<endl;
+            if (r < introducibleVertices.size()) {
+                s = kernel->intro_v(q, introducibleVertices[r]);
+                typeState = "IntroVertex_"+to_string(introducibleVertices[r]);
 
             } else {
-                r = r - introducibleEdges.size();
-                if (r < forgettableVertices.size()) {
-                    s = kernel->forget_v(q, forgettableVertices[r]);
-                    typeState = "ForgetVertex_"+to_string(forgettableVertices[r]);
-                }else{
-                    pair<State::ptr,string>  deletedState = generatedVector[generatedVector.size()-1];
-                    mapState.erase(deletedState.first);
-                    generatedVector.erase(generatedVector.begin()+generatedVector.size()-1, generatedVector.end());
-                    s = generatedVector[generatedVector.size()-1].first;
-                    typeState = generatedVector[generatedVector.size()-1].second;
+                r = r - introducibleVertices.size();
+                if (r < introducibleEdges.size()) {
+                    s = kernel->intro_e(q, introducibleEdges[r].first, introducibleEdges[r].second);
+                    typeState = "IntroEdge_"+to_string(introducibleEdges[r].first)+"_"+to_string(introducibleEdges[r].second);
+
+                } else {
+                    r = r - introducibleEdges.size();
+                    if (r < forgettableVertices.size()) {
+                        s = kernel->forget_v(q, forgettableVertices[r]);
+                        typeState = "ForgetVertex_"+to_string(forgettableVertices[r]);
+                    }else{
+                        pair<State::ptr,string>  deletedState = generatedVector[generatedVector.size()-1];
+                        mapState.erase(deletedState.first);
+                        generatedVector.erase(generatedVector.begin()+generatedVector.size()-1, generatedVector.end());
+                        s = generatedVector[generatedVector.size()-1].first;
+                        typeState = generatedVector[generatedVector.size()-1].second;
+                    }
                 }
             }
-        }
 
-        if(flags->get("PrintStates")==1){
-            cout<<"-----Generated State------"<<endl;
-            s->print();
-        }
-        auto it = mapState.find(s);
-        if(it != mapState.end()){
             if(flags->get("PrintStates")==1){
-                cout<<"Duplicate State"<<endl;
+                cout<<"-----Generated State------"<<endl;
+                s->print();
             }
-            unsigned vecIndex = it->second;
-            for (unsigned p = vecIndex+1; p < generatedVector.size() ; ++p) {
-                mapState.erase(generatedVector[p].first);
+            auto it = mapState.find(s);
+            if(it != mapState.end()){
+                if(flags->get("PrintStates")==1){
+                    cout<<"Duplicate State"<<endl;
+                }
+                unsigned vecIndex = it->second;
+                for (unsigned p = vecIndex+1; p < generatedVector.size() ; ++p) {
+                    mapState.erase(generatedVector[p].first);
+                }
+                if(vecIndex < generatedVector.size()){
+                    generatedVector.erase(generatedVector.begin()+vecIndex+1,generatedVector.end());
+                }
+            }else{
+                generatedVector.push_back({s,typeState});
+                mapState.insert({s,generatedVector.size()-1});
             }
-            if(vecIndex < generatedVector.size()){
-                generatedVector.erase(generatedVector.begin()+vecIndex+1,generatedVector.end());
+            foundCounterexample = !(conjecture->evaluateConjectureOnState(*s,kernel));
+            if(foundCounterexample){
+                cout<<"COUNTER EXAMPLE FOUND"<<endl;
+                s->print();
+                ConcreteTreeDecomposition *concreteDecomposition = new ConcreteTreeDecomposition;
+                *concreteDecomposition = extractCTDDecomposition();
+                concreteDecomposition->printAbstract();
+                concreteDecomposition->extractMultiGraph().printGraph();
+                cout<< "\n convert to gml " <<concreteDecomposition->extractMultiGraph().convertToGML();
+                StateTree *stateTree = new StateTree();
+                *stateTree = extractStateTreeDecomposition();
+                stateTree->printAbstract();
+                stateTree->extractMultiGraph().printGraph();
+                exit(20);
             }
-        }else{
-            generatedVector.push_back({s,typeState});
-            mapState.insert({s,generatedVector.size()-1});
-        }
-        foundCounterexample = !(conjecture->evaluateConjectureOnState(*s,kernel));
-        if(foundCounterexample){
-            cout<<"COUNTER EXAMPLE FOUND"<<endl;
-            s->print();
-            ConcreteTreeDecomposition *concreteDecomposition = new ConcreteTreeDecomposition;
-            *concreteDecomposition = extractCTDDecomposition();
-            concreteDecomposition->printAbstract();
-            concreteDecomposition->extractMultiGraph().printGraph();
-            cout<< "\n convert to gml " <<concreteDecomposition->extractMultiGraph().convertToGML();
-            StateTree *stateTree = new StateTree();
-            *stateTree = extractStateTreeDecomposition();
-            stateTree->printAbstract();
-            stateTree->extractMultiGraph().printGraph();
-            exit(20);
-        }
 
-        if(flags->get("PrintVectors")==1){
-            cout<<"*******generated vector print"<<endl;
-            for (unsigned i = 1; i < generatedVector.size(); ++i) {
-                auto tempMapItr = mapState.find(generatedVector[i].first);
-                cout<<"target state"<<endl;
-                generatedVector[i].first->print();
-                cout<<"First:"<<endl;
-                tempMapItr->first->print();
-                cout<<"Second:"<<endl;
-                (generatedVector[tempMapItr->second]).first->print();
+            if(flags->get("PrintVectors")==1){
+                cout<<"*******generated vector print"<<endl;
+                for (unsigned i = 1; i < generatedVector.size(); ++i) {
+                    auto tempMapItr = mapState.find(generatedVector[i].first);
+                    cout<<"target state"<<endl;
+                    generatedVector[i].first->print();
+                    cout<<"First:"<<endl;
+                    tempMapItr->first->print();
+                    cout<<"Second:"<<endl;
+                    (generatedVector[tempMapItr->second]).first->print();
+                }
+                cout<<"*******"<<endl;
             }
-            cout<<"*******"<<endl;
+            if(flags->get("LoopTime")==1){
+                cout<<"----------Vector Size:"<<generatedVector.size()<<"---- Iteration number:"<<iterationNumber <<endl;
+            }
+            iterationNumber++;
         }
-        if(flags->get("LoopTime")==1){
-            cout<<"----------Vector Size:"<<generatedVector.size()<<"---- Iteration number:"<<iterationNumber <<endl;
-        }
-        iterationNumber++;
     }
 
 
