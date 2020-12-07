@@ -1,0 +1,20 @@
+Usage:
+
+1) For testing whether a conjecture is valid on all graphs of treewidth or pathwith k.
+The conjecture and width are specified at InputFile. 
+
+dp <ConjectureInputFile> -search=<SearchMethod>
+
+ex: 
+
+dp input.txt -search=LeveledSetSearch
+
+
+2) For testing whether a specific graph satisfies the conjecture.
+
+dp <ConjectureInputFile> <TreeDecompositionInputFile> <GraphInputFile>
+
+ex: 
+
+dp input.txt treedecomposition.td graph.gr
+
