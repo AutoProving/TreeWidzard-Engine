@@ -92,5 +92,7 @@ add_executable(
 		Translation/PACE/Parser/td_lexer.cpp
 		Translation/PACE/Parser/td_parser.cpp
 		Translation/PACE/Parser/td_parser.hpp
+	# TreeAutomaton
+		#TreeAutomaton/TreeAutomaton.cpp
 )
 target_link_libraries(dp ${CMAKE_DL_LIBS})
