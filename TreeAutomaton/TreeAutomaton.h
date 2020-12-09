@@ -1,3 +1,5 @@
+#ifndef TREEAUTOMATON_H
+#define TREEAUTOMATON_H
 #include<iostream>
 #include<vector>
 #include<memory>
@@ -7,14 +9,14 @@ using namespace std;
 class AbstractTreeDecompositionSymbol{
 	string symbol;
 	bool operator< (AbstractTreeDecompositionSymbol &rhs)  {
-		int typeSymbol1 = symbolType(this->symbol); 
+		int typeSymbol1 = symbolType(this->symbol);
 		int typeSymbol2 = symbolType(rhs.symbol);
 		vector<int> numbersSymbol1 = symbolNumbers(this->symbol);
 		vector<int> numbersSymbol2 = symbolNumbers(rhs.symbol);
 		if (typeSymbol1<typeSymbol2) return true;
 		if (typeSymbol1>typeSymbol2) return false;
-		return numbersSymbol1 < numbersSymbol2;  
- 	};  
+		return numbersSymbol1 < numbersSymbol2;
+ 	};
 	int symbolType(string symbol); // returns "0 if Leaf, 1 if IntroVertex, 2 if  ForgetVertex, 3 if IntroEdge or 4 if Join"
 	//ToDo: implement this
 	vector<int> symbolNumbers(string s); // returns vector "[i]" if symbol="IntroVertex_i or ForgetVertex_i", Returns vector "[i,j]" if symbol="IntroEdge_i_j", Returns empty vector if symbol = "Join"
@@ -107,7 +109,7 @@ public:
 	friend TreeAutomaton<StateType,SymbolType> unionAutomata(TreeAutomaton<StateType,SymbolType> automaton1, TreeAutomaton<StateType,SymbolType> automaton2); 
 	TreeAutomaton<StateType,SymbolType> complementation(); 
 };
-
+#endif
 
 
 
