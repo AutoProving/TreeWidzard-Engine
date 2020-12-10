@@ -79,7 +79,8 @@ union TERM_STYPE
      unsigned number;
      char* string;
 
-#line 83 "term_parser.hpp" /* yacc.c:1909  */
+
+#line 84 "term_parser.hpp" /* yacc.c:1909  */
 };
 
 typedef union TERM_STYPE TERM_STYPE;

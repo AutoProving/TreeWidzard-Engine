@@ -24,6 +24,7 @@
 %union{
      unsigned number;
      char* string;
+
 }
 %parse-param {Term<string> &term}
 %parse-param {int &result}
@@ -37,9 +38,9 @@
 
 %%
 
-TR_START                   : TR_COMMENTS TR_NODES_INFO                            {std::cout<<"hello"<<std::endl;}
+TR_START                   : TR_NODES_INFO                            {std::cout<<"hello"<<std::endl;}
                            ;
-TR_NODES_INFO              : TR_NODE_NUM TR_SEPARATOR TR_NODE_SYMBOL TR_NODE_CHILDREN TR_NEWLINE TR_NODES_INFO  {}
+TR_NODES_INFO              : TR_COMMENTS TR_NODE_NUM TR_SEPARATOR TR_NODE_SYMBOL TR_NODE_CHILDREN TR_NEWLINE TR_NODES_INFO  {}
                            |
                            ;
 TR_NODE_CHILDREN           : TR_NODE_NUM TR_NODE_NUM

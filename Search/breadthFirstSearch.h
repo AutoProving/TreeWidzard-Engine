@@ -10,7 +10,6 @@
 //These are states used to define what is a 
 //valid decomposition
 class DecompositionState{
-
 	//TODO: DEFINE ALL COMPARATORS, AND PRINT FUNCTION AS VIRTUAL. ATD implements these menthods
 
 };
@@ -27,8 +26,7 @@ class ATDState: public DecompositionState{
 	void setBagEdge(set<int> bagedge);
 	void getPastEdges();
 	void setPastEdges(set<pair<int,int> > pastEdges);
-	void addPastEdge(int i, int j); 
-
+	void addPastEdge(int i, int j);
 	void printDecompositionState(); 
 	bool operator<(const ATDState& rhs) const;
 	bool operator==(const ATDState& rhs) const;
@@ -49,7 +47,7 @@ class ATDState: public DecompositionState{
 class SearchState: public DecompositionState{
 	DecompositionState decState;
 	State kernelState;
-        DecompositionState getDecompositionState();
+	ecompositionState getDecompositionState();
 	void setDecompositionState();
 	State getKernelState(); 
 	void setKernelState(); 

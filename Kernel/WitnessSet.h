@@ -85,7 +85,6 @@ public:
 
 };
 typedef shared_ptr<WitnessSet> WitnessSetPointer;
-
 template <class T>
 class WitnessSetTypeOne : public WitnessSet{
 public:

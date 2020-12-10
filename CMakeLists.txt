@@ -32,6 +32,7 @@ add_executable(
 		#   DynamicCores/HasMultipleEdges.cpp
 		#   DynamicCores/HasMultipleEdges.h
 		#	DynamicCores/TriangleFreeWidthFour.cpp
+			DynamicCores/EdgeConnected_AtMost.cpp
 
 	# Kernel files
         Kernel/Witness.cpp

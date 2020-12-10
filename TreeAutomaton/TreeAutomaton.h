@@ -5,7 +5,6 @@
 #include<memory>
 #include<set>
 using namespace std;
-
 class AbstractTreeDecompositionSymbol{
 	string symbol;
 	bool operator< (AbstractTreeDecompositionSymbol &rhs)  {
@@ -23,7 +22,6 @@ class AbstractTreeDecompositionSymbol{
 	bool operator== (const AbstractTreeDecompositionSymbol &rhs) const {return this->symbol == rhs.symbol;}
 	void setSymbol(string s);
 };
-
 
 template<class SymbolType> 
 class TermNode{

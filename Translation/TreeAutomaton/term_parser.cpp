@@ -159,7 +159,8 @@ union TERM_STYPE
      unsigned number;
      char* string;
 
-#line 163 "term_parser.cpp" /* yacc.c:355  */
+
+#line 164 "term_parser.cpp" /* yacc.c:355  */
 };
 
 typedef union TERM_STYPE TERM_STYPE;
@@ -190,7 +191,7 @@ int term_parse (Term<string> &term, int &result);
 
 /* Copy the second part of user declarations.  */
 
-#line 194 "term_parser.cpp" /* yacc.c:358  */
+#line 195 "term_parser.cpp" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -432,9 +433,9 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  6
+#define YYFINAL  7
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   10
+#define YYLAST   13
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  8
@@ -490,8 +491,8 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    40,    40,    42,    43,    45,    46,    47,    49,    50,
-      51
+       0,    41,    41,    43,    44,    46,    47,    48,    50,    51,
+      52
 };
 #endif
 
@@ -515,12 +516,12 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -7
+#define YYPACT_NINF -4
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-7)))
+  (!!((Yystate) == (-4)))
 
-#define YYTABLE_NINF -1
+#define YYTABLE_NINF -11
 
 #define yytable_value_is_error(Yytable_value) \
   0
@@ -529,8 +530,8 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -4,    -4,    -7,     2,     0,    -7,    -7,    -3,    -7,    -1,
-       3,     4,     5,    -7,     0,    -7
+      -3,    -1,    -4,     5,    -4,     3,    -4,    -4,     0,     2,
+       6,     7,     8,    -4,    -3,    -4
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -538,42 +539,42 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-      10,    10,     9,     0,     4,     8,     1,     0,     2,     0,
+       4,    10,     9,     0,     2,     0,     8,     1,     0,     0,
        7,     6,     0,     5,     4,     3
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -7,    -7,    -6,    -7,     8
+      -4,    -4,    -2,    -4,    10
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     3,     8,    12,     4
+      -1,     3,     4,    12,     5
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
      positive, shift that token.  If negative, reduce the rule whose
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
-static const yytype_uint8 yytable[] =
+static const yytype_int8 yytable[] =
 {
-       1,     2,     6,     7,     9,    10,    11,    13,    15,     5,
-      14
+     -10,     1,     2,     1,     2,     7,     8,     9,    10,    11,
+      13,     6,    15,    14
 };
 
 static const yytype_uint8 yycheck[] =
 {
-       4,     5,     0,     3,     7,     6,     3,     3,    14,     1,
-       5
+       3,     4,     5,     4,     5,     0,     3,     7,     6,     3,
+       3,     1,    14,     5
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,     4,     5,     9,    12,    12,     0,     3,    10,     7,
+       0,     4,     5,     9,    10,    12,    12,     0,     3,     7,
        6,     3,    11,     3,     5,    10
 };
 
@@ -587,7 +588,7 @@ static const yytype_uint8 yyr1[] =
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     2,     6,     0,     2,     1,     0,     2,     1,
+       0,     2,     1,     7,     0,     2,     1,     0,     2,     1,
        0
 };
 
@@ -1362,25 +1363,25 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 40 "term_parser.y" /* yacc.c:1646  */
+#line 41 "term_parser.y" /* yacc.c:1646  */
     {std::cout<<"hello"<<std::endl;}
-#line 1368 "term_parser.cpp" /* yacc.c:1646  */
+#line 1369 "term_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 42 "term_parser.y" /* yacc.c:1646  */
+#line 43 "term_parser.y" /* yacc.c:1646  */
     {}
-#line 1374 "term_parser.cpp" /* yacc.c:1646  */
+#line 1375 "term_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 49 "term_parser.y" /* yacc.c:1646  */
+#line 50 "term_parser.y" /* yacc.c:1646  */
     {}
-#line 1380 "term_parser.cpp" /* yacc.c:1646  */
+#line 1381 "term_parser.cpp" /* yacc.c:1646  */
     break;
 
 
-#line 1384 "term_parser.cpp" /* yacc.c:1646  */
+#line 1385 "term_parser.cpp" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1615,7 +1616,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 53 "term_parser.y" /* yacc.c:1906  */
+#line 54 "term_parser.y" /* yacc.c:1906  */
 
 template<class S>
 void yyerror(Term<S> &term, int &result, char const* msg){
