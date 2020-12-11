@@ -11,7 +11,8 @@
 //valid decomposition
 class DecompositionState{
 	//TODO: DEFINE ALL COMPARATORS, AND PRINT FUNCTION AS VIRTUAL. ATD implements these menthods
-
+	unsigned int convertToNumber(); //converts this DecompsitionState into an integer
+	DecompositionState convertFromNumber(unsigned int decompositionStateNumber); // converts a unsigned int representing a DecompositionState into this DecompositionState
 };
 
 
@@ -26,7 +27,8 @@ class ATDState: public DecompositionState{
 	void setBagEdge(set<int> bagedge);
 	void getPastEdges();
 	void setPastEdges(set<pair<int,int> > pastEdges);
-	void addPastEdge(int i, int j);
+	void addPastEdge(int i, int j); 
+
 	void printDecompositionState(); 
 	bool operator<(const ATDState& rhs) const;
 	bool operator==(const ATDState& rhs) const;
@@ -45,13 +47,17 @@ class ATDState: public DecompositionState{
 
 //SearchState
 class SearchState: public DecompositionState{
-	DecompositionState decState;
-	State kernelState;
-	ecompositionState getDecompositionState();
-	void setDecompositionState();
-	State getKernelState(); 
-	void setKernelState(); 
+	int decStateNum; // numerical representation of a decomposition state
+	State::ptr kernelState;
+	void setDecStateNum(int i);
+	void setKernelState(shared_ptr<State>)
+	int getDecStateNum()
+	shared_ptr<State> getKernelState(); 
+	void setDecStateNum(); 
 	void setSearchState(); 
+	
+        DecompositionState getDecompositionState();
+	
 	bool operator<(const SearchState& rhs) const;
 	bool operator==(const SearchState& rhs) const;
 	class ptr {
@@ -77,10 +83,10 @@ using namespace std::chrono;
 class BreadthFirstSearch : public SearchStrategy {
   private:
 	TreeAutomaton bfsDAG; // Constructs a DAG corresponding to the BFS. 
-	set<searchState> allStatesSet;
-        set<searchState> intermediateStatesSet; 
-	set<searchState> newStatesSet; 
-	vector<searchState> newStatesVector; // This will allow us to use parallel search 
+	set<shared_ptr<searchState> > allStatesSet;
+        set<shared_ptr<searchState> > intermediateStatesSet; 
+	set<shared_ptr<searchState> >  newStatesSet; 
+	vector<shared_ptr<searchState> > newStatesVector; // This will make it easier to do parallel search 
   public:
     	BreadthFirstSearch();
 	BreadthFirstSearch(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags);
