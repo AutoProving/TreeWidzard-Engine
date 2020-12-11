@@ -38,17 +38,22 @@
 
 %%
 
-TR_START                   : TR_NODES_INFO                            {std::cout<<"hello"<<std::endl;}
+TR_START                   : TR_NODES_INFO1                            {std::cout<<"hello"<<std::endl;}
                            ;
-TR_NODES_INFO              : TR_COMMENTS TR_NODE_NUM TR_SEPARATOR TR_NODE_SYMBOL TR_NODE_CHILDREN TR_NEWLINE TR_NODES_INFO  {}
+TR_NODES_INFO1             : TR_NODE_NUM TR_SEPARATOR TR_NODE_SYMBOL TR_NODE_CHILDREN TR_NODES_INFO2
+                           | TR_COMMENTS TR_NODES_INFO1
                            |
                            ;
+TR_NODES_INFO2             : TR_NEWLINE TR_NODE_NUM TR_SEPARATOR TR_NODE_SYMBOL TR_NODE_CHILDREN  TR_NODES_INFO2
+                           | TR_NEWLINE TR_NODES_INFO2
+                           |
+                           ;
+
 TR_NODE_CHILDREN           : TR_NODE_NUM TR_NODE_NUM
                            | TR_NODE_NUM
                            |
                            ;
-TR_COMMENTS                : TR_COMMENT  TR_COMMENTS                                {}
-                           | TR_NEWLINE
+TR_COMMENTS                : TR_COMMENT TR_COMMENTS
                            |
                            ;
 %%
