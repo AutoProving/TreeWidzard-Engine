@@ -26,15 +26,22 @@ public:
     virtual void print();
     //*****************************
     //*****************************
-    // Only change this part. Here you can define attributes and functions that are specific to your witness.
-    bool found; // Shows a disconnectedness has been found.
+    // Specific Attributes
+    bool found; // True if a disconnecting set has been found. 
     bool processed; // Indicates that a partition has been processed or not.
-    set<set<unsigned >> partition; // Partition of the vertices.
-    set<pair<unsigned ,unsigned >> disconnectedEdges; // Set of edges are considered as a disconnected edges.
     unsigned size ; // Size of the disconnected edges.
-    void removeIncidentEdges(unsigned i); // remove all incident edges to "i" from disconnectedEdges.
+    set<pair<unsigned ,unsigned >> dinconnectingEdges; // Set of edges that when removed will disconnect the graph.
+    set<set<unsigned >> partition; // Partition of the vertices.
+    // Auxiliary functions
+    void removeIncidentEdges(unsigned i); // remove all incident edges to "i" from dinconnectingEdges.
+    // The follwoing function returns a pair of bools. The first is true if the partition has at least two cells where {i} is one of the cells.
+    // Therefore, if we delete i, we will have at least two connected components. 
+    // the second is true when {i} is the only cell of the partition. This means that that component represented is connected but 
+    // has been completely forgotten. Therefore the introduction of any new vertex gives rise to a disconnected graph. 
     friend pair<bool,bool> removeVertexFromPartition(unsigned  i, set<set<unsigned >> &partition);
+    // The next function is used to collapse cells of a partition after adding an edge between two cells. 
     friend void addEdgeToPartition(unsigned i, unsigned j, set<set<unsigned >> &partition);
+    // The next function merges two partitions by collapsing cells appropriately whenever there is an intersection. 
     friend set<set<unsigned >> mergePartitions(set<set<unsigned >> &partition1, set<set<unsigned >> &partition2);
     //*****************************
     //*****************************

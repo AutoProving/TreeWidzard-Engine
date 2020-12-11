@@ -16,14 +16,6 @@
 
 #include "EdgeConnected_AtMost.h"
 
-extern "C" {
-DynamicCore * create() {
-    return new EdgeConnected_AtMost_DynamicCore;
-}
-DynamicCore * create_int(unsigned param) {
-    return new EdgeConnected_AtMost_DynamicCore(param);
-}
-}
 
 ////////////////////////////// AUXILIARY FUNCTIONS //////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -42,36 +34,34 @@ DynamicCore * create_int(unsigned param) {
 bool EdgeConnected_AtMost_Witness::is_equal_implementation(const EdgeConnected_AtMost_WitnessPointerConst w)const{
     //*****************************
     //*****************************
-    return (this->found == w->found and this->size == w->size and this->partition == w->partition and
-        this->processed == w->processed and this->disconnectedEdges == w->disconnectedEdges
-    );
-
+    return (this->found == w->found and 
+	    this->processed == w->processed and
+            this->size == w->size and 
+	    this->partition == w->partition and
+	    this->disconnectingEdges == w->disconnectingEdges);
     //*****************************
     //*****************************
 }
-//TODO
+
+
 bool EdgeConnected_AtMost_Witness::is_less_implementation(const EdgeConnected_AtMost_WitnessPointerConst w)const{
-
     //*****************************
     //*****************************
-    // Only edit this part
-    // Here you will implement the code that determines when a witness is less than the other
-    // Don't forget to return the result
-    // return RESULT;
+	if (this->found != w->found) return (this->found); // true is smaller than false in this case 
+	if (this->processed != w->processed) return (this->processed < w->processed); 
+	if (this->size != w->size) return (this->size < w->size); 
+	if (this->partition != w->partition) return (this->partition < w->partition); 
+	return this->disconnectingEdges < w->disconnectingEdges;
     //*****************************
     //*****************************
-
 }
 
 Witness& EdgeConnected_AtMost_Witness::set_equal_implementation(EdgeConnected_AtMost_WitnessPointer w){
     //*****************************
     //*****************************
-    // Only edit this part
-    // Here you will implement the code that attributes one witness to the other
-    // This function should return *this, don't change the line below
     this->found = w->found;
     this->partition = w->partition;
-    this->disconnectedEdges = w->disconnectedEdges;
+    this->disconnectingEdges = w->disconnectingEdges;
     this->processed = w->processed;
     this->size = w->size;
     return *this;
@@ -79,12 +69,26 @@ Witness& EdgeConnected_AtMost_Witness::set_equal_implementation(EdgeConnected_At
     //*****************************
 }
 
-//TODO
 void EdgeConnected_AtMost_Witness::print() {
     //*****************************
     //*****************************
-    // Only edit this part
-    // Here you will implement the code that print the witness
+    cout << "found: " << this->found << "  processed: "<< this->processed << "  size: " << this->size << endl;
+    cout << "disconnecting edges: {"; 
+    for (auto it:this->disconnectingEdges){
+	cout<< "(" << *it.first << "," << *it.second << ")";  
+    	if (it!=disconnectingEdges.end()-1) cout << ","; 
+    }
+    cout<<"}" << endl;
+    cout << "partition: ("; 
+    for (auto it:this->partition){
+    	cout << "{" ;
+	for (auto itPrime:(*it)){
+		cout << *itPrime ; 
+		if (itPrime!=(*it).end()-1) cout << ","; 
+	}
+	cout << "}" ; 
+    }
+    cout << ")" << endl; 
     //*****************************
     //*****************************
 }
@@ -99,13 +103,13 @@ EdgeConnected_AtMost_Witness::~EdgeConnected_AtMost_Witness() {
 }
 
 void EdgeConnected_AtMost_Witness::removeIncidentEdges(unsigned int i) {
-    set<pair<unsigned ,unsigned > > temp; // temp disconnectedEdges
-    for(auto e:disconnectedEdges){
+    set<pair<unsigned ,unsigned > > temp; // temp disconnectingEdges
+    for(auto e:disconnectingEdges){
         if(e.first != i and e.second != i){
             temp.insert(e);
         }
     }
-    disconnectedEdges = temp;
+    disconnectingEdges = temp;
 }
 
 pair<bool,bool> removeVertexFromPartition(unsigned int i, set<set<unsigned int>> &partition) {
@@ -113,18 +117,20 @@ pair<bool,bool> removeVertexFromPartition(unsigned int i, set<set<unsigned int>>
     bool found = false; // If found = true, it means the new partition is disconnected
     bool processed = false; // If processed = true, it means the new partition is empty
     for(auto cell:partition){
-     if(cell.count(i) > 0 ){
-         if( cell.size()==1 and partition.size()>1){
-             found = true; // This means, partition will be disconnected
-         }else if(cell.size()==1 and partition.size() == 1){
-             processed = true;
-         }else{
-             cell.erase(i);
-             temp.insert(cell);
-         }
-     }else{
-         temp.insert(cell);
-     }
+    	if(cell.count(i) > 0 ){
+        	if(cell.size()==1){
+			if (partition.size()>1){
+             			found = true; // This means, partition will be disconnected
+	         	}else if(partition.size() == 1){
+		             processed = true;
+			} 
+         	}else{
+             	cell.erase(i);
+             	temp.insert(cell);
+         	}
+     	}else{
+        	temp.insert(cell);
+     	}
     }
     partition = temp;
     return make_pair(found,processed);
@@ -132,7 +138,6 @@ pair<bool,bool> removeVertexFromPartition(unsigned int i, set<set<unsigned int>>
 
 void addEdgeToPartition(unsigned int i, unsigned int j, set<set<unsigned int>> &partition) {
     set<unsigned> s1, s2;
-    //CHECK: change "part" with "cell"
     for(auto cell : partition) {
         if(cell.count(i) > 0) {
             s1 = cell;
@@ -149,52 +154,105 @@ void addEdgeToPartition(unsigned int i, unsigned int j, set<set<unsigned int>> &
         partition.erase(s2);
         partition.insert(intermediate);
     }
-
 }
 
+
+//
+//// TODO: Implement a generic merge function for partitions. 
+//set<set<unsigned >> mergePartitions(set<set<unsigned int>> &partition1, set<set<unsigned int>> &partition2) {
+//    map<unsigned, int> eleToCellMap;
+//    int ncells = 1;
+//    for(auto cell : partition1) {
+//        for(auto ele : cell) {
+//            eleToCellMap[ele] = ncells;
+//        }
+//        ncells++;
+//    }
+//    for(auto cell : partition2) {
+//        set<unsigned> s; // This set is initialized to empty
+//        for(auto ele : cell) {
+//            if(eleToCellMap.find(ele) != eleToCellMap.end()) {
+//                s = cell;
+//                break;
+//            }
+//        }
+//        if(!s.empty()) {
+//            set<unsigned> otherCellNumbers;
+//            unsigned parent = 1e9;
+//            for(auto i : s) {
+//                if(eleToCellMap.find(i) != eleToCellMap.end()) {
+//                    otherCellNumbers.insert(eleToCellMap[i]);
+//                    parent = min(parent, (unsigned) eleToCellMap[i]);
+//                } else {
+//                    eleToCellMap[i] = -1;
+//                }
+//            }
+//            // change the cell number
+//            for(auto pair : eleToCellMap) { // iterating through all pairs in the map.
+//                if(otherCellNumbers.find(pair.second) != otherCellNumbers.end() || pair.second == -1) {
+//                    // If the condition is not satisfied, then the element of the map is not related
+//                    // to the cell we are analysing at the moment.
+//                    pair.second = parent;
+//                }
+//            }
+//            ncells = ncells - otherCellNumbers.size() + 1;
+//        } else {
+//            // If the element does not occur in some cell of w1, then we create a cell specifically for that element.
+//            ncells++;
+//            for(auto ele : cell) {
+//                eleToCellMap[ele] = ncells;
+//            }
+//        }
+//    }
+//    // Now group all the elements according to their cell numbers and add them to resulting cell.
+//    map<int, set<unsigned>> result; //The first coordinate is the cell number. The second coordinate is the set of elements in that cell
+//    for(auto pair : eleToCellMap) {
+//        result[pair.second].insert(pair.first);
+//    }
+//    set<set<unsigned >> partition;
+//    for(auto pair : result) {
+//        partition.insert(pair.second);
+//    }
+//    return partition;
+//}
+//
+//
+
+
+// TODO: TEST THIS FUNCTION 
 set<set<unsigned >> mergePartitions(set<set<unsigned int>> &partition1, set<set<unsigned int>> &partition2) {
     map<unsigned, int> eleToCellMap;
-    int cells = 1;
+    int ncells = 0;
     for(auto cell : partition1) {
+        ncells++;
         for(auto ele : cell) {
-            eleToCellMap[ele] = cells;
+            eleToCellMap[ele] = ncells;
         }
-        cells++;
     }
     for(auto cell : partition2) {
         set<unsigned> s; // This set is initialized to empty
         for(auto ele : cell) {
-            if(eleToCellMap.find(ele) != eleToCellMap.end()) {
-                s = cell;
-                break;
+	    auto it = eleToCellMap.find(ele); 
+            if(it != eleToCellMap.end()) {
+                s.insert(it->second) ;
             }
         }
         if(!s.empty()) {
-            set<unsigned> otherCellNumbers;
-            unsigned parent = 1e9;
-            for(auto i : s) {
-                if(eleToCellMap.find(i) != eleToCellMap.end()) {
-                    otherCellNumbers.insert(eleToCellMap[i]);
-                    parent = min(parent, (unsigned) eleToCellMap[i]);
-                } else {
-                    eleToCellMap[i] = -1;
+            int minCellNumber = *(s.begin()); 
+	    for (auto ele:cell){
+	    	eleToCellMap.insert(make_pair(ele,minCellNumber)); 
+	    }
+	    // change the cell number
+            for(auto pair : eleToCellMap) { // iterating through all pairs in the map and change the cell number to minCellNumber if the current one belong to s.
+                if(s.find(pair.second) != s.end()) {
+                    pair.second = minCellNumber;
                 }
             }
-            // change the cell number
-            for(auto pair : eleToCellMap) { // iterating through all pairs in the map.
-                if(otherCellNumbers.find(pair.second) != otherCellNumbers.end() || pair.second == -1) {
-                    // If the condition is not satisfied, then the element of the map is not related
-                    // to the cell we are analysing at the moment.
-                    pair.second = parent;
-                }
-            }
-            cells = cells - otherCellNumbers.size() + 1;
         } else {
             // If the element does not occur in some cell of w1, then we create a cell specifically for that element.
-            cells++;
-            unsigned parent = cells;
+            ncells++;
             for(auto ele : cell) {
-                eleToCellMap[ele] = parent;
+                eleToCellMap[ele] = ncells;
             }
         }
     }
@@ -209,6 +267,11 @@ set<set<unsigned >> mergePartitions(set<set<unsigned int>> &partition1, set<set<
     }
     return partition;
 }
+
+
+
+
+
 
 EdgeConnected_AtMost_DynamicCore::EdgeConnected_AtMost_DynamicCore(){
 
@@ -250,6 +313,9 @@ void EdgeConnected_AtMost_DynamicCore::createInitialWitnessSet_implementation(){
     EdgeConnected_AtMost_WitnessPointer witness = createWitness();
     witness->found = false;
     witness->processed = false;
+    witness->size = 0; 
+    //witness->partition is already empty by default
+    //witness->disconnectingEdges is already empty by default
     this->insertIntoInitialWitnessSet(witness);
     //*****************************
     //*****************************
@@ -259,33 +325,24 @@ void EdgeConnected_AtMost_DynamicCore::intro_v_implementation(unsigned i, Bag &b
     //*****************************
     //*****************************
     if(w->found ){
-        // In this case, a disconnectedness has been found, therefore, we will return a witness with "found=true",
-        // and other attributes are empty
+        // In this case, a disconnecting set has already been found in the past.
+	// Therefore, we return a singleton containing only the input witness.
+        witnessSet->insert(w);
+    }else if(w->processed){
+        // In this case, since "processed" is true, we have already read a full connected
+	// component in the past. By adding "i", the graph gets disconnected. 
         EdgeConnected_AtMost_WitnessPointer witness = createWitness();
         witness->found = true;
         witness->processed = false;
-        witnessSet->insert(witness);
-        return ;
-    }else if(w->processed){
-        // In this case, since "processed" is true, by adding "i", the partition will be disconnected,
-        // therefore, this is disconnectedness, and we set "found = true".
-        EdgeConnected_AtMost_WitnessPointer witness = createWitness();
-        witness->set_equal(*w);
-        witness->found = true;
-        // TODO: can we add "i" to the partition?
-        set<unsigned > p; // new partition by adding "i"
-        p.insert(i);
-        witness->partition.insert(p);
-        // TODO
-        witnessSet->insert(witness);
-        return;
+	witness->size = 0;	
+	witnessSet->insert(witness); 	    
     }else{
         // In this case, we can add "i" as a new cell to the partition.
         EdgeConnected_AtMost_WitnessPointer witness = createWitness();
         witness->set_equal(*w);
-        set<unsigned > p; // new partition by adding "i"
-        p.insert(i);
-        witness->partition.insert(p);
+        set<unsigned > cell; // new cell containing only "i"
+        cell.insert(i);
+        witness->partition.insert(cell);
         witnessSet->insert(witness);
         return;
     }
@@ -296,28 +353,26 @@ void EdgeConnected_AtMost_DynamicCore::intro_v_implementation(unsigned i, Bag &b
 void EdgeConnected_AtMost_DynamicCore::intro_e_implementation(unsigned i, unsigned j, Bag &b, EdgeConnected_AtMost_WitnessPointer w, EdgeConnected_AtMost_WitnessSetPointer witnessSet){
     //*****************************
     //*****************************
-    EdgeConnected_AtMost_WitnessPointer witness1 = createWitness();
-
     if(w->found){
-        // In this case, a disconnectedness has been found, therefore, we will return a witness with "found=true",
-        // and other attributes are empty
-        witness1->found = true;
-        witness1->processed = false;
-        witnessSet->insert(witness1);
-        return;
+        // In this case, a disconnecting set has already been found in the past.
+	// Therefore, we return a singleton containing only the input witness.
+	witnessSet->insert(w);
     }else{
-        // In this case, we have two options, add {i,j} to disconnectedEdges or not.
+        // In this case, we have two options. Either we {i,j} to disconnectingEdges or 
+	// to use {i,j} to connect vertices belonging to cells of the partition.
+    	// First case. Add {i,j} to partition
+	EdgeConnected_AtMost_WitnessPointer witness1 = createWitness();
         witness1->set_equal(*w);
         addEdgeToPartition(i,j,witness1->partition);
         witnessSet->insert(witness1);
-        // Here, if size < parameter we want to add {i,j} to disconnectedEdges
+        // Second case. Add {i,j} to disconnecting set.
         if(w->size < parameter){
             EdgeConnected_AtMost_WitnessPointer  witness2 = createWitness();
             witness2->set_equal(*w);
-            witness2->disconnectedEdges.insert(make_pair(min(i,j),max(i,j)));
+            witness2->disconnectingEdges.insert(make_pair(min(i,j),max(i,j)));
+	    witness2->size++; 
             witnessSet->insert(witness2);
         }
-        return;
     }
     //*****************************
     //*****************************
@@ -326,24 +381,26 @@ void EdgeConnected_AtMost_DynamicCore::intro_e_implementation(unsigned i, unsign
 void EdgeConnected_AtMost_DynamicCore::forget_v_implementation(unsigned i, Bag &b, EdgeConnected_AtMost_WitnessPointer w, EdgeConnected_AtMost_WitnessSetPointer witnessSet){
     //*****************************
     //*****************************
-    EdgeConnected_AtMost_WitnessPointer witness = createWitness();
     if(w->found ){
-        // In this case, a disconnectedness has been found, therefore, we will return a witness with "found=true",
-        // and other attributes are empty
-        witness->found = true;
-        witness->processed = false;
-        witnessSet->insert(witness);
-        return;
+        // In this case, a disconnecting set has already been found in the past.
+	// Therefore, we return a singleton containing only the input witness.
+	witnessSet->insert(w);
     }else{
-        // In this case, we remove all incident edges to "i" from disconnected edges set, and remove it from the partition
-        witness->set_equal(*w);
-        // Remove incident edges
-        witness->removeIncidentEdges(i);
-        pair<bool,bool> result;
-        result = removeVertexFromPartition(i,witness->partition);
-        witness->found = result.first;
-        witness->processed = result.second;
-        return;
+        // In this case, we remove all incident edges to "i" from disconnectingEdges. We also remove "i" from the partition
+	set<set<int> > newpartition = w->partition; 
+        pair<bool,bool> result = removeVertexFromPartition(i,newpartition);
+    	EdgeConnected_AtMost_WitnessPointer witness = createWitness();
+        if (result.first== true){
+		witness->found = true;
+        	witness->processed = false;
+		witness->size = 0;	
+	} else {
+		witness->set_equal(*w);
+	        witness->processed = result.second;
+		witness->partition = newpartition; 
+		witness->removeIncidentEdges(i);
+	}
+	witnessSet->insert(witness);
     }
     //*****************************
     //*****************************
@@ -352,34 +409,40 @@ void EdgeConnected_AtMost_DynamicCore::join_implementation(Bag &b, EdgeConnected
     //*****************************
     //*****************************
     EdgeConnected_AtMost_WitnessPointer witness = createWitness();
-    if(w1->found or w2->found){
-        witness->found = true;
-        witness->processed = false;
-        witnessSet->insert(witness);
-        return;
-    }else{
-        // First Step, construct the union of the disconnectedEdges of both witnesses
-        set<pair<unsigned ,unsigned >> edgeUnion;
-        set_union(w1->disconnectedEdges.begin(),w1->disconnectedEdges.end(),
-                  w2->disconnectedEdges.begin(),w2->disconnectedEdges.end(), inserter(edgeUnion,edgeUnion.begin()));
-        // Check the size of the disconnectedEdge that both witnesses are create.
-        // The size is w1->size + w2->size - 2*|edgeUnion|
-        unsigned size  = w1->size + w2->size - 2*edgeUnion.size();
+    if(w1->found){
+	witnessSet->insert(w1); 
+    } else if (w2->found){
+	witnessSet->insert(w2); 
+    } else {  
+	// First check if not more than the allowed number of edges has been 
+	// added to the set of deleted edges. 
+	set<pair<unsigned ,unsigned >> edgeIntersection;
+ 	     		set_intersection(w1->disconnectingEdges.begin(),w1->disconnectingEdges.end(),
+        	        	w2->disconnectingEdges.begin(),w2->disconnectingEdges.end(), inserter(edgeIntersection,edgeIntersection.begin()));
+
+        unsigned size  = w1->size + w2->size - edgeIntersection.size();
         if(size > parameter){
             // If size is bigger than parameter, then it is not valid
             return;
         }else{
-            if(w1->processed and w2->processed){
-                return;
-            }else if(w1->processed and !w2->partition.empty()){
-                return;
-            }else if(w2->processed and !w1->partition.empty()){
-                return;
-            }
-            witness->found = false;
-            witness->disconnectedEdges = edgeUnion;
-            witness->size = size;
-            witness->partition = mergePartitions(w1->partition,w2->partition);
+		 if ((w1->processed and w2->processed) or 
+	       		(w1->processed and !w2->partition.empty()) or 
+	       		(w2->processed and !w1->partition.empty()){
+	        	EdgeConnected_AtMost_WitnessPointer witness = createWitness();
+			witness->found = true;
+		       	witness->processed = false;
+			witness->size = 0;	
+			witnessSet->insert(witness); 
+ 		   } else{ 
+    		        witness->found = false;
+		        set<pair<unsigned ,unsigned >> edgeUnion;
+ 	     		set_union(w1->disconnectingEdges.begin(),w1->disconnectingEdges.end(),
+        	        	w2->disconnectingEdges.begin(),w2->disconnectingEdges.end(), inserter(edgeUnion,edgeUnion.begin()));
+            		witness->disconnectingEdges = edgeUnion;
+            		witness->size = size;
+            		witness->partition = mergePartitions(w1->partition,w2->partition);
+			witnessSet->insert(witness); 
+		}
         }
     }
     //*****************************
@@ -387,6 +450,7 @@ void EdgeConnected_AtMost_DynamicCore::join_implementation(Bag &b, EdgeConnected
 }
 
 shared_ptr<WitnessSet> EdgeConnected_AtMost_DynamicCore::clean(shared_ptr<WitnessSet> witnessSet) {
+    
     //*****************************
     //*****************************
     // In most cases, you will not need to change this function.
@@ -518,3 +582,17 @@ bool EdgeConnected_AtMost_DynamicCore::is_final_witness(Witness &witness) {
         exit(20);
     }
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////// The functions below are used by the plugin handler /////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+extern "C" {
+DynamicCore * create() {
+    return new EdgeConnected_AtMost_DynamicCore;
+}
+DynamicCore * create_int(unsigned param) {
+    return new EdgeConnected_AtMost_DynamicCore(param);
+}
+}
+
