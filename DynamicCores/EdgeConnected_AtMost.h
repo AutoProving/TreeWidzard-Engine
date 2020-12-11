@@ -1,16 +1,12 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 
-/////////////////////////////////////////////////////////////////////////////
-// Before starting to work on your core, please create a new branch, and rename
-// these files according to the instructions in the file README-GenericCore.txt
-/////////////////////////////////////////////////////////////////////////////
-
 #ifndef EDGECONNNECTED_ATMOST_H
 #define EDGECONNNECTED_ATMOST_H
 #include "../Kernel/Bag.h"
 #include "../Kernel/Witness.h"
 #include "../Kernel/DynamicCore.h"
 #include "../Kernel/WitnessSet.h"
+#include <algorithm>
 
 using namespace std;
 class EdgeConnected_AtMost_Witness;
@@ -38,7 +34,8 @@ public:
     unsigned size ; // Size of the disconnected edges.
     void removeIncidentEdges(unsigned i); // remove all incident edges to "i" from disconnectedEdges.
     friend pair<bool,bool> removeVertexFromPartition(unsigned  i, set<set<unsigned >> &partition);
-    friend void addEdgeToPartition(unsigned i, unsigned j, set,set<unsigned >> &partition);
+    friend void addEdgeToPartition(unsigned i, unsigned j, set<set<unsigned >> &partition);
+    friend set<set<unsigned >> mergePartitions(set<set<unsigned >> &partition1, set<set<unsigned >> &partition2);
     //*****************************
     //*****************************
 };

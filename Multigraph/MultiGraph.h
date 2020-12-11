@@ -23,6 +23,10 @@ class MultiGraph {
 
 	// copy constructor
 	MultiGraph(const MultiGraph &multiGraph);
+	// Size functions
+	unsigned verticesSize();
+
+	unsigned edgesSize();
 	// set functions
 
 	void setVertices(const set<unsigned> &vertices);

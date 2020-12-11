@@ -197,3 +197,11 @@ bool MultiGraph::convertToGML() {
 	gmlFile.close();
 	return true;
 }
+
+unsigned MultiGraph::verticesSize() {
+    return vertices.size();
+}
+
+unsigned MultiGraph::edgesSize() {
+    return edges.size();
+}

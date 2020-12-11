@@ -12,6 +12,7 @@
 #include "Bag.h"
 #include "Witness.h"
 #include "WitnessSet.h"
+#include "Multigraph/MultiGraph.h"
 
 using namespace std;
 class DynamicCore {
@@ -45,5 +46,6 @@ class DynamicCore {
 };
 using DynamicCore_creator_t =  DynamicCore *(*)();
 using DynamicCore_creator_t_int =  DynamicCore *(*)(unsigned param);
+using DynamicCore_creator_t_multiGraph =  DynamicCore *(*)(MultiGraph multiGraph);
 
 #endif

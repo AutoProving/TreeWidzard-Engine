@@ -4,6 +4,7 @@
 #include "DynamicCore.h"
 #include <dlfcn.h>
 #include <iostream>
+#include "Multigraph/MultiGraph.h"
 
 using namespace std;
 
@@ -12,6 +13,7 @@ private:
     void * handler = nullptr;
     DynamicCore_creator_t creator = nullptr;
     DynamicCore_creator_t_int creator_int = nullptr;
+    DynamicCore_creator_t_multiGraph creator_multiGraph = nullptr;
     static void Reset_dlerror() {
         dlerror();
     }
@@ -31,6 +33,7 @@ public:
         Reset_dlerror();
         creator = reinterpret_cast<DynamicCore_creator_t>(dlsym(handler, "create"));
         creator_int = reinterpret_cast<DynamicCore_creator_t_int>(dlsym(handler, "create_int"));
+        creator_multiGraph = reinterpret_cast<DynamicCore_creator_t_multiGraph>(dlsym(handler, "create_multiGraph"));
         //Check_dlerror();
     }
 
@@ -40,7 +43,9 @@ public:
     std::unique_ptr<DynamicCore> create_int(unsigned param) const {
         return std::unique_ptr<DynamicCore>(creator_int(param));
     }
-
+    std::unique_ptr<DynamicCore> create_multiGraph(MultiGraph multiGraph) const {
+        return std::unique_ptr<DynamicCore>(creator_multiGraph(multiGraph));
+    }
     ~DynamicCoreHandler() {
         if (handler) {
             dlclose(handler);
