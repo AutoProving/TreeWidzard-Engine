@@ -20,12 +20,11 @@ class MultiGraph {
 		incidenceMap; // incidenceMap(e,v) indicates that v belongs to e
   public:
 	MultiGraph();
-
 	// copy constructor
 	MultiGraph(const MultiGraph &multiGraph);
-	// Size functions
+	// Order of the graph
 	unsigned verticesSize();
-
+	// Size of the graph
 	unsigned edgesSize();
 	// set functions
 
@@ -41,14 +40,16 @@ class MultiGraph {
 	const set<unsigned> &getEdges() const;
 
 	const multimap<unsigned, unsigned> &getIncidenceMap() const;
+
+	unsigned nthVertex(unsigned n); // get nth vertex's label in the vertex set
+
 	// auxiliary functions
 
 	void addVertex(unsigned vertex);
 
 	void deleteVertex(unsigned vertex);
 
-	unsigned addEdgeEndPoints(unsigned i,
-							  unsigned j); // Adds i and j as an edge and
+	unsigned addEdgeEndPoints(unsigned i, unsigned j); // Adds i and j as an edge and
 										   // returns a label of the new edge
 
 	set<unsigned> edgesBetweenVertices(

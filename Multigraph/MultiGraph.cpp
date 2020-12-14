@@ -205,3 +205,9 @@ unsigned MultiGraph::verticesSize() {
 unsigned MultiGraph::edgesSize() {
     return edges.size();
 }
+
+unsigned MultiGraph::nthVertex(unsigned n) {
+   auto it = vertices.begin();
+   advance(it,n);
+   return *it;
+}

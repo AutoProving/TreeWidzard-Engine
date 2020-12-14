@@ -30,11 +30,11 @@ public:
     bool found; // True if a disconnecting set has been found. 
     bool processed; // Indicates that a partition has been processed or not.
     unsigned size ; // Size of the disconnected edges.
-    set<pair<unsigned ,unsigned >> dinconnectingEdges; // Set of edges that when removed will disconnect the graph.
+    set<pair<unsigned ,unsigned >> disconnectingEdges; // Set of edges that when removed will disconnect the graph.
     set<set<unsigned >> partition; // Partition of the vertices.
     // Auxiliary functions
-    void removeIncidentEdges(unsigned i); // remove all incident edges to "i" from dinconnectingEdges.
-    // The follwoing function returns a pair of bools. The first is true if the partition has at least two cells where {i} is one of the cells.
+    void removeIncidentEdges(unsigned i); // remove all incident edges to "i" from disconnectingEdges.
+    // The following function returns a pair of bools. The first is true if the partition has at least two cells where {i} is one of the cells.
     // Therefore, if we delete i, we will have at least two connected components. 
     // the second is true when {i} is the only cell of the partition. This means that that component represented is connected but 
     // has been completely forgotten. Therefore the introduction of any new vertex gives rise to a disconnected graph. 
@@ -68,7 +68,9 @@ private:
     void forget_v_implementation(unsigned i, Bag &b, EdgeConnected_AtMost_WitnessPointer w, EdgeConnected_AtMost_WitnessSetPointer witnessSet);
     void intro_e_implementation(unsigned i,unsigned j, Bag &b, EdgeConnected_AtMost_WitnessPointer w, EdgeConnected_AtMost_WitnessSetPointer witnessSet);
     void join_implementation(Bag &b, EdgeConnected_AtMost_WitnessPointer w1, EdgeConnected_AtMost_WitnessPointer w2, EdgeConnected_AtMost_WitnessSetPointer witnessSet);
+    shared_ptr<WitnessSet> clean_implementation(EdgeConnected_AtMost_WitnessSetPointer witnessSet);
     bool is_final_witness_implementation(EdgeConnected_AtMost_WitnessPointer w);
+
 public:
     unsigned parameter;
     EdgeConnected_AtMost_DynamicCore();

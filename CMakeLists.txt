@@ -34,6 +34,8 @@ add_executable(
 		#	DynamicCores/TriangleFreeWidthFour.cpp
 			DynamicCores/EdgeConnected_AtMost.cpp
 			DynamicCores/Minor.cpp
+			DynamicCores/TopologicalMinor.cpp
+			DynamicCores/TopologicalMinor.h
 
 	# Kernel files
         Kernel/Witness.cpp
@@ -99,5 +101,5 @@ add_executable(
 		Translation/TreeAutomaton/term_lexer.cpp
 	# TreeAutomaton
 		TreeAutomaton/TreeAutomaton.cpp
-)
+        )
 target_link_libraries(dp ${CMAKE_DL_LIBS})

@@ -1,7 +1,7 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 
-#ifndef MINOR_H
-#define MINOR_H
+#ifndef TopologicalMinor_H
+#define TopologicalMinor_H
 #include "../Kernel/Bag.h"
 #include "../Kernel/Witness.h"
 #include "../Kernel/DynamicCore.h"
@@ -10,27 +10,26 @@
 #include "../Multigraph/MultiGraph.h"
 
 using namespace std;
-class Minor_Witness;
-// Pointer type for Minor_Witness
-typedef shared_ptr<Minor_Witness> Minor_WitnessPointer;
-typedef shared_ptr<Minor_Witness const > Minor_WitnessPointerConst;
+class TopologicalMinor_Witness;
+// Pointer type for TopologicalMinor_Witness
+typedef shared_ptr<TopologicalMinor_Witness> TopologicalMinor_WitnessPointer;
+typedef shared_ptr<TopologicalMinor_Witness const > TopologicalMinor_WitnessPointerConst;
 
-class Minor_Witness: public Witness, public enable_shared_from_this<Minor_Witness>{
+class TopologicalMinor_Witness: public Witness, public enable_shared_from_this<TopologicalMinor_Witness>{
 public:
-    bool is_equal_implementation(const Minor_WitnessPointerConst w) const;
-    bool is_less_implementation(const Minor_WitnessPointerConst w) const;
-    Witness& set_equal_implementation(Minor_WitnessPointer w);
-    ~Minor_Witness();
+    bool is_equal_implementation(const TopologicalMinor_WitnessPointerConst w) const;
+    bool is_less_implementation(const TopologicalMinor_WitnessPointerConst w) const;
+    Witness& set_equal_implementation(TopologicalMinor_WitnessPointer w);
+    ~TopologicalMinor_Witness();
     virtual bool is_equal(const Witness &rhs)const;
     virtual bool is_less(const Witness &rhs)const;
     virtual Witness& set_equal(Witness &witness);
     virtual void print();
     //*****************************
     //*****************************
-    bool found; // Shows that a minor has been found or not. If it is true it means a minor is found, otherwise, not.
+    bool found; // Shows that a TopologicalMinor has been found or not. If it is true it means a TopologicalMinor is found, otherwise, not.
     // Each index of this vector correspond to an edge of the multigraph, and each coordinate is a tuple
-    vector<tuple<set<unsigned >, set<set<unsigned >>,bool,bool> > partitions;
-    vector<pair<unsigned ,bool>> edgeFoundVector;
+    vector<tuple<set<unsigned >, set<set<unsigned >>,bool> > partitions;
     // The following function returns a pair of bools. The first is true if the partition has at least two cells where {i} is one of the cells.
     // Therefore, if we delete i, we will have at least two connected components.
     // the second is true when {i} is the only cell of the partition. This means that that component represented is connected but
@@ -44,7 +43,7 @@ public:
     //*****************************
 };
 
-class Minor_WitnessSet : public WitnessSetTypeOne<Minor_WitnessSet> {
+class TopologicalMinor_WitnessSet : public WitnessSetTypeOne<TopologicalMinor_WitnessSet> {
     //************************
     //************************
     //Do not define anything. All functions and memebers are derived from WitnessTypeOne.
@@ -52,25 +51,23 @@ class Minor_WitnessSet : public WitnessSetTypeOne<Minor_WitnessSet> {
     //************************
 };
 
-// Pointer type for Minor_WitnessSet.
-typedef shared_ptr<Minor_WitnessSet> Minor_WitnessSetPointer;
+// Pointer type for TopologicalMinor_WitnessSet.
+typedef shared_ptr<TopologicalMinor_WitnessSet> TopologicalMinor_WitnessSetPointer;
 
-class Minor_DynamicCore: public DynamicCore{
+class TopologicalMinor_DynamicCore: public DynamicCore{
 private:
     void createInitialWitnessSet_implementation();
-    void copyWitness(Minor_WitnessPointer w_input, Minor_WitnessPointer w_output);
-    Minor_WitnessPointer createWitness();
-    void intro_v_implementation(unsigned i, Bag &b, Minor_WitnessPointer w, Minor_WitnessSetPointer witnessSet);
-    void forget_v_implementation(unsigned i, Bag &b, Minor_WitnessPointer w, Minor_WitnessSetPointer witnessSet);
-    void intro_e_implementation(unsigned i,unsigned j, Bag &b, Minor_WitnessPointer w, Minor_WitnessSetPointer witnessSet);
-    void join_implementation(Bag &b, Minor_WitnessPointer w1, Minor_WitnessPointer w2, Minor_WitnessSetPointer witnessSet);
-    bool is_final_witness_implementation(Minor_WitnessPointer w);
-    shared_ptr<WitnessSet> clean_implementation(Minor_WitnessSetPointer witnessSet);
-
+    void copyWitness(TopologicalMinor_WitnessPointer w_input, TopologicalMinor_WitnessPointer w_output);
+    TopologicalMinor_WitnessPointer createWitness();
+    void intro_v_implementation(unsigned i, Bag &b, TopologicalMinor_WitnessPointer w, TopologicalMinor_WitnessSetPointer witnessSet);
+    void forget_v_implementation(unsigned i, Bag &b, TopologicalMinor_WitnessPointer w, TopologicalMinor_WitnessSetPointer witnessSet);
+    void intro_e_implementation(unsigned i,unsigned j, Bag &b, TopologicalMinor_WitnessPointer w, TopologicalMinor_WitnessSetPointer witnessSet);
+    void join_implementation(Bag &b, TopologicalMinor_WitnessPointer w1, TopologicalMinor_WitnessPointer w2, TopologicalMinor_WitnessSetPointer witnessSet);
+    bool is_final_witness_implementation(TopologicalMinor_WitnessPointer w);
 public:
     MultiGraph multigraph;
-    Minor_DynamicCore();
-    Minor_DynamicCore(MultiGraph multiGraph);
+    TopologicalMinor_DynamicCore();
+    TopologicalMinor_DynamicCore(MultiGraph multiGraph);
     void createInitialWitnessSet();
     virtual shared_ptr<WitnessSet> intro_v(unsigned i, Bag &b, Witness &witness);
     virtual shared_ptr<WitnessSet> intro_e(unsigned i, unsigned j, Bag &b, Witness &witness);

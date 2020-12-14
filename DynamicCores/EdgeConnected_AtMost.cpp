@@ -75,16 +75,16 @@ void EdgeConnected_AtMost_Witness::print() {
     cout << "found: " << this->found << "  processed: "<< this->processed << "  size: " << this->size << endl;
     cout << "disconnecting edges: {"; 
     for (auto it:this->disconnectingEdges){
-	cout<< "(" << *it.first << "," << *it.second << ")";  
-    	if (it!=disconnectingEdges.end()-1) cout << ","; 
+	cout<< "(" << it.first << "," << it.second << ")";
+    	if ( it != *(--disconnectingEdges.end()) ) cout << ",";
     }
     cout<<"}" << endl;
     cout << "partition: ("; 
     for (auto it:this->partition){
     	cout << "{" ;
-	for (auto itPrime:(*it)){
-		cout << *itPrime ; 
-		if (itPrime!=(*it).end()-1) cout << ","; 
+	for (auto itPrime:it){
+		cout << itPrime ;
+		if (itPrime != *(--it.end())) cout << ",";
 	}
 	cout << "}" ; 
     }
@@ -158,7 +158,6 @@ void addEdgeToPartition(unsigned int i, unsigned int j, set<set<unsigned int>> &
 
 
 //
-//// TODO: Implement a generic merge function for partitions. 
 //set<set<unsigned >> mergePartitions(set<set<unsigned int>> &partition1, set<set<unsigned int>> &partition2) {
 //    map<unsigned, int> eleToCellMap;
 //    int ncells = 1;
@@ -387,10 +386,10 @@ void EdgeConnected_AtMost_DynamicCore::forget_v_implementation(unsigned i, Bag &
 	witnessSet->insert(w);
     }else{
         // In this case, we remove all incident edges to "i" from disconnectingEdges. We also remove "i" from the partition
-	set<set<int> > newpartition = w->partition; 
+	set<set<unsigned > > newpartition = w->partition;
         pair<bool,bool> result = removeVertexFromPartition(i,newpartition);
     	EdgeConnected_AtMost_WitnessPointer witness = createWitness();
-        if (result.first== true){
+        if (result.first){
 		witness->found = true;
         	witness->processed = false;
 		witness->size = 0;	
@@ -427,7 +426,7 @@ void EdgeConnected_AtMost_DynamicCore::join_implementation(Bag &b, EdgeConnected
         }else{
 		 if ((w1->processed and w2->processed) or 
 	       		(w1->processed and !w2->partition.empty()) or 
-	       		(w2->processed and !w1->partition.empty()){
+	       		(w2->processed and !w1->partition.empty()) ){
 	        	EdgeConnected_AtMost_WitnessPointer witness = createWitness();
 			witness->found = true;
 		       	witness->processed = false;
@@ -449,15 +448,22 @@ void EdgeConnected_AtMost_DynamicCore::join_implementation(Bag &b, EdgeConnected
     //*****************************
 }
 
-shared_ptr<WitnessSet> EdgeConnected_AtMost_DynamicCore::clean(shared_ptr<WitnessSet> witnessSet) {
-    
-    //*****************************
-    //*****************************
-    // In most cases, you will not need to change this function.
-    //*****************************
-    //*****************************
+shared_ptr<WitnessSet> EdgeConnected_AtMost_DynamicCore::clean_implementation(EdgeConnected_AtMost_WitnessSetPointer witnessSet) {
+    for(auto witness:(*witnessSet)){
+        if (EdgeConnected_AtMost_WitnessPointer e = dynamic_pointer_cast<EdgeConnected_AtMost_Witness>(witness)) {
+            if(e->found){
+                EdgeConnected_AtMost_WitnessSetPointer newWitnessSet (new EdgeConnected_AtMost_WitnessSet);
+                newWitnessSet->insert(witness);
+                return newWitnessSet;
+            }
+        }else{
+            cerr<<"ERROR: in EdgeConnected_AtMost_DynamicCore::clean_implementation cast error"<<endl;
+            exit(20);
+        }
+    }
     return witnessSet;
 }
+
 bool EdgeConnected_AtMost_DynamicCore::is_final_witness_implementation(EdgeConnected_AtMost_WitnessPointer w) {
     //*****************************
     //*****************************
@@ -573,6 +579,16 @@ shared_ptr<WitnessSet> EdgeConnected_AtMost_DynamicCore::join(Bag &b, Witness &w
     }
 }
 
+shared_ptr<WitnessSet> EdgeConnected_AtMost_DynamicCore::clean(shared_ptr<WitnessSet> witnessSet) {
+
+    if (EdgeConnected_AtMost_WitnessSetPointer e = dynamic_pointer_cast<EdgeConnected_AtMost_WitnessSet >(witnessSet)) {
+        return clean_implementation(e);
+    }else{
+        cerr<<"ERROR: in EdgeConnected_AtMost_DynamicCore::clean cast error"<<endl;
+        exit(20);
+    }
+}
+
 bool EdgeConnected_AtMost_DynamicCore::is_final_witness(Witness &witness) {
     if (EdgeConnected_AtMost_Witness *e = dynamic_cast<EdgeConnected_AtMost_Witness *>(&witness)) {
         EdgeConnected_AtMost_WitnessPointer w = e->shared_from_this();
@@ -582,17 +598,14 @@ bool EdgeConnected_AtMost_DynamicCore::is_final_witness(Witness &witness) {
         exit(20);
     }
 }
-
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////// The functions below are used by the plugin handler /////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
-
-extern "C" {
-DynamicCore * create() {
-    return new EdgeConnected_AtMost_DynamicCore;
-}
-DynamicCore * create_int(unsigned param) {
-    return new EdgeConnected_AtMost_DynamicCore(param);
-}
-}
-
+    extern "C" {
+    DynamicCore * create() {
+        return new EdgeConnected_AtMost_DynamicCore;
+    }
+    DynamicCore * create_int(unsigned param) {
+        return new EdgeConnected_AtMost_DynamicCore(param);
+    }
+    }
