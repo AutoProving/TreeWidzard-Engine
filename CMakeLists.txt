@@ -36,6 +36,8 @@ add_executable(
 			DynamicCores/Minor.cpp
 			DynamicCores/TopologicalMinor.cpp
 			DynamicCores/TopologicalMinor.h
+		    DynamicCores/NoWhereZeroFlow_AtMost.cpp
+			DynamicCores/AuxiliaryFunctions.h
 
 	# Kernel files
         Kernel/Witness.cpp

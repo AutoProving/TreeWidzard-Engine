@@ -17,8 +17,8 @@ typedef shared_ptr<Minor_Witness const > Minor_WitnessPointerConst;
 
 class Minor_Witness: public Witness, public enable_shared_from_this<Minor_Witness>{
 public:
-    bool is_equal_implementation(const Minor_WitnessPointerConst w) const;
-    bool is_less_implementation(const Minor_WitnessPointerConst w) const;
+    bool is_equal_implementation(Minor_WitnessPointerConst w) const;
+    bool is_less_implementation(Minor_WitnessPointerConst w) const;
     Witness& set_equal_implementation(Minor_WitnessPointer w);
     ~Minor_Witness();
     virtual bool is_equal(const Witness &rhs)const;
@@ -30,11 +30,11 @@ public:
     //*****************************
     bool found; // Shows that a minor has been found or not. If it is true it means a minor is found, otherwise, not.
     // Each coordinate of the next vector corresponds to a vertex of the pattern graph, and contains a tuple encoding 
-    // a connnected subgraph of the host graph. 
+    // a connected subgraph of the host graph.
     // The first coordinate corresponds to the vertex set of the component. The second coordinate, is a partition of this 
     // set, and is used to keep track of connectivity as the decomposition is read. The third component is a boolean flag
     // that is true if the component has been completely processed. 
-    vector<tuple<set<unsigned >, set<set<unsigned >>,bool,bool> > partitions;  // TODO: probably the fourth coordinate is irrelevant. 
+    vector<tuple<set<unsigned >, set<set<unsigned >>,bool> > partitions;
     // Each coordinate of the next vector corresponds to an edge of the pattern graph, and contains a pair a pair reprenenting a The following vector has one coordinate for each edge of the graph. The 
     //vector<pair<unsigned,bool>> edgeFoundVector;
     set<unsigned int> foundEdges; // i belongs to the set if the edge labeled i has been found. 
@@ -76,6 +76,7 @@ private:
     void join_implementation(Bag &b, Minor_WitnessPointer w1, Minor_WitnessPointer w2, Minor_WitnessSetPointer witnessSet);
     bool is_final_witness_implementation(Minor_WitnessPointer w);
     shared_ptr<WitnessSet> clean_implementation(Minor_WitnessSetPointer witnessSet);
+    bool is_minor_found(Minor_WitnessPointer);
 
 public:
     MultiGraph multigraph;
