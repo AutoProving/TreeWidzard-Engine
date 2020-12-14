@@ -34,7 +34,7 @@ bool Minor_Witness::is_equal_implementation(const Minor_WitnessPointerConst w)co
     //*****************************
     //*****************************
     return (this->found  == w->found and this->partitions == w->partitions
-            and this->edgeFoundVector == w->edgeFoundVector);
+            and this->foundEdges == w->foundEdges);
     //*****************************
     //*****************************
 }
@@ -44,7 +44,7 @@ bool Minor_Witness::is_less_implementation(const Minor_WitnessPointerConst w)con
     //*****************************
     if(this->found != w->found) return found;
     if(this->partitions != w->partitions) return this->partitions<w->partitions;
-    return this->edgeFoundVector < w->edgeFoundVector;
+    return this->foundEdges < w->foundEdges;
     //*****************************
     //*****************************
 }
@@ -54,14 +54,15 @@ Witness& Minor_Witness::set_equal_implementation(Minor_WitnessPointer w){
     //*****************************
     this->found = w->found;
     this->partitions = w->partitions;
-    this->edgeFoundVector = w->edgeFoundVector;
+    this->foundEdges = w->foundEdges;
     return *this;
     //*****************************
     //*****************************
 }
 
 //TODO: Implement this function
-void Minor_Witness::print() {
+void Minor_Witness::print(){
+    //TODO
     //*****************************
     //*****************************
     // Only edit this part
@@ -108,16 +109,17 @@ void Minor_DynamicCore::createInitialWitnessSet_implementation(){
     //*****************************
     //*****************************
     Minor_WitnessPointer initialWitness = createWitness();
-    vector<pair<unsigned ,bool>> edgeFoundVector;
-    set<unsigned > edges = multigraph.getEdges();
-    for(auto e:edges){
-        edgeFoundVector.push_back(make_pair(e,false));
-    }
+    // vector<pair<unsigned ,bool>> foundEdges;
+    set<unsigned int> foundEdges; 
+    //set<unsigned > edges = multigraph.getEdges();
+    //for(auto e:edges){
+    //    foundEdges.push_back(make_pair(e,false));
+    //}
     vector<tuple<set<unsigned >, set<set<unsigned >>,bool,bool> > partitions;
     partitions.resize(multigraph.verticesSize());
     initialWitness->found = false;
     initialWitness->partitions = partitions;
-    initialWitness->edgeFoundVector = edgeFoundVector;
+    initialWitness->foundEdges = foundEdges;
     //*****************************
     //*****************************
 }
@@ -125,21 +127,22 @@ void Minor_DynamicCore::createInitialWitnessSet_implementation(){
 void Minor_DynamicCore::intro_v_implementation(unsigned i, Bag &b, Minor_WitnessPointer w, Minor_WitnessSetPointer witnessSet){
     //*****************************
     //*****************************
-    // Since we can either include "i" in the partitions or not, the immediate witness is 'w".
+    // There are two options. Either we add 'i' the the component corresponding to
+    // a vertex of the pattern graph or we do nothing with 'i'
+    // If 'i' is not added, the witness remains the same, so w is always included in the partition.   
     witnessSet->insert(w);
-    if(w->found){
-        // If found is true, it means the minor has been found
-    }else{
-        // We can insert "i" into one the none-processed partition of the partitions.
+    if(!(w->found)){
+        // We will add 'i' to each non-processed partition. 
         for(size_t m=0; m < w->partitions.size(); m++ ){
-            if(!get<2>(w->partitions[m])){
+	    //if T is a tuple get<i>(T) is the i-th coordinate of T
+            if(!get<2>(w->partitions[m])){ //If the partition at position m has not been processed (i.e. the processed flag is 0)
                 Minor_WitnessPointer witness = createWitness();
                 witness->set_equal(*w);
-                get<0>(witness->partitions[m]).insert(i);
-                set<unsigned > cell;
+                get<0>(witness->partitions[m]).insert(i); // we add 
+                set<unsigned int> cell;
                 cell.insert(i);// Add "{i}" as a cell into the partition.
                 get<1>(witness->partitions[m]).insert(cell);
-                get<3>(witness->partitions[m]) = true;
+                //get<3>(witness->partitions[m]) = true; //TODO REMOVE THIS. 
                 witnessSet->insert(witness);
             }
         }
@@ -154,8 +157,9 @@ void Minor_DynamicCore::intro_e_implementation(unsigned i, unsigned j, Bag &b, M
     if(w->found){
         witnessSet->insert(w);
     }else{
-        int iIndex=-1;
-        int jIndex=-1;
+        int iIndex=-1; // index of the vector corresponding to the component where i belongs to. -1 if i belongs to no such component
+        int jIndex=-1; // index of the vector corresponding to the component where j belongs to. -1 if j belongs to no such component
+	// The next for loop is used to find the correct values of iIndex and jIndex
         for(size_t m=0; m < w->partitions.size(); m++ ){
             if(get<0>(w->partitions[m]).count(i) ){
                 iIndex = m;
@@ -164,12 +168,18 @@ void Minor_DynamicCore::intro_e_implementation(unsigned i, unsigned j, Bag &b, M
                 jIndex = m;
             }
         }
+	// There are three cases to be considered.
+	// One: if i and j belong to the same component
+	// Two: if i and j belong to distinct components
+	// Three: either i or j belong to no component 
         if( iIndex==jIndex and iIndex!=-1 ){
             // "i" and "j" are in a same partition
             // We introduce {i,j} to partitions[iIndex]
-            Minor_WitnessPointer witness = createWitness();
+   
+    	    Minor_WitnessPointer witness = createWitness();
             witness->set_equal(*w);
             witness->addEdgeToPartition(i,j,get<1>(witness->partitions[iIndex]));
+	    //TODO CHECK IF MINOR WAS FOUND
             witnessSet->insert(witness);
         }else if(iIndex!=jIndex and iIndex!=-1 and jIndex!=-1){
             // "i" and "j" belong to different partitions
@@ -178,20 +188,22 @@ void Minor_DynamicCore::intro_e_implementation(unsigned i, unsigned j, Bag &b, M
             // Get labels of "iIndex"th  and "jIndex"th vertices of the graph
             unsigned iLabel = multigraph.nthVertex(iIndex);
             unsigned jLabel = multigraph.nthVertex(jIndex);
-            set<unsigned > edges = multigraph.edgesBetweenVertices(iLabel,jLabel);
-            if(edges.size()==0){
-                //nothing
+            set<unsigned int> incidentEdges = multigraph.edgesBetweenVertices(iLabel,jLabel);
+	    set<unsigned int> notYetFound; 
+	    set_difference(incidentEdges.begin(),incidentEdges.end(),foundEdges.begin(),foundEdges.end(),inserter(notYetFound,notYetFound.begin())); 
+            if(notYetFound.size()==0){
+                witnessSet->insert(w); // The new introduced edge is simply not part of the minor
             }else{
-                // Change the Boolean value of the edges inside "edges" to true.
-                for(auto e:witness->edgeFoundVector){
-                    if(edges.count(e.first)){
-                        e.second = true;
-                    }
-                }
+	    	int newedge = *notYetFound.begin(); 
+	    	foundEdges.insert(newEdge); 
+	    	//TODO CHECK IF MINOR WAS FOUND
+            	witnessSet->insert(witness);
             }
-            witnessSet->insert(witness);
         }else{
-            //TODO: iIndex or jIndex is -1, and it shouldn't happen, What I have to return?
+		// Case Three: either i or j belong to no component 
+		// In this case, {i,j} is simply not added to the minor
+		// and therefore only the input witness is returned
+	   	witnessSet.insert(w); 
         }
     }
     //*****************************
@@ -206,22 +218,28 @@ void Minor_DynamicCore::forget_v_implementation(unsigned i, Bag &b, Minor_Witnes
     }else{
         Minor_WitnessPointer witness = createWitness();
         witness->set_equal(*w);
-        for(auto partition: witness->partitions){
+        bool isInSomeComponent = false;
+	for(auto partition: witness->partitions){
             if(get<0>(partition).count(i)){
+		isInSomeComponent = true; 
                 // Remove from the set
                 get<0>(partition).erase(i);
-                pair<bool, bool> result = witness->removeVertexFromPartition(i, get<1>(partition));
-                if(result.first){
-                    // Here, the partition is disconnected
-                    break;
-                }else{
+                pair<bool, bool> result = witness->removeVertexFromPartition(i, get<1>(partition)); // the first coordinate is true if the partition becomes disconnected (bad case)
+                if(!result.first){ //Meaning that removing the vertex does not disconnect the component represented by the partition 
                     // change the processed value of the partition
                     get<2>(partition) = result.second;
                     witnessSet->insert(witness);
                     break;
-                }
+                } else {
+		    break; // In this case the component where i belongs to becomes disconnected. No wintess is returned in this case.
+		}
             }
         }
+	// If 'i' is not in any component, just return the singleton with the input witness
+	if (!isInSomeComponent){
+		witnessSet.insert(w); 	
+	}
+
     }
     //*****************************
     //*****************************
@@ -269,15 +287,15 @@ void Minor_DynamicCore::join_implementation(Bag &b, Minor_WitnessPointer w1, Min
                     get<0>(witness->partitions[n]) = unionSet;
                     get<1>(witness->partitions[n]) = newPartition;
                     get<2>(witness->partitions[n]) = (get<2>(w1->partitions[n]) or get<2>(w1->partitions[n]) );
-                    get<3>(witness->partitions[n]) = (get<3>(w1->partitions[n]) or get<3>(w1->partitions[n]) );
+                    //get<3>(witness->partitions[n]) = (get<3>(w1->partitions[n]) or get<3>(w1->partitions[n]) ); TODO remove this.
                 }
             }
         }
         if(successFlag){
             // update edges' value
             for(size_t n=0; n < multigraph.edgesSize(); n++){
-                witness->edgeFoundVector[n].first = w1->edgeFoundVector[n].first;
-                witness->edgeFoundVector[n].second = (w1->edgeFoundVector[n].second or w2->edgeFoundVector[n].second);
+                witness->foundEdges[n].first = w1->foundEdges[n].first;
+                witness->foundEdges[n].second = (w1->foundEdges[n].second or w2->foundEdges[n].second);
             }
             //TODO: How check found?
             witnessSet->insert(witness);

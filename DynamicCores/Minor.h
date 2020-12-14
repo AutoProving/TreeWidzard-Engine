@@ -26,11 +26,21 @@ public:
     virtual Witness& set_equal(Witness &witness);
     virtual void print();
     //*****************************
+    //******BEGIN**ATTRIBUTES*******
     //*****************************
     bool found; // Shows that a minor has been found or not. If it is true it means a minor is found, otherwise, not.
-    // Each index of this vector correspond to an edge of the multigraph, and each coordinate is a tuple
-    vector<tuple<set<unsigned >, set<set<unsigned >>,bool,bool> > partitions;
-    vector<pair<unsigned ,bool>> edgeFoundVector;
+    // Each coordinate of the next vector corresponds to a vertex of the pattern graph, and contains a tuple encoding 
+    // a connnected subgraph of the host graph. 
+    // The first coordinate corresponds to the vertex set of the component. The second coordinate, is a partition of this 
+    // set, and is used to keep track of connectivity as the decomposition is read. The third component is a boolean flag
+    // that is true if the component has been completely processed. 
+    vector<tuple<set<unsigned >, set<set<unsigned >>,bool,bool> > partitions;  // TODO: probably the fourth coordinate is irrelevant. 
+    // Each coordinate of the next vector corresponds to an edge of the pattern graph, and contains a pair a pair reprenenting a The following vector has one coordinate for each edge of the graph. The 
+    //vector<pair<unsigned,bool>> edgeFoundVector;
+    set<unsigned int> foundEdges; // i belongs to the set if the edge labeled i has been found. 
+    //*****************************
+    //*******END**ATTRIBUTES*******
+    //*****************************
     // The following function returns a pair of bools. The first is true if the partition has at least two cells where {i} is one of the cells.
     // Therefore, if we delete i, we will have at least two connected components.
     // the second is true when {i} is the only cell of the partition. This means that that component represented is connected but
