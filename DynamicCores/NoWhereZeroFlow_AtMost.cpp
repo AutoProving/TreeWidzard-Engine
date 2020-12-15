@@ -34,7 +34,7 @@
 bool NoWhereZeroFlow_AtMost_Witness::is_equal_implementation(const NoWhereZeroFlow_AtMost_WitnessPointerConst w)const{
     //*****************************
     //*****************************
-    return this->flow == w->flow;
+    return this->flowSum == w->flowSum;
     //*****************************
     //*****************************
 }
@@ -43,7 +43,7 @@ bool NoWhereZeroFlow_AtMost_Witness::is_equal_implementation(const NoWhereZeroFl
 bool NoWhereZeroFlow_AtMost_Witness::is_less_implementation(const NoWhereZeroFlow_AtMost_WitnessPointerConst w)const{
     //*****************************
     //*****************************
-    return this->flow < w->flow;
+    return this->flowSum < w->flowSum;
     //*****************************
     //*****************************
 }
@@ -51,7 +51,7 @@ bool NoWhereZeroFlow_AtMost_Witness::is_less_implementation(const NoWhereZeroFlo
 Witness& NoWhereZeroFlow_AtMost_Witness::set_equal_implementation(NoWhereZeroFlow_AtMost_WitnessPointer w){
     //*****************************
     //*****************************
-    this->flow = w->flow;
+    this->flowSum = w->flowSum;
     return *this;
     //*****************************
     //*****************************
@@ -60,9 +60,10 @@ Witness& NoWhereZeroFlow_AtMost_Witness::set_equal_implementation(NoWhereZeroFlo
 void NoWhereZeroFlow_AtMost_Witness::print() {
     //*****************************
     //*****************************
-    for(auto f:flow){
+    cout << "FlowSum: "
+    for(auto f:flowSum){
         cout<<"("<<f.first<<"->"<<f.second<<")";
-        if(f != *(--flow.end())){
+        if(f != *(--flowSum.end())){
             cout<<",";
         }
     }
@@ -116,7 +117,7 @@ void NoWhereZeroFlow_AtMost_DynamicCore::createInitialWitnessSet_implementation(
     // Here, you can modify the witness and then insert to the witnessSet.
     // this->insertIntoInitialWitnessSet(witness);
     // If there are more, these should also be added to initialWitnessSet.
-    NoWhereZeroFlow_AtMost_WitnessPointer witness = createWitness();
+    NoWhereZeroFlow_AtMost_WitnessPointer witness = createWitness(); // creates a pointer to a new object of type NoWhereZeroFlow_AtMost_Witness. The flowSum map is empty by default. 
     this->insertIntoInitialWitnessSet(witness);
     //*****************************
     //*****************************
@@ -127,7 +128,8 @@ void NoWhereZeroFlow_AtMost_DynamicCore::intro_v_implementation(unsigned i, Bag 
     //*****************************
     NoWhereZeroFlow_AtMost_WitnessPointer witness = createWitness();
     witness->set_equal(*w);
-    witness->flow.insert(make_pair(i,0));
+    witness->flowSum.insert(make_pair(i,0));
+    witnessSet.insert(witness); 
     //*****************************
     //*****************************
 }
@@ -135,7 +137,26 @@ void NoWhereZeroFlow_AtMost_DynamicCore::intro_v_implementation(unsigned i, Bag 
 void NoWhereZeroFlow_AtMost_DynamicCore::intro_e_implementation(unsigned i, unsigned j, Bag &b, NoWhereZeroFlow_AtMost_WitnessPointer w, NoWhereZeroFlow_AtMost_WitnessSetPointer witnessSet){
     //*****************************
     //*****************************
-
+    NoWhereZeroFlow_AtMost_WitnessPointer  witness = createWitness();
+    //The existence of a nowhere zero flow does not depend on the direction of the edges. 
+    //therefore, we choose arbitrarily the direction to be from the smallest vertex to the 
+    //biggest vertex: (minVertex,maxVertex)
+    auto minVertex = w->flowSum.find(min(i,j));
+    auto maxVertex = w->flowSum.find(max(i,j));
+    for(int x = 1; x<=this->parameter-1; x++){
+	    //The flow is negative whne leaving minVertex
+	    int minVertexSum = (minVertex->second - x) % this->parameter; //obs: In C++, the % operator is not the mod operator but rather the remainder operator, which can be a negative number 
+	    if (minVertexSum < 0) minVertexSum = this->parameter - minVertexSum; 
+	    //The flow is positive whne entering maxVertex
+	    int maxVertexSum = (maxVertex->second + x) % this->parameter; // here we don't need to test for positivity, since the remainder of a positive number will be positive
+	    //Create a fresh copy of w
+	    NoWhereZeroFlow_AtMost_WitnessPointer witnesss = createWitness(); 
+	    witness.set_equal(*w);
+	    //Update flowSum in this copy
+	    witness->flowSum[minVertex->second] = minVertexSum; 
+	    witness->flowSum[maxVertex->second] = maxVertexSum; 
+	    witnessSet.insert(witness);  
+    }
     //*****************************
     //*****************************
 }
@@ -143,10 +164,10 @@ void NoWhereZeroFlow_AtMost_DynamicCore::intro_e_implementation(unsigned i, unsi
 void NoWhereZeroFlow_AtMost_DynamicCore::forget_v_implementation(unsigned i, Bag &b, NoWhereZeroFlow_AtMost_WitnessPointer w, NoWhereZeroFlow_AtMost_WitnessSetPointer witnessSet){
     //*****************************
     //*****************************
-    auto it = w->flow.find(i);
+    auto it = w->flowSum.find(i);
     if(it->second==0){
         NoWhereZeroFlow_AtMost_WitnessPointer  witness = createWitness();
-        witness->flow.erase(i);
+        witness->flowSum.erase(i);
         witnessSet->insert(witness);
     }
     //*****************************
@@ -157,9 +178,10 @@ void NoWhereZeroFlow_AtMost_DynamicCore::join_implementation(Bag &b, NoWhereZero
     //*****************************
     NoWhereZeroFlow_AtMost_WitnessPointer witness = createWitness();
     set<unsigned > bagSet = b.get_elements();
-    for(unsigned int it : bagSet){
-        witness->flow.insert({it, w1->flow[it] + w2->flow[it]});
+    for(unsigned int x : bagSet){
+        witness->flowSum.insert({x, (w1->flowSum[x] + w2->flowSum[x]) % this->parameter});
     }
+    witnessSet.insert(witness); 
     //*****************************
     //*****************************
 }
@@ -171,7 +193,9 @@ shared_ptr<WitnessSet> NoWhereZeroFlow_AtMost_DynamicCore::clean_implementation(
 bool NoWhereZeroFlow_AtMost_DynamicCore::is_final_witness_implementation(NoWhereZeroFlow_AtMost_WitnessPointer w) {
     //*****************************
     //*****************************
-    for(auto & it : w->flow){
+    for(auto & it : w->flowSum){
+	// The summation of the flows in the incomming edges minus the summation of the flows in the outgoing edges is equal to zero.
+	// If this condition is not satisfied, the witness is not valid. 
         if(it.second != 0){
             return false;
         }

@@ -27,7 +27,10 @@ public:
     //*****************************
     //******BEGIN**ATTRIBUTES*******
     //*****************************
-    map<unsigned ,unsigned > flow;
+    //The unique atribute is a map that sends each vertex to the current sum
+    //of the flows around those vertices. The sum will be updated once an edge 
+    //is introduced 
+    map<unsigned ,unsigned > flowSum;
     //*****************************
     //*******END**ATTRIBUTES*******
     //*****************************
@@ -38,7 +41,7 @@ public:
 class NoWhereZeroFlow_AtMost_WitnessSet : public WitnessSetTypeOne<NoWhereZeroFlow_AtMost_WitnessSet> {
     //************************
     //************************
-    //Do not define anything. All functions and members are derived from WitnessTypeOne.
+    //Do not define anything. All functions and members are derived from WitnessTypeOne in this case.
     //************************
     //************************
 };

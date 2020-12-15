@@ -55,6 +55,8 @@ bool DynamicCore::is_final_set_witness(Bag &b, WitnessSetPointer witnessSet) {
 }
 
 WitnessSetPointer DynamicCore::clean(WitnessSetPointer witnessSet) {
+	// By default, if this function is not implemented by a derived class
+	// this function simply returns a pointer to the input witness set. 
 	return witnessSet;
 }
 
