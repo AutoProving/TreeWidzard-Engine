@@ -98,7 +98,7 @@ int main(int argc, char *arg[]) {
         return EXIT_FAILURE;
     }
     int result = 1; // if parsing successful result will be 0 otherwise 1
-    yyparse(pl, conjecture, width, result); // Parser function from Parser.hpp
+    result = yyparse(pl, conjecture, width, result); // Parser function from Parser.hpp
     // check for successful parsing
     if (result != 0) {
         cout << " Error: input file " << path << " is not in valid format"
@@ -127,12 +127,13 @@ int main(int argc, char *arg[]) {
 
     DynamicCoreHandler* factory;
     // adding Cores to dynamicKernel
+
     for (size_t j = 0; j < propertyList.size(); ++j) {
         auto it = coreList.find(propertyList[j].get_name());
         if(it!=coreList.end()){
             cout<< "("<<j+1<<") " << propertyList[j].get_label()<<":= "<< it->first <<" ";
-          map<string,string> itMap = it->second;
-          if(itMap["ParameterType"]=="NoParameter"){
+            map<string,string> itMap = it->second;
+            if(itMap["ParameterType"]=="NoParameter"){
               string corePath = dynamicPlugin+coreNamesToFiles[it->first];
               factory = new DynamicCoreHandler(corePath.c_str());
               std::unique_ptr<DynamicCore> handlerCore = factory->create();
@@ -144,6 +145,10 @@ int main(int argc, char *arg[]) {
                   unsigned int callingParameter=propertyList[j].get_value();
                   if(propertyList[j].get_operatorSign()==">"){
                       callingParameter = callingParameter+1;
+                  }else if(propertyList[j].get_operatorSign()!=">=" ){
+                      cerr<<"\n Error: The property of "<<  propertyList[j].get_name() <<" is 'At Least', but the sign is "
+                      << propertyList[j].get_operatorSign()<<endl;
+                      exit(20);
                   }
                   string corePath = dynamicPlugin+coreNamesToFiles[it->first];
                   //MaxDegree_AtLeast_DynamicCore *core = new MaxDegree_AtLeast_DynamicCore(callingParameter);
@@ -155,21 +160,46 @@ int main(int argc, char *arg[]) {
                   unsigned int callingParameter = propertyList[j].get_value();
                   if (propertyList[j].get_operatorSign() == "<") {
                       callingParameter = callingParameter - 1;
+                  }else if(propertyList[j].get_operatorSign()!="<=" ){
+
+                      cerr<<"\n Error: The property of "<<  propertyList[j].get_name() <<" is 'At Most', but the sign is "
+                          << propertyList[j].get_operatorSign()<<endl;
+                      exit(20);
                   }
                   string corePath = dynamicPlugin + coreNamesToFiles[it->first];
                   factory = new DynamicCoreHandler(corePath.c_str());
                   std::unique_ptr<DynamicCore> handlerCore = factory->create_int(callingParameter);
                   DynamicCore *core = handlerCore.release();
                   dynamicKernel.addCore(*core);
-              }else if(itMap["ParameterType"]=="InputFile"){
-
               }
-          }
+          }else if(itMap["ParameterType"]=="InputFile"){
+                string graph_path = propertyList[j].get_filePath();
+                graph_path.erase(remove(graph_path.begin(), graph_path.end(), '"'), graph_path.end()); // remove " from begin and end of the file path
+                cout<<graph_path<<endl;
+                ifstream input;
+                input.open(graph_path);
+                if(!input) {
+                    cout << "file path problem";
+                    exit(20);
+                }else{
+                    MultiGraph multiGraph;
+                    multiGraph.readFromFile(input);
+                    string corePath = dynamicPlugin + coreNamesToFiles[it->first];
+                    factory = new DynamicCoreHandler(corePath.c_str());
+                    std::unique_ptr<DynamicCore> handlerCore = factory->create_multiGraph(multiGraph);
+                    DynamicCore *core = handlerCore.release();
+                    dynamicKernel.addCore(*core);
+                }
+            }
         }else{
             cout<<"The core "<<propertyList[j].get_name()<<" was not found."<<endl;
             exit(20);
         }
         cout<<endl;
+    }
+    if(!dynamicKernel.coreSize()){
+        cerr<<"Error: Core list is empty"<<endl;
+        exit(20);
     }
     Flags flags;
     flags.add_flag("PrintStates", printStates);

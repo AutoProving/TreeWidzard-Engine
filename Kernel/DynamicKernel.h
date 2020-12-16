@@ -20,6 +20,7 @@ class DynamicKernel : public std::enable_shared_from_this<DynamicKernel> {
 
   public:
 	void addCore(DynamicCore& core);
+	size_t coreSize();
 	Width &get_width();
 	void set_width(Width &width);
 	void addProperty(PropertyAssignment &);

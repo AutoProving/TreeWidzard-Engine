@@ -244,6 +244,7 @@ void Minor_DynamicCore::createInitialWitnessSet_implementation(){
     initialWitness->found = false;
     initialWitness->partitions = partitions;
     initialWitness->foundEdges = foundEdges;
+    this->insertIntoInitialWitnessSet(initialWitness);
     //*****************************
     //*****************************
 }

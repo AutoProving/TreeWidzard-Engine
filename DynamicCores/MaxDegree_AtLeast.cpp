@@ -117,6 +117,7 @@ void MaxDegree_AtLeast_DynamicCore::intro_v_implementation(unsigned int i, Bag &
         w->degreeCounter.insert(make_pair(i,0));
         witnessSet->insert(w);
     }
+
 }
 
 WitnessSetPointer MaxDegree_AtLeast_DynamicCore::intro_v(unsigned i, Bag &b, Witness &witness) {
@@ -125,6 +126,7 @@ WitnessSetPointer MaxDegree_AtLeast_DynamicCore::intro_v(unsigned i, Bag &b, Wit
         MaxDegree_AtLeast_WitnessPointer w = e->shared_from_this();
         MaxDegree_AtLeast_WitnessSetPointer witnessSet(new MaxDegree_AtLeast_WitnessSet);
         intro_v_implementation(i,b,w,witnessSet);
+
         return clean(witnessSet);
     }else{
         cerr<<"ERROR: in MaxDegree_GreaterThan_Witness::intro_v cast error"<<endl;

@@ -1754,7 +1754,6 @@ bool check_variables(char* v){
 int index_variable(char* v){
 
     if(variables.size()>0){
-        
         for(int i = 0 ; i < variables.size() ; i++){
             int result = strcmp(variables[i], v);
             if(result == 0){
@@ -1762,12 +1761,10 @@ int index_variable(char* v){
             }
         }
         std::cout<< "grammar error!"<<std::endl;
-        exit(20);
 
     }else{
+        std::cout << "Input file variable error "<<std::endl;
 
-        std::cout << "empty core "<<std::endl;
-        exit(20);
     }
 
 

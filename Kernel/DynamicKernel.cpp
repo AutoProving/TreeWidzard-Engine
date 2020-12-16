@@ -6,6 +6,9 @@ void DynamicKernel::addCore(DynamicCore& core) {
       cores.push_back(&core);
 }
 
+size_t DynamicKernel::coreSize() {
+    return cores.size();
+}
 State::ptr DynamicKernel::initialState() {
 	State::ptr initialState;
 	Bag emptyBag; // Empty
