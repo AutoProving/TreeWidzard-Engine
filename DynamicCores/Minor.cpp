@@ -101,6 +101,99 @@ void Minor_Witness::print(){
     //*****************************
 }
 
+pair<bool, bool> Minor_Witness::removeVertexFromPartition(unsigned int i, set<set<unsigned int>> &partition) {
+    set<set<unsigned >> temp;
+    bool found = false; // If found = true, it means the new partition is disconnected
+    bool processed = false; // If processed = true, it means the new partition is empty
+    for(auto cell:partition){
+        if(cell.count(i) > 0 ){
+            if(cell.size()==1){
+                if (partition.size()>1){
+                    found = true; // This means, partition will be disconnected
+                }else if(partition.size() == 1){
+                    processed = true;
+                }
+            }else{
+                cell.erase(i);
+                temp.insert(cell);
+            }
+        }else{
+            temp.insert(cell);
+        }
+    }
+    partition = temp;
+    return make_pair(found,processed);
+}
+
+void Minor_Witness::addEdgeToPartition(unsigned int i, unsigned int j, set<set<unsigned int>> &partition) {
+    set<unsigned> s1, s2;
+    for(auto cell : partition) {
+        if(cell.count(i) > 0) {
+            s1 = cell;
+        }
+        if(cell.count(j) > 0) {
+            s2 = cell;
+        }
+    }
+    if(s1 != s2 and !s1.empty() and !s2.empty()) {
+        set<unsigned> intermediate;
+        set_union(s1.begin(), s1.end(), s2.begin(), s2.end(),
+                  inserter(intermediate, intermediate.end()));
+        partition.erase(s1);
+        partition.erase(s2);
+        partition.insert(intermediate);
+    }
+}
+
+set<set<unsigned int>> Minor_Witness::mergePartitions(set<set<unsigned int>> &partition1,
+                                                      set<set<unsigned int>> &partition2) {
+    map<unsigned, int> eleToCellMap;
+    int ncells = 0;
+    for(auto cell : partition1) {
+        ncells++;
+        for(auto ele : cell) {
+            eleToCellMap[ele] = ncells;
+        }
+    }
+    for(auto cell : partition2) {
+        set<unsigned> s; // This set is initialized to empty
+        for(auto ele : cell) {
+            auto it = eleToCellMap.find(ele);
+            if(it != eleToCellMap.end()) {
+                s.insert(it->second) ;
+            }
+        }
+        if(!s.empty()) {
+            int minCellNumber = *(s.begin());
+            for (auto ele:cell){
+                eleToCellMap.insert(make_pair(ele,minCellNumber));
+            }
+            // change the cell number
+            for(auto pair : eleToCellMap) { // iterating through all pairs in the map and change the cell number to minCellNumber if the current one belong to s.
+                if(s.find(pair.second) != s.end()) {
+                    pair.second = minCellNumber;
+                }
+            }
+        } else {
+            // If the element does not occur in some cell of w1, then we create a cell specifically for that element.
+            ncells++;
+            for(auto ele : cell) {
+                eleToCellMap[ele] = ncells;
+            }
+        }
+    }
+    // Now group all the elements according to their cell numbers and add them to resulting cell.
+    map<int, set<unsigned>> result; //The first coordinate is the cell number. The second coordinate is the set of elements in that cell
+    for(auto pair : eleToCellMap) {
+        result[pair.second].insert(pair.first);
+    }
+    set<set<unsigned >> partition;
+    for(auto pair : result) {
+        partition.insert(pair.second);
+    }
+    return partition;
+}
+
 Minor_Witness::~Minor_Witness() {
     //*****************************
     //*****************************
@@ -128,7 +221,8 @@ Minor_DynamicCore::Minor_DynamicCore(){
 Minor_DynamicCore::Minor_DynamicCore(MultiGraph multiGraph){
     //*****************************
     //*****************************
-    // In most cases, you will not to need to change this function.
+    addAttribute("CoreName","Minor"); // Obligatory attribute. Replace GenericName by the name of the core.
+    addAttribute("ParameterType","InputFile"); // Obligatory attribute. Replace GenericType by the type of the core: "NoParameter", "UnsignedInt", "InputFile".
     //*****************************
     //*****************************
     this->multigraph = multiGraph;
@@ -145,7 +239,7 @@ void Minor_DynamicCore::createInitialWitnessSet_implementation(){
     //for(auto e:edges){
     //    foundEdges.push_back(make_pair(e,false));
     //}
-    vector<tuple<set<unsigned >, set<set<unsigned >>,bool,bool> > partitions;
+    vector<tuple<set<unsigned >, set<set<unsigned >>,bool> > partitions;
     partitions.resize(multigraph.verticesSize());
     initialWitness->found = false;
     initialWitness->partitions = partitions;
@@ -396,8 +490,6 @@ bool Minor_Witness::is_equal(const Witness &rhs) const{
     }
 }
 
-
-
 bool Minor_Witness::is_less(const Witness &rhs)const {
     if (Minor_Witness const *e = dynamic_cast<Minor_Witness const *>(&rhs)) {
         Minor_WitnessPointerConst w = e->shared_from_this();
@@ -407,7 +499,6 @@ bool Minor_Witness::is_less(const Witness &rhs)const {
         exit(20);
     }
 }
-
 
 
 Witness& Minor_Witness::set_equal(Witness &witness) {

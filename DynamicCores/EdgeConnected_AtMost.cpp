@@ -293,9 +293,12 @@ EdgeConnected_AtMost_DynamicCore::EdgeConnected_AtMost_DynamicCore(){
 EdgeConnected_AtMost_DynamicCore::EdgeConnected_AtMost_DynamicCore(unsigned parameter){
     //*****************************
     //*****************************
-    // In most cases, you will not to need to change this function.
+    addAttribute("CoreName","EdgeConnected"); // Obligatory attribute. Replace GenericName by the name of the core.
+    addAttribute("ParameterType","UnsignedInt"); // Obligatory attribute. Replace GenericType by the type of the core: "NoParameter", "UnsignedInt", "InputFile".
+    addAttribute("PrimaryOperator","AtMost"); //  This line should be uncommented if the type of the core is "UnsignedInt".
     //*****************************
     //*****************************
+
     this->parameter = parameter;
     createInitialWitnessSet();
 }
@@ -559,7 +562,6 @@ shared_ptr<WitnessSet> EdgeConnected_AtMost_DynamicCore::forget_v(unsigned i, Ba
     }
 }
 
-
 shared_ptr<WitnessSet> EdgeConnected_AtMost_DynamicCore::join(Bag &b, Witness &witness1, Witness &witness2) {
     if(EdgeConnected_AtMost_Witness *e1 = dynamic_cast<EdgeConnected_AtMost_Witness *>(&witness1)){
         if(EdgeConnected_AtMost_Witness *e2 = dynamic_cast<EdgeConnected_AtMost_Witness *>(&witness2)){
@@ -580,8 +582,7 @@ shared_ptr<WitnessSet> EdgeConnected_AtMost_DynamicCore::join(Bag &b, Witness &w
 }
 
 shared_ptr<WitnessSet> EdgeConnected_AtMost_DynamicCore::clean(shared_ptr<WitnessSet> witnessSet) {
-
-    if (EdgeConnected_AtMost_WitnessSetPointer e = dynamic_pointer_cast<EdgeConnected_AtMost_WitnessSet >(witnessSet)) {
+    if (EdgeConnected_AtMost_WitnessSetPointer e = dynamic_pointer_cast<EdgeConnected_AtMost_WitnessSet>(witnessSet)) {
         return clean_implementation(e);
     }else{
         cerr<<"ERROR: in EdgeConnected_AtMost_DynamicCore::clean cast error"<<endl;

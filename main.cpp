@@ -28,26 +28,26 @@ extern FILE *term_in;
 namespace fs = std::experimental::filesystem;
 
 int main(int argc, char *arg[]) {
-    cout<<"Automaton Parse started!"<<endl;
-
-    //Test for term's parser
-    char* termFilePath = "../Tests/term.tr";
-    term_in = fopen(termFilePath, "r");
-    if (!term_in) {
-        std::perror("File opening failed");
-        return EXIT_FAILURE;
-    }
-    Term<string> term;
-    int resultTerm = 0; // if parsing successful result will be 0 otherwise 1
-    resultTerm = term_parse(term, resultTerm); // Parser function from Parser.hpp
-    cout<<"result: "<<resultTerm<<endl;
-    // check for successful parsing
-    if (resultTerm != 0) {
-        cout << " Error: input file " << termFilePath << " is not in valid format"
-             << endl;
-        exit(20);
-    }
-    cout<<"Automaton Parse Finished!"<<endl;
+//    cout<<"Automaton Parse started!"<<endl;
+//
+//    //Test for term's parser
+//    char* termFilePath = "../Tests/term.tr";
+//    term_in = fopen(termFilePath, "r");
+//    if (!term_in) {
+//        std::perror("File opening failed");
+//        return EXIT_FAILURE;
+//    }
+//    Term<string> term;
+//    int resultTerm = 0; // if parsing successful result will be 0 otherwise 1
+//    resultTerm = term_parse(term, resultTerm); // Parser function from Parser.hpp
+//    cout<<"result: "<<resultTerm<<endl;
+//    // check for successful parsing
+//    if (resultTerm != 0) {
+//        cout << " Error: input file " << termFilePath << " is not in valid format"
+//             << endl;
+//        exit(20);
+//    }
+//    cout<<"Automaton Parse Finished!"<<endl;
 
 
     char* path = "../Tests/input.txt";

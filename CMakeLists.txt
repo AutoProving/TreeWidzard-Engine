@@ -16,7 +16,7 @@ add_compile_options(-O2)
 include_directories(.)
 link_libraries(stdc++fs)
 include_directories(DynamicCores)
-
+project("treewidzard")
 add_executable(
 	# Executable file name
 		dp
@@ -33,11 +33,9 @@ add_executable(
 		#   DynamicCores/HasMultipleEdges.h
 		#	DynamicCores/TriangleFreeWidthFour.cpp
 			DynamicCores/EdgeConnected_AtMost.cpp
-			DynamicCores/Minor.cpp
-			DynamicCores/TopologicalMinor.cpp
-			DynamicCores/TopologicalMinor.h
-		    DynamicCores/NoWhereZeroFlow_AtMost.cpp
-			DynamicCores/AuxiliaryFunctions.h
+		#	DynamicCores/Minor.cpp
+		#   DynamicCores/NoWhereZeroFlow_AtMost.cpp
+		#	DynamicCores/AuxiliaryFunctions.h
 
 	# Kernel files
         Kernel/Witness.cpp
@@ -105,3 +103,7 @@ add_executable(
 		TreeAutomaton/TreeAutomaton.cpp
         )
 target_link_libraries(dp ${CMAKE_DL_LIBS})
+
+execute_process (
+		COMMAND bash -c "${CMAKE_CURRENT_SOURCE_DIR}/./plugins.sh"
+)

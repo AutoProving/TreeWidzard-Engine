@@ -1,7 +1,7 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 
 #include "DynamicCore.h"
-
+#include "../DynamicCores/EdgeConnected_AtMost.h"
 WitnessSetPointer DynamicCore::getInitialSet() {
     return initialWitnessSet; }
 
@@ -13,17 +13,18 @@ WitnessSetPointer DynamicCore::intro_v(unsigned i, Bag &b,WitnessSetPointer witn
 	WitnessSetPointer aux = witnessSet->createEmptyWitnessSet(); // aux initializes with empty set
 	for (auto temp : *witnessSet) {
         aux->union_set_witness(intro_v(i, b, *temp));
-
     }
-	return clean(aux);
+	return aux;
 }
 
 WitnessSetPointer DynamicCore::intro_e(unsigned i, unsigned j, Bag &b,WitnessSetPointer witnessSet) {
 	WitnessSetPointer aux = witnessSet->createEmptyWitnessSet(); // aux initializes with empty set
+	WitnessSet t = *aux;
 	for (auto temp : *witnessSet) {
 		aux->union_set_witness(intro_e(i, j, b, *temp));
 	}
-	return clean(aux);
+
+	return aux;
 }
 
 WitnessSetPointer DynamicCore::forget_v(unsigned i, Bag &b,WitnessSetPointer witnessSet) {
@@ -31,7 +32,7 @@ WitnessSetPointer DynamicCore::forget_v(unsigned i, Bag &b,WitnessSetPointer wit
 	for (auto temp : *witnessSet) {
 		aux->union_set_witness(forget_v(i, b, *temp));
 	}
-	return clean(aux);
+	return aux;
 }
 
 WitnessSetPointer DynamicCore::join(Bag &b, WitnessSetPointer witnessSet1,WitnessSetPointer witnessSet2) {
@@ -41,7 +42,7 @@ WitnessSetPointer DynamicCore::join(Bag &b, WitnessSetPointer witnessSet1,Witnes
 			aux->union_set_witness(join(b, *temp1, *temp2));
 		}
 	}
-	return clean(aux);
+	return aux;
 }
 
 bool DynamicCore::is_final_set_witness(Bag &b, WitnessSetPointer witnessSet) {

@@ -12,7 +12,7 @@
 #include "Bag.h"
 #include "Witness.h"
 #include "WitnessSet.h"
-#include "Multigraph/MultiGraph.h"
+#include "../Multigraph/MultiGraph.h"
 
 using namespace std;
 class DynamicCore {

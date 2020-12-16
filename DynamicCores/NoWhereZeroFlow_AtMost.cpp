@@ -60,7 +60,7 @@ Witness& NoWhereZeroFlow_AtMost_Witness::set_equal_implementation(NoWhereZeroFlo
 void NoWhereZeroFlow_AtMost_Witness::print() {
     //*****************************
     //*****************************
-    cout << "FlowSum: "
+    cout << "FlowSum: ";
     for(auto f:flowSum){
         cout<<"("<<f.first<<"->"<<f.second<<")";
         if(f != *(--flowSum.end())){
@@ -101,7 +101,9 @@ NoWhereZeroFlow_AtMost_DynamicCore::NoWhereZeroFlow_AtMost_DynamicCore(){
 NoWhereZeroFlow_AtMost_DynamicCore::NoWhereZeroFlow_AtMost_DynamicCore(unsigned parameter){
     //*****************************
     //*****************************
-    // In most cases, you will not to need to change this function.
+    addAttribute("CoreName","NoWhereZeroFlow"); // Obligatory attribute. Replace GenericName by the name of the core.
+    addAttribute("ParameterType","UnsignedInt"); // Obligatory attribute. Replace GenericType by the type of the core: "NoParameter", "UnsignedInt", "InputFile".
+    addAttribute("PrimaryOperator","AtMost"); //  This line should be uncommented if the type of the core is "UnsignedInt".
     //*****************************
     //*****************************
     this->parameter = parameter;
@@ -129,7 +131,7 @@ void NoWhereZeroFlow_AtMost_DynamicCore::intro_v_implementation(unsigned i, Bag 
     NoWhereZeroFlow_AtMost_WitnessPointer witness = createWitness();
     witness->set_equal(*w);
     witness->flowSum.insert(make_pair(i,0));
-    witnessSet.insert(witness); 
+    witnessSet->insert(witness);
     //*****************************
     //*****************************
 }
@@ -143,19 +145,19 @@ void NoWhereZeroFlow_AtMost_DynamicCore::intro_e_implementation(unsigned i, unsi
     //biggest vertex: (minVertex,maxVertex)
     auto minVertex = w->flowSum.find(min(i,j));
     auto maxVertex = w->flowSum.find(max(i,j));
-    for(int x = 1; x<=this->parameter-1; x++){
+    for(unsigned x = 1; x<=this->parameter-1; x++){
 	    //The flow is negative whne leaving minVertex
-	    int minVertexSum = (minVertex->second - x) % this->parameter; //obs: In C++, the % operator is not the mod operator but rather the remainder operator, which can be a negative number 
+	    unsigned minVertexSum = (minVertex->second - x) % this->parameter; //obs: In C++, the % operator is not the mod operator but rather the remainder operator, which can be a negative number
 	    if (minVertexSum < 0) minVertexSum = this->parameter - minVertexSum; 
 	    //The flow is positive whne entering maxVertex
-	    int maxVertexSum = (maxVertex->second + x) % this->parameter; // here we don't need to test for positivity, since the remainder of a positive number will be positive
+	    unsigned maxVertexSum = (maxVertex->second + x) % this->parameter; // here we don't need to test for positivity, since the remainder of a positive number will be positive
 	    //Create a fresh copy of w
 	    NoWhereZeroFlow_AtMost_WitnessPointer witnesss = createWitness(); 
-	    witness.set_equal(*w);
+	    witness->set_equal(*w);
 	    //Update flowSum in this copy
 	    witness->flowSum[minVertex->second] = minVertexSum; 
 	    witness->flowSum[maxVertex->second] = maxVertexSum; 
-	    witnessSet.insert(witness);  
+	    witnessSet->insert(witness);
     }
     //*****************************
     //*****************************
@@ -181,7 +183,7 @@ void NoWhereZeroFlow_AtMost_DynamicCore::join_implementation(Bag &b, NoWhereZero
     for(unsigned int x : bagSet){
         witness->flowSum.insert({x, (w1->flowSum[x] + w2->flowSum[x]) % this->parameter});
     }
-    witnessSet.insert(witness); 
+    witnessSet->insert(witness);
     //*****************************
     //*****************************
 }
