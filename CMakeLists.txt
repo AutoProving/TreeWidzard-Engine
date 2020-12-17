@@ -32,8 +32,8 @@ add_executable(
 		#   DynamicCores/HasMultipleEdges.cpp
 		#   DynamicCores/HasMultipleEdges.h
 		#	DynamicCores/TriangleFreeWidthFour.cpp
-			DynamicCores/EdgeConnected_AtMost.cpp
-		#	DynamicCores/Minor.cpp
+		#	DynamicCores/EdgeConnected_AtMost.cpp
+			DynamicCores/Minor.cpp
 		#   DynamicCores/NoWhereZeroFlow_AtMost.cpp
 		#	DynamicCores/AuxiliaryFunctions.h
 

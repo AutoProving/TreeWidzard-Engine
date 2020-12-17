@@ -57,6 +57,7 @@ public:
 class Minor_WitnessSet : public WitnessSetTypeOne<Minor_WitnessSet> {
     //************************
     //************************
+    shared_ptr<WitnessSet> createEmptyWitnessSet() override;
     //Do not define anything. All functions and memebers are derived from WitnessTypeOne.
     //************************
     //************************

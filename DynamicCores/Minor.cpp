@@ -512,6 +512,11 @@ Witness& Minor_Witness::set_equal(Witness &witness) {
     }
 }
 
+shared_ptr<WitnessSet> Minor_WitnessSet::createEmptyWitnessSet() {
+    Minor_WitnessSetPointer witnessSet (new Minor_WitnessSet);
+    return witnessSet;
+}
+
 void  Minor_DynamicCore::createInitialWitnessSet() {
     Minor_WitnessSetPointer witnessSet(new Minor_WitnessSet);
     this->setInitialWitnessSet(witnessSet);
@@ -615,3 +620,5 @@ DynamicCore * create_multiGraph(MultiGraph multiGraph) {
     return new Minor_DynamicCore(multiGraph);
 }
 }
+
+

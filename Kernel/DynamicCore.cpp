@@ -14,7 +14,7 @@ WitnessSetPointer DynamicCore::intro_v(unsigned i, Bag &b,WitnessSetPointer witn
 	for (auto temp : *witnessSet) {
         aux->union_set_witness(intro_v(i, b, *temp));
     }
-	return aux;
+	return clean(aux);
 }
 
 WitnessSetPointer DynamicCore::intro_e(unsigned i, unsigned j, Bag &b,WitnessSetPointer witnessSet) {
@@ -24,7 +24,7 @@ WitnessSetPointer DynamicCore::intro_e(unsigned i, unsigned j, Bag &b,WitnessSet
 		aux->union_set_witness(intro_e(i, j, b, *temp));
 	}
 
-	return aux;
+	return clean(aux);
 }
 
 WitnessSetPointer DynamicCore::forget_v(unsigned i, Bag &b,WitnessSetPointer witnessSet) {
@@ -32,7 +32,7 @@ WitnessSetPointer DynamicCore::forget_v(unsigned i, Bag &b,WitnessSetPointer wit
 	for (auto temp : *witnessSet) {
 		aux->union_set_witness(forget_v(i, b, *temp));
 	}
-	return aux;
+    return clean(aux);
 }
 
 WitnessSetPointer DynamicCore::join(Bag &b, WitnessSetPointer witnessSet1,WitnessSetPointer witnessSet2) {
@@ -42,7 +42,7 @@ WitnessSetPointer DynamicCore::join(Bag &b, WitnessSetPointer witnessSet1,Witnes
 			aux->union_set_witness(join(b, *temp1, *temp2));
 		}
 	}
-	return aux;
+    return clean(aux);
 }
 
 bool DynamicCore::is_final_set_witness(Bag &b, WitnessSetPointer witnessSet) {
