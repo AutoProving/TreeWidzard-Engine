@@ -1,0 +1,4 @@
+path_width 3
+a := MaxDegree > 3
+b := MaxDegree > 4
+a OR NOT b

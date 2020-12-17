@@ -1,0 +1,6 @@
+path_width 3
+a := MaxDegree > 3
+b := MaxDegree > 2
+c := EdgeColoring < 5
+d := HasMultiEdge 
+d IMPLIES (NOT a AND b IMPLIES c)

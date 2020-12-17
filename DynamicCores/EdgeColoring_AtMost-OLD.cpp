@@ -9,12 +9,39 @@ DynamicCore * create_int(unsigned param) {
     return new EdgeColoring_AtMost_DynamicCore(param);
 }
 }
+//********************
+//********************
+// Implementations of specific functions:
 
+unsigned EdgeColoring_AtMost_Witness::next_available_edge_number() {
+    // Getting the greatest edgeNumber:
+    auto maxNumberIterator = this->availableEdgeNumbers.rbegin();
+    unsigned maxNumber = maxNumberIterator->first;
+
+    // In the range of (1, maxNumber), if a number is not in availableEdgeNumbers,
+    // then this number is the next available one.
+    for (unsigned i = 1; i <= maxNumber; ++i) {
+        if (!this->availableEdgeNumbers.count(i)) return i;
+    }
+    // if all numbers until maxNumber are being used, add a new edgeNumber.
+    return maxNumber + 1;
+}
+
+void EdgeColoring_AtMost_Witness::print_pair(pair<unsigned,unsigned> edge) {
+    cout << "(" << edge.first << ", " << edge.second << ")";
+}
+//********************
+//*******************
+//////////////////////////////Implementation//////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
 
 bool EdgeColoring_AtMost_Witness::is_equal_implementation(const EdgeColoring_AtMost_WitnessPointerConst w) const {
     //*****************************
     //*****************************
-    return this->mapSetColors == w->mapSetColors;
+    return this->availableEdgeNumbers == w->availableEdgeNumbers &&
+           this->edgesPerVertex == w->edgesPerVertex;
     //*****************************
     //*****************************
 }
@@ -32,7 +59,7 @@ bool EdgeColoring_AtMost_Witness::is_equal(const Witness &rhs) const{
 bool EdgeColoring_AtMost_Witness::is_less_implementation(const EdgeColoring_AtMost_WitnessPointerConst w) const {
     //*****************************
     //*****************************
-    return this->mapSetColors < w->mapSetColors;
+    return this->edgesPerVertex < w->edgesPerVertex;
     //*****************************
     //*****************************
 }
@@ -50,7 +77,8 @@ bool EdgeColoring_AtMost_Witness::is_less(const Witness &rhs)const {
 Witness & EdgeColoring_AtMost_Witness::set_equal_implementation(EdgeColoring_AtMost_WitnessPointer w) {
     //*****************************
     //*****************************
-    this->mapSetColors = w->mapSetColors;
+    this->availableEdgeNumbers = w->availableEdgeNumbers;
+    this->edgesPerVertex = w->edgesPerVertex;
     return *this;
     //*****************************
     //*****************************
@@ -72,14 +100,14 @@ void EdgeColoring_AtMost_Witness::print() {
     // Witness :
     // (vertex1, { (#edge1, #color1) (#edge2, #color2) } )
     // (vertex2, { (#edge1, #color1) (#edge3, #color4) } )
-    cout << "EdgeColoring Witness:";
-    for (auto &pairVertexSetColors: this->mapSetColors) {
-        cout << "(" << pairVertexSetColors.first << ", " << "{ ";
-        for (auto colorIt=pairVertexSetColors.second.begin(); colorIt!=pairVertexSetColors.second.end(); colorIt++) {
-        	cout << *colorIt;
-                if (colorIt != pairVertexSetColors.second.end()--) cout << ",";
+    cout << "Witness:\n";
+    for (auto &pair: this->edgesPerVertex) {
+        cout << "(" << pair.first << ", " << "{ ";
+        for (auto &element: pair.second) {
+            this->print_pair(element);
+            cout << " ";
         }
-        cout << "})";
+        cout << "} )\n";
     }
     //*****************************
     //*****************************
@@ -96,7 +124,7 @@ EdgeColoring_AtMost_Witness::~EdgeColoring_AtMost_Witness() {
 }
 EdgeColoring_AtMost_DynamicCore::EdgeColoring_AtMost_DynamicCore() {
     // Initializing attributes
-    addAttribute("CoreName","EdgeColoring");
+    addAttribute("CoreName","EdgeColoringOLD");
     addAttribute("ParameterType","UnsignedInt");
     addAttribute("PrimaryOperator","AtMost");
 }
@@ -108,7 +136,7 @@ EdgeColoring_AtMost_DynamicCore::EdgeColoring_AtMost_DynamicCore(unsigned parame
     //*****************************
     //*****************************
     // Initializing attributes
-    addAttribute("CoreName","EdgeColoring");
+    addAttribute("CoreName","EdgeColoringOLD");
     addAttribute("ParameterType","UnsignedInt");
     addAttribute("PrimaryOperator","AtMost");
     this->parameter = parameter;
@@ -131,12 +159,11 @@ void EdgeColoring_AtMost_DynamicCore::intro_v_implementation(unsigned int i, Bag
                                                              EdgeColoring_AtMost_WitnessSetPointer witnessSet) {
     //*****************************
     //*****************************
-    // We add vertex i to the map with an empty set of used colors
-    set<unsigned> emptyColorSet; 
-    EdgeColoring_AtMost_WitnessPointer witness = createWitness();
-    witness->set_equal(*w);
-    witness->mapSetColors[i]=emptyColorSet; 
-    witnessSet->insert(witness);
+    // When introducing a vertex into a bag, no edge changes, so, the witness
+    // is the same as before.
+    EdgeColoring_AtMost_WitnessPointer w1 = createWitness();
+    w1->set_equal(*w);
+    witnessSet->insert(w1);
     //*****************************
     //*****************************
 }
@@ -158,22 +185,44 @@ void EdgeColoring_AtMost_DynamicCore::intro_e_implementation(unsigned int i, uns
                                                              EdgeColoring_AtMost_WitnessSetPointer witnessSet) {
     //*****************************
     //*****************************
-    set<unsigned> allColors; 
-    for (unsigned color = 1; color<=this->parameter; color++){
-	    allColors.insert(color); 
-    }	    
-    set<unsigned> usedColors; 
-    set_union(w->mapSetColors[i].begin(), w->mapSetColors[i].end(), w->mapSetColors[j].begin(),w->mapSetColors[j].end(),inserter(usedColors,usedColors.begin())); 
-    set<unsigned> availableColors; 
-    set_difference(allColors.begin(),allColors.end(),usedColors.begin(),usedColors.end(),inserter(availableColors, availableColors.begin())); 
-    // if availableColors is empty, then we are trying to assign a color to an edge, but there is no possibility of doing so. The witness in this case is empty.
-    for (unsigned color:availableColors){
-    	EdgeColoring_AtMost_WitnessPointer witness = createWitness(); 
-	witness->set_equal(*w); 
-	witness->mapSetColors[i].insert(color);
-	witness->mapSetColors[j].insert(color);
-	witnessSet->insert(witness); 
-    }
+    if (w->edgesPerVertex.count(i) && w->edgesPerVertex.count(j)) { // if i and j are present, make the new witnesses.
+        //Getting iterators for keys i and j in the edgesPerVertex map.
+        auto iItr = w->edgesPerVertex.find(i);
+        auto jItr = w->edgesPerVertex.find(j);
+
+        set<unsigned> possibleEdgeColors;
+        set<unsigned> aux; // will hold colors that can't be assigned to the new edge.
+
+        // Getting all possible colors:
+        for (auto &edge: iItr->second) {
+            aux.insert(edge.second);
+        }
+        for (auto &edge: jItr->second) {
+            aux.insert(edge.second);
+        }
+        for (int k = 1; k <= this->parameter; ++k) {
+            if (!aux.count(k)) possibleEdgeColors.insert(k);
+        }
+
+        // If there are possible colors:
+        if (!possibleEdgeColors.empty()) {
+            // The number of this edge will be the next available in p:
+            unsigned edgeNumber = w->next_available_edge_number();
+            // For each possible color, introduce an edge colored with
+            // this color in w1 and insert it into the witness set:
+            for (auto &color: possibleEdgeColors) {
+                EdgeColoring_AtMost_WitnessPointer w1 = createWitness();
+                w1->set_equal(*w);
+                auto iItr1 = w1->edgesPerVertex.find(i);
+                auto jItr1 = w1->edgesPerVertex.find(j);
+                // Introducing edge <i,j>:
+                iItr1->second.insert(pair<unsigned,unsigned>(edgeNumber,color));
+                jItr1->second.insert(pair<unsigned,unsigned>(edgeNumber,color));
+                w1->availableEdgeNumbers.insert(pair<unsigned,unsigned>(edgeNumber, 2));
+                witnessSet->insert(w1);
+            }
+        }// Else, there is no possible witness.
+    }// Else, there is no way to intro_e_i_j.
     //*****************************
     //*****************************
 }
@@ -195,10 +244,31 @@ void EdgeColoring_AtMost_DynamicCore::forget_v_implementation(unsigned int i, Ba
                                                               EdgeColoring_AtMost_WitnessSetPointer witnessSet) {
     //*****************************
     //*****************************
-    EdgeColoring_AtMost_WitnessPointer witness = createWitness();
-    witness->set_equal(*w);
-    witness->mapSetColors.erase(i); 
-    witnessSet->insert(witness); 
+    // Unique witness: equals to p, but with i vertex removed from edgesPerVertex. If i is the
+    // only endpoint of an edge, this edge should be removed from availableEdgeNumbers as well.
+
+    if (w->edgesPerVertex.count(i)) { // if i is present, forget it.
+
+        EdgeColoring_AtMost_WitnessPointer w1 = createWitness();
+        w1->set_equal(*w);
+
+        // Saving the edges related to the forgotten vertex:
+        auto forgottenVertexIterator = w1->edgesPerVertex.find(i);
+        map<unsigned,unsigned> forgottenEdges(forgottenVertexIterator->second);
+
+        // Deleting vertex i:
+        w1->edgesPerVertex.erase(i);
+
+        // Fixing the number of endpoints of an edge related to the forgotten vertex:
+        for (auto &forgottenEdge: forgottenEdges) {
+            w1->availableEdgeNumbers[forgottenEdge.first]--;
+            // If this edge has no endpoints anymore, it should not be represented in availableEdgeNumbers.
+            // Thus, delete it:
+            if(w1->availableEdgeNumbers[forgottenEdge.first] == 0) w1->availableEdgeNumbers.erase(forgottenEdge.first);
+        }
+
+        witnessSet->insert(w1);
+    } // else i cannot be removed, because it's not present.
     //*****************************
     //*****************************
 }
@@ -220,30 +290,55 @@ void EdgeColoring_AtMost_DynamicCore::join_implementation(Bag &b, EdgeColoring_A
                                                           EdgeColoring_AtMost_WitnessSetPointer witnessSet) {
     //*****************************
     //*****************************
-    bool consistent = true; 
-    auto it1 = w1->mapSetColors.begin();
-    for (auto it2 = w2->mapSetColors.begin(); it2!=w2->mapSetColors.end(); it2++){
-    	set<unsigned> intersection; 
-	// it1->first should be equal to it2->first, since all elements of the bag must be in the domain of each map. 
-	set_intersection(it1->second.begin(),it1->second.end(),it2->second.begin(),it2->second.end(), inserter(intersection,intersection.begin()));
-        if (!intersection.empty()){
-		consistent = false;
-		break;
-	}
-	it1++; // move to next vertex in the the map of w1
+    // For each vertex in the bag, verify if some color appears in an edge incident in
+    // the left witness and in the right witness. Obs:The join can only be applied when
+    // the bags of the left-side and right-side witnesses are the same.
+
+    auto it1 = w1->edgesPerVertex.begin();
+    auto it2 = w2->edgesPerVertex.begin();
+    bool contradiction = false;
+
+    // Checking colors:
+    while (it1 != w1->edgesPerVertex.end() && !contradiction) {
+        for (auto edge1: it1->second) {
+            for (auto edge2: it2->second) {
+                // If there is an edge with same color in the same vertex, join is impossible.
+                // We have a contradiction, so, break.
+                if (edge1.second == edge2.second) {
+                    contradiction = true;
+                    break;
+                } // else, continue. There is no contradiction.
+            }
+        }
+        it1++;
+        it2++;
     }
-    if (consistent ==true){
- 	EdgeColoring_AtMost_WitnessPointer witness = createWitness();
-	auto it1 = w1->mapSetColors.begin();
-    	for (auto it2 = w2->mapSetColors.begin(); it2!=w2->mapSetColors.end(); it2++){
-    	    set<unsigned> unioncolors; 
-	    // it1->first should be equal to it2->first, since all elements of the bag must be in the domain of each map. 
-	    set_union(it1->second.begin(),it1->second.end(),it2->second.begin(),it2->second.end(), inserter(unioncolors,unioncolors.begin()));
-	    witness->mapSetColors[it1->first] = unioncolors; 
-	    it1++; // move to next vertex in the the map of w1
-   	}
-	witnessSet->insert(witness); 
-   }
+
+    // If there is no contradiction, merge p1 and p2.
+    if (!contradiction) {
+        EdgeColoring_AtMost_WitnessPointer wPrime1 = createWitness();
+        wPrime1->set_equal(*w1); // will represent the joined witness of p1 and p2.
+
+        // Transferring edges from p2 to p1.
+        it1 = w1->edgesPerVertex.begin();
+        it2 = w2->edgesPerVertex.begin();
+
+        while (it2 != w2->edgesPerVertex.end()) {
+            // For each edge from p2, insert it in wPrime1 with its color, but with a different edge number.
+            for (auto &edge: it2->second) {
+                pair<unsigned,unsigned> mergedEdge;
+                // The i-eth edge in p2, will be the i-eth available edge in p1:
+                mergedEdge = make_pair(w1->next_available_edge_number(), edge.second);
+                wPrime1->edgesPerVertex[mergedEdge.first].insert(mergedEdge);
+                wPrime1->availableEdgeNumbers[mergedEdge.first] = w2->availableEdgeNumbers[mergedEdge.first];
+            }
+            it1++;
+            it2++;
+        }
+        witnessSet->insert(wPrime1);
+    }else{
+        // do nothing. There's no way to join, so, the witnessSet will be empty.
+    }
     //*****************************
     //*****************************
 }
@@ -265,7 +360,6 @@ WitnessSetPointer EdgeColoring_AtMost_DynamicCore::join(Bag &b, Witness &witness
         exit(20);
     }
 }
-
 WitnessSetPointer EdgeColoring_AtMost_DynamicCore::clean(WitnessSetPointer witnessSet) {
     //*****************************
     //*****************************
@@ -278,7 +372,16 @@ WitnessSetPointer EdgeColoring_AtMost_DynamicCore::clean(WitnessSetPointer witne
 bool EdgeColoring_AtMost_DynamicCore::is_final_witness_implementation(EdgeColoring_AtMost_WitnessPointer w) {
     //*****************************
     //*****************************
-    return true; // All witnesses are consistent, since we guarantee that no more than this->parameter colors occur at each step.
+    // Count the number of colors.
+    set<unsigned> colors;
+    for (auto vertex: w->edgesPerVertex) {
+        for (auto edge: vertex.second) {
+            colors.insert(edge.second);
+        }
+    }
+    // If the number of colors is at most this->parameter, this is a final
+    // witness. Otherwise, it is not.
+    return colors.size() <= this->parameter;
     //*****************************
     //*****************************
 }

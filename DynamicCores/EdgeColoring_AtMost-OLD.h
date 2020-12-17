@@ -24,8 +24,18 @@ public:
     virtual void print();
     //*****************************
     //*****************************
+    //Specific functions:
+    void print_pair(pair<unsigned,unsigned> edge);// This method prints a pair with the format (pair.first, pair.second).
+    unsigned next_available_edge_number(); // This method gets the next available edge number in the availableEdgeNumbers map of this witness so that
+    // a new edge does not overwrite one that is already represented.
+
     //Attributes:
-    map<unsigned,set<unsigned> > mapSetColors; // For each vertex v we have a set with the colors that have occurred as incident with v
+    map<unsigned,unsigned> availableEdgeNumbers; // Each edge is represented by a number. This map records the number of times each edge is used.
+    // The first coordinate is the number representing the edge. The second coordinate can be 1 or 2.
+    // <a,2> indicates that edge "a" is being used by two vertices in the bag. <a,1> indicates the edge "a"
+    // is being used by two vertices. If "a" is used by no vertex in the bag then no pair is assigned to it.
+    map<unsigned, map<unsigned,unsigned>> edgesPerVertex; // This map records the edges incident with each vertex together with their respective colors.
+    // The first coordinate is the vertex number. The second is a map from edge numbers to colors.
     //*****************************
     //*****************************
 };
