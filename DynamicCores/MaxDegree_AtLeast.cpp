@@ -111,11 +111,11 @@ void MaxDegree_AtLeast_DynamicCore::intro_v_implementation(unsigned int i, Bag &
     if(w->found==true){
         witnessSet->insert(w);
     }else{
-        shared_ptr<MaxDegree_AtLeast_Witness> w(new MaxDegree_AtLeast_Witness);
-        w->found=false;
-        w->degreeCounter = w->degreeCounter;
-        w->degreeCounter.insert(make_pair(i,0));
-        witnessSet->insert(w);
+        shared_ptr<MaxDegree_AtLeast_Witness> witness(new MaxDegree_AtLeast_Witness);
+        witness->found=false;
+        witness->degreeCounter = w->degreeCounter;
+        witness->degreeCounter.insert(make_pair(i,0));
+        witnessSet->insert(witness);
     }
 
 }
@@ -126,7 +126,6 @@ WitnessSetPointer MaxDegree_AtLeast_DynamicCore::intro_v(unsigned i, Bag &b, Wit
         MaxDegree_AtLeast_WitnessPointer w = e->shared_from_this();
         MaxDegree_AtLeast_WitnessSetPointer witnessSet(new MaxDegree_AtLeast_WitnessSet);
         intro_v_implementation(i,b,w,witnessSet);
-
         return clean(witnessSet);
     }else{
         cerr<<"ERROR: in MaxDegree_GreaterThan_Witness::intro_v cast error"<<endl;
@@ -137,7 +136,7 @@ WitnessSetPointer MaxDegree_AtLeast_DynamicCore::intro_v(unsigned i, Bag &b, Wit
 void MaxDegree_AtLeast_DynamicCore::intro_e_implementation(unsigned int i, unsigned int j, Bag &b,
                                                            MaxDegree_AtLeast_WitnessPointer w,
                                                            MaxDegree_AtLeast_WitnessSetPointer witnessSet) {
-    if(w->found == true){
+    if(w->found){
         witnessSet->insert(w);
     }else if( i!=j and  w->degreeCounter.find(i)->second < this->maxDegree-1 and w->degreeCounter.find(j)->second < this->maxDegree-1 ){
         MaxDegree_AtLeast_WitnessPointer wPrime = createWitness();
@@ -157,6 +156,11 @@ void MaxDegree_AtLeast_DynamicCore::intro_e_implementation(unsigned int i, unsig
     }else{
         MaxDegree_AtLeast_WitnessPointer wPrime = createWitness();
         wPrime->found = true;
+        wPrime->degreeCounter = w->degreeCounter;
+        wPrime->degreeCounter.erase(i);
+        wPrime->degreeCounter.erase(j);
+        wPrime->degreeCounter.insert(make_pair(i,w->degreeCounter.find(i)->second+1));
+        wPrime->degreeCounter.insert(make_pair(j,w->degreeCounter.find(j)->second+1));
         witnessSet->insert(wPrime);
     }
 

@@ -575,14 +575,17 @@ maxWitnessSetSize[m] =
 					*T = extractCTDDecomposition(iterationNumber + 1, *it,
 												 leveledSetAllStates);
 					T->printAbstract();
-					// StateTree* S = new StateTree;
-					// *S = extractStateTreeDecomposition(iterationNumber+1,*it,
-					// leveledSetAllStates,tree_width); S->printAbstract();
+                    T->printTree();
+
+                    StateTree* S = new StateTree;
+					 *S = extractStateTreeDecomposition(iterationNumber+1,*it,
+					 leveledSetAllStates,tree_width);
+					 S->printAbstract();
 					cout << "-----------------state tree "
 							"printing--------------------"
 						 << endl;
-					// S->printStateTree();
-					T->printTree();
+					S->printStateTree();
+					//
 					cout << endl
 						 << "------------------Constructing Counter Example "
 							"Graph-------------------"
