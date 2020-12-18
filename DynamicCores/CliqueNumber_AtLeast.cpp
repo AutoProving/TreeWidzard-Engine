@@ -258,6 +258,10 @@ WitnessSetPointer CliqueNumber_AtLeast_DynamicCore::join(Bag &b, Witness &witnes
     }
 }
 
+WitnessSetPointer CliqueNumber_AtLeast_DynamicCore::clean(WitnessSetPointer witnessSet) {
+    return witnessSet;
+}
+
 bool CliqueNumber_AtLeast_DynamicCore::is_final_witness(Witness &witness) {
     if (CliqueNumber_AtLeast_Witness *e = dynamic_cast<CliqueNumber_AtLeast_Witness *>(&witness)) {
         shared_ptr<CliqueNumber_AtLeast_Witness> p = e->shared_from_this();
@@ -268,6 +272,4 @@ bool CliqueNumber_AtLeast_DynamicCore::is_final_witness(Witness &witness) {
     }
 }
 
-WitnessSetPointer CliqueNumber_AtLeast_DynamicCore::clean(WitnessSetPointer witnessSet) {
-    return witnessSet;
-}
+

@@ -44,6 +44,7 @@ class NoWhereZeroFlow_AtMost_WitnessSet : public WitnessSetTypeOne<NoWhereZeroFl
     //Do not define anything. All functions and members are derived from WitnessTypeOne in this case.
     //************************
     //************************
+    shared_ptr<WitnessSet> createEmptyWitnessSet() override;
 };
 
 // Pointer type for NoWhereZeroFlow_AtMost_WitnessSet.

@@ -50,6 +50,7 @@ int main(int argc, char *arg[]) {
 //    cout<<"Automaton Parse Finished!"<<endl;
 
 
+
     char* path = "../Tests/input.txt";
     char* functionType="../Tests/treedecomposition.td";
 	if (argc < 2) {

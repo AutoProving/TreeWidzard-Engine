@@ -65,7 +65,7 @@ void Minor_Witness::print(){
     //*****************************
     //*****************************
     cout<<"found:"<<found<<" foundEdge:{";
-    for(auto e:foundEdges ){
+    for(auto &e:foundEdges ){
         cout<< e;
         if(e!= *(--foundEdges.end())){
             cout<<", ";
@@ -73,16 +73,16 @@ void Minor_Witness::print(){
     }
     cout<<endl;
     cout<<"partitions: ";
-    for(auto partition : partitions){
+    for(auto& partition : partitions){
         cout<<"( {";
-        for(auto s:get<0>(partition)){
+        for(auto& s:get<0>(partition)){
             cout<<s;
             if(s!=*(--get<0>(partition).end())){
                 cout<<",";
             }
         }
         cout<<"}, [";
-        for(auto cell:get<1>(partition)){
+        for(auto& cell:get<1>(partition)){
             cout<<"{";
             for(auto s:cell){
                 cout<<s;
@@ -127,7 +127,7 @@ pair<bool, bool> Minor_Witness::removeVertexFromPartition(unsigned int i, set<se
 
 void Minor_Witness::addEdgeToPartition(unsigned int i, unsigned int j, set<set<unsigned int>> &partition) {
     set<unsigned> s1, s2;
-    for(auto cell : partition) {
+    for(auto& cell : partition) {
         if(cell.count(i) > 0) {
             s1 = cell;
         }
@@ -149,15 +149,15 @@ set<set<unsigned int>> Minor_Witness::mergePartitions(set<set<unsigned int>> &pa
                                                       set<set<unsigned int>> &partition2) {
     map<unsigned, int> eleToCellMap;
     int ncells = 0;
-    for(auto cell : partition1) {
+    for(auto& cell : partition1) {
         ncells++;
-        for(auto ele : cell) {
+        for(auto& ele : cell) {
             eleToCellMap[ele] = ncells;
         }
     }
-    for(auto cell : partition2) {
+    for(auto& cell : partition2) {
         set<unsigned> s; // This set is initialized to empty
-        for(auto ele : cell) {
+        for(auto& ele : cell) {
             auto it = eleToCellMap.find(ele);
             if(it != eleToCellMap.end()) {
                 s.insert(it->second) ;
@@ -165,11 +165,11 @@ set<set<unsigned int>> Minor_Witness::mergePartitions(set<set<unsigned int>> &pa
         }
         if(!s.empty()) {
             int minCellNumber = *(s.begin());
-            for (auto ele:cell){
+            for (auto& ele:cell){
                 eleToCellMap.insert(make_pair(ele,minCellNumber));
             }
             // change the cell number
-            for(auto pair : eleToCellMap) { // iterating through all pairs in the map and change the cell number to minCellNumber if the current one belong to s.
+            for(auto& pair : eleToCellMap) { // iterating through all pairs in the map and change the cell number to minCellNumber if the current one belong to s.
                 if(s.find(pair.second) != s.end()) {
                     pair.second = minCellNumber;
                 }
@@ -177,18 +177,18 @@ set<set<unsigned int>> Minor_Witness::mergePartitions(set<set<unsigned int>> &pa
         } else {
             // If the element does not occur in some cell of w1, then we create a cell specifically for that element.
             ncells++;
-            for(auto ele : cell) {
+            for(auto &ele : cell) {
                 eleToCellMap[ele] = ncells;
             }
         }
     }
     // Now group all the elements according to their cell numbers and add them to resulting cell.
     map<int, set<unsigned>> result; //The first coordinate is the cell number. The second coordinate is the set of elements in that cell
-    for(auto pair : eleToCellMap) {
+    for(auto& pair : eleToCellMap) {
         result[pair.second].insert(pair.first);
     }
     set<set<unsigned >> partition;
-    for(auto pair : result) {
+    for(auto& pair : result) {
         partition.insert(pair.second);
     }
     return partition;
@@ -234,11 +234,7 @@ void Minor_DynamicCore::createInitialWitnessSet_implementation(){
     //*****************************
     Minor_WitnessPointer initialWitness = createWitness();
     // vector<pair<unsigned ,bool>> foundEdges;
-    set<unsigned int> foundEdges; 
-    //set<unsigned > edges = multigraph.getEdges();
-    //for(auto e:edges){
-    //    foundEdges.push_back(make_pair(e,false));
-    //}
+    set<unsigned int> foundEdges;
     vector<tuple<set<unsigned >, set<set<unsigned >>,bool> > partitions;
     partitions.resize(multigraph.verticesSize());
     initialWitness->found = false;

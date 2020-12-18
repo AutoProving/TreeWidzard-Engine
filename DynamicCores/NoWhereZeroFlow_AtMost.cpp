@@ -139,8 +139,7 @@ void NoWhereZeroFlow_AtMost_DynamicCore::intro_v_implementation(unsigned i, Bag 
 void NoWhereZeroFlow_AtMost_DynamicCore::intro_e_implementation(unsigned i, unsigned j, Bag &b, NoWhereZeroFlow_AtMost_WitnessPointer w, NoWhereZeroFlow_AtMost_WitnessSetPointer witnessSet){
     //*****************************
     //*****************************
-    NoWhereZeroFlow_AtMost_WitnessPointer  witness = createWitness();
-    //The existence of a nowhere zero flow does not depend on the direction of the edges. 
+    //The existence of a nowhere zero flow does not depend on the direction of the edges.
     //therefore, we choose arbitrarily the direction to be from the smallest vertex to the 
     //biggest vertex: (minVertex,maxVertex)
     auto minVertex = w->flowSum.find(min(i,j));
@@ -152,7 +151,7 @@ void NoWhereZeroFlow_AtMost_DynamicCore::intro_e_implementation(unsigned i, unsi
 	    //The flow is positive whne entering maxVertex
 	    unsigned maxVertexSum = (maxVertex->second + x) % this->parameter; // here we don't need to test for positivity, since the remainder of a positive number will be positive
 	    //Create a fresh copy of w
-	    NoWhereZeroFlow_AtMost_WitnessPointer witnesss = createWitness(); 
+	    NoWhereZeroFlow_AtMost_WitnessPointer witness = createWitness();
 	    witness->set_equal(*w);
 	    //Update flowSum in this copy
 	    witness->flowSum[minVertex->second] = minVertexSum; 
@@ -241,6 +240,10 @@ Witness& NoWhereZeroFlow_AtMost_Witness::set_equal(Witness &witness) {
     }
 }
 
+shared_ptr<WitnessSet> NoWhereZeroFlow_AtMost_WitnessSet::createEmptyWitnessSet() {
+    NoWhereZeroFlow_AtMost_WitnessSetPointer witnessSet(new NoWhereZeroFlow_AtMost_WitnessSet);
+    return witnessSet;
+}
 
 void  NoWhereZeroFlow_AtMost_DynamicCore::createInitialWitnessSet() {
     NoWhereZeroFlow_AtMost_WitnessSetPointer witnessSet(new NoWhereZeroFlow_AtMost_WitnessSet);

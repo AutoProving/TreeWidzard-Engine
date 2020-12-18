@@ -1,13 +1,35 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
+
+///////////////////////////////////////////////////////////////////////////////
+// Before starting to work on your core, please create a new branch, and rename
+// these files according to the instructions in the file README-GenericCore.txt
+// In particular "Minor" should be renamed everywhere to as specified in the file.
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+// Please use the following commands for standardization purposes
+// To create a witness called "witness": Minor_WitnessPointer witness(new Minor_Witness);
+// To copy "witness1" into "witness2": copy(witness1,witness2)
+// To insert "witness" into "witnessSet":  witnessSet->insert(witness)
+/////////////////////////////////////////////////////////////////////////////
+
+
 #include "MaxDegree_AtLeast.h"
-extern "C" {
-    DynamicCore * create() {
-        return new MaxDegree_AtLeast_DynamicCore;
-    }
-    DynamicCore * create_int(unsigned param) {
-        return new MaxDegree_AtLeast_DynamicCore(param);
-    }
-}
+
+////////////////////////////// AUXILIARY FUNCTIONS //////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+//
+// If you need to implement auxiliary functions, please define them in the header
+// file (Generic_Core.h) and implement them here.
+//
+/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+///////////////////////////// IMPLEMENTATION OF CORES ////////////////////////////////////
+//////////////////////////// ONLY CHANGE THE GREY AREA ///////////////////////////////////
+
 
 MaxDegree_AtLeast_Witness::MaxDegree_AtLeast_Witness() {
     found =false;
@@ -32,6 +54,42 @@ bool MaxDegree_AtLeast_Witness::is_equal_implementation(const MaxDegree_AtLeast_
         return false;
     }
 }
+bool MaxDegree_AtLeast_Witness::is_less_implementation(const MaxDegree_AtLeast_WitnessPointerConst w) const {
+    if(this->found < w->found or (this->found == w->found and this->degreeCounter < w->degreeCounter)){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+Witness & MaxDegree_AtLeast_Witness::set_equal_implementation(MaxDegree_AtLeast_WitnessPointer w) {
+    found = w->found;
+    degreeCounter = w->degreeCounter;
+    return *this;
+}
+
+shared_ptr<WitnessSet> MaxDegree_AtLeast_DynamicCore::clean_implementation(MaxDegree_AtLeast_WitnessSetPointer witnessSet) {
+    for(auto witness:(*witnessSet)){
+        if (MaxDegree_AtLeast_WitnessPointer w = dynamic_pointer_cast<MaxDegree_AtLeast_Witness>(witness)) {
+            if(w->found){
+                MaxDegree_AtLeast_WitnessSetPointer newWitnessSet (new MaxDegree_AtLeast_WitnessSet);
+                newWitnessSet->insert(w);
+                return newWitnessSet;
+            }
+        }else{
+            cerr<<"ERROR: in MaxDegree_AtLeast_DynamicCore::clean_implementation cast error"<<endl;
+            exit(20);
+        }
+    }
+    return witnessSet;
+}
+shared_ptr<WitnessSet> MaxDegree_AtLeast_WitnessSet::createEmptyWitnessSet() {
+    MaxDegree_AtLeast_WitnessSetPointer witnessSet(new MaxDegree_AtLeast_WitnessSet);
+    return witnessSet;
+}
+///////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+
 bool MaxDegree_AtLeast_Witness::is_equal(const Witness &rhs)const {
     if(MaxDegree_AtLeast_Witness const *e = dynamic_cast<MaxDegree_AtLeast_Witness const *>(&rhs)) {
         shared_ptr<MaxDegree_AtLeast_Witness const> w = e->shared_from_this();
@@ -39,13 +97,6 @@ bool MaxDegree_AtLeast_Witness::is_equal(const Witness &rhs)const {
     }else{
         cerr<<"ERROR: in MaxDegree_GreaterThan_Witness::is_equal cast error"<<endl;
         exit(20);
-    }
-}
-bool MaxDegree_AtLeast_Witness::is_less_implementation(const MaxDegree_AtLeast_WitnessPointerConst w) const {
-    if(this->found < w->found or (this->found == w->found and this->degreeCounter < w->degreeCounter)){
-        return true;
-    }else{
-        return false;
     }
 }
 
@@ -59,11 +110,6 @@ bool MaxDegree_AtLeast_Witness::is_less(const  Witness &rhs)const {
     }
 }
 
-Witness & MaxDegree_AtLeast_Witness::set_equal_implementation(MaxDegree_AtLeast_WitnessPointer w) {
-    found = w->found;
-    degreeCounter = w->degreeCounter;
-    return *this;
-}
 Witness &MaxDegree_AtLeast_Witness::set_equal(Witness &witness) {
     if (MaxDegree_AtLeast_Witness  *e = dynamic_cast<MaxDegree_AtLeast_Witness *>(&witness)) {
         shared_ptr<MaxDegree_AtLeast_Witness> w = e->shared_from_this();
@@ -269,9 +315,17 @@ bool MaxDegree_AtLeast_DynamicCore::is_final_witness(Witness &witness) {
     }
 }
 
-WitnessSetPointer MaxDegree_AtLeast_DynamicCore::clean(WitnessSetPointer witnessSet) {
-    return witnessSet;
+
+shared_ptr<WitnessSet> MaxDegree_AtLeast_DynamicCore::clean(shared_ptr<WitnessSet> witnessSet) {
+
+    if (MaxDegree_AtLeast_WitnessSetPointer e = dynamic_pointer_cast<MaxDegree_AtLeast_WitnessSet >(witnessSet)) {
+        return clean_implementation(e);
+    }else{
+        cerr<<"ERROR: in MaxDegree_AtLeast_DynamicCore::clean cast error"<<endl;
+        exit(20);
+    }
 }
+
 
 MaxDegree_AtLeast_WitnessPointer MaxDegree_AtLeast_DynamicCore::createWitness() {
     MaxDegree_AtLeast_WitnessPointer w(new MaxDegree_AtLeast_Witness);
@@ -281,4 +335,17 @@ MaxDegree_AtLeast_WitnessPointer MaxDegree_AtLeast_DynamicCore::createWitness() 
 void MaxDegree_AtLeast_DynamicCore::copyWitness(MaxDegree_AtLeast_WitnessPointer w_input,
                                                 MaxDegree_AtLeast_WitnessPointer w_output) {
     w_output->set_equal_implementation(w_input);
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////// The functions below are used by the plugin handler /////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+extern "C" {
+DynamicCore * create() {
+    return new MaxDegree_AtLeast_DynamicCore;
+}
+DynamicCore * create_int(unsigned param) {
+    return new MaxDegree_AtLeast_DynamicCore(param);
+}
 }

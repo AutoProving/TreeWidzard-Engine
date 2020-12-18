@@ -1,3 +1,3 @@
-path_width 4
-a := Max
+tree_width 4
+a := MaxDegree > 3
 TRUE

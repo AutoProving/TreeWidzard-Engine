@@ -29,7 +29,7 @@ class MaxDegree_AtLeast_Witness:public Witness, public enable_shared_from_this<M
 };
 
 class MaxDegree_AtLeast_WitnessSet : public WitnessSetTypeOne<MaxDegree_AtLeast_WitnessSet>{
-
+    shared_ptr<WitnessSet> createEmptyWitnessSet() override;
 };
 
 // Pointer type for Generic_Operator_WitnessSet.
@@ -46,6 +46,7 @@ private:
     void intro_e_implementation(unsigned i,unsigned j, Bag &b, MaxDegree_AtLeast_WitnessPointer w, MaxDegree_AtLeast_WitnessSetPointer witnessSet);
     void join_implementation(Bag &b, MaxDegree_AtLeast_WitnessPointer w1, MaxDegree_AtLeast_WitnessPointer w2, MaxDegree_AtLeast_WitnessSetPointer witnessSet);
     bool is_final_witness_implementation(MaxDegree_AtLeast_WitnessPointer w);
+    shared_ptr<WitnessSet> clean_implementation(MaxDegree_AtLeast_WitnessSetPointer witnessSet);
 public:
     unsigned maxDegree;
     MaxDegree_AtLeast_DynamicCore();
