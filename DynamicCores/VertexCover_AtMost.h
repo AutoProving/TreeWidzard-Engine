@@ -34,6 +34,7 @@ public:
     //*****************************
 };
 class VertexCover_AtMost_WitnessSet : public WitnessSetTypeOne<VertexCover_AtMost_WitnessSet>{
+    shared_ptr<WitnessSet> createEmptyWitnessSet() override;
 
 };
 
@@ -49,6 +50,7 @@ private:
     void forget_v_implementation(unsigned i, Bag &b, VertexCover_AtMost_WitnessPointer w, VertexCover_AtMost_WitnessSetPointer witnessSet);
     void intro_e_implementation(unsigned i,unsigned j, Bag &b, VertexCover_AtMost_WitnessPointer w, VertexCover_AtMost_WitnessSetPointer witnessSet);
     void join_implementation(Bag &b, VertexCover_AtMost_WitnessPointer w1, VertexCover_AtMost_WitnessPointer w2, VertexCover_AtMost_WitnessSetPointer witnessSet);
+    VertexCover_AtMost_WitnessSetPointer clean_implementation(VertexCover_AtMost_WitnessSetPointer witnessSet);
     bool is_final_witness_implementation(VertexCover_AtMost_WitnessPointer w);
 public:
     VertexCover_AtMost_DynamicCore();

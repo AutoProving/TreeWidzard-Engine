@@ -2,11 +2,6 @@
 
 #include "HamiltonianCycle.h"
 
-extern "C" {
-DynamicCore * create() {
-    return new HamiltonianCycle_DynamicCore;
-}
-}
 
 ///////////////////////Implementation////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
@@ -400,15 +395,12 @@ void HamiltonianCycle_DynamicCore::join_implementation(Bag &b, HamiltonianCycle_
     //*****************************
     //*****************************
 }
-WitnessSetPointer HamiltonianCycle_DynamicCore::clean(WitnessSetPointer witnessSet) {
-    //*****************************
-    //*****************************
-    // In most cases, you will not need to change this function.
-    //*****************************
-    //*****************************
+
+HamiltonianCycle_WitnessSetPointer HamiltonianCycle_DynamicCore::clean_implementation(
+        HamiltonianCycle_WitnessSetPointer witnessSet) {
+
     return witnessSet;
 }
-
 
 bool HamiltonianCycle_DynamicCore::is_final_witness_implementation(HamiltonianCycle_WitnessPointer w) {
     //*****************************
@@ -440,7 +432,6 @@ bool HamiltonianCycle_Witness::is_equal(const Witness &rhs) const{
     }
 }
 
-
 bool HamiltonianCycle_Witness::is_less(const Witness &rhs)const {
     if (HamiltonianCycle_Witness const *e = dynamic_cast<HamiltonianCycle_Witness const *>(&rhs)) {
         HamiltonianCycle_WitnessPointerConst w = e->shared_from_this();
@@ -450,8 +441,6 @@ bool HamiltonianCycle_Witness::is_less(const Witness &rhs)const {
         exit(20);
     }
 }
-
-
 
 Witness &HamiltonianCycle_Witness::set_equal(Witness &witness) {
     if (HamiltonianCycle_Witness *e = dynamic_cast<HamiltonianCycle_Witness *>(&witness)) {
@@ -463,7 +452,20 @@ Witness &HamiltonianCycle_Witness::set_equal(Witness &witness) {
     }
 }
 
+shared_ptr<WitnessSet> HamiltonianCycle_WitnessSet::createEmptyWitnessSet() {
+    HamiltonianCycle_WitnessSetPointer witnessSet(new HamiltonianCycle_WitnessSet);
+    return witnessSet;
+}
 
+HamiltonianCycle_WitnessPointer HamiltonianCycle_DynamicCore::createWitness() {
+    HamiltonianCycle_WitnessPointer w(new HamiltonianCycle_Witness);
+    return w;
+}
+
+void HamiltonianCycle_DynamicCore::copyWitness(HamiltonianCycle_WitnessPointer w_input,
+                                               HamiltonianCycle_WitnessPointer w_output) {
+    w_output->set_equal_implementation(w_input);
+}
 
 void HamiltonianCycle_DynamicCore::createInitialWitnessSet() {
     HamiltonianCycle_WitnessSetPointer witnessSet(new HamiltonianCycle_WitnessSet);
@@ -531,6 +533,14 @@ WitnessSetPointer HamiltonianCycle_DynamicCore::join(Bag &b, Witness &witness1, 
     }
 }
 
+WitnessSetPointer HamiltonianCycle_DynamicCore::clean(WitnessSetPointer witnessSet) {
+    if (HamiltonianCycle_WitnessSetPointer e = dynamic_pointer_cast<HamiltonianCycle_WitnessSet >(witnessSet)) {
+        return clean_implementation(e);
+    }else{
+        cerr<<"ERROR: in HamiltonianCycle_DynamicCore::clean cast error"<<endl;
+        exit(20);
+    }
+}
 
 bool HamiltonianCycle_DynamicCore::is_final_witness(Witness &witness) {
     if (HamiltonianCycle_Witness *e = dynamic_cast<HamiltonianCycle_Witness *>(&witness)) {
@@ -541,13 +551,11 @@ bool HamiltonianCycle_DynamicCore::is_final_witness(Witness &witness) {
         exit(20);
     }
 }
-
-
-HamiltonianCycle_WitnessPointer HamiltonianCycle_DynamicCore::createWitness() {
-    HamiltonianCycle_WitnessPointer w(new HamiltonianCycle_Witness);
-    return w;
+/////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////// The functions below are used by the plugin handler /////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+extern "C" {
+DynamicCore * create() {
+    return new HamiltonianCycle_DynamicCore;
 }
-void HamiltonianCycle_DynamicCore::copyWitness(HamiltonianCycle_WitnessPointer w_input,
-                                               HamiltonianCycle_WitnessPointer w_output) {
-    w_output->set_equal_implementation(w_input);
 }

@@ -1,17 +1,7 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 
 #include "VertexCover_AtMost.h"
-extern "C" {
-DynamicCore * create() {
-    return new VertexCover_AtMost_DynamicCore;
-}
-DynamicCore * create_int(unsigned param) {
-    return new VertexCover_AtMost_DynamicCore(param);
-}
-}
-/*
- * Determine whether two witnesses are equal.
- */
+
 ///////////////////////Implementation////////////////////////////////
 ////////////////////////////////////////////////////////////////////
 bool VertexCover_AtMost_Witness::is_equal_implementation(const VertexCover_AtMost_WitnessPointerConst w) const {
@@ -201,6 +191,13 @@ void VertexCover_AtMost_DynamicCore::join_implementation(Bag &b, VertexCover_AtM
     //*****************************
     //*****************************
 }
+
+VertexCover_AtMost_WitnessSetPointer VertexCover_AtMost_DynamicCore::clean_implementation(
+        VertexCover_AtMost_WitnessSetPointer witnessSet) {
+    // default clean
+    return witnessSet;
+}
+
 /*
  * Determine whether `witness` if final
  */
@@ -211,15 +208,7 @@ bool VertexCover_AtMost_DynamicCore::is_final_witness_implementation(VertexCover
     //*****************************
     //*****************************
 }
-shared_ptr<WitnessSet> VertexCover_AtMost_DynamicCore::clean(shared_ptr<WitnessSet> witnessSet)
-{
-    //*****************************
-    //*****************************
-    // In most cases, you will not need to change this function.
-    //*****************************
-    //*****************************
-    return witnessSet;
-}
+
 ////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
 bool VertexCover_AtMost_Witness::is_equal(const Witness &rhs) const
@@ -261,12 +250,29 @@ Witness &VertexCover_AtMost_Witness::set_equal(Witness &witness)
         exit(20);
     }
 }
+
+shared_ptr<WitnessSet> VertexCover_AtMost_WitnessSet::createEmptyWitnessSet() {
+    VertexCover_AtMost_WitnessSetPointer witnessSet(new VertexCover_AtMost_WitnessSet);
+    return witnessSet;
+}
+
+VertexCover_AtMost_WitnessPointer VertexCover_AtMost_DynamicCore::createWitness() {
+    VertexCover_AtMost_WitnessPointer w(new VertexCover_AtMost_Witness);
+    return w;
+}
+
+void VertexCover_AtMost_DynamicCore::copyWitness(VertexCover_AtMost_WitnessPointer w_input,
+                                                 VertexCover_AtMost_WitnessPointer w_output) {
+    w_output->set_equal_implementation(w_input);
+}
+
 void VertexCover_AtMost_DynamicCore::createInitialWitnessSet()
 {
     VertexCover_AtMost_WitnessSetPointer witnessSet(new VertexCover_AtMost_WitnessSet);
     this->setInitialWitnessSet(witnessSet);
     createInitialWitnessSet_implementation();
 }
+
 WitnessSetPointer VertexCover_AtMost_DynamicCore::intro_v(unsigned i, Bag &bag, Witness &witness)
 {
     if (VertexCover_AtMost_Witness *e = dynamic_cast<VertexCover_AtMost_Witness *>(&witness))
@@ -282,6 +288,7 @@ WitnessSetPointer VertexCover_AtMost_DynamicCore::intro_v(unsigned i, Bag &bag, 
         exit(20);
     }
 }
+
 shared_ptr<WitnessSet> VertexCover_AtMost_DynamicCore::intro_e(unsigned i, unsigned j, Bag &bag, Witness &witness)
 {
     if (VertexCover_AtMost_Witness *e = dynamic_cast<VertexCover_AtMost_Witness *>(&witness))
@@ -337,6 +344,17 @@ shared_ptr<WitnessSet> VertexCover_AtMost_DynamicCore::join(Bag &b, Witness &wit
         exit(20);
     }
 }
+
+shared_ptr<WitnessSet> VertexCover_AtMost_DynamicCore::clean(shared_ptr<WitnessSet> witnessSet)
+{
+    if (VertexCover_AtMost_WitnessSetPointer e = dynamic_pointer_cast<VertexCover_AtMost_WitnessSet >(witnessSet)) {
+        return clean_implementation(e);
+    }else{
+        cerr<<"ERROR: in VertexCover_AtMost_DynamicCore::clean cast error"<<endl;
+        exit(20);
+    }
+}
+
 bool VertexCover_AtMost_DynamicCore::is_final_witness(Witness &witness)
 {
     if (VertexCover_AtMost_Witness *e = dynamic_cast<VertexCover_AtMost_Witness *>(&witness))
@@ -350,12 +368,17 @@ bool VertexCover_AtMost_DynamicCore::is_final_witness(Witness &witness)
         exit(20);
     }
 }
-VertexCover_AtMost_WitnessPointer VertexCover_AtMost_DynamicCore::createWitness() {
-    VertexCover_AtMost_WitnessPointer w(new VertexCover_AtMost_Witness);
-    return w;
-}
 
-void VertexCover_AtMost_DynamicCore::copyWitness(VertexCover_AtMost_WitnessPointer w_input,
-                                                 VertexCover_AtMost_WitnessPointer w_output) {
-    w_output->set_equal_implementation(w_input);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////// The functions below are used by the plugin handler /////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+extern "C" {
+DynamicCore * create() {
+    return new VertexCover_AtMost_DynamicCore;
+}
+DynamicCore * create_int(unsigned param) {
+    return new VertexCover_AtMost_DynamicCore(param);
+}
 }

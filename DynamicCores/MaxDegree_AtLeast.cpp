@@ -55,7 +55,8 @@ bool MaxDegree_AtLeast_Witness::is_equal_implementation(const MaxDegree_AtLeast_
     }
 }
 bool MaxDegree_AtLeast_Witness::is_less_implementation(const MaxDegree_AtLeast_WitnessPointerConst w) const {
-    if(this->found < w->found or (this->found == w->found and this->degreeCounter < w->degreeCounter)){
+    // True is smaller than false. In this way, in the set container, the accepting witnesses come first.
+    if(this->found > w->found or (this->found == w->found and this->degreeCounter < w->degreeCounter)){
         return true;
     }else{
         return false;
@@ -66,58 +67,6 @@ Witness & MaxDegree_AtLeast_Witness::set_equal_implementation(MaxDegree_AtLeast_
     found = w->found;
     degreeCounter = w->degreeCounter;
     return *this;
-}
-
-shared_ptr<WitnessSet> MaxDegree_AtLeast_DynamicCore::clean_implementation(MaxDegree_AtLeast_WitnessSetPointer witnessSet) {
-    for(auto witness:(*witnessSet)){
-        if (MaxDegree_AtLeast_WitnessPointer w = dynamic_pointer_cast<MaxDegree_AtLeast_Witness>(witness)) {
-            if(w->found){
-                MaxDegree_AtLeast_WitnessSetPointer newWitnessSet (new MaxDegree_AtLeast_WitnessSet);
-                newWitnessSet->insert(w);
-                return newWitnessSet;
-            }
-        }else{
-            cerr<<"ERROR: in MaxDegree_AtLeast_DynamicCore::clean_implementation cast error"<<endl;
-            exit(20);
-        }
-    }
-    return witnessSet;
-}
-shared_ptr<WitnessSet> MaxDegree_AtLeast_WitnessSet::createEmptyWitnessSet() {
-    MaxDegree_AtLeast_WitnessSetPointer witnessSet(new MaxDegree_AtLeast_WitnessSet);
-    return witnessSet;
-}
-///////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-
-bool MaxDegree_AtLeast_Witness::is_equal(const Witness &rhs)const {
-    if(MaxDegree_AtLeast_Witness const *e = dynamic_cast<MaxDegree_AtLeast_Witness const *>(&rhs)) {
-        shared_ptr<MaxDegree_AtLeast_Witness const> w = e->shared_from_this();
-        return is_equal_implementation(w);
-    }else{
-        cerr<<"ERROR: in MaxDegree_GreaterThan_Witness::is_equal cast error"<<endl;
-        exit(20);
-    }
-}
-
-bool MaxDegree_AtLeast_Witness::is_less(const  Witness &rhs)const {
-    if (MaxDegree_AtLeast_Witness const *e = dynamic_cast<MaxDegree_AtLeast_Witness const *>(&rhs)) {
-        shared_ptr<MaxDegree_AtLeast_Witness const> w = e->shared_from_this();
-        return is_less_implementation(w);
-    }else{
-        cerr<<"ERROR: in MaxDegree_GreaterThan_Witness::is_less cast error"<<endl;
-        exit(20);
-    }
-}
-
-Witness &MaxDegree_AtLeast_Witness::set_equal(Witness &witness) {
-    if (MaxDegree_AtLeast_Witness  *e = dynamic_cast<MaxDegree_AtLeast_Witness *>(&witness)) {
-        shared_ptr<MaxDegree_AtLeast_Witness> w = e->shared_from_this();
-        return set_equal_implementation(w);
-    }else{
-        cerr<<"ERROR: in MaxDegree_GreaterThan_Witness::is_less cast error"<<endl;
-        exit(20);
-    }
 }
 
 MaxDegree_AtLeast_Witness::~MaxDegree_AtLeast_Witness() {
@@ -139,22 +88,15 @@ MaxDegree_AtLeast_DynamicCore::MaxDegree_AtLeast_DynamicCore(unsigned maxDegree)
     addAttribute("ParameterType","UnsignedInt");
     addAttribute("PrimaryOperator","AtLeast");
 }
+
 void MaxDegree_AtLeast_DynamicCore::createInitialWitnessSet_implementation() {
     MaxDegree_AtLeast_WitnessPointer w = createWitness();
     this->insertIntoInitialWitnessSet(w);
 }
 
-void MaxDegree_AtLeast_DynamicCore::createInitialWitnessSet() {
-    shared_ptr<MaxDegree_AtLeast_Witness> w(new MaxDegree_AtLeast_Witness);
-    w->found=false;
-    shared_ptr<MaxDegree_AtLeast_WitnessSet> witnessSet(new MaxDegree_AtLeast_WitnessSet);
-    setInitialWitnessSet(witnessSet);
-    createInitialWitnessSet_implementation();
-}
-
 void MaxDegree_AtLeast_DynamicCore::intro_v_implementation(unsigned int i, Bag &b, MaxDegree_AtLeast_WitnessPointer w,
                                                            MaxDegree_AtLeast_WitnessSetPointer witnessSet) {
-    if(w->found==true){
+    if(w->found){
         witnessSet->insert(w);
     }else{
         shared_ptr<MaxDegree_AtLeast_Witness> witness(new MaxDegree_AtLeast_Witness);
@@ -164,19 +106,6 @@ void MaxDegree_AtLeast_DynamicCore::intro_v_implementation(unsigned int i, Bag &
         witnessSet->insert(witness);
     }
 
-}
-
-WitnessSetPointer MaxDegree_AtLeast_DynamicCore::intro_v(unsigned i, Bag &b, Witness &witness) {
-    if (MaxDegree_AtLeast_Witness *e = dynamic_cast<MaxDegree_AtLeast_Witness *>(&witness)) {
-       // shared_ptr<MaxDegree_AtLeast_Witness> p = make_shared<MaxDegree_AtLeast_Witness>(*e);
-        MaxDegree_AtLeast_WitnessPointer w = e->shared_from_this();
-        MaxDegree_AtLeast_WitnessSetPointer witnessSet(new MaxDegree_AtLeast_WitnessSet);
-        intro_v_implementation(i,b,w,witnessSet);
-        return clean(witnessSet);
-    }else{
-        cerr<<"ERROR: in MaxDegree_GreaterThan_Witness::intro_v cast error"<<endl;
-        exit(20);
-    }
 }
 
 void MaxDegree_AtLeast_DynamicCore::intro_e_implementation(unsigned int i, unsigned int j, Bag &b,
@@ -212,18 +141,6 @@ void MaxDegree_AtLeast_DynamicCore::intro_e_implementation(unsigned int i, unsig
 
 }
 
-WitnessSetPointer MaxDegree_AtLeast_DynamicCore::intro_e(unsigned i , unsigned j, Bag &b, Witness &witness) {
-    if (MaxDegree_AtLeast_Witness *e = dynamic_cast<MaxDegree_AtLeast_Witness *>(&witness)) {
-        MaxDegree_AtLeast_WitnessPointer w = e->shared_from_this();
-        MaxDegree_AtLeast_WitnessSetPointer witnessSet(new MaxDegree_AtLeast_WitnessSet);
-        intro_e_implementation(i,j,b,w,witnessSet);
-        return clean(witnessSet);
-    }else{
-        cerr<<"ERROR: in MaxDegree_GreaterThan_Witness::intro_e cast error"<<endl;
-        exit(20);
-    }
-}
-
 void MaxDegree_AtLeast_DynamicCore::forget_v_implementation(unsigned int i, Bag &b, MaxDegree_AtLeast_WitnessPointer w,
                                                             MaxDegree_AtLeast_WitnessSetPointer witnessSet) {
     if(w->found == true){
@@ -237,25 +154,13 @@ void MaxDegree_AtLeast_DynamicCore::forget_v_implementation(unsigned int i, Bag 
     }
 }
 
-WitnessSetPointer MaxDegree_AtLeast_DynamicCore::forget_v(unsigned i, Bag &b, Witness &witness) {
-    if (MaxDegree_AtLeast_Witness *e = dynamic_cast<MaxDegree_AtLeast_Witness *>(&witness)) {
-        MaxDegree_AtLeast_WitnessPointer w = e->shared_from_this();
-        MaxDegree_AtLeast_WitnessSetPointer witnessSet(new MaxDegree_AtLeast_WitnessSet);
-        forget_v_implementation(i,b,w,witnessSet);
-        return clean(witnessSet);
-    }else{
-        cerr<<"ERROR: in MaxDegree_GreaterThan_Witness::forget_v cast error"<<endl;
-        exit(20);
-    }
-}
-
 void MaxDegree_AtLeast_DynamicCore::join_implementation(Bag &b, MaxDegree_AtLeast_WitnessPointer w1,
                                                         MaxDegree_AtLeast_WitnessPointer w2,
                                                         MaxDegree_AtLeast_WitnessSetPointer witnessSet) {
     MaxDegree_AtLeast_WitnessPointer wPrime = createWitness();
-    if (w1->found == true ){
+    if (w1->found ){
         witnessSet->insert(w1);
-    } else if( w2->found == true){
+    } else if( w2->found ){
         witnessSet->insert(w2);
     }else {
         map<unsigned, unsigned> temp1 = w1->degreeCounter;
@@ -283,6 +188,120 @@ void MaxDegree_AtLeast_DynamicCore::join_implementation(Bag &b, MaxDegree_AtLeas
     }
 }
 
+bool MaxDegree_AtLeast_DynamicCore::is_final_witness_implementation(MaxDegree_AtLeast_WitnessPointer w) {
+    return w->found;
+}
+
+shared_ptr<WitnessSet> MaxDegree_AtLeast_DynamicCore::clean_implementation(MaxDegree_AtLeast_WitnessSetPointer witnessSet) {
+    for(auto witness:(*witnessSet)){
+        if (MaxDegree_AtLeast_WitnessPointer w = dynamic_pointer_cast<MaxDegree_AtLeast_Witness>(witness)) {
+            if(w->found){
+                MaxDegree_AtLeast_WitnessSetPointer newWitnessSet (new MaxDegree_AtLeast_WitnessSet);
+                newWitnessSet->insert(w);
+                return newWitnessSet;
+            }
+        }else{
+            cerr<<"ERROR: in MaxDegree_AtLeast_DynamicCore::clean_implementation cast error"<<endl;
+            exit(20);
+        }
+    }
+    return witnessSet;
+}
+
+///////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
+
+bool MaxDegree_AtLeast_Witness::is_equal(const Witness &rhs)const {
+    if(MaxDegree_AtLeast_Witness const *e = dynamic_cast<MaxDegree_AtLeast_Witness const *>(&rhs)) {
+        shared_ptr<MaxDegree_AtLeast_Witness const> w = e->shared_from_this();
+        return is_equal_implementation(w);
+    }else{
+        cerr<<"ERROR: in MaxDegree_GreaterThan_Witness::is_equal cast error"<<endl;
+        exit(20);
+    }
+}
+
+bool MaxDegree_AtLeast_Witness::is_less(const  Witness &rhs)const {
+    if (MaxDegree_AtLeast_Witness const *e = dynamic_cast<MaxDegree_AtLeast_Witness const *>(&rhs)) {
+        shared_ptr<MaxDegree_AtLeast_Witness const> w = e->shared_from_this();
+        return is_less_implementation(w);
+    }else{
+        cerr<<"ERROR: in MaxDegree_GreaterThan_Witness::is_less cast error"<<endl;
+        exit(20);
+    }
+}
+
+Witness &MaxDegree_AtLeast_Witness::set_equal(Witness &witness) {
+    if (MaxDegree_AtLeast_Witness  *e = dynamic_cast<MaxDegree_AtLeast_Witness *>(&witness)) {
+        shared_ptr<MaxDegree_AtLeast_Witness> w = e->shared_from_this();
+        return set_equal_implementation(w);
+    }else{
+        cerr<<"ERROR: in MaxDegree_GreaterThan_Witness::is_less cast error"<<endl;
+        exit(20);
+    }
+}
+
+shared_ptr<WitnessSet> MaxDegree_AtLeast_WitnessSet::createEmptyWitnessSet() {
+    MaxDegree_AtLeast_WitnessSetPointer witnessSet(new MaxDegree_AtLeast_WitnessSet);
+    return witnessSet;
+}
+
+MaxDegree_AtLeast_WitnessPointer MaxDegree_AtLeast_DynamicCore::createWitness() {
+    MaxDegree_AtLeast_WitnessPointer w(new MaxDegree_AtLeast_Witness);
+    return w;
+}
+
+void MaxDegree_AtLeast_DynamicCore::copyWitness(MaxDegree_AtLeast_WitnessPointer w_input,
+                                                MaxDegree_AtLeast_WitnessPointer w_output) {
+    w_output->set_equal_implementation(w_input);
+}
+
+void MaxDegree_AtLeast_DynamicCore::createInitialWitnessSet() {
+    shared_ptr<MaxDegree_AtLeast_Witness> w(new MaxDegree_AtLeast_Witness);
+    w->found=false;
+    shared_ptr<MaxDegree_AtLeast_WitnessSet> witnessSet(new MaxDegree_AtLeast_WitnessSet);
+    setInitialWitnessSet(witnessSet);
+    createInitialWitnessSet_implementation();
+}
+
+WitnessSetPointer MaxDegree_AtLeast_DynamicCore::intro_v(unsigned i, Bag &b, Witness &witness) {
+    if (MaxDegree_AtLeast_Witness *e = dynamic_cast<MaxDegree_AtLeast_Witness *>(&witness)) {
+       // shared_ptr<MaxDegree_AtLeast_Witness> p = make_shared<MaxDegree_AtLeast_Witness>(*e);
+        MaxDegree_AtLeast_WitnessPointer w = e->shared_from_this();
+        MaxDegree_AtLeast_WitnessSetPointer witnessSet(new MaxDegree_AtLeast_WitnessSet);
+        intro_v_implementation(i,b,w,witnessSet);
+        return clean(witnessSet);
+    }else{
+        cerr<<"ERROR: in MaxDegree_GreaterThan_Witness::intro_v cast error"<<endl;
+        exit(20);
+    }
+}
+
+WitnessSetPointer MaxDegree_AtLeast_DynamicCore::intro_e(unsigned i , unsigned j, Bag &b, Witness &witness) {
+    if (MaxDegree_AtLeast_Witness *e = dynamic_cast<MaxDegree_AtLeast_Witness *>(&witness)) {
+        MaxDegree_AtLeast_WitnessPointer w = e->shared_from_this();
+        MaxDegree_AtLeast_WitnessSetPointer witnessSet(new MaxDegree_AtLeast_WitnessSet);
+        intro_e_implementation(i,j,b,w,witnessSet);
+        return clean(witnessSet);
+    }else{
+        cerr<<"ERROR: in MaxDegree_GreaterThan_Witness::intro_e cast error"<<endl;
+        exit(20);
+    }
+}
+
+
+WitnessSetPointer MaxDegree_AtLeast_DynamicCore::forget_v(unsigned i, Bag &b, Witness &witness) {
+    if (MaxDegree_AtLeast_Witness *e = dynamic_cast<MaxDegree_AtLeast_Witness *>(&witness)) {
+        MaxDegree_AtLeast_WitnessPointer w = e->shared_from_this();
+        MaxDegree_AtLeast_WitnessSetPointer witnessSet(new MaxDegree_AtLeast_WitnessSet);
+        forget_v_implementation(i,b,w,witnessSet);
+        return clean(witnessSet);
+    }else{
+        cerr<<"ERROR: in MaxDegree_GreaterThan_Witness::forget_v cast error"<<endl;
+        exit(20);
+    }
+}
+
 WitnessSetPointer MaxDegree_AtLeast_DynamicCore::join(Bag &b, Witness &witness1, Witness &witness2) {
     if (MaxDegree_AtLeast_Witness  *e1 = dynamic_cast<MaxDegree_AtLeast_Witness  *>(&witness1)){
         if(MaxDegree_AtLeast_Witness  *e2 = dynamic_cast<MaxDegree_AtLeast_Witness  *>(&witness2)) {
@@ -301,9 +320,6 @@ WitnessSetPointer MaxDegree_AtLeast_DynamicCore::join(Bag &b, Witness &witness1,
     }
 }
 
-bool MaxDegree_AtLeast_DynamicCore::is_final_witness_implementation(MaxDegree_AtLeast_WitnessPointer w) {
-    return w->found;
-}
 
 bool MaxDegree_AtLeast_DynamicCore::is_final_witness(Witness &witness) {
     if (MaxDegree_AtLeast_Witness *e = dynamic_cast<MaxDegree_AtLeast_Witness *>(&witness)) {
@@ -315,9 +331,7 @@ bool MaxDegree_AtLeast_DynamicCore::is_final_witness(Witness &witness) {
     }
 }
 
-
 shared_ptr<WitnessSet> MaxDegree_AtLeast_DynamicCore::clean(shared_ptr<WitnessSet> witnessSet) {
-
     if (MaxDegree_AtLeast_WitnessSetPointer e = dynamic_pointer_cast<MaxDegree_AtLeast_WitnessSet >(witnessSet)) {
         return clean_implementation(e);
     }else{
@@ -326,21 +340,10 @@ shared_ptr<WitnessSet> MaxDegree_AtLeast_DynamicCore::clean(shared_ptr<WitnessSe
     }
 }
 
-
-MaxDegree_AtLeast_WitnessPointer MaxDegree_AtLeast_DynamicCore::createWitness() {
-    MaxDegree_AtLeast_WitnessPointer w(new MaxDegree_AtLeast_Witness);
-    return w;
-}
-
-void MaxDegree_AtLeast_DynamicCore::copyWitness(MaxDegree_AtLeast_WitnessPointer w_input,
-                                                MaxDegree_AtLeast_WitnessPointer w_output) {
-    w_output->set_equal_implementation(w_input);
-}
-
-
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////// The functions below are used by the plugin handler /////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
+
 extern "C" {
 DynamicCore * create() {
     return new MaxDegree_AtLeast_DynamicCore;

@@ -135,12 +135,17 @@ int main(int argc, char *arg[]) {
             cout<< "("<<j+1<<") " << propertyList[j].get_label()<<":= "<< it->first <<" ";
             map<string,string> itMap = it->second;
             if(itMap["ParameterType"]=="NoParameter"){
+              if(!propertyList[j].get_operatorSign().empty()){
+                    cout<<"\n Error: Core Type Error, "<<propertyList[j].get_name() <<" is NoParameter type!"<<endl;
+                    exit(20);
+              }
               string corePath = dynamicPlugin+coreNamesToFiles[it->first];
               factory = new DynamicCoreHandler(corePath.c_str());
               std::unique_ptr<DynamicCore> handlerCore = factory->create();
               DynamicCore* core = handlerCore.release();
               dynamicKernel.addCore(*core);
           }else if(itMap["ParameterType"]=="UnsignedInt"){
+
               cout<<propertyList[j].get_operatorSign() << propertyList[j].get_value();
               if(itMap["PrimaryOperator"]=="AtLeast"){
                   unsigned int callingParameter=propertyList[j].get_value();

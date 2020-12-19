@@ -105,19 +105,21 @@ pair<bool, bool> Minor_Witness::removeVertexFromPartition(unsigned int i, set<se
     set<set<unsigned >> temp;
     bool found = false; // If found = true, it means the new partition is disconnected
     bool processed = false; // If processed = true, it means the new partition is empty
-    for(auto cell:partition){
-        if(cell.count(i) > 0 ){
-            if(cell.size()==1){
+    for(auto it = partition.begin(); it!=partition.end(); it++){
+        if(it->count(i) > 0 ){
+            if(it->size()==1){
                 if (partition.size()>1){
                     found = true; // This means, partition will be disconnected
                 }else if(partition.size() == 1){
                     processed = true;
                 }
             }else{
+                set<unsigned > cell = *it;
                 cell.erase(i);
                 temp.insert(cell);
             }
         }else{
+            set<unsigned > cell = *it;
             temp.insert(cell);
         }
     }
@@ -596,7 +598,6 @@ bool Minor_DynamicCore::is_final_witness(Witness &witness) {
 }
 
 shared_ptr<WitnessSet> Minor_DynamicCore::clean(shared_ptr<WitnessSet> witnessSet) {
-
     if (Minor_WitnessSetPointer e = dynamic_pointer_cast<Minor_WitnessSet >(witnessSet)) {
         return clean_implementation(e);
     }else{
@@ -604,7 +605,6 @@ shared_ptr<WitnessSet> Minor_DynamicCore::clean(shared_ptr<WitnessSet> witnessSe
         exit(20);
     }
 }
-
 /////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////// The functions below are used by the plugin handler /////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////

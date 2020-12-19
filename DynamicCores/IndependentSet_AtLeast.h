@@ -32,7 +32,7 @@ public:
     //*****************************
 };
 class IndependentSet_AtLeast_WitnessSet : public WitnessSetTypeOne<IndependentSet_AtLeast_WitnessSet>{
-
+ shared_ptr<WitnessSet> createEmptyWitnessSet() override;
 };
 
 typedef shared_ptr<IndependentSet_AtLeast_WitnessSet> IndependentSet_AtLeast_WitnessSetPointer;
@@ -45,6 +45,7 @@ private:
     void forget_v_implementation(unsigned i, Bag &b, IndependentSet_AtLeast_WitnessPointer w, IndependentSet_AtLeast_WitnessSetPointer witnessSet);
     void intro_e_implementation(unsigned i,unsigned j, Bag &b, IndependentSet_AtLeast_WitnessPointer w, IndependentSet_AtLeast_WitnessSetPointer witnessSet);
     void join_implementation(Bag &b, IndependentSet_AtLeast_WitnessPointer w1, IndependentSet_AtLeast_WitnessPointer w2, IndependentSet_AtLeast_WitnessSetPointer witnessSet);
+    WitnessSetPointer clean_implementation(IndependentSet_AtLeast_WitnessSetPointer  witnessSet);
     bool is_final_witness_implementation(IndependentSet_AtLeast_WitnessPointer w);
 public:
     unsigned parameter;

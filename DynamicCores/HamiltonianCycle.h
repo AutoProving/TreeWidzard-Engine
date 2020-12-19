@@ -30,8 +30,7 @@ public:
     //*****************************
 };
 class HamiltonianCycle_WitnessSet : public WitnessSetTypeOne<HamiltonianCycle_WitnessSet>{
-
-
+    shared_ptr<WitnessSet> createEmptyWitnessSet() override;
 };
 
 typedef shared_ptr<HamiltonianCycle_WitnessSet> HamiltonianCycle_WitnessSetPointer ;
@@ -46,6 +45,7 @@ private:
     void forget_v_implementation(unsigned i, Bag &b, HamiltonianCycle_WitnessPointer w, HamiltonianCycle_WitnessSetPointer witnessSet);
     void intro_e_implementation(unsigned i,unsigned j, Bag &b, HamiltonianCycle_WitnessPointer w, HamiltonianCycle_WitnessSetPointer witnessSet);
     void join_implementation(Bag &b, HamiltonianCycle_WitnessPointer w1, HamiltonianCycle_WitnessPointer w2, HamiltonianCycle_WitnessSetPointer witnessSet);
+    HamiltonianCycle_WitnessSetPointer  clean_implementation(HamiltonianCycle_WitnessSetPointer witnessSet);
     bool is_final_witness_implementation(HamiltonianCycle_WitnessPointer w);
 public:
     unsigned parameter;

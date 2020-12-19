@@ -54,6 +54,7 @@ class EdgeConnected_AtMost_WitnessSet : public WitnessSetTypeOne<EdgeConnected_A
     //Do not define anything. All functions and members are derived from WitnessTypeOne.
     //************************
     //************************
+    shared_ptr<WitnessSet> createEmptyWitnessSet() override;
 };
 
 // Pointer type for Generic_Operator_WitnessSet.

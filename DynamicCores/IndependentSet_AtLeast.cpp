@@ -1,14 +1,7 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 
 #include "IndependentSet_AtLeast.h"
-extern "C" {
-DynamicCore * create() {
-    return new IndependentSet_AtLeast_DynamicCore;
-}
-DynamicCore * create_int(unsigned param) {
-    return new IndependentSet_AtLeast_DynamicCore(param);
-}
-}
+
 ///////////////////////Implementation/////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 bool IndependentSet_AtLeast_Witness::is_equal_implementation(
@@ -172,12 +165,20 @@ void IndependentSet_AtLeast_DynamicCore::join_implementation(Bag &b, Independent
     //*****************************
     //*****************************
 }
-shared_ptr<WitnessSet> IndependentSet_AtLeast_DynamicCore::clean(shared_ptr<WitnessSet> witnessSet) {
-    //*****************************
-    //*****************************
-    // In most cases, you will not need to change this function.
-    //*****************************
-    //*****************************
+
+shared_ptr<WitnessSet> IndependentSet_AtLeast_DynamicCore::clean_implementation(IndependentSet_AtLeast_WitnessSetPointer  witnessSet) {
+    for(auto witness:(*witnessSet)){
+        if (IndependentSet_AtLeast_WitnessPointer w = dynamic_pointer_cast<IndependentSet_AtLeast_Witness>(witness)) {
+            if(w->found){
+                IndependentSet_AtLeast_WitnessSetPointer newWitnessSet (new IndependentSet_AtLeast_WitnessSet);
+                newWitnessSet->insert(w);
+                return newWitnessSet;
+            }
+        }else{
+            cerr<<"ERROR: in IndependentSet_AtLeast_DynamicCore::clean_implementation cast error"<<endl;
+            exit(20);
+        }
+    }
     return witnessSet;
 }
 
@@ -189,6 +190,7 @@ bool IndependentSet_AtLeast_DynamicCore::is_final_witness_implementation(Indepen
     //*****************************
     //*****************************
 }
+
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 
@@ -220,10 +222,28 @@ Witness &IndependentSet_AtLeast_Witness::set_equal(Witness &witness) {
         exit(20);
     }
 }
+
+shared_ptr<WitnessSet> IndependentSet_AtLeast_WitnessSet::createEmptyWitnessSet() {
+    IndependentSet_AtLeast_WitnessSetPointer witnessSet(new IndependentSet_AtLeast_WitnessSet);
+    return witnessSet;
+
+}
+
 void IndependentSet_AtLeast_DynamicCore::createInitialWitnessSet() {
     IndependentSet_AtLeast_WitnessSetPointer witnessSet(new IndependentSet_AtLeast_WitnessSet);
     this->setInitialWitnessSet(witnessSet);
     createInitialWitnessSet_implementation();
+}
+
+
+IndependentSet_AtLeast_WitnessPointer IndependentSet_AtLeast_DynamicCore::createWitness() {
+    IndependentSet_AtLeast_WitnessPointer w(new IndependentSet_AtLeast_Witness);
+    return w;
+}
+
+void IndependentSet_AtLeast_DynamicCore::copyWitness(IndependentSet_AtLeast_WitnessPointer w_input,
+                                                     IndependentSet_AtLeast_WitnessPointer w_output) {
+    w_output->set_equal_implementation(w_input);
 }
 
 WitnessSetPointer IndependentSet_AtLeast_DynamicCore::intro_v(unsigned i, Bag &b, Witness &witness) {
@@ -260,6 +280,7 @@ WitnessSetPointer IndependentSet_AtLeast_DynamicCore::forget_v(unsigned i, Bag &
         exit(20);
     }
 }
+
 WitnessSetPointer IndependentSet_AtLeast_DynamicCore::join(Bag &b, Witness &witness1, Witness &witness2) {
     if(IndependentSet_AtLeast_Witness *e1 = dynamic_cast<IndependentSet_AtLeast_Witness *>(&witness1)){
         if(IndependentSet_AtLeast_Witness *e2 = dynamic_cast<IndependentSet_AtLeast_Witness *>(&witness2)){
@@ -278,6 +299,16 @@ WitnessSetPointer IndependentSet_AtLeast_DynamicCore::join(Bag &b, Witness &witn
         exit(20);
     }
 }
+
+shared_ptr<WitnessSet> IndependentSet_AtLeast_DynamicCore::clean(shared_ptr<WitnessSet> witnessSet) {
+    if (IndependentSet_AtLeast_WitnessSetPointer e = dynamic_pointer_cast<IndependentSet_AtLeast_WitnessSet >(witnessSet)) {
+        return clean_implementation(e);
+    }else{
+        cerr<<"ERROR: in IndependentSet_AtLeast_DynamicCore::clean cast error"<<endl;
+        exit(20);
+    }
+}
+
 bool IndependentSet_AtLeast_DynamicCore::is_final_witness(Witness &witness) {
     if (IndependentSet_AtLeast_Witness *e = dynamic_cast<IndependentSet_AtLeast_Witness *>(&witness)) {
         IndependentSet_AtLeast_WitnessPointer w = e->shared_from_this();
@@ -287,12 +318,16 @@ bool IndependentSet_AtLeast_DynamicCore::is_final_witness(Witness &witness) {
         exit(20);
     }
 }
-IndependentSet_AtLeast_WitnessPointer IndependentSet_AtLeast_DynamicCore::createWitness() {
-    IndependentSet_AtLeast_WitnessPointer w(new IndependentSet_AtLeast_Witness);
-    return w;
-}
 
-void IndependentSet_AtLeast_DynamicCore::copyWitness(IndependentSet_AtLeast_WitnessPointer w_input,
-                                                IndependentSet_AtLeast_WitnessPointer w_output) {
-    w_output->set_equal_implementation(w_input);
+/////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////// The functions below are used by the plugin handler /////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+extern "C" {
+DynamicCore * create() {
+    return new IndependentSet_AtLeast_DynamicCore;
+}
+DynamicCore * create_int(unsigned param) {
+    return new IndependentSet_AtLeast_DynamicCore(param);
+}
 }

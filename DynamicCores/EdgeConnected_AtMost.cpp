@@ -116,21 +116,23 @@ pair<bool,bool> removeVertexFromPartition(unsigned int i, set<set<unsigned int>>
     set<set<unsigned >> temp;
     bool found = false; // If found = true, it means the new partition is disconnected
     bool processed = false; // If processed = true, it means the new partition is empty
-    for(auto cell:partition){
-    	if(cell.count(i) > 0 ){
-        	if(cell.size()==1){
-			if (partition.size()>1){
-             			found = true; // This means, partition will be disconnected
-	         	}else if(partition.size() == 1){
-		             processed = true;
-			} 
-         	}else{
-             	cell.erase(i);
-             	temp.insert(cell);
-         	}
-     	}else{
-        	temp.insert(cell);
-     	}
+    for(auto it = partition.begin(); it!=partition.end(); it++){
+        if(it->count(i) > 0 ){
+            if(it->size()==1){
+                if (partition.size()>1){
+                    found = true; // This means, partition will be disconnected
+                }else if(partition.size() == 1){
+                    processed = true;
+                }
+            }else{
+                set<unsigned > cell = *it;
+                cell.erase(i);
+                temp.insert(cell);
+            }
+        }else{
+            set<unsigned > cell = *it;
+            temp.insert(cell);
+        }
     }
     partition = temp;
     return make_pair(found,processed);
@@ -156,93 +158,30 @@ void addEdgeToPartition(unsigned int i, unsigned int j, set<set<unsigned int>> &
     }
 }
 
-
-//
-//set<set<unsigned >> mergePartitions(set<set<unsigned int>> &partition1, set<set<unsigned int>> &partition2) {
-//    map<unsigned, int> eleToCellMap;
-//    int ncells = 1;
-//    for(auto cell : partition1) {
-//        for(auto ele : cell) {
-//            eleToCellMap[ele] = ncells;
-//        }
-//        ncells++;
-//    }
-//    for(auto cell : partition2) {
-//        set<unsigned> s; // This set is initialized to empty
-//        for(auto ele : cell) {
-//            if(eleToCellMap.find(ele) != eleToCellMap.end()) {
-//                s = cell;
-//                break;
-//            }
-//        }
-//        if(!s.empty()) {
-//            set<unsigned> otherCellNumbers;
-//            unsigned parent = 1e9;
-//            for(auto i : s) {
-//                if(eleToCellMap.find(i) != eleToCellMap.end()) {
-//                    otherCellNumbers.insert(eleToCellMap[i]);
-//                    parent = min(parent, (unsigned) eleToCellMap[i]);
-//                } else {
-//                    eleToCellMap[i] = -1;
-//                }
-//            }
-//            // change the cell number
-//            for(auto pair : eleToCellMap) { // iterating through all pairs in the map.
-//                if(otherCellNumbers.find(pair.second) != otherCellNumbers.end() || pair.second == -1) {
-//                    // If the condition is not satisfied, then the element of the map is not related
-//                    // to the cell we are analysing at the moment.
-//                    pair.second = parent;
-//                }
-//            }
-//            ncells = ncells - otherCellNumbers.size() + 1;
-//        } else {
-//            // If the element does not occur in some cell of w1, then we create a cell specifically for that element.
-//            ncells++;
-//            for(auto ele : cell) {
-//                eleToCellMap[ele] = ncells;
-//            }
-//        }
-//    }
-//    // Now group all the elements according to their cell numbers and add them to resulting cell.
-//    map<int, set<unsigned>> result; //The first coordinate is the cell number. The second coordinate is the set of elements in that cell
-//    for(auto pair : eleToCellMap) {
-//        result[pair.second].insert(pair.first);
-//    }
-//    set<set<unsigned >> partition;
-//    for(auto pair : result) {
-//        partition.insert(pair.second);
-//    }
-//    return partition;
-//}
-//
-//
-
-
-// TODO: TEST THIS FUNCTION 
 set<set<unsigned >> mergePartitions(set<set<unsigned int>> &partition1, set<set<unsigned int>> &partition2) {
     map<unsigned, int> eleToCellMap;
     int ncells = 0;
-    for(auto cell : partition1) {
+    for(auto& cell : partition1) {
         ncells++;
-        for(auto ele : cell) {
+        for(auto& ele : cell) {
             eleToCellMap[ele] = ncells;
         }
     }
-    for(auto cell : partition2) {
+    for(auto& cell : partition2) {
         set<unsigned> s; // This set is initialized to empty
-        for(auto ele : cell) {
-	    auto it = eleToCellMap.find(ele); 
+        for(auto& ele : cell) {
+            auto it = eleToCellMap.find(ele);
             if(it != eleToCellMap.end()) {
                 s.insert(it->second) ;
             }
         }
         if(!s.empty()) {
-            int minCellNumber = *(s.begin()); 
-	    for (auto ele:cell){
-	    	eleToCellMap.insert(make_pair(ele,minCellNumber)); 
-	    }
-	    // change the cell number
-            for(auto pair : eleToCellMap) { // iterating through all pairs in the map and change the cell number to minCellNumber if the current one belong to s.
+            int minCellNumber = *(s.begin());
+            for (auto& ele:cell){
+                eleToCellMap.insert(make_pair(ele,minCellNumber));
+            }
+            // change the cell number
+            for(auto& pair : eleToCellMap) { // iterating through all pairs in the map and change the cell number to minCellNumber if the current one belong to s.
                 if(s.find(pair.second) != s.end()) {
                     pair.second = minCellNumber;
                 }
@@ -250,27 +189,22 @@ set<set<unsigned >> mergePartitions(set<set<unsigned int>> &partition1, set<set<
         } else {
             // If the element does not occur in some cell of w1, then we create a cell specifically for that element.
             ncells++;
-            for(auto ele : cell) {
+            for(auto &ele : cell) {
                 eleToCellMap[ele] = ncells;
             }
         }
     }
     // Now group all the elements according to their cell numbers and add them to resulting cell.
     map<int, set<unsigned>> result; //The first coordinate is the cell number. The second coordinate is the set of elements in that cell
-    for(auto pair : eleToCellMap) {
+    for(auto& pair : eleToCellMap) {
         result[pair.second].insert(pair.first);
     }
     set<set<unsigned >> partition;
-    for(auto pair : result) {
+    for(auto& pair : result) {
         partition.insert(pair.second);
     }
     return partition;
 }
-
-
-
-
-
 
 EdgeConnected_AtMost_DynamicCore::EdgeConnected_AtMost_DynamicCore(){
 
@@ -298,7 +232,6 @@ EdgeConnected_AtMost_DynamicCore::EdgeConnected_AtMost_DynamicCore(unsigned para
     addAttribute("PrimaryOperator","AtMost"); //  This line should be uncommented if the type of the core is "UnsignedInt".
     //*****************************
     //*****************************
-
     this->parameter = parameter;
     createInitialWitnessSet();
 }
@@ -509,6 +442,10 @@ Witness& EdgeConnected_AtMost_Witness::set_equal(Witness &witness) {
     }
 }
 
+shared_ptr<WitnessSet> EdgeConnected_AtMost_WitnessSet::createEmptyWitnessSet() {
+    EdgeConnected_AtMost_WitnessSetPointer witnessSet(new EdgeConnected_AtMost_WitnessSet);
+    return witnessSet;
+}
 
 void  EdgeConnected_AtMost_DynamicCore::createInitialWitnessSet() {
     EdgeConnected_AtMost_WitnessSetPointer witnessSet(new EdgeConnected_AtMost_WitnessSet);

@@ -31,7 +31,7 @@ public:
 };
 
 class EdgeColoring_AtMost_WitnessSet: public WitnessSetTypeOne<EdgeColoring_AtMost_WitnessSet>{
-
+    shared_ptr<WitnessSet> createEmptyWitnessSet() override;
 };
 
 typedef shared_ptr<EdgeColoring_AtMost_WitnessSet> EdgeColoring_AtMost_WitnessSetPointer ;
@@ -44,6 +44,7 @@ class EdgeColoring_AtMost_DynamicCore: public DynamicCore{
     void forget_v_implementation(unsigned i, Bag &b, EdgeColoring_AtMost_WitnessPointer w, EdgeColoring_AtMost_WitnessSetPointer witnessSet);
     void intro_e_implementation(unsigned i,unsigned j, Bag &b, EdgeColoring_AtMost_WitnessPointer w, EdgeColoring_AtMost_WitnessSetPointer witnessSet);
     void join_implementation(Bag &b, EdgeColoring_AtMost_WitnessPointer w1, EdgeColoring_AtMost_WitnessPointer w2, EdgeColoring_AtMost_WitnessSetPointer witnessSet);
+    EdgeColoring_AtMost_WitnessSetPointer clean_implementation(EdgeColoring_AtMost_WitnessSetPointer witnessSet);
     bool is_final_witness_implementation(EdgeColoring_AtMost_WitnessPointer w);
 public:
     unsigned parameter;
