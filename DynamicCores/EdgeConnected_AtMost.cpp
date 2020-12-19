@@ -47,7 +47,7 @@ bool EdgeConnected_AtMost_Witness::is_equal_implementation(const EdgeConnected_A
 bool EdgeConnected_AtMost_Witness::is_less_implementation(const EdgeConnected_AtMost_WitnessPointerConst w)const{
     //*****************************
     //*****************************
-	if (this->found != w->found) return (this->found); // true is smaller than false in this case 
+	if (this->found != w->found) return (w->found < this->found); // true is smaller than false in this case. Therefore, we should return w->found < this->found instead of this->found < w->found
 	if (this->processed != w->processed) return (this->processed < w->processed); 
 	if (this->size != w->size) return (this->size < w->size); 
 	if (this->partition != w->partition) return (this->partition < w->partition); 
@@ -88,7 +88,7 @@ void EdgeConnected_AtMost_Witness::print() {
 	}
 	cout << "}" ; 
     }
-    cout << ")" << endl; 
+    cout << ")" << endl;
     //*****************************
     //*****************************
 }
@@ -340,6 +340,7 @@ void EdgeConnected_AtMost_DynamicCore::forget_v_implementation(unsigned i, Bag &
     //*****************************
     //*****************************
 }
+
 void EdgeConnected_AtMost_DynamicCore::join_implementation(Bag &b, EdgeConnected_AtMost_WitnessPointer w1, EdgeConnected_AtMost_WitnessPointer w2, EdgeConnected_AtMost_WitnessSetPointer witnessSet) {
     //*****************************
     //*****************************
@@ -403,7 +404,7 @@ shared_ptr<WitnessSet> EdgeConnected_AtMost_DynamicCore::clean_implementation(Ed
 bool EdgeConnected_AtMost_DynamicCore::is_final_witness_implementation(EdgeConnected_AtMost_WitnessPointer w) {
     //*****************************
     //*****************************
-    return w->found;
+    return w->found or w->partition.size()>1; // Either we have already forgotten a component and added some vertex after that, or the current partition has at least two cells
     //*****************************
     //*****************************
 }

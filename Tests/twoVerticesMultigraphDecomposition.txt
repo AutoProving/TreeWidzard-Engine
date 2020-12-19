@@ -1,0 +1,4 @@
+0 Empty
+1 IntroVertex_1(0)
+2 IntroVertex_2(1)
+3 IntroEdge_1_2(2)
