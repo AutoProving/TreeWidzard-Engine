@@ -1,3 +1,4 @@
-tree_width 4
-a := HamiltonianCycle 
-TRUE
+path_width 5
+a := CycleGirth < 5
+b := CycleGirth < 2
+a OR NOT b

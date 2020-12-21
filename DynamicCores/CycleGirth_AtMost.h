@@ -36,6 +36,7 @@ public:
 
 class CycleGirth_AtMost_WitnessSet : public WitnessSetTypeOne<CycleGirth_AtMost_WitnessSet>{
 
+    shared_ptr<WitnessSet> createEmptyWitnessSet() override;
 };
 
 typedef shared_ptr<CycleGirth_AtMost_WitnessSet> CycleGirth_AtMost_WitnessSetPointer;
@@ -49,6 +50,7 @@ private:
     void forget_v_implementation(unsigned i, Bag &b, CycleGirth_AtMost_WitnessPointer w, CycleGirth_AtMost_WitnessSetPointer witnessSet);
     void intro_e_implementation(unsigned i,unsigned j, Bag &b, CycleGirth_AtMost_WitnessPointer w, CycleGirth_AtMost_WitnessSetPointer witnessSet);
     void join_implementation(Bag &b, CycleGirth_AtMost_WitnessPointer w1, CycleGirth_AtMost_WitnessPointer w2, CycleGirth_AtMost_WitnessSetPointer witnessSet);
+    CycleGirth_AtMost_WitnessSetPointer clean_implementation(CycleGirth_AtMost_WitnessSetPointer witnessSet);
     bool is_final_witness_implementation(CycleGirth_AtMost_WitnessPointer w);
 public:
     unsigned parameter;

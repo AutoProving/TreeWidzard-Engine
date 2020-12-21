@@ -290,13 +290,13 @@ void EdgeConnected_AtMost_DynamicCore::intro_e_implementation(unsigned i, unsign
     //*****************************
     if(w->found){
         // In this case, a disconnecting set has already been found in the past.
-	// Therefore, we return a singleton containing only the input witness.
-	witnessSet->insert(w);
+	    // Therefore, we return a singleton containing only the input witness.
+	    witnessSet->insert(w);
     }else{
         // In this case, we have two options. Either we {i,j} to disconnectingEdges or 
-	// to use {i,j} to connect vertices belonging to cells of the partition.
+	    // to use {i,j} to connect vertices belonging to cells of the partition.
     	// First case. Add {i,j} to partition
-	EdgeConnected_AtMost_WitnessPointer witness1 = createWitness();
+	    EdgeConnected_AtMost_WitnessPointer witness1 = createWitness();
         witness1->set_equal(*w);
         addEdgeToPartition(i,j,witness1->partition);
         witnessSet->insert(witness1);
@@ -305,7 +305,7 @@ void EdgeConnected_AtMost_DynamicCore::intro_e_implementation(unsigned i, unsign
             EdgeConnected_AtMost_WitnessPointer  witness2 = createWitness();
             witness2->set_equal(*w);
             witness2->disconnectingEdges.insert(make_pair(min(i,j),max(i,j)));
-	    witness2->size++; 
+	        witness2->size++;
             witnessSet->insert(witness2);
         }
     }
@@ -322,20 +322,20 @@ void EdgeConnected_AtMost_DynamicCore::forget_v_implementation(unsigned i, Bag &
 	witnessSet->insert(w);
     }else{
         // In this case, we remove all incident edges to "i" from disconnectingEdges. We also remove "i" from the partition
-	set<set<unsigned > > newpartition = w->partition;
+	    set<set<unsigned > > newpartition = w->partition;
         pair<bool,bool> result = removeVertexFromPartition(i,newpartition);
     	EdgeConnected_AtMost_WitnessPointer witness = createWitness();
         if (result.first){
-		witness->found = true;
+		    witness->found = true;
         	witness->processed = false;
-		witness->size = 0;	
-	} else {
-		witness->set_equal(*w);
-	        witness->processed = result.second;
-		witness->partition = newpartition; 
-		witness->removeIncidentEdges(i);
-	}
-	witnessSet->insert(witness);
+		    witness->size = 0;
+	    } else {
+		    witness->set_equal(*w);
+		    witness->processed = result.second;
+		    witness->partition = newpartition;
+            witness->removeIncidentEdges(i);
+	    }
+	    witnessSet->insert(witness);
     }
     //*****************************
     //*****************************

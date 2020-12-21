@@ -1,14 +1,7 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 #include "CycleGirth_AtMost.h"
 
-extern "C" {
-DynamicCore * create() {
-    return new CycleGirth_AtMost_DynamicCore;
-}
-DynamicCore * create_int(unsigned param) {
-    return new CycleGirth_AtMost_DynamicCore(param);
-}
-}
+
 ///////////////////////////Implementation/////////////////////////////
 /////////////////////////////////////////////////////////////////////
 bool CycleGirth_AtMost_Witness::is_equal_implementation(const CycleGirth_AtMost_WitnessPointerConst w) const {
@@ -351,14 +344,12 @@ void CycleGirth_AtMost_DynamicCore::join_implementation(Bag &b, CycleGirth_AtMos
     //*****************************
     //*****************************
 }
-WitnessSetPointer CycleGirth_AtMost_DynamicCore::clean(WitnessSetPointer witnessSet) {
-    //*****************************
-    //*****************************
-    // In most cases, you will not need to change this function.
-    //*****************************
-    //*****************************
+
+CycleGirth_AtMost_WitnessSetPointer CycleGirth_AtMost_DynamicCore::clean_implementation(
+        CycleGirth_AtMost_WitnessSetPointer witnessSet) {
     return witnessSet;
 }
+
 bool CycleGirth_AtMost_DynamicCore::is_final_witness_implementation(CycleGirth_AtMost_WitnessPointer w) {
     //*****************************
     //*****************************
@@ -380,6 +371,7 @@ bool CycleGirth_AtMost_Witness::is_equal(const Witness &rhs) const {
         exit(20);
     }
 }
+
 bool CycleGirth_AtMost_Witness::is_less(const Witness &rhs) const {
     if (CycleGirth_AtMost_Witness const *e = dynamic_cast<CycleGirth_AtMost_Witness const *>(&rhs)) {
         CycleGirth_AtMost_WitnessPointerConst w = e->shared_from_this();
@@ -389,6 +381,7 @@ bool CycleGirth_AtMost_Witness::is_less(const Witness &rhs) const {
         exit(20);
     }
 }
+
 Witness &CycleGirth_AtMost_Witness::set_equal(Witness &witness) {
     if (CycleGirth_AtMost_Witness *e = dynamic_cast<CycleGirth_AtMost_Witness *>(&witness)) {
         CycleGirth_AtMost_WitnessPointer w = e->shared_from_this();
@@ -398,11 +391,28 @@ Witness &CycleGirth_AtMost_Witness::set_equal(Witness &witness) {
         exit(20);
     }
 }
+
+shared_ptr<WitnessSet> CycleGirth_AtMost_WitnessSet::createEmptyWitnessSet() {
+    CycleGirth_AtMost_WitnessSetPointer witnessSet(new CycleGirth_AtMost_WitnessSet);
+    return witnessSet;
+}
+
 void CycleGirth_AtMost_DynamicCore::createInitialWitnessSet() {
     CycleGirth_AtMost_WitnessSetPointer witnessSet(new CycleGirth_AtMost_WitnessSet);
     this->setInitialWitnessSet(witnessSet);
     createInitialWitnessSet_implementation();
 }
+
+CycleGirth_AtMost_WitnessPointer CycleGirth_AtMost_DynamicCore::createWitness(){
+    CycleGirth_AtMost_WitnessPointer w(new CycleGirth_AtMost_Witness);
+    return w;
+}
+
+void CycleGirth_AtMost_DynamicCore::copyWitness(CycleGirth_AtMost_WitnessPointer w_input,
+                                                CycleGirth_AtMost_WitnessPointer w_output) {
+    w_output->set_equal_implementation(w_input);
+}
+
 WitnessSetPointer CycleGirth_AtMost_DynamicCore::intro_v(unsigned i, Bag &b, Witness &witness) {
     if (CycleGirth_AtMost_Witness *e = dynamic_cast<CycleGirth_AtMost_Witness *>(&witness)) {
         CycleGirth_AtMost_WitnessPointer w = e->shared_from_this();
@@ -454,6 +464,16 @@ WitnessSetPointer CycleGirth_AtMost_DynamicCore::join(Bag &b, Witness &witness1,
         exit(20);
     }
 }
+
+WitnessSetPointer CycleGirth_AtMost_DynamicCore::clean(WitnessSetPointer witnessSet) {
+    if (CycleGirth_AtMost_WitnessSetPointer e = dynamic_pointer_cast<CycleGirth_AtMost_WitnessSet >(witnessSet)) {
+        return clean_implementation(e);
+    }else{
+        cerr<<"ERROR: in CycleGirth_AtMost_DynamicCore::clean cast error"<<endl;
+        exit(20);
+    }
+}
+
 bool CycleGirth_AtMost_DynamicCore::is_final_witness(Witness &witness) {
     if (CycleGirth_AtMost_Witness *e = dynamic_cast<CycleGirth_AtMost_Witness *>(&witness)) {
         CycleGirth_AtMost_WitnessPointer w = e->shared_from_this();
@@ -463,12 +483,16 @@ bool CycleGirth_AtMost_DynamicCore::is_final_witness(Witness &witness) {
         exit(20);
     }
 }
- CycleGirth_AtMost_WitnessPointer CycleGirth_AtMost_DynamicCore::createWitness(){
-    CycleGirth_AtMost_WitnessPointer w(new CycleGirth_AtMost_Witness);
-    return w;
-}
 
-void CycleGirth_AtMost_DynamicCore::copyWitness(CycleGirth_AtMost_WitnessPointer w_input,
-                                                CycleGirth_AtMost_WitnessPointer w_output) {
-    w_output->set_equal_implementation(w_input);
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////// The functions below are used by the plugin handler /////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
+extern "C" {
+DynamicCore * create() {
+    return new CycleGirth_AtMost_DynamicCore;
+}
+DynamicCore * create_int(unsigned param) {
+    return new CycleGirth_AtMost_DynamicCore(param);
+}
 }
