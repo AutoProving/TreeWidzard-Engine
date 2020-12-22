@@ -51,6 +51,7 @@ unsigned MultiGraph::addEdgeEndPoints(unsigned i, unsigned j) {
 	}
 	vertices.insert(i);
 	vertices.insert(j);
+	cout<<"vertices "<<i<<' '<<j<<endl;
 	edges.insert(last + 1);
 	incidenceMap.insert(make_pair(last + 1, i));
 	incidenceMap.insert(make_pair(last + 1, j));

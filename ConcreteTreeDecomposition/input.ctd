@@ -1,0 +1,11 @@
+100 Empty
+200 IntroVertex_1 (100)
+300 IntroVertex_2 (2000)
+400 IntroEdge_1_2 (300)
+500 ForgetVertex_2 (400)
+10 Empty
+20 IntroVertex_1 (10)
+30 IntroVertex_2 (20)
+40 IntroEdge_1_2 (30)
+50 ForgetVertex_2 (40)
+6 Join (500, 50)

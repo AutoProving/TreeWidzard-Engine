@@ -18,7 +18,7 @@ using namespace std;
 class CTDNodeNew : public enable_shared_from_this<CTDNodeNew> {
   protected:
 	string nodeType;						 // Default: "Empty"
-	Bag B;									 // Default: Empty bag
+	Bag B;	    								 // Default: Empty bag
 	shared_ptr<CTDNodeNew> parent = nullptr; // Default Value
 	vector<shared_ptr<CTDNodeNew>> children; // Default: no child
   public:
@@ -54,6 +54,7 @@ class ConcreteTreeDecomposition {
   public:
 	shared_ptr<CTDNodeNew> root;
 	MultiGraph extractMultiGraph();
+	void set_root(shared_ptr<CTDNodeNew> node){root = node;};
 	void traverseNode(CTDNodeNew &node, MultiGraph &G,
 					  map<unsigned, unsigned> &colorToVertexMap,
 					  unsigned &nVertices, unsigned &nEdges);

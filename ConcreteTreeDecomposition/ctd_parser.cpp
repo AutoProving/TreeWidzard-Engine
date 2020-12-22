@@ -59,37 +59,42 @@
 #define YYPULL 1
 
 /* Substitute the type names.  */
-#define YYSTYPE         GR_STYPE
-#define YYLTYPE         GR_LTYPE
+#define YYSTYPE         CTD_STYPE
+#define YYLTYPE         CTD_LTYPE
 /* Substitute the variable and function names.  */
-#define yyparse         gr_parse
-#define yylex           gr_lex
-#define yyerror         gr_error
-#define yydebug         gr_debug
-#define yynerrs         gr_nerrs
+#define yyparse         ctd_parse
+#define yylex           ctd_lex
+#define yyerror         ctd_error
+#define yydebug         ctd_debug
+#define yynerrs         ctd_nerrs
 
-#define yylval          gr_lval
-#define yychar          gr_char
-#define yylloc          gr_lloc
+#define yylval          ctd_lval
+#define yychar          ctd_char
+#define yylloc          ctd_lloc
 
 /* Copy the first part of user declarations.  */
-#line 8 "gr_parser.y" /* yacc.c:339  */
+#line 11 "ctd_parser.y" /* yacc.c:339  */
 
     #include <iostream>
     #include <string.h>
     #include <cmath>
     #include <vector>
-    #include "../../../Multigraph/MultiGraph.h"
+    #include <memory>
+    #include <set>
+    #include <tuple>
+    #include "../Kernel/ConcreteTreeDecomposition.h"
     #include <algorithm>
    
     // this function will be generated
     // using flex
     extern int yylex();
-    extern int td_lineno;
-    extern void yyerror(MultiGraph &multigraph, int &result, char const* msg);
+    extern int ctd_lineno;
+    extern void yyerror(ConcreteTreeDecomposition &ctd, int &result, char const* msg);
+    vector<tuple<shared_ptr<CTDNodeNew>,set<int>,int>> ctdVec;
+    int ctd_construct(ConcreteTreeDecomposition &ctd, vector<tuple<shared_ptr<CTDNodeNew>,set<int>,int>> &ctdVec, int &result);
   
 
-#line 93 "gr_parser.cpp" /* yacc.c:339  */
+#line 98 "ctd_parser.cpp" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -108,88 +113,98 @@
 #endif
 
 /* In a future release of Bison, this section will be replaced
-   by #include "gr_parser.hpp".  */
-#ifndef YY_GR_GR_PARSER_HPP_INCLUDED
-# define YY_GR_GR_PARSER_HPP_INCLUDED
+   by #include "ctd_parser.hpp".  */
+#ifndef YY_CTD_CTD_PARSER_HPP_INCLUDED
+# define YY_CTD_CTD_PARSER_HPP_INCLUDED
 /* Debug traces.  */
-#ifndef GR_DEBUG
+#ifndef CTD_DEBUG
 # if defined YYDEBUG
 #if YYDEBUG
-#   define GR_DEBUG 1
+#   define CTD_DEBUG 1
 #  else
-#   define GR_DEBUG 0
+#   define CTD_DEBUG 0
 #  endif
 # else /* ! defined YYDEBUG */
-#  define GR_DEBUG 0
+#  define CTD_DEBUG 0
 # endif /* ! defined YYDEBUG */
-#endif  /* ! defined GR_DEBUG */
-#if GR_DEBUG
-extern int gr_debug;
+#endif  /* ! defined CTD_DEBUG */
+#if CTD_DEBUG
+extern int ctd_debug;
 #endif
 /* "%code requires" blocks.  */
-#line 3 "gr_parser.y" /* yacc.c:355  */
+#line 3 "ctd_parser.y" /* yacc.c:355  */
 
-    #include "../../../Multigraph/MultiGraph.h"
+    #include "../Kernel/ConcreteTreeDecomposition.h"
     #include <iostream>
     #include <vector>
+    #include <memory>
+    #include <set>
+    #include <tuple>
 
-#line 137 "gr_parser.cpp" /* yacc.c:355  */
+#line 145 "ctd_parser.cpp" /* yacc.c:355  */
 
 /* Token type.  */
-#ifndef GR_TOKENTYPE
-# define GR_TOKENTYPE
-  enum gr_tokentype
+#ifndef CTD_TOKENTYPE
+# define CTD_TOKENTYPE
+  enum ctd_tokentype
   {
-    GR_P = 258,
-    GR_TW = 259,
-    GR_NUM = 260,
-    GR_COMMENT = 261,
-    GR_NEWLINE = 262
+    CTD_NUM = 258,
+    CTD_COMMENT = 259,
+    CTD_NEWLINE = 260,
+    CTD_EMPTY = 261,
+    CTD_INTROVERTEX = 262,
+    CTD_INTROEDGE = 263,
+    CTD_FORGETVERTEX = 264,
+    CTD_JOIN = 265,
+    CTD_LEFTP = 266,
+    CTD_RIGHTP = 267,
+    CTD_SEP1 = 268,
+    CTD_SEP2 = 269
   };
 #endif
 
 /* Value type.  */
-#if ! defined GR_STYPE && ! defined GR_STYPE_IS_DECLARED
+#if ! defined CTD_STYPE && ! defined CTD_STYPE_IS_DECLARED
 
-union GR_STYPE
+union CTD_STYPE
 {
-#line 23 "gr_parser.y" /* yacc.c:355  */
+#line 31 "ctd_parser.y" /* yacc.c:355  */
 
      unsigned number;
      char* string;
 
-#line 162 "gr_parser.cpp" /* yacc.c:355  */
+#line 177 "ctd_parser.cpp" /* yacc.c:355  */
 };
 
-typedef union GR_STYPE GR_STYPE;
-# define GR_STYPE_IS_TRIVIAL 1
-# define GR_STYPE_IS_DECLARED 1
+typedef union CTD_STYPE CTD_STYPE;
+# define CTD_STYPE_IS_TRIVIAL 1
+# define CTD_STYPE_IS_DECLARED 1
 #endif
 
 /* Location type.  */
-#if ! defined GR_LTYPE && ! defined GR_LTYPE_IS_DECLARED
-typedef struct GR_LTYPE GR_LTYPE;
-struct GR_LTYPE
+#if ! defined CTD_LTYPE && ! defined CTD_LTYPE_IS_DECLARED
+typedef struct CTD_LTYPE CTD_LTYPE;
+struct CTD_LTYPE
 {
   int first_line;
   int first_column;
   int last_line;
   int last_column;
 };
-# define GR_LTYPE_IS_DECLARED 1
-# define GR_LTYPE_IS_TRIVIAL 1
+# define CTD_LTYPE_IS_DECLARED 1
+# define CTD_LTYPE_IS_TRIVIAL 1
 #endif
 
 
-extern GR_STYPE gr_lval;
-extern GR_LTYPE gr_lloc;
-int gr_parse (MultiGraph &graph, int &result);
+extern CTD_STYPE ctd_lval;
+extern CTD_LTYPE ctd_lloc;
+int ctd_parse (ConcreteTreeDecomposition  &ctd, int &result);
 
-#endif /* !YY_GR_GR_PARSER_HPP_INCLUDED  */
+#endif /* !YY_CTD_CTD_PARSER_HPP_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
 
-#line 193 "gr_parser.cpp" /* yacc.c:358  */
+#line 208 "ctd_parser.cpp" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -370,8 +385,8 @@ void free (void *); /* INFRINGES ON USER NAME SPACE */
 
 #if (! defined yyoverflow \
      && (! defined __cplusplus \
-         || (defined GR_LTYPE_IS_TRIVIAL && GR_LTYPE_IS_TRIVIAL \
-             && defined GR_STYPE_IS_TRIVIAL && GR_STYPE_IS_TRIVIAL)))
+         || (defined CTD_LTYPE_IS_TRIVIAL && CTD_LTYPE_IS_TRIVIAL \
+             && defined CTD_STYPE_IS_TRIVIAL && CTD_STYPE_IS_TRIVIAL)))
 
 /* A type that is properly aligned for any stack member.  */
 union yyalloc
@@ -433,21 +448,21 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  6
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   16
+#define YYLAST   46
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  8
+#define YYNTOKENS  15
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  6
+#define YYNNTS  5
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  9
+#define YYNRULES  12
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  21
+#define YYNSTATES  43
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   262
+#define YYMAXUTOK   269
 
 #define YYTRANSLATE(YYX)                                                \
   ((unsigned int) (YYX) <= YYMAXUTOK ? yytranslate[YYX] : YYUNDEFTOK)
@@ -482,25 +497,27 @@ static const yytype_uint8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7
+       5,     6,     7,     8,     9,    10,    11,    12,    13,    14
 };
 
-#if GR_DEBUG
+#if CTD_DEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    42,    42,    44,    45,    46,    48,    50,    51,    52
+       0,    49,    49,    51,    53,    57,    61,    65,    70,    71,
+      72,    74,    75
 };
 #endif
 
-#if GR_DEBUG || YYERROR_VERBOSE || 0
+#if CTD_DEBUG || YYERROR_VERBOSE || 0
 /* YYTNAME[SYMBOL-NUM] -- String name of the symbol SYMBOL-NUM.
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "GR_P", "GR_TW", "GR_NUM", "GR_COMMENT",
-  "GR_NEWLINE", "$accept", "GR_START", "GR_GRAPHINFO", "GR_EDGES",
-  "GR_EDGE", "GR_COMMENTS", YY_NULLPTR
+  "$end", "error", "$undefined", "CTD_NUM", "CTD_COMMENT", "CTD_NEWLINE",
+  "CTD_EMPTY", "CTD_INTROVERTEX", "CTD_INTROEDGE", "CTD_FORGETVERTEX",
+  "CTD_JOIN", "CTD_LEFTP", "CTD_RIGHTP", "CTD_SEP1", "CTD_SEP2", "$accept",
+  "CTD_START", "CTD_NODE", "CTD_NODES", "CTD_COMMENTS", YY_NULLPTR
 };
 #endif
 
@@ -509,16 +526,17 @@ static const char *const yytname[] =
    (internal) symbol number NUM (which must be that of a token).  */
 static const yytype_uint16 yytoknum[] =
 {
-       0,   256,   257,   258,   259,   260,   261,   262
+       0,   256,   257,   258,   259,   260,   261,   262,   263,   264,
+     265,   266,   267,   268,   269
 };
 # endif
 
-#define YYPACT_NINF -12
+#define YYPACT_NINF -34
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-12)))
+  (!!((Yystate) == (-34)))
 
-#define YYTABLE_NINF -1
+#define YYTABLE_NINF -13
 
 #define yytable_value_is_error(Yytable_value) \
   0
@@ -527,9 +545,11 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -5,    -5,   -12,     3,     1,   -12,   -12,     2,    -5,     0,
-       4,     5,     6,   -12,     7,     8,   -12,    -5,   -12,     4,
-     -12
+      -3,     2,     6,   -34,    11,    -3,   -34,     3,   -34,    10,
+       4,     5,     7,     8,     1,   -34,    13,    18,    19,    20,
+     -34,    14,    15,    16,    12,    21,    26,    27,    28,    22,
+      24,    25,    29,    10,    30,    10,    10,   -34,    31,   -34,
+     -34,    10,   -34
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -537,57 +557,69 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       9,     9,     8,     0,     0,     7,     1,     0,     9,     0,
-       5,     0,     0,     2,     0,     0,     6,     9,     3,     5,
-       4
+      12,     0,     0,     2,     0,    12,     1,     0,    11,    10,
+       0,     0,     0,     0,     9,     3,     0,     0,     0,     0,
+       8,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,    10,     0,    10,    10,     4,     0,     6,
+       7,    10,     5
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -12,   -12,   -12,   -11,   -12,    -1
+     -34,   -34,    32,   -33,    33
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     3,     8,    13,    14,     4
+      -1,     2,     3,    15,     4
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
      positive, shift that token.  If negative, reduce the rule whose
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
-static const yytype_uint8 yytable[] =
+static const yytype_int8 yytable[] =
 {
-       5,     1,     2,     6,     7,    11,     9,    10,    20,    12,
-      15,    16,     0,     0,    17,    18,    19
+      37,     1,    39,    40,   -12,     1,     6,     5,    42,     9,
+      10,    11,    12,    13,     7,    14,    21,    16,    17,    19,
+      18,    22,    23,    24,    29,    25,    28,    27,    26,    30,
+      31,    32,     0,    38,    33,    34,     0,    35,     8,     0,
+       0,    36,     0,    41,     0,     0,    20
 };
 
 static const yytype_int8 yycheck[] =
 {
-       1,     6,     7,     0,     3,     5,     4,     8,    19,     5,
-       5,     5,    -1,    -1,     7,     7,    17
+      33,     4,    35,    36,     3,     4,     0,     5,    41,     6,
+       7,     8,     9,    10,     3,     5,     3,    13,    13,    11,
+      13,     3,     3,     3,     3,    11,    14,    11,    13,     3,
+       3,     3,    -1,     3,    12,    11,    -1,    12,     5,    -1,
+      -1,    12,    -1,    12,    -1,    -1,    14
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,     6,     7,     9,    13,    13,     0,     3,    10,     4,
-      13,     5,     5,    11,    12,     5,     5,     7,     7,    13,
-      11
+       0,     4,    16,    17,    19,     5,     0,     3,    19,     6,
+       7,     8,     9,    10,     5,    18,    13,    13,    13,    11,
+      17,     3,     3,     3,     3,    11,    13,    11,    14,     3,
+       3,     3,     3,    12,    11,    12,    12,    18,     3,    18,
+      18,    12,    18
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,     8,     9,    10,    11,    11,    12,    13,    13,    13
+       0,    15,    16,    17,    17,    17,    17,    17,    18,    18,
+      18,    19,    19
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     4,     5,     4,     0,     2,     2,     1,     0
+       0,     2,     1,     4,     9,    11,     9,     9,     2,     1,
+       0,     3,     0
 };
 
 
@@ -615,7 +647,7 @@ do                                                              \
     }                                                           \
   else                                                          \
     {                                                           \
-      yyerror (graph, result, YY_("syntax error: cannot back up")); \
+      yyerror (ctd, result, YY_("syntax error: cannot back up")); \
       YYERROR;                                                  \
     }                                                           \
 while (0)
@@ -653,7 +685,7 @@ while (0)
 
 
 /* Enable debugging if requested.  */
-#if GR_DEBUG
+#if CTD_DEBUG
 
 # ifndef YYFPRINTF
 #  include <stdio.h> /* INFRINGES ON USER NAME SPACE */
@@ -672,7 +704,7 @@ do {                                            \
    we won't break user code: when these are the locations we know.  */
 
 #ifndef YY_LOCATION_PRINT
-# if defined GR_LTYPE_IS_TRIVIAL && GR_LTYPE_IS_TRIVIAL
+# if defined CTD_LTYPE_IS_TRIVIAL && CTD_LTYPE_IS_TRIVIAL
 
 /* Print *YYLOCP on YYO.  Private, do not rely on its existence. */
 
@@ -717,7 +749,7 @@ do {                                                                      \
     {                                                                     \
       YYFPRINTF (stderr, "%s ", Title);                                   \
       yy_symbol_print (stderr,                                            \
-                  Type, Value, Location, graph, result); \
+                  Type, Value, Location, ctd, result); \
       YYFPRINTF (stderr, "\n");                                           \
     }                                                                     \
 } while (0)
@@ -728,12 +760,12 @@ do {                                                                      \
 `----------------------------------------*/
 
 static void
-yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, MultiGraph &graph, int &result)
+yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, ConcreteTreeDecomposition  &ctd, int &result)
 {
   FILE *yyo = yyoutput;
   YYUSE (yyo);
   YYUSE (yylocationp);
-  YYUSE (graph);
+  YYUSE (ctd);
   YYUSE (result);
   if (!yyvaluep)
     return;
@@ -750,14 +782,14 @@ yy_symbol_value_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvalue
 `--------------------------------*/
 
 static void
-yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, MultiGraph &graph, int &result)
+yy_symbol_print (FILE *yyoutput, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, ConcreteTreeDecomposition  &ctd, int &result)
 {
   YYFPRINTF (yyoutput, "%s %s (",
              yytype < YYNTOKENS ? "token" : "nterm", yytname[yytype]);
 
   YY_LOCATION_PRINT (yyoutput, *yylocationp);
   YYFPRINTF (yyoutput, ": ");
-  yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, graph, result);
+  yy_symbol_value_print (yyoutput, yytype, yyvaluep, yylocationp, ctd, result);
   YYFPRINTF (yyoutput, ")");
 }
 
@@ -790,7 +822,7 @@ do {                                                            \
 `------------------------------------------------*/
 
 static void
-yy_reduce_print (yytype_int16 *yyssp, YYSTYPE *yyvsp, YYLTYPE *yylsp, int yyrule, MultiGraph &graph, int &result)
+yy_reduce_print (yytype_int16 *yyssp, YYSTYPE *yyvsp, YYLTYPE *yylsp, int yyrule, ConcreteTreeDecomposition  &ctd, int &result)
 {
   unsigned long int yylno = yyrline[yyrule];
   int yynrhs = yyr2[yyrule];
@@ -804,7 +836,7 @@ yy_reduce_print (yytype_int16 *yyssp, YYSTYPE *yyvsp, YYLTYPE *yylsp, int yyrule
       yy_symbol_print (stderr,
                        yystos[yyssp[yyi + 1 - yynrhs]],
                        &(yyvsp[(yyi + 1) - (yynrhs)])
-                       , &(yylsp[(yyi + 1) - (yynrhs)])                       , graph, result);
+                       , &(yylsp[(yyi + 1) - (yynrhs)])                       , ctd, result);
       YYFPRINTF (stderr, "\n");
     }
 }
@@ -812,18 +844,18 @@ yy_reduce_print (yytype_int16 *yyssp, YYSTYPE *yyvsp, YYLTYPE *yylsp, int yyrule
 # define YY_REDUCE_PRINT(Rule)          \
 do {                                    \
   if (yydebug)                          \
-    yy_reduce_print (yyssp, yyvsp, yylsp, Rule, graph, result); \
+    yy_reduce_print (yyssp, yyvsp, yylsp, Rule, ctd, result); \
 } while (0)
 
 /* Nonzero means print parse trace.  It is left uninitialized so that
    multiple parsers can coexist.  */
 int yydebug;
-#else /* !GR_DEBUG */
+#else /* !CTD_DEBUG */
 # define YYDPRINTF(Args)
 # define YY_SYMBOL_PRINT(Title, Type, Value, Location)
 # define YY_STACK_PRINT(Bottom, Top)
 # define YY_REDUCE_PRINT(Rule)
-#endif /* !GR_DEBUG */
+#endif /* !CTD_DEBUG */
 
 
 /* YYINITDEPTH -- initial size of the parser's stacks.  */
@@ -1070,11 +1102,11 @@ yysyntax_error (YYSIZE_T *yymsg_alloc, char **yymsg,
 `-----------------------------------------------*/
 
 static void
-yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, YYLTYPE *yylocationp, MultiGraph &graph, int &result)
+yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, YYLTYPE *yylocationp, ConcreteTreeDecomposition  &ctd, int &result)
 {
   YYUSE (yyvaluep);
   YYUSE (yylocationp);
-  YYUSE (graph);
+  YYUSE (ctd);
   YYUSE (result);
   if (!yymsg)
     yymsg = "Deleting";
@@ -1095,7 +1127,7 @@ int yychar;
 YYSTYPE yylval;
 /* Location data for the lookahead symbol.  */
 YYLTYPE yylloc
-# if defined GR_LTYPE_IS_TRIVIAL && GR_LTYPE_IS_TRIVIAL
+# if defined CTD_LTYPE_IS_TRIVIAL && CTD_LTYPE_IS_TRIVIAL
   = { 1, 1, 1, 1 }
 # endif
 ;
@@ -1108,7 +1140,7 @@ int yynerrs;
 `----------*/
 
 int
-yyparse (MultiGraph &graph, int &result)
+yyparse (ConcreteTreeDecomposition  &ctd, int &result)
 {
     int yystate;
     /* Number of tokens to shift before error messages enabled.  */
@@ -1361,37 +1393,62 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 42 "gr_parser.y" /* yacc.c:1646  */
-    {}
-#line 1367 "gr_parser.cpp" /* yacc.c:1646  */
+#line 49 "ctd_parser.y" /* yacc.c:1646  */
+    {if(ctd_construct(ctd, ctdVec,result)){YYERROR;};}
+#line 1399 "ctd_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 44 "gr_parser.y" /* yacc.c:1646  */
-    {for(int i=1; i<= (yyvsp[-2].number);i++) graph.addVertex(i);}
-#line 1373 "gr_parser.cpp" /* yacc.c:1646  */
+#line 51 "ctd_parser.y" /* yacc.c:1646  */
+    {shared_ptr<CTDNodeNew> node(new CTDNodeNew); node->set_nodeType("Empty");
+                                                                        set<int> children; ctdVec.push_back(make_tuple(node,children,(yyvsp[-2].number)));}
+#line 1406 "ctd_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 45 "gr_parser.y" /* yacc.c:1646  */
-    {}
-#line 1379 "gr_parser.cpp" /* yacc.c:1646  */
+#line 53 "ctd_parser.y" /* yacc.c:1646  */
+    {shared_ptr<CTDNodeNew> node(new CTDNodeNew);
+                                                                                                                            node->set_nodeType("IntroVertex_"+to_string((yyvsp[-4].number)));
+                                                                                                                            set<int> children; children.insert((yyvsp[-2].number));
+                                                                                                                            ctdVec.push_back(make_tuple(node,children,(yyvsp[-7].number)));}
+#line 1415 "ctd_parser.cpp" /* yacc.c:1646  */
+    break;
+
+  case 5:
+#line 57 "ctd_parser.y" /* yacc.c:1646  */
+    {shared_ptr<CTDNodeNew> node(new CTDNodeNew);
+                                                                                                                                           node->set_nodeType("IntroEdge_"+to_string((yyvsp[-6].number))+"_"+to_string((yyvsp[-4].number)));
+                                                                                                                                           set<int> children; children.insert((yyvsp[-2].number));
+                                                                                                                                           ctdVec.push_back(make_tuple(node,children,(yyvsp[-9].number)));}
+#line 1424 "ctd_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 48 "gr_parser.y" /* yacc.c:1646  */
-    {graph.addEdgeEndPoints((yyvsp[-1].number),(yyvsp[0].number));}
-#line 1385 "gr_parser.cpp" /* yacc.c:1646  */
+#line 61 "ctd_parser.y" /* yacc.c:1646  */
+    {shared_ptr<CTDNodeNew> node(new CTDNodeNew);
+                                                                                                                               node->set_nodeType("ForgetVertex_"+to_string((yyvsp[-4].number)));
+                                                                                                                               set<int> children; children.insert((yyvsp[-2].number));
+                                                                                                                               ctdVec.push_back(make_tuple(node,children,(yyvsp[-7].number)));}
+#line 1433 "ctd_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 50 "gr_parser.y" /* yacc.c:1646  */
+#line 65 "ctd_parser.y" /* yacc.c:1646  */
+    {shared_ptr<CTDNodeNew> node(new CTDNodeNew);
+                                                                                                               node->set_nodeType("Join");
+                                                                                                               set<int> children; children.insert((yyvsp[-4].number)); children.insert((yyvsp[-2].number));
+                                                                                                               ctdVec.push_back(make_tuple(node,children,(yyvsp[-7].number)));}
+#line 1442 "ctd_parser.cpp" /* yacc.c:1646  */
+    break;
+
+  case 11:
+#line 74 "ctd_parser.y" /* yacc.c:1646  */
     {}
-#line 1391 "gr_parser.cpp" /* yacc.c:1646  */
+#line 1448 "ctd_parser.cpp" /* yacc.c:1646  */
     break;
 
 
-#line 1395 "gr_parser.cpp" /* yacc.c:1646  */
+#line 1452 "ctd_parser.cpp" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1442,7 +1499,7 @@ yyerrlab:
     {
       ++yynerrs;
 #if ! YYERROR_VERBOSE
-      yyerror (graph, result, YY_("syntax error"));
+      yyerror (ctd, result, YY_("syntax error"));
 #else
 # define YYSYNTAX_ERROR yysyntax_error (&yymsg_alloc, &yymsg, \
                                         yyssp, yytoken)
@@ -1469,7 +1526,7 @@ yyerrlab:
                 yymsgp = yymsg;
               }
           }
-        yyerror (graph, result, yymsgp);
+        yyerror (ctd, result, yymsgp);
         if (yysyntax_error_status == 2)
           goto yyexhaustedlab;
       }
@@ -1493,7 +1550,7 @@ yyerrlab:
       else
         {
           yydestruct ("Error: discarding",
-                      yytoken, &yylval, &yylloc, graph, result);
+                      yytoken, &yylval, &yylloc, ctd, result);
           yychar = YYEMPTY;
         }
     }
@@ -1550,7 +1607,7 @@ yyerrlab1:
 
       yyerror_range[1] = *yylsp;
       yydestruct ("Error: popping",
-                  yystos[yystate], yyvsp, yylsp, graph, result);
+                  yystos[yystate], yyvsp, yylsp, ctd, result);
       YYPOPSTACK (1);
       yystate = *yyssp;
       YY_STACK_PRINT (yyss, yyssp);
@@ -1592,7 +1649,7 @@ yyabortlab:
 | yyexhaustedlab -- memory exhaustion comes here.  |
 `-------------------------------------------------*/
 yyexhaustedlab:
-  yyerror (graph, result, YY_("memory exhausted"));
+  yyerror (ctd, result, YY_("memory exhausted"));
   yyresult = 2;
   /* Fall through.  */
 #endif
@@ -1604,7 +1661,7 @@ yyreturn:
          user semantic actions for why this is necessary.  */
       yytoken = YYTRANSLATE (yychar);
       yydestruct ("Cleanup: discarding lookahead",
-                  yytoken, &yylval, &yylloc, graph, result);
+                  yytoken, &yylval, &yylloc, ctd, result);
     }
   /* Do not reclaim the symbols of the rule whose action triggered
      this YYABORT or YYACCEPT.  */
@@ -1613,7 +1670,7 @@ yyreturn:
   while (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
-                  yystos[*yyssp], yyvsp, yylsp, graph, result);
+                  yystos[*yyssp], yyvsp, yylsp, ctd, result);
       YYPOPSTACK (1);
     }
 #ifndef yyoverflow
@@ -1626,11 +1683,75 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 56 "gr_parser.y" /* yacc.c:1906  */
+#line 79 "ctd_parser.y" /* yacc.c:1906  */
 
 
-void yyerror(MultiGraph &multigraph, int &result, char const* msg){
-  std::cout<<"Syntax Error: "<< msg << " " <<td_lineno << std::endl;
+void yyerror(ConcreteTreeDecomposition &ctd, int &result, char const* msg){
+  std::cerr<<"Syntax Error: "<< msg << " on line " <<ctd_lineno << std::endl;
   // error printing  disabled, it is handeled in main.cpp 
 }
+
+int ctd_construct(ConcreteTreeDecomposition &ctd, vector<tuple<shared_ptr<CTDNodeNew>,set<int>,int>> &ctdVec, int &result){
+    for(auto& node1:ctdVec){
+        /*cout<<get<2>(node1)<< " " << get<0>(node1)->get_nodeType()<< " ";
+        for(auto e:get<1>(node1)){
+            cout<<e<<" ";
+        }
+        cout<<endl;*/
+        vector<shared_ptr<CTDNodeNew>> children;
+        for(auto& node2:ctdVec){
+            if( get<1>(node1).count(get<2>(node2))){
+                get<0>(node2)->set_parent(get<0>(node1));
+                children.push_back(get<0>(node2));
+            }
+        }
+        if(get<0>(node1)->get_nodeType()=="Join"){
+            if(children.size()!=2){
+
+                cerr<<"Error: Decomposition is not correct on node '" <<get<2>(node1)<< " " << get<0>(node1)->get_nodeType()<< "' ";
+                result = 1;
+                return result;
+                //yyerror(ctd, result, "Decomposition is not correct");
+            }
+        }else if(get<0>(node1)->get_nodeType()=="Empty"){
+            if(children.size()!=0){
+                cerr<<"Error: Decomposition is not correct on node '" <<get<2>(node1)<< " " << get<0>(node1)->get_nodeType()<< "' ";
+                result = 1;
+                return result;
+                //yyerror(ctd, result, "Decomposition is not correct");
+          }
+        }else{
+            if(children.size()!=1){
+                cerr<<"Error: Decomposition is not correct on node '" <<get<2>(node1)<< " " << get<0>(node1)->get_nodeType()<< "' ";
+                result = 1;
+                return result;
+                //yyerror(ctd, result, "Decomposition is not correct");
+            }
+        }
+
+        get<0>(node1)->set_children(children);
+    }
+    // Find root
+    set<int> rootIndex;
+
+    for(int i=0; i< ctdVec.size();i++){
+        if(get<0>(ctdVec[i])->get_parent()==nullptr){
+            rootIndex.insert(i);
+        }
+    }
+    if(rootIndex.size()!=1){
+        cerr<<"Error: Decomposition is not correct. " ;
+        if(rootIndex.size()==0){
+            cerr<<"There is not root."<<endl;
+        }else{
+            cerr<<"There are several root."<<endl;
+        }
+        result = 1;
+        return result;
+    }else{
+        ctd.set_root(get<0>(ctdVec[*(rootIndex.begin())]));
+    }
+
+}
+
 

@@ -96,12 +96,13 @@ void CycleGirth_AtMost_DynamicCore::intro_v_implementation(unsigned int i, Bag &
                                                            CycleGirth_AtMost_WitnessSetPointer witnessSet) {
     //*****************************
     //*****************************
-    // In this witness we don't add v to cylce
-    CycleGirth_AtMost_WitnessPointer w_without_v = createWitness();
-    w_without_v->set_equal(*w);
-    witnessSet->insert(w_without_v);
-    // In this witness we add v to cylce only if current_size < parameter
-    if (w->current_size < this->parameter) {
+
+    if(w->found_cycle){
+        witnessSet->insert(w);
+    }else if (w->current_size < this->parameter) {
+        // In this witness we don't add v to cycle
+        witnessSet->insert(w);
+        // In this witness we add v to cycle only if current_size < parameter
         CycleGirth_AtMost_WitnessPointer w_with_v = createWitness();
         w_with_v->set_equal(*w);
         w_with_v->current_size++;
@@ -116,78 +117,83 @@ void CycleGirth_AtMost_DynamicCore::intro_e_implementation(unsigned int i, unsig
                                                            CycleGirth_AtMost_WitnessSetPointer witnessSet) {
     //*****************************
     //*****************************
-    // Insert witness, where edge is not introduced
-    CycleGirth_AtMost_WitnessPointer w_no_edge = createWitness();
-    w_no_edge->set_equal(*w);
-    witnessSet->insert(w_no_edge);
-    // Now calculate and insert witness, where edge is introduced
-    // If the degree of either endpoint of the edge is already 2, then
-    // we are trying to add an edge to an inner node of the cycle.
-    // This is not allowed and therefore no additional witness is created.
-    if (w->degree_2.count(i) || w->degree_2.count(j)) {
-        // nothing
-    }else if (w->degree_0.count(i) && w->degree_0.count(j)) {
-        // If both u and v have degree 0 in the input witness, then
-        // by connecting these vertices, their degree becomes 1.
-        CycleGirth_AtMost_WitnessPointer w_connect_nodes = createWitness();
-        w_connect_nodes->set_equal(*w);
-        w_connect_nodes->extremity[i] = j;
-        w_connect_nodes->extremity[j] = i;
-        w_connect_nodes->degree_0.erase(i);
-        w_connect_nodes->degree_0.erase(j);
-        witnessSet->insert(w_connect_nodes);
+
+    if(w->found_cycle){
+        witnessSet->insert(w);
     }else{
-        auto u_extremity_it = w->extremity.find(i);
-        auto v_extremity_it = w->extremity.find(j);
-        // If one endpoint of the edge has degree 0 (say, u) and the other has degree 1 (say, v),
-        // then v is an extremety of a path. This path gets extended by the new edge (u,v) and
-        // now u becomes the new endpoint of this path.
-        if ((w->degree_0.count(i) && v_extremity_it != w->extremity.end()) ||
-            (w->degree_0.count(j) && u_extremity_it != w->extremity.end())) {
-            // Swap u and v, such that u has always degree 0 and v always degree 1
-            if (!w->degree_0.count(i)) {
-                swap(i, j);
-                swap(u_extremity_it, v_extremity_it);
-            }
-            unsigned v_extremity = v_extremity_it->second;
-            // extend cycle (v is always inner node: u - v - v_extremity)
-            CycleGirth_AtMost_WitnessPointer w_extend = createWitness();
-            w_extend->set_equal(*w);
-            w_extend->degree_0.erase(i);
-            w_extend->extremity[v_extremity] = j;
-            w_extend->extremity[i] = v_extremity;
-            w_extend->extremity.erase(j);
-            w_extend->degree_2.insert(j);
-            witnessSet->insert(w_extend);
-        }else if (u_extremity_it != w->extremity.end() && v_extremity_it != w->extremity.end()) {
-            //The next IF analyses the case in which both endpoints of the edge have degree 1 in the input witness
-            unsigned u_extremity = u_extremity_it->second;
-            unsigned v_extremity = v_extremity_it->second;
-            // There are two cases to be analysed. In the first case, u and v are the
-            // extremities of a path. Therefore by adding the edge (u,v) the cycle gets closed
-            if (u_extremity == j && v_extremity == i) {  // found cycle
-                CycleGirth_AtMost_WitnessPointer w_cycle = createWitness();
-                w_cycle->set_equal(*w);
-                w_cycle->extremity.erase(i);
-                w_cycle->extremity.erase(j);
-                if (w_cycle->degree_0.empty() && w_cycle->extremity.empty()) {
-                    w_cycle->found_cycle = true;
-                    witnessSet->insert(w_cycle);
-                } else {
-                    // nothing
+        // Insert witness, where edge is not introduced
+        CycleGirth_AtMost_WitnessPointer w_no_edge = createWitness();
+        w_no_edge->set_equal(*w);
+        witnessSet->insert(w_no_edge);
+        // Now calculate and insert witness, where edge is introduced
+        // If the degree of either endpoint of the edge is already 2, then
+        // we are trying to add an edge to an inner node of the cycle.
+        // This is not allowed and therefore no additional witness is created.
+        if (w->degree_2.count(i) || w->degree_2.count(j)) {
+            // nothing
+        }else if (w->degree_0.count(i) && w->degree_0.count(j)) {
+            // If both u and v have degree 0 in the input witness, then
+            // by connecting these vertices, their degree becomes 1.
+            CycleGirth_AtMost_WitnessPointer w_connect_nodes = createWitness();
+            w_connect_nodes->set_equal(*w);
+            w_connect_nodes->extremity[i] = j;
+            w_connect_nodes->extremity[j] = i;
+            w_connect_nodes->degree_0.erase(i);
+            w_connect_nodes->degree_0.erase(j);
+            witnessSet->insert(w_connect_nodes);
+        }else{
+            auto u_extremity_it = w->extremity.find(i);
+            auto v_extremity_it = w->extremity.find(j);
+            // If one endpoint of the edge has degree 0 (say, u) and the other has degree 1 (say, v),
+            // then v is an extremety of a path. This path gets extended by the new edge (u,v) and
+            // now u becomes the new endpoint of this path.
+            if ((w->degree_0.count(i) && v_extremity_it != w->extremity.end()) ||
+                (w->degree_0.count(j) && u_extremity_it != w->extremity.end())) {
+                // Swap u and v, such that u has always degree 0 and v always degree 1
+                if (!w->degree_0.count(i)) {
+                    swap(i, j);
+                    swap(u_extremity_it, v_extremity_it);
                 }
-            }else{
-                // In the second case, u is an extremity of a path and v is an extremity of another path
-                // In this case these paths are merged by connecting u and v.
-                CycleGirth_AtMost_WitnessPointer w_connect_parts = createWitness();
-                w_connect_parts->set_equal(*w);
-                w_connect_parts->extremity.erase(i);
-                w_connect_parts->extremity.erase(j);
-                w_connect_parts->degree_2.insert(i);
-                w_connect_parts->degree_2.insert(j);
-                w_connect_parts->extremity[u_extremity] = v_extremity;
-                w_connect_parts->extremity[v_extremity] = u_extremity;
-                witnessSet->insert(w_connect_parts);
+                unsigned v_extremity = v_extremity_it->second;
+                // extend cycle (v is always inner node: u - v - v_extremity)
+                CycleGirth_AtMost_WitnessPointer w_extend = createWitness();
+                w_extend->set_equal(*w);
+                w_extend->degree_0.erase(i);
+                w_extend->extremity[v_extremity] = j;
+                w_extend->extremity[i] = v_extremity;
+                w_extend->extremity.erase(j);
+                w_extend->degree_2.insert(j);
+                witnessSet->insert(w_extend);
+            }else if (u_extremity_it != w->extremity.end() && v_extremity_it != w->extremity.end()) {
+                //The next IF analyses the case in which both endpoints of the edge have degree 1 in the input witness
+                unsigned u_extremity = u_extremity_it->second;
+                unsigned v_extremity = v_extremity_it->second;
+                // There are two cases to be analysed. In the first case, u and v are the
+                // extremities of a path. Therefore by adding the edge (u,v) the cycle gets closed
+                if (u_extremity == j && v_extremity == i) {  // found cycle
+                    CycleGirth_AtMost_WitnessPointer w_cycle = createWitness();
+                    w_cycle->set_equal(*w);
+                    w_cycle->extremity.erase(i);
+                    w_cycle->extremity.erase(j);
+                    if (w_cycle->degree_0.empty() && w_cycle->extremity.empty()) {
+                        w_cycle->found_cycle = true;
+                        witnessSet->insert(w_cycle);
+                    } else {
+                        // nothing
+                    }
+                }else{
+                    // In the second case, u is an extremity of a path and v is an extremity of another path
+                    // In this case these paths are merged by connecting u and v.
+                    CycleGirth_AtMost_WitnessPointer w_connect_parts = createWitness();
+                    w_connect_parts->set_equal(*w);
+                    w_connect_parts->extremity.erase(i);
+                    w_connect_parts->extremity.erase(j);
+                    w_connect_parts->degree_2.insert(i);
+                    w_connect_parts->degree_2.insert(j);
+                    w_connect_parts->extremity[u_extremity] = v_extremity;
+                    w_connect_parts->extremity[v_extremity] = u_extremity;
+                    witnessSet->insert(w_connect_parts);
+                }
             }
         }
     }

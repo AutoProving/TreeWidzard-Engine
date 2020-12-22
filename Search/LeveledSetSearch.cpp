@@ -570,21 +570,22 @@ maxWitnessSetSize[m] =
 					if (kernel->get_width().get_name() == "tree_width") {
 						tree_width = true;
 					}
-					ConcreteTreeDecomposition *T =
-						new ConcreteTreeDecomposition;
+					ConcreteTreeDecomposition *T = new ConcreteTreeDecomposition;
 					*T = extractCTDDecomposition(iterationNumber + 1, *it,
 												 leveledSetAllStates);
+					cout<<"Abstract Concrete Tree Decomposition:"<<endl;
 					T->printAbstract();
+                    cout<<"Tree Concrete Tree Decomposition 1:"<<endl;
                     T->printTree();
-
                     StateTree* S = new StateTree;
-					 *S = extractStateTreeDecomposition(iterationNumber+1,*it,
-					 leveledSetAllStates,tree_width);
-					 S->printAbstract();
+                    *S = extractStateTreeDecomposition(iterationNumber+1,*it,leveledSetAllStates,tree_width);
 					cout << "-----------------state tree "
 							"printing--------------------"
 						 << endl;
-					S->printStateTree();
+                    cout<<"Abstract State Tree Decomposition:"<<endl;
+                    S->printAbstract();
+                    cout<<"Tree State Tree Decomposition:"<<endl;
+                    S->printStateTree();
 					//
 					cout << endl
 						 << "------------------Constructing Counter Example "

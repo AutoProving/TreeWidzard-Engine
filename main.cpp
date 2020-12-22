@@ -18,41 +18,26 @@
 #include "Translation/PACE/Parser/td_parser.hpp"
 #include "Translation/PACE/Parser/gr_parser.hpp"
 #include "Translation/TreeAutomaton/term_parser.hpp"
+#include "ConcreteTreeDecomposition/ctd_parser.hpp"
 
 using namespace std;
 extern FILE *yyin;
 extern FILE *gr_in;
 extern FILE *td_in;
 extern FILE *term_in;
+extern FILE *ctd_in;
 
 namespace fs = std::experimental::filesystem;
 
 int main(int argc, char *arg[]) {
-//    cout<<"Automaton Parse started!"<<endl;
-//
-//    //Test for term's parser
-//    char* termFilePath = "../Tests/term.tr";
-//    term_in = fopen(termFilePath, "r");
-//    if (!term_in) {
-//        std::perror("File opening failed");
-//        return EXIT_FAILURE;
-//    }
-//    Term<string> term;
-//    int resultTerm = 0; // if parsing successful result will be 0 otherwise 1
-//    resultTerm = term_parse(term, resultTerm); // Parser function from Parser.hpp
-//    cout<<"result: "<<resultTerm<<endl;
-//    // check for successful parsing
-//    if (resultTerm != 0) {
-//        cout << " Error: input file " << termFilePath << " is not in valid format"
-//             << endl;
-//        exit(20);
-//    }
-//    cout<<"Automaton Parse Finished!"<<endl;
+    //////Find the current directory in the running machine//////////////////////////////////////////
+    string file_path = __FILE__;
+    string dir_path = file_path.substr(0, file_path.rfind("/"));
+    /////////////////////////////////////////////////////////////////
 
+    char* path;
+    char* functionType;
 
-
-    char* path = "../Tests/input.txt";
-    char* functionType="../Tests/treedecomposition.td";
 	if (argc < 2) {
 		cout << "Input command was not correct." << endl;
 		exit(20);
@@ -65,7 +50,7 @@ int main(int argc, char *arg[]) {
     std::string searchMethod(functionType);
     searchMethod.erase(0,8);
     cout<<searchMethod<<endl;
-    string dynamicPlugin="../DynamicPlugins/";
+    string dynamicPlugin=dir_path+"/DynamicPlugins/";
     map<string, map<string,string> > coreList; // Each entry is a pair of core name and core attributes.
     map<string, string> coreNamesToFiles;
     for (const auto & entry : fs::directory_iterator(dynamicPlugin)){
@@ -217,7 +202,7 @@ int main(int argc, char *arg[]) {
     cout<<"\n";
     if(strstr(functionType,"-search=")!=NULL){
         //search libraries
-        string searchPlugin="../SearchPlugins/";
+        string searchPlugin=dir_path+"/SearchPlugins/";
         map<string, map<string,string> > searchList; // Each entry is a pair of core name and core attributes.
         map<string, string> searchNamesToFiles;
         cout<<endl;

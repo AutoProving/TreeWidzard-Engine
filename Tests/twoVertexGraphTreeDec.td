@@ -1,3 +1,3 @@
 c Tree decomposition with a single bag containting two vertices
-s td 1 0 2
-b 1 2
+s td 1 1 2
+b 1 1 2

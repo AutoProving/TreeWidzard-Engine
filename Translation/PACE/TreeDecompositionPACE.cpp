@@ -112,20 +112,20 @@ root->print(k,0);
 }
 
 shared_ptr<RawAbstractTreeDecomposition> TreeDecompositionPACE::constructInnerNodes(set<unsigned> &visited_bags, unsigned neighbor){
-shared_ptr<RawAbstractTreeDecomposition> node (new RawAbstractTreeDecomposition);
-node->bag.set_elements(bags[neighbor-1]);
-visited_bags.insert(neighbor);
-for(auto it=edges.begin(); it!=edges.end(); it++){
-    if(it->first==neighbor and visited_bags.find(it->second)==visited_bags.end() ){
+    shared_ptr<RawAbstractTreeDecomposition> node (new RawAbstractTreeDecomposition);
+    node->bag.set_elements(bags[neighbor-1]);
+    visited_bags.insert(neighbor);
+    for(auto it=edges.begin(); it!=edges.end(); it++){
+        if(it->first==neighbor and visited_bags.find(it->second)==visited_bags.end() ){
             shared_ptr<RawAbstractTreeDecomposition> new_node;
             new_node = constructInnerNodes(visited_bags,it->second);
             new_node->parent = node;
-            node->children.push_back(new_node); 
+            node->children.push_back(new_node);
         }else if(it->second==neighbor and visited_bags.find(it->first)==visited_bags.end()){
             shared_ptr<RawAbstractTreeDecomposition> new_node;
             new_node = constructInnerNodes(visited_bags,it->first);
             new_node->parent = node;
-            node->children.push_back(new_node); 
+            node->children.push_back(new_node);
         }
     }
     return node;

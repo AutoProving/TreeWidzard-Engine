@@ -30,80 +30,90 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_GR_GR_PARSER_HPP_INCLUDED
-# define YY_GR_GR_PARSER_HPP_INCLUDED
+#ifndef YY_CTD_CTD_PARSER_HPP_INCLUDED
+# define YY_CTD_CTD_PARSER_HPP_INCLUDED
 /* Debug traces.  */
-#ifndef GR_DEBUG
+#ifndef CTD_DEBUG
 # if defined YYDEBUG
 #if YYDEBUG
-#   define GR_DEBUG 1
+#   define CTD_DEBUG 1
 #  else
-#   define GR_DEBUG 0
+#   define CTD_DEBUG 0
 #  endif
 # else /* ! defined YYDEBUG */
-#  define GR_DEBUG 0
+#  define CTD_DEBUG 0
 # endif /* ! defined YYDEBUG */
-#endif  /* ! defined GR_DEBUG */
-#if GR_DEBUG
-extern int gr_debug;
+#endif  /* ! defined CTD_DEBUG */
+#if CTD_DEBUG
+extern int ctd_debug;
 #endif
 /* "%code requires" blocks.  */
-#line 3 "gr_parser.y" /* yacc.c:1909  */
+#line 3 "ctd_parser.y" /* yacc.c:1909  */
 
-    #include "../../../Multigraph/MultiGraph.h"
+    #include "../Kernel/ConcreteTreeDecomposition.h"
     #include <iostream>
     #include <vector>
+    #include <memory>
+    #include <set>
+    #include <tuple>
 
-#line 58 "gr_parser.hpp" /* yacc.c:1909  */
+#line 61 "ctd_parser.hpp" /* yacc.c:1909  */
 
 /* Token type.  */
-#ifndef GR_TOKENTYPE
-# define GR_TOKENTYPE
-  enum gr_tokentype
+#ifndef CTD_TOKENTYPE
+# define CTD_TOKENTYPE
+  enum ctd_tokentype
   {
-    GR_P = 258,
-    GR_TW = 259,
-    GR_NUM = 260,
-    GR_COMMENT = 261,
-    GR_NEWLINE = 262
+    CTD_NUM = 258,
+    CTD_COMMENT = 259,
+    CTD_NEWLINE = 260,
+    CTD_EMPTY = 261,
+    CTD_INTROVERTEX = 262,
+    CTD_INTROEDGE = 263,
+    CTD_FORGETVERTEX = 264,
+    CTD_JOIN = 265,
+    CTD_LEFTP = 266,
+    CTD_RIGHTP = 267,
+    CTD_SEP1 = 268,
+    CTD_SEP2 = 269
   };
 #endif
 
 /* Value type.  */
-#if ! defined GR_STYPE && ! defined GR_STYPE_IS_DECLARED
+#if ! defined CTD_STYPE && ! defined CTD_STYPE_IS_DECLARED
 
-union GR_STYPE
+union CTD_STYPE
 {
-#line 23 "gr_parser.y" /* yacc.c:1909  */
+#line 31 "ctd_parser.y" /* yacc.c:1909  */
 
      unsigned number;
      char* string;
 
-#line 83 "gr_parser.hpp" /* yacc.c:1909  */
+#line 93 "ctd_parser.hpp" /* yacc.c:1909  */
 };
 
-typedef union GR_STYPE GR_STYPE;
-# define GR_STYPE_IS_TRIVIAL 1
-# define GR_STYPE_IS_DECLARED 1
+typedef union CTD_STYPE CTD_STYPE;
+# define CTD_STYPE_IS_TRIVIAL 1
+# define CTD_STYPE_IS_DECLARED 1
 #endif
 
 /* Location type.  */
-#if ! defined GR_LTYPE && ! defined GR_LTYPE_IS_DECLARED
-typedef struct GR_LTYPE GR_LTYPE;
-struct GR_LTYPE
+#if ! defined CTD_LTYPE && ! defined CTD_LTYPE_IS_DECLARED
+typedef struct CTD_LTYPE CTD_LTYPE;
+struct CTD_LTYPE
 {
   int first_line;
   int first_column;
   int last_line;
   int last_column;
 };
-# define GR_LTYPE_IS_DECLARED 1
-# define GR_LTYPE_IS_TRIVIAL 1
+# define CTD_LTYPE_IS_DECLARED 1
+# define CTD_LTYPE_IS_TRIVIAL 1
 #endif
 
 
-extern GR_STYPE gr_lval;
-extern GR_LTYPE gr_lloc;
-int gr_parse (MultiGraph &graph, int &result);
+extern CTD_STYPE ctd_lval;
+extern CTD_LTYPE ctd_lloc;
+int ctd_parse (ConcreteTreeDecomposition  &ctd, int &result);
 
-#endif /* !YY_GR_GR_PARSER_HPP_INCLUDED  */
+#endif /* !YY_CTD_CTD_PARSER_HPP_INCLUDED  */

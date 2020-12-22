@@ -82,6 +82,10 @@ add_executable(
         Parser/lexer.cpp
         Parser/parser.cpp
         Parser/parser.hpp
+	# ConcreteTreeDecomposition
+		ConcreteTreeDecomposition/ctd_parser.hpp
+		ConcreteTreeDecomposition/ctd_parser.cpp
+		ConcreteTreeDecomposition/ctd_lexer.cpp
     # BitVector files
         BitVector/BitVector.cpp
         BitVector/BitVector.h
