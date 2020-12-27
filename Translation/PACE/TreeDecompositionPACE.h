@@ -33,15 +33,22 @@ class TreeDecompositionPACE {
         unsigned num_edges;
         unsigned num_graph_vertices;
         unsigned width;
+        string width_type; // tree_width or path_width
         shared_ptr<RawAbstractTreeDecomposition> root;
         shared_ptr<MultiGraph> multigraph;
         TreeDecompositionPACE();
+
         void setNum_vertices(unsigned n);
         void setNum_graph_vertices(unsigned n);
         void setWidth(unsigned w);
+        void setWidthType(const string &widthType);
         bool addVertexToBag(unsigned vertex, unsigned bagnumber);
         bool setABag(vertex_t s, unsigned bagnumber);
         bool addEdge(unsigned e1, unsigned e2);
+        //////////////////////////////////////////////////////////////
+        unsigned int getWidth() const;
+        const string &getWidthType() const;
+        ////////////////////////////////////////////
         void printBags();
         void printEdges();
         void print();

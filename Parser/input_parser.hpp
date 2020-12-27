@@ -30,90 +30,96 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_CTD_CTD_PARSER_HPP_INCLUDED
-# define YY_CTD_CTD_PARSER_HPP_INCLUDED
+#ifndef YY_INPUT_INPUT_PARSER_HPP_INCLUDED
+# define YY_INPUT_INPUT_PARSER_HPP_INCLUDED
 /* Debug traces.  */
-#ifndef CTD_DEBUG
+#ifndef INPUT_DEBUG
 # if defined YYDEBUG
 #if YYDEBUG
-#   define CTD_DEBUG 1
+#   define INPUT_DEBUG 1
 #  else
-#   define CTD_DEBUG 0
+#   define INPUT_DEBUG 0
 #  endif
 # else /* ! defined YYDEBUG */
-#  define CTD_DEBUG 0
+#  define INPUT_DEBUG 0
 # endif /* ! defined YYDEBUG */
-#endif  /* ! defined CTD_DEBUG */
-#if CTD_DEBUG
-extern int ctd_debug;
+#endif  /* ! defined INPUT_DEBUG */
+#if INPUT_DEBUG
+extern int input_debug;
 #endif
 /* "%code requires" blocks.  */
-#line 3 "ctd_parser.y" /* yacc.c:1909  */
+#line 5 "input_parser.y" /* yacc.c:1909  */
 
-    #include "../Kernel/ConcreteTreeDecomposition.h"
+    #include "../Kernel/PropertyAssignment.h"
+    #include "../Kernel/Conjecture.h"
+    #include "../Kernel/Width.h"
     #include <iostream>
     #include <vector>
-    #include <memory>
-    #include <set>
-    #include <tuple>
 
-#line 61 "ctd_parser.hpp" /* yacc.c:1909  */
+#line 60 "input_parser.hpp" /* yacc.c:1909  */
 
 /* Token type.  */
-#ifndef CTD_TOKENTYPE
-# define CTD_TOKENTYPE
-  enum ctd_tokentype
+#ifndef INPUT_TOKENTYPE
+# define INPUT_TOKENTYPE
+  enum input_tokentype
   {
-    CTD_NUM = 258,
-    CTD_COMMENT = 259,
-    CTD_NEWLINE = 260,
-    CTD_EMPTY = 261,
-    CTD_INTROVERTEX = 262,
-    CTD_INTROEDGE = 263,
-    CTD_FORGETVERTEX = 264,
-    CTD_JOIN = 265,
-    CTD_LEFTP = 266,
-    CTD_RIGHTP = 267,
-    CTD_SEP1 = 268,
-    CTD_SEP2 = 269
+    WIDTHPARAM = 258,
+    SEPERATOR = 259,
+    COMPARATOR = 260,
+    FILEPATH = 261,
+    LEFTP = 262,
+    RIGHTP = 263,
+    NAME = 264,
+    NEWLINE = 265,
+    AND = 266,
+    OR = 267,
+    IFF = 268,
+    IMPLIES = 269,
+    NOT = 270,
+    TRUE = 271,
+    FALSE = 272,
+    COMMENT = 273,
+    INTEGER = 274
   };
 #endif
 
 /* Value type.  */
-#if ! defined CTD_STYPE && ! defined CTD_STYPE_IS_DECLARED
+#if ! defined INPUT_STYPE && ! defined INPUT_STYPE_IS_DECLARED
 
-union CTD_STYPE
+union INPUT_STYPE
 {
-#line 33 "ctd_parser.y" /* yacc.c:1909  */
+#line 32 "input_parser.y" /* yacc.c:1909  */
 
-     unsigned number;
+     PropertyAssignment *property;
+     ConjectureNode *conjecture;
+     int number;
      char* string;
 
-#line 93 "ctd_parser.hpp" /* yacc.c:1909  */
+#line 99 "input_parser.hpp" /* yacc.c:1909  */
 };
 
-typedef union CTD_STYPE CTD_STYPE;
-# define CTD_STYPE_IS_TRIVIAL 1
-# define CTD_STYPE_IS_DECLARED 1
+typedef union INPUT_STYPE INPUT_STYPE;
+# define INPUT_STYPE_IS_TRIVIAL 1
+# define INPUT_STYPE_IS_DECLARED 1
 #endif
 
 /* Location type.  */
-#if ! defined CTD_LTYPE && ! defined CTD_LTYPE_IS_DECLARED
-typedef struct CTD_LTYPE CTD_LTYPE;
-struct CTD_LTYPE
+#if ! defined INPUT_LTYPE && ! defined INPUT_LTYPE_IS_DECLARED
+typedef struct INPUT_LTYPE INPUT_LTYPE;
+struct INPUT_LTYPE
 {
   int first_line;
   int first_column;
   int last_line;
   int last_column;
 };
-# define CTD_LTYPE_IS_DECLARED 1
-# define CTD_LTYPE_IS_TRIVIAL 1
+# define INPUT_LTYPE_IS_DECLARED 1
+# define INPUT_LTYPE_IS_TRIVIAL 1
 #endif
 
 
-extern CTD_STYPE ctd_lval;
-extern CTD_LTYPE ctd_lloc;
-int ctd_parse (ConcreteTreeDecomposition  &ctd, int &result);
+extern INPUT_STYPE input_lval;
+extern INPUT_LTYPE input_lloc;
+int input_parse (std::vector<PropertyAssignment*> &pl, Conjecture &conj, Width &w, int &result);
 
-#endif /* !YY_CTD_CTD_PARSER_HPP_INCLUDED  */
+#endif /* !YY_INPUT_INPUT_PARSER_HPP_INCLUDED  */

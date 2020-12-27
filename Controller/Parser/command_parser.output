@@ -1,0 +1,155 @@
+Terminals unused in grammar
+
+   command_newline
+
+
+Grammar
+
+    0 $accept: command_search $end
+
+    1 command_search: command_search_signature command_flags command_search_strategy command_input_file
+
+    2 command_flags: command_print_state_flag command_flags
+    3              | command_print_loop_flag command_flags
+    4              | %empty
+
+    5 command_input_file: command_string
+
+    6 command_search_strategy: command_string
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+command_newline (258)
+command_search_signature (259) 1
+command_print_state_flag (260) 2
+command_print_loop_flag (261) 3
+command_string (262) 5 6
+
+
+Nonterminals, with rules where they appear
+
+$accept (8)
+    on left: 0
+command_search (9)
+    on left: 1, on right: 0
+command_flags (10)
+    on left: 2 3 4, on right: 1 2 3
+command_input_file (11)
+    on left: 5, on right: 1
+command_search_strategy (12)
+    on left: 6, on right: 1
+
+
+State 0
+
+    0 $accept: . command_search $end
+
+    command_search_signature  shift, and go to state 1
+
+    command_search  go to state 2
+
+
+State 1
+
+    1 command_search: command_search_signature . command_flags command_search_strategy command_input_file
+
+    command_print_state_flag  shift, and go to state 3
+    command_print_loop_flag   shift, and go to state 4
+
+    $default  reduce using rule 4 (command_flags)
+
+    command_flags  go to state 5
+
+
+State 2
+
+    0 $accept: command_search . $end
+
+    $end  shift, and go to state 6
+
+
+State 3
+
+    2 command_flags: command_print_state_flag . command_flags
+
+    command_print_state_flag  shift, and go to state 3
+    command_print_loop_flag   shift, and go to state 4
+
+    $default  reduce using rule 4 (command_flags)
+
+    command_flags  go to state 7
+
+
+State 4
+
+    3 command_flags: command_print_loop_flag . command_flags
+
+    command_print_state_flag  shift, and go to state 3
+    command_print_loop_flag   shift, and go to state 4
+
+    $default  reduce using rule 4 (command_flags)
+
+    command_flags  go to state 8
+
+
+State 5
+
+    1 command_search: command_search_signature command_flags . command_search_strategy command_input_file
+
+    command_string  shift, and go to state 9
+
+    command_search_strategy  go to state 10
+
+
+State 6
+
+    0 $accept: command_search $end .
+
+    $default  accept
+
+
+State 7
+
+    2 command_flags: command_print_state_flag command_flags .
+
+    $default  reduce using rule 2 (command_flags)
+
+
+State 8
+
+    3 command_flags: command_print_loop_flag command_flags .
+
+    $default  reduce using rule 3 (command_flags)
+
+
+State 9
+
+    6 command_search_strategy: command_string .
+
+    $default  reduce using rule 6 (command_search_strategy)
+
+
+State 10
+
+    1 command_search: command_search_signature command_flags command_search_strategy . command_input_file
+
+    command_string  shift, and go to state 11
+
+    command_input_file  go to state 12
+
+
+State 11
+
+    5 command_input_file: command_string .
+
+    $default  reduce using rule 5 (command_input_file)
+
+
+State 12
+
+    1 command_search: command_search_signature command_flags command_search_strategy command_input_file .
+
+    $default  reduce using rule 1 (command_search)

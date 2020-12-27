@@ -58,11 +58,22 @@
 /* Pull parsers.  */
 #define YYPULL 1
 
+/* Substitute the type names.  */
+#define YYSTYPE         INPUT_STYPE
+#define YYLTYPE         INPUT_LTYPE
+/* Substitute the variable and function names.  */
+#define yyparse         input_parse
+#define yylex           input_lex
+#define yyerror         input_error
+#define yydebug         input_debug
+#define yynerrs         input_nerrs
 
-
+#define yylval          input_lval
+#define yychar          input_char
+#define yylloc          input_lloc
 
 /* Copy the first part of user declarations.  */
-#line 10 "parser.y" /* yacc.c:339  */
+#line 12 "input_parser.y" /* yacc.c:339  */
 
     #include <iostream>
     #include <string.h>
@@ -76,14 +87,13 @@
     // this function will be generated
     // using flex
     extern int yylex();
-    extern int yylineno;
-    
+    extern int input_lineno;
     extern void yyerror(std::vector<PropertyAssignment*> &pl, Conjecture &conj, Width &w, int &result, char const* msg);
     vector<char*> variables;
     bool check_variables(char* v);
     int index_variable(char* v);
 
-#line 87 "parser.cpp" /* yacc.c:339  */
+#line 97 "input_parser.cpp" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -102,18 +112,26 @@
 #endif
 
 /* In a future release of Bison, this section will be replaced
-   by #include "parser.hpp".  */
-#ifndef YY_YY_PARSER_HPP_INCLUDED
-# define YY_YY_PARSER_HPP_INCLUDED
+   by #include "input_parser.hpp".  */
+#ifndef YY_INPUT_INPUT_PARSER_HPP_INCLUDED
+# define YY_INPUT_INPUT_PARSER_HPP_INCLUDED
 /* Debug traces.  */
-#ifndef YYDEBUG
-# define YYDEBUG 0
-#endif
+#ifndef INPUT_DEBUG
+# if defined YYDEBUG
 #if YYDEBUG
-extern int yydebug;
+#   define INPUT_DEBUG 1
+#  else
+#   define INPUT_DEBUG 0
+#  endif
+# else /* ! defined YYDEBUG */
+#  define INPUT_DEBUG 0
+# endif /* ! defined YYDEBUG */
+#endif  /* ! defined INPUT_DEBUG */
+#if INPUT_DEBUG
+extern int input_debug;
 #endif
 /* "%code requires" blocks.  */
-#line 3 "parser.y" /* yacc.c:355  */
+#line 5 "input_parser.y" /* yacc.c:355  */
 
     #include "../Kernel/PropertyAssignment.h"
     #include "../Kernel/Conjecture.h"
@@ -121,12 +139,12 @@ extern int yydebug;
     #include <iostream>
     #include <vector>
 
-#line 125 "parser.cpp" /* yacc.c:355  */
+#line 143 "input_parser.cpp" /* yacc.c:355  */
 
 /* Token type.  */
-#ifndef YYTOKENTYPE
-# define YYTOKENTYPE
-  enum yytokentype
+#ifndef INPUT_TOKENTYPE
+# define INPUT_TOKENTYPE
+  enum input_tokentype
   {
     WIDTHPARAM = 258,
     SEPERATOR = 259,
@@ -149,49 +167,49 @@ extern int yydebug;
 #endif
 
 /* Value type.  */
-#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
+#if ! defined INPUT_STYPE && ! defined INPUT_STYPE_IS_DECLARED
 
-union YYSTYPE
+union INPUT_STYPE
 {
-#line 31 "parser.y" /* yacc.c:355  */
+#line 32 "input_parser.y" /* yacc.c:355  */
 
      PropertyAssignment *property;
      ConjectureNode *conjecture;
      int number;
      char* string;
 
-#line 164 "parser.cpp" /* yacc.c:355  */
+#line 182 "input_parser.cpp" /* yacc.c:355  */
 };
 
-typedef union YYSTYPE YYSTYPE;
-# define YYSTYPE_IS_TRIVIAL 1
-# define YYSTYPE_IS_DECLARED 1
+typedef union INPUT_STYPE INPUT_STYPE;
+# define INPUT_STYPE_IS_TRIVIAL 1
+# define INPUT_STYPE_IS_DECLARED 1
 #endif
 
 /* Location type.  */
-#if ! defined YYLTYPE && ! defined YYLTYPE_IS_DECLARED
-typedef struct YYLTYPE YYLTYPE;
-struct YYLTYPE
+#if ! defined INPUT_LTYPE && ! defined INPUT_LTYPE_IS_DECLARED
+typedef struct INPUT_LTYPE INPUT_LTYPE;
+struct INPUT_LTYPE
 {
   int first_line;
   int first_column;
   int last_line;
   int last_column;
 };
-# define YYLTYPE_IS_DECLARED 1
-# define YYLTYPE_IS_TRIVIAL 1
+# define INPUT_LTYPE_IS_DECLARED 1
+# define INPUT_LTYPE_IS_TRIVIAL 1
 #endif
 
 
-extern YYSTYPE yylval;
-extern YYLTYPE yylloc;
-int yyparse (std::vector<PropertyAssignment*> &pl, Conjecture &conj, Width &w, int &result);
+extern INPUT_STYPE input_lval;
+extern INPUT_LTYPE input_lloc;
+int input_parse (std::vector<PropertyAssignment*> &pl, Conjecture &conj, Width &w, int &result);
 
-#endif /* !YY_YY_PARSER_HPP_INCLUDED  */
+#endif /* !YY_INPUT_INPUT_PARSER_HPP_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
 
-#line 195 "parser.cpp" /* yacc.c:358  */
+#line 213 "input_parser.cpp" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -372,8 +390,8 @@ void free (void *); /* INFRINGES ON USER NAME SPACE */
 
 #if (! defined yyoverflow \
      && (! defined __cplusplus \
-         || (defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL \
-             && defined YYSTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
+         || (defined INPUT_LTYPE_IS_TRIVIAL && INPUT_LTYPE_IS_TRIVIAL \
+             && defined INPUT_STYPE_IS_TRIVIAL && INPUT_STYPE_IS_TRIVIAL)))
 
 /* A type that is properly aligned for any stack member.  */
 union yyalloc
@@ -488,17 +506,17 @@ static const yytype_uint8 yytranslate[] =
       15,    16,    17,    18,    19
 };
 
-#if YYDEBUG
+#if INPUT_DEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    60,    60,    62,    64,    65,    67,    72,    75,    79,
-      81,    83,    84,    85,    86,    87,    89,    90,    91,    92,
-      94,    95,    97,    98
+       0,    61,    61,    63,    65,    66,    68,    73,    76,    80,
+      82,    84,    85,    86,    87,    88,    90,    91,    92,    93,
+      95,    96,    98,    99
 };
 #endif
 
-#if YYDEBUG || YYERROR_VERBOSE || 0
+#if INPUT_DEBUG || YYERROR_VERBOSE || 0
 /* YYTNAME[SYMBOL-NUM] -- String name of the symbol SYMBOL-NUM.
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
@@ -678,7 +696,7 @@ while (0)
 
 
 /* Enable debugging if requested.  */
-#if YYDEBUG
+#if INPUT_DEBUG
 
 # ifndef YYFPRINTF
 #  include <stdio.h> /* INFRINGES ON USER NAME SPACE */
@@ -697,7 +715,7 @@ do {                                            \
    we won't break user code: when these are the locations we know.  */
 
 #ifndef YY_LOCATION_PRINT
-# if defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL
+# if defined INPUT_LTYPE_IS_TRIVIAL && INPUT_LTYPE_IS_TRIVIAL
 
 /* Print *YYLOCP on YYO.  Private, do not rely on its existence. */
 
@@ -845,12 +863,12 @@ do {                                    \
 /* Nonzero means print parse trace.  It is left uninitialized so that
    multiple parsers can coexist.  */
 int yydebug;
-#else /* !YYDEBUG */
+#else /* !INPUT_DEBUG */
 # define YYDPRINTF(Args)
 # define YY_SYMBOL_PRINT(Title, Type, Value, Location)
 # define YY_STACK_PRINT(Bottom, Top)
 # define YY_REDUCE_PRINT(Rule)
-#endif /* !YYDEBUG */
+#endif /* !INPUT_DEBUG */
 
 
 /* YYINITDEPTH -- initial size of the parser's stacks.  */
@@ -1124,7 +1142,7 @@ int yychar;
 YYSTYPE yylval;
 /* Location data for the lookahead symbol.  */
 YYLTYPE yylloc
-# if defined YYLTYPE_IS_TRIVIAL && YYLTYPE_IS_TRIVIAL
+# if defined INPUT_LTYPE_IS_TRIVIAL && INPUT_LTYPE_IS_TRIVIAL
   = { 1, 1, 1, 1 }
 # endif
 ;
@@ -1390,110 +1408,110 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 60 "parser.y" /* yacc.c:1646  */
+#line 61 "input_parser.y" /* yacc.c:1646  */
     { conj.root = (yyvsp[-1].conjecture); result = 0; }
-#line 1396 "parser.cpp" /* yacc.c:1646  */
+#line 1414 "input_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 62 "parser.y" /* yacc.c:1646  */
+#line 63 "input_parser.y" /* yacc.c:1646  */
     {w.set_name((yyvsp[-1].string)); w.set_value((yyvsp[0].number)); }
-#line 1402 "parser.cpp" /* yacc.c:1646  */
+#line 1420 "input_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 64 "parser.y" /* yacc.c:1646  */
+#line 65 "input_parser.y" /* yacc.c:1646  */
     {}
-#line 1408 "parser.cpp" /* yacc.c:1646  */
+#line 1426 "input_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 67 "parser.y" /* yacc.c:1646  */
+#line 68 "input_parser.y" /* yacc.c:1646  */
     { if(!check_variables((yyvsp[-4].string))) exit(20);
                                                                                                                         (yyval.property) = new PropertyAssignment();(yyval.property)->set_type("UnsignedInt");
                                                                                                                         (yyval.property)->set_label((yyvsp[-4].string)); (yyval.property)->set_name((yyvsp[-2].string)); (yyval.property)->set_operatorSign((yyvsp[-1].string));
                                                                                                                         (yyval.property)->set_value((yyvsp[0].number)); pl.push_back((yyval.property)); variables.push_back((yyvsp[-4].string)); }
-#line 1417 "parser.cpp" /* yacc.c:1646  */
+#line 1435 "input_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 72 "parser.y" /* yacc.c:1646  */
+#line 73 "input_parser.y" /* yacc.c:1646  */
     {if(!check_variables((yyvsp[-5].string))) exit(20);
                                                                                                                          (yyval.property) = new PropertyAssignment(); (yyval.property)->set_type("InputFile"); (yyval.property)->set_label((yyvsp[-5].string)); (yyval.property)->set_name((yyvsp[-3].string)); (yyval.property)->set_filePath((yyvsp[-1].string));
                                                                                                                          pl.push_back((yyval.property)); variables.push_back((yyvsp[-5].string)); }
-#line 1425 "parser.cpp" /* yacc.c:1646  */
+#line 1443 "input_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 75 "parser.y" /* yacc.c:1646  */
+#line 76 "input_parser.y" /* yacc.c:1646  */
     {if(!check_variables((yyvsp[-2].string))) exit(20);
                                                                                                                          (yyval.property) = new PropertyAssignment(); (yyval.property)->set_type("NoParameter"); (yyval.property)->set_label((yyvsp[-2].string)); (yyval.property)->set_name((yyvsp[0].string));
                                                                                                                           pl.push_back((yyval.property)); variables.push_back((yyvsp[-2].string)); }
-#line 1433 "parser.cpp" /* yacc.c:1646  */
+#line 1451 "input_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 83 "parser.y" /* yacc.c:1646  */
+#line 84 "input_parser.y" /* yacc.c:1646  */
     {(yyval.conjecture) = new ConjectureNode(); (yyval.conjecture)->setLogicalOperator((yyvsp[-1].string)); (yyval.conjecture)->addChild((yyvsp[0].conjecture)); }
-#line 1439 "parser.cpp" /* yacc.c:1646  */
+#line 1457 "input_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 84 "parser.y" /* yacc.c:1646  */
+#line 85 "input_parser.y" /* yacc.c:1646  */
     {(yyval.conjecture) = new ConjectureNode(); (yyval.conjecture)->setLogicalOperator((yyvsp[-1].string)); (yyval.conjecture)->addChild((yyvsp[-2].conjecture)); (yyval.conjecture)->addChild((yyvsp[0].conjecture));}
-#line 1445 "parser.cpp" /* yacc.c:1646  */
+#line 1463 "input_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 85 "parser.y" /* yacc.c:1646  */
+#line 86 "input_parser.y" /* yacc.c:1646  */
     {(yyval.conjecture) = new ConjectureNode(); (yyval.conjecture)->setLogicalOperator((yyvsp[-1].string)); (yyval.conjecture)->addChild((yyvsp[-2].conjecture)); (yyval.conjecture)->addChild((yyvsp[0].conjecture));}
-#line 1451 "parser.cpp" /* yacc.c:1646  */
+#line 1469 "input_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 86 "parser.y" /* yacc.c:1646  */
+#line 87 "input_parser.y" /* yacc.c:1646  */
     {(yyval.conjecture) = new ConjectureNode(); (yyval.conjecture)->setLogicalOperator((yyvsp[-1].string)); (yyval.conjecture)->addChild((yyvsp[-2].conjecture)); (yyval.conjecture)->addChild((yyvsp[0].conjecture));}
-#line 1457 "parser.cpp" /* yacc.c:1646  */
+#line 1475 "input_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 87 "parser.y" /* yacc.c:1646  */
+#line 88 "input_parser.y" /* yacc.c:1646  */
     {(yyval.conjecture) = new ConjectureNode(); (yyval.conjecture)->setLogicalOperator((yyvsp[-1].string)); (yyval.conjecture)->addChild((yyvsp[-2].conjecture)); (yyval.conjecture)->addChild((yyvsp[0].conjecture));}
-#line 1463 "parser.cpp" /* yacc.c:1646  */
+#line 1481 "input_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 89 "parser.y" /* yacc.c:1646  */
+#line 90 "input_parser.y" /* yacc.c:1646  */
     {(yyval.conjecture) = (yyvsp[-1].conjecture);}
-#line 1469 "parser.cpp" /* yacc.c:1646  */
+#line 1487 "input_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 90 "parser.y" /* yacc.c:1646  */
+#line 91 "input_parser.y" /* yacc.c:1646  */
     {(yyval.conjecture) = new ConjectureNode(); (yyval.conjecture)->setLogicalOperator((yyvsp[0].string)); (yyval.conjecture)->setPropertyIndex(0); }
-#line 1475 "parser.cpp" /* yacc.c:1646  */
+#line 1493 "input_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 91 "parser.y" /* yacc.c:1646  */
+#line 92 "input_parser.y" /* yacc.c:1646  */
     {(yyval.conjecture) = new ConjectureNode(); (yyval.conjecture)->setLogicalOperator((yyvsp[0].string)); (yyval.conjecture)->setPropertyIndex(0); }
-#line 1481 "parser.cpp" /* yacc.c:1646  */
+#line 1499 "input_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 92 "parser.y" /* yacc.c:1646  */
+#line 93 "input_parser.y" /* yacc.c:1646  */
     {(yyval.conjecture) = new ConjectureNode() ; (yyval.conjecture)->setPropertyIndex(index_variable((yyvsp[0].string))); }
-#line 1487 "parser.cpp" /* yacc.c:1646  */
+#line 1505 "input_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 94 "parser.y" /* yacc.c:1646  */
+#line 95 "input_parser.y" /* yacc.c:1646  */
     {}
-#line 1493 "parser.cpp" /* yacc.c:1646  */
+#line 1511 "input_parser.cpp" /* yacc.c:1646  */
     break;
 
 
-#line 1497 "parser.cpp" /* yacc.c:1646  */
+#line 1515 "input_parser.cpp" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1728,11 +1746,11 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 101 "parser.y" /* yacc.c:1906  */
+#line 102 "input_parser.y" /* yacc.c:1906  */
 
 
 void yyerror(std::vector<PropertyAssignment*> &pl, Conjecture &conj, Width &w, int &result, char const* msg){
-  std::cout<<"Syntax Error: "<< msg << " " <<yylineno << std::endl;
+  std::cout<<"Syntax Error: "<< msg << " " <<input_lineno << std::endl;
   // error printing  disabled, it is handeled in main.cpp 
 }
 bool check_variables(char* v){

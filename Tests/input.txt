@@ -1,4 +1,4 @@
 path_width 2
-a := EdgeConnected < 2
-b := EdgeConnected < 3
-a OR NOT b
+b := MaxDegree > 4
+c := HasMultipleEdges
+NOT c IMPLIES (NOT  b)

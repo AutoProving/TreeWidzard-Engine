@@ -76,7 +76,6 @@
 #line 11 "ctd_parser.y" /* yacc.c:339  */
 
     #include <iostream>
-    #include <string.h>
     #include <cmath>
     #include <vector>
     #include <memory>
@@ -84,17 +83,20 @@
     #include <tuple>
     #include "../Kernel/ConcreteTreeDecomposition.h"
     #include <algorithm>
-   
+
     // this function will be generated
     // using flex
     extern int yylex();
     extern int ctd_lineno;
     extern void yyerror(ConcreteTreeDecomposition &ctd, int &result, char const* msg);
-    vector<tuple<shared_ptr<CTDNodeNew>,set<int>,int>> ctdVec;
-    int ctd_construct(ConcreteTreeDecomposition &ctd, vector<tuple<shared_ptr<CTDNodeNew>,set<int>,int>> &ctdVec, int &result);
+
+    vector<tuple<shared_ptr<CTDNodeNew>,set<int>,int,set<int>>> ctdVec;
+    vector<set<int>> ctdChildPos;
+    int ctd_construct(ConcreteTreeDecomposition &ctd, vector<tuple<shared_ptr<CTDNodeNew>,set<int>,int,set<int>>> &ctdVec,vector<set<int>> &ctdChildPos);
+    int ctd_constructBags(ConcreteTreeDecomposition &ctd, vector<tuple<shared_ptr<CTDNodeNew>,set<int>,int,set<int>>> &ctdVec,vector<set<int>> &ctdChildPos, int nodeNum);
   
 
-#line 98 "ctd_parser.cpp" /* yacc.c:339  */
+#line 100 "ctd_parser.cpp" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -141,7 +143,7 @@ extern int ctd_debug;
     #include <set>
     #include <tuple>
 
-#line 145 "ctd_parser.cpp" /* yacc.c:355  */
+#line 147 "ctd_parser.cpp" /* yacc.c:355  */
 
 /* Token type.  */
 #ifndef CTD_TOKENTYPE
@@ -168,12 +170,12 @@ extern int ctd_debug;
 
 union CTD_STYPE
 {
-#line 31 "ctd_parser.y" /* yacc.c:355  */
+#line 33 "ctd_parser.y" /* yacc.c:355  */
 
      unsigned number;
      char* string;
 
-#line 177 "ctd_parser.cpp" /* yacc.c:355  */
+#line 179 "ctd_parser.cpp" /* yacc.c:355  */
 };
 
 typedef union CTD_STYPE CTD_STYPE;
@@ -204,7 +206,7 @@ int ctd_parse (ConcreteTreeDecomposition  &ctd, int &result);
 
 /* Copy the second part of user declarations.  */
 
-#line 208 "ctd_parser.cpp" /* yacc.c:358  */
+#line 210 "ctd_parser.cpp" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -504,8 +506,8 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    49,    49,    51,    53,    57,    61,    65,    70,    71,
-      72,    74,    75
+       0,    51,    51,    53,    58,    65,    72,    79,    87,    88,
+      89,    91,    92
 };
 #endif
 
@@ -1393,62 +1395,77 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 49 "ctd_parser.y" /* yacc.c:1646  */
-    {if(ctd_construct(ctd, ctdVec,result)){YYERROR;};}
-#line 1399 "ctd_parser.cpp" /* yacc.c:1646  */
+#line 51 "ctd_parser.y" /* yacc.c:1646  */
+    {int r = ctd_construct(ctd, ctdVec, ctdChildPos); if(r==-1){YYERROR;}; if(!ctd_constructBags(ctd,ctdVec,ctdChildPos,r)){YYERROR;}}
+#line 1401 "ctd_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 51 "ctd_parser.y" /* yacc.c:1646  */
+#line 53 "ctd_parser.y" /* yacc.c:1646  */
     {shared_ptr<CTDNodeNew> node(new CTDNodeNew); node->set_nodeType("Empty");
-                                                                        set<int> children; ctdVec.push_back(make_tuple(node,children,(yyvsp[-2].number)));}
-#line 1406 "ctd_parser.cpp" /* yacc.c:1646  */
+                                                                        set<int> elements;
+                                                                        set<int> children; ctdVec.push_back(make_tuple(node,children,(yyvsp[-2].number),elements));
+                                                                        set<int> childPos; ctdChildPos.push_back(childPos);
+                                                                        }
+#line 1411 "ctd_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 53 "ctd_parser.y" /* yacc.c:1646  */
+#line 58 "ctd_parser.y" /* yacc.c:1646  */
     {shared_ptr<CTDNodeNew> node(new CTDNodeNew);
                                                                                                                             node->set_nodeType("IntroVertex_"+to_string((yyvsp[-4].number)));
                                                                                                                             set<int> children; children.insert((yyvsp[-2].number));
-                                                                                                                            ctdVec.push_back(make_tuple(node,children,(yyvsp[-7].number)));}
-#line 1415 "ctd_parser.cpp" /* yacc.c:1646  */
+                                                                                                                            set<int> elements; elements.insert((yyvsp[-4].number));
+                                                                                                                            ctdVec.push_back(make_tuple(node,children,(yyvsp[-7].number),elements));
+                                                                                                                            set<int> childPos; ctdChildPos.push_back(childPos);
+                                                                                                                            }
+#line 1423 "ctd_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 57 "ctd_parser.y" /* yacc.c:1646  */
+#line 65 "ctd_parser.y" /* yacc.c:1646  */
     {shared_ptr<CTDNodeNew> node(new CTDNodeNew);
                                                                                                                                            node->set_nodeType("IntroEdge_"+to_string((yyvsp[-6].number))+"_"+to_string((yyvsp[-4].number)));
                                                                                                                                            set<int> children; children.insert((yyvsp[-2].number));
-                                                                                                                                           ctdVec.push_back(make_tuple(node,children,(yyvsp[-9].number)));}
-#line 1424 "ctd_parser.cpp" /* yacc.c:1646  */
+                                                                                                                                           set<int> elements; elements.insert((yyvsp[-6].number)); elements.insert((yyvsp[-4].number));
+                                                                                                                                           ctdVec.push_back(make_tuple(node,children,(yyvsp[-9].number),elements));
+                                                                                                                                           set<int> childPos; ctdChildPos.push_back(childPos);
+                                                                                                                                           }
+#line 1435 "ctd_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 61 "ctd_parser.y" /* yacc.c:1646  */
+#line 72 "ctd_parser.y" /* yacc.c:1646  */
     {shared_ptr<CTDNodeNew> node(new CTDNodeNew);
                                                                                                                                node->set_nodeType("ForgetVertex_"+to_string((yyvsp[-4].number)));
                                                                                                                                set<int> children; children.insert((yyvsp[-2].number));
-                                                                                                                               ctdVec.push_back(make_tuple(node,children,(yyvsp[-7].number)));}
-#line 1433 "ctd_parser.cpp" /* yacc.c:1646  */
+                                                                                                                               set<int> elements; elements.insert((yyvsp[-4].number));
+                                                                                                                               ctdVec.push_back(make_tuple(node,children,(yyvsp[-7].number),elements));
+                                                                                                                               set<int> childPos; ctdChildPos.push_back(childPos);
+                                                                                                                               }
+#line 1447 "ctd_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 65 "ctd_parser.y" /* yacc.c:1646  */
+#line 79 "ctd_parser.y" /* yacc.c:1646  */
     {shared_ptr<CTDNodeNew> node(new CTDNodeNew);
                                                                                                                node->set_nodeType("Join");
                                                                                                                set<int> children; children.insert((yyvsp[-4].number)); children.insert((yyvsp[-2].number));
-                                                                                                               ctdVec.push_back(make_tuple(node,children,(yyvsp[-7].number)));}
-#line 1442 "ctd_parser.cpp" /* yacc.c:1646  */
+                                                                                                               set<int> elements;
+                                                                                                               ctdVec.push_back(make_tuple(node,children,(yyvsp[-7].number),elements));
+                                                                                                               set<int> childPos; ctdChildPos.push_back(childPos);
+                                                                                                               }
+#line 1459 "ctd_parser.cpp" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 74 "ctd_parser.y" /* yacc.c:1646  */
+#line 91 "ctd_parser.y" /* yacc.c:1646  */
     {}
-#line 1448 "ctd_parser.cpp" /* yacc.c:1646  */
+#line 1465 "ctd_parser.cpp" /* yacc.c:1646  */
     break;
 
 
-#line 1452 "ctd_parser.cpp" /* yacc.c:1646  */
+#line 1469 "ctd_parser.cpp" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1683,53 +1700,52 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 79 "ctd_parser.y" /* yacc.c:1906  */
+#line 96 "ctd_parser.y" /* yacc.c:1906  */
 
 
 void yyerror(ConcreteTreeDecomposition &ctd, int &result, char const* msg){
   std::cerr<<"Syntax Error: "<< msg << " on line " <<ctd_lineno << std::endl;
-  // error printing  disabled, it is handeled in main.cpp 
+  // error printing  disabled, it is handeled in main.cpp
 }
 
-int ctd_construct(ConcreteTreeDecomposition &ctd, vector<tuple<shared_ptr<CTDNodeNew>,set<int>,int>> &ctdVec, int &result){
-    for(auto& node1:ctdVec){
-        /*cout<<get<2>(node1)<< " " << get<0>(node1)->get_nodeType()<< " ";
-        for(auto e:get<1>(node1)){
+int ctd_construct(ConcreteTreeDecomposition &ctd, vector<tuple<shared_ptr<CTDNodeNew>,set<int>,int,set<int>>> &ctdVec,vector<set<int>> &ctdChildPos){
+    for(int k = 0 ; k<ctdVec.size(); k++){
+        /*cout<<get<2>(ctdVec[k])<< " " << get<0>(ctdVec[k])->get_nodeType()<< " ";
+        for(auto e:get<1>(ctdVec[k])){
             cout<<e<<" ";
         }
         cout<<endl;*/
         vector<shared_ptr<CTDNodeNew>> children;
-        for(auto& node2:ctdVec){
-            if( get<1>(node1).count(get<2>(node2))){
-                get<0>(node2)->set_parent(get<0>(node1));
-                children.push_back(get<0>(node2));
+
+        for(int i = 0 ; i<ctdVec.size();i++){
+            if( get<1>(ctdVec[k]).count(get<2>(ctdVec[i]))){
+                get<0>(ctdVec[i])->set_parent(get<0>(ctdVec[k]));
+                children.push_back(get<0>(ctdVec[i]));
+                ctdChildPos[k].insert(i);
             }
         }
-        if(get<0>(node1)->get_nodeType()=="Join"){
+        if(get<0>(ctdVec[k])->get_nodeType()=="Join"){
             if(children.size()!=2){
 
-                cerr<<"Error: Decomposition is not correct on node '" <<get<2>(node1)<< " " << get<0>(node1)->get_nodeType()<< "' ";
-                result = 1;
-                return result;
+                cerr<<"Error: Decomposition is not correct on node '" <<get<2>(ctdVec[k])<< " " << get<0>(ctdVec[k])->get_nodeType()<< "' ";
+                return -1;
                 //yyerror(ctd, result, "Decomposition is not correct");
             }
-        }else if(get<0>(node1)->get_nodeType()=="Empty"){
+        }else if(get<0>(ctdVec[k])->get_nodeType()=="Empty"){
             if(children.size()!=0){
-                cerr<<"Error: Decomposition is not correct on node '" <<get<2>(node1)<< " " << get<0>(node1)->get_nodeType()<< "' ";
-                result = 1;
-                return result;
+                cerr<<"Error: Decomposition is not correct on node '" <<get<2>(ctdVec[k])<< " " << get<0>(ctdVec[k])->get_nodeType()<< "' ";
+                return -1;
                 //yyerror(ctd, result, "Decomposition is not correct");
           }
         }else{
             if(children.size()!=1){
-                cerr<<"Error: Decomposition is not correct on node '" <<get<2>(node1)<< " " << get<0>(node1)->get_nodeType()<< "' ";
-                result = 1;
-                return result;
+                cerr<<"Error: Decomposition is not correct on node '" <<get<2>(ctdVec[k])<< " " << get<0>(ctdVec[k])->get_nodeType()<< "' ";
+                return -1;
                 //yyerror(ctd, result, "Decomposition is not correct");
             }
         }
 
-        get<0>(node1)->set_children(children);
+        get<0>(ctdVec[k])->set_children(children);
     }
     // Find root
     set<int> rootIndex;
@@ -1746,12 +1762,62 @@ int ctd_construct(ConcreteTreeDecomposition &ctd, vector<tuple<shared_ptr<CTDNod
         }else{
             cerr<<"There are several root."<<endl;
         }
-        result = 1;
-        return result;
+        return -1;
     }else{
         ctd.set_root(get<0>(ctdVec[*(rootIndex.begin())]));
     }
+    return *(rootIndex.begin());
+}
 
+int ctd_constructBags(ConcreteTreeDecomposition &ctd, vector<tuple<shared_ptr<CTDNodeNew>,set<int>,int,set<int>>> &ctdVec, vector<set<int>> &ctdChildPos, int nodeNum){
+    if(get<0>(ctdVec[nodeNum])->get_nodeType()=="Empty"){
+        return 1;
+    }else{
+        for(auto n:ctdChildPos[nodeNum])
+            if(!ctd_constructBags(ctd,ctdVec,ctdChildPos,n)) return 0;
+        if(strstr(get<0>(ctdVec[nodeNum])->get_nodeType().c_str(),"IntroVertex")){
+            int i = *(get<3>(ctdVec[nodeNum]).begin());
+            int n = *(ctdChildPos[nodeNum].begin());
+            if(get<0>(ctdVec[n])->get_B().vertex_introducible(i)){
+                get<0>(ctdVec[nodeNum])->set_B(get<0>(ctdVec[n])->get_B().intro_v(i));
+            }else{
+                cerr<<"Error: Decomposition is not correct on node '" <<get<2>(ctdVec[nodeNum])<< " " << get<0>(ctdVec[nodeNum])->get_nodeType()<< "( "<<n<<" )" <<"' ";
+                return 0;
+            }
+        }else if(strstr(get<0>(ctdVec[nodeNum])->get_nodeType().c_str(),"ForgetVertex")){
+              int i = *(get<3>(ctdVec[nodeNum]).begin());
+              int n = *(ctdChildPos[nodeNum].begin());
+              if(get<0>(ctdVec[n])->get_B().vertex_forgettable(i)){
+                  get<0>(ctdVec[nodeNum])->set_B(get<0>(ctdVec[n])->get_B().forget_v(i));
+              }else{
+                   cerr<<"Error: Decomposition is not correct on node '" <<get<2>(ctdVec[nodeNum])<< " " << get<0>(ctdVec[nodeNum])->get_nodeType()<< "( "<<n<<" )" <<"' ";
+                   return 0;
+              }
+         }else if(strstr(get<0>(ctdVec[nodeNum])->get_nodeType().c_str(),"IntroEdge")){
+            int i = *(get<3>(ctdVec[nodeNum]).begin());
+            int j = *(++get<3>(ctdVec[nodeNum]).begin());
+            int n = *(ctdChildPos[nodeNum].begin());
+            if(get<0>(ctdVec[n])->get_B().edge_introducible(i,j)){
+                 get<0>(ctdVec[nodeNum])->set_B(get<0>(ctdVec[n])->get_B().intro_e(i,j));
+            }else{
+                cerr<<"Error: Decomposition is not correct on node '" <<get<2>(ctdVec[nodeNum])<< " " << get<0>(ctdVec[nodeNum])->get_nodeType()<< "( "<<n<<" )" <<"' ";
+                return 0;
+           }
+        } else if(strstr(get<0>(ctdVec[nodeNum])->get_nodeType().c_str(),"Join")){
+
+            int child1 = *(ctdChildPos[nodeNum].begin());
+            int child2 = *(++ctdChildPos[nodeNum].begin());
+          if(get<0>(ctdVec[child1])->get_B().joinable(get<0>(ctdVec[child2])->get_B())){
+               get<0>(ctdVec[nodeNum])->set_B(get<0>(ctdVec[child1])->get_B());
+          }else{
+            cerr<<"Error: Decomposition is not correct on node '" <<get<2>(ctdVec[nodeNum])<< " " << get<0>(ctdVec[nodeNum])->get_nodeType()<< "( "<<child1<<", "<<child2<<" )" <<"' ";
+            return 0;
+          }
+        }else{
+         return 0;
+        }
+    }
+    return 1;
 }
 
 

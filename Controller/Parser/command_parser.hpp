@@ -1,8 +1,8 @@
 /* A Bison parser, made by GNU Bison 3.0.4.  */
 
-/* Bison interface for Yacc-like parsers in C
+/* Skeleton interface for Bison GLR parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
+   Copyright (C) 2002-2015 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,90 +30,88 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_CTD_CTD_PARSER_HPP_INCLUDED
-# define YY_CTD_CTD_PARSER_HPP_INCLUDED
+#ifndef YY_COMMAND_COMMAND_PARSER_HPP_INCLUDED
+# define YY_COMMAND_COMMAND_PARSER_HPP_INCLUDED
 /* Debug traces.  */
-#ifndef CTD_DEBUG
+#ifndef COMMAND_DEBUG
 # if defined YYDEBUG
 #if YYDEBUG
-#   define CTD_DEBUG 1
+#   define COMMAND_DEBUG 1
 #  else
-#   define CTD_DEBUG 0
+#   define COMMAND_DEBUG 0
 #  endif
 # else /* ! defined YYDEBUG */
-#  define CTD_DEBUG 0
+#  define COMMAND_DEBUG 0
 # endif /* ! defined YYDEBUG */
-#endif  /* ! defined CTD_DEBUG */
-#if CTD_DEBUG
-extern int ctd_debug;
+#endif  /* ! defined COMMAND_DEBUG */
+#if COMMAND_DEBUG
+extern int command_debug;
 #endif
 /* "%code requires" blocks.  */
-#line 3 "ctd_parser.y" /* yacc.c:1909  */
+#line 3 "command_parser.y" /* glr.c:197  */
 
-    #include "../Kernel/ConcreteTreeDecomposition.h"
     #include <iostream>
     #include <vector>
     #include <memory>
     #include <set>
     #include <tuple>
+    using namespace std;
 
-#line 61 "ctd_parser.hpp" /* yacc.c:1909  */
+#line 61 "command_parser.hpp" /* glr.c:197  */
 
 /* Token type.  */
-#ifndef CTD_TOKENTYPE
-# define CTD_TOKENTYPE
-  enum ctd_tokentype
+#ifndef COMMAND_TOKENTYPE
+# define COMMAND_TOKENTYPE
+  enum command_tokentype
   {
-    CTD_NUM = 258,
-    CTD_COMMENT = 259,
-    CTD_NEWLINE = 260,
-    CTD_EMPTY = 261,
-    CTD_INTROVERTEX = 262,
-    CTD_INTROEDGE = 263,
-    CTD_FORGETVERTEX = 264,
-    CTD_JOIN = 265,
-    CTD_LEFTP = 266,
-    CTD_RIGHTP = 267,
-    CTD_SEP1 = 268,
-    CTD_SEP2 = 269
+    command_newline = 258,
+    command_search_signature = 259,
+    command_print_state_flag = 260,
+    command_print_loop_flag = 261,
+    command_string = 262,
+    command_help = 263,
+    command_end = 264,
+    command_parse_signature = 265,
+    command_parse_pace = 266,
+    command_parse_abstract = 267
   };
 #endif
 
 /* Value type.  */
-#if ! defined CTD_STYPE && ! defined CTD_STYPE_IS_DECLARED
+#if ! defined COMMAND_STYPE && ! defined COMMAND_STYPE_IS_DECLARED
 
-union CTD_STYPE
+union COMMAND_STYPE
 {
-#line 33 "ctd_parser.y" /* yacc.c:1909  */
+#line 33 "command_parser.y" /* glr.c:197  */
 
      unsigned number;
      char* string;
 
-#line 93 "ctd_parser.hpp" /* yacc.c:1909  */
+#line 91 "command_parser.hpp" /* glr.c:197  */
 };
 
-typedef union CTD_STYPE CTD_STYPE;
-# define CTD_STYPE_IS_TRIVIAL 1
-# define CTD_STYPE_IS_DECLARED 1
+typedef union COMMAND_STYPE COMMAND_STYPE;
+# define COMMAND_STYPE_IS_TRIVIAL 1
+# define COMMAND_STYPE_IS_DECLARED 1
 #endif
 
 /* Location type.  */
-#if ! defined CTD_LTYPE && ! defined CTD_LTYPE_IS_DECLARED
-typedef struct CTD_LTYPE CTD_LTYPE;
-struct CTD_LTYPE
+#if ! defined COMMAND_LTYPE && ! defined COMMAND_LTYPE_IS_DECLARED
+typedef struct COMMAND_LTYPE COMMAND_LTYPE;
+struct COMMAND_LTYPE
 {
   int first_line;
   int first_column;
   int last_line;
   int last_column;
 };
-# define CTD_LTYPE_IS_DECLARED 1
-# define CTD_LTYPE_IS_TRIVIAL 1
+# define COMMAND_LTYPE_IS_DECLARED 1
+# define COMMAND_LTYPE_IS_TRIVIAL 1
 #endif
 
 
-extern CTD_STYPE ctd_lval;
-extern CTD_LTYPE ctd_lloc;
-int ctd_parse (ConcreteTreeDecomposition  &ctd, int &result);
+extern COMMAND_STYPE command_lval;
+extern COMMAND_LTYPE command_lloc;
+int command_parse (int &result);
 
-#endif /* !YY_CTD_CTD_PARSER_HPP_INCLUDED  */
+#endif /* !YY_COMMAND_COMMAND_PARSER_HPP_INCLUDED  */

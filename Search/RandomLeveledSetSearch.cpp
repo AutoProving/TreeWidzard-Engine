@@ -172,9 +172,9 @@ pair<bool,ConcreteTreeDecomposition> RandomLeveledSetSearch::search(){
         if(foundCounterexample){
             cout<<"COUNTER EXAMPLE FOUND"<<endl;
             s->print();
-            //ConcreteTreeDecomposition *concreteDecomposition = new ConcreteTreeDecomposition;
-            //*concreteDecomposition = extractCTDDecomposition();
-            //concreteDecomposition->printAbstract();
+            ConcreteTreeDecomposition *concreteDecomposition = new ConcreteTreeDecomposition;
+            *concreteDecomposition = extractCTDDecomposition();
+            concreteDecomposition->printAbstract();
             //concreteDecomposition->extractMultiGraph().printGraph();
             StateTree *stateTree = new StateTree();
             *stateTree = extractStateTreeDecomposition();

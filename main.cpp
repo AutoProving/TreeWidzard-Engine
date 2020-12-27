@@ -6,35 +6,79 @@
 #include "DynamicCores/MaxDegree_AtLeast.h"
 #include "DynamicCores/HasMultipleEdges.h"
 #include "Kernel/ConcreteTreeDecomposition.h"
-#include "Parser/parser.hpp"
+//#include "Parser/input_parser.hpp"
 #include "Kernel/DynamicCoreHandler.h"
 #include "Kernel/DynamicKernel.h"
 #include "Kernel/Flags.h"
 #include "Kernel/PropertyAssignment.h"
 #include <experimental/filesystem>
 #include "Kernel/SearchStrategyHandler.h"
-#include "Translation/PACE/TreeDecompositionPACE.h"
-#include "Translation/PACE/WitnessTreePACE.h"
-#include "Translation/PACE/Parser/td_parser.hpp"
-#include "Translation/PACE/Parser/gr_parser.hpp"
+
+
 #include "Translation/TreeAutomaton/term_parser.hpp"
 #include "ConcreteTreeDecomposition/ctd_parser.hpp"
+#include "Controller/Parser/command_parser.hpp"
 
 using namespace std;
-extern FILE *yyin;
-extern FILE *gr_in;
-extern FILE *td_in;
+//extern FILE *input_in;
 extern FILE *term_in;
-extern FILE *ctd_in;
+
+extern FILE *command_in;
 
 namespace fs = std::experimental::filesystem;
-
+using namespace std;
 int main(int argc, char *arg[]) {
+    std::string _all_arg;
+    for (int i = 1 ; i < argc; i++) {
+        _all_arg += arg[i];
+        if(i != argc-1){
+            _all_arg += "\n";
+        }else{
+            _all_arg +="\n;";
+        }
+    }
+    //cout<<_all_arg;
+    // Create and open a text file
+    ofstream MyFile("command.txt");
+    // Write to the file
+    MyFile << _all_arg;
+    // Close the file
+    MyFile.close();
+    command_in = fopen("command.txt", "r");
+    if (!command_in) {
+        std::perror("File opening failed");
+        return EXIT_FAILURE;
+    }
+    int result_arg=10;
+    result_arg = command_parse(result_arg);
+    /////////////////////////////////////////////////////////////////////////////////////////////////
     //////Find the current directory in the running machine//////////////////////////////////////////
-    string file_path = __FILE__;
+    /*string file_path = __FILE__;
     string dir_path = file_path.substr(0, file_path.rfind("/"));
     /////////////////////////////////////////////////////////////////
+//    cout<<"Automaton Parse started!"<<endl;
+//
+//    //Test for term's parser
+//    char* termFilePath = "../Tests/term.tr";
+//    term_in = fopen(termFilePath, "r");
+//    if (!term_in) {
+//        std::perror("File opening failed");
+//        return EXIT_FAILURE;
+//    }
+//    Term<string> term;
+//    int resultTerm = 0; // if parsing successful result will be 0 otherwise 1
+//    resultTerm = term_parse(term, resultTerm); // Parser function from Parser.hpp
+//    cout<<"result: "<<resultTerm<<endl;
+//    // check for successful parsing
+//    if (resultTerm != 0) {
+//        cout << " Error: input file " << termFilePath << " is not in valid format"
+//             << endl;
+//        exit(20);
+//    }
+//    cout<<"Automaton Parse Finished!"<<endl;
 
+
+    cout<<"Concrete Tree Decomposition Parse Finished!"<<endl;
     char* path;
     char* functionType;
 
@@ -78,13 +122,13 @@ int main(int argc, char *arg[]) {
     Width width;
     vector<PropertyAssignment *> pl;
     Conjecture conjecture;
-    yyin = fopen(path, "r");
-    if (!yyin) {
+    input_in = fopen(path, "r");
+    if (!input_in) {
         std::perror("File opening failed");
         return EXIT_FAILURE;
     }
     int result = 1; // if parsing successful result will be 0 otherwise 1
-    result = yyparse(pl, conjecture, width, result); // Parser function from Parser.hpp
+    result = input_parse(pl, conjecture, width, result); // Parser function from Parser.hpp
     // check for successful parsing
     if (result != 0) {
         cout << " Error: input file " << path << " is not in valid format"
@@ -200,6 +244,28 @@ int main(int argc, char *arg[]) {
     cout<<"Conjecture:"<<endl;
     conjecture.print();
     cout<<"\n";
+    cout<<"Concrete Tree Decomposition Parse started!"<<endl;
+
+    //Test for term's parser
+    char* termFilePath = "../ConcreteTreeDecomposition/input.ctd";
+    ctd_in = fopen(termFilePath, "r");
+    if (!ctd_in) {
+        std::perror("File opening failed");
+        return EXIT_FAILURE;
+    }
+    ConcreteTreeDecomposition ctd;
+    int resultCTD = 0; // if parsing successful result will be 0 otherwise 1
+    resultCTD = ctd_parse(ctd, resultCTD); // Parser function from Parser.hpp
+    cout<<"result: "<<resultCTD<<endl;
+    // check for successful parsing
+    if (resultCTD != 0) {
+        cout << " Error: input file " << termFilePath << " is not in valid format"
+             << endl;
+        exit(20);
+    }
+    ctd.printTree();
+    ctd.conjectureCheck(conjecture);
+    exit(20);
     if(strstr(functionType,"-search=")!=NULL){
         //search libraries
         string searchPlugin=dir_path+"/SearchPlugins/";
@@ -286,6 +352,6 @@ int main(int argc, char *arg[]) {
         WitnessTreePACE witnessTreePace;
         witnessTreePace.stateTreeToWitnessTreePACE(stateTree, dynamicKernel);
         witnessTreePace.print();
-    }
+    }*/
 	return 0;
 }

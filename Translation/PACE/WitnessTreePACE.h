@@ -15,7 +15,6 @@ class WitnessTreePACENode{
         Bag bag;
         void print();
 };
-
 class WitnessTreePACE{
     public:
         shared_ptr<WitnessTreePACENode> root;

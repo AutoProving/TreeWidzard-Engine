@@ -16,7 +16,7 @@
 %%
 
 s                           yylval.string = "s" ; return TD_S;
-td                          yylval.string = "td"; return TD_TD;
+tree_width|path_width       yylval.string = strdup(yytext); return TD_TD;
 b                           yylval.string = "b" ; return TD_B;
 [0-9]+                      yylval.number = atoi(yytext);   return TD_NUM;
 c.*\n                       yylval.string = strdup(yytext); return TD_COMMENT;

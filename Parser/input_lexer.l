@@ -1,13 +1,14 @@
 /*Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.*/
-
 %option noyywrap
+%option prefix="input_"
 %{
     #include <cstdlib>
     #include <vector>
     #include "../Kernel/PropertyAssignment.h"
     #include "../Kernel/Conjecture.h"
     #include "../Kernel/Width.h"
-    #include "parser.hpp"
+    #include "input_parser.hpp"
+    #define yylval input_lval
 
     extern int yyparse(std::vector<PropertyAssignment*> &pl, Conjecture &conj, Width &w, int &result);
 

@@ -39,15 +39,15 @@
 
 %%
 
-GR_START                   : GR_COMMENTS GR_GRAPHINFO  GR_COMMENTS GR_EDGES                             {}
+GR_START                   : GR_COMMENTS GR_GRAPHINFO  GR_COMMENTS GR_EDGES         {}
                            ;
-GR_GRAPHINFO               : GR_P GR_TW GR_NUM GR_NUM GR_NEWLINE                                        {for(int i=1; i<= $3;i++) graph.addVertex(i);}
-GR_EDGES                   : GR_EDGE GR_NEWLINE GR_COMMENTS GR_EDGES                                    {}                
+GR_GRAPHINFO               : GR_P GR_TW GR_NUM GR_NUM GR_NEWLINE                    {for(int i=1; i<= $3;i++) graph.addVertex(i);}
+GR_EDGES                   : GR_EDGE GR_NEWLINE GR_COMMENTS GR_EDGES                {}
                            |
                            ;
-GR_EDGE                    : GR_NUM GR_NUM                                                        {graph.addEdgeEndPoints($1,$2);}                                          
+GR_EDGE                    : GR_NUM GR_NUM                                          {graph.addEdgeEndPoints($1,$2);}
                            ;
-GR_COMMENTS                : GR_COMMENT  GR_COMMENTS                                              {}
+GR_COMMENTS                : GR_COMMENT  GR_COMMENTS                                {}
                            | GR_NEWLINE
                            |
                            ;

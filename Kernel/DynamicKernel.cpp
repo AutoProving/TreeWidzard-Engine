@@ -29,8 +29,8 @@ State::ptr DynamicKernel::intro_v(State::ptr q, unsigned i) {
 		aux->set_bag(b.intro_v(i));
 		return aux;
 	} else {
-		cerr << "Error in function DynamicKernel::intro_v. The bag is not i "
-				"introducible"
+		cerr << "Error in function DynamicKernel::intro_v. The bag is not "<<i<<
+				" introducible"
 			 << endl;
 		exit(10);
 	}
@@ -48,8 +48,8 @@ State::ptr DynamicKernel::intro_e(const State::ptr q, const unsigned i,
 		aux->set_bag(b.intro_e(i, j));
 		return aux;
 	} else {
-		cerr << "Error in function DynamicKernel::intro_e. The bag is not i j "
-				"introducible"
+		cerr << "Error in function DynamicKernel::intro_e. The bag is not "<<i <<", "<<j<<
+				" introducible"
 			 << endl;
 		exit(10);
 	}
@@ -66,8 +66,8 @@ State::ptr DynamicKernel::forget_v(State::ptr q, unsigned i) {
 		aux->set_bag(b.forget_v(i));
 		return aux;
 	} else {
-		cerr << "Error in function DynamicKernel::forget_v. The bag is not i "
-				"forgettable"
+		cerr << "Error in function DynamicKernel::forget_v. The bag is not "<<i<<
+				" forgettable"
 			 << endl;
 		exit(10);
 	}

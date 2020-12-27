@@ -77,7 +77,9 @@ string CTDNodeNew::printCTDNode() {
 	set<unsigned> bagElements = B.get_elements();
 	string s = "{";
 	for (auto element : bagElements) {
-		s = s + to_string(element) + ",";
+		s = s + to_string(element);
+        if(element!=*(--bagElements.end()))
+            s = s + ",";
 	}
 	s = s + "} [" + to_string(this->get_B().get_edge().first) + "," +
 		to_string(this->get_B().get_edge().second) + "]";
@@ -678,7 +680,7 @@ pair<bool, State::ptr> ConcreteTreeDecomposition::constructWitnesses(
 			return childProcess;
 		} else {
 			pair<unsigned, unsigned> e =
-				childProcess.second->get_bag().get_edge();
+				node->get_B().get_edge();
 			State::ptr q = conjecture.kernel->intro_e(childProcess.second,
 													  e.first, e.second);
 			bool conjectureEvaluationResult =

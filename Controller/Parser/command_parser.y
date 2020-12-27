@@ -1,0 +1,80 @@
+%defines
+%define api.prefix {command_}
+%code requires {
+    #include <iostream>
+    #include <vector>
+    #include <memory>
+    #include <set>
+    #include <tuple>
+    using namespace std;
+}
+%{
+    #include <iostream>
+    #include <cmath>
+    #include <vector>
+    #include <memory>
+    #include <set>
+    #include <tuple>
+    #include <algorithm>
+    #include "../SearchController.h"
+    #include "../../Kernel/Flags.h"
+    #include "../ParseController.h"
+    #include "../AuxiliaryController.hpp"
+
+    // this function will be generated
+    // using flex
+    extern int yylex();
+    extern int command_lineno;
+    extern void yyerror(int &result, char const* msg);
+    Flags flags;
+
+  %}
+%locations
+%union{
+     unsigned number;
+     char* string;
+}
+%parse-param {int &result}
+%token command_newline command_search_signature command_print_state_flag command_print_loop_flag command_string command_help command_end
+        command_parse_signature command_parse_pace command_parse_abstract
+%type<string> command_newline command_search_signature command_print_state_flag command_print_loop_flag
+              command_string command_input_file command_search_strategy command_help command_end
+              command_parse_signature command_parse_pace command_parse_abstract
+%start command_start
+%glr-parser
+
+%%
+
+command_start       : command_search
+                    | command_help command_end {show_manual();}
+                    | command_parse
+                    ;
+command_search      : command_search_signature command_flags
+                      command_search_strategy  command_input_file command_end { SearchController search($4,$3,flags);
+                                                                                search.action();
+                                                                                }
+
+                    ;
+command_flags       : command_print_state_flag command_flags {flags.add_flag("PrintStates", 1); cout<<"print state"<<endl;}
+                    | command_print_loop_flag command_flags  {flags.add_flag("LoopTime", 1); cout<<"print loop"<<endl;}
+                    |                                        {cout<<"empty"<<endl;}
+                    ;
+
+command_input_file  : command_string {cout<<"input file "<<$1<<endl; $$=$1;}
+                    ;
+command_search_strategy : command_string {cout<<"search strategy "<<$1<<endl; $$=$1;}
+                    ;
+command_parse       : command_parse_signature command_parse_pace command_flags command_input_file command_input_file command_input_file
+                       command_end{ ParseController parsePACE(flags, $4); parsePACE.parse_pace($5, $6); }
+                    | command_parse_signature command_parse_abstract command_flags command_input_file command_input_file command_end
+                        { ParseController parsePACE(flags, $4); parsePACE.parse_abstract($5);}
+                    ;
+
+%%
+
+void yyerror(int &result, char const* msg){
+  std::cerr<<"Syntax Error: "<< msg << " on line " <<command_lineno << std::endl;
+  cout<<"command not found. use --help to see help";
+  // error printing  disabled, it is handeled in main.cpp
+}
+

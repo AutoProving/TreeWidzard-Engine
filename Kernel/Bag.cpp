@@ -22,8 +22,10 @@ void Bag::set_elements(const std::set<unsigned> &elements) {
 void Bag::print() {
 	std::cout << "[{";
 	for (auto element : elements) {
-		std::cout << element << ", ";
-	}
+		std::cout << element;
+        if(element!=*(--elements.end()))
+            cout<<",";
+    }
 	std::cout << "} , {" << i << ", " << j << "}]";
 }
 

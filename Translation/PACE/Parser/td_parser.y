@@ -43,21 +43,23 @@
 
 %%
 
-TD_START                   : TD_COMMENTS TD_TDINFO TD_COMMENTS TD_BAGS TD_EDGES                   {}
+TD_START                   : TD_COMMENTS TD_TDINFO TD_COMMENTS TD_BAGS TD_EDGES     {}
                            ;
-TD_TDINFO                  : TD_S TD_TD TD_NUM TD_NUM TD_NUM TD_NEWLINE                             {td.setNum_vertices($3); td.setWidth($4-1); td.setNum_graph_vertices($5); }
+TD_TDINFO                  : TD_S TD_TD TD_NUM TD_NUM TD_NUM TD_NEWLINE   {td.setWidthType($2); td.setNum_vertices($3); td.setWidth($4-1);
+                                                                           td.setNum_graph_vertices($5); }
+                           ;
 TD_BAGS                    : TD_BAG TD_NEWLINE TD_COMMENTS TD_BAGS
                            |
                            ;
-TD_BAG                     : TD_B TD_NUM TD_NUMS                                            {td.setABag(*$3,$2);}
+TD_BAG                     : TD_B TD_NUM TD_NUMS                           {if(!td.setABag(*$3,$2)) {cout<<"number of bags is incorrect!"<<endl; YYERROR;}}
                            ;
-TD_NUMS                    : TD_NUM TD_NUMS                                              {$$= new set<unsigned>(*$2);  $$->insert($1);}
-                           |                                                       {$$=new set<unsigned>;}
+TD_NUMS                    : TD_NUM TD_NUMS                                {$$= new set<unsigned>(*$2);  $$->insert($1);}
+                           |                                               {$$=new set<unsigned>;}
                            ;
 TD_EDGES                   : TD_EDGE TD_NEWLINE TD_COMMENTS TD_EDGES                                    {}                
                            |
                            ;
-TD_EDGE                    : TD_NUM TD_NUM                                                {td.addEdge($1,$2);} 
+TD_EDGE                    : TD_NUM TD_NUM      {if(!td.addEdge($1,$2)) {cout<<"Edges" <<$1<< "and"<< $2 <<" are not correct"; YYERROR;}}
                            ;
 
 TD_COMMENTS                : TD_COMMENT  TD_COMMENTS                                       {}
@@ -69,7 +71,7 @@ TD_COMMENTS                : TD_COMMENT  TD_COMMENTS                            
 %%
 
 void yyerror(TreeDecompositionPACE &td, int &result, char const* msg){
-  std::cout<<"Syntax Error: "<< msg << " " <<td_lineno << std::endl;
+  std::cout<<"\n Syntax Error in Tree Decomposition's File: "<< msg << " " <<td_lineno << std::endl;
   // error printing  disabled, it is handeled in main.cpp 
 }
 

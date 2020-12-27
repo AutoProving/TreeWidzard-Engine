@@ -16,11 +16,21 @@ add_compile_options(-O2)
 include_directories(.)
 link_libraries(stdc++fs)
 include_directories(DynamicCores)
-project("treewidzard")
+project(treewidzard)
 add_executable(
 	# Executable file name
-		dp
+		treewidzard
 	# Main file
+		Controller/Parser/command_parser.hpp
+		Controller/Parser/command_parser.cpp
+		Controller/Parser/command_lexer.cpp
+		Controller/SearchController.h
+		Controller/SearchController.cpp
+		Controller/ParseController.cpp
+		Controller/ParseController.h
+		Controller/InputController.cpp
+		Controller/InputController.h
+		Controller/AuxiliaryController.hpp
 		main.cpp
 	# DynamicCore files
 		 #   DynamicCores/CliqueNumber_AtLeast.cpp
@@ -79,10 +89,11 @@ add_executable(
 		#Search/LeveledSetSearchPremise.cpp
 		#Search/LeveledSetSearchPremise.h
 	# Parser files
-        Parser/lexer.cpp
-        Parser/parser.cpp
-        Parser/parser.hpp
-	# ConcreteTreeDecomposition
+		# Input File Parser
+		Parser/input_lexer.cpp
+		Parser/input_parser.cpp
+		Parser/input_parser.hpp
+		# ConcreteTreeDecomposition
 		ConcreteTreeDecomposition/ctd_parser.hpp
 		ConcreteTreeDecomposition/ctd_parser.cpp
 		ConcreteTreeDecomposition/ctd_lexer.cpp
@@ -108,7 +119,7 @@ add_executable(
 	# TreeAutomaton
 		TreeAutomaton/TreeAutomaton.cpp
         )
-target_link_libraries(dp ${CMAKE_DL_LIBS})
+target_link_libraries(treewidzard ${CMAKE_DL_LIBS})
 
 execute_process (
 		COMMAND bash -c "${CMAKE_CURRENT_SOURCE_DIR}/./plugins.sh"

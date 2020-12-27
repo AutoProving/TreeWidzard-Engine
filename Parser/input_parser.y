@@ -1,5 +1,7 @@
 //Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 %defines
+%define api.prefix {input_}
+
 %code requires {
     #include "../Kernel/PropertyAssignment.h"
     #include "../Kernel/Conjecture.h"
@@ -20,8 +22,7 @@
     // this function will be generated
     // using flex
     extern int yylex();
-    extern int yylineno;
-    
+    extern int input_lineno;
     extern void yyerror(std::vector<PropertyAssignment*> &pl, Conjecture &conj, Width &w, int &result, char const* msg);
     vector<char*> variables;
     bool check_variables(char* v);
@@ -101,7 +102,7 @@ FORMULACOMMENTS         : NEWLINE COMMENTS FORMULACOMMENTS
 %%
 
 void yyerror(std::vector<PropertyAssignment*> &pl, Conjecture &conj, Width &w, int &result, char const* msg){
-  std::cout<<"Syntax Error: "<< msg << " " <<yylineno << std::endl;
+  std::cout<<"Syntax Error: "<< msg << " " <<input_lineno << std::endl;
   // error printing  disabled, it is handeled in main.cpp 
 }
 bool check_variables(char* v){

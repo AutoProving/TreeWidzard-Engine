@@ -1,8 +1,8 @@
 /* A Bison parser, made by GNU Bison 3.0.4.  */
 
-/* Bison interface for Yacc-like parsers in C
+/* Skeleton interface for Bison GLR parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
+   Copyright (C) 2002-2015 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,88 +30,83 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_YY_PARSER_HPP_INCLUDED
-# define YY_YY_PARSER_HPP_INCLUDED
+#ifndef YY_COMMAND_COMMAND_PARSER_TAB_H_INCLUDED
+# define YY_COMMAND_COMMAND_PARSER_TAB_H_INCLUDED
 /* Debug traces.  */
-#ifndef YYDEBUG
-# define YYDEBUG 0
-#endif
+#ifndef COMMAND_DEBUG
+# if defined YYDEBUG
 #if YYDEBUG
-extern int yydebug;
+#   define COMMAND_DEBUG 1
+#  else
+#   define COMMAND_DEBUG 0
+#  endif
+# else /* ! defined YYDEBUG */
+#  define COMMAND_DEBUG 0
+# endif /* ! defined YYDEBUG */
+#endif  /* ! defined COMMAND_DEBUG */
+#if COMMAND_DEBUG
+extern int command_debug;
 #endif
 /* "%code requires" blocks.  */
-#line 3 "parser.y" /* yacc.c:1909  */
+#line 3 "command_parser.y" /* glr.c:197  */
 
-    #include "../Kernel/PropertyAssignment.h"
-    #include "../Kernel/Conjecture.h"
-    #include "../Kernel/Width.h"
     #include <iostream>
     #include <vector>
+    #include <memory>
+    #include <set>
+    #include <tuple>
+    using namespace std;
 
-#line 52 "parser.hpp" /* yacc.c:1909  */
+#line 61 "command_parser.tab.h" /* glr.c:197  */
 
 /* Token type.  */
-#ifndef YYTOKENTYPE
-# define YYTOKENTYPE
-  enum yytokentype
+#ifndef COMMAND_TOKENTYPE
+# define COMMAND_TOKENTYPE
+  enum command_tokentype
   {
-    WIDTHPARAM = 258,
-    SEPERATOR = 259,
-    COMPARATOR = 260,
-    FILEPATH = 261,
-    LEFTP = 262,
-    RIGHTP = 263,
-    NAME = 264,
-    NEWLINE = 265,
-    AND = 266,
-    OR = 267,
-    IFF = 268,
-    IMPLIES = 269,
-    NOT = 270,
-    TRUE = 271,
-    FALSE = 272,
-    COMMENT = 273,
-    INTEGER = 274
+    command_newline = 258,
+    command_search_signature = 259,
+    command_print_state_flag = 260,
+    command_print_loop_flag = 261,
+    command_string = 262
   };
 #endif
 
 /* Value type.  */
-#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
+#if ! defined COMMAND_STYPE && ! defined COMMAND_STYPE_IS_DECLARED
 
-union YYSTYPE
+union COMMAND_STYPE
 {
-#line 31 "parser.y" /* yacc.c:1909  */
+#line 31 "command_parser.y" /* glr.c:197  */
 
-     PropertyAssignment *property;
-     ConjectureNode *conjecture;
-     int number;
+     unsigned number;
      char* string;
 
-#line 91 "parser.hpp" /* yacc.c:1909  */
+#line 86 "command_parser.tab.h" /* glr.c:197  */
 };
 
-typedef union YYSTYPE YYSTYPE;
-# define YYSTYPE_IS_TRIVIAL 1
-# define YYSTYPE_IS_DECLARED 1
+typedef union COMMAND_STYPE COMMAND_STYPE;
+# define COMMAND_STYPE_IS_TRIVIAL 1
+# define COMMAND_STYPE_IS_DECLARED 1
 #endif
 
 /* Location type.  */
-#if ! defined YYLTYPE && ! defined YYLTYPE_IS_DECLARED
-typedef struct YYLTYPE YYLTYPE;
-struct YYLTYPE
+#if ! defined COMMAND_LTYPE && ! defined COMMAND_LTYPE_IS_DECLARED
+typedef struct COMMAND_LTYPE COMMAND_LTYPE;
+struct COMMAND_LTYPE
 {
   int first_line;
   int first_column;
   int last_line;
   int last_column;
 };
-# define YYLTYPE_IS_DECLARED 1
-# define YYLTYPE_IS_TRIVIAL 1
+# define COMMAND_LTYPE_IS_DECLARED 1
+# define COMMAND_LTYPE_IS_TRIVIAL 1
 #endif
 
 
-extern YYSTYPE yylval;
-extern YYLTYPE yylloc;
-int yyparse (std::vector<PropertyAssignment*> &pl, Conjecture &conj, Width &w, int &result);
+extern COMMAND_STYPE command_lval;
+extern COMMAND_LTYPE command_lloc;
+int command_parse (int &result);
 
-#endif /* !YY_YY_PARSER_HPP_INCLUDED  */
+#endif /* !YY_COMMAND_COMMAND_PARSER_TAB_H_INCLUDED  */
