@@ -21,7 +21,41 @@ class AbstractTreeDecompositionSymbol{
 	vector<int> symbolNumbers(string s); // returns vector "[i]" if symbol="IntroVertex_i or ForgetVertex_i", Returns vector "[i,j]" if symbol="IntroEdge_i_j", Returns empty vector if symbol = "Join"
 	bool operator== (const AbstractTreeDecompositionSymbol &rhs) const {return this->symbol == rhs.symbol;}
 	void setSymbol(string s);
+	//Operators
+	bool operator>(const AbstractTreeDecompositionSymbol &rhs) const {
+		return !( (*this < rhs) or (*this==rhs)); 
+	}
+	AbstractTreeDecompositionSymbol SmallestSymbol(){
+		return "Leaf";
+	}
 };
+
+
+
+template<class SymbolType, class StateType> 
+class RunSymbol{
+	SymbolType symbol; 
+	StateType state;
+	void printRunSymbol(){
+		cout << "Symbol: "
+		symbol.print(); 
+		cout << " State: "
+		state.print(); 	
+	}
+	//////////////
+	bool operator<(const RunSymbol<SymbolType,StateType>& rhs) const{
+		return this->root < rhs.root; 
+	}
+	bool operator==(const RunSymbol<SymbolType,StateType>& rhs) const{
+		return this->root == rhs.root; 
+	}
+	bool operator>(const RunSymbol<SymbolType,StateType>& rhs) const {
+		return !( (*this < rhs) or (*this==rhs)); 
+	}
+
+}
+
+
 
 template<class SymbolType> 
 class TermNode{
@@ -42,6 +76,35 @@ public:
 	shared_ptr<TermNode<SymbolType>> getParent();
     vector<shared_ptr<TermNode<SymbolType> > > getChildren();
     shared_ptr<TermNode<SymbolType>> getChild(int i); // returns a pointer to the i-th child
+        bool operator<(const TermNode<SymbolType>& rhs) const{
+		if (!(this->symbol==rhs.symbol)){
+			return this->symbol < rhs.symbol;
+		} else {	
+			if (!(this->children.size() == rhs.children.size())){
+				return this->children.size() < rhs.children.size();
+			} else {
+				for (int i = 0; i< children.size(); i++){
+					if (!(this->children[i] == rhs.children[i])){
+						return this->children[i] < rhs.children[i]; 
+					}
+				}
+			}
+			return false; // in this case the terms are equal. 
+		{
+	}
+
+	bool operator==(const TermNode<SymbolType>& rhs) const{ 
+		if (!(this->symbol== rhs.symbol)) return false; 
+		if (this->children.size() == rhs.children.size()){ 
+			for (int i = 0; i< children.size(); i++){
+				if (!(this->children[i] == rhs.children[i]) return false; // Note: this is a recursive step
+			}
+		} else{
+			return false; 
+		}
+		return true;
+	}
+
 };
 
 
@@ -54,6 +117,17 @@ public:
 	void printTermToFile(); 
 	void readTerm(string inputFile);
 	//////////////
+	bool operator<(const Term<SymbolType>& rhs) const{
+		return this->root < rhs.root; 
+	}
+	bool operator==(const Term<SymbolType>& rhs) const{
+		return this->root == rhs.root; 
+	}
+	bool operator>(const Term<SymbolType>& rhs) const {
+		return !( (*this < rhs) or (*this==rhs)); 
+	}
+
+	
 };
 
 
@@ -74,6 +148,21 @@ public:
 	void setConsequentState(StateType state);
 	void setSymbol(SymbolType sym);
 	void setAntecedentStates(vector<StateType> antS);
+	//Operators
+	bool operator<(const Transition<StateType,SymbolType>& rhs) const{
+		if (!(this->consequentState == rhs.consequentState)) return this->consequentState < rhs.consequentState; // Note that we have a comparator for shared_ptr<State>
+		if (!(this->symbol == rhs.symbol)) return this->symbol < rhs.symbol; 
+		for (int i=0; i< antecedentStates.size(); i++){
+			if (!(this->antecedentStates[i] == rhs.antecedentStates[i])) return this->antecedentStates[i] < rhs.antecedentStates[i];	
+		}
+		return false; // In this case, the transitions are equal
+	}
+	bool operator==(const Transition<StateType,SymbolType>& rhs) const{
+		return (this->consequentState == rhs.consequentState) and (this->symbol == rhs.symbol) and (this->antecedentStates == rhs.antecedentStates); 
+	}
+	bool operator>(const Transition<SymbolType,SymbolType>& rhs) const {
+		return !( (*this < rhs) or (*this==rhs)); 
+	}
 };
 
 
@@ -105,7 +194,27 @@ public:
 	bool membership(Term<SymbolType> term);
 	friend TreeAutomaton<StateType,SymbolType> intersectionAutomata(TreeAutomaton<StateType,SymbolType> automaton1, TreeAutomaton<StateType,SymbolType> automaton2); 
 	friend TreeAutomaton<StateType,SymbolType> unionAutomata(TreeAutomaton<StateType,SymbolType> automaton1, TreeAutomaton<StateType,SymbolType> automaton2); 
-	TreeAutomaton<StateType,SymbolType> complementation(); 
+	TreeAutomaton<StateType,SymbolType> complementation();
+	//////////////////////////////////////////////////////////////////////////////////////////
+	// The next two functions are meant to return a term that reaches the state "state"
+        void retrieveTermNodeAcyclicAutomaton(StateType state, shared_ptr<TermNode<SymbolType> >); 
+        Term<SymbolType> retrieveTermAcyclicAutomaton(StateType state);
+	//////////////////////////////////////////////////////////////////////////////////////////	
+	//////////////////////////////////////////////////////////////////////////////////////////
+	// The next two functions are meant to return a run that reaches the state "state"
+	// A run is just a term where the symbol at each position is a pair of an "alphabet symbol" and a "state"
+	void retrieveRunNodeAcyclicAutomaton(StateType state, shared_ptr<TermNode<RunSymbol<SymbolType, State> > > node);
+	//Recovers the root node of a term that reaches state. Assumes that the automaton is acyclic, and that the language of each state is non-empty. 	
+        Term<RunSymbol<SymbolType,StateType> > retrieveRunAcyclicAutomaton(StateType state); 
+	//Recovers a term that reaches state. Assumes that the automaton is acyclic, and that the language of each state is non-empty. 	
+	////////////////////////////////////////////////////////////////////////////////////////////
+	//Operators
+	bool operator<(const TreeAutomaton<StateType,SymbolType>& rhs) const;
+	bool operator==(const TreeAutomaton<StateType,SymbolType>& rhs) const;
+	bool operator>(const TreeAutomaton<SymbolType,SymbolType>& rhs) const {
+		return !( (*this < rhs) or (*this==rhs)); 
+	}
+
 };
 #endif
 

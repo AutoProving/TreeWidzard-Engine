@@ -185,8 +185,99 @@ void TreeAutomaton<StateType, SymbolType>::addTransition(Transition<StateType, S
     transitions.insert(transition);
 }
 
+template<class StateType, class SymbolType>
+void TreeAutomaton<StateType,SymbolType>::retrieveTermNodeAcyclicAutomaton(StateType state, shared_ptr<TermNode<SymbolType> > node){
+	//Assumes that the automaton is acyclic and that each state has a transition in which the state is the consequent
+	if (!this->transitions.empty()){
+		SymbolType a;
+		a.setSymbol(a.SmallestSymbol()); //Creates a symbol of type SymbolType and set it to the smallest symbol 
+		vector<StateType> emptyAntecedents;
+		Transition<StateType,SymbolType> t(state,a,emptyAntecedents); // This is the smallest transition with a consequent equal to state
+		auto it = this->transitions.upper_bound();
+		it--; // This is always defined, since the transition set is non-empty
+		auto itAux = it; 
+		if (itAux->consequentState != state){ 
+			itAux++
+		}
+		if (itAux != this->transitions.end()){
+			if (itAux->consequentState == state){
+				node.symbol = itAux->Symbol;
+				for (int i = 0; i< itAux->antecendentStates.size(); i++){
+					shared_ptr<TermNode<SymbolType> > child(new TermNode<SymbolType>); 
+					child->parent = node; 
+					node.children.push_back(child); 
+					retrieveTermNodeAcyclicAutomaton(itAux->antecedentStates[i],child); 
+				}
+			}
+		}
+		cout << "Error: No transition with consequent equal to the input state.";
+		exit(20);
+	} else {
+		cout << "Error: The automaton has no transitions." << end;
+		exit(20);	
+	}
+
+}
 
 
+template<class StateType, class SymbolType>
+Term<SymbolType> TreeAutomaton<StateType,SymbolType>::retrieveTermAcyclicAutomaton(StateType state){
+	Term<SymbolType> term;
+	shared_ptr<TermNode<SymbolType> > root(new TermNode<SymbolType>);
+	root.parent = NULL; 
+	retrieveTermNodeAcyclicAutomaton(state,root); 
+	return term; 
+}
+
+
+
+
+
+
+template<class StateType, class SymbolType>
+void TreeAutomaton<StateType,SymbolType>::retrieveRunNodeAcyclicAutomaton(StateType state, shared_ptr<TermNode<RunSymbol<SymbolType,StateType> > > node){
+	//Assumes that the automaton is acyclic and that each state has a transition in which the state is the consequent
+	if (!this->transitions.empty()){
+		SymbolType a;
+		a.setSymbol(a.SmallestSymbol()); //Creates a symbol of type SymbolType and set it to the smallest symbol 
+		vector<StateType> emptyAntecedents;
+		Transition<StateType,SymbolType> t(state,a,emptyAntecedents); // This is the smallest transition with a consequent equal to state
+		auto it = this->transitions.upper_bound();
+		it--; // This is always defined, since the transition set is non-empty
+		auto itAux = it; 
+		if (itAux->consequentState != state){ 
+			itAux++
+		}
+		if (itAux != this->transitions.end()){
+			if (itAux->consequentState == state){
+				node.symbol.symbol = itAux->Symbol;
+				node.symbol.state = state; 
+				for (int i = 0; i< itAux->antecendentStates.size(); i++){
+					shared_ptr<TermNode<SymbolType> > child(new TermNode<RunSymbol<SymbolType,StateType> >); 
+					child->parent = node; 
+					node.children.push_back(child); 
+					retrieveTermNodeAcyclicAutomaton(itAux->antecedentStates[i],child); 
+				}
+			}
+		}
+		cout << "Error: No transition with consequent equal to the input state.";
+		exit(20);
+	} else {
+		cout << "Error: The automaton has no transitions." << end;
+		exit(20);	
+	}
+
+}
+
+
+template<class StateType, class SymbolType>
+Term<SymbolType> TreeAutomaton<StateType,SymbolType>::retrieveRunAcyclicAutomaton(StateType state){
+	Term<RunSymbol<SymbolType,StateType> > term;
+	shared_ptr<TermNode<RunSymbol<SymbolType,StateType> > > root(new TermNode<RunSymbol<SymbolType,StateType> >);
+	root.parent = NULL; 
+	retrieveTermNodeAcyclicAutomaton(state,root); 
+	return term; 
+}
 
 
 
