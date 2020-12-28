@@ -10,13 +10,13 @@ extern "C" {
     }
 }
 
-bool check_lessThan_states_BreadthFirstSearch(const State::ptr &lhs,
-											const State::ptr &rhs) {
+// TODO: This looks obsolete, since we already defined the comparison for pointers inside the state class. 
+bool check_lessThan_states_BreadthFirstSearch(const State::ptr &lhs, const State::ptr &rhs) {
 	return *lhs < *rhs;
 }
 
-bool check_equality_states_BreadthFirstSearch(const State::ptr &lhs,
-											const State::ptr &rhs) {
+// TODO: This looks obsolete, since we already defined the comparison for pointers inside the state class. 
+bool check_equality_states_BreadthFirstSearch(const State::ptr &lhs, const State::ptr &rhs) {
 	return (*lhs == *rhs);
 }
 
@@ -24,29 +24,26 @@ BreadthFirstSearch::BreadthFirstSearch() {
     addAttribute("SearchName","BreadthFirstSearch");
 }
 
-BreadthFirstSearch::BreadthFirstSearch(DynamicKernel *dynamicKernel,
-								   Conjecture *conjecture, Flags *flags)
-	: SearchStrategy(dynamicKernel, conjecture, flags) {
+BreadthFirstSearch::BreadthFirstSearch(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags): SearchStrategy(dynamicKernel, conjecture, flags) {
 	this->kernel = kernel;
 	this->conjecture = conjecture;
 	this->flags = flags;
     addAttribute("SearchName","BreadthFirstSearch");
-
 }
 
 pair<bool, AbstractTreeDecomposition> BreadthFirstSearch::search(){
-	SearchState initialSearchState(0,dynamicKernel->initialState); // 0 is the number corresponding to the initial decomposition state (\empty,\empty,\empty) while dynamicKernel->initialSearchState is the initial kernel state
 	TreeAutomaton bfsDAG; // Constructs a DAG corresponding to the BFS. 
+	State dynamicKernel->initialState(); 
 	allStatesSet.insert(initialSearchState); //TODO define InitialSearchState
 	newStatesSet.insert(initialSearchState);  
 	unsigned int width = kernel->get_width().get_value(); 
-	while(newStateVector.size()>0){
+	while(newStateSet.size()>0){
 		newStatesVector.clear();
 		std::copy(newStatesSet.begin(),newStatesSet.end(),newStatesVector.begin());
 		newStatesSet.clear();
 		//This loop is suitable for parallelization
 		for(int l=0;l<newStatesVector.size();l++){
-			ATDState decState(newStatesVector[l].decStateNum); 
+			shared_ptr<State> statePointer = newStatesVector[l]; 
 			///////////////////////////////////////////////////////
 			//////////////////// Introduce Vertex /////////////////
 			///////////////////////////////////////////////////////
@@ -54,11 +51,17 @@ pair<bool, AbstractTreeDecomposition> BreadthFirstSearch::search(){
 			// size of the bag minus one. So the loop iterates 
 			// from 1 to number of elements inteh bag.
 			for (int i=1; i<=dynamicKernel.width+1; i++){
-				if (decState.bagset.find(i)== decState.bagset.end()){
-					ATDState decStatePrime(decState.bagset.insert(i),decState.bagedge,decState.setEdges);
+				if (statePointer.bagset.find(i)== state.bagset.end()){
 				        State::ptr newStatePointer = kernel->intro_v(newStatesVector[l], i); 
-					SearchState::ptr newSearchStatePointer = SearchState(decStatePrime.convertToNumber(),newStatePointer); // TODO fix this line 
-					intermediateStatesSet.insert(newSearchStatePointer); // TODO define comparator
+					if (allStates.find(newStatePointer)!=allStates.end()){
+						newStatesSet.insert(newSearchStatePointer); // TODO define comparator
+						shared_ptr<State> consequentState = newStatePointer; 
+						AbstractTreeDecompositionNodeContent symbol("IntroVertex_"+ str(i));
+						vector<shared_ptr<State> > antecedentStates;
+					        antecedentStates.push_back(state)
+						Transition t(consequentState,Symbol,antecedentStates);
+						bfsDAG.insert(t); 
+					}
 				}
 			}
 			///////////////////////////////////////////////////////

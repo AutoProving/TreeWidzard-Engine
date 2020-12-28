@@ -15,6 +15,7 @@
 
 using namespace std;
 
+
 class CTDNodeNew : public enable_shared_from_this<CTDNodeNew> {
   protected:
 	string nodeType;						 // Default: "Empty"

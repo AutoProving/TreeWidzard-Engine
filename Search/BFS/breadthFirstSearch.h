@@ -7,6 +7,7 @@
 #include "../Kernel/StateTree.h"
 #include "../TreeAutomaton/TreeAutomaton.h"
 
+/*
 //These are states used to define what is a 
 //valid decomposition
 class DecompositionState{
@@ -72,7 +73,7 @@ class SearchState: public DecompositionState{
 	};
 	ptr get_ptr() { return ptr(this->shared_from_this()); }
 };
-
+*/
 
 
 
@@ -83,16 +84,16 @@ using namespace std::chrono;
 class BreadthFirstSearch : public SearchStrategy {
   private:
 	TreeAutomaton bfsDAG; // Constructs a DAG corresponding to the BFS. 
-	set<shared_ptr<searchState> > allStatesSet;
-        set<shared_ptr<searchState> > intermediateStatesSet; 
-	set<shared_ptr<searchState> >  newStatesSet; 
-	vector<shared_ptr<searchState> > newStatesVector; // This will make it easier to do parallel search 
+	set<State::ptr> allStatesSet;
+        set<State::ptr> intermediateStatesSet; 
+	set<State::ptr>  newStatesSet; 
+	vector<State::ptr> newStatesVector; // This will make it easier to do parallel search 
   public:
     	BreadthFirstSearch();
 	BreadthFirstSearch(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags);
 	~BreadthFirstSearch(){};
-	Term<AbstractTreeDecompositionSymbol> extractCounterExampleTerm(); 	
-	//Term<pair<AbstractTreeDecompositionSymbol,SearchState>> extractCounterExampleStateTree(); fix this part. Create a class for these pairs.
+	AbstractTreeDecomposition extractCounterExampleTerm(); 	
+	Term<RunSymbol<AbstractTreeDecompositionSymbol,State> > extractCounterExampleRun();  
 };
 
 #endif // CURRENT_BREADTHFIRSTSEARCH_H
