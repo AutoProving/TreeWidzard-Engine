@@ -2,10 +2,11 @@
 #ifndef CURRENT_BREADTHFIRSTSEARCH_H
 #define CURRENT_BREADTHFIRSTSEARCH_H
 #include <math.h>
-#include "../Kernel/ConcreteTreeDecomposition.h"
-#include "../Kernel/SearchStrategy.h"
-#include "../Kernel/StateTree.h"
-#include "../TreeAutomaton/TreeAutomaton.h"
+#include "../../Kernel/ConcreteTreeDecomposition.h"
+#include "../../Kernel/SearchStrategy.h"
+#include "../../Kernel/StateTree.h"
+#include "../../TreeAutomaton/TreeAutomaton.h"
+#include "../../TreeAutomaton/AbstractTreeDecomposition.h"
 
 /*
 //These are states used to define what is a 
@@ -83,17 +84,18 @@ using namespace std::chrono;
 
 class BreadthFirstSearch : public SearchStrategy {
   private:
-	TreeAutomaton bfsDAG; // Constructs a DAG corresponding to the BFS. 
+	TreeAutomaton<State,AbstractTreeDecompositionNodeContent> bfsDAG; // Constructs a DAG corresponding to the BFS.
 	set<State::ptr> allStatesSet;
-        set<State::ptr> intermediateStatesSet; 
+	set<State::ptr> intermediateStatesSet;
 	set<State::ptr>  newStatesSet; 
 	vector<State::ptr> newStatesVector; // This will make it easier to do parallel search 
   public:
-    	BreadthFirstSearch();
+    BreadthFirstSearch();
 	BreadthFirstSearch(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags);
 	~BreadthFirstSearch(){};
 	AbstractTreeDecomposition extractCounterExampleTerm(); 	
-	Term<RunSymbol<AbstractTreeDecompositionSymbol,State> > extractCounterExampleRun();  
+	Term<RunNodeContent<State,AbstractTreeDecompositionNodeContent> > extractCounterExampleRun();
+    void search();
 };
 
 #endif // CURRENT_BREADTHFIRSTSEARCH_H

@@ -18,7 +18,7 @@ class RandomLeveledSetSearchPremise: public SearchStrategy{
         RandomLeveledSetSearchPremise();
         RandomLeveledSetSearchPremise(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags);
         static unsigned bagSetToNumber(set<unsigned> bagSet,unsigned width);
-        virtual pair<bool,ConcreteTreeDecomposition> search();
+        void search();
         shared_ptr<CTDNodeNew> extractCTDNode(unsigned index);
         ConcreteTreeDecomposition extractCTDDecomposition();
         shared_ptr<StateTreeNode> extractStateTreeNode(unsigned index);

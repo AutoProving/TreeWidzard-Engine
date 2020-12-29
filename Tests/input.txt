@@ -1,4 +1,4 @@
-path_width 2
+path_width 1
 b := MaxDegree > 4
 c := HasMultipleEdges
 NOT c IMPLIES (NOT  b)

@@ -270,7 +270,7 @@ StateTree LeveledSetSearchPremise::extractStateTreeDecomposition(unsigned level,
     return stateTree;
 }
 
-pair<bool,ConcreteTreeDecomposition> LeveledSetSearchPremise::search(){
+void LeveledSetSearchPremise::search(){
 
     //The number of positions of the vectors setAllStates, setNewStates and setIntermediateStates
     //is equal to the number of BagSets of with width+1 elements (where width = pathwidth or treewidth)
@@ -539,8 +539,7 @@ pair<bool,ConcreteTreeDecomposition> LeveledSetSearchPremise::search(){
         }
     }
     cout<<"!!!FINISH!!!"<<endl;
-    ConcreteTreeDecomposition T;
-    return std::make_pair(true, T); 
+
 }
 
 

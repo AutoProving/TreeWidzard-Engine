@@ -47,7 +47,7 @@ add_executable(
 		#	DynamicCores/Minor.cpp
 		#   DynamicCores/NoWhereZeroFlow_AtMost.cpp
 		#	DynamicCores/AuxiliaryFunctions.h
-			DynamicCores/HamiltonianCycle.cpp
+		#	DynamicCores/HamiltonianCycle.cpp
 
 	# Kernel files
         Kernel/Witness.cpp
@@ -88,6 +88,8 @@ add_executable(
 		#Search/LeveledSetSearch.h
 		#Search/LeveledSetSearchPremise.cpp
 		#Search/LeveledSetSearchPremise.h
+		Search/BFS/BreadthFirstSearch.h
+		Search/BFS/BreadthFirstSearch.cpp
 	# Parser files
 		# Input File Parser
 		Parser/input_lexer.cpp
@@ -117,7 +119,12 @@ add_executable(
 		Translation/TreeAutomaton/term_parser.cpp
 		Translation/TreeAutomaton/term_lexer.cpp
 	# TreeAutomaton
+		TreeAutomaton/TreeAutomaton.h
 		TreeAutomaton/TreeAutomaton.cpp
+		TreeAutomaton/Term.h
+		TreeAutomaton/Term.cpp
+		TreeAutomaton/AbstractTreeDecomposition.h
+		TreeAutomaton/AbstractTreeDecomposition.cpp
         )
 target_link_libraries(treewidzard ${CMAKE_DL_LIBS})
 

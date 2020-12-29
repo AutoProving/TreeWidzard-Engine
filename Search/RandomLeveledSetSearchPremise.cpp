@@ -79,7 +79,7 @@ StateTree RandomLeveledSetSearchPremise::extractStateTreeDecomposition(){
 
 }
 
-pair<bool,ConcreteTreeDecomposition> RandomLeveledSetSearchPremise::search(){
+void RandomLeveledSetSearchPremise::search(){
     // Add Initial state to vector
     generatedVector.push_back({kernel->initialState(),"Empty"});
     bool foundCounterexample = false;
@@ -221,6 +221,4 @@ pair<bool,ConcreteTreeDecomposition> RandomLeveledSetSearchPremise::search(){
             iterationNumber++;
         }
     }
-
-
 }

@@ -10,46 +10,61 @@ void State::addWitnessSet(shared_ptr<WitnessSet> ws) {
 	witnessSetVector.push_back(ws);
 }
 
-bool State::operator<(State& rhs) {
-	if (this->get_bag() < rhs.get_bag()) {
-		return true;
-	} else if (numberOfComponents() != rhs.numberOfComponents()) {
-		cout << "ERROR: In State::operator< sizes are different! " << endl;
-		exit(20);
-	} else if (this->get_bag() == rhs.get_bag()) {
-		for (unsigned j = 0; j < numberOfComponents(); j++) {
-			shared_ptr<WitnessSet> temp1 = getWitnessSet(j);
-			shared_ptr<WitnessSet> temp2 = rhs.getWitnessSet(j);
-			if (*temp1 < *temp2) {
-				return true;
-			} else if (*temp2 < *temp1) {
-				return false;
-			}
-		}
-		return false;
-	} else {
-		return false;
-	}
+bool State::operator==(const State &rhs) const {
+    if (this->get_bag() == rhs.get_bag()) {
+        if (numberOfComponents() != rhs.numberOfComponents()) {
+            cout << "ERROR: In State::operator== sizes are different! " << endl;
+            exit(20);
+        } else {
+            for (size_t j = 0; j < numberOfComponents(); j++) {
+                if (!(*(rhs.getWitnessSet(j)) == *(getWitnessSet(j)))) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    } else {
+        return false;
+    }
 }
 
-bool State::operator==(State& rhs) {
-	if (this->get_bag() == rhs.get_bag()) {
-		if (numberOfComponents() != rhs.numberOfComponents()) {
-			cout << "ERROR: In State::operator== sizes are different! " << endl;
-			exit(20);
-		} else {
-			for (size_t j = 0; j < numberOfComponents(); j++) {
-				if (!(*(rhs.getWitnessSet(j)) == *(getWitnessSet(j)))) {
-					return false;
-				}
-			}
-			return true;
-		}
-	} else {
-		return false;
-	}
+bool State::operator!=(const State &rhs) const {
+    return !(rhs == *this);
 }
 
+bool State::operator<(const State &rhs) const {
+    if (this->get_bag() < rhs.get_bag()) {
+        return true;
+    } else if (numberOfComponents() != rhs.numberOfComponents()) {
+        cout << "ERROR: In State::operator< sizes are different! " << endl;
+        exit(20);
+    } else if (this->get_bag() == rhs.get_bag()) {
+        for (unsigned j = 0; j < numberOfComponents(); j++) {
+            shared_ptr<WitnessSet> temp1 = getWitnessSet(j);
+            shared_ptr<WitnessSet> temp2 = rhs.getWitnessSet(j);
+            if (*temp1 < *temp2) {
+                return true;
+            } else if (*temp2 < *temp1) {
+                return false;
+            }
+        }
+        return false;
+    } else {
+        return false;
+    }
+}
+
+bool State::operator >(const State &rhs) const {
+    return rhs < *this;
+}
+
+bool State::operator<=(const State &rhs) const {
+    return !(rhs < *this);
+}
+
+bool State::operator>=(const State &rhs) const {
+    return !(*this < rhs);
+}
 /// Implementation of this function should change regard to WitnessSet and
 /// Witness
 size_t State::operator()(const State& b) const {
@@ -79,8 +94,12 @@ void State::print() {
 	cout << "\n------------\n";
 }
 
-shared_ptr<WitnessSet> State::getWitnessSet(int i) {
+shared_ptr<WitnessSet> State::getWitnessSet(int i) const {
 	return witnessSetVector[i];
 }
 
 int State::numberOfComponents() const { return witnessSetVector.size(); }
+
+
+
+

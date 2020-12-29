@@ -11,6 +11,8 @@
 #include "../Translation/PACE/Parser/td_parser.hpp"
 #include "../Translation/PACE/Parser/gr_parser.hpp"
 #include "../ConcreteTreeDecomposition/ctd_parser.hpp"
+#include "../TreeAutomaton/TreeAutomaton.h"
+#include "../TreeAutomaton/AbstractTreeDecomposition.h"
 
 using namespace std;
 extern FILE *gr_in;
@@ -25,8 +27,13 @@ public:
     ParseController(const Flags &flag, const string &inputPath);
     void parse_pace(string graphPath, string decompositionPath);
     void parse_abstract(string abstractPath);
+    void test_term();
 
 };
 
+class FarhadState{
+public:
+    string name;
 
+};
 #endif //TREEWIDZARD_PARSECONTROLLER_H

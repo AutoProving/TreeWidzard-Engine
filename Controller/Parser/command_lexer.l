@@ -13,10 +13,11 @@
 
 %%
 -search                     yylval.string = strdup(yytext); return command_search_signature;
--parse                       yylval.string = strdup(yytext); return command_parse_signature;
+-parse                      yylval.string = strdup(yytext); return command_parse_signature;
 -ps                         yylval.string = strdup(yytext); return command_print_state_flag;
 -pl                         yylval.string = strdup(yytext); return command_print_loop_flag;
 --help                      yylval.string = strdup(yytext); return command_help;
+-term                       yylval.string = strdup(yytext); return command_term_signature;
 PACE                        yylval.string = strdup(yytext); return command_parse_pace;
 ABSTRACT                    yylval.string = strdup(yytext); return command_parse_abstract;
 ;                           yylval.string = strdup(yytext); return command_end;

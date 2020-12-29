@@ -26,9 +26,7 @@ class SearchStrategy {
     bool isAttribute(string x, string y);
     string getAttributeValue(string x);// Returns "y" if (x,y) belongs to attributes.
     map<string,string> getAttributes();
-    virtual pair<bool, ConcreteTreeDecomposition>
-	search(); // Returns <0,emptytree> if no counter example is found. Returns
-			  // <1,counterexampletree> if a counter example found.
+    virtual void search();
 };
 using SearchStrategy_creator_t =  SearchStrategy *(*)();
 using SearchStrategy_creator_t_parameter =  SearchStrategy *(*)(DynamicKernel*, Conjecture*,Flags*);

@@ -36,10 +36,10 @@
 }
 %parse-param {int &result}
 %token command_newline command_search_signature command_print_state_flag command_print_loop_flag command_string command_help command_end
-        command_parse_signature command_parse_pace command_parse_abstract
+        command_parse_signature command_parse_pace command_parse_abstract command_term_signature
 %type<string> command_newline command_search_signature command_print_state_flag command_print_loop_flag
               command_string command_input_file command_search_strategy command_help command_end
-              command_parse_signature command_parse_pace command_parse_abstract
+              command_parse_signature command_parse_pace command_parse_abstract command_term_signature
 %start command_start
 %glr-parser
 
@@ -48,6 +48,7 @@
 command_start       : command_search
                     | command_help command_end {show_manual();}
                     | command_parse
+                    | command_term
                     ;
 command_search      : command_search_signature command_flags
                       command_search_strategy  command_input_file command_end { SearchController search($4,$3,flags);
@@ -69,6 +70,7 @@ command_parse       : command_parse_signature command_parse_pace command_flags c
                     | command_parse_signature command_parse_abstract command_flags command_input_file command_input_file command_end
                         { ParseController parsePACE(flags, $4); parsePACE.parse_abstract($5);}
                     ;
+command_term        : command_term_signature command_input_file command_end{ParseController parseTest(flags,$2); parseTest.test_term();}
 
 %%
 

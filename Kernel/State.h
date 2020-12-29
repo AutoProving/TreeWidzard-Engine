@@ -27,12 +27,24 @@ class State : private std::enable_shared_from_this<State> {
 	Bag get_bag() const;
 	void set_bag(const Bag &bag);
 	void addWitnessSet(shared_ptr<WitnessSet>);
-	bool operator<(State &rhs);
-	bool operator==(State &rhs);
-	size_t operator()(const State &b) const;
+
+    bool operator==(const State &rhs) const;
+
+    bool operator!=(const State &rhs) const;
+
+    bool operator<(const State &rhs) const;
+
+    bool operator>(const State &rhs) const;
+
+    bool operator<=(const State &rhs) const;
+
+    bool operator>=(const State &rhs) const;
+
+    size_t operator()(const State &b) const;
 	void print();
-	shared_ptr<WitnessSet> getWitnessSet(int);
+	shared_ptr<WitnessSet> getWitnessSet(int) const;
 	int numberOfComponents() const;
+
 };
 
 #endif

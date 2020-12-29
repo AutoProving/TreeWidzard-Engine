@@ -333,7 +333,7 @@ StateTree LeveledSetSearch::extractStateTreeDecomposition(
 	return stateTree;
 }
 
-pair<bool, ConcreteTreeDecomposition> LeveledSetSearch::search() {
+void LeveledSetSearch::search() {
 	// The number of positions of the vectors setAllStates, setNewStates and
 	// setIntermediateStates is equal to the number of BagSets of with width+1
 	// elements (where width = pathwidth or treewidth) that means, 2^{width+1}.
@@ -405,30 +405,16 @@ maxWitnessSetSize[m] =
 				}
 				// introduce an edge
 				if ((*iteratorNewStates)->get_bag().get_elements().size() > 1) {
-					set<unsigned> bagSet =
-						(*iteratorNewStates)->get_bag().get_elements();
-					for (auto itBagEl1 = bagSet.begin();
-						 itBagEl1 != bagSet.end(); itBagEl1++) {
+					set<unsigned> bagSet = (*iteratorNewStates)->get_bag().get_elements();
+					for (auto itBagEl1 = bagSet.begin(); itBagEl1 != bagSet.end(); itBagEl1++) {
 						auto it = itBagEl1;
 						it++;
-						if (it != (*iteratorNewStates)
-									  ->get_bag()
-									  .get_elements()
-									  .end()) {
-							for (auto itBagEl2 = it; itBagEl2 != bagSet.end();
-								 itBagEl2++) {
-								if ((*iteratorNewStates)
-										->get_bag()
-										.edge_introducible(*itBagEl1,
-														   *itBagEl2)) {
-									State::ptr newState =
-										kernel->intro_e(*iteratorNewStates,
-														*itBagEl1, *itBagEl2);
-									unsigned index = bagSetToNumber(
-										newState->get_bag().get_elements(),
-										width);
-									setIntermediateStates[index].insert(
-										newState);
+						if (it != (*iteratorNewStates)->get_bag().get_elements().end()) {
+							for (auto itBagEl2 = it; itBagEl2 != bagSet.end(); itBagEl2++) {
+								if ((*iteratorNewStates)->get_bag().edge_introducible(*itBagEl1,*itBagEl2)) {
+									State::ptr newState =kernel->intro_e(*iteratorNewStates,*itBagEl1, *itBagEl2);
+									unsigned index = bagSetToNumber(newState->get_bag().get_elements(),width);
+									setIntermediateStates[index].insert(newState);
 									// Statistics
 									if (flags->get("PrintStates") == 1) {
 										cout << "intro_e_" << *itBagEl1 << "_"
@@ -436,16 +422,9 @@ maxWitnessSetSize[m] =
 										newState->print();
 									}
 									if (flags->get("LoopTime") == 1) {
-										for (size_t m = 0;
-											 m < newState->numberOfComponents();
-											 m++) {
-											if (maxWitnessSetSize[m] <
-												static_cast<unsigned>(
-													newState->getWitnessSet(m)
-														->size())) {
-												maxWitnessSetSize[m] =
-													newState->getWitnessSet(m)
-														->size();
+										for (size_t m = 0; m < newState->numberOfComponents(); m++) {
+											if (maxWitnessSetSize[m] < static_cast<unsigned>(newState->getWitnessSet(m)->size())) {
+												maxWitnessSetSize[m] = newState->getWitnessSet(m)->size();
 											}
 										}
 									}
@@ -676,6 +655,4 @@ maxWitnessSetSize[m] =
 		}
 	}
 	cout << "!!!FINISH!!!" << endl;
-	ConcreteTreeDecomposition T;
-	return std::make_pair(true, T);
 }

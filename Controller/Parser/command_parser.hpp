@@ -73,7 +73,8 @@ extern int command_debug;
     command_end = 264,
     command_parse_signature = 265,
     command_parse_pace = 266,
-    command_parse_abstract = 267
+    command_parse_abstract = 267,
+    command_term_signature = 268
   };
 #endif
 
@@ -87,7 +88,7 @@ union COMMAND_STYPE
      unsigned number;
      char* string;
 
-#line 91 "command_parser.hpp" /* glr.c:197  */
+#line 92 "command_parser.hpp" /* glr.c:197  */
 };
 
 typedef union COMMAND_STYPE COMMAND_STYPE;

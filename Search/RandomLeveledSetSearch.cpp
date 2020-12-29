@@ -73,7 +73,7 @@ StateTree RandomLeveledSetSearch::extractStateTreeDecomposition(){
 
 }
 
-pair<bool,ConcreteTreeDecomposition> RandomLeveledSetSearch::search(){
+void RandomLeveledSetSearch::search(){
 
     // Add Initial state to vector
     generatedVector.push_back(make_pair(kernel->initialState(),"Empty"));

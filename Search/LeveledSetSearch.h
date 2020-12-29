@@ -20,7 +20,7 @@ class LeveledSetSearch : public SearchStrategy {
 	LeveledSetSearch(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags);
 	~LeveledSetSearch(){};
 	static unsigned bagSetToNumber(set<unsigned> bagSet, unsigned width);
-	virtual pair<bool, ConcreteTreeDecomposition> search();
+	void search();
 	shared_ptr<CTDNodeNew> extractCTDNode(
 		unsigned level, State::ptr s,
 		vector<vector<set<State::ptr> > > &leveledSetAllStates);
