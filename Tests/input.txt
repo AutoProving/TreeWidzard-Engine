@@ -1,4 +1,4 @@
-path_width 1
+path_width 3
 b := MaxDegree > 4
 c := HasMultipleEdges
-NOT c IMPLIES (NOT  b)
+TRUE

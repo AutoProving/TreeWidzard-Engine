@@ -22,11 +22,16 @@ BreadthFirstSearch::BreadthFirstSearch(DynamicKernel *dynamicKernel, Conjecture 
 }
 
 void BreadthFirstSearch::search(){
-	TreeAutomaton<State,AbstractTreeDecompositionNodeContent> bfsDAG; // Constructs a DAG corresponding to the BFS.
+	TreeAutomaton<State::ptr,AbstractTreeDecompositionNodeContent> bfsDAG; // Constructs a DAG corresponding to the BFS.
 	State::ptr initialState = kernel->initialState();
 	allStatesSet.insert(initialState); //TODO define InitialSearchState
 	newStatesSet.insert(initialState);
-	unsigned int width = kernel->get_width().get_value();
+    bfsDAG.addState(initialState);
+    AbstractTreeDecompositionNodeContent initialTransitionContent("Leaf");
+    vector<State::ptr> initialAntecedents; // Empty vector since there are no children.
+    Transition<State::ptr,AbstractTreeDecompositionNodeContent> initialTransition(initialState,initialTransitionContent,initialAntecedents);
+	bfsDAG.addTransition(initialTransition);
+    unsigned int width = kernel->get_width().get_value();
 	int iterationNumber = 0;
 	while(!newStatesSet.empty()){
 	    iterationNumber++;
@@ -46,37 +51,35 @@ void BreadthFirstSearch::search(){
 			// size of the bag minus one. So the loop iterates 
 			// from 1 to number of elements inteh bag.
 			for (int i=1; i<= width+1; i++){
-				if (!bagElement.count(i)){
-				    if(statePointer->get_bag().vertex_introducible(i)){
-                        State::ptr newStatePointer = kernel->intro_v(statePointer, i);
-                        if (!allStatesSet.count(newStatePointer)){
-                            newStatesSet.insert(newStatePointer);
-                            State::ptr consequentState = newStatePointer;
-                            AbstractTreeDecompositionNodeContent transitionContent("IntroVertex_"+ to_string(i));
-                            vector<State> antecedentStates;
-                            antecedentStates.push_back(*statePointer);
-                            Transition<State,AbstractTreeDecompositionNodeContent> transition(*consequentState,transitionContent,antecedentStates);
-                            bfsDAG.addTransition(transition);
-                        }
-				    }
-				}
+                if(bag.vertex_introducible(i)){
+                    State::ptr newStatePointer = kernel->intro_v(statePointer, i);
+                    if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer) ){
+                        newStatesSet.insert(newStatePointer);
+                        State::ptr consequentState = newStatePointer;
+                        bfsDAG.addState(consequentState);
+                        AbstractTreeDecompositionNodeContent transitionContent("IntroVertex_"+ to_string(i));
+                        vector<State::ptr> antecedentStates;
+                        antecedentStates.push_back(statePointer);
+                        Transition<State::ptr,AbstractTreeDecompositionNodeContent> transition(consequentState,transitionContent,antecedentStates);
+                        bfsDAG.addTransition(transition);
+                    }
+                }
 			}
 			///////////////////////////////////////////////////////
 			//////////////////// Forget Vertex //////////////////// 
 			///////////////////////////////////////////////////////
 			for (auto it= bagElement.begin(); it!=bagElement.end(); it++){
-				if(bag.vertex_forgettable(*it)){
-                    State::ptr newStatePointer = kernel->forget_v(statePointer, *it);
-                    if (!allStatesSet.count(newStatePointer)){
-                        newStatesSet.insert(newStatePointer);
-                        State::ptr consequentState = newStatePointer;
-                        AbstractTreeDecompositionNodeContent transitionContent("ForgetVertex_"+ to_string(*it));
-                        vector<State> antecedentStates;
-                        antecedentStates.push_back(*statePointer);
-                        Transition<State,AbstractTreeDecompositionNodeContent> transition(*consequentState,transitionContent,antecedentStates);
-                        bfsDAG.addTransition(transition);
-                    }
-				}
+                State::ptr newStatePointer = kernel->forget_v(statePointer, *it);
+                if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer)){
+                    newStatesSet.insert(newStatePointer);
+                    State::ptr consequentState = newStatePointer;
+                    AbstractTreeDecompositionNodeContent transitionContent("ForgetVertex_"+ to_string(*it));
+                    bfsDAG.addState(consequentState);
+                    vector<State::ptr> antecedentStates;
+                    antecedentStates.push_back(statePointer);
+                    Transition<State::ptr,AbstractTreeDecompositionNodeContent> transition(consequentState,transitionContent,antecedentStates);
+                    bfsDAG.addTransition(transition);
+                }
 			}
             //Introduce Edge
 			if(bag.get_elements().size()>1){
@@ -85,29 +88,33 @@ void BreadthFirstSearch::search(){
                     itX++; // TODO write this more elegantly
                     if(itX!=bagElement.end()){
                         for (auto itPrime = itX ; itPrime != bagElement.end(); itPrime++){
-                            if(bag.edge_introducible(*it,*itPrime)){
-                                State::ptr newStatePointer = kernel->intro_e(statePointer, *it, *itPrime);
-                                if (!allStatesSet.count(newStatePointer)){
-                                    newStatesSet.insert(newStatePointer);
-                                    State::ptr consequentState = newStatePointer;
-                                    AbstractTreeDecompositionNodeContent transitionContent("IntroEdge_"+ to_string(*it)+"_"+to_string(*itPrime));
-                                    vector<State> antecedentStates;
-                                    antecedentStates.push_back(*statePointer);
-                                    Transition<State,AbstractTreeDecompositionNodeContent> transition(*consequentState,transitionContent,antecedentStates);
-                                    bfsDAG.addTransition(transition);
-                                }
+                            State::ptr newStatePointer = kernel->intro_e(statePointer, *it, *itPrime);
+                            if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer)){
+                                newStatesSet.insert(newStatePointer);
+                                State::ptr consequentState = newStatePointer;
+                                AbstractTreeDecompositionNodeContent transitionContent("IntroEdge_"+ to_string(*it)+"_"+to_string(*itPrime));
+                                bfsDAG.addState(consequentState);
+                                vector<State::ptr> antecedentStates;
+                                antecedentStates.push_back(statePointer);
+                                Transition<State::ptr,AbstractTreeDecompositionNodeContent> transition(consequentState,transitionContent,antecedentStates);
+                                bfsDAG.addTransition(transition);
                             }
                         }
                     }
                 }
 			}
 		}
+		for(auto it = newStatesSet.begin(); it!=newStatesSet.end(); it++){
+		    if(!conjecture->evaluateConjectureOnState(**it,kernel)){
+		        bfsDAG.addFinalState(*it);
+		    }
+		}
         set<State::ptr> setUnion;
 		set_union(allStatesSet.begin(),allStatesSet.end(),newStatesSet.begin(),newStatesSet.end(),inserter(setUnion,setUnion.begin()));
 		allStatesSet = setUnion;
 		setUnion.clear();
         if(flags->get("LoopTime") == 1){
-            cout<<"new State: "<<newStatesSet.size()<<endl;
+            cout<<"AllState:"<<allStatesSet.size()<<" new State: "<<newStatesSet.size()<<endl;
             cout << endl << "----------------- End Iteration: " << iterationNumber << " ----------------------------" << endl << endl;
         }
 	}

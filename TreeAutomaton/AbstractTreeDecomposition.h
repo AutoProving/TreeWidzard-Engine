@@ -47,7 +47,6 @@ public:
 
 class AbstractTreeDecomposition: public Term<AbstractTreeDecompositionNodeContent>{
 public:
-
     //	public:
 //		ATD();
 //		ATD(Multigraph G);

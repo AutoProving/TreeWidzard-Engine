@@ -22,7 +22,22 @@ class State : private std::enable_shared_from_this<State> {
 		State &operator*() const { return *pointer; }
 		State *operator->() const { return &*pointer; }
 		bool operator<(const ptr &rhs) const { return **this < *rhs; }
-	};
+        bool operator>(const ptr &rhs) const {
+            return rhs < *this;
+        }
+        bool operator<=(const ptr &rhs) const {
+            return !(rhs < *this);
+        }
+        bool operator>=(const ptr &rhs) const {
+            return !(*this < rhs);
+        }
+        bool operator==(const ptr &rhs) const {
+            return **this == *rhs;
+        }
+        bool operator!=(const ptr &rhs) const {
+            return !(rhs == *this);
+        }
+    };
 	ptr get_ptr() { return ptr(this->shared_from_this()); }
 	Bag get_bag() const;
 	void set_bag(const Bag &bag);

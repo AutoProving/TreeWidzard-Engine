@@ -90,3 +90,4 @@ Term<RunNodeContent<TermNodeContent,StateType> > TreeAutomaton<StateType,TermNod
     retrieveTermNodeAcyclicAutomaton(state,root);
     return term;
 }
+

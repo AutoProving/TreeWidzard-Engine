@@ -178,6 +178,13 @@ public:
     void addTransition(Transition<StateType,TermNodeContent> transition){
         transitions.insert(transition);
     }
+    void addState(StateType state){
+        states.insert(state);
+    };
+
+    void addFinalState(StateType state){
+        finalStates.insert(state);
+    };
 
     bool operator==(const TreeAutomaton &rhs) const {
         return states == rhs.states &&
