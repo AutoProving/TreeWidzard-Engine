@@ -30,18 +30,17 @@ class DynamicCore {
     map<string,string> getAttributes();
 	void insertIntoInitialWitnessSet(WitnessPointer);
 	virtual void createInitialWitnessSet();
+	
 	virtual WitnessSetPointer intro_v(unsigned i, Bag &b, Witness &witness);
-	virtual WitnessSetPointer intro_e(unsigned i, unsigned j, Bag &b,
-									  Witness &witness);
+	virtual WitnessSetPointer intro_e(unsigned i, unsigned j, Bag &b, Witness &witness);
 	virtual WitnessSetPointer forget_v(unsigned i, Bag &b, Witness &witness);
-	virtual WitnessSetPointer join(Bag &b, Witness &witness1,
-								   Witness &witness2);
-	virtual bool is_final_witness(Witness &witness);
-	virtual WitnessSetPointer clean(WitnessSetPointer witnessSet);
+	virtual WitnessSetPointer join(Bag &b, Witness &witness1, Witness &witness2);
 	WitnessSetPointer intro_v(unsigned i, Bag &b, WitnessSetPointer witnessSet);
 	WitnessSetPointer intro_e(unsigned i, unsigned j, Bag &b,WitnessSetPointer witnessSet);
 	WitnessSetPointer forget_v(unsigned i, Bag &b, WitnessSetPointer witnessSet);
 	WitnessSetPointer join(Bag &b, WitnessSetPointer witnessSet1,WitnessSetPointer witnessSet2);
+	virtual bool is_final_witness(Witness &witness);
+	virtual WitnessSetPointer clean(WitnessSetPointer witnessSet);
 	bool is_final_set_witness(Bag &b, WitnessSetPointer witnessSet);
 };
 using DynamicCore_creator_t =  DynamicCore *(*)();

@@ -65,6 +65,7 @@ public:
     virtual ~WitnessSet(){};
     virtual BaseIterator begin(){cout<<"Error: WitnessSet begin()."<<endl; exit(20);};
     virtual BaseIterator end(){cout<< "Error: WitnessSet end()"<<endl; exit(20);};
+    virtual shared_ptr<WitnessSet> relabel(map<unsigned,unsigned>); // relabelingMap is a relabeling of the vertices in a bag. The relabel function propagates this relabeling to each witness in the witness set 
     virtual void insert(shared_ptr<Witness> w){cout<<"Error: WitnessSet insert()."<<endl; exit(20);};
     virtual void union_set_witness(shared_ptr<WitnessSet> witnessSet){cout<<"Error: Set union of witnessSet class."<<endl; exit(20);};
     virtual void print(){cout<<"Error: WitnessSet print."<<endl; exit(20);};

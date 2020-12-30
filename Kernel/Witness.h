@@ -13,6 +13,7 @@ protected:
     virtual Witness &set_equal(Witness &witness);
 public:
     virtual void print();
+    virtual shared_ptr<Witness> relabel(map<unsigned,unsigned> relabelingMap); // relabelingMap is a relabeling of the vertices in a bag. The relabel function propagates this relabeling to a witness
     virtual ~Witness();
     friend bool operator==(const Witness &lhs, const Witness &rhs);
     friend bool operator<(const Witness &lhs, const Witness &rhs);
