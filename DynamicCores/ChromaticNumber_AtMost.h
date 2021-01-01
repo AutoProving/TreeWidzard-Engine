@@ -9,8 +9,12 @@ using namespace std;
 
 class ChromaticNumber_AtMost_Witness: public Witness, public enable_shared_from_this<ChromaticNumber_AtMost_Witness> {
     public:
+<<<<<<< HEAD
         std::map<unsigned,unsigned> coloring; //The first coordinate of each pair is a vertex and the second a color. 
      //   virtual shared_ptr<Witness> relabel(map<unsigned,unsigned> relabelingMap);
+=======
+        std::map<unsigned,unsigned> coloring; //This map assigns colors to elements of a bag
+>>>>>>> 857c0c53acad2d95541e463de586fe54916ea154
         ChromaticNumber_AtMost_Witness(){};
         ~ChromaticNumber_AtMost_Witness(){};
         virtual bool is_equal(const Witness &rhs)const;
