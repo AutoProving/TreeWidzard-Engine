@@ -103,10 +103,62 @@ void BreadthFirstSearch::search(){
                     }
                 }
 			}
+
+            // join
+            if (kernel->get_width().get_name() == "tree_width") {
+                // join
+                for (auto it = allStatesSet.begin(); it != allStatesSet.end(); it++) {
+                    if (statePointer->get_bag().joinable((*it)->get_bag())) {
+                        State::ptr newStatePointer = kernel->join(statePointer, *it);
+                        if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer)) {
+                            newStatesSet.insert(newStatePointer);
+                            State::ptr consequentState = newStatePointer;
+                            AbstractTreeDecompositionNodeContent transitionContent("Join");
+                            bfsDAG.addState(consequentState);
+                            vector<State::ptr> antecedentStates;
+                            antecedentStates.push_back(statePointer);
+                            antecedentStates.push_back(*it);
+                            Transition<State::ptr, AbstractTreeDecompositionNodeContent> transition(consequentState,
+                                                                                                    transitionContent,
+                                                                                                    antecedentStates);
+                            bfsDAG.addTransition(transition);
+                        }
+                    }
+                }
+                for (auto it = newStatesSet.begin(); it != newStatesSet.end(); it++) {
+                    if (statePointer->get_bag().joinable((*it)->get_bag())) {
+                        State::ptr newStatePointer = kernel->join(statePointer, *it);
+                        if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer)) {
+                            newStatesSet.insert(newStatePointer);
+                            State::ptr consequentState = newStatePointer;
+                            AbstractTreeDecompositionNodeContent transitionContent("Join");
+                            bfsDAG.addState(consequentState);
+                            vector<State::ptr> antecedentStates;
+                            antecedentStates.push_back(statePointer);
+                            antecedentStates.push_back(*it);
+                            Transition<State::ptr, AbstractTreeDecompositionNodeContent> transition(consequentState,
+                                                                                                    transitionContent,
+                                                                                                    antecedentStates);
+                            bfsDAG.addTransition(transition);
+                        }
+                    }
+                }
+            }
 		}
 		for(auto it = newStatesSet.begin(); it!=newStatesSet.end(); it++){
 		    if(!conjecture->evaluateConjectureOnState(**it,kernel)){
+                cout<<"BAD STATE:"<<endl;
+		        (**it).print();
 		        bfsDAG.addFinalState(*it);
+		        cout<<"-----------------Term Print---------------------"<<endl;
+		        AbstractTreeDecomposition atd;
+		        shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> rootNode;
+		        rootNode = bfsDAG.retrieveTermAcyclicAutomaton(*it);
+		        atd.setRoot(rootNode);
+		        atd.printTermNodes();
+		        ConcreteTreeDecomposition ctd = atd.convertToConcreteTreeDecomposition();
+		        ctd.extractMultiGraph().printGraph();
+		        exit(20);
 		    }
 		}
         set<State::ptr> setUnion;
@@ -118,5 +170,6 @@ void BreadthFirstSearch::search(){
             cout << endl << "----------------- End Iteration: " << iterationNumber << " ----------------------------" << endl << endl;
         }
 	}
+	bfsDAG.print();
     cout<<"Finish"<<endl;
 }

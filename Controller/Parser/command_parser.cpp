@@ -924,31 +924,31 @@ yyuserAction (yyRuleNum yyn, size_t yyrhslen, yyGLRStackItem* yyvsp,
 
   case 7:
 #line 59 "command_parser.y" /* glr.c:816  */
-    {flags.add_flag("PrintStates", 1); cout<<"print state"<<endl;}
+    {flags.add_flag("PrintStates", 1); }
 #line 929 "command_parser.cpp" /* glr.c:816  */
     break;
 
   case 8:
 #line 60 "command_parser.y" /* glr.c:816  */
-    {flags.add_flag("LoopTime", 1); cout<<"print loop"<<endl;}
+    {flags.add_flag("LoopTime", 1); }
 #line 935 "command_parser.cpp" /* glr.c:816  */
     break;
 
   case 9:
 #line 61 "command_parser.y" /* glr.c:816  */
-    {cout<<"empty"<<endl;}
+    {}
 #line 941 "command_parser.cpp" /* glr.c:816  */
     break;
 
   case 10:
 #line 64 "command_parser.y" /* glr.c:816  */
-    {cout<<"input file "<<(((yyGLRStackItem const *)yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.string)<<endl; ((*yyvalp).string)=(((yyGLRStackItem const *)yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.string);}
+    { ((*yyvalp).string)=(((yyGLRStackItem const *)yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.string);}
 #line 947 "command_parser.cpp" /* glr.c:816  */
     break;
 
   case 11:
 #line 66 "command_parser.y" /* glr.c:816  */
-    {cout<<"search strategy "<<(((yyGLRStackItem const *)yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.string)<<endl; ((*yyvalp).string)=(((yyGLRStackItem const *)yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.string);}
+    { ((*yyvalp).string)=(((yyGLRStackItem const *)yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.string);}
 #line 953 "command_parser.cpp" /* glr.c:816  */
     break;
 

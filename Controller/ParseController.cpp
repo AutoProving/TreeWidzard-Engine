@@ -96,20 +96,20 @@ void ParseController::parse_abstract(string abstractPath) {
 
 void ParseController::test_term() {
 
-    AbstractTreeDecompositionNodeContent abstractTreeDecompositionNodeContent1("IntroVertex_13456");
-    AbstractTreeDecompositionNodeContent abstractTreeDecompositionNodeContent2("IntroVertex_7_9");
-    AbstractTreeDecomposition abstractTreeDecomposition;
-    shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> a1(new TermNode<AbstractTreeDecompositionNodeContent>);
-    shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> a2(new TermNode<AbstractTreeDecompositionNodeContent>);
-    a1->setNodeContent(abstractTreeDecompositionNodeContent1);
-    a2->setNodeContent(abstractTreeDecompositionNodeContent2);
-    vector<shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> > children;
-    children.push_back(a2);
-    a2->setParent(a1);
-    a1->setChildren(children);
-    abstractTreeDecomposition.setRoot(a1);
-    abstractTreeDecomposition.printTerm();
-    TreeAutomaton<FarhadState,AbstractTreeDecompositionNodeContent> treeAutomaton;
+//    AbstractTreeDecompositionNodeContent abstractTreeDecompositionNodeContent1("IntroVertex_13456");
+//    AbstractTreeDecompositionNodeContent abstractTreeDecompositionNodeContent2("IntroVertex_7_9");
+//    AbstractTreeDecomposition abstractTreeDecomposition;
+//    shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> a1(new TermNode<AbstractTreeDecompositionNodeContent>);
+//    shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> a2(new TermNode<AbstractTreeDecompositionNodeContent>);
+//    a1->setNodeContent(abstractTreeDecompositionNodeContent1);
+//    a2->setNodeContent(abstractTreeDecompositionNodeContent2);
+//    vector<shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> > children;
+//    children.push_back(a2);
+//    a2->setParent(a1);
+//    a1->setChildren(children);
+//    abstractTreeDecomposition.setRoot(a1);
+//    abstractTreeDecomposition.printTermNodes();
+//    TreeAutomaton<FarhadState,AbstractTreeDecompositionNodeContent> treeAutomaton;
 
 }
 

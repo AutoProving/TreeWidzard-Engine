@@ -105,9 +105,25 @@ public:
     }
 
     //print functions
-    void printConsequentState();
-    void printAntecedentStates();
-    void printTransitions();
+    void print() {
+        cout<<"Antecedent States:"<<endl;
+        printAntecedentStates();
+        cout<<"Transition Content:"<<endl;
+        printTransitionContent();
+        cout<<"Consequent State:"<<endl;
+        printConsequentState();
+    };
+    void printConsequentState(){
+        consequentState.print();
+    };
+    void printAntecedentStates(){
+        for(auto antecedent:antecedentStates){
+            antecedent.print();
+        }
+    };
+    void printTransitionContent(){
+        transitionContent.print();
+    }
     //Operators
 
     bool operator==(const Transition &rhs) const {
@@ -220,9 +236,24 @@ public:
         return !(*this < rhs);
     }
 
+    void print(){
+        cout<<"States:"<<endl;
+        for(auto state:states){
+            state.print();
+        }
+        cout<<"Final State:"<<endl;
+        for(auto state:finalStates){
+            state.print();
+        }
+        cout<<"Transition:"<<endl;
+        for(auto transition:transitions){
+            cout<<"****************transition***********************"<<endl;
+            transition.print();
+        }
+    }
     // The next two functions are meant to return a term that reaches the state "state"
     void retrieveTermNodeAcyclicAutomaton(StateType state, shared_ptr<TermNode<TermNodeContent>> node);
-    Term<TermNodeContent> retrieveTermAcyclicAutomaton(StateType state);
+    shared_ptr<TermNode<TermNodeContent>> retrieveTermAcyclicAutomaton(StateType state);
     //////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////
     // The next two functions are meant to return a run that reaches the state "state"
@@ -261,5 +292,55 @@ public:
 //    }
 
 };
+
+template<class StateType, class TermNodeContent>
+void TreeAutomaton<StateType,TermNodeContent>::retrieveTermNodeAcyclicAutomaton(StateType state, shared_ptr<TermNode<TermNodeContent> > node){
+    //Assumes that the automaton is acyclic and that each state has a transition in which the state is the consequent
+    if (!this->transitions.empty()){
+        TermNodeContent a;
+        a.setSymbol(a.smallestContent()); //Creates a symbol of type TermNodeContent and set it to the smallest symbol
+        vector<StateType> emptyAntecedents;
+        Transition<StateType,TermNodeContent> t(state,a,emptyAntecedents); // This is the smallest transition with a consequent equal to state
+        auto it = transitions.upper_bound(t);
+        if(it != transitions.begin()){
+            it--; // This is always defined, since the transition set is non-empty
+        }
+        auto itAux = it;
+        if ( itAux->getConsequentState() != state){
+            itAux++;
+            if(itAux != transitions.end()){
+                if (itAux->getConsequentState() != state){
+                    cout << "Error: No transition with consequent equal to the input state.";
+                    exit(20);
+                }
+            }else{
+                cout << "Error: No transition with consequent equal to the input state.";
+                exit(20);
+            }
+        }
+        node->setNodeContent(itAux->getTransitionContent());
+        for (int i = 0; i < itAux->getAntecedentStates().size(); i++){
+            shared_ptr<TermNode<TermNodeContent> > child(new TermNode<TermNodeContent>);
+            child->setParent(node);
+            node->addChild(child);
+            retrieveTermNodeAcyclicAutomaton(itAux->getAntecedentStates()[i],child);
+        }
+
+    } else {
+        cout << "Error: The automaton has no transitions." << endl;
+        exit(20);
+    }
+
+}
+
+
+template<class StateType, class TermNodeContent>
+shared_ptr<TermNode<TermNodeContent>> TreeAutomaton<StateType,TermNodeContent>::retrieveTermAcyclicAutomaton(StateType state){
+    shared_ptr<TermNode<TermNodeContent> > root(new TermNode<TermNodeContent>);
+    root->setParent(nullptr);
+    retrieveTermNodeAcyclicAutomaton(state,root);
+    return root;
+}
+
 
 #endif //TREEWIDZARD_TREEAUTOMATON_H

@@ -2,9 +2,12 @@
 #define TREEWIDZARD_ABSTRACTTREEDECOMPOSITION_H
 
 #include <iostream>
+#include <cstring>
 #include <sstream>
 #include <algorithm>
 #include "Term.h"
+#include "../Multigraph/MultiGraph.h"
+#include "../Kernel/ConcreteTreeDecomposition.h"
 using namespace std;
 
 class AbstractTreeDecompositionNodeContent : public TermNodeContentType {
@@ -14,6 +17,8 @@ public:
     AbstractTreeDecompositionNodeContent();
 
     AbstractTreeDecompositionNodeContent(const string &symbol);
+
+    AbstractTreeDecompositionNodeContent(const AbstractTreeDecompositionNodeContent &abstractTreeDecompositionNodeContent);
 
     bool operator<(const AbstractTreeDecompositionNodeContent &rhs) const;
 
@@ -29,7 +34,9 @@ public:
 
     const string &getSymbol() const;
 
-    void setSymbol(const string &symbol);
+    void setSymbol(const string &symbol){
+        this->symbol = symbol;
+    };
 
     void print() override;
 
@@ -39,23 +46,17 @@ public:
 
     vector<int> extractIntegerWords(string s) const;
     //Define the lexicographically smallest content.
-    shared_ptr<TermNodeContentType> smallestContent(){
-        shared_ptr<AbstractTreeDecompositionNodeContent> smallest(new AbstractTreeDecompositionNodeContent("Leaf") );
-        return smallest;
+    string smallestContent(){
+        return "Leaf";
     }
 };
 
 class AbstractTreeDecomposition: public Term<AbstractTreeDecompositionNodeContent>{
 public:
-    //	public:
-//		ATD();
-//		ATD(Multigraph G);
-//		ATD(TreeDe)
-//		Multigraph ATD_To_Multigraph();
-//		ATD()
-//
-//}
-//
+
+    shared_ptr<CTDNodeNew> constructCTDNode(TermNode<AbstractTreeDecompositionNodeContent> &node);
+    ConcreteTreeDecomposition convertToConcreteTreeDecomposition();
+
 };
 
 #endif //TREEWIDZARD_ABSTRACTTREEDECOMPOSITION_H

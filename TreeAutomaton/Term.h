@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include <iostream>
+#include <set>
 using namespace std;
 
 class TermNodeContentType{
@@ -32,7 +33,10 @@ public:
     void setNodeContent(TermNodeContent nodeContent) {
         TermNode::nodeContent = nodeContent;
     }
-    const vector<shared_ptr<TermNode<TermNodeContent>>> &getChildren() const {
+
+    TermNodeContent getNodeContent() const;
+
+    vector<shared_ptr<TermNode<TermNodeContent>>> &getChildren() {
         return children;
     }
     void setChildren(const vector<shared_ptr<TermNode<TermNodeContent>>> &children) {
@@ -45,7 +49,9 @@ public:
     void setParent(const shared_ptr<TermNode<TermNodeContent>> &parent) {
         TermNode::parent = parent;
     }
-
+    void addChild(shared_ptr<TermNode<TermNodeContent> > child){
+        children.push_back(child);
+    }
     bool operator==(const TermNode &rhs) const {
         return nodeContent == rhs.nodeContent &&
                children == rhs.children &&
@@ -84,30 +90,51 @@ public:
     bool operator>=(const TermNode &rhs) const {
         return !(*this < rhs);
     }
-    void print();
+    void printTermNode(unsigned &label);
 };
 
 template<class TermNodeContent>
-void TermNode<TermNodeContent>::print() {
-    nodeContent.print();
+void TermNode<TermNodeContent>::printTermNode(unsigned &label) {
+    set<unsigned > childrenLabel;
     for(auto child : children){
-        child->print();
+        child->printTermNode(label);
+        childrenLabel.insert(label);
     }
+    label++;
+    cout<<label <<"  ";
+    nodeContent.print() ;
+    if(childrenLabel.size()){
+        cout<<"(";
+        for(auto childNo:childrenLabel){
+            cout<<childNo;
+            if(childNo!=*(--childrenLabel.end())){
+                cout<<",";
+            }
+        }
+        cout<<")";
+    }
+    cout<<endl;
+
+}
+
+template<class TermNodeContent>
+TermNodeContent TermNode<TermNodeContent>::getNodeContent() const {
+    return nodeContent;
 }
 
 
 template<class TermNodeContent>
 class Term{
-
 private:
-    shared_ptr<TermNode<TermNodeContent>> root;
+    shared_ptr<TermNode<TermNodeContent> > root= nullptr;
 public:
+
     const shared_ptr<TermNode<TermNodeContent>> &getRoot() const {
         return root;
     }
 
-    void setRoot(const shared_ptr<TermNode<TermNodeContent>> &root) {
-        Term::root = root;
+    void setRoot(shared_ptr<TermNode<TermNodeContent>>& rootNode) {
+        root = rootNode;
     }
 
     bool operator==(const Term &rhs) const {
@@ -135,7 +162,7 @@ public:
     }
 
     ///////TODO
-    void printTerm();
+    void printTermNodes();
     ////Format?////
     void printTermToFile();
     void readTerm(string inputFile);
@@ -143,8 +170,9 @@ public:
 };
 
 template<class TermNodeContent>
-void Term<TermNodeContent>::printTerm() {
-    root->print();
+void Term<TermNodeContent>::printTermNodes() {
+    unsigned label=0;
+    root->printTermNode(label);
 }
 
 

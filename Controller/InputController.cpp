@@ -1,8 +1,8 @@
 #include "InputController.h"
 void InputController::check_available_cores() {
+    cout<<"Available Cores:"<<endl;
     for (const auto & entry : fs::directory_iterator(dynamicPluginPath)){
         string s = entry.path();
-        cout<<"Available Cores:"<<endl;
         if (s.find(".so") != std::string::npos) {
             cout<<s<<endl;
             char *MyClassLibraryName = const_cast<char *>(s.c_str());

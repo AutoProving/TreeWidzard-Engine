@@ -378,10 +378,9 @@ void LeveledSetSearch::search() {
 				// the +2 below comes from the fact that treewidth is size of
 				// bag minus one. So the loop iterates from 1 to number of
 				// elements inteh bag.
-				for (unsigned i = 1; i < width + 2; ++i) {
+				for (unsigned i = 1; i <= width + 1; ++i) {
 					if ((*iteratorNewStates)->get_bag().vertex_introducible(i)) {
-						State::ptr newState =
-							kernel->intro_v(*iteratorNewStates, i);
+						State::ptr newState = kernel->intro_v(*iteratorNewStates, i);
                         unsigned index = bagSetToNumber(
 							newState->get_bag().get_elements(), width);
 						setIntermediateStates[index].insert(newState);
@@ -403,6 +402,33 @@ maxWitnessSetSize[m] =
 						}
 					}
 				}
+                // forget a vertex
+                for (size_t i = 1; i < kernel->get_width().get_value() + 2;
+                     ++i) {
+                    if ((*iteratorNewStates)->get_bag().vertex_forgettable(i)) {
+                        State::ptr newState =
+                                kernel->forget_v(*iteratorNewStates, i);
+                        unsigned index = bagSetToNumber(
+                                newState->get_bag().get_elements(), width);
+                        setIntermediateStates[index].insert(newState);
+                        // Statistics
+                        if (flags->get("PrintStates") == 1) {
+                            cout << "forget_v_" << i << endl;
+                            newState->print();
+                        }
+                        if (flags->get("LoopTime") == 1) {
+                            for (size_t m = 0;
+                                 m < newState->numberOfComponents(); m++) {
+                                if (maxWitnessSetSize[m] <
+                                    static_cast<unsigned>(
+                                            newState->getWitnessSet(m)->size())) {
+                                    maxWitnessSetSize[m] =
+                                            newState->getWitnessSet(m)->size();
+                                }
+                            }
+                        }
+                    }
+                }
 				// introduce an edge
 				if ((*iteratorNewStates)->get_bag().get_elements().size() > 1) {
 					set<unsigned> bagSet = (*iteratorNewStates)->get_bag().get_elements();
@@ -433,33 +459,7 @@ maxWitnessSetSize[m] =
 						}
 					}
 				}
-				// forget a vertex
-				for (size_t i = 1; i < kernel->get_width().get_value() + 2;
-					 ++i) {
-					if ((*iteratorNewStates)->get_bag().vertex_forgettable(i)) {
-						State::ptr newState =
-							kernel->forget_v(*iteratorNewStates, i);
-						unsigned index = bagSetToNumber(
-							newState->get_bag().get_elements(), width);
-						setIntermediateStates[index].insert(newState);
-						// Statistics
-						if (flags->get("PrintStates") == 1) {
-							cout << "forget_v_" << i << endl;
-							newState->print();
-						}
-						if (flags->get("LoopTime") == 1) {
-							for (size_t m = 0;
-								 m < newState->numberOfComponents(); m++) {
-								if (maxWitnessSetSize[m] <
-									static_cast<unsigned>(
-										newState->getWitnessSet(m)->size())) {
-									maxWitnessSetSize[m] =
-										newState->getWitnessSet(m)->size();
-								}
-							}
-						}
-					}
-				}
+
 				if (kernel->get_width().get_name() == "tree_width") {
 					// join
 					for (auto it = setAllStates[k].begin();

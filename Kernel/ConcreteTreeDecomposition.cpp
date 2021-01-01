@@ -182,7 +182,7 @@ void ConcreteTreeDecomposition::traverseNode(
 	CTDNodeNew &node, MultiGraph &G, map<unsigned, unsigned> &colorToVertexMap,
 	unsigned &nVertices, unsigned &nEdges) {
 	map<unsigned, unsigned> colorToVertexMapCopy = colorToVertexMap;
-	if (node.get_nodeType() == "Empty") {
+	if (node.get_nodeType() == "Empty" or node.get_nodeType() == "Leaf") {
 		// do nothing
 	} else if (strstr(node.get_nodeType().c_str(), "IntroVertex")) {
 		/////////////// Finding the introduced vertex ///////////
@@ -297,7 +297,7 @@ void ConcreteTreeDecomposition::printTree() {
 
 string ConcreteTreeDecomposition::printAbstractRecursive(CTDNodeNew &node,
 														 unsigned &label) {
-	if (node.get_nodeType() == "Join") {
+	if (node.get_nodeType() == "Join" and node.get_children().size()==2) {
 		string s1 = printAbstractRecursive(*node.get_children()[0], label);
 		unsigned label1 = label;
 		string s2 = printAbstractRecursive(*node.get_children()[1], label);
@@ -305,16 +305,26 @@ string ConcreteTreeDecomposition::printAbstractRecursive(CTDNodeNew &node,
 		label++;
 		return s1 + s2 + to_string(label) + " " + node.printAbstract() + "(" +
 			   to_string(label1) + "," + to_string(label2) + ")\n";
-	} else if (node.get_nodeType() == "Empty") {
+	} else if ( (node.get_nodeType() == "Empty" or node.get_nodeType() == "Leaf") and node.get_children().size()==0) {
 		label++;
 		return to_string(label) + " " + node.printAbstract() + "\n";
 	} else {
-		string s = printAbstractRecursive(*node.get_children()[0], label);
-		label++;
-		return s + to_string(label) + " " + (node.printAbstract()) + "(" +
-			   to_string(label - 1) +
-			   ")"
-			   "\n";
+	    if( (strstr(node.get_nodeType().c_str(),"IntroVertex_") or strstr(node.get_nodeType().c_str(),"IntroEdge_") or strstr(node.get_nodeType().c_str(),"ForgetVertex_")) and
+	    node.get_children().size()==1){
+            string s = printAbstractRecursive(*node.get_children()[0], label);
+            label++;
+            cout<<label <<" "<<node.get_nodeType()<<endl;
+            return s + to_string(label) + " " + (node.printAbstract()) + "(" +
+                   to_string(label - 1) +
+                   ")"
+                   "\n";
+
+	    }else{
+	        cout<<"Error: ConcreteTreeDecomposition::printAbstractRecursive node is not valid, introduced type: "
+	        <<node.get_nodeType()<<endl;
+	        exit(20);
+	    }
+
 	}
 }
 void ConcreteTreeDecomposition::printAbstract() {

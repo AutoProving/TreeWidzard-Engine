@@ -1,49 +1,6 @@
 
 #include "TreeAutomaton.h"
 
-template<class StateType, class TermNodeContent>
-void TreeAutomaton<StateType,TermNodeContent>::retrieveTermNodeAcyclicAutomaton(StateType state, shared_ptr<TermNode<TermNodeContent> > node){
-    //Assumes that the automaton is acyclic and that each state has a transition in which the state is the consequent
-    if (!this->transitions.empty()){
-        TermNodeContent a;
-        a.setSymbol(a.smallestContent()); //Creates a symbol of type TermNodeContent and set it to the smallest symbol
-        vector<StateType> emptyAntecedents;
-        Transition<StateType,TermNodeContent> t(state,a,emptyAntecedents); // This is the smallest transition with a consequent equal to state
-        auto it = this->transitions.upper_bound();
-        it--; // This is always defined, since the transition set is non-empty
-        auto itAux = it;
-        if (itAux->consequentState != state){
-            itAux++;
-        }
-        if (itAux != this->transitions.end()){
-            if (itAux->consequentState == state){
-                node->nodeContent = itAux->transitionContent;
-                for (int i = 0; i< itAux->antecendentStates.size(); i++){
-                    shared_ptr<TermNode<TermNodeContent> > child(new TermNode<TermNodeContent>);
-                    child->parent = node;
-                    node->children.push_back(child);
-                    retrieveTermNodeAcyclicAutomaton(itAux->antecedentStates[i],child);
-                }
-            }
-        }
-        cout << "Error: No transition with consequent equal to the input state.";
-        exit(20);
-    } else {
-        cout << "Error: The automaton has no transitions." << endl;
-        exit(20);
-    }
-
-}
-
-
-template<class StateType, class TermNodeContent>
-Term<TermNodeContent> TreeAutomaton<StateType,TermNodeContent>::retrieveTermAcyclicAutomaton(StateType state){
-    Term<TermNodeContent> term;
-    shared_ptr<TermNode<TermNodeContent> > root(new TermNode<TermNodeContent>);
-    root.parent = nullptr;
-    retrieveTermNodeAcyclicAutomaton(state,root);
-    return term;
-}
 
 template<class StateType, class TermNodeContent>
 void TreeAutomaton<StateType,TermNodeContent>::retrieveRunNodeAcyclicAutomaton(StateType state, shared_ptr<TermNode<RunNodeContent<TermNodeContent,StateType> > > node){

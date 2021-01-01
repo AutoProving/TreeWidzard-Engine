@@ -13,8 +13,7 @@ class State : private std::enable_shared_from_this<State> {
 	Bag bag;
 	std::vector<shared_ptr<WitnessSet>> witnessSetVector;
   public:
-	virtual State relabel(map<unsigned,unsigned>); // relabelingMap is a relabeling of the vertices in a bag. The relabel function propagates this relabeling to a State
-
+	//virtual State relabel(map<unsigned,unsigned>); // relabelingMap is a relabeling of the vertices in a bag. The relabel function propagates this relabeling to a State
 	class ptr {
 	  private:
 		shared_ptr<State> pointer;
@@ -39,6 +38,9 @@ class State : private std::enable_shared_from_this<State> {
         bool operator!=(const ptr &rhs) const {
             return !(rhs == *this);
         }
+        void print(){
+		    pointer->print();
+		}
     };
 	ptr get_ptr() { return ptr(this->shared_from_this()); }
 	Bag get_bag() const;

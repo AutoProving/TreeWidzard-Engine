@@ -56,14 +56,14 @@ command_search      : command_search_signature command_flags
                                                                                 }
 
                     ;
-command_flags       : command_print_state_flag command_flags {flags.add_flag("PrintStates", 1); cout<<"print state"<<endl;}
-                    | command_print_loop_flag command_flags  {flags.add_flag("LoopTime", 1); cout<<"print loop"<<endl;}
-                    |                                        {cout<<"empty"<<endl;}
+command_flags       : command_print_state_flag command_flags {flags.add_flag("PrintStates", 1); }
+                    | command_print_loop_flag command_flags  {flags.add_flag("LoopTime", 1); }
+                    |                                        {}
                     ;
 
-command_input_file  : command_string {cout<<"input file "<<$1<<endl; $$=$1;}
+command_input_file  : command_string { $$=$1;}
                     ;
-command_search_strategy : command_string {cout<<"search strategy "<<$1<<endl; $$=$1;}
+command_search_strategy : command_string { $$=$1;}
                     ;
 command_parse       : command_parse_signature command_parse_pace command_flags command_input_file command_input_file command_input_file
                        command_end{ ParseController parsePACE(flags, $4); parsePACE.parse_pace($5, $6); }

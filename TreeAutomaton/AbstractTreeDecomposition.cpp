@@ -9,10 +9,6 @@ const string &AbstractTreeDecompositionNodeContent::getSymbol() const {
     return symbol;
 }
 
-void AbstractTreeDecompositionNodeContent::setSymbol(const string &symbol) {
-    AbstractTreeDecompositionNodeContent::symbol = symbol;
-}
-
 bool AbstractTreeDecompositionNodeContent::operator==(const AbstractTreeDecompositionNodeContent &rhs) const {
     return symbol == rhs.symbol;
 }
@@ -78,7 +74,7 @@ vector<int> AbstractTreeDecompositionNodeContent::symbolNumbers(string s) const 
 }
 
 void AbstractTreeDecompositionNodeContent::print() {
-    cout<<"symbol: " << symbol<<endl;
+    cout<< symbol;
 }
 
 vector<int> AbstractTreeDecompositionNodeContent::extractIntegerWords(string s) const{
@@ -107,5 +103,68 @@ vector<int> AbstractTreeDecompositionNodeContent::extractIntegerWords(string s) 
     return numberVec;
 }
 
+AbstractTreeDecompositionNodeContent::AbstractTreeDecompositionNodeContent(
+        const AbstractTreeDecompositionNodeContent &abstractTreeDecompositionNodeContent) {
+    this->symbol = abstractTreeDecompositionNodeContent.getSymbol();
+}
 
 
+shared_ptr<CTDNodeNew> AbstractTreeDecomposition::constructCTDNode(TermNode<AbstractTreeDecompositionNodeContent> &node) {
+    shared_ptr<CTDNodeNew> ctdNode(new CTDNodeNew);
+    vector<shared_ptr<CTDNodeNew>> children;
+    string symbol = node.getNodeContent().getSymbol();
+    ctdNode->set_nodeType(symbol);
+    for(auto &child:node.getChildren()){
+
+        shared_ptr<CTDNodeNew> ctdChild = constructCTDNode(*child);
+        ctdChild->set_parent(ctdNode);
+        children.push_back(ctdChild);
+    }
+    Bag b;
+    if(symbol == "Leaf"){
+        ctdNode->set_B(b);
+    }else {
+        vector<int> numbersInString = node.getNodeContent().extractIntegerWords(symbol);
+        if(strstr(symbol.c_str(),"IntroVertex")){
+            if(numbersInString.size()!=1){
+                cout<<"Error: AbstractTreeDecomposition::constructCTDNode children numbers not valid"<<endl;
+                exit(20);
+            }else{
+                b = children[0]->get_B();
+                b.intro_v(numbersInString[0]);
+                ctdNode->set_B(b);
+            }
+        }else if(strstr(symbol.c_str(),"ForgetVertex")){
+            if(numbersInString.size()!=1){
+                cout<<"Error: AbstractTreeDecomposition::constructCTDNode children numbers not valid"<<endl;
+                exit(20);
+            }else{
+                b = children[0]->get_B();
+                b.forget_v(numbersInString[0]);
+                ctdNode->set_B(b);
+            }
+        }else if(strstr(symbol.c_str(),"IntroEdge")){
+            if(numbersInString.size()!=2){
+                cout<<"Error: AbstractTreeDecomposition::constructCTDNode children numbers not valid"<<endl;
+                exit(20);
+            }else{
+                b = children[0]->get_B();
+                b.intro_e(numbersInString[0],numbersInString[1]);
+                ctdNode->set_B(b);
+            }
+        }else if(symbol == "Join"){
+            Bag joinBag;
+            joinBag.set_elements(children[0]->get_B().get_elements());
+            ctdNode->set_B(joinBag);
+        }
+    }
+    ctdNode->set_children(children);
+    return ctdNode;
+}
+
+
+ConcreteTreeDecomposition AbstractTreeDecomposition::convertToConcreteTreeDecomposition() {
+    ConcreteTreeDecomposition concreteTreeDecomposition;
+    concreteTreeDecomposition.root = constructCTDNode(*getRoot());
+    return concreteTreeDecomposition;
+}
