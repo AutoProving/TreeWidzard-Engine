@@ -15,11 +15,6 @@ class Bag {
 
   public:
 	std::set<unsigned> get_elements() const;
-<<<<<<< HEAD
-	//Bag relabel(map<unsigned,unsigned> relabelingMap); // relabelingMap is a relabeling of the vertices in a bag. example: B = ({1,3,5},{1,5})
-								   // and relabelingmap = 1->1, 3->2, 5->3, then the relabled bag is B'=({1,2,3},{1,3}) 
-=======
->>>>>>> 857c0c53acad2d95541e463de586fe54916ea154
 	void set_elements(const std::set<unsigned>& elements);
 	void set_edge(unsigned i, unsigned j);
 	pair<unsigned, unsigned> get_edge() const;

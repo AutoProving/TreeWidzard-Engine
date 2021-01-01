@@ -13,10 +13,6 @@ class State : private std::enable_shared_from_this<State> {
 	Bag bag;
 	std::vector<shared_ptr<WitnessSet>> witnessSetVector;
   public:
-<<<<<<< HEAD
-	//virtual State relabel(map<unsigned,unsigned>); // relabelingMap is a relabeling of the vertices in a bag. The relabel function propagates this relabeling to a State
-=======
->>>>>>> 857c0c53acad2d95541e463de586fe54916ea154
 	class ptr {
 	  private:
 		shared_ptr<State> pointer;
