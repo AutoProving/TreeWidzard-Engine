@@ -10,7 +10,6 @@ DynamicCore * create_int(unsigned param) {
     return new ChromaticNumber_AtMost_DynamicCore(param);
 }
 }
-<<<<<<< HEAD
 //
 //shared_ptr<Witness> ChromaticNumber_AtMost_Witness::relabel(map<unsigned,unsigned> relabelingMap){
 //	shared_ptr<ChromaticNumber_AtMost_Witness> relabeledWitness(new ChromaticNumber_AtMost_Witness);
@@ -23,9 +22,6 @@ DynamicCore * create_int(unsigned param) {
 //	return relabeledWitness;
 //}
 
-
-=======
->>>>>>> 857c0c53acad2d95541e463de586fe54916ea154
 bool ChromaticNumber_AtMost_Witness::is_equal(const Witness &rhs)const{
     if (ChromaticNumber_AtMost_Witness const *e = dynamic_cast<ChromaticNumber_AtMost_Witness const *>(&rhs)) {
         shared_ptr<const ChromaticNumber_AtMost_Witness> p = e->shared_from_this();
@@ -70,6 +66,18 @@ void ChromaticNumber_AtMost_Witness::print() {
         }
         cout<<"}";
 }
+
+shared_ptr<Witness> ChromaticNumber_AtMost_Witness::relabel(map<unsigned,unsigned> relabelingMap){
+    shared_ptr<ChromaticNumber_AtMost_Witness> relabeledWitness(new ChromaticNumber_AtMost_Witness);
+    for (auto it = this->coloring.begin(); it!=this->coloring.end();it++){
+        pair<unsigned,unsigned> relabeledPair;
+        relabeledPair.first = relabelingMap[it->first];
+        relabeledPair.second = it->second;
+        relabeledWitness->coloring.insert(relabeledPair);
+    }
+    return relabeledWitness;
+}
+
 
 ChromaticNumber_AtMost_DynamicCore::ChromaticNumber_AtMost_DynamicCore() {
     // Initializing attributes
@@ -163,5 +171,10 @@ bool ChromaticNumber_AtMost_DynamicCore::is_final_witness(Witness &witness) {
 }
 
 WitnessSetPointer ChromaticNumber_AtMost_DynamicCore::clean(WitnessSetPointer witnessSet) {
+    return witnessSet;
+}
+
+shared_ptr<WitnessSet> ChromaticNumber_AtMost_WitnessSet::createEmptyWitnessSet() {
+    ChromaticNumber_AtMost_WitnessSetPointer witnessSet(new ChromaticNumber_AtMost_WitnessSet);
     return witnessSet;
 }

@@ -26,9 +26,12 @@ class MaxDegree_AtLeast_Witness:public Witness, public enable_shared_from_this<M
         virtual bool is_equal(const Witness &rhs) const; //Comparator
         virtual bool is_less(const Witness &rhs) const;  //Comparator
         virtual Witness& set_equal(Witness &witness); //Assignment operator
+        virtual shared_ptr<Witness> relabel(map<unsigned,unsigned> relabelingMap);
+
 };
 
 class MaxDegree_AtLeast_WitnessSet : public WitnessSetTypeOne<MaxDegree_AtLeast_WitnessSet>{
+public:
     shared_ptr<WitnessSet> createEmptyWitnessSet() override;
 };
 

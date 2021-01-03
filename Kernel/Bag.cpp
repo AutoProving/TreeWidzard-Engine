@@ -104,3 +104,19 @@ Bag Bag::forget_v(unsigned i) {
 	}
 	return *this;
 }
+
+Bag Bag::relabel(map<unsigned int, unsigned int> relabelingMap) {
+    Bag b;
+    set<unsigned > bagElements;
+    for(auto v:this->elements){
+        if(relabelingMap.count(v)) {
+            bagElements.insert(relabelingMap[v]);
+        }else{
+            cout<<"Error: Bag::relabel "<< v <<" is not in the relabeling map"<<endl;
+            exit(20);
+        }
+    }
+    b.set_elements(bagElements);
+    b.set_edge(relabelingMap[this->i],relabelingMap[this->j]);
+    return b;
+}

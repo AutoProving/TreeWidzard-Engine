@@ -1,4 +1,3 @@
-tree_width 3
-b := MaxDegree > 3
-a := HasMultipleEdges
-NOT a IMPLIES NOT b
+path_width 5
+a := ChromaticNumber < 3
+TRUE

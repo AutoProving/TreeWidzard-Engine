@@ -16,7 +16,7 @@ add_compile_options(-O2)
 include_directories(.)
 link_libraries(stdc++fs)
 include_directories(DynamicCores)
-project(treewidzard)
+project("treewidzard")
 add_executable(
 	# Executable file name
 		treewidzard
@@ -33,9 +33,9 @@ add_executable(
 		Controller/AuxiliaryController.hpp
 		main.cpp
 	# DynamicCore files
-		 #   DynamicCores/CliqueNumber_AtLeast.cpp
-		#DynamicCores/CliqueNumber_AtLeast.h
-		#  DynamicCores/ChromaticNumber_AtMost.cpp
+		#   DynamicCores/CliqueNumber_AtLeast.cpp
+		#   DynamicCores/CliqueNumber_AtLeast.h
+		#   DynamicCores/ChromaticNumber_AtMost.cpp
 		#   DynamicCores/ChromaticNumber_AtMost.h
 		#	DynamicCores/MaxDegree_AtLeast.cpp
 		#	DynamicCores/MaxDegree_AtLeast.h
@@ -48,6 +48,8 @@ add_executable(
 		#   DynamicCores/NoWhereZeroFlow_AtMost.cpp
 		#	DynamicCores/AuxiliaryFunctions.h
 		#	DynamicCores/HamiltonianCycle.cpp
+		#	DynamicCores/MaxDegree_AtLeast.h
+		#	DynamicCores/MaxDegree_AtLeast.cpp
 
 	# Kernel files
         Kernel/Witness.cpp
@@ -88,8 +90,10 @@ add_executable(
 		#Search/LeveledSetSearch.h
 		#Search/LeveledSetSearchPremise.cpp
 		#Search/LeveledSetSearchPremise.h
-		Search/BFS/BreadthFirstSearch.h
-		Search/BFS/BreadthFirstSearch.cpp
+		#Search/BFS/BreadthFirstSearch.h
+		#Search/BFS/BreadthFirstSearch.cpp
+		#Search/RelabeledLeveledSetSearch.h
+		#Search/RelabeledLeveledSetSearch.cpp
 	# Parser files
 		# Input File Parser
 		Parser/input_lexer.cpp

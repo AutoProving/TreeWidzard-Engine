@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <iostream>
 #include <memory>
+#include <map>
 
 using namespace std;
 class Witness {
@@ -12,6 +13,7 @@ protected:
     virtual bool is_less(const Witness &rhs) const;
     virtual Witness &set_equal(Witness &witness);
 public:
+    virtual shared_ptr<Witness> relabel(map<unsigned,unsigned> relabelingMap);
     virtual void print();
     virtual ~Witness();
     friend bool operator==(const Witness &lhs, const Witness &rhs);

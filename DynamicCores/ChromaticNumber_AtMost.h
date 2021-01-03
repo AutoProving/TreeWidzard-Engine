@@ -8,21 +8,24 @@
 using namespace std;
 
 class ChromaticNumber_AtMost_Witness: public Witness, public enable_shared_from_this<ChromaticNumber_AtMost_Witness> {
-    public:
-        std::map<unsigned,unsigned> coloring; //The first coordinate of each pair is a vertex and the second a color.
-     //   virtual shared_ptr<Witness> relabel(map<unsigned,unsigned> relabelingMap);
-
-        ChromaticNumber_AtMost_Witness(){};
-        ~ChromaticNumber_AtMost_Witness(){};
-        virtual bool is_equal(const Witness &rhs)const;
-        virtual bool is_less(const Witness &lhs)const;
-        virtual Witness& set_equal(Witness &rhs);
-        virtual void print();
+public:
+    std::map<unsigned,unsigned> coloring; //The first coordinate of each pair is a vertex and the second a color.
+    //   virtual shared_ptr<Witness> relabel(map<unsigned,unsigned> relabelingMap);
+    ChromaticNumber_AtMost_Witness(){};
+    ~ChromaticNumber_AtMost_Witness(){};
+    virtual bool is_equal(const Witness &rhs)const;
+    virtual bool is_less(const Witness &lhs)const;
+    virtual Witness& set_equal(Witness &rhs);
+    virtual shared_ptr<Witness> relabel(map<unsigned,unsigned> relabelingMap);
+    virtual void print();
 };
 
 class ChromaticNumber_AtMost_WitnessSet : public WitnessSetTypeOne<ChromaticNumber_AtMost_WitnessSet>{
-
+public:
+    shared_ptr<WitnessSet> createEmptyWitnessSet() override;
 };
+typedef shared_ptr<ChromaticNumber_AtMost_WitnessSet> ChromaticNumber_AtMost_WitnessSetPointer;
+
 class ChromaticNumber_AtMost_DynamicCore: public DynamicCore{
     public:
         unsigned k;

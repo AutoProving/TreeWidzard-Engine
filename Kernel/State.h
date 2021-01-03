@@ -42,9 +42,14 @@ class State : private std::enable_shared_from_this<State> {
 		}
     };
 	ptr get_ptr() { return ptr(this->shared_from_this()); }
+
 	Bag get_bag() const;
+
 	void set_bag(const Bag &bag);
-	void addWitnessSet(shared_ptr<WitnessSet>);
+
+    void setWitnessSetVector(const vector<shared_ptr<WitnessSet>> &witnessSetVector);
+
+    void addWitnessSet(shared_ptr<WitnessSet>);
 
     bool operator==(const State &rhs) const;
 
@@ -59,9 +64,15 @@ class State : private std::enable_shared_from_this<State> {
     bool operator>=(const State &rhs) const;
 
     size_t operator()(const State &b) const;
-	void print();
-	shared_ptr<WitnessSet> getWitnessSet(int) const;
-	int numberOfComponents() const;
+
+    void print();
+
+    shared_ptr<WitnessSet> getWitnessSet(int) const;
+
+    int numberOfComponents() const;
+
+    shared_ptr<State> relabel(map<unsigned,unsigned> relabelingMap); // relabelingMap is a relabeling of the vertices in a bag. The relabel function propagates this relabeling to a State
+
 
 };
 

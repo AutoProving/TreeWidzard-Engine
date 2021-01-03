@@ -6,6 +6,10 @@ Bag State::get_bag() const { return State::bag; }
 
 void State::set_bag(const Bag& bag) { State::bag = bag; }
 
+void State::setWitnessSetVector(const vector<shared_ptr<WitnessSet>> &witnessSetVector) {
+    State::witnessSetVector = witnessSetVector;
+}
+
 void State::addWitnessSet(shared_ptr<WitnessSet> ws) {
 	witnessSetVector.push_back(ws);
 }
@@ -99,6 +103,20 @@ shared_ptr<WitnessSet> State::getWitnessSet(int i) const {
 }
 
 int State::numberOfComponents() const { return witnessSetVector.size(); }
+
+shared_ptr<State> State::relabel(map<unsigned int, unsigned int> relabelingMap) {
+    shared_ptr<State> state(new State);
+    vector<shared_ptr<WitnessSet> > witnessSetVec;
+    witnessSetVec.resize(witnessSetVector.size());
+    for(size_t i = 0; i < witnessSetVector.size(); i++){
+        witnessSetVec[i] = witnessSetVector[i]->relabel(relabelingMap);
+    }
+    state->setWitnessSetVector(witnessSetVec);
+    Bag b = bag.relabel(relabelingMap);
+    state->set_bag(b);
+    return state;
+}
+
 
 
 

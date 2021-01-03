@@ -26,7 +26,6 @@ void TreeAutomaton<StateType,TermNodeContent>::retrieveRunNodeAcyclicAutomaton(S
                     node->children.push_back(child);
                     retrieveTermNodeAcyclicAutomaton(itAux->antecedentStates[i],child);
                 }
-                return node;
             }else{
                 cout << "Error: No transition with consequent equal to the input state.";
                 exit(20);

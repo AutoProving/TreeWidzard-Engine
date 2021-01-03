@@ -63,9 +63,10 @@ public:
 class WitnessSet { // data structure to store 'shared_ptr<Witness>'
 public:
     virtual ~WitnessSet(){};
+    virtual shared_ptr<WitnessSet> relabel(map<unsigned,unsigned> map){cout<<"Error: Base WitnessSet relabel function"<<endl; exit(20);}
     virtual BaseIterator begin(){cout<<"Error: WitnessSet begin()."<<endl; exit(20);};
     virtual BaseIterator end(){cout<< "Error: WitnessSet end()"<<endl; exit(20);};
-    virtual void insert(shared_ptr<Witness> w){cout<<"Error: WitnessSet insert()."<<endl; exit(20);};
+    virtual void insert(shared_ptr<Witness> w){cout<<"Error: WitnessSet insert."<<endl; exit(20);};
     virtual void union_set_witness(shared_ptr<WitnessSet> witnessSet){cout<<"Error: Set union of witnessSet class."<<endl; exit(20);};
     virtual void print(){cout<<"Error: WitnessSet print."<<endl; exit(20);};
     friend bool operator==(WitnessSet &lhs, WitnessSet &rhs){
@@ -135,6 +136,14 @@ public:
         shared_ptr<WitnessSetTypeOne<T>> witnessSet(new WitnessSetTypeOne<T>);
         return witnessSet;
     }
+    virtual shared_ptr<WitnessSet> relabel(map<unsigned,unsigned> map){
+        shared_ptr<WitnessSet> witnessSet = this->createEmptyWitnessSet();
+        for(auto witness:*this){
+            witnessSet->insert(witness->relabel(map));
+        }
+        return witnessSet;
+    }
+
 };
 
 template <class T>

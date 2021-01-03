@@ -27,3 +27,10 @@ void Witness::print() {
             "yet implemented in the derived class."
          << endl;
 }
+
+shared_ptr<Witness> Witness::relabel(map<unsigned int, unsigned int> relabelingMap) {
+    cout << "It you are seeing this, it is because the relabel function was not "
+            "yet implemented in the derived class."
+         << endl;
+    exit(20);
+}
