@@ -73,18 +73,21 @@ Witness & MaxDegree_AtLeast_Witness::set_equal_implementation(MaxDegree_AtLeast_
 shared_ptr<Witness> MaxDegree_AtLeast_Witness::relabel(map<unsigned int, unsigned int> relabelingMap) {
     MaxDegree_AtLeast_WitnessPointer w (new MaxDegree_AtLeast_Witness);
     map<unsigned ,unsigned > m;
-    for(auto element:this->degreeCounter){
-        if(relabelingMap.count(element.first)){
-            m.insert(make_pair(relabelingMap[element.first],element.second));
-
-        }else{
-            cout<<"Error: MaxDegree_AtLeast_Witness::relabel " << element.first<< " is not in the map"<<endl;
-            cout<<" map:";
-            exit(20);
+    if(this->found){
+        w->found = true;
+    }else{
+        for(auto element:this->degreeCounter){
+            if(relabelingMap.count(element.first)){
+                m.insert(make_pair(relabelingMap[element.first],element.second));
+            }else{
+                cout<<"Error: MaxDegree_AtLeast_Witness::relabel " << element.first<< " is not in the map"<<endl;
+                cout<<" map:";
+                exit(20);
+            }
         }
+        w->degreeCounter = m;
+        w->found = this->found;
     }
-    w->degreeCounter = m;
-    w->found = this->found;
     return w;
 }
 

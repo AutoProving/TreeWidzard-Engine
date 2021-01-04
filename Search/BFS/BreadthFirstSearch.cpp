@@ -170,6 +170,5 @@ void BreadthFirstSearch::search(){
             cout << endl << "----------------- End Iteration: " << iterationNumber << " ----------------------------" << endl << endl;
         }
 	}
-	bfsDAG.print();
     cout<<"Finish"<<endl;
 }

@@ -31,6 +31,26 @@ Witness & Connectivity_Witness::set_equal_implementation(Connectivity_WitnessPoi
     //*****************************
     //*****************************
 }
+
+shared_ptr<Witness> Connectivity_Witness::relabel(map<unsigned int, unsigned int> relabelingMap) {
+    Connectivity_WitnessPointer w(new Connectivity_Witness);
+    set<set<unsigned >> newPartition;
+    for(auto cell:this->partition){
+        set<unsigned > newCell;
+        for(auto v:cell){
+            if(relabelingMap.count(v)){
+                newCell.insert(relabelingMap[v]);
+            }else{
+                cout<<"Error: Connectivity_Witness::relabel "<< v << " is not in the map"<<endl;
+                exit(20);
+            }
+        }
+        newPartition.insert(newCell);
+    }
+    w->partition = newPartition;
+    return w;
+}
+
 void Connectivity_Witness::print() {
     //*****************************
     //*****************************
