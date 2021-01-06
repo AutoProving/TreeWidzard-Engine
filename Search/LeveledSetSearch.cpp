@@ -556,15 +556,18 @@ maxWitnessSetSize[m] =
 					T->printAbstract();
                     cout<<"Tree Concrete Tree Decomposition 1:"<<endl;
                     T->printTree();
-                    StateTree* S = new StateTree;
-                    *S = extractStateTreeDecomposition(iterationNumber+1,*it,leveledSetAllStates,tree_width);
-					cout << "-----------------state tree "
-							"printing--------------------"
-						 << endl;
-                    cout<<"Abstract State Tree Decomposition:"<<endl;
-                    S->printAbstract();
-                    cout<<"Tree State Tree Decomposition:"<<endl;
-                    S->printStateTree();
+                    if(flags->get("StateTree")==1){
+                        StateTree* S = new StateTree;
+                        *S = extractStateTreeDecomposition(iterationNumber+1,*it,leveledSetAllStates,tree_width);
+                        cout << "-----------------state tree "
+                                "printing--------------------"
+                             << endl;
+                        cout<<"Abstract State Tree Decomposition:"<<endl;
+                        S->printAbstract();
+                        cout<<"Tree State Tree Decomposition:"<<endl;
+                        S->printStateTree();
+                    }
+
 					//
 					cout << endl
 						 << "------------------Constructing Counter Example "

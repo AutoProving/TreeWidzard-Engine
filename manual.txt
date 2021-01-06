@@ -3,6 +3,7 @@
     Flag Options:
         -pl       print loop
         -ps       print states
+        -st       print state tree decomposition if a counterexample is found
     For PARSE:
         1- For PACE Format
             ./treewidzard -parse PACE <property file> <graph file> <tree decomposition file>

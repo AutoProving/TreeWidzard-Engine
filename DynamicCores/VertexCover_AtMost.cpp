@@ -38,6 +38,20 @@ Witness & VertexCover_AtMost_Witness::set_equal_implementation(VertexCover_AtMos
     //*****************************
 }
 
+shared_ptr<Witness> VertexCover_AtMost_Witness::relabel(map<unsigned int, unsigned int> relabelingMap) {
+    VertexCover_AtMost_WitnessPointer relabeledWitness(new VertexCover_AtMost_Witness);
+    relabeledWitness->cost = this->cost;
+    for(auto item:this->partialCover){
+        if(relabelingMap.count(item)){
+            relabeledWitness->partialCover.insert(relabelingMap[item]);
+        }else{
+            cout<<"Error: VertexCover_AtMost_Witness::relabel "<<item<<" is not in the map."<<endl;
+            exit(20);
+        }
+    }
+    return relabeledWitness;
+}
+
 /*
  * Expected output example: "Witness: ({ 1 2 3 }, 10)"
  */

@@ -16,6 +16,7 @@
 -parse                      yylval.string = strdup(yytext); return command_parse_signature;
 -ps                         yylval.string = strdup(yytext); return command_print_state_flag;
 -pl                         yylval.string = strdup(yytext); return command_print_loop_flag;
+-st                         yylval.string = strdup(yytext); return command_print_state_tree;
 --help                      yylval.string = strdup(yytext); return command_help;
 -term                       yylval.string = strdup(yytext); return command_term_signature;
 PACE                        yylval.string = strdup(yytext); return command_parse_pace;

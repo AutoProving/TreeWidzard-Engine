@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.0.4.  */
+/* A Bison parser, made by GNU Bison 3.5.1.  */
 
 /* Skeleton interface for Bison GLR parsers in C
 
-   Copyright (C) 2002-2015 Free Software Foundation, Inc.
+   Copyright (C) 2002-2015, 2018-2020 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@
 extern int command_debug;
 #endif
 /* "%code requires" blocks.  */
-#line 3 "command_parser.y" /* glr.c:197  */
+#line 3 "command_parser.y"
 
     #include <iostream>
     #include <vector>
@@ -57,7 +57,7 @@ extern int command_debug;
     #include <tuple>
     using namespace std;
 
-#line 61 "command_parser.hpp" /* glr.c:197  */
+#line 61 "command_parser.hpp"
 
 /* Token type.  */
 #ifndef COMMAND_TOKENTYPE
@@ -74,23 +74,23 @@ extern int command_debug;
     command_parse_signature = 265,
     command_parse_pace = 266,
     command_parse_abstract = 267,
-    command_term_signature = 268
+    command_term_signature = 268,
+    command_print_state_tree = 269
   };
 #endif
 
 /* Value type.  */
 #if ! defined COMMAND_STYPE && ! defined COMMAND_STYPE_IS_DECLARED
-
 union COMMAND_STYPE
 {
-#line 33 "command_parser.y" /* glr.c:197  */
+#line 33 "command_parser.y"
 
      unsigned number;
      char* string;
 
-#line 92 "command_parser.hpp" /* glr.c:197  */
-};
+#line 92 "command_parser.hpp"
 
+};
 typedef union COMMAND_STYPE COMMAND_STYPE;
 # define COMMAND_STYPE_IS_TRIVIAL 1
 # define COMMAND_STYPE_IS_DECLARED 1

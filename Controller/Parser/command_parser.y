@@ -36,10 +36,10 @@
 }
 %parse-param {int &result}
 %token command_newline command_search_signature command_print_state_flag command_print_loop_flag command_string command_help command_end
-        command_parse_signature command_parse_pace command_parse_abstract command_term_signature
+        command_parse_signature command_parse_pace command_parse_abstract command_term_signature command_print_state_tree
 %type<string> command_newline command_search_signature command_print_state_flag command_print_loop_flag
               command_string command_input_file command_search_strategy command_help command_end
-              command_parse_signature command_parse_pace command_parse_abstract command_term_signature
+              command_parse_signature command_parse_pace command_parse_abstract command_term_signature command_print_state_tree
 %start command_start
 %glr-parser
 
@@ -56,8 +56,9 @@ command_search      : command_search_signature command_flags
                                                                                 }
 
                     ;
-command_flags       : command_print_state_flag command_flags {flags.add_flag("PrintStates", 1); }
-                    | command_print_loop_flag command_flags  {flags.add_flag("LoopTime", 1); }
+command_flags       : command_print_state_flag command_flags {flags.add_flag("PrintStates", 1);}
+                    | command_print_loop_flag command_flags  {flags.add_flag("LoopTime", 1);}
+                    | command_print_state_tree command_flags {flags.add_flag("StateTree", 1);}
                     |                                        {}
                     ;
 
@@ -76,7 +77,7 @@ command_term        : command_term_signature command_input_file command_end{Pars
 
 void yyerror(int &result, char const* msg){
   std::cerr<<"Syntax Error: "<< msg << " on line " <<command_lineno << std::endl;
-  cout<<"command not found. use --help to see help";
+  cout<<"command not found. use --help to see help\n";
   // error printing  disabled, it is handeled in main.cpp
 }
 

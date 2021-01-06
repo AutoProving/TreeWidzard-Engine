@@ -21,10 +21,7 @@ add_executable(
 	# Executable file name
 		treewidzard
 	# Main file
-		Controller/Parser/command_parser.hpp
-		Controller/Parser/command_parser.cpp
-		Controller/Parser/command_lexer.cpp
-		Controller/SearchController.h
+        Controller/SearchController.h
 		Controller/SearchController.cpp
 		Controller/ParseController.cpp
 		Controller/ParseController.h
@@ -101,6 +98,10 @@ add_executable(
 		 Search/BFS/RelabeledBreadthFirstSearch.h
 		 Search/BFS/RelabeledBreadthFirstSearch.cpp
 	# Parser files
+		# Command Parser
+		Controller/Parser/command_parser.hpp
+		Controller/Parser/command_parser.cpp
+		Controller/Parser/command_lexer.cpp
 		# Input File Parser
 		Parser/input_lexer.cpp
 		Parser/input_parser.cpp
