@@ -34,6 +34,7 @@ void SearchController::check_search() {
 }
 
 void SearchController::action() {
+    cout<<"Search Method: "<<searchStrategy<<endl;
     check_search();
     auto it = searchList.find(searchStrategy);
     SearchStrategyHandler* searchStrategyHandler;

@@ -48,6 +48,48 @@ Witness & HamiltonianPath_Witness::set_equal_implementation(HamiltonianPath_Witn
     //*****************************
     //*****************************
 }
+
+shared_ptr<Witness> HamiltonianPath_Witness::relabel(map<unsigned int, unsigned int> relabelingMap) {
+    HamiltonianPath_WitnessPointer relabeledWitness(new HamiltonianPath_Witness);
+    // Relabeling degree_0
+    for(auto d:this->degree_0){
+        if(relabelingMap.count(d)){
+            relabeledWitness->degree_0.insert(relabelingMap[d]);
+        }else{
+            cout<<"Error: HamiltonianPath_Witness::relabel "<< d<<" from degree_0 is not in the map."<<endl;
+            exit(20);
+        }
+    }
+    // Relabeling degree_1
+    for(auto d:this->degree_1){
+        if(relabelingMap.count(d)){
+            relabeledWitness->degree_1.insert(relabelingMap[d]);
+        }else{
+            cout<<"Error: HamiltonianPath_Witness::relabel "<< d<<" from degree_1 is not in the map."<<endl;
+            exit(20);
+        }
+    }
+    // Relabeling degree_2
+    for(auto d:this->degree_2){
+        if(relabelingMap.count(d)){
+            relabeledWitness->degree_2.insert(relabelingMap[d]);
+        }else{
+            cout<<"Error: HamiltonianPath_Witness::relabel "<< d<<" from degree_2 is not in the map."<<endl;
+            exit(20);
+        }
+    }
+    // Relabeling matching
+    for(auto m:matching){
+        if(relabelingMap.count(m.first) and relabelingMap.count(m.second)){
+            relabeledWitness->matching.insert(make_pair(relabelingMap[m.first],relabelingMap[m.second]));
+        }else{
+            cout<<"Error: HamiltonianPath_Witness::relabel "<< m.first << " or "<< m.second<<" from matching is not in the map."<<endl;
+            exit(20);
+        }
+    }
+    return relabeledWitness;
+}
+
 void HamiltonianPath_Witness::print() {
     //*****************************
     //*****************************

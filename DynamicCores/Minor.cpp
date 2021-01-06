@@ -59,7 +59,54 @@ Witness& Minor_Witness::set_equal_implementation(Minor_WitnessPointer w){
     //*****************************
     //*****************************
 }
-
+shared_ptr<Witness> Minor_Witness::relabel(map<unsigned int, unsigned int> relabelingMap) {
+    if(this->found){
+        return this->shared_from_this();
+    }else{
+        Minor_WitnessPointer relabeledWitness(new Minor_Witness);
+        relabeledWitness->found = false;
+        relabeledWitness->partitions.resize(this->partitions.size());
+        // Relabeling partitions
+        for(size_t i = 0 ; i < this->partitions.size(); i++){
+            // First coordinate relabeling
+            for(auto item:get<0>(this->partitions[i])){
+                if(relabelingMap.count(item)){
+                    get<0>(relabeledWitness->partitions[i]).insert(relabelingMap[item]);
+                }else{
+                    cout<<"Error: Minor_Witness::relabel "<<item<< " from partitions is not in the map."<<endl;
+                    print();
+                    for(auto m:relabelingMap){
+                        cout<<m.first  << " "<<m.second<<endl;
+                    }
+                    exit(20);
+                }
+            }
+            // Second coordinate relabeling
+            for(auto cell:get<1>(this->partitions[i])){
+                set<unsigned > relabeledCell;
+                for(auto item:cell){
+                    if(relabelingMap.count(item)){
+                        relabeledCell.insert(relabelingMap[item]);
+                    }else{
+                        cout<<"Error: Minor_Witness::relabel "<<item<< " from partitions is not in the map."<<endl;
+                        print();
+                        cout<<endl;
+                        for(auto m:relabelingMap){
+                            cout<<m.first  << " "<<m.second<<endl;
+                        }
+                        exit(20);
+                    }
+                }
+                get<1>(relabeledWitness->partitions[i]).insert(relabeledCell);
+            }
+            // Third coordinate
+            get<2>(relabeledWitness->partitions[i]) = get<2>(this->partitions[i]);
+        }
+        // foundEdges
+        relabeledWitness->foundEdges = this->foundEdges;
+        return relabeledWitness;
+    }
+}
 void Minor_Witness::print(){
 
     //*****************************
@@ -71,8 +118,8 @@ void Minor_Witness::print(){
             cout<<", ";
         }
     }
-    cout<<endl;
-    cout<<"partitions: ";
+    cout<<"}"<<endl;
+    cout<<"partitions: "<<endl;
     for(auto& partition : partitions){
         cout<<"( {";
         for(auto& s:get<0>(partition)){
@@ -81,7 +128,7 @@ void Minor_Witness::print(){
                 cout<<",";
             }
         }
-        cout<<"}, [";
+        cout<<"} [";
         for(auto& cell:get<1>(partition)){
             cout<<"{";
             for(auto s:cell){
@@ -95,7 +142,7 @@ void Minor_Witness::print(){
                 cout<<",";
             }
         }
-        cout<<"]";
+        cout<<"] )"<<endl;
     }
     //*****************************
     //*****************************
@@ -275,7 +322,7 @@ void Minor_DynamicCore::intro_v_implementation(unsigned i, Bag &b, Minor_Witness
 
 void Minor_DynamicCore::intro_e_implementation(unsigned i, unsigned j, Bag &b, Minor_WitnessPointer w, Minor_WitnessSetPointer witnessSet){
     //*****************************
-    //*****************************
+    //*****************************witness
     if(w->found){
         witnessSet->insert(w);
     }else{
@@ -350,7 +397,7 @@ void Minor_DynamicCore::forget_v_implementation(unsigned i, Bag &b, Minor_Witnes
         Minor_WitnessPointer witness = createWitness();
         witness->set_equal(*w);
         bool isInSomeComponent = false;
-	for(auto partition: witness->partitions){
+	    for(auto &partition: witness->partitions){
             if(get<0>(partition).count(i)){
 		        isInSomeComponent = true;
                 // Remove from the set

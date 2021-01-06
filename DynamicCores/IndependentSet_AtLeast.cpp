@@ -31,6 +31,25 @@ Witness & IndependentSet_AtLeast_Witness::set_equal_implementation(IndependentSe
     //*****************************
     //*****************************
 }
+shared_ptr<Witness> IndependentSet_AtLeast_Witness::relabel(map<unsigned int, unsigned int> relabelingMap) {
+
+    if(this->found){
+        return this->shared_from_this();
+    }else{
+        IndependentSet_AtLeast_WitnessPointer relabeledWitness(new IndependentSet_AtLeast_Witness);
+        relabeledWitness->found = false;
+        relabeledWitness->size = this->size;
+        for(auto s:this->partialIndSet){
+            if(relabelingMap.count(s)){
+                relabeledWitness->partialIndSet.insert(relabelingMap[s]);
+            }else{
+                cout<<"Error: IndependentSet_AtLeast_Witness::relabel "<< s<<" is not in the map."<<endl;
+                exit(20);
+            }
+        }
+        return relabeledWitness;
+    }
+}
 void IndependentSet_AtLeast_Witness::print() {
     //*****************************
     //*****************************
