@@ -69,6 +69,40 @@ Witness& EdgeConnected_AtMost_Witness::set_equal_implementation(EdgeConnected_At
     //*****************************
 }
 
+shared_ptr<Witness> EdgeConnected_AtMost_Witness::relabel(map<unsigned int, unsigned int> relabelingMap) {
+    if(this->found){
+        return this->shared_from_this();
+    }else{
+        EdgeConnected_AtMost_WitnessPointer relabeledWitness(new EdgeConnected_AtMost_Witness);
+        relabeledWitness->found = false;
+        relabeledWitness->processed = this->processed;
+        relabeledWitness->size = this->size;
+        // Relabeling disconnectingEdges
+        for(auto e:this->disconnectingEdges){
+            if(relabelingMap.count(e.first) and relabelingMap.count(e.second)){
+                relabeledWitness->disconnectingEdges.insert(make_pair(relabelingMap[e.first],relabelingMap[e.second]));
+            }else{
+                cout<<"Error: EdgeConnected_AtMost_Witness::relabel "<< e.first<< " or "<<e.second<< " is not in the map."<<endl;
+                exit(20);
+            }
+        }
+        // Relabeling partition
+        for(auto cell:this->partition){
+            set<unsigned > relabelSet;
+            for(auto v:cell){
+                if(relabelingMap.count(v)){
+                    relabelSet.insert(relabelingMap[v]);
+                }else{
+                    cout<<"Error: EdgeConnected_AtMost_Witness::relabel "<<v<<" from the partition is not in the map."<<endl;
+                    exit(20);
+                }
+            }
+            relabeledWitness->partition.insert(relabelSet);
+        }
+        return relabeledWitness;
+    }
+}
+
 void EdgeConnected_AtMost_Witness::print() {
     //*****************************
     //*****************************

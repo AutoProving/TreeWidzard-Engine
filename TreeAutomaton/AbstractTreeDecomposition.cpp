@@ -127,7 +127,7 @@ shared_ptr<CTDNodeNew> AbstractTreeDecomposition::constructCTDNode(TermNode<Abst
         vector<int> numbersInString = node.getNodeContent().extractIntegerWords(symbol);
         if(strstr(symbol.c_str(),"IntroVertex")){
             if(numbersInString.size()!=1){
-                cout<<"Error: AbstractTreeDecomposition::constructCTDNode children numbers not valid"<<endl;
+                cout<<"Error: ConcreteTreeDecomposition::constructCTDNode children numbers not valid"<<endl;
                 exit(20);
             }else{
                 b = children[0]->get_B();
@@ -136,7 +136,7 @@ shared_ptr<CTDNodeNew> AbstractTreeDecomposition::constructCTDNode(TermNode<Abst
             }
         }else if(strstr(symbol.c_str(),"ForgetVertex")){
             if(numbersInString.size()!=1){
-                cout<<"Error: AbstractTreeDecomposition::constructCTDNode children numbers not valid"<<endl;
+                cout<<"Error: ConcreteTreeDecomposition::constructCTDNode children numbers not valid"<<endl;
                 exit(20);
             }else{
                 b = children[0]->get_B();
@@ -145,7 +145,7 @@ shared_ptr<CTDNodeNew> AbstractTreeDecomposition::constructCTDNode(TermNode<Abst
             }
         }else if(strstr(symbol.c_str(),"IntroEdge")){
             if(numbersInString.size()!=2){
-                cout<<"Error: AbstractTreeDecomposition::constructCTDNode children numbers not valid"<<endl;
+                cout<<"Error: ConcreteTreeDecomposition::constructCTDNode children numbers not valid"<<endl;
                 exit(20);
             }else{
                 b = children[0]->get_B();

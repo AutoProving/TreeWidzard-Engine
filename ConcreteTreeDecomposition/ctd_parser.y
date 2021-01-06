@@ -1,5 +1,5 @@
 %defines
-%define api.prefix {ctd_}
+%define api.prefix {atd_}
 %code requires {
     #include "../Kernel/ConcreteTreeDecomposition.h"
     #include <iostream>

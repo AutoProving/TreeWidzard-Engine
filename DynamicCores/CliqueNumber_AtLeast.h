@@ -5,6 +5,10 @@
 #include <utility>
 #include <algorithm>
 using namespace std;
+class CliqueNumber_AtLeast_Witness;
+
+typedef shared_ptr<CliqueNumber_AtLeast_Witness> CliqueNumber_AtLeast_WitnessPointer;
+typedef shared_ptr<CliqueNumber_AtLeast_Witness const> CliqueNumber_AtLeast_WitnessPointerConst;
 class CliqueNumber_AtLeast_Witness: public Witness, public enable_shared_from_this<CliqueNumber_AtLeast_Witness>{
 public:
 	bool found; // Set to true if and only if a clique of the right size was found
@@ -15,6 +19,7 @@ public:
 	virtual bool is_less(const Witness &rhs)const;
 	virtual Witness& set_equal(Witness &witness);
 	virtual void print();
+	shared_ptr<Witness> relabel(map<unsigned int, unsigned int> relabelingMap) override;
 	friend set<unsigned> verticesOnPartialClique(set<pair<int,int>> edges); // Auxiliary Function. Vertices seen in the partial clique.
 	friend set<unsigned> neighborsOnPartialClique(set<pair<int,int>> edges, int i); // Auxiliary Function. Neighbors of i seen in the clique.
 };

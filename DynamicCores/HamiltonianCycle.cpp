@@ -51,6 +51,53 @@ Witness & HamiltonianCycle_Witness::set_equal_implementation(HamiltonianCycle_Wi
     //*****************************
 }
 
+shared_ptr<Witness> HamiltonianCycle_Witness::relabel(map<unsigned int, unsigned int> relabelingMap) {
+    if(this->degree_0.empty() and this->degree_1.empty() and this->degree_2.empty()
+            and this->matching.empty() and this->closed){
+        return this->shared_from_this();
+    }else{
+        HamiltonianCycle_WitnessPointer relabeledWitness(new HamiltonianCycle_Witness);
+        relabeledWitness->closed = this->closed;
+        // Relabeling degree_0
+        for(auto d:this->degree_0){
+            if(relabelingMap.count(d)){
+                relabeledWitness->degree_0.insert(relabelingMap[d]);
+            }else{
+                cout<<"Error: HamiltonianCycle_Witness::relabel "<< d<<" from degree_0 is not in the map."<<endl;
+                exit(20);
+            }
+        }
+        // Relabeling degree_1
+        for(auto d:this->degree_1){
+            if(relabelingMap.count(d)){
+                relabeledWitness->degree_1.insert(relabelingMap[d]);
+            }else{
+                cout<<"Error: HamiltonianCycle_Witness::relabel "<< d<<" from degree_1 is not in the map."<<endl;
+                exit(20);
+            }
+        }
+        // Relabeling degree_2
+        for(auto d:this->degree_2){
+            if(relabelingMap.count(d)){
+                relabeledWitness->degree_2.insert(relabelingMap[d]);
+            }else{
+                cout<<"Error: HamiltonianCycle_Witness::relabel "<< d<<" from degree_2 is not in the map."<<endl;
+                exit(20);
+            }
+        }
+        // Relabeling matching
+        for(auto m:matching){
+                if(relabelingMap.count(m.first) and relabelingMap.count(m.second)){
+                    relabeledWitness->matching.insert(make_pair(relabelingMap[m.first],relabelingMap[m.second]));
+                }else{
+                    cout<<"Error: HamiltonianCycle_Witness::relabel "<< m.first << " or "<< m.second<<" from matching is not in the map."<<endl;
+                    exit(20);
+                }
+        }
+        return relabeledWitness;
+    }
+}
+
 void HamiltonianCycle_Witness::print() {
     //*****************************
     //*****************************

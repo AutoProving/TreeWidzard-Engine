@@ -4,6 +4,10 @@
 #include "../Kernel/WitnessSet.h"
 #include "../Kernel/DynamicCore.h"
 #include <algorithm>
+class HasMultipleEdges_Witness;
+
+typedef shared_ptr<HasMultipleEdges_Witness> HasMultipleEdges_WitnessPointer;
+typedef shared_ptr<HasMultipleEdges_Witness const> HasMultipleEdges_WitnessPointerConst;
 class HasMultipleEdges_Witness: public Witness, public enable_shared_from_this<HasMultipleEdges_Witness>{
 public:
     std::set<pair<unsigned,unsigned>> edgeSet;
@@ -13,6 +17,7 @@ public:
     virtual bool is_equal(const Witness &rhs) const;
     virtual bool is_less(const Witness &rhs) const;
     virtual Witness& set_equal(Witness &rhs);
+    shared_ptr<Witness> relabel(map<unsigned int, unsigned int> relabelingMap) override;
     virtual void print();
 };
 

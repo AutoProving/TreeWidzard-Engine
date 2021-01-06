@@ -41,6 +41,29 @@ Witness &CliqueNumber_AtLeast_Witness::set_equal(Witness &witness) {
     }
 }
 
+shared_ptr<Witness> CliqueNumber_AtLeast_Witness::relabel(map<unsigned int, unsigned int> relabelingMap) {
+    if(this->found){
+        return this->shared_from_this();
+    }else{
+        CliqueNumber_AtLeast_WitnessPointer relabeledWitness(new CliqueNumber_AtLeast_Witness);
+        relabeledWitness->found = false;
+        for(auto p:edges){
+            if(relabelingMap.count(p.first) and relabelingMap.count(p.second)){
+                relabeledWitness->edges.insert(make_pair(relabelingMap[p.first],relabelingMap[p.second]));
+            }else{
+                cout<<"Error: CliqueNumber_AtLeast_Witness::relabel "<< p.first<< " or "<< p.second<<" is not "
+                                                                                                     "in the map"<<endl;
+                print();
+                for(auto l:relabelingMap){
+                    cout<<l.first<<"->"<<l.second<<endl;
+                }
+                exit(20);
+            }
+        }
+        return relabeledWitness;
+    }
+}
+
 void CliqueNumber_AtLeast_Witness::print() {
     cout << "found = " << found << " ";
 	cout<<"E={";
@@ -163,7 +186,7 @@ WitnessSetPointer CliqueNumber_AtLeast_DynamicCore::intro_e(unsigned i, unsigned
                 // Suppose that both endpoints of the edge are in the partial clique.
                 // Then we have no choice. We need to add the edge to the partial clique.
                 aux.insert(newedge);
-                if (vertices.size() == cliqueSize and aux.size() == cliqueSize*(cliqueSize-1)/2){
+                if (vertices.size() == cliqueSize and aux.size() == cliqueSize*(cliqueSize-1)/2)cliqueSize{
                     // if the partial clique gets complete, we are done, meaning that we set found to true and the edgeset to empty.
                     shared_ptr<CliqueNumber_AtLeast_Witness> w(new CliqueNumber_AtLeast_Witness);
                     w->found = true;

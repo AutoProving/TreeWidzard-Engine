@@ -26,6 +26,19 @@ Witness & EdgeColoring_AtMost_Witness::set_equal_implementation(EdgeColoring_AtM
     //*****************************
 }
 
+shared_ptr<Witness> EdgeColoring_AtMost_Witness::relabel(map<unsigned int, unsigned int> relabelingMap) {
+    EdgeColoring_AtMost_WitnessPointer relabeledWitness(new EdgeColoring_AtMost_Witness);
+    for(auto m:mapSetColors){
+        if(relabelingMap.count(m.first)){
+            relabeledWitness->mapSetColors.insert(make_pair(relabelingMap[m.first],m.second));
+        }else{
+            cout<<"Error: EdgeColoring_AtMost_Witness::relabel "<< m.first<< " is not in the map"<<endl;
+            exit(20);
+        }
+    }
+    return relabeledWitness;
+}
+
 void EdgeColoring_AtMost_Witness::print() {
     //*****************************
     //*****************************

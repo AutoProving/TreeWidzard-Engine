@@ -38,6 +38,54 @@ Witness & CycleGirth_AtMost_Witness::set_equal_implementation(CycleGirth_AtMost_
     //*****************************
     //*****************************
 }
+
+shared_ptr<Witness> CycleGirth_AtMost_Witness::relabel(map<unsigned int, unsigned int> relabelingMap) {
+    CycleGirth_AtMost_WitnessPointer w(new CycleGirth_AtMost_Witness);
+    if(this->found_cycle){
+        w->found_cycle = true;
+        w->current_size = this->current_size;
+        return w;
+    }else{
+        set<unsigned > newDegree_0;
+        set<unsigned > newDegree_2;
+        map<unsigned, unsigned> newExtremity;
+        for(auto v: this->degree_0){
+            if(relabelingMap.count(v)){
+                newDegree_0.insert(relabelingMap[v]);
+            }else{
+                cout<<"Error: CycleGirth_AtMost_Witness::relabel "<< v << " from degree_0 is not in the map"<<endl;
+                exit(20);
+            }
+        }
+        for(auto v: this->degree_2){
+            if(relabelingMap.count(v)){
+                newDegree_2.insert(relabelingMap[v]);
+            }else{
+                cout<<"Error: CycleGirth_AtMost_Witness::relabel "<< v << "from degree_2 is not in the map"<<endl;
+                exit(20);
+            }
+        }
+        for(auto v: this->extremity){
+            if(relabelingMap.count(v.first) and relabelingMap.count(v.second)){
+                newExtremity.insert(make_pair(relabelingMap[v.first],relabelingMap[v.second]));
+            }else{
+                cout<<"Error: CycleGirth_AtMost_Witness::relabel "<< v.first <<" or "<< v.second << " from extremity is not in the map"<<endl;
+                print();
+                for(auto m:relabelingMap){
+                    cout<<m.first  << " "<<m.second<<endl;
+                }
+                exit(20);
+            }
+        }
+        w->found_cycle = false;
+        w->current_size = this->current_size;
+        w->degree_0 = newDegree_0;
+        w->degree_2 = newDegree_2;
+        w->extremity = newExtremity;
+        return w;
+    }
+}
+
 void CycleGirth_AtMost_Witness::print() {
     //*****************************
     //*****************************
@@ -54,7 +102,7 @@ void CycleGirth_AtMost_Witness::print() {
     cout << "Corresponding Extremity Map (key -> value):" << endl;
     for (auto &elem : this->extremity) cout << elem.first << " -> " << elem.second << endl;
     cout << endl;
-    cout << "Found Cylce: " << this->found_cycle << endl;
+    cout << "Found Cycle: " << this->found_cycle << endl;
     //*****************************
     //*****************************
 }
@@ -125,21 +173,35 @@ void CycleGirth_AtMost_DynamicCore::intro_e_implementation(unsigned int i, unsig
         CycleGirth_AtMost_WitnessPointer w_no_edge = createWitness();
         w_no_edge->set_equal(*w);
         witnessSet->insert(w_no_edge);
+        for(auto l:w_no_edge->extremity){
+            if(!(w_no_edge->extremity[l.second]==l.first and w_no_edge->extremity[l.first]== l.second)){
+                cout<<"Error!!! 1"<<endl;
+                w_no_edge->print();
+                exit(20);
+            }
+        }
         // Now calculate and insert witness, where edge is introduced
         // If the degree of either endpoint of the edge is already 2, then
         // we are trying to add an edge to an inner node of the cycle.
         // This is not allowed and therefore no additional witness is created.
         if (w->degree_2.count(i) || w->degree_2.count(j)) {
-            // nothing
+            // The edge {i,j} cannot be introduced.
         }else if (w->degree_0.count(i) && w->degree_0.count(j)) {
             // If both u and v have degree 0 in the input witness, then
-            // by connecting these vertices, their degree becomes 1.
+            // by connecting these vertices, their degrees become 1.
             CycleGirth_AtMost_WitnessPointer w_connect_nodes = createWitness();
             w_connect_nodes->set_equal(*w);
             w_connect_nodes->extremity[i] = j;
             w_connect_nodes->extremity[j] = i;
             w_connect_nodes->degree_0.erase(i);
             w_connect_nodes->degree_0.erase(j);
+            for(auto l:w_connect_nodes->extremity){
+                if(!(w_connect_nodes->extremity[l.second]==l.first and w_connect_nodes->extremity[l.first]== l.second)){
+                    cout<<"Error!!! 2"<<endl;
+                    w_connect_nodes->print();
+                    exit(20);
+                }
+            }
             witnessSet->insert(w_connect_nodes);
         }else{
             auto u_extremity_it = w->extremity.find(i);
@@ -159,10 +221,24 @@ void CycleGirth_AtMost_DynamicCore::intro_e_implementation(unsigned int i, unsig
                 CycleGirth_AtMost_WitnessPointer w_extend = createWitness();
                 w_extend->set_equal(*w);
                 w_extend->degree_0.erase(i);
-                w_extend->extremity[v_extremity] = j;
-                w_extend->extremity[i] = v_extremity;
-                w_extend->extremity.erase(j);
                 w_extend->degree_2.insert(j);
+                w_extend->extremity[v_extremity] = i;
+                w_extend->extremity[i]=v_extremity;
+                w_extend->extremity.erase(j);
+//                w_extend->degree_0.erase(i);
+//                w_extend->extremity[v_extremity] = j;
+//                w_extend->extremity[i] = v_extremity;
+//                w_extend->extremity.erase(j);
+//                w_extend->degree_2.insert(j);
+                for(auto l:w_extend->extremity){
+                    if(!(w_extend->extremity[l.second]==l.first and w_extend->extremity[l.first]== l.second)){
+                        cout<<"Error!!! 3"<<endl;
+                        cout<<"i: "<<i<<" j:"<<j<<" v_extremity:"<<v_extremity<<endl;
+                        w->print();
+                        w_extend->print();
+                        exit(20);
+                    }
+                }
                 witnessSet->insert(w_extend);
             }else if (u_extremity_it != w->extremity.end() && v_extremity_it != w->extremity.end()) {
                 //The next IF analyses the case in which both endpoints of the edge have degree 1 in the input witness
@@ -177,6 +253,14 @@ void CycleGirth_AtMost_DynamicCore::intro_e_implementation(unsigned int i, unsig
                     w_cycle->extremity.erase(j);
                     if (w_cycle->degree_0.empty() && w_cycle->extremity.empty()) {
                         w_cycle->found_cycle = true;
+                        for(auto l:w_cycle->extremity){
+                            if(!(w_cycle->extremity[l.second]==l.first and w_cycle->extremity[l.first]== l.second)){
+                                cout<<"Error!!! 4"<<endl;
+                                w_cycle->print();
+                                exit(20);
+                            }
+                        }
+                        w_cycle->degree_2.clear();
                         witnessSet->insert(w_cycle);
                     } else {
                         // nothing
@@ -192,6 +276,13 @@ void CycleGirth_AtMost_DynamicCore::intro_e_implementation(unsigned int i, unsig
                     w_connect_parts->degree_2.insert(j);
                     w_connect_parts->extremity[u_extremity] = v_extremity;
                     w_connect_parts->extremity[v_extremity] = u_extremity;
+                    for(auto l:w_connect_parts->extremity){
+                        if(!(w_connect_parts->extremity[l.second]==l.first and w_connect_parts->extremity[l.first]== l.second)){
+                            cout<<"Error!!! 5"<<endl;
+                            w_connect_parts->print();
+                            exit(20);
+                        }
+                    }
                     witnessSet->insert(w_connect_parts);
                 }
             }
@@ -204,12 +295,16 @@ void CycleGirth_AtMost_DynamicCore::forget_v_implementation(unsigned int i, Bag 
                                                             CycleGirth_AtMost_WitnessSetPointer witnessSet) {
     //*****************************
     //*****************************
-    if (w->degree_2.count(i)) {
-        CycleGirth_AtMost_WitnessPointer w_forgot = createWitness();
-        w_forgot->set_equal(*w);
-        w_forgot->degree_2.erase(i);
-        witnessSet->insert(w_forgot);
+    if(w->found_cycle){
+        witnessSet->insert(w);
+    }else if (w->degree_2.count(i)) {
+        CycleGirth_AtMost_WitnessPointer w_forgotten = createWitness();
+        w_forgotten->set_equal(*w);
+        w_forgotten->degree_2.erase(i);
+        witnessSet->insert(w_forgotten);
     }
+    // If we try to forget a vertex of degree 0 or 1, then the input witness is incompatible with forgetting
+    // this vertex, therefore nothing is added to witnessSet.
     //*****************************
     //*****************************
 }
@@ -327,6 +422,7 @@ void CycleGirth_AtMost_DynamicCore::join_implementation(Bag &b, CycleGirth_AtMos
                     if (wPrime->degree_0.empty() && wPrime->extremity.empty() &&
                         wPrime->current_size <= this->parameter) {
                         wPrime->found_cycle = true;
+                        wPrime->degree_2.clear();
                         witnessSet->insert(wPrime);
                         return;
                     } else {

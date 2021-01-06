@@ -22,6 +22,7 @@ public:
     virtual bool is_equal(const Witness &rhs) const;
     virtual bool is_less(const Witness &rhs) const;
     virtual Witness &set_equal(Witness &witness);
+    shared_ptr<Witness> relabel(map<unsigned int, unsigned int> relabelingMap) override;
     virtual void print();
     //*****************************
     //*****************************

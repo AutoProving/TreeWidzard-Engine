@@ -1,0 +1,7 @@
+path_width 4
+a := HasMultipleEdges
+b := MaxDegree > 3
+c := MinDegree < 3
+d := CycleGirth < 4
+e := Connectivity
+NOT a AND e AND NOT b AND NOT c IMPLIES d

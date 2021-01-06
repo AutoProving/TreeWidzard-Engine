@@ -47,6 +47,27 @@ Witness &HasMultipleEdges_Witness::set_equal(Witness &rhs) {
     }
 }
 
+shared_ptr<Witness> HasMultipleEdges_Witness::relabel(map<unsigned int, unsigned int> relabelingMap) {
+    HasMultipleEdges_WitnessPointer w(new HasMultipleEdges_Witness);
+    if(this->found ){
+        w->found = true;
+        return w;
+    }else{
+        set<pair<unsigned,unsigned>> newEdgeSet;
+        for(auto p:this->edgeSet){
+            if(relabelingMap.count(p.first) and relabelingMap.count(p.second)){
+                newEdgeSet.insert(make_pair(relabelingMap[p.first],relabelingMap[p.second]));
+            }else{
+                cout<<"Error: HasMultipleEdges_Witness::relabel "<< p.first <<" or "<< p.second << " is not in the map"<<endl;
+                exit(20);
+            }
+        }
+        w->edgeSet = newEdgeSet;
+        w->found = false;
+        return w;
+    }
+}
+
 void HasMultipleEdges_Witness::print() {
     cout<<"{";
     for (set<pair<unsigned,unsigned>>::iterator it = this->edgeSet.begin() ; it != this->edgeSet.end() ; ++it) {

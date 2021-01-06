@@ -71,9 +71,15 @@ shared_ptr<Witness> ChromaticNumber_AtMost_Witness::relabel(map<unsigned,unsigne
     shared_ptr<ChromaticNumber_AtMost_Witness> relabeledWitness(new ChromaticNumber_AtMost_Witness);
     for (auto it = this->coloring.begin(); it!=this->coloring.end();it++){
         pair<unsigned,unsigned> relabeledPair;
-        relabeledPair.first = relabelingMap[it->first];
-        relabeledPair.second = it->second;
-        relabeledWitness->coloring.insert(relabeledPair);
+        if(relabelingMap.count(it->first)){
+            relabeledPair.first = relabelingMap[it->first];
+            relabeledPair.second = it->second;
+            relabeledWitness->coloring.insert(relabeledPair);
+        }else{
+            cout<<"Error: ChromaticNumber_AtMost_Witness::relabel "<< it->first << " is not in the map"<<endl;
+            exit(20);
+        }
+
     }
     return relabeledWitness;
 }

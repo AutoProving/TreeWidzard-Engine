@@ -1,27 +1,27 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
-#include "BreadthFirstSearch.h"
+#include "RelabeledBreadthFirstSearch.h"
 
 extern "C" {
-    BreadthFirstSearch * create() {
-        return new BreadthFirstSearch();
+    RelabeledBreadthFirstSearch * create() {
+        return new RelabeledBreadthFirstSearch();
     }
-    BreadthFirstSearch * create_parameter(DynamicKernel* dynamicKernel, Conjecture* conjecture,Flags* flags) {
-        return new BreadthFirstSearch(dynamicKernel,conjecture,flags);
+    RelabeledBreadthFirstSearch * create_parameter(DynamicKernel* dynamicKernel, Conjecture* conjecture,Flags* flags) {
+        return new RelabeledBreadthFirstSearch(dynamicKernel,conjecture,flags);
     }
 }
 
-BreadthFirstSearch::BreadthFirstSearch() {
-    addAttribute("SearchName","BreadthFirstSearch");
+RelabeledBreadthFirstSearch::RelabeledBreadthFirstSearch() {
+    addAttribute("SearchName","RelabeledBreadthFirstSearch");
 }
 
-BreadthFirstSearch::BreadthFirstSearch(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags): SearchStrategy(dynamicKernel, conjecture, flags) {
+RelabeledBreadthFirstSearch::RelabeledBreadthFirstSearch(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags): SearchStrategy(dynamicKernel, conjecture, flags) {
     this->kernel = kernel;
 	this->conjecture = conjecture;
 	this->flags = flags;
-    addAttribute("SearchName","BreadthFirstSearch");
+    addAttribute("SearchName","RelabeledBreadthFirstSearch");
 }
 
-void BreadthFirstSearch::search(){
+void RelabeledBreadthFirstSearch::search(){
 	TreeAutomaton<State::ptr,AbstractTreeDecompositionNodeContent> bfsDAG; // Constructs a DAG corresponding to the BFS.
 	State::ptr initialState = kernel->initialState();
 	allStatesSet.insert(initialState); //TODO define InitialSearchState
@@ -53,9 +53,10 @@ void BreadthFirstSearch::search(){
 			for (int i=1; i<= width+1; i++){
                 if(bag.vertex_introducible(i)){
                     State::ptr newStatePointer = kernel->intro_v(statePointer, i);
-                    if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer) ){
-                        newStatesSet.insert(newStatePointer);
-                        State::ptr consequentState = newStatePointer;
+                    State::ptr relabeledNewStatePointer= newStatePointer->relabel(relabeledMapGenerator(newStatePointer->get_bag().get_elements()));
+                    if (!allStatesSet.count(relabeledNewStatePointer) and !newStatesSet.count(relabeledNewStatePointer) ){
+                        newStatesSet.insert(relabeledNewStatePointer);
+                        State::ptr consequentState = relabeledNewStatePointer;
                         bfsDAG.addState(consequentState);
                         AbstractTreeDecompositionNodeContent transitionContent("IntroVertex_"+ to_string(i));
                         vector<State::ptr> antecedentStates;
@@ -70,9 +71,10 @@ void BreadthFirstSearch::search(){
 			///////////////////////////////////////////////////////
 			for (auto it= bagElement.begin(); it!=bagElement.end(); it++){
                 State::ptr newStatePointer = kernel->forget_v(statePointer, *it);
-                if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer)){
-                    newStatesSet.insert(newStatePointer);
-                    State::ptr consequentState = newStatePointer;
+                State::ptr relabeledNewStatePointer= newStatePointer->relabel(relabeledMapGenerator(newStatePointer->get_bag().get_elements()));
+                if (!allStatesSet.count(relabeledNewStatePointer) and !newStatesSet.count(relabeledNewStatePointer)){
+                    newStatesSet.insert(relabeledNewStatePointer);
+                    State::ptr consequentState = relabeledNewStatePointer;
                     AbstractTreeDecompositionNodeContent transitionContent("ForgetVertex_"+ to_string(*it));
                     bfsDAG.addState(consequentState);
                     vector<State::ptr> antecedentStates;
@@ -89,9 +91,10 @@ void BreadthFirstSearch::search(){
                     if(itX!=bagElement.end()){
                         for (auto itPrime = itX ; itPrime != bagElement.end(); itPrime++){
                             State::ptr newStatePointer = kernel->intro_e(statePointer, *it, *itPrime);
-                            if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer)){
-                                newStatesSet.insert(newStatePointer);
-                                State::ptr consequentState = newStatePointer;
+                            State::ptr relabeledNewStatePointer= newStatePointer->relabel(relabeledMapGenerator(newStatePointer->get_bag().get_elements()));
+                            if (!allStatesSet.count(relabeledNewStatePointer) and !newStatesSet.count(relabeledNewStatePointer)){
+                                newStatesSet.insert(relabeledNewStatePointer);
+                                State::ptr consequentState = relabeledNewStatePointer;
                                 AbstractTreeDecompositionNodeContent transitionContent("IntroEdge_"+ to_string(*it)+"_"+to_string(*itPrime));
                                 bfsDAG.addState(consequentState);
                                 vector<State::ptr> antecedentStates;
@@ -110,9 +113,10 @@ void BreadthFirstSearch::search(){
                 for (auto it = allStatesSet.begin(); it != allStatesSet.end(); it++) {
                     if (statePointer->get_bag().joinable((*it)->get_bag())) {
                         State::ptr newStatePointer = kernel->join(statePointer, *it);
-                        if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer)) {
-                            newStatesSet.insert(newStatePointer);
-                            State::ptr consequentState = newStatePointer;
+                        State::ptr relabeledNewStatePointer= newStatePointer->relabel(relabeledMapGenerator(newStatePointer->get_bag().get_elements()));
+                        if (!allStatesSet.count(relabeledNewStatePointer) and !newStatesSet.count(relabeledNewStatePointer)) {
+                            newStatesSet.insert(relabeledNewStatePointer);
+                            State::ptr consequentState = relabeledNewStatePointer;
                             AbstractTreeDecompositionNodeContent transitionContent("Join");
                             bfsDAG.addState(consequentState);
                             vector<State::ptr> antecedentStates;
@@ -128,9 +132,10 @@ void BreadthFirstSearch::search(){
                 for (auto it = newStatesSet.begin(); it != newStatesSet.end(); it++) {
                     if (statePointer->get_bag().joinable((*it)->get_bag())) {
                         State::ptr newStatePointer = kernel->join(statePointer, *it);
-                        if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer)) {
-                            newStatesSet.insert(newStatePointer);
-                            State::ptr consequentState = newStatePointer;
+                        State::ptr relabeledNewStatePointer= newStatePointer->relabel(relabeledMapGenerator(newStatePointer->get_bag().get_elements()));
+                        if (!allStatesSet.count(relabeledNewStatePointer) and !newStatesSet.count(relabeledNewStatePointer)) {
+                            newStatesSet.insert(relabeledNewStatePointer);
+                            State::ptr consequentState = relabeledNewStatePointer;
                             AbstractTreeDecompositionNodeContent transitionContent("Join");
                             bfsDAG.addState(consequentState);
                             vector<State::ptr> antecedentStates;
@@ -159,7 +164,7 @@ void BreadthFirstSearch::search(){
 		        ConcreteTreeDecomposition ctd = atd.convertToConcreteTreeDecomposition();
                 shared_ptr<DynamicKernel> sharedKernel = make_shared<DynamicKernel>(*kernel);
                 ctd.convertToStateTree(sharedKernel).printStateTree();
-                ctd.extractMultiGraph().printGraph();
+		        ctd.extractMultiGraph().printGraph();
 		        exit(20);
 		    }
 		}
@@ -173,4 +178,14 @@ void BreadthFirstSearch::search(){
         }
 	}
     cout<<"Finish"<<endl;
+}
+
+map<unsigned, unsigned> RelabeledBreadthFirstSearch::relabeledMapGenerator(set<unsigned int> bagElements) {
+    map<unsigned int, unsigned int> map;
+    unsigned i =1;
+    for(auto v:bagElements){
+        map.insert(make_pair(v,i));
+        i++;
+    }
+    return map;
 }

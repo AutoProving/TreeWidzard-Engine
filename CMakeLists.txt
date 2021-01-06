@@ -50,6 +50,10 @@ add_executable(
 		#	DynamicCores/HamiltonianCycle.cpp
 		#	DynamicCores/MaxDegree_AtLeast.h
 		#	DynamicCores/MaxDegree_AtLeast.cpp
+		#	DynamicCores/MinDegree_AtMost.h
+		#	DynamicCores/MinDegree_AtMost.cpp
+		#	DynamicCores/CycleGirth_AtMost.h
+		#	DynamicCores/CycleGirth_AtMost.cpp
 
 	# Kernel files
         Kernel/Witness.cpp
@@ -94,6 +98,8 @@ add_executable(
 		#Search/BFS/BreadthFirstSearch.cpp
 		#Search/RelabeledLeveledSetSearch.h
 		#Search/RelabeledLeveledSetSearch.cpp
+		 Search/BFS/RelabeledBreadthFirstSearch.h
+		 Search/BFS/RelabeledBreadthFirstSearch.cpp
 	# Parser files
 		# Input File Parser
 		Parser/input_lexer.cpp

@@ -89,6 +89,8 @@ void ParseController::parse_abstract(string abstractPath) {
     }
     ctd.printTree();
     if(!ctd.conjectureCheck(inputController->getConjecture())){
+        shared_ptr<DynamicKernel> sharedKernel = make_shared<DynamicKernel>(inputController->getDynamicKernel());
+        ctd.convertToStateTree(sharedKernel).printStateTree();
         ctd.extractMultiGraph().printGraph();
     };
 
@@ -98,7 +100,7 @@ void ParseController::test_term() {
 
 //    AbstractTreeDecompositionNodeContent abstractTreeDecompositionNodeContent1("IntroVertex_13456");
 //    AbstractTreeDecompositionNodeContent abstractTreeDecompositionNodeContent2("IntroVertex_7_9");
-//    AbstractTreeDecomposition abstractTreeDecomposition;
+//    ConcreteTreeDecomposition abstractTreeDecomposition;
 //    shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> a1(new TermNode<AbstractTreeDecompositionNodeContent>);
 //    shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> a2(new TermNode<AbstractTreeDecompositionNodeContent>);
 //    a1->setNodeContent(abstractTreeDecompositionNodeContent1);
