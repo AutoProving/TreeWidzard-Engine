@@ -57,6 +57,23 @@ Witness& NoWhereZeroFlow_AtMost_Witness::set_equal_implementation(NoWhereZeroFlo
     //*****************************
 }
 
+shared_ptr<Witness> NoWhereZeroFlow_AtMost_Witness::relabel(map<unsigned int, unsigned int> relabelingMap) {
+    NoWhereZeroFlow_AtMost_WitnessPointer relabeledWitness(new NoWhereZeroFlow_AtMost_Witness);
+    for(auto item:this->flowSum){
+        if(relabelingMap.count(item.first)){
+            relabeledWitness->flowSum.insert(make_pair(relabelingMap[item.first],item.second));
+        }else{
+            cout<<"Error: NoWhereZeroFlow_AtMost_Witness::relabel "<< item.first <<" is not in the map."<<endl;
+            print();
+            for(auto m:relabelingMap){
+                cout<<m.first<<"->"<<m.second<<endl;
+            }
+            exit(20);
+        }
+    }
+    return relabeledWitness;
+}
+
 void NoWhereZeroFlow_AtMost_Witness::print() {
     //*****************************
     //*****************************
@@ -154,8 +171,9 @@ void NoWhereZeroFlow_AtMost_DynamicCore::intro_e_implementation(unsigned i, unsi
 	    NoWhereZeroFlow_AtMost_WitnessPointer witness = createWitness();
 	    witness->set_equal(*w);
 	    //Update flowSum in this copy
-	    witness->flowSum[minVertex->second] = minVertexSum; 
-	    witness->flowSum[maxVertex->second] = maxVertexSum; 
+
+	    witness->flowSum[minVertex->first] = minVertexSum;
+	    witness->flowSum[maxVertex->first] = maxVertexSum;
 	    witnessSet->insert(witness);
     }
     //*****************************
@@ -168,6 +186,7 @@ void NoWhereZeroFlow_AtMost_DynamicCore::forget_v_implementation(unsigned i, Bag
     auto it = w->flowSum.find(i);
     if(it->second==0){
         NoWhereZeroFlow_AtMost_WitnessPointer  witness = createWitness();
+        witness->set_equal(*w);
         witness->flowSum.erase(i);
         witnessSet->insert(witness);
     }
