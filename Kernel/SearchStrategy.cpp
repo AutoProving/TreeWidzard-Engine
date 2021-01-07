@@ -49,4 +49,12 @@ map<string, string> SearchStrategy::getAttributes() {
     return attributes;
 }
 
+const string &SearchStrategy::getPropertyFilePath() const {
+    return propertyFilePath;
+}
+
+void SearchStrategy::setPropertyFilePath(const string &propertyFilePath) {
+    SearchStrategy::propertyFilePath = propertyFilePath;
+}
+
 

@@ -8,12 +8,15 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+#include <experimental/filesystem>
 #include "../Multigraph/MultiGraph.h"
 #include "Bag.h"
 #include "Conjecture.h"
 #include "StateTree.h"
 
+
 using namespace std;
+namespace concrete_fs = std::experimental::filesystem;
 
 class CTDNodeNew : public enable_shared_from_this<CTDNodeNew> {
   protected:
@@ -52,22 +55,21 @@ class CTDNodeNew : public enable_shared_from_this<CTDNodeNew> {
 
 class ConcreteTreeDecomposition {
   public:
-	shared_ptr<CTDNodeNew> root;
+	shared_ptr<CTDNodeNew> root= nullptr;
 	MultiGraph extractMultiGraph();
 	void set_root(shared_ptr<CTDNodeNew> node){root = node;};
 	void traverseNode(CTDNodeNew &node, MultiGraph &G, map<unsigned, unsigned> &colorToVertexMap, unsigned &nVertices, unsigned &nEdges);
 	string printAbstractRecursive( CTDNodeNew &node, unsigned &label); // This prints the tree recursively
 	void printAbstract(); // This prints the tree of Bag Types
+	void writeToFileAbstract(string fileName);
 	string printTreeRecursive(CTDNodeNew &node, unsigned &label);
 	void printTree();
-	void printConcrete(); // This prints the tree of Bags
 	bool readToken(string::iterator &it, string token);
 	unsigned readInteger(string::iterator &it); // Reads a string, if the string starts with integers it
 				  // returns integers else returns -1. Ex "123abc" returns 123
 	bool readAbstractVertexNumber(string::iterator &it, unsigned &v); // This function will be deleted
 	bool readAbstractEdgeNumber( string::iterator &it, pair<unsigned, unsigned> &e); // This function will be deleted
-	shared_ptr<CTDNodeNew> readAbstractExpressionRecursive( string::iterator &it, string::iterator end,
-                                                         vector<shared_ptr<CTDNodeNew>> &v); // Reads Abstract Tree Decomposition recursively
+	shared_ptr<CTDNodeNew> readAbstractExpressionRecursive( string::iterator &it, string::iterator end, vector<shared_ptr<CTDNodeNew>> &v); // Reads Abstract Tree Decomposition recursively
 	void readAbstract(string s); // Reads Abstract Tree Decomposition
 	void readConcrete(); // Reads Concrete Tree Decomposition
 	// take a conjecture as an input and check that the concrete tree

@@ -533,28 +533,18 @@ maxWitnessSetSize[m] =
 			for (auto it = setNewStates[bagSetIndex].begin();
 				 it != setNewStates[bagSetIndex].end(); it++) {
 				if (!conjecture->evaluateConjectureOnState(*(*it), kernel)) {
-					cout << endl
-						 << "-----------------------BAD STATE "
-							"FOUND---------------------"
-						 << endl;
+				    cout<< "-----------------------BAD STATE FOUND---------------------"<< endl;
 					(*it)->print();
-					cout << endl
-						 << "--------------------------------------------------"
-							"---------"
-						 << endl;
-					cout << endl
-						 << "Constructing Counter Example Decomposition"
-						 << endl;
+					cout << "Constructing Counter Example Decomposition" << endl;
 					bool tree_width = false;
 					if (kernel->get_width().get_name() == "tree_width") {
 						tree_width = true;
 					}
 					ConcreteTreeDecomposition *T = new ConcreteTreeDecomposition;
-					*T = extractCTDDecomposition(iterationNumber + 1, *it,
-												 leveledSetAllStates);
-					cout<<"Abstract Concrete Tree Decomposition:"<<endl;
+					*T = extractCTDDecomposition(iterationNumber + 1, *it,leveledSetAllStates);
+					cout<<"Abstract Tree Decomposition:"<<endl;
 					T->printAbstract();
-                    cout<<"Tree Concrete Tree Decomposition 1:"<<endl;
+                    cout<<"Concrete Tree Decomposition 1:"<<endl;
                     T->printTree();
                     if(flags->get("StateTree")==1){
                         StateTree* S = new StateTree;
@@ -567,12 +557,8 @@ maxWitnessSetSize[m] =
                         cout<<"Tree State Tree Decomposition:"<<endl;
                         S->printStateTree();
                     }
-
 					//
-					cout << endl
-						 << "------------------Constructing Counter Example "
-							"Graph-------------------"
-						 << endl;
+					cout << "\n ------------------Constructing Counter Example Graph-------------------"<< endl;
 					T->extractMultiGraph().printGraph();
 					cout << "\n convert to gml "
 						 << T->extractMultiGraph().convertToGML();

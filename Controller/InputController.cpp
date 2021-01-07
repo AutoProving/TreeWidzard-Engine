@@ -156,3 +156,7 @@ InputController::InputController(const string &inputPath, const string &dynamicP
     parse_input();
     construct_dynamicKernel();
 }
+
+const string &InputController::getInputPath() const {
+    return inputPath;
+}

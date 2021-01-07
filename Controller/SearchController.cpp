@@ -44,6 +44,7 @@ void SearchController::action() {
         std::unique_ptr<SearchStrategy> search = searchStrategyHandler->create_parameter(
                 &inputController->getDynamicKernel(), &inputController->getConjecture(), &flags);
         SearchStrategy* searchStrategy = search.release();
+        searchStrategy->setPropertyFilePath(inputController->getInputPath());
         searchStrategy->search();
     }else{
         cout<<"Error: Search method " << searchStrategy << " was not found."<<endl;

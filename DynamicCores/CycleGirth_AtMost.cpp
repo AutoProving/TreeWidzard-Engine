@@ -144,12 +144,11 @@ void CycleGirth_AtMost_DynamicCore::intro_v_implementation(unsigned int i, Bag &
                                                            CycleGirth_AtMost_WitnessSetPointer witnessSet) {
     //*****************************
     //*****************************
-
+    // In this witness we don't add v to cycle
+    witnessSet->insert(w);
     if(w->found_cycle){
-        witnessSet->insert(w);
+        // nothing
     }else if (w->current_size < this->parameter) {
-        // In this witness we don't add v to cycle
-        witnessSet->insert(w);
         // In this witness we add v to cycle only if current_size < parameter
         CycleGirth_AtMost_WitnessPointer w_with_v = createWitness();
         w_with_v->set_equal(*w);

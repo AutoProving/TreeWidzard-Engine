@@ -295,7 +295,7 @@ void StateTree::printTreeRecursive(StateTreeNode &node, unsigned &label) {
 		cout << node.get_nodeType() + "(" + to_string(label1) + "," +
 					to_string(label2) + ")\n";
 		node.printStateTreeNode();
-	} else if (node.get_nodeType() == "Empty") {
+	} else if (node.get_nodeType() == "Empty" or node.get_nodeType() == "Leaf") {
 		label++;
 		cout << to_string(label) + " " + node.get_nodeType() + "\n";
 		node.printStateTreeNode();

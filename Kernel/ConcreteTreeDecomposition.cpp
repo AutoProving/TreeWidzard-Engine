@@ -279,9 +279,9 @@ string ConcreteTreeDecomposition::printTreeRecursive(CTDNodeNew &node,
 		return s1 + s2 + to_string(label) + " " + node.get_nodeType() + "(" +
 			   to_string(label1) + "," + to_string(label2) + ") " +
 			   node.printCTDNode() + "\n";
-	} else if (node.get_nodeType() == "Empty") {
+	} else if (node.get_nodeType() == "Empty" or node.get_nodeType() == "Leaf") {
 		label++;
-		return to_string(label) + " Empty\n";
+		return to_string(label) +" "+ node.get_nodeType()+"\n";
 	} else {
 		string s = printTreeRecursive(*node.get_children()[0], label);
 		label++;
@@ -291,8 +291,12 @@ string ConcreteTreeDecomposition::printTreeRecursive(CTDNodeNew &node,
 }
 void ConcreteTreeDecomposition::printTree() {
 	unsigned label = 0;
-
-	cout << printTreeRecursive(*root, label);
+	if(root != nullptr) {
+        cout << printTreeRecursive(*root, label);
+    }else{
+	    cout<<"Error: ConcreteTreeDecomposition::printTree() the root is null"<<endl;
+	    exit(20);
+	}
 }
 
 string ConcreteTreeDecomposition::printAbstractRecursive(CTDNodeNew &node,
@@ -617,12 +621,10 @@ void ConcreteTreeDecomposition::readAbstract(string s) {
 	this->root = v[v.size() - 1];
 }
 
-void ConcreteTreeDecomposition::printConcrete() {}
-
 pair<bool, State::ptr> ConcreteTreeDecomposition::constructWitnesses(
 	Conjecture &conjecture, shared_ptr<CTDNodeNew> node) {
 	// First, We check the type of the node
-	if (node->get_nodeType() == "Empty") {
+	if (node->get_nodeType() == "Empty" or node->get_nodeType()=="Leaf") {
 		// if it is an empty, then it is a leaf
 		State::ptr q = conjecture.kernel->initialState();
 		return make_pair(
@@ -741,7 +743,7 @@ bool ConcreteTreeDecomposition::conjectureCheck(Conjecture &conjecture) {
 shared_ptr<StateTreeNode> ConcreteTreeDecomposition::generateStateTreeNode(
 	shared_ptr<CTDNodeNew> node, shared_ptr<DynamicKernel> kernel) {
 	// First, We check the type of the node
-	if (node->get_nodeType() == "Empty") {
+	if (node->get_nodeType() == "Empty" or node->get_nodeType() == "Leaf") {
 		shared_ptr<StateTreeNode> stateTreeNode(new StateTreeNode);
 		// if it is an empty, then it is a leaf
 		State::ptr q = kernel->initialState();
@@ -877,3 +879,19 @@ StateTree ConcreteTreeDecomposition::convertToStateTree(shared_ptr<DynamicKernel
     stateTree.root = generateStateTreeNode(root, kernel);
     return stateTree;
 }
+
+void ConcreteTreeDecomposition::writeToFileAbstract(string fileName) {
+    fileName = "Counterexample_ConcreteTreeDec_"+concrete_fs::path(fileName).filename().string();
+    ofstream ctdFile (fileName);
+    if (ctdFile.is_open())
+    {
+        unsigned label = 0;
+        ctdFile << printTreeRecursive(*root, label);
+        ctdFile.close();
+    }
+    else {
+        cout << "Unable to open "<< fileName << endl;
+        exit(20);
+    }
+}
+

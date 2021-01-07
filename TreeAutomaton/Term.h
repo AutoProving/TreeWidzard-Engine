@@ -10,6 +10,7 @@ using namespace std;
 class TermNodeContentType{
 public:
     virtual void print();
+    virtual string nodeInformation();
     /*  virtual shared_ptr<TermNodeContentType> smallestContent();
     virtual void print();
     virtual bool operator<(const TermNodeContentType &rhs) const;
@@ -90,11 +91,13 @@ public:
     bool operator>=(const TermNode &rhs) const {
         return !(*this < rhs);
     }
+    string nodeInformation(unsigned &label);
     void printTermNode(unsigned &label);
 };
 
 template<class TermNodeContent>
 void TermNode<TermNodeContent>::printTermNode(unsigned &label) {
+
     set<unsigned > childrenLabel;
     for(auto child : children){
         child->printTermNode(label);
@@ -120,6 +123,31 @@ void TermNode<TermNodeContent>::printTermNode(unsigned &label) {
 template<class TermNodeContent>
 TermNodeContent TermNode<TermNodeContent>::getNodeContent() const {
     return nodeContent;
+}
+
+template<class TermNodeContent>
+string TermNode<TermNodeContent>::nodeInformation(unsigned int &label) {
+    string s;
+    set<unsigned > childrenLabel;
+    for(auto child : children){
+        s+=child->nodeInformation(label);
+        childrenLabel.insert(label);
+    }
+    label++;
+    string t = to_string(label) + " "+ nodeContent.nodeInformation();
+    if(childrenLabel.size()){
+        t+= "(";
+        for(auto childNo:childrenLabel){
+            t+= to_string(childNo);
+            if(childNo!=*(--childrenLabel.end())){
+                t+=",";
+            }
+        }
+        t+=")";
+    }
+    t+="\n";
+    s = s+t;
+    return s;
 }
 
 
@@ -163,16 +191,20 @@ public:
 
     ///////TODO
     void printTermNodes();
+    string termInformation();
     ////Format?////
-    void printTermToFile();
-    void readTerm(string inputFile);
-    //////////////
 };
 
 template<class TermNodeContent>
 void Term<TermNodeContent>::printTermNodes() {
     unsigned label=0;
     root->printTermNode(label);
+}
+
+template<class TermNodeContent>
+string Term<TermNodeContent>::termInformation() {
+    unsigned label = 0;
+    return root->nodeInformation(label);
 }
 
 

@@ -161,7 +161,10 @@ void RelabeledBreadthFirstSearch::search(){
 		        rootNode = bfsDAG.retrieveTermAcyclicAutomaton(*it);
 		        atd.setRoot(rootNode);
 		        atd.printTermNodes();
+		        atd.writeToFile(this->getPropertyFilePath());
 		        ConcreteTreeDecomposition ctd = atd.convertToConcreteTreeDecomposition();
+		        ctd.printTree();
+		        ctd.writeToFileAbstract(this->getPropertyFilePath());
                 shared_ptr<DynamicKernel> sharedKernel = make_shared<DynamicKernel>(*kernel);
                 ctd.convertToStateTree(sharedKernel).printStateTree();
 		        ctd.extractMultiGraph().printGraph();

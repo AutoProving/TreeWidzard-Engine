@@ -5,10 +5,12 @@
 #include <cstring>
 #include <sstream>
 #include <algorithm>
+#include <experimental/filesystem>
 #include "Term.h"
 #include "../Multigraph/MultiGraph.h"
 #include "../Kernel/ConcreteTreeDecomposition.h"
 using namespace std;
+namespace abstract_fs = std::experimental::filesystem;
 
 class AbstractTreeDecompositionNodeContent : public TermNodeContentType {
 private:
@@ -38,6 +40,8 @@ public:
         this->symbol = symbol;
     };
 
+    string nodeInformation() override;
+
     void print() override;
 
     int symbolType(string symbol) const; // returns "0 if Leaf, 1 if IntroVertex, 2 if  ForgetVertex, 3 if IntroEdge or 4 if Join"
@@ -53,7 +57,7 @@ public:
 
 class AbstractTreeDecomposition: public Term<AbstractTreeDecompositionNodeContent>{
 public:
-
+    void writeToFile(string fileName);
     shared_ptr<CTDNodeNew> constructCTDNode(TermNode<AbstractTreeDecompositionNodeContent> &node);
     ConcreteTreeDecomposition convertToConcreteTreeDecomposition();
 

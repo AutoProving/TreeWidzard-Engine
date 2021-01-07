@@ -23,13 +23,12 @@ private:
     map<string, map<string,string> > coreList; // Each entry is a pair of core name and core attributes.
     map<string, string> coreNamesToFiles; // Map from name of a core to path of the core.
 public:
-    // TODO constructor
     InputController(const string &inputPath, const string &dynamicPluginPath);
 
+    const string &getInputPath() const;
+
     DynamicKernel &getDynamicKernel();
-
     Conjecture &getConjecture();
-
     void check_available_cores();
     void parse_input();
     void construct_dynamicKernel();

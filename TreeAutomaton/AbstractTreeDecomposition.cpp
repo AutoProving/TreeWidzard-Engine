@@ -108,6 +108,10 @@ AbstractTreeDecompositionNodeContent::AbstractTreeDecompositionNodeContent(
     this->symbol = abstractTreeDecompositionNodeContent.getSymbol();
 }
 
+string AbstractTreeDecompositionNodeContent::nodeInformation() {
+    return symbol;
+}
+
 
 shared_ptr<CTDNodeNew> AbstractTreeDecomposition::constructCTDNode(TermNode<AbstractTreeDecompositionNodeContent> &node) {
     shared_ptr<CTDNodeNew> ctdNode(new CTDNodeNew);
@@ -167,4 +171,20 @@ ConcreteTreeDecomposition AbstractTreeDecomposition::convertToConcreteTreeDecomp
     ConcreteTreeDecomposition concreteTreeDecomposition;
     concreteTreeDecomposition.root = constructCTDNode(*getRoot());
     return concreteTreeDecomposition;
+}
+
+
+void AbstractTreeDecomposition::writeToFile(string fileName) {
+    fileName = "Counterexample_AbstractTreeDec_"+abstract_fs::path(fileName).filename().string();
+    ofstream atdFile (fileName);
+    if (atdFile.is_open())
+    {
+
+        atdFile << termInformation();
+        atdFile.close();
+    }
+    else {
+        cout << "Unable to open "<< fileName << endl;
+        exit(20);
+    }
 }
