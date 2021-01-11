@@ -93,8 +93,12 @@ class BreadthFirstSearch : public SearchStrategy {
     BreadthFirstSearch();
 	BreadthFirstSearch(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags);
 	~BreadthFirstSearch(){};
-	AbstractTreeDecomposition extractCounterExampleTerm(); 	
-	Term<RunNodeContent<State,AbstractTreeDecompositionNodeContent> > extractCounterExampleRun();
+AbstractTreeDecomposition extractCounterExampleTerm(State::ptr state, TreeAutomaton<State::ptr,AbstractTreeDecompositionNodeContent>)
+{
+	//Convert a run into a AbstractTreeDecomposition (forget the states)
+
+}
+Term<RunNodeContent<State,AbstractTreeDecompositionNodeContent> > extractCounterExampleRun(State::ptr state, TreeAutomaton<State::ptr,AbstractTreeDecompositionNodeContent>);
     void search();
 };
 
