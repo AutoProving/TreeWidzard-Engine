@@ -9,15 +9,16 @@
 #include <map>
 #include <set>
 #include <sstream>
+#include <experimental/filesystem>
 
 using namespace std;
+namespace multigraph_fs = std::experimental::filesystem;
 
 class MultiGraph {
   private:
 	set<unsigned> vertices;
 	set<unsigned> edges;
-	multimap<unsigned, unsigned>
-		incidenceMap; // incidenceMap(e,v) indicates that v belongs to e
+	multimap<unsigned, unsigned> incidenceMap; // incidenceMap(e,v) indicates that v belongs to e
   public:
 	MultiGraph();
 	// copy constructor
@@ -49,14 +50,11 @@ class MultiGraph {
 
 	void deleteVertex(unsigned vertex);
 
-	unsigned addEdgeEndPoints(unsigned i, unsigned j); // Adds i and j as an edge and
-										   // returns a label of the new edge
+	unsigned addEdgeEndPoints(unsigned i, unsigned j); // Adds i and j as an edge and returns a label of the new edge
 
-	set<unsigned> edgesBetweenVertices(
-		unsigned i, unsigned j); // Returns label of the edges between i and j
+	set<unsigned> edgesBetweenVertices(unsigned i, unsigned j); // Returns label of the edges between i and j
 
-	set<unsigned> edgesVertex(
-		unsigned i); // Returns labels of the incident edges to i
+	set<unsigned> edgesVertex(unsigned i); // Returns labels of the incident edges to i
 
 	void deleteEdgeEndpoints(unsigned i, unsigned j);
 
@@ -72,12 +70,14 @@ class MultiGraph {
 
 	void readGraph();
 
-	void printToFile(ofstream &file);
+	void printToFile(string fileName);
+
+	void printToFilePACEFormat(string fileName);
 
 	bool isMultigraph(); // Tests if for each edge there is exactly two distinct
 						 // elements in the map.
 
-	bool convertToGML();
+	bool convertToGML(string fileName);
 
 	bool convertFromGML();
 };

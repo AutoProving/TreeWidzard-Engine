@@ -22,6 +22,7 @@ public:
     virtual Witness& set_equal(Witness &witness);
     shared_ptr<Witness> relabel(map<unsigned int, unsigned int> relabelingMap) override;
     virtual void print();
+    string witnessInformation() override;
     //*****************************
     //*****************************
     std::set<unsigned> degree_0, degree_1, degree_2;

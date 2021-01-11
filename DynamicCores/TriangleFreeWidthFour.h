@@ -20,6 +20,7 @@ class TriangleFreeWidthFour_Witness
 	virtual bool is_less(const Witness &rhs) const;
 	virtual Witness &set_equal(Witness &witness);
 	virtual void print();
+	string witnessInformation() override;
 	friend unsigned int verticesOnPartialClique(unsigned int edges); // Auxiliary Function. Vertices seen in the partial clique.
 	friend unsigned int neighborsOnPartialClique(unsigned int edges,int i); // Auxiliary Function. Neighbors of i seen in the clique.
 };

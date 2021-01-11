@@ -61,7 +61,8 @@ class ConcreteTreeDecomposition {
 	void traverseNode(CTDNodeNew &node, MultiGraph &G, map<unsigned, unsigned> &colorToVertexMap, unsigned &nVertices, unsigned &nEdges);
 	string printAbstractRecursive( CTDNodeNew &node, unsigned &label); // This prints the tree recursively
 	void printAbstract(); // This prints the tree of Bag Types
-	void writeToFileAbstract(string fileName);
+	void writeToFileAbstractTD(string fileName);
+	void writeToFileConcreteTD(string fileName);
 	string printTreeRecursive(CTDNodeNew &node, unsigned &label);
 	void printTree();
 	bool readToken(string::iterator &it, string token);

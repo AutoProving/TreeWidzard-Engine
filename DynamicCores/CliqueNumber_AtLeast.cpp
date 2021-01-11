@@ -73,6 +73,17 @@ void CliqueNumber_AtLeast_Witness::print() {
     cout<<"}"; 
 }
 
+string CliqueNumber_AtLeast_Witness::witnessInformation() {
+    string info;
+    info =  "found = " +  to_string(found) + " ";
+    info = info + "E={";
+    for(set<pair<unsigned,unsigned>>::iterator it = edges.begin() ; it != edges.end() ; ++it){
+        info = info + "(" + to_string(it->first) + "," + to_string(it->second) + ")";
+    }
+    info = info + "}";
+    return info;
+}
+
 /*void CliqueNumber_AtLeast_WitnessSet::print() {
     for (WitnessSetIterator it = this->begin() ; it != this->end() ; ++it) {
         (*it)->print();
@@ -186,7 +197,7 @@ WitnessSetPointer CliqueNumber_AtLeast_DynamicCore::intro_e(unsigned i, unsigned
                 // Suppose that both endpoints of the edge are in the partial clique.
                 // Then we have no choice. We need to add the edge to the partial clique.
                 aux.insert(newedge);
-                if (vertices.size() == cliqueSize and aux.size() == cliqueSize*(cliqueSize-1)/2)cliqueSize{
+                if (vertices.size() == cliqueSize and aux.size() == cliqueSize*(cliqueSize-1)/2){
                     // if the partial clique gets complete, we are done, meaning that we set found to true and the edgeset to empty.
                     shared_ptr<CliqueNumber_AtLeast_Witness> w(new CliqueNumber_AtLeast_Witness);
                     w->found = true;

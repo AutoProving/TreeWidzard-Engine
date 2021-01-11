@@ -76,6 +76,15 @@ void HasMultipleEdges_Witness::print() {
     cout<<"} found: "<<this->found;
 }
 
+string HasMultipleEdges_Witness::witnessInformation() {
+    string info;
+    info = "{";
+    for (set<pair<unsigned,unsigned>>::iterator it = this->edgeSet.begin() ; it != this->edgeSet.end() ; ++it) {
+        info=info + "(" + to_string(it->first)+","+to_string(it->second)+"),";
+    }
+    info=info+"} found: "+to_string(this->found);
+    return info;
+}
 
 HasMultipleEdges_DynamicCore::HasMultipleEdges_DynamicCore() {
     // Initializing attributes

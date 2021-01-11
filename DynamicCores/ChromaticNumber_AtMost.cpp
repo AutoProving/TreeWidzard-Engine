@@ -67,6 +67,17 @@ void ChromaticNumber_AtMost_Witness::print() {
         cout<<"}";
 }
 
+
+string ChromaticNumber_AtMost_Witness::witnessInformation() {
+    string info;
+    info = "{";
+    for (map<unsigned,unsigned>::iterator it = coloring.begin(); it != coloring.end() ; ++it) {
+        info = info + to_string( it->first) + " -> " + to_string( it->second) + ", ";
+    }
+    info= info + "}";
+    return info;
+}
+
 shared_ptr<Witness> ChromaticNumber_AtMost_Witness::relabel(map<unsigned,unsigned> relabelingMap){
     shared_ptr<ChromaticNumber_AtMost_Witness> relabeledWitness(new ChromaticNumber_AtMost_Witness);
     for (auto it = this->coloring.begin(); it!=this->coloring.end();it++){

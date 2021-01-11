@@ -142,8 +142,7 @@ shared_ptr<CTDNodeNew> LeveledSetSearch::extractCTDNode(
 			}
 		}
 		// Join
-		for (auto it1 = leveledSetAllStates[level - 1][bagNumber].begin();
-			 it1 != leveledSetAllStates[level - 1][bagNumber].end(); it1++) {
+		for (auto it1 = leveledSetAllStates[level - 1][bagNumber].begin(); it1 != leveledSetAllStates[level - 1][bagNumber].end(); it1++) {
 			State::ptr sprime1 = *it1;
 			for (unsigned j = level - 1; j >= 0; j--) {
 				for (auto it2 = leveledSetAllStates[j][bagNumber].begin();
@@ -535,35 +534,31 @@ maxWitnessSetSize[m] =
 				if (!conjecture->evaluateConjectureOnState(*(*it), kernel)) {
 				    cout<< "-----------------------BAD STATE FOUND---------------------"<< endl;
 					(*it)->print();
-					cout << "Constructing Counter Example Decomposition" << endl;
 					bool tree_width = false;
 					if (kernel->get_width().get_name() == "tree_width") {
 						tree_width = true;
 					}
-					ConcreteTreeDecomposition *T = new ConcreteTreeDecomposition;
-					*T = extractCTDDecomposition(iterationNumber + 1, *it,leveledSetAllStates);
-					cout<<"Abstract Tree Decomposition:"<<endl;
-					T->printAbstract();
-                    cout<<"Concrete Tree Decomposition 1:"<<endl;
-                    T->printTree();
+					ConcreteTreeDecomposition T = extractCTDDecomposition(iterationNumber + 1, *it,leveledSetAllStates);
+                    cout<<"=======ABSTRACT TREE========="<<endl;
+					T.printAbstract();
+                    cout<<"=======Concrete TREE========="<<endl;
+                    T.printTree();
+                    T.writeToFileAbstractTD(this->getPropertyFilePath());
+                    T.writeToFileConcreteTD(this->getPropertyFilePath());
+                    shared_ptr<DynamicKernel> sharedKernel = make_shared<DynamicKernel>(*kernel);
+                    StateTree stateTree = T.convertToStateTree(sharedKernel);
                     if(flags->get("StateTree")==1){
-                        StateTree* S = new StateTree;
-                        *S = extractStateTreeDecomposition(iterationNumber+1,*it,leveledSetAllStates,tree_width);
-                        cout << "-----------------state tree "
-                                "printing--------------------"
-                             << endl;
-                        cout<<"Abstract State Tree Decomposition:"<<endl;
-                        S->printAbstract();
-                        cout<<"Tree State Tree Decomposition:"<<endl;
-                        S->printStateTree();
+                        cout<<"=======STATE TREE========="<<endl;
+                       stateTree.printStateTree();
                     }
+                    stateTree.writeToFile(this->getPropertyFilePath());
 					//
 					cout << "\n ------------------Constructing Counter Example Graph-------------------"<< endl;
-					T->extractMultiGraph().printGraph();
-					cout << "\n convert to gml "
-						 << T->extractMultiGraph().convertToGML();
-					// S->extractMultiGraph().printGraph();
-					// S->extractMultiGraph().convertToGML();
+					MultiGraph multiGraph = T.extractMultiGraph();
+					multiGraph.printGraph();
+					multiGraph.printToFile(this->getPropertyFilePath());
+					multiGraph.printToFilePACEFormat(this->getPropertyFilePath());
+					multiGraph.convertToGML(this->getPropertyFilePath());
 					exit(20);
 				}
 			}

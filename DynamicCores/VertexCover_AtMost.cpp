@@ -72,6 +72,22 @@ void VertexCover_AtMost_Witness::print()
     //*****************************
 }
 
+string VertexCover_AtMost_Witness::witnessInformation() {
+    //*****************************
+    //*****************************
+    string info;
+    info = info + "Witness: ({ ";
+
+    for (auto v : partialCover) {
+        info = info + to_string(v) + " ";
+    }
+
+    info = info+  " }, " +  to_string(this->cost) + ")\n";
+    return info;
+    //*****************************
+    //*****************************
+}
+
 VertexCover_AtMost_Witness::~VertexCover_AtMost_Witness()
 {
     //*****************************

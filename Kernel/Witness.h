@@ -15,6 +15,7 @@ protected:
 public:
     virtual shared_ptr<Witness> relabel(map<unsigned,unsigned> relabelingMap);
     virtual void print();
+    virtual string witnessInformation();
     virtual ~Witness();
     friend bool operator==(const Witness &lhs, const Witness &rhs);
     friend bool operator<(const Witness &lhs, const Witness &rhs);

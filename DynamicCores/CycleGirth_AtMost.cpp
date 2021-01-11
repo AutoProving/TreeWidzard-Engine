@@ -107,6 +107,27 @@ void CycleGirth_AtMost_Witness::print() {
     //*****************************
 }
 
+string CycleGirth_AtMost_Witness::witnessInformation() {
+    //*****************************
+    //*****************************
+    string info;
+    info =  "Current size of cycle: " + to_string(this->current_size) + "\n";
+    info = info +  "Vertices of degree 0: ";
+    for (unsigned v : this->degree_0) info = info + to_string(v) + " ";
+    info = info + "\n";
+
+    info = info + "Vertices of degree 2: ";
+    for (unsigned v : this->degree_2) info = info +to_string(v) + " ";
+    info = info + "\n";
+
+    info = info + "Corresponding Extremity Map (key -> value):\n";
+    for (auto &elem : this->extremity) info = info + to_string(elem.first) + " -> " + to_string(elem.second)+"\n";
+    info = info + "Found Cycle: " + to_string(this->found_cycle)+"\n";
+    return info;
+    //*****************************
+    //*****************************
+}
+
 CycleGirth_AtMost_Witness::~CycleGirth_AtMost_Witness() {
     //*****************************
     //*****************************

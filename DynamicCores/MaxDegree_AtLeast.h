@@ -23,6 +23,7 @@ class MaxDegree_AtLeast_Witness:public Witness, public enable_shared_from_this<M
         MaxDegree_AtLeast_Witness(); // Constructor
         ~MaxDegree_AtLeast_Witness();
         virtual void print();
+        string witnessInformation() override;
         virtual bool is_equal(const Witness &rhs) const; //Comparator
         virtual bool is_less(const Witness &rhs) const;  //Comparator
         virtual Witness& set_equal(Witness &witness); //Assignment operator

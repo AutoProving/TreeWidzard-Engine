@@ -58,7 +58,27 @@ void EdgeColoring_AtMost_Witness::print() {
     //*****************************
     //*****************************
 }
-
+string EdgeColoring_AtMost_Witness::witnessInformation() {
+    //*****************************
+    //*****************************
+    // EXPECTED OUTPUT EXAMPLE
+    // Witness :
+    // (vertex1, { (#edge1, #color1) (#edge2, #color2) } )
+    // (vertex2, { (#edge1, #color1) (#edge3, #color4) } )
+    string info;
+    info = "EdgeColoring Witness:";
+    for (auto &pairVertexSetColors: this->mapSetColors) {
+        info = info +  "(" + to_string(pairVertexSetColors.first) + ", " + "{ ";
+        for (auto colorIt=pairVertexSetColors.second.begin(); colorIt!=pairVertexSetColors.second.end(); colorIt++) {
+            info = info + to_string(*colorIt);
+            if (colorIt != pairVertexSetColors.second.end()--) info = info + ",";
+        }
+        info = info +"})";
+    }
+    return info;
+    //*****************************
+    //*****************************
+}
 EdgeColoring_AtMost_Witness::~EdgeColoring_AtMost_Witness() {
     //*****************************
     //*****************************

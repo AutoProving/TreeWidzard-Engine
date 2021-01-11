@@ -24,6 +24,7 @@ public:
     virtual Witness &set_equal(Witness &witness);
     shared_ptr<Witness> relabel(map<unsigned int, unsigned int> relabelingMap) override;
     virtual void print();
+    string witnessInformation() override;
     //*****************************
     //*****************************
     unsigned current_size = 0;

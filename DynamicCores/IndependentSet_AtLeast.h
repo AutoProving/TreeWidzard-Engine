@@ -23,6 +23,7 @@ public:
     virtual Witness& set_equal(Witness &witness);
     shared_ptr<Witness> relabel(map<unsigned int, unsigned int> relabelingMap) override;
     virtual void print();
+    string witnessInformation() override;
     //*****************************
     //*****************************
     // Only change this part. Here you can define attributes and functions that are specific to your witness.

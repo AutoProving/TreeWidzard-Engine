@@ -34,3 +34,10 @@ shared_ptr<Witness> Witness::relabel(map<unsigned int, unsigned int> relabelingM
          << endl;
     exit(20);
 }
+
+string Witness::witnessInformation() {
+    cout << "It you are seeing this, it is because the witnessInformation function was not "
+            "yet implemented in the derived class."
+         << endl;
+    exit(20);
+}

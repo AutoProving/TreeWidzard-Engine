@@ -111,6 +111,31 @@ void HamiltonianPath_Witness::print() {
     //*****************************
     //*****************************
 }
+
+string HamiltonianPath_Witness::witnessInformation() {
+    //*****************************
+    //*****************************
+    string info = "";
+    info = info + "Vertices of degree 0:\t";
+    for(auto &v: this->degree_0) info = info + to_string(v) + " ";
+    info = info + "\n";
+
+    info = info + "Vertices of degree 1:\t";
+    for(auto &v: this->degree_1) info = info + to_string(v) + " ";
+    info = info + "\n";
+
+    info = info + "Vertices of degree 2:\t";
+    for(auto &v: this->degree_2) info = info + to_string(v) + " ";
+    info = info + "\n";
+
+    info = info + "Matching:\t";
+    for(auto &v: this->matching) info = info + "(" + to_string(v.first) + ", " + to_string(v.second) + ") ";
+    info = info + "\n";
+    return info;
+    //*****************************
+    //*****************************
+}
+
 HamiltonianPath_Witness::~HamiltonianPath_Witness() {
     //*****************************
     //*****************************

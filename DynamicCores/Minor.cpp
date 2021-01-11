@@ -148,6 +148,48 @@ void Minor_Witness::print(){
     //*****************************
 }
 
+string Minor_Witness::witnessInformation() {
+    //*****************************
+    //*****************************
+    string info;
+    info = "found:" + to_string(found) + " foundEdge:{";
+    for(auto &e:foundEdges ){
+        info=info + to_string(e);
+        if(e!= *(--foundEdges.end())){
+            info = info +", ";
+        }
+    }
+    info = info +"}\n";
+    info = info +"partitions: \n";
+    for(auto& partition : partitions){
+        info = info + "( {";
+        for(auto& s:get<0>(partition)){
+            info = info + to_string(s);
+            if(s!=*(--get<0>(partition).end())){
+                info = info + ",";
+            }
+        }
+        info = info +"} [";
+        for(auto& cell:get<1>(partition)){
+            info = info + "{";
+            for(auto s:cell){
+                info = info + to_string(s);
+                if(s!=*(--cell.end())){
+                    info = info + ",";
+                }
+            }
+            info = info + "}";
+            if(cell != *(--get<1>(partition).end())){
+                info = info + ",";
+            }
+        }
+        info = info + "] )\n";
+    }
+    return info;
+    //*****************************
+    //*****************************
+}
+
 pair<bool, bool> Minor_Witness::removeVertexFromPartition(unsigned int i, set<set<unsigned int>> &partition) {
     set<set<unsigned >> temp;
     bool found = false; // If found = true, it means the new partition is disconnected

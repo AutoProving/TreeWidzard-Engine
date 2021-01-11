@@ -19,6 +19,7 @@ public:
     virtual Witness& set_equal(Witness &rhs);
     shared_ptr<Witness> relabel(map<unsigned int, unsigned int> relabelingMap) override;
     virtual void print();
+    string witnessInformation() override;
 };
 
 class HasMultipleEdges_WitnessSet : public WitnessSetTypeOne<HasMultipleEdges_WitnessSet>{

@@ -25,10 +25,11 @@ public:
     virtual Witness& set_equal(Witness &witness);
     shared_ptr<Witness> relabel(map<unsigned int, unsigned int> relabelingMap) override;
     virtual void print();
+    string witnessInformation() override;
     //*****************************
     //******BEGIN**ATTRIBUTES*******
     //*****************************
-    //The unique atribute is a map that sends each vertex to the current sum
+    //The unique attribute is a map that sends each vertex to the current sum
     //of the flows around those vertices. The sum will be updated once an edge 
     //is introduced 
     map<unsigned ,unsigned > flowSum;

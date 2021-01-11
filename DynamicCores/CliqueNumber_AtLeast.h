@@ -19,6 +19,7 @@ public:
 	virtual bool is_less(const Witness &rhs)const;
 	virtual Witness& set_equal(Witness &witness);
 	virtual void print();
+	string witnessInformation() override;
 	shared_ptr<Witness> relabel(map<unsigned int, unsigned int> relabelingMap) override;
 	friend set<unsigned> verticesOnPartialClique(set<pair<int,int>> edges); // Auxiliary Function. Vertices seen in the partial clique.
 	friend set<unsigned> neighborsOnPartialClique(set<pair<int,int>> edges, int i); // Auxiliary Function. Neighbors of i seen in the clique.

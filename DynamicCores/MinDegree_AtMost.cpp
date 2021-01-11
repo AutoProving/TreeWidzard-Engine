@@ -48,6 +48,21 @@ void MinDegree_AtMost_Witness::print() {
     }
     cout<<"} "<<"found : "<<found;
 }
+
+string MinDegree_AtMost_Witness::witnessInformation() {
+    string info;
+    info = "{";
+    for(map<unsigned,unsigned>::iterator it = degreeCounter.begin(); it != degreeCounter.end() ; it++){
+        auto tempIt = it;
+        info = info + to_string(it->first) + " -> " + to_string(it->second);
+        if(++tempIt != degreeCounter.end()){
+            info = info + ", ";
+        }
+    }
+    info = info  +"} " + "found : " + to_string(found);
+    return info;
+}
+
 bool MinDegree_AtMost_Witness::is_equal_implementation(const MinDegree_AtMost_WitnessPointerConst w) const {
     if(found == w->found and (degreeCounter==w->degreeCounter)){
         return  true;

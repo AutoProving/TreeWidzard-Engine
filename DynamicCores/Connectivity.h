@@ -23,6 +23,7 @@ public:
     virtual Witness& set_equal(Witness &witness);
     virtual shared_ptr<Witness> relabel(map<unsigned,unsigned> relabelingMap);
     virtual void print();
+    string witnessInformation() override;
     //*****************************
     //*****************************
     set<set<unsigned>> partition;

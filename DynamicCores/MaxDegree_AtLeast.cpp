@@ -48,6 +48,21 @@ void MaxDegree_AtLeast_Witness::print() {
     }
     cout<<"} "<<"found : "<<found;
 }
+
+string MaxDegree_AtLeast_Witness::witnessInformation() {
+    string info;
+    info = "{";
+    for(map<unsigned,unsigned>::iterator it = degreeCounter.begin(); it != degreeCounter.end() ; it++){
+        auto tempIt = it;
+        info = info + to_string(it->first) + " -> " + to_string(it->second);
+        if(++tempIt != degreeCounter.end()){
+            info = info + ", ";
+        }
+    }
+    info = info  +"} " + "found : " + to_string(found);
+    return info;
+}
+
 bool MaxDegree_AtLeast_Witness::is_equal_implementation(const MaxDegree_AtLeast_WitnessPointerConst w) const {
     if(found == w->found and (degreeCounter==w->degreeCounter)){
         return  true;

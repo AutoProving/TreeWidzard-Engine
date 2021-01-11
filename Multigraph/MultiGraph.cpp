@@ -144,23 +144,54 @@ void MultiGraph::readFromFile(ifstream &file) {
 	}
 }
 
-void MultiGraph::printToFile(ofstream &file) {
-	file.open("multigraphOutput.txt");
-	file << "vertices:" << endl;
-	for (set<unsigned>::iterator it = this->vertices.begin();
-		 it != this->vertices.end(); ++it) {
-		file << *it << endl;
-	}
-	file << "Edges" << endl;
-	for (set<unsigned>::iterator itr = this->edges.begin();
-		 itr != this->edges.end(); ++itr) {
-		file << *itr << "\t";
-		auto equalIt = incidenceMap.equal_range(*itr);
-		for (auto it = equalIt.first; it != equalIt.second; ++it) {
-			file << it->second << "\t";
-		}
-		file << endl;
-	}
+void MultiGraph::printToFile(string fileName) {
+    fileName = "Counterexample_Graph_"+multigraph_fs::path(fileName).filename().string();
+    ofstream multiGraphFile (fileName);
+    if (multiGraphFile.is_open())
+    {
+        multiGraphFile << "vertices:" << endl;
+        for (set<unsigned>::iterator it = this->vertices.begin();
+             it != this->vertices.end(); ++it) {
+            multiGraphFile << *it << endl;
+        }
+        multiGraphFile << "Edges" << endl;
+        for (set<unsigned>::iterator itr = this->edges.begin();
+             itr != this->edges.end(); ++itr) {
+            multiGraphFile << *itr << "\t";
+            auto equalIt = incidenceMap.equal_range(*itr);
+            for (auto it = equalIt.first; it != equalIt.second; ++it) {
+                multiGraphFile << it->second << "\t";
+            }
+            multiGraphFile << endl;
+        }
+        multiGraphFile.close();
+    }else {
+        cout << "Unable to open "<< fileName << endl;
+        exit(20);
+    }
+}
+
+void MultiGraph::printToFilePACEFormat(string fileName) {
+    string modifiedFileName = "Counterexample_GraphPACEFormat_"+multigraph_fs::path(fileName).stem().string()+".gr";
+    ofstream multiGraphFile (modifiedFileName);
+    if (multiGraphFile.is_open())
+    {
+        multiGraphFile << "c This is the counter example for "<<fileName << endl;
+        multiGraphFile<< "p td " << this->vertices.size() << " " << edges.size() << endl;
+        for (set<unsigned>::iterator itr = this->edges.begin(); itr != this->edges.end(); ++itr) {
+           // multiGraphFile << *itr << "\t";
+            auto equalIt = incidenceMap.equal_range(*itr);
+            for (auto it = equalIt.first; it != equalIt.second; ++it) {
+                multiGraphFile << it->second << " ";
+            }
+            multiGraphFile << endl;
+        }
+        multiGraphFile.close();
+    }else {
+        cout << "Unable to open "<< fileName << endl;
+        exit(20);
+    }
+
 }
 
 bool MultiGraph::isMultigraph() {
@@ -173,8 +204,9 @@ bool MultiGraph::isMultigraph() {
 	return true;
 }
 
-bool MultiGraph::convertToGML() {
-	ofstream gmlFile("convertGml.gml");
+bool MultiGraph::convertToGML(string fileName) {
+    fileName = "Counterexample_GraphGml_"+multigraph_fs::path(fileName).stem().string()+".gml";
+    ofstream gmlFile(fileName);
 	gmlFile << "graph [\n";
 	for (auto it = vertices.begin(); it != vertices.end(); it++) {
 		gmlFile << "node \n [\n id " + to_string(*it) + "\n ]\n";

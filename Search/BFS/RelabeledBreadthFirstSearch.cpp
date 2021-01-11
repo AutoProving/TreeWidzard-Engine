@@ -160,14 +160,26 @@ void RelabeledBreadthFirstSearch::search(){
 		        shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> rootNode;
 		        rootNode = bfsDAG.retrieveTermAcyclicAutomaton(*it);
 		        atd.setRoot(rootNode);
-		        atd.printTermNodes();
+                cout<<"=======ABSTRACT TREE========="<<endl;
+                atd.printTermNodes();
 		        atd.writeToFile(this->getPropertyFilePath());
 		        ConcreteTreeDecomposition ctd = atd.convertToConcreteTreeDecomposition();
-		        ctd.printTree();
-		        ctd.writeToFileAbstract(this->getPropertyFilePath());
+                cout<<"=======Concrete TREE========="<<endl;
+                ctd.printTree();
+		        ctd.writeToFileConcreteTD(this->getPropertyFilePath());
                 shared_ptr<DynamicKernel> sharedKernel = make_shared<DynamicKernel>(*kernel);
-                ctd.convertToStateTree(sharedKernel).printStateTree();
-		        ctd.extractMultiGraph().printGraph();
+                StateTree stateTree = ctd.convertToStateTree(sharedKernel);
+                if(flags->get("StateTree")==1){
+                    cout<<"=======STATE TREE========="<<endl;
+                    stateTree.printStateTree();
+                }
+                stateTree.writeToFile(this->getPropertyFilePath());
+                cout << "\n ------------------Constructing Counter Example Graph-------------------"<< endl;
+                MultiGraph multiGraph = ctd.extractMultiGraph();
+                multiGraph.printGraph();
+                multiGraph.printToFile(this->getPropertyFilePath());
+                multiGraph.convertToGML(this->getPropertyFilePath());
+                multiGraph.printToFilePACEFormat(this->getPropertyFilePath());
 		        exit(20);
 		    }
 		}

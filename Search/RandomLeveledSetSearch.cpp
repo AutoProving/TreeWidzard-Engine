@@ -172,14 +172,27 @@ void RandomLeveledSetSearch::search(){
         if(foundCounterexample){
             cout<<"COUNTER EXAMPLE FOUND"<<endl;
             s->print();
-            ConcreteTreeDecomposition *concreteDecomposition = new ConcreteTreeDecomposition;
-            *concreteDecomposition = extractCTDDecomposition();
-            concreteDecomposition->printAbstract();
-            //concreteDecomposition->extractMultiGraph().printGraph();
-            StateTree *stateTree = new StateTree();
-            *stateTree = extractStateTreeDecomposition();
-            stateTree->printStateTree();
-            stateTree->extractMultiGraph().printGraph();
+            ConcreteTreeDecomposition T = extractCTDDecomposition();
+            cout<<"=======ABSTRACT TREE========="<<endl;
+            T.printAbstract();
+            cout<<"=======Concrete TREE========="<<endl;
+            T.printTree();
+            T.writeToFileAbstractTD(this->getPropertyFilePath());
+            T.writeToFileConcreteTD(this->getPropertyFilePath());
+            shared_ptr<DynamicKernel> sharedKernel = make_shared<DynamicKernel>(*kernel);
+            StateTree stateTree = T.convertToStateTree(sharedKernel);
+            if(flags->get("StateTree")==1){
+                cout<<"=======STATE TREE========="<<endl;
+                stateTree.printStateTree();
+            }
+            stateTree.writeToFile(this->getPropertyFilePath());
+            //
+            cout << "\n ------------------Constructing Counter Example Graph-------------------"<< endl;
+            MultiGraph multiGraph = T.extractMultiGraph();
+            multiGraph.printGraph();
+            multiGraph.printToFile(this->getPropertyFilePath());
+            multiGraph.printToFilePACEFormat(this->getPropertyFilePath());
+            multiGraph.convertToGML(this->getPropertyFilePath());
             exit(20);
         }
         if(flags->get("PrintVectors")==1){

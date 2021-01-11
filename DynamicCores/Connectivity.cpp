@@ -65,6 +65,22 @@ void Connectivity_Witness::print() {
     //*****************************
 }
 
+string Connectivity_Witness::witnessInformation() {
+    //*****************************
+    //*****************************
+    string info;
+    auto witness = this->partition;
+    info = "Witness:\n";
+    for(auto part : witness) {
+        for(auto it=part.begin(); it != part.end(); it++)
+            info = info + to_string(*it) +" ";
+        info = info + "\n";
+    }
+    return info;
+    //*****************************
+    //*****************************
+}
+
 Connectivity_Witness::~Connectivity_Witness() {
     //*****************************
     //*****************************

@@ -117,6 +117,14 @@ void TriangleFreeWidthFour_Witness::print() {
 	cout<<"witness print"<<endl;
 }
 
+string TriangleFreeWidthFour_Witness::witnessInformation() {
+
+    string info;
+    info = "It is not implemented\n";
+    return info;
+
+}
+
 /*void CliqueNumber_AtLeast_WitnessSet::print() {
 	for (WitnessSetIterator it = this->begin() ; it != this->end() ; ++it) {
 		(*it)->print();

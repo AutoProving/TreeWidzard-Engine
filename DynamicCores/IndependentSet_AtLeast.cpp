@@ -66,6 +66,24 @@ void IndependentSet_AtLeast_Witness::print() {
     //*****************************
 }
 
+string IndependentSet_AtLeast_Witness::witnessInformation() {
+    //*****************************
+    //*****************************
+    // Expected output example: Witness: ({1 2 3}, 5, false)
+    string info;
+    set<unsigned>::iterator itr;
+    info =  "Witness: ({ ";
+    for (itr = this->partialIndSet.begin(); itr != this->partialIndSet.end(); ++itr) {
+        info = info + to_string(*itr) + " ";
+    }
+    info = info +  "}, " + to_string(this->size) + ", ";
+    if (this->found == true) info = info+ "true)\n";
+    else info=info+ "false)\n";
+    return info;
+    //*****************************
+    //*****************************
+}
+
 IndependentSet_AtLeast_Witness::~IndependentSet_AtLeast_Witness() {
     //*****************************
     //*****************************

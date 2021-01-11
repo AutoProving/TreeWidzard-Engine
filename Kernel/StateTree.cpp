@@ -91,7 +91,7 @@ void StateTreeNode::set_kernel(shared_ptr<DynamicKernel> kernel) {
 ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void StateTreeNode::printStateTreeNode() { this->get_S()->print(); }
+string StateTreeNode::printStateTreeNode() { return this->get_S()->stateInformation(); }
 
 string StateTreeNode::printAbstract() { return this->get_nodeType(); }
 
@@ -198,76 +198,79 @@ StateTreeNode join(StateTreeNode &left, StateTreeNode &right) {
 void StateTree::traverseNode(StateTreeNode &node, MultiGraph &G,
 							 map<unsigned, unsigned> &colorToVertexMap,
 							 unsigned &nVertices, unsigned &nEdges) {
-	map<unsigned, unsigned> colorToVertexMapCopy = colorToVertexMap;
-	if (node.get_nodeType() == "Empty") {
-		// do nothing
-	} else if (strstr(node.get_nodeType().c_str(), "IntroVertex")) {
-		// strstr is a c++ funciton which gets two strings and check that the
-		// second string is a substring of the first string or not. We use
-		// strstr here because node type is string+number (example
-		// IntorVertex_1) so we concern to check the string (IntroVertex) not
-		// the number.
-		/////////////// Finding the introduced vertex ///////////
-		set<unsigned> bagSet = node.get_S()->get_bag().get_elements();
-		set<unsigned> childBagSet =
-			node.get_children()[0]->get_S()->get_bag().get_elements();
-		set<unsigned> bagSetDifference;
-		set_difference(
-			bagSet.begin(), bagSet.end(), childBagSet.begin(),
-			childBagSet.end(),
-			std::inserter(bagSetDifference, bagSetDifference.begin()));
-		if (bagSetDifference.size() != 1) {
-			cout << "ERROR: StateTree::traverseNode in IntroVertex child's bag "
-					"and node's bag are not valid"
-				 << endl;
-			exit(20);
-		}
-		//////////// End of Finding the introduced vertex ///////////
-		colorToVertexMapCopy.erase(*(bagSetDifference.begin()));
-		traverseNode(*(node.get_children()[0]), G, colorToVertexMapCopy,
-					 nVertices,
-					 nEdges); // Nothing happens. Just process the next bag.
-	} else if (strstr(node.get_nodeType().c_str(), "ForgetVertex")) {
-		/////////////// Finding the Forgotten vertex ///////////
-		set<unsigned> bagSet = node.get_S()->get_bag().get_elements();
-		set<unsigned> childBagSet =
-			node.get_children()[0]->get_S()->get_bag().get_elements();
-		set<unsigned> bagSetDifference;
-		set_difference(
-			childBagSet.begin(), childBagSet.end(), bagSet.begin(),
-			bagSet.end(),
-			std::inserter(bagSetDifference, bagSetDifference.begin()));
-		if (bagSetDifference.size() != 1) {
-			cout << "ERROR: StateTree::traverseNode in ForgetVertex child's "
-					"bag and node's bag are not valid"
-				 << endl;
-			exit(20);
-		}
-		//////////// End of Finding the Forgotten vertex ///////////
-		nVertices = nVertices + 1;
-		G.addVertex(nVertices);
-		colorToVertexMapCopy[*(bagSetDifference.begin())] = nVertices;
-		traverseNode(*(node.get_children()[0]), G, colorToVertexMapCopy,
-					 nVertices,
-					 nEdges); // Nothing happens. Just process the next bag.
-	} else if (strstr(node.get_nodeType().c_str(), "IntroEdge")) {
-		nEdges = nEdges + 1;
-		pair<unsigned, unsigned> e = node.get_S()->get_bag().get_edge();
-		G.addEdgeLabel(nEdges);
-		G.addIncidence(nEdges, colorToVertexMap.find(e.first)->second);
-		G.addIncidence(nEdges, colorToVertexMap.find(e.second)->second);
-		traverseNode(*(node.get_children()[0]), G, colorToVertexMapCopy,
-					 nVertices, nEdges);
-	} else if (node.get_nodeType() == "Join") {
-		traverseNode(*(node.get_children()[0]), G, colorToVertexMapCopy,
-					 nVertices, nEdges);
-		traverseNode(*(node.get_children()[1]), G, colorToVertexMapCopy,
-					 nVertices, nEdges);
-	}
+
+    //	map<unsigned, unsigned> colorToVertexMapCopy = colorToVertexMap;
+//	if (node.get_nodeType() == "Empty") {
+//		// do nothing
+//	} else if (strstr(node.get_nodeType().c_str(), "IntroVertex")) {
+//		// strstr is a c++ funciton which gets two strings and check that the
+//		// second string is a substring of the first string or not. We use
+//		// strstr here because node type is string+number (example
+//		// IntorVertex_1) so we concern to check the string (IntroVertex) not
+//		// the number.
+//		/////////////// Finding the introduced vertex ///////////
+//		set<unsigned> bagSet = node.get_S()->get_bag().get_elements();
+//		set<unsigned> childBagSet =
+//			node.get_children()[0]->get_S()->get_bag().get_elements();
+//		set<unsigned> bagSetDifference;
+//		set_difference(
+//			bagSet.begin(), bagSet.end(), childBagSet.begin(),
+//			childBagSet.end(),
+//			std::inserter(bagSetDifference, bagSetDifference.begin()));
+//		if (bagSetDifference.size() != 1) {
+//			cout << "ERROR: StateTree::traverseNode in IntroVertex child's bag "
+//					"and node's bag are not valid"
+//				 << endl;
+//			exit(20);
+//		}
+//		//////////// End of Finding the introduced vertex ///////////
+//		colorToVertexMapCopy.erase(*(bagSetDifference.begin()));
+//		traverseNode(*(node.get_children()[0]), G, colorToVertexMapCopy,
+//					 nVertices,
+//					 nEdges); // Nothing happens. Just process the next bag.
+//	} else if (strstr(node.get_nodeType().c_str(), "ForgetVertex")) {
+//		/////////////// Finding the Forgotten vertex ///////////
+//		set<unsigned> bagSet = node.get_S()->get_bag().get_elements();
+//		set<unsigned> childBagSet =
+//			node.get_children()[0]->get_S()->get_bag().get_elements();
+//		set<unsigned> bagSetDifference;
+//		set_difference(
+//			childBagSet.begin(), childBagSet.end(), bagSet.begin(),
+//			bagSet.end(),
+//			std::inserter(bagSetDifference, bagSetDifference.begin()));
+//		if (bagSetDifference.size() != 1) {
+//			cout << "ERROR: StateTree::traverseNode in ForgetVertex child's "
+//					"bag and node's bag are not valid"
+//				 << endl;
+//			exit(20);
+//		}
+//		//////////// End of Finding the Forgotten vertex ///////////
+//		nVertices = nVertices + 1;
+//		G.addVertex(nVertices);
+//		colorToVertexMapCopy[*(bagSetDifference.begin())] = nVertices;
+//		traverseNode(*(node.get_children()[0]), G, colorToVertexMapCopy,
+//					 nVertices,
+//					 nEdges); // Nothing happens. Just process the next bag.
+//	} else if (strstr(node.get_nodeType().c_str(), "IntroEdge")) {
+//		nEdges = nEdges + 1;
+//		pair<unsigned, unsigned> e = node.get_S()->get_bag().get_edge();
+//		G.addEdgeLabel(nEdges);
+//		G.addIncidence(nEdges, colorToVertexMap.find(e.first)->second);
+//		G.addIncidence(nEdges, colorToVertexMap.find(e.second)->second);
+//		traverseNode(*(node.get_children()[0]), G, colorToVertexMapCopy,
+//					 nVertices, nEdges);
+//	} else if (node.get_nodeType() == "Join") {
+//		traverseNode(*(node.get_children()[0]), G, colorToVertexMapCopy,
+//					 nVertices, nEdges);
+//		traverseNode(*(node.get_children()[1]), G, colorToVertexMapCopy,
+//					 nVertices, nEdges);
+//	}
 }
 
 MultiGraph StateTree::extractMultiGraph() {
-	MultiGraph G;
+	cout<<"StateTree::extractMultiGraph is not implemented"<<endl;
+	exit(20);
+    MultiGraph G;
 	map<unsigned, unsigned> colorToVertexMap;
 	unsigned nVertices = 0;
 	unsigned nEdges = 0;
@@ -284,35 +287,37 @@ MultiGraph StateTree::extractMultiGraph() {
 	return G;
 }
 
-void StateTree::printTreeRecursive(StateTreeNode &node, unsigned &label) {
-	if (node.get_nodeType() == "Join") {
-		printTreeRecursive(*node.get_children()[0], label);
+string StateTree::printTreeRecursive(StateTreeNode &node, unsigned &label) {
+	string s;
+    if (node.get_nodeType() == "Join") {
+		s += printTreeRecursive(*node.get_children()[0], label);
 		unsigned label1 = label;
-		printTreeRecursive(*node.get_children()[1], label);
+		s += printTreeRecursive(*node.get_children()[1], label);
 		unsigned label2 = label;
 		label++;
-		cout << to_string(label) + " ";
-		cout << node.get_nodeType() + "(" + to_string(label1) + "," +
+		s = s + to_string(label) + " " + node.get_nodeType() + "(" + to_string(label1) + "," +
 					to_string(label2) + ")\n";
-		node.printStateTreeNode();
+        s = s + node.printStateTreeNode();
 	} else if (node.get_nodeType() == "Empty" or node.get_nodeType() == "Leaf") {
 		label++;
-		cout << to_string(label) + " " + node.get_nodeType() + "\n";
-		node.printStateTreeNode();
+        s = s + to_string(label) + " " + node.get_nodeType() + "\n";
+        s = s + node.printStateTreeNode();
 	} else {
-		printTreeRecursive(*node.get_children()[0], label);
+        s = s + printTreeRecursive(*node.get_children()[0], label);
 		label++;
-		cout << to_string(label) + " " + node.get_nodeType() + "(" +
+        s = s + to_string(label) + " " + node.get_nodeType() + "(" +
 					to_string(label - 1) + ")\n";
 
-		node.printStateTreeNode();
+        s = s +node.printStateTreeNode();
 	}
+    return s;
 }
 
 void StateTree::printStateTree() {
 	unsigned label = 0;
-	printTreeRecursive(*root, label);
+	cout<<printTreeRecursive(*root, label);
 }
+
 
 string StateTree::printAbstractRecursive(StateTreeNode &node, unsigned &label) {
 	if (node.get_nodeType() == "Join") {
@@ -323,7 +328,7 @@ string StateTree::printAbstractRecursive(StateTreeNode &node, unsigned &label) {
 		label++;
 		return s1 + s2 + to_string(label) + " " + (node.printAbstract()) + "(" +
 			   to_string(label1) + "," + to_string(label2) + ")\n";
-	} else if (node.get_nodeType() == "Empty") {
+	} else if (node.get_nodeType() == "Empty" or node.get_nodeType()=="Leaf") {
 		label++;
 		return to_string(label) + " " + node.printAbstract() + "\n";
 	} else {
@@ -341,185 +346,203 @@ void StateTree::printAbstract() {
 	cout << printAbstractRecursive(*root, label);
 }
 
-bool StateTree::readToken(string::iterator &it, string token) {
-	string::iterator tempIt = it;
-	for (auto element : token) {
-		if (!(*tempIt == element)) {
-			return false;
-		} else {
-			tempIt++;
-		}
-	}
-	it = tempIt;
-	return true;
+void StateTree::writeToFile(string fileName) {
+
+    fileName = "Counterexample_StateTreeDec_"+state_fs::path(fileName).filename().string();
+    ofstream atdFile (fileName);
+    if (atdFile.is_open())
+    {
+        unsigned label = 0;
+        atdFile << printTreeRecursive(*root,label);
+        atdFile.close();
+    }
+    else {
+        cout << "Unable to open "<< fileName << endl;
+        exit(20);
+    }
 }
 
-unsigned StateTree::readInteger(string::iterator &it) {
-	string::iterator tempIt = it;
-	int integer = -1;
-	string digits;
-	while (isdigit(*tempIt)) {
-		digits = digits + *tempIt;
-		tempIt++;
-	}
-	it = tempIt;
-	integer = stoi(digits);
-	return integer;
-}
 
-shared_ptr<StateTreeNode> StateTree::readStateTreeExpressionRecursive(
-	string::iterator &it, string::iterator end,
-	vector<shared_ptr<StateTreeNode> > &v, DynamicKernel &kernel) {
-	int label = 0;
-	if (isdigit(*it)) {
-		label = readInteger(it);
-		if (readToken(it, "IntroVertex_")) {
-			int introducedVertex = readInteger(it);
-			int childLabel = 0;
-			if (readToken(it, "(")) {
-				childLabel = readInteger(it);
-				if (readToken(it, ")")) {
-				} else {
-					// To Do : print an error message here
-				}
-			} else {
-				// To Do : print an error message here
-			}
-			StateTreeNode stateObj =
-				v[childLabel]->introVertex(introducedVertex);
-			vector<shared_ptr<StateTreeNode> > children;
-			children.push_back(v[childLabel]);
-			stateObj.set_children(children);
-			v[childLabel]->set_parent(stateObj.shared_from_this());
-			if (v.size() < label + 1) {
-				v.resize(label + 1);
-			}
-			v[label] = stateObj.shared_from_this();
-			if (it != end) {
-				readStateTreeExpressionRecursive(it, end, v, kernel);
-			}
-			return stateObj.shared_from_this();
-		} else if (readToken(it, "IntroEdge_")) {
-			int introducedEdge1 = readInteger(it);
-			int introducedEdge2 = 0;
-			if (readToken(it, "_")) {
-				introducedEdge2 = readInteger(it);
-			} else {
-				// TO DO: print an error message
-			}
-			int childLabel = 0;
-			if (readToken(it, "(")) {
-				childLabel = readInteger(it);
-				if (readToken(it, ")")) {
-				} else {
-					// To Do : print an error message here
-				}
-			} else {
-				// To Do : print an error message here
-			}
-			StateTreeNode stateObj =
-				v[childLabel]->introEdge(introducedEdge1, introducedEdge2);
-			vector<shared_ptr<StateTreeNode> > children;
-			children.push_back(v[childLabel]);
-			stateObj.set_children(children);
-			v[childLabel]->set_parent(stateObj.shared_from_this());
-			if (v.size() < label + 1) {
-				v.resize(label + 1);
-			}
-			v[label] = stateObj.shared_from_this();
-			if (it != end) {
-				readStateTreeExpressionRecursive(it, end, v, kernel);
-			}
-			return stateObj.shared_from_this();
-
-		} else if (readToken(it, "ForgetVertex_")) {
-			int forgottenVertex = readInteger(it);
-			int childLabel = 0;
-			if (readToken(it, "(")) {
-				childLabel = readInteger(it);
-				if (readToken(it, ")")) {
-				} else {
-					// To Do : print an error message here
-				}
-			} else {
-				// To Do : print an error message here
-			}
-			StateTreeNode stateObj =
-				v[childLabel]->forgetVertex(forgottenVertex);
-			vector<shared_ptr<StateTreeNode> > children;
-			children.push_back(v[childLabel]);
-			stateObj.set_children(children);
-			v[childLabel]->set_parent(stateObj.shared_from_this());
-			if (v.size() < label + 1) {
-				v.resize(label + 1);
-			}
-			v[label] = stateObj.shared_from_this();
-			if (it != end) {
-				readStateTreeExpressionRecursive(it, end, v, kernel);
-			}
-			return stateObj.shared_from_this();
-		} else if (readToken(it, "Join")) {
-			int childLabel1 = 0;
-			int childLabel2 = 0;
-			if (readToken(it, "(")) {
-				childLabel1 = readInteger(it);
-				if (readToken(it, ",")) {
-					childLabel2 = readInteger(it);
-				} else {
-					// TO DO: print an error message
-				}
-				if (readToken(it, ")")) {
-				} else {
-					// To Do : print an error message here
-				}
-
-			} else {
-				// To Do : print an error message here
-			}
-
-			StateTreeNode stateObj = join(*v[childLabel1], *v[childLabel2]);
-			vector<shared_ptr<StateTreeNode> > children;
-			children.push_back(v[childLabel1]);
-			children.push_back(v[childLabel2]);
-			stateObj.set_children(children);
-			v[childLabel1]->set_parent(stateObj.shared_from_this());
-			v[childLabel2]->set_parent(stateObj.shared_from_this());
-			if ((int)v.size() < label + 1) {
-				v.resize(label + 1);
-			}
-			v[label] = stateObj.shared_from_this();
-			if (it != end) {
-				readStateTreeExpressionRecursive(it, end, v, kernel);
-			}
-			return stateObj.shared_from_this();
-
-		} else if (readToken(it, "Empty")) {
-			StateTreeNode stateObj;
-			State s;
-			for (int i = 0; i < (int)kernel.get_properties().size(); i++) {
-				s.addWitnessSet(kernel.pointerToCoreNumber(i)->getInitialSet());
-			}
-			v[label] = stateObj.shared_from_this();
-			if (it != end) {
-				readStateTreeExpressionRecursive(it, end, v, kernel);
-			}
-			stateObj.set_S(s.get_ptr());
-			stateObj.set_kernel(kernel.shared_from_this());
-			return stateObj.shared_from_this();
-
-		} else {
-			cout << "ERROR: in readStateTreeExpressionRecursive token isn't "
-					"matched "
-				 << endl;
-			exit(20);
-		}
-	}
-}
-
-void StateTree::readStateTree(string s, DynamicKernel &kernel) {
-	s.erase(std::remove_if(s.begin(), s.end(), ::isspace), s.end());
-	string::iterator it = s.begin();
-	vector<shared_ptr<StateTreeNode> > v;
-	readStateTreeExpressionRecursive(it, s.end(), v, kernel);
-	this->root = v[v.size() - 1];
-}
+//
+//bool StateTree::readToken(string::iterator &it, string token) {
+//	string::iterator tempIt = it;
+//	for (auto element : token) {
+//		if (!(*tempIt == element)) {
+//			return false;
+//		} else {
+//			tempIt++;
+//		}
+//	}
+//	it = tempIt;
+//	return true;
+//}
+//
+//unsigned StateTree::readInteger(string::iterator &it) {
+//	string::iterator tempIt = it;
+//	int integer = -1;
+//	string digits;
+//	while (isdigit(*tempIt)) {
+//		digits = digits + *tempIt;
+//		tempIt++;
+//	}
+//	it = tempIt;
+//	integer = stoi(digits);
+//	return integer;
+//}
+//
+//shared_ptr<StateTreeNode> StateTree::readStateTreeExpressionRecursive(
+//	string::iterator &it, string::iterator end,
+//	vector<shared_ptr<StateTreeNode> > &v, DynamicKernel &kernel) {
+//	int label = 0;
+//	if (isdigit(*it)) {
+//		label = readInteger(it);
+//		if (readToken(it, "IntroVertex_")) {
+//			int introducedVertex = readInteger(it);
+//			int childLabel = 0;
+//			if (readToken(it, "(")) {
+//				childLabel = readInteger(it);
+//				if (readToken(it, ")")) {
+//				} else {
+//					// To Do : print an error message here
+//				}
+//			} else {
+//				// To Do : print an error message here
+//			}
+//			StateTreeNode stateObj =
+//				v[childLabel]->introVertex(introducedVertex);
+//			vector<shared_ptr<StateTreeNode> > children;
+//			children.push_back(v[childLabel]);
+//			stateObj.set_children(children);
+//			v[childLabel]->set_parent(stateObj.shared_from_this());
+//			if (v.size() < label + 1) {
+//				v.resize(label + 1);
+//			}
+//			v[label] = stateObj.shared_from_this();
+//			if (it != end) {
+//				readStateTreeExpressionRecursive(it, end, v, kernel);
+//			}
+//			return stateObj.shared_from_this();
+//		} else if (readToken(it, "IntroEdge_")) {
+//			int introducedEdge1 = readInteger(it);
+//			int introducedEdge2 = 0;
+//			if (readToken(it, "_")) {
+//				introducedEdge2 = readInteger(it);
+//			} else {
+//				// TO DO: print an error message
+//			}
+//			int childLabel = 0;
+//			if (readToken(it, "(")) {
+//				childLabel = readInteger(it);
+//				if (readToken(it, ")")) {
+//				} else {
+//					// To Do : print an error message here
+//				}
+//			} else {
+//				// To Do : print an error message here
+//			}
+//			StateTreeNode stateObj =
+//				v[childLabel]->introEdge(introducedEdge1, introducedEdge2);
+//			vector<shared_ptr<StateTreeNode> > children;
+//			children.push_back(v[childLabel]);
+//			stateObj.set_children(children);
+//			v[childLabel]->set_parent(stateObj.shared_from_this());
+//			if (v.size() < label + 1) {
+//				v.resize(label + 1);
+//			}
+//			v[label] = stateObj.shared_from_this();
+//			if (it != end) {
+//				readStateTreeExpressionRecursive(it, end, v, kernel);
+//			}
+//			return stateObj.shared_from_this();
+//
+//		} else if (readToken(it, "ForgetVertex_")) {
+//			int forgottenVertex = readInteger(it);
+//			int childLabel = 0;
+//			if (readToken(it, "(")) {
+//				childLabel = readInteger(it);
+//				if (readToken(it, ")")) {
+//				} else {
+//					// To Do : print an error message here
+//				}
+//			} else {
+//				// To Do : print an error message here
+//			}
+//			StateTreeNode stateObj =
+//				v[childLabel]->forgetVertex(forgottenVertex);
+//			vector<shared_ptr<StateTreeNode> > children;
+//			children.push_back(v[childLabel]);
+//			stateObj.set_children(children);
+//			v[childLabel]->set_parent(stateObj.shared_from_this());
+//			if (v.size() < label + 1) {
+//				v.resize(label + 1);
+//			}
+//			v[label] = stateObj.shared_from_this();
+//			if (it != end) {
+//				readStateTreeExpressionRecursive(it, end, v, kernel);
+//			}
+//			return stateObj.shared_from_this();
+//		} else if (readToken(it, "Join")) {
+//			int childLabel1 = 0;
+//			int childLabel2 = 0;
+//			if (readToken(it, "(")) {
+//				childLabel1 = readInteger(it);
+//				if (readToken(it, ",")) {
+//					childLabel2 = readInteger(it);
+//				} else {
+//					// TO DO: print an error message
+//				}
+//				if (readToken(it, ")")) {
+//				} else {
+//					// To Do : print an error message here
+//				}
+//
+//			} else {
+//				// To Do : print an error message here
+//			}
+//
+//			StateTreeNode stateObj = join(*v[childLabel1], *v[childLabel2]);
+//			vector<shared_ptr<StateTreeNode> > children;
+//			children.push_back(v[childLabel1]);
+//			children.push_back(v[childLabel2]);
+//			stateObj.set_children(children);
+//			v[childLabel1]->set_parent(stateObj.shared_from_this());
+//			v[childLabel2]->set_parent(stateObj.shared_from_this());
+//			if ((int)v.size() < label + 1) {
+//				v.resize(label + 1);
+//			}
+//			v[label] = stateObj.shared_from_this();
+//			if (it != end) {
+//				readStateTreeExpressionRecursive(it, end, v, kernel);
+//			}
+//			return stateObj.shared_from_this();
+//
+//		} else if (readToken(it, "Empty")) {
+//			StateTreeNode stateObj;
+//			State s;
+//			for (int i = 0; i < (int)kernel.get_properties().size(); i++) {
+//				s.addWitnessSet(kernel.pointerToCoreNumber(i)->getInitialSet());
+//			}
+//			v[label] = stateObj.shared_from_this();
+//			if (it != end) {
+//				readStateTreeExpressionRecursive(it, end, v, kernel);
+//			}
+//			stateObj.set_S(s.get_ptr());
+//			stateObj.set_kernel(kernel.shared_from_this());
+//			return stateObj.shared_from_this();
+//
+//		} else {
+//			cout << "ERROR: in readStateTreeExpressionRecursive token isn't "
+//					"matched "
+//				 << endl;
+//			exit(20);
+//		}
+//	}
+//}
+//
+//void StateTree::readStateTree(string s, DynamicKernel &kernel) {
+//	s.erase(std::remove_if(s.begin(), s.end(), ::isspace), s.end());
+//	string::iterator it = s.begin();
+//	vector<shared_ptr<StateTreeNode> > v;
+//	readStateTreeExpressionRecursive(it, s.end(), v, kernel);
+//	this->root = v[v.size() - 1];
+//}

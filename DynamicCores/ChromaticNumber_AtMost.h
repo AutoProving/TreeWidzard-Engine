@@ -18,6 +18,7 @@ public:
     virtual Witness& set_equal(Witness &rhs);
     virtual shared_ptr<Witness> relabel(map<unsigned,unsigned> relabelingMap);
     virtual void print();
+    string witnessInformation() override;
 };
 
 class ChromaticNumber_AtMost_WitnessSet : public WitnessSetTypeOne<ChromaticNumber_AtMost_WitnessSet>{

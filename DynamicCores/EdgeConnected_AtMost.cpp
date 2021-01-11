@@ -127,6 +127,32 @@ void EdgeConnected_AtMost_Witness::print() {
     //*****************************
 }
 
+string EdgeConnected_AtMost_Witness::witnessInformation() {
+    //*****************************
+    //*****************************
+    string info;
+    info =  "found: " + to_string(this->found) + "  processed: " +  to_string(this->processed) + "  size: " + to_string(this->size)+"\n";
+    info = info + "disconnecting edges: {";
+    for (auto it:this->disconnectingEdges){
+        info = info + "(" + to_string(it.first) + "," + to_string(it.second) + ")";
+        if ( it != *(--disconnectingEdges.end()) ) info = info + ",";
+    }
+    info = info + "}\n";
+    info = info + "partition: (";
+    for (auto it:this->partition){
+        info = info +"{" ;
+        for (auto itPrime:it){
+            info = info + to_string(itPrime) ;
+            if (itPrime != *(--it.end())) info = info + ",";
+        }
+        info = info + "}" ;
+    }
+    info = info + ")\n";
+    return info;
+    //*****************************
+    //*****************************
+}
+
 EdgeConnected_AtMost_Witness::~EdgeConnected_AtMost_Witness() {
     //*****************************
     //*****************************

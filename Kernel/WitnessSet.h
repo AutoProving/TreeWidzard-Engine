@@ -69,6 +69,7 @@ public:
     virtual void insert(shared_ptr<Witness> w){cout<<"Error: WitnessSet insert."<<endl; exit(20);};
     virtual void union_set_witness(shared_ptr<WitnessSet> witnessSet){cout<<"Error: Set union of witnessSet class."<<endl; exit(20);};
     virtual void print(){cout<<"Error: WitnessSet print."<<endl; exit(20);};
+    virtual string witnessSetInformation(){cout<<"Error: WitnessSet witnessSetInformation"<<endl; exit(20);}
     friend bool operator==(WitnessSet &lhs, WitnessSet &rhs){
         return lhs.isEqual(rhs);
     };
@@ -129,6 +130,7 @@ public:
     virtual void insert(shared_ptr<Witness> w);
     virtual void union_set_witness(shared_ptr<WitnessSet> witnessSet);
     virtual void print();
+    string witnessSetInformation() override;
     virtual bool isLess(WitnessSet &rhs);
     virtual bool isEqual(WitnessSet &rhs);
     virtual int size();
@@ -236,6 +238,14 @@ template <class T>
 void WitnessSetTypeOne<T>::print() {
     for (auto element : *this) element->print();
 }
+
+template<class T>
+string WitnessSetTypeOne<T>::witnessSetInformation() {
+    string info;
+    for (auto element : *this) info = info + element->witnessInformation();
+    return info;
+}
+
 template <class T>
 bool WitnessSetTypeOne<T>::isLess(WitnessSet &rhs) {
     if (WitnessSetTypeOne<T> *e = dynamic_cast<WitnessSetTypeOne<T> *>(&rhs)){
@@ -294,6 +304,8 @@ int WitnessSetTypeOne<T>::size() {
         ret += (mask[i / 8] >> (i % 8) & 1);
     return ret;
 }
+
+
 
 
 /////////////WitnessSet TYPE Two////////////////

@@ -11,7 +11,7 @@
 
 CTDNodeNew::CTDNodeNew() {
 	// Empty noded is the default.
-	this->nodeType = "Empty";
+	this->nodeType = "Leaf";
 	// this->B is already the empty bag by default
 	// this->parent is NULL by default
 	// this->children is the empty vector by default.
@@ -880,7 +880,22 @@ StateTree ConcreteTreeDecomposition::convertToStateTree(shared_ptr<DynamicKernel
     return stateTree;
 }
 
-void ConcreteTreeDecomposition::writeToFileAbstract(string fileName) {
+void ConcreteTreeDecomposition::writeToFileAbstractTD(string fileName) {
+    fileName = "Counterexample_AbstractTreeDec_"+concrete_fs::path(fileName).filename().string();
+    ofstream ctdFile (fileName);
+    if (ctdFile.is_open())
+    {
+        unsigned label = 0;
+        ctdFile << printAbstractRecursive(*root, label);
+        ctdFile.close();
+    }
+    else {
+        cout << "Unable to open "<< fileName << endl;
+        exit(20);
+    }
+}
+
+void ConcreteTreeDecomposition::writeToFileConcreteTD(string fileName) {
     fileName = "Counterexample_ConcreteTreeDec_"+concrete_fs::path(fileName).filename().string();
     ofstream ctdFile (fileName);
     if (ctdFile.is_open())

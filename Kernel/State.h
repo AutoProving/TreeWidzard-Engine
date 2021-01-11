@@ -67,6 +67,8 @@ class State : private std::enable_shared_from_this<State> {
 
     void print();
 
+    string stateInformation();
+
     shared_ptr<WitnessSet> getWitnessSet(int) const;
 
     int numberOfComponents() const;

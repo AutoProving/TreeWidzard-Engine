@@ -98,6 +98,20 @@ void State::print() {
 	cout << "\n------------\n";
 }
 
+
+string State::stateInformation() {
+    string info;
+    info = bag.bagInformation();
+    int i = 1;
+    for (auto element : witnessSetVector) {
+        info  = info + "\nCore " +to_string(i) +" WitnessSet \n";
+        info  = info + element->witnessSetInformation();
+        i++;
+    }
+    info  = info + "\n------------\n";
+    return info;
+}
+
 shared_ptr<WitnessSet> State::getWitnessSet(int i) const {
 	return witnessSetVector[i];
 }
@@ -116,6 +130,7 @@ shared_ptr<State> State::relabel(map<unsigned int, unsigned int> relabelingMap) 
     state->set_bag(b);
     return state;
 }
+
 
 
 

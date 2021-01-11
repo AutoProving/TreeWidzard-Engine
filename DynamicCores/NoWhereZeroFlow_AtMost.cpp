@@ -88,6 +88,23 @@ void NoWhereZeroFlow_AtMost_Witness::print() {
     //*****************************
 }
 
+string NoWhereZeroFlow_AtMost_Witness::witnessInformation() {
+    //*****************************
+    //*****************************
+    string info;
+    info = "FlowSum: ";
+    for(auto f:flowSum){
+        info = info + "(" + to_string(f.first) + "->" + to_string(f.second)+")";
+        if(f != *(--flowSum.end())){
+            info = info + ",";
+        }
+    }
+    return info;
+
+    //*****************************
+    //*****************************
+}
+
 NoWhereZeroFlow_AtMost_Witness::~NoWhereZeroFlow_AtMost_Witness() {
     //*****************************
     //*****************************
