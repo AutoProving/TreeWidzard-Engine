@@ -1,6 +1,6 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
-#ifndef TREEWIDZARD_RelabeledBREADTHFIRSTSEARCH_H
-#define TREEWIDZARD_RelabeledBREADTHFIRSTSEARCH_H
+#ifndef TREEWIDZARD_IsomorphismBreadthFirstSearch_H
+#define TREEWIDZARD_IsomorphismBreadthFirstSearch_H
 #include <math.h>
 #include <algorithm>
 #include "../../Kernel/ConcreteTreeDecomposition.h"
@@ -13,7 +13,7 @@
 using namespace std;
 using namespace std::chrono;
 
-class RelabeledBreadthFirstSearch : public SearchStrategy {
+class IsomorphismBreadthFirstSearch : public SearchStrategy {
   private:
 	TreeAutomaton<State::ptr,AbstractTreeDecompositionNodeContent> bfsDAG; // Constructs a DAG corresponding to the BFS.
 	// The vector has width+2 positions. Index 0 contains states with an empty bag, and index i contains states with bags of size i.
@@ -22,9 +22,9 @@ class RelabeledBreadthFirstSearch : public SearchStrategy {
 	vector<set<State::ptr>>  newStatesSet;
 	vector<vector<State::ptr>> newStatesVector; // This will make it easier to do parallel search
   public:
-    RelabeledBreadthFirstSearch();
-	RelabeledBreadthFirstSearch(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags);
-	~RelabeledBreadthFirstSearch(){};
+    IsomorphismBreadthFirstSearch();
+	IsomorphismBreadthFirstSearch(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags);
+	~IsomorphismBreadthFirstSearch(){};
 	AbstractTreeDecomposition extractCounterExampleTerm(); 	
 	Term<RunNodeContent<State,AbstractTreeDecompositionNodeContent> > extractCounterExampleRun();
     void search();
@@ -32,8 +32,9 @@ class RelabeledBreadthFirstSearch : public SearchStrategy {
     map<unsigned ,unsigned > initialPermutation(unsigned k); // Returns the identity map with domain {1,...,k}
     bool nextPermutation(map<unsigned ,unsigned > &m);
     void testPermutationGeneration(unsigned k);
+    State::ptr canonicalState(State::ptr state);
 
 
 };
 
-#endif // CURRENT_RelabeledBREADTHFIRSTSEARCH_H
+#endif // CURRENT_IsomorphismBreadthFirstSearch_H

@@ -495,12 +495,12 @@ maxWitnessSetSize[m] =
 							}
 						}
 					}
-					for (auto itrJoin = setNewStates[k].begin();
-						 itrJoin != setNewStates[k].end(); itrJoin++) {
-						State::ptr newState =
-							kernel->join(*iteratorNewStates, *itrJoin);
-						setIntermediateStates[k].insert(newState);
-					}
+//					for (auto itrJoin = setNewStates[k].begin();
+//						 itrJoin != setNewStates[k].end(); itrJoin++) {
+//						State::ptr newState =
+//							kernel->join(*iteratorNewStates, *itrJoin);
+//						setIntermediateStates[k].insert(newState);
+//					}
 				}
 			}
 		}

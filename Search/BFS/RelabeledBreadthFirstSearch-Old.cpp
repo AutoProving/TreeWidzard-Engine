@@ -1,90 +1,28 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
-#include "BreadthFirstSearch.h"
-
-#include <utility>
+#include "RelabeledBreadthFirstSearch-Old.h"
 
 extern "C" {
-    BreadthFirstSearch * create() {
-        return new BreadthFirstSearch();
+    RelabeledBreadthFirstSearch_Old * create() {
+        return new RelabeledBreadthFirstSearch_Old();
     }
-    BreadthFirstSearch * create_parameter(DynamicKernel* dynamicKernel, Conjecture* conjecture,Flags* flags) {
-        return new BreadthFirstSearch(dynamicKernel,conjecture,flags);
+    RelabeledBreadthFirstSearch_Old * create_parameter(DynamicKernel* dynamicKernel, Conjecture* conjecture,Flags* flags) {
+        return new RelabeledBreadthFirstSearch_Old(dynamicKernel,conjecture,flags);
     }
 }
 
-BreadthFirstSearch::BreadthFirstSearch() {
-    addAttribute("SearchName","BreadthFirstSearch");
+RelabeledBreadthFirstSearch_Old::RelabeledBreadthFirstSearch_Old() {
+    addAttribute("SearchName","RelabeledBreadthFirstSearch_Old");
 }
 
-BreadthFirstSearch::BreadthFirstSearch(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags): SearchStrategy(dynamicKernel, conjecture, flags) {
+RelabeledBreadthFirstSearch_Old::RelabeledBreadthFirstSearch_Old(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags): SearchStrategy(dynamicKernel, conjecture, flags) {
     this->kernel = kernel;
 	this->conjecture = conjecture;
 	this->flags = flags;
-    addAttribute("SearchName","BreadthFirstSearch");
+    addAttribute("SearchName","RelabeledBreadthFirstSearch_Old");
 }
 
-
-AbstractTreeDecomposition BreadthFirstSearch::extractCounterExampleTerm(State::ptr state) {
-    AbstractTreeDecomposition atd;
-    shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> rootNode;
-    rootNode = bfsDAG.retrieveTermAcyclicAutomaton(state);
-    atd.setRoot(rootNode);
-    return atd;
-}
-
-StateTree BreadthFirstSearch::extractCounterExampleStateTree(State::ptr state) {
-    StateTree stateTree;
-    shared_ptr<StateTreeNode> root(new StateTreeNode());
-    shared_ptr<DynamicKernel> sharedKernel = make_shared<DynamicKernel>(*kernel);
-    root->set_kernel(sharedKernel);
-    extractCounterExampleStateTreeNode(state,root);
-    stateTree.root = root;
-    return stateTree;
-}
-
-void BreadthFirstSearch::extractCounterExampleStateTreeNode(State::ptr state, shared_ptr<StateTreeNode> node) {
-    //Assumes that the automaton is acyclic and that each state has a transition in which the state is the consequent
-    if (!bfsDAG.getTransitions().empty()){
-        AbstractTreeDecompositionNodeContent a;
-        a.setSymbol(a.smallestContent()); //Creates a symbol of type TermNodeContent and set it to the smallest symbol
-        vector<State::ptr> emptyAntecedents;
-        Transition<State::ptr,AbstractTreeDecompositionNodeContent> t(state,a,emptyAntecedents); // This is the smallest transition with a consequent equal to state
-        auto it = bfsDAG.getTransitions().upper_bound(t);
-        if(it != bfsDAG.getTransitions().begin()){
-            it--; // This is always defined, since the transition set is non-empty
-        }
-        auto itAux = it;
-        if ( itAux->getConsequentState() != state){
-            itAux++;
-            if(itAux != bfsDAG.getTransitions().end()){
-                if (itAux->getConsequentState() != state){
-                    cout << "Error: No transition with consequent equal to the input state.";
-                    exit(20);
-                }
-            }else{
-                cout << "Error: No transition with consequent equal to the input state.";
-                exit(20);
-            }
-        }
-        node->set_nodeType(itAux->getTransitionContent().getSymbol());
-        node->set_S(state);
-        vector<shared_ptr<StateTreeNode>> children;
-        for (int i = 0; i < itAux->getAntecedentStates().size(); i++){
-            shared_ptr<StateTreeNode> child(new StateTreeNode);
-            child->set_parent(node);
-            child->set_kernel(node->get_kernel());
-            children.push_back(child);
-            extractCounterExampleStateTreeNode(itAux->getAntecedentStates()[i],child);
-        }
-        node->set_children(children);
-    } else {
-        cout << "Error: The automaton has no transitions." << endl;
-        exit(20);
-    }
-}
-
-
-void BreadthFirstSearch::search(){
+void RelabeledBreadthFirstSearch_Old::search(){
+	TreeAutomaton<State::ptr,AbstractTreeDecompositionNodeContent> bfsDAG; // Constructs a DAG corresponding to the BFS.
 	State::ptr initialState = kernel->initialState();
 	allStatesSet.insert(initialState); //TODO define InitialSearchState
 	newStatesSet.insert(initialState);
@@ -115,9 +53,10 @@ void BreadthFirstSearch::search(){
 			for (int i=1; i<= width+1; i++){
                 if(bag.vertex_introducible(i)){
                     State::ptr newStatePointer = kernel->intro_v(statePointer, i);
-                    if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer) ){
-                        newStatesSet.insert(newStatePointer);
-                        State::ptr consequentState = newStatePointer;
+                    State::ptr relabeledNewStatePointer= newStatePointer->relabel(relabeledMapGenerator(newStatePointer->get_bag().get_elements()));
+                    if (!allStatesSet.count(relabeledNewStatePointer) and !newStatesSet.count(relabeledNewStatePointer) ){
+                        newStatesSet.insert(relabeledNewStatePointer);
+                        State::ptr consequentState = relabeledNewStatePointer;
                         bfsDAG.addState(consequentState);
                         AbstractTreeDecompositionNodeContent transitionContent("IntroVertex_"+ to_string(i));
                         vector<State::ptr> antecedentStates;
@@ -132,9 +71,10 @@ void BreadthFirstSearch::search(){
 			///////////////////////////////////////////////////////
 			for (auto it= bagElement.begin(); it!=bagElement.end(); it++){
                 State::ptr newStatePointer = kernel->forget_v(statePointer, *it);
-                if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer)){
-                    newStatesSet.insert(newStatePointer);
-                    State::ptr consequentState = newStatePointer;
+                State::ptr relabeledNewStatePointer= newStatePointer->relabel(relabeledMapGenerator(newStatePointer->get_bag().get_elements()));
+                if (!allStatesSet.count(relabeledNewStatePointer) and !newStatesSet.count(relabeledNewStatePointer)){
+                    newStatesSet.insert(relabeledNewStatePointer);
+                    State::ptr consequentState = relabeledNewStatePointer;
                     AbstractTreeDecompositionNodeContent transitionContent("ForgetVertex_"+ to_string(*it));
                     bfsDAG.addState(consequentState);
                     vector<State::ptr> antecedentStates;
@@ -151,9 +91,10 @@ void BreadthFirstSearch::search(){
                     if(itX!=bagElement.end()){
                         for (auto itPrime = itX ; itPrime != bagElement.end(); itPrime++){
                             State::ptr newStatePointer = kernel->intro_e(statePointer, *it, *itPrime);
-                            if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer)){
-                                newStatesSet.insert(newStatePointer);
-                                State::ptr consequentState = newStatePointer;
+                            State::ptr relabeledNewStatePointer= newStatePointer->relabel(relabeledMapGenerator(newStatePointer->get_bag().get_elements()));
+                            if (!allStatesSet.count(relabeledNewStatePointer) and !newStatesSet.count(relabeledNewStatePointer)){
+                                newStatesSet.insert(relabeledNewStatePointer);
+                                State::ptr consequentState = relabeledNewStatePointer;
                                 AbstractTreeDecompositionNodeContent transitionContent("IntroEdge_"+ to_string(*it)+"_"+to_string(*itPrime));
                                 bfsDAG.addState(consequentState);
                                 vector<State::ptr> antecedentStates;
@@ -171,10 +112,12 @@ void BreadthFirstSearch::search(){
                 // join
                 for (auto it = allStatesSet.begin(); it != allStatesSet.end(); it++) {
                     if (statePointer->get_bag().joinable((*it)->get_bag())) {
+                        // for each relabeling of the bag from it, you do the join between the statePointer and the relabeled version of it.
                         State::ptr newStatePointer = kernel->join(statePointer, *it);
-                        if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer)) {
-                            newStatesSet.insert(newStatePointer);
-                            State::ptr consequentState = newStatePointer;
+                        State::ptr relabeledNewStatePointer= newStatePointer->relabel(relabeledMapGenerator(newStatePointer->get_bag().get_elements()));
+                        if (!allStatesSet.count(relabeledNewStatePointer) and !newStatesSet.count(relabeledNewStatePointer)) {
+                            newStatesSet.insert(relabeledNewStatePointer);
+                            State::ptr consequentState = relabeledNewStatePointer;
                             AbstractTreeDecompositionNodeContent transitionContent("Join");
                             bfsDAG.addState(consequentState);
                             vector<State::ptr> antecedentStates;
@@ -187,42 +130,46 @@ void BreadthFirstSearch::search(){
                         }
                     }
                 }
-//                for (auto it = newStatesSet.begin(); it != newStatesSet.end(); it++) {
-//                    if (statePointer->get_bag().joinable((*it)->get_bag())) {
-//                        State::ptr newStatePointer = kernel->join(statePointer, *it);
-//                        if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer)) {
-//                            newStatesSet.insert(newStatePointer);
-//                            State::ptr consequentState = newStatePointer;
-//                            AbstractTreeDecompositionNodeContent transitionContent("Join");
-//                            bfsDAG.addState(consequentState);
-//                            vector<State::ptr> antecedentStates;
-//                            antecedentStates.push_back(statePointer);
-//                            antecedentStates.push_back(*it);
-//                            Transition<State::ptr, AbstractTreeDecompositionNodeContent> transition(consequentState,
-//                                                                                                    transitionContent,
-//                                                                                                    antecedentStates);
-//                            bfsDAG.addTransition(transition);
-//                        }
-//                    }
-//                }
+                for (auto it = newStatesSet.begin(); it != newStatesSet.end(); it++) {
+                    if (statePointer->get_bag().joinable((*it)->get_bag())) {
+                        State::ptr newStatePointer = kernel->join(statePointer, *it);
+                        State::ptr relabeledNewStatePointer= newStatePointer->relabel(relabeledMapGenerator(newStatePointer->get_bag().get_elements()));
+                        if (!allStatesSet.count(relabeledNewStatePointer) and !newStatesSet.count(relabeledNewStatePointer)) {
+                            newStatesSet.insert(relabeledNewStatePointer);
+                            State::ptr consequentState = relabeledNewStatePointer;
+                            AbstractTreeDecompositionNodeContent transitionContent("Join");
+                            bfsDAG.addState(consequentState);
+                            vector<State::ptr> antecedentStates;
+                            antecedentStates.push_back(statePointer);
+                            antecedentStates.push_back(*it);
+                            Transition<State::ptr, AbstractTreeDecompositionNodeContent> transition(consequentState,
+                                                                                                    transitionContent,
+                                                                                                    antecedentStates);
+                            bfsDAG.addTransition(transition);
+                        }
+                    }
+                }
             }
 		}
 		for(auto it = newStatesSet.begin(); it!=newStatesSet.end(); it++){
 		    if(!conjecture->evaluateConjectureOnState(**it,kernel)){
                 cout<<"BAD STATE:"<<endl;
-                State::ptr state = *it;
-                (**it).print();
-                bfsDAG.addFinalState(*it);
-                cout<<"-----------------Term Print---------------------"<<endl;
-                AbstractTreeDecomposition atd  = extractCounterExampleTerm(state);
+		        (**it).print();
+		        bfsDAG.addFinalState(*it);
+		        cout<<"-----------------Term Print---------------------"<<endl;
+		        AbstractTreeDecomposition atd;
+		        shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> rootNode;
+		        rootNode = bfsDAG.retrieveTermAcyclicAutomaton(*it);
+		        atd.setRoot(rootNode);
                 cout<<"=======ABSTRACT TREE========="<<endl;
                 atd.printTermNodes();
-                atd.writeToFile(this->getPropertyFilePath());
-                ConcreteTreeDecomposition ctd = atd.convertToConcreteTreeDecomposition();
+		        atd.writeToFile(this->getPropertyFilePath());
+		        ConcreteTreeDecomposition ctd = atd.convertToConcreteTreeDecomposition();
                 cout<<"=======Concrete TREE========="<<endl;
                 ctd.printTree();
-                ctd.writeToFileConcreteTD(this->getPropertyFilePath());
-                StateTree stateTree = extractCounterExampleStateTree(state);
+		        ctd.writeToFileConcreteTD(this->getPropertyFilePath());
+                shared_ptr<DynamicKernel> sharedKernel = make_shared<DynamicKernel>(*kernel);
+                StateTree stateTree = ctd.convertToStateTree(sharedKernel);
                 if(flags->get("StateTree")==1){
                     cout<<"=======STATE TREE========="<<endl;
                     stateTree.printStateTree();
@@ -234,7 +181,7 @@ void BreadthFirstSearch::search(){
                 multiGraph.printToFile(this->getPropertyFilePath());
                 multiGraph.convertToGML(this->getPropertyFilePath());
                 multiGraph.printToFilePACEFormat(this->getPropertyFilePath());
-                exit(20);
+		        exit(20);
 		    }
 		}
         set<State::ptr> setUnion;
@@ -249,3 +196,12 @@ void BreadthFirstSearch::search(){
     cout<<"Finish"<<endl;
 }
 
+map<unsigned, unsigned> RelabeledBreadthFirstSearch_Old::relabeledMapGenerator(set<unsigned int> bagElements) {
+    map<unsigned int, unsigned int> map;
+    unsigned i =1;
+    for(auto v:bagElements){
+        map.insert(make_pair(v,i));
+        i++;
+    }
+    return map;
+}

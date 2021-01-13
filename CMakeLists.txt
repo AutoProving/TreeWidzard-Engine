@@ -97,6 +97,10 @@ add_executable(
 		#Search/RelabeledLeveledSetSearch.cpp
 		#Search/BFS/RelabeledBreadthFirstSearch.h
 		#Search/BFS/RelabeledBreadthFirstSearch.cpp
+		#Search/BFS/RelabeledBreadthFirstSearch-Old.h
+		#Search/BFS/RelabeledBreadthFirstSearch-Old.cpp
+		Search/BFS/IsomorphismBreadthFirstSearch.h
+		Search/BFS/IsomorphismBreadthFirstSearch.cpp
 	# Parser files
 		# Command Parser
 		Controller/Parser/command_parser.hpp

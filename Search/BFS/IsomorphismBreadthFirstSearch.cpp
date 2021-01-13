@@ -1,27 +1,27 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
-#include "RelabeledBreadthFirstSearch.h"
+#include "IsomorphismBreadthFirstSearch.h"
 
 extern "C" {
-    RelabeledBreadthFirstSearch * create() {
-        return new RelabeledBreadthFirstSearch();
+    IsomorphismBreadthFirstSearch * create() {
+        return new IsomorphismBreadthFirstSearch();
     }
-    RelabeledBreadthFirstSearch * create_parameter(DynamicKernel* dynamicKernel, Conjecture* conjecture,Flags* flags) {
-        return new RelabeledBreadthFirstSearch(dynamicKernel,conjecture,flags);
+    IsomorphismBreadthFirstSearch * create_parameter(DynamicKernel* dynamicKernel, Conjecture* conjecture,Flags* flags) {
+        return new IsomorphismBreadthFirstSearch(dynamicKernel,conjecture,flags);
     }
 }
 
-RelabeledBreadthFirstSearch::RelabeledBreadthFirstSearch() {
-    addAttribute("SearchName","RelabeledBreadthFirstSearch");
+IsomorphismBreadthFirstSearch::IsomorphismBreadthFirstSearch() {
+    addAttribute("SearchName","IsomorphismBreadthFirstSearch");
 }
 
-RelabeledBreadthFirstSearch::RelabeledBreadthFirstSearch(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags): SearchStrategy(dynamicKernel, conjecture, flags) {
+IsomorphismBreadthFirstSearch::IsomorphismBreadthFirstSearch(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags): SearchStrategy(dynamicKernel, conjecture, flags) {
     this->kernel = kernel;
 	this->conjecture = conjecture;
 	this->flags = flags;
-    addAttribute("SearchName","RelabeledBreadthFirstSearch");
+    addAttribute("SearchName","IsomorphismBreadthFirstSearch");
 }
 
-void RelabeledBreadthFirstSearch::search(){
+void IsomorphismBreadthFirstSearch::search(){
     unsigned int width = kernel->get_width().get_value();
     State::ptr initialState = kernel->initialState();
     // Initialization of the acyclic tree automaton bfsDag.
@@ -65,7 +65,7 @@ void RelabeledBreadthFirstSearch::search(){
                     unsigned i = bagElements.size() + 1;
                     if (bag.vertex_introducible(i)) {
                         State::ptr newStatePointer = kernel->intro_v(statePointer, i);
-                        State::ptr relabeledNewStatePointer = newStatePointer; // The relabeling is the identity.
+                        State::ptr relabeledNewStatePointer = canonicalState(newStatePointer); // Computes the canonical state derived from newStatePointer.
                         if (!allStatesSet[bagElements.size()+1].count(relabeledNewStatePointer) and
                             !newStatesSet[bagElements.size()+1].count(relabeledNewStatePointer)) {
                             newStatesSet[bagElements.size()+1].insert(relabeledNewStatePointer);
@@ -87,8 +87,9 @@ void RelabeledBreadthFirstSearch::search(){
                 ///////////////////////////////////////////////////////
                 for (auto it = bagElements.begin(); it != bagElements.end(); it++) {
                     State::ptr newStatePointer = kernel->forget_v(statePointer, *it);
-                    State::ptr relabeledNewStatePointer = newStatePointer->relabel(
-                            relabeledMapGenerator(newStatePointer->get_bag().get_elements()));
+                    // We need to normalized the bag so that the bag.elements is equal to {1,...,k} for some k.
+                    State::ptr intermediateStatePointer = newStatePointer->relabel(relabeledMapGenerator(newStatePointer->get_bag().get_elements()));
+                    State::ptr relabeledNewStatePointer = canonicalState(intermediateStatePointer); // Computes the canonical state derived from newStatePointer.
                     if (!allStatesSet[bagElements.size()-1].count(relabeledNewStatePointer) and !newStatesSet[bagElements.size()-1].count(relabeledNewStatePointer)) {
                         newStatesSet[bagElements.size()-1].insert(relabeledNewStatePointer);
                         State::ptr consequentState = relabeledNewStatePointer;
@@ -110,9 +111,9 @@ void RelabeledBreadthFirstSearch::search(){
                         if (itX != bagElements.end()) {
                             for (auto itPrime = itX; itPrime != bagElements.end(); itPrime++) {
                                 State::ptr newStatePointer = kernel->intro_e(statePointer, *it, *itPrime);
-                                State::ptr relabeledNewStatePointer = newStatePointer; // The relabeling is the identity.
-                                if (!allStatesSet[bagElements.size()].count(relabeledNewStatePointer) and
-                                    !newStatesSet[bagElements.size()].count(relabeledNewStatePointer)) {
+                                State::ptr relabeledNewStatePointer = canonicalState(newStatePointer); // Computes the canonical state derived from newStatePointer.                                if (!allStatesSet[bagElements.size()].count(relabeledNewStatePointer) and
+                                if (!allStatesSet[index].count(relabeledNewStatePointer) and
+                                        !newStatesSet[bagElements.size()].count(relabeledNewStatePointer)) {
                                     newStatesSet[bagElements.size()].insert(relabeledNewStatePointer);
                                     State::ptr consequentState = relabeledNewStatePointer;
                                     AbstractTreeDecompositionNodeContent transitionContent(
@@ -139,8 +140,7 @@ void RelabeledBreadthFirstSearch::search(){
                         do{
                             State::ptr permutedState = (*it)->relabel(m);
                             State::ptr newStatePointer = kernel->join(statePointer, permutedState);
-                            State::ptr relabeledNewStatePointer = newStatePointer; // The identity relabeling.
-                            // for each relabeling of the bag from it, you do the join between the statePointer and the relabeled version of it.
+                            State::ptr relabeledNewStatePointer = canonicalState(newStatePointer); // Computes the canonical state derived from newStatePointer.                            // for each relabeling of the bag from it, you do the join between the statePointer and the relabeled version of it.
                             if (!allStatesSet[index].count(relabeledNewStatePointer) and
                                 !newStatesSet[index].count(relabeledNewStatePointer)) {
                                 newStatesSet[index].insert(relabeledNewStatePointer);
@@ -214,7 +214,7 @@ void RelabeledBreadthFirstSearch::search(){
     cout<<"Finished :)"<<endl;
 }
 
-map<unsigned, unsigned> RelabeledBreadthFirstSearch::relabeledMapGenerator(set<unsigned int> bagElements) {
+map<unsigned, unsigned> IsomorphismBreadthFirstSearch::relabeledMapGenerator(set<unsigned int> bagElements) {
     map<unsigned int, unsigned int> map;
     unsigned i =1;
     for(auto v:bagElements){
@@ -224,7 +224,7 @@ map<unsigned, unsigned> RelabeledBreadthFirstSearch::relabeledMapGenerator(set<u
     return map;
 }
 
-map<unsigned int, unsigned int> RelabeledBreadthFirstSearch::initialPermutation(unsigned int k) {
+map<unsigned int, unsigned int> IsomorphismBreadthFirstSearch::initialPermutation(unsigned int k) {
     map<unsigned , unsigned > m;
     for(unsigned index = 1; index <= k ; index++){
         m.insert(make_pair(index,index));
@@ -232,7 +232,7 @@ map<unsigned int, unsigned int> RelabeledBreadthFirstSearch::initialPermutation(
     return m;
 }
 
-bool RelabeledBreadthFirstSearch::nextPermutation(map<unsigned int, unsigned int> &m) {
+bool IsomorphismBreadthFirstSearch::nextPermutation(map<unsigned int, unsigned int> &m) {
     vector<unsigned > vec;
     vec.resize(m.size());
     for(auto item:m){
@@ -250,7 +250,7 @@ bool RelabeledBreadthFirstSearch::nextPermutation(map<unsigned int, unsigned int
     }
 }
 
-void RelabeledBreadthFirstSearch::testPermutationGeneration(unsigned k) {
+void IsomorphismBreadthFirstSearch::testPermutationGeneration(unsigned k) {
     map<unsigned ,unsigned > m = initialPermutation(k);
     do{
         for(auto item:m){
@@ -258,4 +258,17 @@ void RelabeledBreadthFirstSearch::testPermutationGeneration(unsigned k) {
         }
         cout<<endl;
     } while (nextPermutation(m));
+}
+
+State::ptr IsomorphismBreadthFirstSearch::canonicalState(State::ptr state) {
+   // Assume that the bag.elements is equal to {1,...,k} for some k.
+    State::ptr canonicalState = state;
+    map<unsigned ,unsigned > m = initialPermutation(state->get_bag().get_elements().size());
+    do{
+        State::ptr relabeledState = state->relabel(m);
+        if(relabeledState < canonicalState){
+            canonicalState = relabeledState;
+        }
+    }while(nextPermutation(m));
+    return canonicalState;
 }
