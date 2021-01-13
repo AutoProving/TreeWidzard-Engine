@@ -11,7 +11,7 @@
 
 StateTreeNode::StateTreeNode() {
 	// Empty node is the default.
-	this->nodeType = "Empty";
+	this->nodeType = "Leaf";
 	State::ptr state;
 	this->S = state;
 	// this->parent is NULL by default
@@ -288,7 +288,7 @@ MultiGraph StateTree::extractMultiGraph() {
 }
 
 string StateTree::printTreeRecursive(StateTreeNode &node, unsigned &label) {
-	string s;
+    string s;
     if (node.get_nodeType() == "Join") {
 		s += printTreeRecursive(*node.get_children()[0], label);
 		unsigned label1 = label;

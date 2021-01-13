@@ -2,10 +2,10 @@
 #define TREEWIDZARD_INPUTCONTROLLER_H
 #include <iostream>
 #include <experimental/filesystem>
-#include "Kernel/DynamicCoreHandler.h"
-#include "Kernel/DynamicKernel.h"
-#include "Kernel/Conjecture.h"
-#include "Parser/input_parser.hpp"
+#include "../Kernel/DynamicCoreHandler.h"
+#include "../Kernel/DynamicKernel.h"
+#include "../Kernel/Conjecture.h"
+#include "../Parser/input_parser.hpp"
 
 using namespace std;
 namespace fs = std::experimental::filesystem;

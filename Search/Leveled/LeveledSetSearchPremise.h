@@ -2,9 +2,9 @@
 
 #ifndef CURRENT_LEVELEDSETSEARCHPREMISE_H
 #define CURRENT_LEVELEDSETSEARCHPREMISE_H
-#include "../Kernel/SearchStrategy.h"
-#include "../Kernel/StateTree.h"
-#include "../Kernel/ConcreteTreeDecomposition.h"
+#include "../../Kernel/SearchStrategy.h"
+#include "../../Kernel/StateTree.h"
+#include "../../Kernel/ConcreteTreeDecomposition.h"
 #include <math.h>
 
 using namespace std;

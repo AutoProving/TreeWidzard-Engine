@@ -5,7 +5,7 @@
 #include <iostream>
 #include <fstream>
 void show_manual(){
-    std::ifstream f("../manual.txt");
+    std::ifstream f("../README");
     if (f.is_open())
         std::cout << f.rdbuf();
     exit(20);

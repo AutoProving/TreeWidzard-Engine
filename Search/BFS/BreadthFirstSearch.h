@@ -84,7 +84,7 @@ using namespace std::chrono;
 
 class BreadthFirstSearch : public SearchStrategy {
   private:
-	TreeAutomaton<State,AbstractTreeDecompositionNodeContent> bfsDAG; // Constructs a DAG corresponding to the BFS.
+	TreeAutomaton<State::ptr,AbstractTreeDecompositionNodeContent> bfsDAG; // Constructs a DAG corresponding to the BFS.
 	set<State::ptr> allStatesSet;
 	set<State::ptr> intermediateStatesSet;
 	set<State::ptr>  newStatesSet; 
@@ -93,12 +93,12 @@ class BreadthFirstSearch : public SearchStrategy {
     BreadthFirstSearch();
 	BreadthFirstSearch(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags);
 	~BreadthFirstSearch(){};
-AbstractTreeDecomposition extractCounterExampleTerm(State::ptr state, TreeAutomaton<State::ptr,AbstractTreeDecompositionNodeContent>)
-{
-	//Convert a run into a AbstractTreeDecomposition (forget the states)
-
-}
-Term<RunNodeContent<State,AbstractTreeDecompositionNodeContent> > extractCounterExampleRun(State::ptr state, TreeAutomaton<State::ptr,AbstractTreeDecompositionNodeContent>);
+    AbstractTreeDecomposition extractCounterExampleTerm(State::ptr state);
+    ////Extract State Tree//////////
+    void extractCounterExampleStateTreeNode(State::ptr state,shared_ptr<StateTreeNode>);
+    StateTree extractCounterExampleStateTree(State::ptr state);
+    ///////////////////////////////
+    Term<RunNodeContent<State,AbstractTreeDecompositionNodeContent> > extractCounterExampleRun(State::ptr state, TreeAutomaton<State::ptr,AbstractTreeDecompositionNodeContent>);
     void search();
 };
 

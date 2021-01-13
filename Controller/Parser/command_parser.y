@@ -76,8 +76,8 @@ command_term        : command_term_signature command_input_file command_end{Pars
 %%
 
 void yyerror(int &result, char const* msg){
-  std::cerr<<"Syntax Error: "<< msg << " on line " <<command_lineno << std::endl;
-  cout<<"command not found. use --help to see help\n";
+  //std::cerr<<"Syntax Error: "<< msg << " on line " <<command_lineno << std::endl;
+  cout<<"Wrong number of inputs. Please execute treewidzard --help for more information."<<endl;
   // error printing  disabled, it is handeled in main.cpp
 }
 

@@ -2,8 +2,8 @@
 
 #ifndef RANDOMLEVELEDSETSEARCH_H
 #define RANDOMLEVELEDSETSEARCH_H
-#include "../Kernel/SearchStrategy.h"
-#include "../Kernel/StateTree.h"
+#include "../../Kernel/SearchStrategy.h"
+#include "../../Kernel/StateTree.h"
 #include <math.h>
 
 class RandomLeveledSetSearch: public SearchStrategy{

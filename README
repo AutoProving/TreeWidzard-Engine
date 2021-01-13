@@ -1,20 +1,11 @@
-Usage:
-
-1) For testing whether a conjecture is valid on all graphs of treewidth or pathwith k.
-The conjecture and width are specified at InputFile. 
-
-dp <ConjectureInputFile> -search=<SearchMethod>
-
-ex: 
-
-dp input.txt -search=LeveledSetSearch
-
-
-2) For testing whether a specific graph satisfies the conjecture.
-
-dp <ConjectureInputFile> <TreeDecompositionInputFile> <GraphInputFile>
-
-ex: 
-
-dp input.txt treedecomposition.td graph.gr
-
+    For SEARCH:
+        ./treewidzard -search [Flag Options] <search method> <property file>
+    Flag Options:
+        -pl       print loop
+        -ps       print states
+        -st       print state tree decomposition if a counterexample is found
+    For PARSE:
+        1- For PACE Format
+            ./treewidzard -parse PACE <property file> <graph file> <tree decomposition file>
+        2- For ABSTRACT Decomposition Verify
+            ./treewidzard -parse ABSTRACT <property file> <abstract tree decomposition file>

@@ -100,7 +100,6 @@ string NoWhereZeroFlow_AtMost_Witness::witnessInformation() {
         }
     }
     return info;
-
     //*****************************
     //*****************************
 }
@@ -115,7 +114,6 @@ NoWhereZeroFlow_AtMost_Witness::~NoWhereZeroFlow_AtMost_Witness() {
 }
 
 NoWhereZeroFlow_AtMost_DynamicCore::NoWhereZeroFlow_AtMost_DynamicCore(){
-
     //*****************************
     //*****************************
     // Only edit this part

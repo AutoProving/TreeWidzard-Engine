@@ -4,7 +4,7 @@
 #include "DynamicCore.h"
 #include <dlfcn.h>
 #include <iostream>
-#include "Multigraph/MultiGraph.h"
+#include "../Multigraph/MultiGraph.h"
 
 using namespace std;
 

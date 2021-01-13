@@ -60,7 +60,6 @@ public:
     void writeToFile(string fileName);
     shared_ptr<CTDNodeNew> constructCTDNode(TermNode<AbstractTreeDecompositionNodeContent> &node);
     ConcreteTreeDecomposition convertToConcreteTreeDecomposition();
-
 };
 
 #endif //TREEWIDZARD_ABSTRACTTREEDECOMPOSITION_H

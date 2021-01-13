@@ -2,9 +2,9 @@
 #ifndef CURRENT_LEVELEDSETSEARCH_H
 #define CURRENT_LEVELEDSETSEARCH_H
 #include <math.h>
-#include "../Kernel/ConcreteTreeDecomposition.h"
-#include "../Kernel/SearchStrategy.h"
-#include "../Kernel/StateTree.h"
+#include "../../Kernel/ConcreteTreeDecomposition.h"
+#include "../../Kernel/SearchStrategy.h"
+#include "../../Kernel/StateTree.h"
 
 using namespace std;
 using namespace std::chrono;

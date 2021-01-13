@@ -1,4 +1,4 @@
-#ifndef TREEWIDZARD_TREEAUTOMATON_H
+    #ifndef TREEWIDZARD_TREEAUTOMATON_H
 #define TREEWIDZARD_TREEAUTOMATON_H
 
 #include<iostream>
@@ -14,7 +14,6 @@ private:
     TermNodeContent runNodeContent;
     StateType state;
 public:
-
     TermNodeContent getRunNodeContent() const {
         return runNodeContent;
     }
@@ -325,12 +324,10 @@ void TreeAutomaton<StateType,TermNodeContent>::retrieveTermNodeAcyclicAutomaton(
             node->addChild(child);
             retrieveTermNodeAcyclicAutomaton(itAux->getAntecedentStates()[i],child);
         }
-
     } else {
         cout << "Error: The automaton has no transitions." << endl;
         exit(20);
     }
-
 }
 
 

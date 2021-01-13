@@ -13,7 +13,7 @@ else()
     #add_compile_options(-Wall)
 endif()
 add_compile_options(-O2)
-include_directories(.)
+include_directories(Scripts)
 link_libraries(stdc++fs)
 include_directories(DynamicCores)
 project("treewidzard")
@@ -95,8 +95,8 @@ add_executable(
 		#Search/BFS/BreadthFirstSearch.cpp
 		#Search/RelabeledLeveledSetSearch.h
 		#Search/RelabeledLeveledSetSearch.cpp
-		 Search/BFS/RelabeledBreadthFirstSearch.h
-		 Search/BFS/RelabeledBreadthFirstSearch.cpp
+		#Search/BFS/RelabeledBreadthFirstSearch.h
+		#Search/BFS/RelabeledBreadthFirstSearch.cpp
 	# Parser files
 		# Command Parser
 		Controller/Parser/command_parser.hpp
@@ -140,5 +140,4 @@ add_executable(
 target_link_libraries(treewidzard ${CMAKE_DL_LIBS})
 
 execute_process (
-		COMMAND bash -c "${CMAKE_CURRENT_SOURCE_DIR}/./plugins.sh"
-)
+		COMMAND bash -c "${CMAKE_CURRENT_SOURCE_DIR}/Scripts/./plugins.sh")

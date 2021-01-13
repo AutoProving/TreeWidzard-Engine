@@ -3,8 +3,8 @@
 #ifndef RANDOMLEVELEDSETSEARCHPREMISE_H
 #define RANDOMLEVELEDSETSEARCHPREMISE_H
 
-#include "../Kernel/SearchStrategy.h"
-#include "../Kernel/StateTree.h"
+#include "../../Kernel/SearchStrategy.h"
+#include "../../Kernel/StateTree.h"
 #include <math.h>
 
 class RandomLeveledSetSearchPremise: public SearchStrategy{

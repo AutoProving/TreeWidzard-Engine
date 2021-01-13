@@ -1,6 +1,8 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 #include "BreadthFirstSearch.h"
 
+#include <utility>
+
 extern "C" {
     BreadthFirstSearch * create() {
         return new BreadthFirstSearch();
@@ -21,8 +23,68 @@ BreadthFirstSearch::BreadthFirstSearch(DynamicKernel *dynamicKernel, Conjecture 
     addAttribute("SearchName","BreadthFirstSearch");
 }
 
+
+AbstractTreeDecomposition BreadthFirstSearch::extractCounterExampleTerm(State::ptr state) {
+    AbstractTreeDecomposition atd;
+    shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> rootNode;
+    rootNode = bfsDAG.retrieveTermAcyclicAutomaton(state);
+    atd.setRoot(rootNode);
+    return atd;
+}
+
+StateTree BreadthFirstSearch::extractCounterExampleStateTree(State::ptr state) {
+    StateTree stateTree;
+    shared_ptr<StateTreeNode> root(new StateTreeNode());
+    shared_ptr<DynamicKernel> sharedKernel = make_shared<DynamicKernel>(*kernel);
+    root->set_kernel(sharedKernel);
+    extractCounterExampleStateTreeNode(state,root);
+    stateTree.root = root;
+    return stateTree;
+}
+
+void BreadthFirstSearch::extractCounterExampleStateTreeNode(State::ptr state, shared_ptr<StateTreeNode> node) {
+    //Assumes that the automaton is acyclic and that each state has a transition in which the state is the consequent
+    if (!bfsDAG.getTransitions().empty()){
+        AbstractTreeDecompositionNodeContent a;
+        a.setSymbol(a.smallestContent()); //Creates a symbol of type TermNodeContent and set it to the smallest symbol
+        vector<State::ptr> emptyAntecedents;
+        Transition<State::ptr,AbstractTreeDecompositionNodeContent> t(state,a,emptyAntecedents); // This is the smallest transition with a consequent equal to state
+        auto it = bfsDAG.getTransitions().upper_bound(t);
+        if(it != bfsDAG.getTransitions().begin()){
+            it--; // This is always defined, since the transition set is non-empty
+        }
+        auto itAux = it;
+        if ( itAux->getConsequentState() != state){
+            itAux++;
+            if(itAux != bfsDAG.getTransitions().end()){
+                if (itAux->getConsequentState() != state){
+                    cout << "Error: No transition with consequent equal to the input state.";
+                    exit(20);
+                }
+            }else{
+                cout << "Error: No transition with consequent equal to the input state.";
+                exit(20);
+            }
+        }
+        node->set_nodeType(itAux->getTransitionContent().getSymbol());
+        node->set_S(state);
+        vector<shared_ptr<StateTreeNode>> children;
+        for (int i = 0; i < itAux->getAntecedentStates().size(); i++){
+            shared_ptr<StateTreeNode> child(new StateTreeNode);
+            child->set_parent(node);
+            child->set_kernel(node->get_kernel());
+            children.push_back(child);
+            extractCounterExampleStateTreeNode(itAux->getAntecedentStates()[i],child);
+        }
+        node->set_children(children);
+    } else {
+        cout << "Error: The automaton has no transitions." << endl;
+        exit(20);
+    }
+}
+
+
 void BreadthFirstSearch::search(){
-	TreeAutomaton<State::ptr,AbstractTreeDecompositionNodeContent> bfsDAG; // Constructs a DAG corresponding to the BFS.
 	State::ptr initialState = kernel->initialState();
 	allStatesSet.insert(initialState); //TODO define InitialSearchState
 	newStatesSet.insert(initialState);
@@ -148,13 +210,11 @@ void BreadthFirstSearch::search(){
 		for(auto it = newStatesSet.begin(); it!=newStatesSet.end(); it++){
 		    if(!conjecture->evaluateConjectureOnState(**it,kernel)){
                 cout<<"BAD STATE:"<<endl;
+                State::ptr state = *it;
                 (**it).print();
                 bfsDAG.addFinalState(*it);
                 cout<<"-----------------Term Print---------------------"<<endl;
-                AbstractTreeDecomposition atd;
-                shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> rootNode;
-                rootNode = bfsDAG.retrieveTermAcyclicAutomaton(*it);
-                atd.setRoot(rootNode);
+                AbstractTreeDecomposition atd  = extractCounterExampleTerm(state);
                 cout<<"=======ABSTRACT TREE========="<<endl;
                 atd.printTermNodes();
                 atd.writeToFile(this->getPropertyFilePath());
@@ -162,8 +222,7 @@ void BreadthFirstSearch::search(){
                 cout<<"=======Concrete TREE========="<<endl;
                 ctd.printTree();
                 ctd.writeToFileConcreteTD(this->getPropertyFilePath());
-                shared_ptr<DynamicKernel> sharedKernel = make_shared<DynamicKernel>(*kernel);
-                StateTree stateTree = ctd.convertToStateTree(sharedKernel);
+                StateTree stateTree = extractCounterExampleStateTree(state);
                 if(flags->get("StateTree")==1){
                     cout<<"=======STATE TREE========="<<endl;
                     stateTree.printStateTree();
@@ -189,3 +248,4 @@ void BreadthFirstSearch::search(){
 	}
     cout<<"Finish"<<endl;
 }
+
