@@ -1,4 +1,4 @@
-path_width 3
+path_width 4
 a := HasMultipleEdges
 b := MaxDegree > 3
 c := MinDegree < 3

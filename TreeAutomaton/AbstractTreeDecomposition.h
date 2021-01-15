@@ -22,6 +22,8 @@ public:
 
     AbstractTreeDecompositionNodeContent(const AbstractTreeDecompositionNodeContent &abstractTreeDecompositionNodeContent);
 
+    AbstractTreeDecompositionNodeContent& operator=(const AbstractTreeDecompositionNodeContent & other);
+
     bool operator<(const AbstractTreeDecompositionNodeContent &rhs) const;
 
     bool operator>(const AbstractTreeDecompositionNodeContent &rhs) const;

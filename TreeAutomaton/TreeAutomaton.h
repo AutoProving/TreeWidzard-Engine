@@ -6,67 +6,9 @@
 #include<memory>
 #include<set>
 #include "Term.h"
+#include "RunTree.h"
 using namespace std;
 
-template<class StateType, class TermNodeContent>
-class RunNodeContent{
-private:
-    TermNodeContent runNodeContent;
-    StateType state;
-public:
-    TermNodeContent getRunNodeContent() const {
-        return runNodeContent;
-    }
-
-    void setRunNodeContent(TermNodeContent runNodeContent) {
-        RunNodeContent::runNodeContent = runNodeContent;
-    }
-
-    StateType getState() const {
-        return state;
-    }
-
-    void setState(StateType state) {
-        RunNodeContent::state = state;
-    }
-
-    bool operator==(const RunNodeContent &rhs) const {
-        return runNodeContent == rhs.runNodeContent &&
-               state == rhs.state;
-    }
-
-    bool operator!=(const RunNodeContent &rhs) const {
-        return !(rhs == *this);
-    }
-
-    bool operator<(const RunNodeContent &rhs) const {
-        if (runNodeContent < rhs.runNodeContent)
-            return true;
-        if (rhs.runNodeContent < runNodeContent)
-            return false;
-        return state < rhs.state;
-    }
-
-    bool operator>(const RunNodeContent &rhs) const {
-        return rhs < *this;
-    }
-
-    bool operator<=(const RunNodeContent &rhs) const {
-        return !(rhs < *this);
-    }
-
-    bool operator>=(const RunNodeContent &rhs) const {
-        return !(*this < rhs);
-    }
-
-    void print() {
-        cout<<"Term Node Content:"<<endl;
-        runNodeContent.print();
-        cout<<"State:"<<endl;
-        state.print();
-    }
-
-};
 
 template<class StateType, class TermNodeContent>
 class Transition{
@@ -257,9 +199,9 @@ public:
     //////////////////////////////////////////////////////////////////////////////////////////
     // The next two functions are meant to return a run that reaches the state "state"
     // A run is just a term where the symbol at each position is a pair of an "alphabet symbol" and a "state"
-    void retrieveRunNodeAcyclicAutomaton(StateType state, shared_ptr<TermNode<RunNodeContent<TermNodeContent, StateType> > > node);
+    void retrieveRunNodeAcyclicAutomaton(StateType state, shared_ptr<TermNode<RunNodeContent<StateType,TermNodeContent> > > node);
     //Recovers the root node of a term that reaches state. Assumes that the automaton is acyclic, and that the language of each state is non-empty.
-    Term<RunNodeContent<TermNodeContent,StateType> > retrieveRunAcyclicAutomaton(StateType state);
+    RunTree<StateType,TermNodeContent> retrieveRunAcyclicAutomaton(StateType state);
     //Recovers a term that reaches state. Assumes that the automaton is acyclic, and that the language of each state is non-empty.
 
 //    // print functions
@@ -337,6 +279,63 @@ shared_ptr<TermNode<TermNodeContent>> TreeAutomaton<StateType,TermNodeContent>::
     root->setParent(nullptr);
     retrieveTermNodeAcyclicAutomaton(state,root);
     return root;
+}
+
+template<class StateType, class TermNodeContent>
+void TreeAutomaton<StateType, TermNodeContent>::retrieveRunNodeAcyclicAutomaton(StateType state,
+                                                                                    shared_ptr<TermNode<RunNodeContent<StateType,TermNodeContent>>> node) {
+//Assumes that the automaton is acyclic and that each state has a transition in which the state is the consequent
+    if (!transitions.empty()){
+        TermNodeContent a;
+        a.setSymbol(a.smallestContent()); //Creates a symbol of type TermNodeContent and set it to the smallest symbol
+        vector<StateType> emptyAntecedents;
+        Transition<StateType,TermNodeContent> t(state,a,emptyAntecedents); // This is the smallest transition with a consequent equal to state
+        auto it = transitions.upper_bound(t);
+        if(it != transitions.begin()){
+            it--; // This is always defined, since the transition set is non-empty
+        }
+        auto itAux = it;
+        if ( itAux->getConsequentState() != state){
+            itAux++;
+            if(itAux != transitions.end()){
+                if (itAux->getConsequentState() != state){
+                    cout << "Error: No transition with consequent equal to the input state.";
+                    exit(20);
+                }
+            }else{
+                cout << "Error: No transition with consequent equal to the input state.";
+                exit(20);
+            }
+        }
+        RunNodeContent<StateType,TermNodeContent> runNode;
+        runNode.setState(state);
+        runNode.setRunNodeContent(itAux->getTransitionContent());
+        node->setNodeContent(runNode);
+
+        vector<shared_ptr<TermNode<RunNodeContent<StateType,TermNodeContent> > >> children;
+        for (int i = 0; i < itAux->getAntecedentStates().size(); i++){
+            shared_ptr<TermNode<RunNodeContent<StateType,TermNodeContent>>>
+                    child(new TermNode<RunNodeContent<StateType,TermNodeContent>> );
+            child->setParent(node);
+            children.push_back(child);
+            retrieveRunNodeAcyclicAutomaton(itAux->getAntecedentStates()[i],child);
+        }
+        node->setChildren(children);
+    } else {
+        cout << "Error: The automaton has no transitions." << endl;
+        exit(20);
+    }
+
+}
+
+template<class StateType, class TermNodeContent>
+RunTree<StateType,TermNodeContent>
+TreeAutomaton<StateType, TermNodeContent>::retrieveRunAcyclicAutomaton(StateType state) {
+    shared_ptr<TermNode<RunNodeContent<StateType,TermNodeContent>>> root(new TermNode<RunNodeContent<StateType,TermNodeContent>>);
+    retrieveRunNodeAcyclicAutomaton(state,root);
+    RunTree<StateType,TermNodeContent> runTree;
+    runTree.setRoot(root);
+    return runTree;
 }
 
 

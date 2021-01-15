@@ -40,6 +40,9 @@ class State : private std::enable_shared_from_this<State> {
         void print(){
 		    pointer->print();
 		}
+		string stateInformation(){
+            return pointer->stateInformation();
+		}
     };
 	ptr get_ptr() { return ptr(this->shared_from_this()); }
 

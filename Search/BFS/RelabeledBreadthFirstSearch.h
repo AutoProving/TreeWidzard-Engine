@@ -32,8 +32,9 @@ class RelabeledBreadthFirstSearch : public SearchStrategy {
     map<unsigned ,unsigned > initialPermutation(unsigned k); // Returns the identity map with domain {1,...,k}
     bool nextPermutation(map<unsigned ,unsigned > &m);
     void testPermutationGeneration(unsigned k);
-
-
+    void convertRelabeledRunNode(shared_ptr<TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent> >> relabeledNode,
+                                 shared_ptr<TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent>>> node, vector<unsigned > &v);
+    RunTree<State::ptr,AbstractTreeDecompositionNodeContent> convertRelabeledRunTree(State::ptr state);
 };
 
 #endif // CURRENT_RelabeledBREADTHFIRSTSEARCH_H

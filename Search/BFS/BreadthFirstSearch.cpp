@@ -86,7 +86,7 @@ void BreadthFirstSearch::extractCounterExampleStateTreeNode(State::ptr state, sh
 
 void BreadthFirstSearch::search(){
 	State::ptr initialState = kernel->initialState();
-	allStatesSet.insert(initialState); //TODO define InitialSearchState
+	allStatesSet.insert(initialState);
 	newStatesSet.insert(initialState);
     bfsDAG.addState(initialState);
     AbstractTreeDecompositionNodeContent initialTransitionContent("Leaf");
@@ -222,10 +222,12 @@ void BreadthFirstSearch::search(){
                 cout<<"=======Concrete TREE========="<<endl;
                 ctd.printTree();
                 ctd.writeToFileConcreteTD(this->getPropertyFilePath());
+                RunTree<State::ptr,AbstractTreeDecompositionNodeContent> runTree = extractCounterExampleRun(state);
+                runTree.writeToFile(this->getPropertyFilePath());
                 StateTree stateTree = extractCounterExampleStateTree(state);
                 if(flags->get("StateTree")==1){
-                    cout<<"=======STATE TREE========="<<endl;
-                    stateTree.printStateTree();
+                    cout<<"-----------------Run Tree-----------------------"<<endl;
+                    runTree.printTermNodes();
                 }
                 stateTree.writeToFile(this->getPropertyFilePath());
                 cout << "\n ------------------Constructing Counter Example Graph-------------------"<< endl;
@@ -247,5 +249,10 @@ void BreadthFirstSearch::search(){
         }
 	}
     cout<<"Finish"<<endl;
+}
+RunTree<State::ptr, AbstractTreeDecompositionNodeContent>
+BreadthFirstSearch::extractCounterExampleRun(State::ptr state) {
+    RunTree<State::ptr,AbstractTreeDecompositionNodeContent> runTree = bfsDAG.retrieveRunAcyclicAutomaton(state);
+    return runTree;
 }
 

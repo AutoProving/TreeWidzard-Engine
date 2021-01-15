@@ -98,7 +98,9 @@ class BreadthFirstSearch : public SearchStrategy {
     void extractCounterExampleStateTreeNode(State::ptr state,shared_ptr<StateTreeNode>);
     StateTree extractCounterExampleStateTree(State::ptr state);
     ///////////////////////////////
-    Term<RunNodeContent<State,AbstractTreeDecompositionNodeContent> > extractCounterExampleRun(State::ptr state, TreeAutomaton<State::ptr,AbstractTreeDecompositionNodeContent>);
+    ////Extract Run Tree///////////
+    void extractCounterExampleRunNode(State::ptr state, shared_ptr<TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent> >> node);
+    RunTree<State::ptr,AbstractTreeDecompositionNodeContent> extractCounterExampleRun(State::ptr state);
     void search();
 };
 

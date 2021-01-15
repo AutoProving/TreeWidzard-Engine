@@ -95,12 +95,12 @@ add_executable(
 		#Search/BFS/BreadthFirstSearch.cpp
 		#Search/RelabeledLeveledSetSearch.h
 		#Search/RelabeledLeveledSetSearch.cpp
-		#Search/BFS/RelabeledBreadthFirstSearch.h
-		#Search/BFS/RelabeledBreadthFirstSearch.cpp
+		Search/BFS/RelabeledBreadthFirstSearch.h
+		Search/BFS/RelabeledBreadthFirstSearch.cpp
 		#Search/BFS/RelabeledBreadthFirstSearch-Old.h
 		#Search/BFS/RelabeledBreadthFirstSearch-Old.cpp
-		Search/BFS/IsomorphismBreadthFirstSearch.h
-		Search/BFS/IsomorphismBreadthFirstSearch.cpp
+		#Search/BFS/IsomorphismBreadthFirstSearch.h
+		#Search/BFS/IsomorphismBreadthFirstSearch.cpp
 	# Parser files
 		# Command Parser
 		Controller/Parser/command_parser.hpp
@@ -140,7 +140,7 @@ add_executable(
 		TreeAutomaton/Term.cpp
 		TreeAutomaton/AbstractTreeDecomposition.h
 		TreeAutomaton/AbstractTreeDecomposition.cpp
-        )
+		TreeAutomaton/RunTree.cpp TreeAutomaton/RunTree.h)
 target_link_libraries(treewidzard ${CMAKE_DL_LIBS})
 
 execute_process (

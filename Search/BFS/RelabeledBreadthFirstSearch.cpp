@@ -178,23 +178,27 @@ void RelabeledBreadthFirstSearch::search(){
                     cout << "=======ABSTRACT TREE=========" << endl;
                     atd.printTermNodes();
                     atd.writeToFile(this->getPropertyFilePath());
-                    ConcreteTreeDecomposition ctd = atd.convertToConcreteTreeDecomposition();
-                    cout << "=======Concrete TREE=========" << endl;
-                    ctd.printTree();
-                    ctd.writeToFileConcreteTD(this->getPropertyFilePath());
-                    shared_ptr<DynamicKernel> sharedKernel = make_shared<DynamicKernel>(*kernel);
-                    StateTree stateTree = ctd.convertToStateTree(sharedKernel);
-                    if (flags->get("StateTree") == 1) {
-                        cout << "=======STATE TREE=========" << endl;
-                        stateTree.printStateTree();
-                    }
-                    stateTree.writeToFile(this->getPropertyFilePath());
+//                    ConcreteTreeDecomposition ctd = atd.convertToConcreteTreeDecomposition();
+//                    cout << "=======Concrete TREE=========" << endl;
+//                    ctd.printTree();
+//                    ctd.writeToFileConcreteTD(this->getPropertyFilePath());
+//                    shared_ptr<DynamicKernel> sharedKernel = make_shared<DynamicKernel>(*kernel);
+//                    StateTree stateTree = ctd.convertToStateTree(sharedKernel);
+//                    if (flags->get("StateTree") == 1) {
+//                        cout << "=======STATE TREE=========" << endl;
+//                        stateTree.printStateTree();
+//                    }
+//                    stateTree.writeToFile(this->getPropertyFilePath());
+                    cout<<"===========Run Tree============"<<endl;
+                    RunTree<State::ptr,AbstractTreeDecompositionNodeContent> runTree = convertRelabeledRunTree(*it);
+                    runTree.writeToFile(this->getPropertyFilePath());
+
                     cout << "\n ------------------Constructing Counter Example Graph-------------------" << endl;
-                    MultiGraph multiGraph = ctd.extractMultiGraph();
-                    multiGraph.printGraph();
-                    multiGraph.printToFile(this->getPropertyFilePath());
-                    multiGraph.convertToGML(this->getPropertyFilePath());
-                    multiGraph.printToFilePACEFormat(this->getPropertyFilePath());
+//                    MultiGraph multiGraph = ctd.extractMultiGraph();
+//                    multiGraph.printGraph();
+//                    multiGraph.printToFile(this->getPropertyFilePath());
+//                    multiGraph.convertToGML(this->getPropertyFilePath());
+//                    multiGraph.printToFilePACEFormat(this->getPropertyFilePath());
                     exit(20);
                 }
             }
@@ -259,3 +263,111 @@ void RelabeledBreadthFirstSearch::testPermutationGeneration(unsigned k) {
         cout<<endl;
     } while (nextPermutation(m));
 }
+
+void RelabeledBreadthFirstSearch::convertRelabeledRunNode(
+        shared_ptr<TermNode<RunNodeContent<State::ptr, AbstractTreeDecompositionNodeContent>>> relabeledNode,
+        shared_ptr<TermNode<RunNodeContent<State::ptr, AbstractTreeDecompositionNodeContent>>> node, vector<unsigned > &v) {
+    cout<<"enter"<<endl;
+    set<unsigned > bagElements = relabeledNode->getNodeContent().getState()->get_bag().get_elements();
+    vector<unsigned > nv;
+    copy(v.begin(),v.end(),back_inserter(nv));
+    cout<<"after copy vec"<<endl;
+    if(relabeledNode->getParent()== nullptr){
+        for(auto item:bagElements){
+            nv.push_back(item);
+        }
+    }else{
+        string parentSymbol = relabeledNode->getParent()->getNodeContent().getRunNodeContent().getSymbol();
+        if(strstr(parentSymbol.c_str(),"IntroVertex_")){
+            nv.pop_back();
+        }else if(strstr(parentSymbol.c_str(),"IntroEdge_")){
+           // nv = v
+        }else if(strstr(parentSymbol.c_str(),"ForgetVertex_")){
+            vector<int > numbers = relabeledNode->getParent()->getNodeContent().getRunNodeContent().extractIntegerWords(parentSymbol);
+            if(numbers.size()==1){
+                unsigned i = numbers[0];
+                nv.insert(nv.begin()+i,v.size()+1);
+            }else{
+                cout<<"Error: RelabeledBreadthFirstSearch::convertRelabeledRunNode extracted numbers are not valid"<<endl;
+                exit(20);
+            }
+        }else if(strstr(parentSymbol.c_str(),"Join")){
+            // nv = v
+        }else{
+            cout<<"Error: RelabeledBreadthFirstSearch::convertRelabeledRunNode node type error!"<<endl;
+            exit(20);
+        }
+    }
+
+    vector<shared_ptr<TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent >>>> children;
+    for(auto& item:relabeledNode->getChildren()){
+        shared_ptr<TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent>>> child(new TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent>> );
+        child->setParent(node);
+        convertRelabeledRunNode(item, child, nv);
+        children.push_back(child);
+    }
+    ///////
+    node->setChildren(children);
+    string relabeledSymbol = relabeledNode->getNodeContent().getRunNodeContent().getSymbol();
+    string symbol;
+    vector<int > numbers = relabeledNode->getNodeContent().getRunNodeContent().extractIntegerWords(relabeledSymbol);
+    if(strstr(relabeledSymbol.c_str(),"IntroVertex_")){
+        if(numbers.size()==1){
+            symbol = "IntroVertex_"+to_string(nv[numbers[0]-1]);
+        }else{
+
+        }
+    }else if(strstr(relabeledSymbol.c_str(),"IntroEdge_")){
+        if(numbers.size()==2){
+            symbol = "IntroEdge_"+to_string(nv[numbers[0]-1])+"_"+to_string(nv[numbers[1]-1]);
+        }else{
+
+        }
+
+    }else if(strstr(relabeledSymbol.c_str(),"ForgetVertex_")){
+        if(numbers.size()==1){
+            symbol = "ForgetVertex_"+to_string(nv[numbers[0]-1]);
+        }else{
+
+        }
+    }else if(strstr(relabeledSymbol.c_str(),"Join")){
+        if(numbers.size()==0){
+            symbol = "Join";
+        }else{
+
+        }
+    }else if(strstr(relabeledSymbol.c_str(),"Leaf")){
+        if(numbers.size()==0){
+            symbol = "Leaf";
+        }else{
+
+        }
+    }else{
+
+    }
+    map<unsigned ,unsigned > m;
+    for(unsigned indx = 0 ; indx < nv.size(); indx++){
+        m.insert(make_pair(indx+1,nv[indx]));
+    }
+    State::ptr originalState = relabeledNode->getNodeContent().getState()->relabel(m);
+    AbstractTreeDecompositionNodeContent absNode(symbol);
+    RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent> runNodeContent(absNode,originalState);
+    node->setNodeContent(runNodeContent);
+}
+
+RunTree<State::ptr, AbstractTreeDecompositionNodeContent>
+RelabeledBreadthFirstSearch::convertRelabeledRunTree(State::ptr state) {
+    RunTree<State::ptr,AbstractTreeDecompositionNodeContent> runTree = bfsDAG.retrieveRunAcyclicAutomaton(state);
+    shared_ptr<TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent>>> originalRoot(new TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent>>);
+    vector<unsigned > v;
+//    set<unsigned > bagElements =  root->getNodeContent().getState()->get_bag().get_elements();
+//    for(auto item:bagElements){
+//        v.push_back(item);
+//    }
+    convertRelabeledRunNode(runTree.getRoot(),originalRoot,v);
+    cout<<"after coدversion"<<endl;
+    RunTree<State::ptr,AbstractTreeDecompositionNodeContent> originalRunTree;
+    originalRunTree.setRoot(originalRoot);
+    return originalRunTree;
+}
+

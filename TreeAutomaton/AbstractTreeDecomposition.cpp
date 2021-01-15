@@ -66,6 +66,7 @@ vector<int> AbstractTreeDecompositionNodeContent::symbolNumbers(string s) const 
     }else if(s.find("IntroEdge") != string::npos) {
 
     }else if(s.find("Join") != string::npos) {
+
     }else{
         cout<<"Error: AbstractTreeDecompositionNodeContent::symbolNumbers, string is not in formal format."<<endl;
         exit(20);
@@ -110,6 +111,12 @@ AbstractTreeDecompositionNodeContent::AbstractTreeDecompositionNodeContent(
 
 string AbstractTreeDecompositionNodeContent::nodeInformation() {
     return symbol;
+}
+
+AbstractTreeDecompositionNodeContent &
+AbstractTreeDecompositionNodeContent::operator=(const AbstractTreeDecompositionNodeContent &other) {
+    setSymbol(other.getSymbol());
+    return *this;
 }
 
 
@@ -179,7 +186,6 @@ void AbstractTreeDecomposition::writeToFile(string fileName) {
     ofstream atdFile (fileName);
     if (atdFile.is_open())
     {
-
         atdFile << termInformation();
         atdFile.close();
     }

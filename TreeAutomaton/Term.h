@@ -25,14 +25,19 @@ public:
 };
 
 template<class TermNodeContent>
-class TermNode : enable_shared_from_this<TermNodeContent> {
+class TermNode{
 private:
     TermNodeContent nodeContent;
     vector<shared_ptr<TermNode<TermNodeContent> > > children;
     shared_ptr<TermNode<TermNodeContent> > parent;
 public:
+    TermNode();
+
+    TermNode(TermNodeContent nodeContent, const vector<shared_ptr<TermNode<TermNodeContent>>> &children,
+             const shared_ptr<TermNode<TermNodeContent>> &parent);
+
     void setNodeContent(TermNodeContent nodeContent) {
-        TermNode::nodeContent = nodeContent;
+        this->nodeContent = nodeContent;
     }
 
     TermNodeContent getNodeContent() const;
@@ -150,6 +155,17 @@ string TermNode<TermNodeContent>::nodeInformation(unsigned int &label) {
     return s;
 }
 
+template<class TermNodeContent>
+TermNode<TermNodeContent>::TermNode() {}
+
+template<class TermNodeContent>
+TermNode<TermNodeContent>::TermNode(TermNodeContent nodeContent,
+                                    const vector<shared_ptr<TermNode<TermNodeContent>>> &children,
+                                    const shared_ptr<TermNode<TermNodeContent>> &parent):nodeContent(nodeContent),
+                                                                                         children(children),
+                                                                                         parent(parent) {}
+
+
 
 template<class TermNodeContent>
 class Term{
@@ -157,7 +173,7 @@ private:
     shared_ptr<TermNode<TermNodeContent> > root= nullptr;
 public:
 
-    const shared_ptr<TermNode<TermNodeContent>> &getRoot() const {
+    shared_ptr<TermNode<TermNodeContent>> &getRoot() {
         return root;
     }
 

@@ -104,7 +104,7 @@ string State::stateInformation() {
     info = bag.bagInformation();
     int i = 1;
     for (auto element : witnessSetVector) {
-        info  = info + "\nCore " +to_string(i) +" WitnessSet \n";
+        info  = info + "\nCore " + to_string(i) +" WitnessSet \n";
         info  = info + element->witnessSetInformation();
         i++;
     }
