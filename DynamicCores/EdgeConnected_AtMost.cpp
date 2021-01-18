@@ -80,7 +80,11 @@ shared_ptr<Witness> EdgeConnected_AtMost_Witness::relabel(map<unsigned int, unsi
         // Relabeling disconnectingEdges
         for(auto e:this->disconnectingEdges){
             if(relabelingMap.count(e.first) and relabelingMap.count(e.second)){
-                relabeledWitness->disconnectingEdges.insert(make_pair(relabelingMap[e.first],relabelingMap[e.second]));
+                if(relabelingMap[e.first]<relabelingMap[e.second]){
+                    relabeledWitness->disconnectingEdges.insert(make_pair(relabelingMap[e.first],relabelingMap[e.second]));
+                }else{
+                    relabeledWitness->disconnectingEdges.insert(make_pair(relabelingMap[e.second],relabelingMap[e.first]));
+                }
             }else{
                 cout<<"Error: EdgeConnected_AtMost_Witness::relabel "<< e.first<< " or "<<e.second<< " is not in the map."<<endl;
                 exit(20);

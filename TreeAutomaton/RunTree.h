@@ -75,7 +75,7 @@ public:
 
     string nodeInformation() override {
         string info;
-        info = runNodeContent.nodeInformation() + "\n"+ state.stateInformation();
+        info = runNodeContent.nodeInformation() +" " + state.stateInformation();
         return info;
     }
 
@@ -99,7 +99,8 @@ template<class StateType, class TermNodeContent>
 class RunTree : public Term<RunNodeContent<StateType,TermNodeContent> >{
 public:
     void writeToFile(string fileName);
-
+    //TODO
+    Term<TermNodeContent> convertRunToTerm(RunTree<StateType,TermNodeContent> runTree);
 };
 
 template<class StateType, class TermNodeContent>

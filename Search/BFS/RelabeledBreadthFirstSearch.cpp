@@ -135,7 +135,7 @@ void RelabeledBreadthFirstSearch::search(){
                     // join new states with past states.
                     for (auto it = allStatesSet[index].begin(); it != allStatesSet[index].end(); it++) {
                         // Testing possibility of joining with each permuted version of "it".
-                        map<unsigned ,unsigned > m = initialPermutation(index);
+                        map<unsigned ,unsigned > m = identityMap(bagElements);
                         do{
                             State::ptr permutedState = (*it)->relabel(m);
                             State::ptr newStatePointer = kernel->join(statePointer, permutedState);
@@ -190,7 +190,7 @@ void RelabeledBreadthFirstSearch::search(){
 //                    }
 //                    stateTree.writeToFile(this->getPropertyFilePath());
                     cout<<"===========Run Tree============"<<endl;
-                    RunTree<State::ptr,AbstractTreeDecompositionNodeContent> runTree = convertRelabeledRunTree(*it);
+                    RunTree<State::ptr,AbstractTreeDecompositionNodeContent> runTree = extractRunTree(*it);
                     runTree.writeToFile(this->getPropertyFilePath());
 
                     cout << "\n ------------------Constructing Counter Example Graph-------------------" << endl;
@@ -228,146 +228,237 @@ map<unsigned, unsigned> RelabeledBreadthFirstSearch::relabeledMapGenerator(set<u
     return map;
 }
 
-map<unsigned int, unsigned int> RelabeledBreadthFirstSearch::initialPermutation(unsigned int k) {
+map<unsigned int, unsigned int> RelabeledBreadthFirstSearch::identityMap(unsigned int k) {
     map<unsigned , unsigned > m;
     for(unsigned index = 1; index <= k ; index++){
         m.insert(make_pair(index,index));
     }
     return m;
 }
-
-bool RelabeledBreadthFirstSearch::nextPermutation(map<unsigned int, unsigned int> &m) {
-    vector<unsigned > vec;
-    vec.resize(m.size());
-    for(auto item:m){
-        vec[item.first-1] = item.second;
+map<unsigned int, unsigned int> RelabeledBreadthFirstSearch::identityMap(set<unsigned > bagSet) {
+    map<unsigned , unsigned > m;
+    for(auto item:bagSet){
+        m.insert(make_pair(item,item));
     }
-    if(!next_permutation(vec.begin(),vec.end())){
+    return m;
+}
+
+
+bool RelabeledBreadthFirstSearch::nextPermutation(map<unsigned int, unsigned int> &permutation) {
+    vector<unsigned > indexToValue;
+    indexToValue.resize(permutation.size());
+    unsigned counter = 0;
+    for(auto item:permutation){
+        indexToValue[counter] = item.second;
+        counter++;
+    }
+    if(!next_permutation(indexToValue.begin(),indexToValue.end())){
         return false;
     }else{
-        unsigned index = 1;
-        for(auto& item:m){
-            item.second = vec[index-1];
+        unsigned index= 0;
+        for(auto& item:permutation){
+            item.second = indexToValue[index];
             index++;
         }
         return true;
     }
 }
 
-void RelabeledBreadthFirstSearch::testPermutationGeneration(unsigned k) {
-    map<unsigned ,unsigned > m = initialPermutation(k);
-    do{
+void RelabeledBreadthFirstSearch::extractRunTreeNode(
+        shared_ptr<TermNode<RunNodeContent<State::ptr, AbstractTreeDecompositionNodeContent>>> wrongRunNode,
+        shared_ptr<TermNode<RunNodeContent<State::ptr, AbstractTreeDecompositionNodeContent>>> correctedRunNode,
+        map<unsigned ,unsigned > &m) {
+    string wrongSymbol = wrongRunNode->getNodeContent().getRunNodeContent().getSymbol();
+    cout<<wrongSymbol<<endl;
+    if(strstr(wrongSymbol.c_str(),"Leaf")){
+           if(m.empty()){
+               State::ptr correctedState = wrongRunNode->getNodeContent().getState();
+               AbstractTreeDecompositionNodeContent abs("Leaf");
+               RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent> correctedRunNodeContent(abs,correctedState);
+               correctedRunNode->setNodeContent(correctedRunNodeContent);
+
+           }else{
+               cout<<"Error: In Empty node, map is not valid. "<<endl;
+               exit(20);
+           }
+    }else if(strstr(wrongSymbol.c_str(),"IntroVertex")){
         for(auto item:m){
-            cout<<item.first<<"->"<< item.second<<"  ";
+            cout<<item.first<<"->"<<item.second<<" ,";
         }
         cout<<endl;
-    } while (nextPermutation(m));
-}
-
-void RelabeledBreadthFirstSearch::convertRelabeledRunNode(
-        shared_ptr<TermNode<RunNodeContent<State::ptr, AbstractTreeDecompositionNodeContent>>> relabeledNode,
-        shared_ptr<TermNode<RunNodeContent<State::ptr, AbstractTreeDecompositionNodeContent>>> node, vector<unsigned > &v) {
-    cout<<"enter"<<endl;
-    set<unsigned > bagElements = relabeledNode->getNodeContent().getState()->get_bag().get_elements();
-    vector<unsigned > nv;
-    copy(v.begin(),v.end(),back_inserter(nv));
-    cout<<"after copy vec"<<endl;
-    if(relabeledNode->getParent()== nullptr){
-        for(auto item:bagElements){
-            nv.push_back(item);
-        }
-    }else{
-        string parentSymbol = relabeledNode->getParent()->getNodeContent().getRunNodeContent().getSymbol();
-        if(strstr(parentSymbol.c_str(),"IntroVertex_")){
-            nv.pop_back();
-        }else if(strstr(parentSymbol.c_str(),"IntroEdge_")){
-           // nv = v
-        }else if(strstr(parentSymbol.c_str(),"ForgetVertex_")){
-            vector<int > numbers = relabeledNode->getParent()->getNodeContent().getRunNodeContent().extractIntegerWords(parentSymbol);
-            if(numbers.size()==1){
-                unsigned i = numbers[0];
-                nv.insert(nv.begin()+i,v.size()+1);
-            }else{
-                cout<<"Error: RelabeledBreadthFirstSearch::convertRelabeledRunNode extracted numbers are not valid"<<endl;
-                exit(20);
-            }
-        }else if(strstr(parentSymbol.c_str(),"Join")){
-            // nv = v
+        State::ptr correctedState = wrongRunNode->getNodeContent().getState()->relabel(m);
+        AbstractTreeDecompositionNodeContent abs;
+        vector<int> numbers = abs.extractIntegerWords(wrongSymbol); // Extract the integers inside the string.
+        if(numbers.size()==1){
+            abs.setSymbol("IntroVertex_"+to_string(m[numbers[0]]));
         }else{
-            cout<<"Error: RelabeledBreadthFirstSearch::convertRelabeledRunNode node type error!"<<endl;
+            cout<<"Error: in IntroVertex numbers is not valid."<<endl;
             exit(20);
         }
-    }
-
-    vector<shared_ptr<TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent >>>> children;
-    for(auto& item:relabeledNode->getChildren()){
-        shared_ptr<TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent>>> child(new TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent>> );
-        child->setParent(node);
-        convertRelabeledRunNode(item, child, nv);
+        cout<<"new symbol -----> "<<abs.getSymbol()<<endl;
+        RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent> correctedRunNodeContent(abs,correctedState);
+        correctedRunNode->setNodeContent(correctedRunNodeContent);
+        m.erase(numbers[0]);
+        cout<<"modified map ==============="<<endl;
+        for(auto item:m){
+            cout<<item.first<<"->"<<item.second<<" ,";
+        }
+        cout<<endl;
+        shared_ptr<TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent> > >
+                child(new TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent>>);
+        child->setParent(correctedRunNode);
+        vector<shared_ptr<TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent> > >> children;
         children.push_back(child);
-    }
-    ///////
-    node->setChildren(children);
-    string relabeledSymbol = relabeledNode->getNodeContent().getRunNodeContent().getSymbol();
-    string symbol;
-    vector<int > numbers = relabeledNode->getNodeContent().getRunNodeContent().extractIntegerWords(relabeledSymbol);
-    if(strstr(relabeledSymbol.c_str(),"IntroVertex_")){
-        if(numbers.size()==1){
-            symbol = "IntroVertex_"+to_string(nv[numbers[0]-1]);
-        }else{
+        correctedRunNode->setChildren(children);
+        extractRunTreeNode(wrongRunNode->getChildren()[0],child,m);
 
+
+    }else if(strstr(wrongSymbol.c_str(),"ForgetVertex")){
+        State::ptr correctedState = wrongRunNode->getNodeContent().getState()->relabel(m);
+
+        for(auto item:m){
+            cout<<item.first<<"->"<<item.second<<" ,";
         }
-    }else if(strstr(relabeledSymbol.c_str(),"IntroEdge_")){
+        cout<<endl;
+        unsigned smallestAvailable = 1;
+        set<unsigned > usedValues;
+        for(auto item:m){
+            usedValues.insert(item.second);
+        }
+        for(auto item:usedValues){
+            if(item!=smallestAvailable){
+                break;
+            }else{
+                smallestAvailable++;
+            }
+        }
+        AbstractTreeDecompositionNodeContent abs;
+        vector<int> numbers = abs.extractIntegerWords(wrongSymbol); // Extract the integers inside the string.
+        auto it = m.find(numbers[0]);
+        if(it!=m.end()){
+           map<unsigned ,unsigned > nm;
+           for(auto item:m){
+               if(item.first >= numbers[0]){
+                   nm.insert(make_pair(item.first+1,item.second));
+               }else{
+                   nm.insert(make_pair(item.first,item.second));
+               }
+           }
+           m = nm;
+        }
+        m.insert(make_pair(numbers[0],smallestAvailable));
+        if(numbers.size()==1){
+            abs.setSymbol("ForgetVertex_"+to_string(m[numbers[0]]));
+        }else{
+            cout<<"Error: in IntroVertex numbers is not valid."<<endl;
+            exit(20);
+        }
+        cout<<"new symbol -----> "<<abs.getSymbol()<<endl;
+        cout<<"modified map==============="<<endl;
+        for(auto item:m){
+            cout<<item.first<<"->"<<item.second<<" ,";
+        }
+        cout<<endl;
+        RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent> correctedRunNodeContent(abs,correctedState);
+        correctedRunNode->setNodeContent(correctedRunNodeContent);
+        shared_ptr<TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent> > >
+                child(new TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent>>);
+        child->setParent(correctedRunNode);
+        vector<shared_ptr<TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent> > >> children;
+        children.push_back(child);
+        correctedRunNode->setChildren(children);
+        extractRunTreeNode(wrongRunNode->getChildren()[0],child,m);
+
+    }else if(strstr(wrongSymbol.c_str(),"IntroEdge")){
+        State::ptr correctedState = wrongRunNode->getNodeContent().getState()->relabel(m);
+
+        for(auto item:m){
+            cout<<item.first<<"->"<<item.second<<" ,";
+        }
+        cout<<endl;
+        AbstractTreeDecompositionNodeContent abs;
+        vector<int> numbers = abs.extractIntegerWords(wrongSymbol); // Extract the integers inside the string.
         if(numbers.size()==2){
-            symbol = "IntroEdge_"+to_string(nv[numbers[0]-1])+"_"+to_string(nv[numbers[1]-1]);
+            abs.setSymbol("IntroEdge_"+to_string(m[numbers[0]])+"_"+to_string(m[numbers[1]]));
         }else{
-
+            cout<<"Error: in IntroEdge numbers is not valid."<<endl;
+            exit(20);
         }
-
-    }else if(strstr(relabeledSymbol.c_str(),"ForgetVertex_")){
-        if(numbers.size()==1){
-            symbol = "ForgetVertex_"+to_string(nv[numbers[0]-1]);
+        cout<<"new symbol -----> "<<abs.getSymbol()<<endl;
+        cout<<"modified map==============="<<endl;
+        for(auto item:m){
+            cout<<item.first<<"->"<<item.second<<" ,";
+        }
+        cout<<endl;
+        RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent> correctedRunNodeContent(abs,correctedState);
+        correctedRunNode->setNodeContent(correctedRunNodeContent);
+        shared_ptr<TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent> > >
+                child(new TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent>>);
+        child->setParent(correctedRunNode);
+        vector<shared_ptr<TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent> > >> children;
+        children.push_back(child);
+        correctedRunNode->setChildren(children);
+        extractRunTreeNode(wrongRunNode->getChildren()[0],child,m);
+    }else if(strstr(wrongSymbol.c_str(),"Join")){
+        State::ptr correctedState = wrongRunNode->getNodeContent().getState()->relabel(m);
+        AbstractTreeDecompositionNodeContent abs;
+        abs.setSymbol("Join");
+        RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent> correctedRunNodeContent(abs,correctedState);
+        correctedRunNode->setNodeContent(correctedRunNodeContent);
+        vector<shared_ptr<TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent> > >> children;
+        // Child 1
+        map<unsigned ,unsigned > m1 = m;
+        shared_ptr<TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent> > >
+                child1(new TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent>>);
+        child1->setParent(correctedRunNode);
+        children.push_back(child1);
+        extractRunTreeNode(wrongRunNode->getChildren()[0],child1,m1);
+        // Child 2
+        map<unsigned ,unsigned > m2 = identityMap(correctedState->get_bag().get_elements());
+        // We need to discover a map that is compatible with the join.
+        State::ptr joinState;
+        bool flag = false;
+        do {
+            map<unsigned ,unsigned > compositionMap; // Changes the domain of the child
+            for(auto item:m){
+                compositionMap.insert(make_pair(item.first,m2[item.second]));
+            }
+            State::ptr state = wrongRunNode->getChildren()[1]->getNodeContent().getState()->relabel(compositionMap);
+            joinState = kernel->join(child1->getNodeContent().getState(),state);
+            if(joinState==correctedState){
+                flag = true;
+                break;
+            }
+        } while (nextPermutation(m2));
+        if(flag){
+            shared_ptr<TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent> > >
+                    child2(new TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent>>);
+            child2->setParent(correctedRunNode);
+            children.push_back(child2);
+            extractRunTreeNode(wrongRunNode->getChildren()[0],child2,m2);
         }else{
-
+            cout<<"Error: join is not valid.";
+            exit(20);
         }
-    }else if(strstr(relabeledSymbol.c_str(),"Join")){
-        if(numbers.size()==0){
-            symbol = "Join";
-        }else{
-
-        }
-    }else if(strstr(relabeledSymbol.c_str(),"Leaf")){
-        if(numbers.size()==0){
-            symbol = "Leaf";
-        }else{
-
-        }
+        correctedRunNode->setChildren(children);
     }else{
-
+        cout<<"Error: Node Type is not valid."<<endl;
+        exit(20);
     }
-    map<unsigned ,unsigned > m;
-    for(unsigned indx = 0 ; indx < nv.size(); indx++){
-        m.insert(make_pair(indx+1,nv[indx]));
-    }
-    State::ptr originalState = relabeledNode->getNodeContent().getState()->relabel(m);
-    AbstractTreeDecompositionNodeContent absNode(symbol);
-    RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent> runNodeContent(absNode,originalState);
-    node->setNodeContent(runNodeContent);
 }
 
 RunTree<State::ptr, AbstractTreeDecompositionNodeContent>
-RelabeledBreadthFirstSearch::convertRelabeledRunTree(State::ptr state) {
-    RunTree<State::ptr,AbstractTreeDecompositionNodeContent> runTree = bfsDAG.retrieveRunAcyclicAutomaton(state);
-    shared_ptr<TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent>>> originalRoot(new TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent>>);
-    vector<unsigned > v;
-//    set<unsigned > bagElements =  root->getNodeContent().getState()->get_bag().get_elements();
-//    for(auto item:bagElements){
-//        v.push_back(item);
-//    }
-    convertRelabeledRunNode(runTree.getRoot(),originalRoot,v);
-    cout<<"after coدversion"<<endl;
-    RunTree<State::ptr,AbstractTreeDecompositionNodeContent> originalRunTree;
-    originalRunTree.setRoot(originalRoot);
-    return originalRunTree;
+RelabeledBreadthFirstSearch::extractRunTree(State::ptr state) {
+    RunTree<State::ptr,AbstractTreeDecompositionNodeContent> wrongRunTree = bfsDAG.retrieveRunAcyclicAutomaton(state);
+    RunTree<State::ptr,AbstractTreeDecompositionNodeContent> correctedRunTree;
+    shared_ptr<TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent>>>
+            correctedRoot(new TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent>>);
+    map<unsigned,unsigned> m = identityMap(state->get_bag().get_elements());
+    extractRunTreeNode(wrongRunTree.getRoot(),correctedRoot,m);
+    correctedRunTree.setRoot(correctedRoot);
+    return correctedRunTree;
 }
+
+
+
 

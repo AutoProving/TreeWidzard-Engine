@@ -56,9 +56,18 @@ shared_ptr<Witness> HasMultipleEdges_Witness::relabel(map<unsigned int, unsigned
         set<pair<unsigned,unsigned>> newEdgeSet;
         for(auto p:this->edgeSet){
             if(relabelingMap.count(p.first) and relabelingMap.count(p.second)){
-                newEdgeSet.insert(make_pair(relabelingMap[p.first],relabelingMap[p.second]));
+                if(relabelingMap[p.first] < relabelingMap[p.second]){
+                    newEdgeSet.insert(make_pair(relabelingMap[p.first],relabelingMap[p.second]));
+                }else{
+                    newEdgeSet.insert(make_pair(relabelingMap[p.second],relabelingMap[p.first]));
+                }
             }else{
                 cout<<"Error: HasMultipleEdges_Witness::relabel "<< p.first <<" or "<< p.second << " is not in the map"<<endl;
+                print();
+                cout<<"\nmap"<<endl;
+                for(auto item:relabelingMap){
+                    cout<<item.first<<"->"<<item.second<<endl;
+                }
                 exit(20);
             }
         }
@@ -161,13 +170,10 @@ WitnessSetPointer HasMultipleEdges_DynamicCore::forget_v(unsigned i, Bag &b, Wit
             w->edgeSet = p->edgeSet;
             set<unsigned> tempBag = b.get_elements();
             for(set<unsigned>::iterator it = tempBag.begin(); it != tempBag.end() ; it++){
-                if(i<*it){
-                    pair<unsigned,unsigned> e = make_pair(i,*it);
-                    w->edgeSet.erase(e);
-                }else if(*it<i){
-                    pair<unsigned,unsigned> e = make_pair(*it,i);
-                    w->edgeSet.erase(e);
-                }
+                pair<unsigned,unsigned> e = make_pair(i,*it);
+                w->edgeSet.erase(e);
+                e = make_pair(*it,i);
+                w->edgeSet.erase(e);
             }
             witnessSet->insert(w);
             return clean(witnessSet);

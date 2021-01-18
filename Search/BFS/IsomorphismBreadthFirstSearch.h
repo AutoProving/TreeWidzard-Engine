@@ -29,11 +29,13 @@ class IsomorphismBreadthFirstSearch : public SearchStrategy {
 	Term<RunNodeContent<State,AbstractTreeDecompositionNodeContent> > extractCounterExampleRun();
     void search();
     map<unsigned ,unsigned > relabeledMapGenerator(set<unsigned > bagElements);
-    map<unsigned ,unsigned > initialPermutation(unsigned k); // Returns the identity map with domain {1,...,k}
+    map<unsigned ,unsigned > identityMap(unsigned k); // Returns the identity map with domain {1,...,k}
+    map<unsigned ,unsigned > identityMap(set<unsigned > bagSet); // Returns the identity map on bagSet.
     bool nextPermutation(map<unsigned ,unsigned > &m);
-    void testPermutationGeneration(unsigned k);
     State::ptr canonicalState(State::ptr state);
-
+    void extractRunTreeNode(shared_ptr<TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent> >> wrongRunNode,
+                            shared_ptr<TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent>>> correctedRunNode, map<unsigned ,unsigned > &m);
+    RunTree<State::ptr,AbstractTreeDecompositionNodeContent> extractRunTree(State::ptr state);
 
 };
 

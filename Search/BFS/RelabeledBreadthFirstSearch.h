@@ -29,12 +29,12 @@ class RelabeledBreadthFirstSearch : public SearchStrategy {
 	Term<RunNodeContent<State,AbstractTreeDecompositionNodeContent> > extractCounterExampleRun();
     void search();
     map<unsigned ,unsigned > relabeledMapGenerator(set<unsigned > bagElements);
-    map<unsigned ,unsigned > initialPermutation(unsigned k); // Returns the identity map with domain {1,...,k}
+    map<unsigned ,unsigned > identityMap(unsigned k); // Returns the identity map with domain {1,...,k}
+    map<unsigned ,unsigned > identityMap(set<unsigned > bagSet); // Returns the identity map on bagSet.
     bool nextPermutation(map<unsigned ,unsigned > &m);
-    void testPermutationGeneration(unsigned k);
-    void convertRelabeledRunNode(shared_ptr<TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent> >> relabeledNode,
-                                 shared_ptr<TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent>>> node, vector<unsigned > &v);
-    RunTree<State::ptr,AbstractTreeDecompositionNodeContent> convertRelabeledRunTree(State::ptr state);
+    void extractRunTreeNode(shared_ptr<TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent> >> relabeledNode,
+                        shared_ptr<TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent>>> node, map<unsigned ,unsigned > &m);
+    RunTree<State::ptr,AbstractTreeDecompositionNodeContent> extractRunTree(State::ptr state);
 };
 
 #endif // CURRENT_RelabeledBREADTHFIRSTSEARCH_H

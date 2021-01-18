@@ -1,7 +1,6 @@
-path_width 2
-a := HasMultipleEdges
-b := MaxDegree > 2
-c := MinDegree < 2
-d := CycleGirth < 4
-e := Connectivity
-NOT a AND e AND NOT b AND NOT c IMPLIES d
+tree_width 4
+b := EdgeConnected < 4
+a := EdgeConnected < 3
+c := MaxDegree > 1
+f := HasMultipleEdges
+c AND NOT f IMPLIES b AND NOT a

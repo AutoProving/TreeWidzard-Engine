@@ -168,11 +168,6 @@ void MaxDegree_AtLeast_DynamicCore::intro_e_implementation(unsigned int i, unsig
     }else{
         MaxDegree_AtLeast_WitnessPointer wPrime = createWitness();
         wPrime->found = true;
-        wPrime->degreeCounter = w->degreeCounter;
-        wPrime->degreeCounter.erase(i);
-        wPrime->degreeCounter.erase(j);
-        wPrime->degreeCounter.insert(make_pair(i,w->degreeCounter.find(i)->second+1));
-        wPrime->degreeCounter.insert(make_pair(j,w->degreeCounter.find(j)->second+1));
         witnessSet->insert(wPrime);
     }
 
@@ -220,6 +215,7 @@ void MaxDegree_AtLeast_DynamicCore::join_implementation(Bag &b, MaxDegree_AtLeas
             witnessSet->insert(wPrime);
         } else {
             wPrime->found = true;
+            wPrime->degreeCounter.clear();
             witnessSet->insert(wPrime);
         }
     }
