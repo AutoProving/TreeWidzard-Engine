@@ -14,7 +14,6 @@
 #include "Conjecture.h"
 #include "StateTree.h"
 
-
 using namespace std;
 namespace concrete_fs = std::experimental::filesystem;
 

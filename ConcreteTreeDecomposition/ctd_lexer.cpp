@@ -764,7 +764,7 @@ char *yytext;
 #line 4 "ctd_lexer.l"
     #include <cstdlib>
     #include <vector>
-    #include "../Kernel/ConcreteTreeDecomposition.h"
+    #include "../TreeAutomaton/ConcreteTreeDecomposition.h"
     #include "ctd_parser.hpp"
     #define yylval ctd_lval
     extern int yyparse(ConcreteTreeDecomposition &ctd, int &result);

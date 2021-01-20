@@ -59,12 +59,10 @@ void ParseController::parse_pace(string graphPath, string decompositionPath) {
     cout<<"--------------------------------------------Concrete decomposition"<<endl;
     shared_ptr<ConcreteTreeDecomposition> concreteTreeDecomposition;
     concreteTreeDecomposition = td.convertToConcreteTreeDecomposition();
-    concreteTreeDecomposition->printTree();
-    shared_ptr<DynamicKernel> sharedKernel = make_shared<DynamicKernel>(inputController->getDynamicKernel());
-    StateTree stateTree = concreteTreeDecomposition->convertToStateTree(sharedKernel);
+    concreteTreeDecomposition->printTermNodes();
+
     cout<<"---------------------------------------------State Tree"<<endl;
-    stateTree.printStateTree();
-    concreteTreeDecomposition->conjectureCheck(inputController->getConjecture());
+    //concreteTreeDecomposition->conjectureCheck(inputController->getConjecture());
     //WitnessTreePACE witnessTreePace;
     //witnessTreePace.stateTreeToWitnessTreePACE(stateTree, inputController->getDynamicKernel());
     //witnessTreePace.print();
@@ -87,12 +85,12 @@ void ParseController::parse_abstract(string abstractPath) {
              << endl;
         exit(20);
     }
-    ctd.printTree();
-    if(!ctd.conjectureCheck(inputController->getConjecture())){
-        shared_ptr<DynamicKernel> sharedKernel = make_shared<DynamicKernel>(inputController->getDynamicKernel());
-        ctd.convertToStateTree(sharedKernel).printStateTree();
-        ctd.extractMultiGraph().printGraph();
-    };
+    ctd.printTermNodes();
+//    if(!ctd.conjectureCheck(inputController->getConjecture())){
+//        shared_ptr<DynamicKernel> sharedKernel = make_shared<DynamicKernel>(inputController->getDynamicKernel());
+//        ctd.convertToStateTree(sharedKernel).printStateTree();
+//        ctd.extractMultiGraph().printGraph();
+//    };
 
 }
 

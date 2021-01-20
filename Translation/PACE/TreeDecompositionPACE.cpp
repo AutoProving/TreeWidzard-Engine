@@ -518,13 +518,14 @@ void TreeDecompositionPACE::construct() {
     updateTD();
 }
 
-void TreeDecompositionPACE::createCTDNode(shared_ptr<CTDNodeNew> cnode, shared_ptr<RawAbstractTreeDecomposition> rnode) {
-    cnode->set_nodeType(rnode->type);
+void TreeDecompositionPACE::createCTDNode(shared_ptr<TermNode<ConcreteNode>> cnode, shared_ptr<RawAbstractTreeDecomposition> rnode) {
+    ConcreteNode concrete;
+    concrete.setSymbol(rnode->type);
+    //cnode->setNodeContent(concrete);
     Bag bag;
     set<unsigned> bag_elements;
     pair<unsigned,unsigned> e_new = make_pair(0,0);
     pair<unsigned,unsigned> e = rnode->bag.get_edge();
-
     for(auto it= rnode->color_to_vertex_map.begin(); it!= rnode->color_to_vertex_map.end();it++){
         bag_elements.insert(it->first);
         if(e.first == it->second){
@@ -535,24 +536,24 @@ void TreeDecompositionPACE::createCTDNode(shared_ptr<CTDNodeNew> cnode, shared_p
     }
     bag.set_elements(bag_elements);
     bag.set_edge(e_new.first,e_new.second);
-    cnode->set_B(bag);
-
-    vector<shared_ptr<CTDNodeNew>> children;
-    for(size_t i=0 ; i<rnode->children.size(); i++){
-        shared_ptr<CTDNodeNew> ctdnode(new CTDNodeNew);
+    concrete.setBag(bag);
+   // cnode->setNodeContent(concrete);
+    vector<shared_ptr<TermNode<ConcreteNode>>> children;
+    for(size_t i=0 ; i < rnode->children.size(); i++){
+        shared_ptr<TermNode<ConcreteNode> > ctdnode(new TermNode<ConcreteNode>);
         createCTDNode(ctdnode, rnode->children[i]);
         children.push_back(ctdnode);
-        ctdnode->set_parent(cnode);
+        ctdnode->setParent(cnode);
     }
-    cnode->set_children(children);
+    cnode->setChildren(children);
 
     if(strstr(rnode->type.c_str(),"IntroEdge_")){
         string type = "IntroEdge_"+to_string(e_new.first)+"_"+to_string(e_new.second);
-        cnode->set_nodeType(type);
+        concrete.setSymbol(type);
     }else if(strstr(rnode->type.c_str(),"IntroVertex_")){
         set<unsigned> set_diff;
-        set<unsigned> elements_node = cnode->get_B().get_elements();
-        set<unsigned> elements_node_child = cnode->get_children()[0]->get_B().get_elements();
+        set<unsigned> elements_node = cnode->getNodeContent().getBag().get_elements();
+        set<unsigned> elements_node_child = cnode->getChildren()[0]->getNodeContent().getBag().get_elements();
         cout<<"i parent ";
         for(auto e:elements_node){
             cout<<e<<",";
@@ -568,11 +569,11 @@ void TreeDecompositionPACE::createCTDNode(shared_ptr<CTDNodeNew> cnode, shared_p
             cout<<"ERORR in TreeDecompositionPACE::createCTDNode, set_diff is not valid"<<endl;
             exit(20);
         }
-        cnode->set_nodeType("IntroVertex_"+to_string(*set_diff.begin()));
+        concrete.setSymbol("IntroVertex_"+to_string(*set_diff.begin()));
     }else if(strstr(rnode->type.c_str(),"ForgetVertex_")){
         set<unsigned> set_diff;
-        set<unsigned> elements_node = cnode->get_B().get_elements();
-        set<unsigned> elements_node_child = cnode->get_children()[0]->get_B().get_elements();
+        set<unsigned> elements_node = cnode->getNodeContent().getBag().get_elements();
+        set<unsigned> elements_node_child = cnode->getChildren()[0]->getNodeContent().getBag().get_elements();
         cout<<"f parent ";
         for(auto e:elements_node){
             cout<<e<<",";
@@ -588,14 +589,15 @@ void TreeDecompositionPACE::createCTDNode(shared_ptr<CTDNodeNew> cnode, shared_p
             cout<<"ERORR in TreeDecompositionPACE::createCTDNode, set_diff is not valid"<<endl;
             exit(20);
         }
-        cnode->set_nodeType("ForgetVertex_"+to_string(*set_diff.begin()));
+        concrete.setSymbol("ForgetVertex_"+to_string(*set_diff.begin()));
     }
+    cnode->setNodeContent(concrete);
 }
 
 shared_ptr<ConcreteTreeDecomposition> TreeDecompositionPACE::convertToConcreteTreeDecomposition() {
     shared_ptr<ConcreteTreeDecomposition> concreteTreeDecomposition(new ConcreteTreeDecomposition);
-    shared_ptr<CTDNodeNew> ctd_root(new CTDNodeNew);
-    concreteTreeDecomposition->root = ctd_root;
+    shared_ptr<TermNode<ConcreteNode> > ctd_root(new TermNode<ConcreteNode>);
+    concreteTreeDecomposition->setRoot(ctd_root);
     createCTDNode(ctd_root, root);
     return concreteTreeDecomposition;
 }

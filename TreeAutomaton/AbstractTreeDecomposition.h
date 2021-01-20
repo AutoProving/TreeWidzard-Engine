@@ -8,12 +8,13 @@
 #include <experimental/filesystem>
 #include "Term.h"
 #include "../Multigraph/MultiGraph.h"
-#include "../Kernel/ConcreteTreeDecomposition.h"
+#include "ConcreteTreeDecomposition.h"
 using namespace std;
 namespace abstract_fs = std::experimental::filesystem;
 
 class AbstractTreeDecompositionNodeContent : public TermNodeContentType {
 private:
+
     string symbol="Leaf";
 public:
     AbstractTreeDecompositionNodeContent();
@@ -55,12 +56,14 @@ public:
     string smallestContent(){
         return "Leaf";
     }
+
 };
 
 class AbstractTreeDecomposition: public Term<AbstractTreeDecompositionNodeContent>{
 public:
+
     void writeToFile(string fileName);
-    shared_ptr<CTDNodeNew> constructCTDNode(TermNode<AbstractTreeDecompositionNodeContent> &node);
+    shared_ptr<TermNode<ConcreteNode>> constructCTDNode(TermNode<AbstractTreeDecompositionNodeContent> &node);
     ConcreteTreeDecomposition convertToConcreteTreeDecomposition();
 };
 

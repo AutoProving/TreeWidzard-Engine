@@ -1,6 +1,3 @@
-tree_width 4
-b := EdgeConnected < 4
-a := EdgeConnected < 3
-c := MaxDegree > 1
-f := HasMultipleEdges
-c AND NOT f IMPLIES b AND NOT a
+path_width 4
+a := MinDegree < 5
+NOT a

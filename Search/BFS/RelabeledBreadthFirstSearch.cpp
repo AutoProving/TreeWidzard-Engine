@@ -170,35 +170,25 @@ void RelabeledBreadthFirstSearch::search(){
                     cout << "BAD STATE:" << endl;
                     (**it).print();
                     bfsDAG.addFinalState(*it);
-                    cout << "-----------------Term Print---------------------" << endl;
-                    AbstractTreeDecomposition atd;
-                    shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> rootNode;
-                    rootNode = bfsDAG.retrieveTermAcyclicAutomaton(*it);
-                    atd.setRoot(rootNode);
-                    cout << "=======ABSTRACT TREE=========" << endl;
-                    atd.printTermNodes();
-                    atd.writeToFile(this->getPropertyFilePath());
-//                    ConcreteTreeDecomposition ctd = atd.convertToConcreteTreeDecomposition();
-//                    cout << "=======Concrete TREE=========" << endl;
-//                    ctd.printTree();
-//                    ctd.writeToFileConcreteTD(this->getPropertyFilePath());
-//                    shared_ptr<DynamicKernel> sharedKernel = make_shared<DynamicKernel>(*kernel);
-//                    StateTree stateTree = ctd.convertToStateTree(sharedKernel);
-//                    if (flags->get("StateTree") == 1) {
-//                        cout << "=======STATE TREE=========" << endl;
-//                        stateTree.printStateTree();
-//                    }
-//                    stateTree.writeToFile(this->getPropertyFilePath());
                     cout<<"===========Run Tree============"<<endl;
                     RunTree<State::ptr,AbstractTreeDecompositionNodeContent> runTree = extractRunTree(*it);
                     runTree.writeToFile(this->getPropertyFilePath());
-
+                    cout << "=======ABSTRACT TREE=========" << endl;
+                    Term<AbstractTreeDecompositionNodeContent>* term = new AbstractTreeDecomposition;
+                    *term = runTree.convertRunToTerm(runTree);
+                    AbstractTreeDecomposition* atd = static_cast<AbstractTreeDecomposition *>(term);
+                    atd->printTermNodes();
+                    atd->writeToFile(this->getPropertyFilePath());
+                    ConcreteTreeDecomposition ctd = atd->convertToConcreteTreeDecomposition();
+                    cout << "=======Concrete TREE=========" << endl;
+                    ctd.printTree();
+                    ctd.writeToFileConcreteTD(this->getPropertyFilePath());
                     cout << "\n ------------------Constructing Counter Example Graph-------------------" << endl;
-//                    MultiGraph multiGraph = ctd.extractMultiGraph();
-//                    multiGraph.printGraph();
-//                    multiGraph.printToFile(this->getPropertyFilePath());
-//                    multiGraph.convertToGML(this->getPropertyFilePath());
-//                    multiGraph.printToFilePACEFormat(this->getPropertyFilePath());
+                    MultiGraph multiGraph = ctd.extractMultiGraph();
+                    multiGraph.printGraph();
+                    multiGraph.printToFile(this->getPropertyFilePath());
+                    multiGraph.convertToGML(this->getPropertyFilePath());
+                    multiGraph.printToFilePACEFormat(this->getPropertyFilePath());
                     exit(20);
                 }
             }

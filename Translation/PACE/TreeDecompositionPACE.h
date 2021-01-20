@@ -5,7 +5,7 @@
 #include <set>
 #include <vector>
 #include "../../Multigraph/MultiGraph.h"
-#include "../../Kernel/ConcreteTreeDecomposition.h"
+#include "../../TreeAutomaton/ConcreteTreeDecomposition.h"
 
 using namespace std;
 typedef set<unsigned> vertex_t;
@@ -67,7 +67,7 @@ class TreeDecompositionPACE {
         bool updateInnerNodeTD(shared_ptr<RawAbstractTreeDecomposition> node, unsigned &number,unsigned parentno);
         bool updateTD();
         void construct();
-        void createCTDNode(shared_ptr<CTDNodeNew> cnode, shared_ptr<RawAbstractTreeDecomposition> rnode);
+        void createCTDNode(shared_ptr<TermNode<ConcreteNode>> cnode, shared_ptr<RawAbstractTreeDecomposition> rnode);
         shared_ptr<ConcreteTreeDecomposition> convertToConcreteTreeDecomposition();
 };
 

@@ -75,8 +75,6 @@ add_executable(
         Kernel/State.h
         Kernel/Width.h
         Kernel/Width.cpp
-        Kernel/ConcreteTreeDecomposition.h
-		Kernel/ConcreteTreeDecomposition.cpp
 		Kernel/StateTree.cpp
 		Kernel/StateTree.h
 		Kernel/DynamicCoreHandler.cpp
@@ -140,7 +138,9 @@ add_executable(
 		TreeAutomaton/Term.cpp
 		TreeAutomaton/AbstractTreeDecomposition.h
 		TreeAutomaton/AbstractTreeDecomposition.cpp
-		TreeAutomaton/RunTree.cpp TreeAutomaton/RunTree.h)
+		TreeAutomaton/RunTree.cpp TreeAutomaton/RunTree.h
+		TreeAutomaton/ConcreteTreeDecomposition.cpp
+		TreeAutomaton/ConcreteTreeDecomposition.h)
 target_link_libraries(treewidzard ${CMAKE_DL_LIBS})
 
 execute_process (

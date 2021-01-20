@@ -2,6 +2,7 @@
 #define TREEWIDZARD_RUNTREE_H
 #include <iostream>
 #include <fstream>
+#include <memory>
 #include <experimental/filesystem>
 #include "Term.h"
 using namespace std;
@@ -100,6 +101,8 @@ class RunTree : public Term<RunNodeContent<StateType,TermNodeContent> >{
 public:
     void writeToFile(string fileName);
     //TODO
+    void convertRunNodeToTermNode(shared_ptr<TermNode<RunNodeContent<StateType, TermNodeContent>>> runNode,
+                                  shared_ptr<TermNode<TermNodeContent>> termNode);
     Term<TermNodeContent> convertRunToTerm(RunTree<StateType,TermNodeContent> runTree);
 };
 
@@ -115,6 +118,30 @@ void RunTree<StateType, TermNodeContent>::writeToFile(string fileName) {
     else {
         cout << "Unable to open "<< fileName << endl;
         exit(20);
+    }
+}
+
+template<class StateType, class TermNodeContent>
+Term<TermNodeContent>
+RunTree<StateType, TermNodeContent>::convertRunToTerm(RunTree<StateType, TermNodeContent> runTree) {
+    Term<TermNodeContent> term;
+    shared_ptr<TermNode<TermNodeContent>> termRoot(new TermNode<TermNodeContent>);
+    convertRunNodeToTermNode(this->getRoot(), termRoot);
+    term.setRoot(termRoot);
+    return term;
+}
+
+template<class StateType, class TermNodeContent>
+void RunTree<StateType, TermNodeContent>::convertRunNodeToTermNode(shared_ptr<TermNode<RunNodeContent<StateType, TermNodeContent>>> runNode,
+                                                                   shared_ptr<TermNode<TermNodeContent>> termNode) {
+    termNode->setNodeContent(runNode->getNodeContent().getRunNodeContent());
+    vector<shared_ptr<TermNode<TermNodeContent>>> children;
+    for(auto item:runNode->getChildren()){
+        shared_ptr<TermNode<TermNodeContent> > termChild(new TermNode<TermNodeContent>);
+        convertRunNodeToTermNode(item,termChild);
+        children.push_back(termChild);
+        termChild->setParent(termNode);
+        termNode->addChild(termChild);
     }
 }
 

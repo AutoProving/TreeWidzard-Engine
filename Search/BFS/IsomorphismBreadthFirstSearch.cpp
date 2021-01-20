@@ -190,35 +190,25 @@ void IsomorphismBreadthFirstSearch::search(){
                     cout << "BAD STATE:" << endl;
                     (**it).print();
                     bfsDAG.addFinalState(*it);
-                    cout << "-----------------Term Print---------------------" << endl;
-                    AbstractTreeDecomposition atd;
-                    shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> rootNode;
-                    rootNode = bfsDAG.retrieveTermAcyclicAutomaton(*it);
-                    atd.setRoot(rootNode);
-                    cout << "=======ABSTRACT TREE=========" << endl;
-                    atd.printTermNodes();
-                    atd.writeToFile(this->getPropertyFilePath());
-//                    ConcreteTreeDecomposition ctd = atd.convertToConcreteTreeDecomposition();
-//                    cout << "=======Concrete TREE=========" << endl;
-//                    ctd.printTree();
-//                    ctd.writeToFileConcreteTD(this->getPropertyFilePath());
-//                    shared_ptr<DynamicKernel> sharedKernel = make_shared<DynamicKernel>(*kernel);
-//                    StateTree stateTree = ctd.convertToStateTree(sharedKernel);
-//                    if (flags->get("StateTree") == 1) {
-//                        cout << "=======STATE TREE=========" << endl;
-//                        stateTree.printStateTree();
-//                    }
-//                    stateTree.writeToFile(this->getPropertyFilePath());
                     cout<<"===========Run Tree============"<<endl;
                     RunTree<State::ptr,AbstractTreeDecompositionNodeContent> runTree = extractRunTree(*it);
                     runTree.writeToFile(this->getPropertyFilePath());
-
+                    cout << "=======ABSTRACT TREE=========" << endl;
+                    Term<AbstractTreeDecompositionNodeContent>* term = new AbstractTreeDecomposition;
+                    *term = runTree.convertRunToTerm(runTree);
+                    AbstractTreeDecomposition* atd = static_cast<AbstractTreeDecomposition *>(term);
+                    atd->printTermNodes();
+                    atd->writeToFile(this->getPropertyFilePath());
+                    ConcreteTreeDecomposition ctd = atd->convertToConcreteTreeDecomposition();
+                    cout << "=======Concrete TREE=========" << endl;
+                    ctd.printTermNodes();
+                   // ctd.writeToFileConcreteTD(this->getPropertyFilePath());
                     cout << "\n ------------------Constructing Counter Example Graph-------------------" << endl;
-//                    MultiGraph multiGraph = ctd.extractMultiGraph();
-//                    multiGraph.printGraph();
-//                    multiGraph.printToFile(this->getPropertyFilePath());
-//                    multiGraph.convertToGML(this->getPropertyFilePath());
-//                    multiGraph.printToFilePACEFormat(this->getPropertyFilePath());
+                    MultiGraph multiGraph = ctd.extractMultiGraph();
+                    multiGraph.printGraph();
+                    multiGraph.printToFile(this->getPropertyFilePath());
+                    multiGraph.convertToGML(this->getPropertyFilePath());
+                    multiGraph.printToFilePACEFormat(this->getPropertyFilePath());
                     exit(20);
                 }
             }
@@ -303,7 +293,17 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
         shared_ptr<TermNode<RunNodeContent<State::ptr, AbstractTreeDecompositionNodeContent>>> correctedRunNode,
         map<unsigned int, unsigned int> &m) {
     string wrongSymbol = wrongRunNode->getNodeContent().getRunNodeContent().getSymbol();
+    ///////////////////////////////////////////////////////
     cout<<wrongSymbol<<endl;
+    cout<<"Input Map"<<endl;
+    for(auto item:m){
+        cout<<item.first<<"->"<<item.second<<" ";
+    }
+    cout<<endl;
+    cout<<"Wrong node"<<endl;
+    wrongRunNode->getNodeContent().getState().print();
+    cout<<endl;
+    //////////////////////////////////////////////////////
     if(strstr(wrongSymbol.c_str(),"Leaf")){
         if(m.empty()){
             State::ptr correctedState = wrongRunNode->getNodeContent().getState();
@@ -316,17 +316,12 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
             exit(20);
         }
     }else if(strstr(wrongSymbol.c_str(),"IntroVertex")){
-        cout<<"THE MAP INTROOOO"<<endl;
-        for(auto item:m){
-            cout<<item.first<<"->"<<item.second<<" ";
-        }
-        cout<<endl;
         State::ptr correctedState = wrongRunNode->getNodeContent().getState()->relabel(m);
+        /////////////////////////////////////////////////////////////////////
         cout<<"corrected state"<<endl;
         correctedState.print();
         cout<<endl;
-        wrongRunNode->getChildren()[0]->getNodeContent().getState().print();
-        cout<<endl;
+        /////////////////////////////////////////////////////////////////////
         cout<<"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"<<endl;
         // discovers IntroducedVertex and child's map;
         set<unsigned > setElements = correctedState->get_bag().get_elements();
@@ -343,6 +338,7 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
 //                    break;
 //                }
 //            }
+
             map<unsigned ,unsigned > initialChildMap;
             bool afterV = false;
             for(auto item:m){
@@ -360,22 +356,21 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
                 for(auto item:initialChildMap){
                     compositionMap.insert(make_pair(item.first,testMap[item.second]));
                 }
-                cout<<"THE MAP"<<endl;
-                for(auto item:compositionMap){
-                    cout<<item.first<<"->"<<item.second<<" ";
-                }
-                cout<<endl;
                 State::ptr childState = wrongRunNode->getChildren()[0]->getNodeContent().getState()->relabel(compositionMap);
                 State::ptr testState = kernel->intro_v(childState,v);
-
-                cout<<"child state"<<endl;
-                childState.print();
-                cout<<endl;
-                cout<<"test state"<<endl;
-                testState.print();
-                cout<<endl;
-                cout<<"#####################################"<<endl;
                 if(testState == correctedState){
+                    cout<<"child state"<<endl;
+                    childState.print();
+                    cout<<endl;
+                    cout<<"test state"<<endl;
+                    testState.print();
+                    cout<<endl;
+                    cout<<"THE MAP"<<endl;
+                    for(auto item:compositionMap){
+                        cout<<item.first<<"->"<<item.second<<" ";
+                    }
+                    cout<<"#####################################"<<endl;
+                    ///////////////////////////////////////////////////////
                     introducedVertex = v;
                     childMap = compositionMap;
                     breakFor = true;
@@ -407,6 +402,12 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
 
     }else if(strstr(wrongSymbol.c_str(),"ForgetVertex")){
         State::ptr correctedState = wrongRunNode->getNodeContent().getState()->relabel(m);
+        /////////////////////////////////////////////////////////////////////
+        cout<<"corrected state"<<endl;
+        correctedState.print();
+        cout<<endl;
+        /////////////////////////////////////////////////////////////////////
+        cout<<"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"<<endl;
         // discovers ForgottenVertex and child's map;
         set<unsigned > setElements = correctedState->get_bag().get_elements();
         unsigned forgottenVertex = 0;
@@ -424,8 +425,7 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
             childDomain.insert(v);
             map<unsigned ,unsigned > initialChildMap = m;
             // add v to initialChildMap
-           initialChildMap.insert(make_pair(m.size()+1,v));
-
+            initialChildMap.insert(make_pair(m.size()+1,v));
 
             map<unsigned ,unsigned > testMap  = identityMap(childDomain);
             do {
@@ -436,6 +436,18 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
                 State::ptr childState = wrongRunNode->getChildren()[0]->getNodeContent().getState()->relabel(compositionMap);
                 State::ptr testState = kernel->forget_v(childState,v);
                 if(testState == correctedState){
+                    cout<<"child state"<<endl;
+                    childState.print();
+                    cout<<endl;
+                    cout<<"test state"<<endl;
+                    testState.print();
+                    cout<<endl;
+                    cout<<"THE MAP"<<endl;
+                    for(auto item:compositionMap){
+                        cout<<item.first<<"->"<<item.second<<" ";
+                    }
+                    cout<<"#####################################"<<endl;
+                    ///////////////////////////////////////////////////////
                     forgottenVertex = v;
                     childMap = compositionMap;
                     breakFor = true;
@@ -458,18 +470,7 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
         correctedRunNode->setChildren(children);
         extractRunTreeNode(wrongRunNode->getChildren()[0],child,childMap);
     }else if(strstr(wrongSymbol.c_str(),"IntroEdge")){
-        cout<<"THE MAP INTROOOO"<<endl;
-        for(auto item:m){
-            cout<<item.first<<"->"<<item.second<<" ";
-        }
-        cout<<endl;
         State::ptr correctedState = wrongRunNode->getNodeContent().getState()->relabel(m);
-        cout<<"corrected state"<<endl;
-        correctedState.print();
-        cout<<endl;
-        wrongRunNode->getChildren()[0]->getNodeContent().getState().print();
-        cout<<endl;
-        cout<<"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"<<endl;
         // discovers IntroducedEdge and child's map;
         set<unsigned > setElements = correctedState->get_bag().get_elements();
         unsigned e_i = 0;
@@ -488,20 +489,8 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
                     for(auto item:initialChildMap){
                         compositionMap.insert(make_pair(item.first,testMap[item.second]));
                     }
-                    cout<<"THE MAP"<<endl;
-                    for(auto item:compositionMap){
-                        cout<<item.first<<"->"<<item.second<<" ";
-                    }
-                    cout<<endl;
                     State::ptr childState = wrongRunNode->getChildren()[0]->getNodeContent().getState()->relabel(compositionMap);
                     State::ptr testState = kernel->intro_e(childState,*it,*itr);
-                    cout<<"child state"<<endl;
-                    childState.print();
-                    cout<<endl;
-                    cout<<"test state"<<endl;
-                    testState.print();
-                    cout<<endl;
-                    cout<<"#####################################"<<endl;
                     if(testState == correctedState){
                         e_i=*it;
                         e_j=*itr;
@@ -538,7 +527,6 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
     }else if(strstr(wrongSymbol.c_str(),"Join")){
         State::ptr correctedState = wrongRunNode->getNodeContent().getState()->relabel(m);
         set<unsigned > setElements = correctedState->get_bag().get_elements();
-
         AbstractTreeDecompositionNodeContent abs;
         abs.setSymbol("Join");
         RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent> correctedRunNodeContent(abs,correctedState);
@@ -569,12 +557,11 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
                 State::ptr childState2 = wrongRunNode->getChildren()[1]->getNodeContent().getState()->relabel(compositionMap2);
                 State::ptr testState = kernel->join(childState1,childState2);
                 if(correctedState == testState){
-                    childMap1 = testMap1;
-                    childMap2 =testMap2;
+                    childMap1 = compositionMap1;
+                    childMap2 = compositionMap2;
                     checkContinue = true;
                     break;
                 }
-
             } while (nextPermutation(testMap2));
             if(checkContinue){
                 break;

@@ -1,8 +1,9 @@
-/* A Bison parser, made by GNU Bison 3.0.4.  */
+/* A Bison parser, made by GNU Bison 3.5.1.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2020 Free Software Foundation,
+   Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,6 +31,9 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
+/* Undocumented macros, especially those whose name start with YY_,
+   are private implementation details.  Do not rely on them.  */
+
 #ifndef YY_CTD_CTD_PARSER_HPP_INCLUDED
 # define YY_CTD_CTD_PARSER_HPP_INCLUDED
 /* Debug traces.  */
@@ -48,16 +52,16 @@
 extern int ctd_debug;
 #endif
 /* "%code requires" blocks.  */
-#line 3 "ctd_parser.y" /* yacc.c:1909  */
+#line 3 "ctd_parser.y"
 
-    #include "../Kernel/ConcreteTreeDecomposition.h"
+    #include "../TreeAutomaton/ConcreteTreeDecomposition.h"
     #include <iostream>
     #include <vector>
     #include <memory>
     #include <set>
     #include <tuple>
 
-#line 61 "ctd_parser.hpp" /* yacc.c:1909  */
+#line 65 "ctd_parser.hpp"
 
 /* Token type.  */
 #ifndef CTD_TOKENTYPE
@@ -81,17 +85,16 @@ extern int ctd_debug;
 
 /* Value type.  */
 #if ! defined CTD_STYPE && ! defined CTD_STYPE_IS_DECLARED
-
 union CTD_STYPE
 {
-#line 33 "ctd_parser.y" /* yacc.c:1909  */
+#line 36 "ctd_parser.y"
 
      unsigned number;
      char* string;
 
-#line 93 "ctd_parser.hpp" /* yacc.c:1909  */
-};
+#line 96 "ctd_parser.hpp"
 
+};
 typedef union CTD_STYPE CTD_STYPE;
 # define CTD_STYPE_IS_TRIVIAL 1
 # define CTD_STYPE_IS_DECLARED 1
