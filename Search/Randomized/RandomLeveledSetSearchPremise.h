@@ -4,7 +4,8 @@
 #define RANDOMLEVELEDSETSEARCHPREMISE_H
 
 #include "../../Kernel/SearchStrategy.h"
-#include "../../Kernel/StateTree.h"
+#include "../../TreeAutomaton/ConcreteTreeDecomposition.h"
+#include "../../TreeAutomaton/AbstractTreeDecomposition.h"
 #include <math.h>
 
 class RandomLeveledSetSearchPremise: public SearchStrategy{
@@ -19,10 +20,10 @@ class RandomLeveledSetSearchPremise: public SearchStrategy{
         RandomLeveledSetSearchPremise(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags);
         static unsigned bagSetToNumber(set<unsigned> bagSet,unsigned width);
         void search();
-        shared_ptr<CTDNodeNew> extractCTDNode(unsigned index);
+        shared_ptr<TermNode<ConcreteNode>> extractCTDNode(unsigned index);
         ConcreteTreeDecomposition extractCTDDecomposition();
-        shared_ptr<StateTreeNode> extractStateTreeNode(unsigned index);
-        StateTree extractStateTreeDecomposition();
+//        shared_ptr<StateTreeNode> extractStateTreeNode(unsigned index);
+//        StateTree extractStateTreeDecomposition();
 
 };
 

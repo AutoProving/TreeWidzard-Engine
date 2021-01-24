@@ -1,7 +1,6 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 #include "LeveledSetSearchPremise.h"
 
-
 extern "C" {
     LeveledSetSearchPremise * create() {
         return new LeveledSetSearchPremise();
@@ -37,99 +36,123 @@ unsigned LeveledSetSearchPremise::bagSetToNumber(set<unsigned> bagSet,unsigned w
     }
     return number;
 }
-shared_ptr<CTDNodeNew> LeveledSetSearchPremise::extractCTDNode(unsigned level,State::ptr s,
-        vector<vector<set<State::ptr> > > &leveledSetAllStates ){
-    unsigned w  = this->kernel->get_width().get_value();
-    shared_ptr<CTDNodeNew>  node (new CTDNodeNew());
-    node->set_B(s->get_bag());
-    node->set_parent(nullptr);
-    if (level == 0){
+shared_ptr<TermNode<ConcreteNode> > LeveledSetSearchPremise::extractCTDNode(
+        unsigned level, State::ptr s,
+        vector<vector<set<State::ptr> > > &leveledSetAllStates) {
+    unsigned w = this->kernel->get_width().get_value();
+    shared_ptr<TermNode<ConcreteNode>> node(new TermNode<ConcreteNode> );
+    ConcreteNode concrete;
+    concrete.setBag(s->get_bag());
+    node->setNodeContent(concrete);
+    //symbol
+    node->setParent(nullptr);
+    if (level == 0) {
         // nodeType is already "Empty" by default
         // children is also empty by Default
         return node;
-    }else{
+    } else {
         set<unsigned> bagElements = s->get_bag().get_elements();
-        int bagNumber = bagSetToNumber(bagElements,kernel->get_width().get_value());
-        //IntroVertex
-        for (auto element=bagElements.begin(); element != bagElements.end(); element++){
+        int bagNumber =
+                bagSetToNumber(bagElements, kernel->get_width().get_value());
+        // IntroVertex
+        for (auto element = bagElements.begin(); element != bagElements.end();
+             element++) {
             set<unsigned> bagElementsPrime = bagElements;
             bagElementsPrime.erase(*element);
-            unsigned bagNumberPrime = bagSetToNumber(bagElementsPrime,w);
-            for (auto it = leveledSetAllStates[level-1][bagNumberPrime].begin(); it != leveledSetAllStates[level-1][bagNumberPrime].end(); it++){
+            unsigned bagNumberPrime = bagSetToNumber(bagElementsPrime, w);
+            for (auto it =
+                    leveledSetAllStates[level - 1][bagNumberPrime].begin();
+                 it != leveledSetAllStates[level - 1][bagNumberPrime].end();
+                 it++) {
                 State::ptr sprime = *it;
-                if (*s == *(kernel->intro_v(sprime,*element))){
-                    //this means that s is obtained from sprime by introudcing vertex *element
-                    shared_ptr<CTDNodeNew> child = extractCTDNode(level-1,sprime, leveledSetAllStates);
-                    child->set_parent(node);
-                    vector<shared_ptr<CTDNodeNew> > children;
-                    children.push_back(child);
-                    node->set_children(children);
-                    node->set_nodeType("IntroVertex_" + to_string(*element));
+                if (*s == *(kernel->intro_v(sprime, *element))) {
+                    // this means that s is obtained from sprime by introudcing
+                    // vertex *element
+                    shared_ptr<TermNode<ConcreteNode> > child =
+                            extractCTDNode(level - 1, sprime, leveledSetAllStates);
+                    child->setParent(node);
+                    node->addChild(child);
+                    concrete.setSymbol("IntroVertex_" + to_string(*element));
+                    node->setNodeContent(concrete);
                     return node;
                 }
             }
         }
 
-        //IntroEdge
-        pair<unsigned,unsigned> edge =  s->get_bag().get_edge();
-        if ((edge.first !=0) and (edge.second != 0)){
-            for (auto it = leveledSetAllStates[level-1][bagNumber].begin(); it != leveledSetAllStates[level-1][bagNumber].end(); it++){
+        // IntroEdge
+        pair<unsigned, unsigned> edge = s->get_bag().get_edge();
+        if ((edge.first != 0) and (edge.second != 0)) {
+            for (auto it = leveledSetAllStates[level - 1][bagNumber].begin();
+                 it != leveledSetAllStates[level - 1][bagNumber].end(); it++) {
                 State::ptr sprime = *it;
-                if (*s == *kernel->intro_e(sprime,edge.first, edge.second)){
-                    //this means that s is obained from sprime by introudcing vertex *element
-                    shared_ptr<CTDNodeNew> child = extractCTDNode(level-1,sprime, leveledSetAllStates);
-                    child->set_parent(node);
-                    vector<shared_ptr<CTDNodeNew> > children;
-                    children.push_back(child);
-                    node->set_children(children);
-                    node->set_nodeType("IntroEdge_" + to_string(edge.first) + "_" + to_string(edge.second));
+                if (*s == *kernel->intro_e(sprime, edge.first, edge.second)) {
+                    // this means that s is obained from sprime by introudcing
+                    // vertex *element
+                    shared_ptr<TermNode<ConcreteNode> > child =
+                            extractCTDNode(level - 1, sprime, leveledSetAllStates);
+                    child->setParent(node);
+                    node->addChild(child);
+                    concrete.setSymbol("IntroEdge_" + to_string(edge.first) +
+                                       "_" + to_string(edge.second));
+                    node->setNodeContent(concrete);
                     return node;
                 }
             }
         }
 
-        //ForgetVertex
+        // ForgetVertex
         set<unsigned> allElements;
-        for (size_t x = 1; x<= kernel->get_width().get_value(); x++){
+        for (size_t x = 1; x <= kernel->get_width().get_value(); x++) {
             allElements.insert(x);
         }
         set<unsigned> remainingElements;
-        set_difference(allElements.begin(),allElements.end(),bagElements.begin(),bagElements.end(),inserter(remainingElements,remainingElements.begin()));
-        for (auto element=remainingElements.begin(); element != remainingElements.end(); element++){
+        set_difference(allElements.begin(), allElements.end(),
+                       bagElements.begin(), bagElements.end(),
+                       inserter(remainingElements, remainingElements.begin()));
+        for (auto element = remainingElements.begin();
+             element != remainingElements.end(); element++) {
             set<unsigned> bagElementsPrime = bagElements;
             bagElementsPrime.insert(*element);
-            unsigned bagNumberPrime = bagSetToNumber(bagElementsPrime,kernel->get_width().get_value());
-            for (auto it = leveledSetAllStates[level-1][bagNumberPrime].begin(); it != leveledSetAllStates[level-1][bagNumberPrime].end(); it++){
+            unsigned bagNumberPrime = bagSetToNumber(
+                    bagElementsPrime, kernel->get_width().get_value());
+            for (auto it =
+                    leveledSetAllStates[level - 1][bagNumberPrime].begin();
+                 it != leveledSetAllStates[level - 1][bagNumberPrime].end();
+                 it++) {
                 State::ptr sprime = *it;
-                if (*s == *kernel->forget_v(sprime,*element)){
-                    //this means that s is obained from sprime by introudcing vertex *element
-                    shared_ptr<CTDNodeNew>  child = extractCTDNode(level-1,sprime, leveledSetAllStates);
-                    child->set_parent(node);
-                    vector<shared_ptr<CTDNodeNew> > children;
-                    children.push_back(child);
-                    node->set_children(children);
-                    node->set_nodeType("ForgetVertex_" + to_string(*element));
+                if (*s == *kernel->forget_v(sprime, *element)) {
+                    // this means that s is obained from sprime by introudcing
+                    // vertex *element
+                    shared_ptr<TermNode<ConcreteNode> > child =
+                            extractCTDNode(level - 1, sprime, leveledSetAllStates);
+                    child->setParent(node);
+                    node->addChild(child);
+                    concrete.setSymbol("ForgetVertex_" + to_string(*element));
+                    node->setNodeContent(concrete);
                     return node;
                 }
             }
         }
-        //Join
-        for (auto it1 = leveledSetAllStates[level-1][bagNumber].begin(); it1 != leveledSetAllStates[level-1][bagNumber].end(); it1++){
+        // Join
+        for (auto it1 = leveledSetAllStates[level - 1][bagNumber].begin(); it1 != leveledSetAllStates[level - 1][bagNumber].end(); it1++) {
             State::ptr sprime1 = *it1;
-            for (unsigned j = level -1; j>=0; j--){
-                for (auto it2 = leveledSetAllStates[j][bagNumber].begin(); it2 != leveledSetAllStates[j][bagNumber].end(); it2++){
+            for (unsigned j = level - 1; j >= 0; j--) {
+                for (auto it2 = leveledSetAllStates[j][bagNumber].begin();
+                     it2 != leveledSetAllStates[j][bagNumber].end(); it2++) {
                     State::ptr sprime2 = *it2;
-                    if (*s == *kernel->join(sprime1,sprime2)){
-                        //this means that s is obained from sprime by introudcing vertex *element
-                        shared_ptr<CTDNodeNew> child1 = extractCTDNode(level-1,sprime1, leveledSetAllStates);
-                        shared_ptr<CTDNodeNew> child2 = extractCTDNode(j,sprime2, leveledSetAllStates);
-                        child1->set_parent(node);
-                        child2->set_parent(node);
-                        vector<shared_ptr<CTDNodeNew> > children;
-                        children.push_back(child1);
-                        children.push_back(child2);
-                        node->set_children(children);
-                        node->set_nodeType("Join");
+                    if (*s == *kernel->join(sprime1, sprime2)) {
+                        // this means that s is obained from sprime by
+                        // introudcing vertex *element
+                        shared_ptr<TermNode<ConcreteNode> > child1 = extractCTDNode(
+                                level - 1, sprime1, leveledSetAllStates);
+                        shared_ptr<TermNode<ConcreteNode > > child2 =
+                                extractCTDNode(j, sprime2, leveledSetAllStates);
+                        child1->setParent(node);
+                        child2->setParent(node);
+                        node->addChild(child1);
+                        node->addChild(child2);
+                        concrete.setSymbol("Join");
+                        node->setNodeContent(concrete);
                         return node;
                     }
                 }
@@ -138,137 +161,140 @@ shared_ptr<CTDNodeNew> LeveledSetSearchPremise::extractCTDNode(unsigned level,St
     }
 }
 
-ConcreteTreeDecomposition LeveledSetSearchPremise::extractCTDDecomposition(unsigned level, State::ptr s, vector<vector<set<State::ptr>>> &leveledSetAllStates){
+ConcreteTreeDecomposition LeveledSetSearchPremise::extractCTDDecomposition(
+        unsigned level, State::ptr s,
+        vector<vector<set<State::ptr> > > &leveledSetAllStates) {
     ConcreteTreeDecomposition T;
-    T.root = extractCTDNode(level,s,leveledSetAllStates);
+    shared_ptr<TermNode<ConcreteNode> > root = extractCTDNode(level, s, leveledSetAllStates);
+    T.setRoot(root);
     return T;
 }
 
-shared_ptr<StateTreeNode> LeveledSetSearchPremise::extractStateTreeNode(unsigned level, State::ptr s, vector<vector<set<State::ptr>>> &leveledSetAllStates, bool tree_width){
-    unsigned w  = this->kernel->get_width().get_value();
-    shared_ptr<StateTreeNode>  node (new StateTreeNode());
-    node->set_S(s);
-    shared_ptr<DynamicKernel> spkernel(kernel);
-    node->set_kernel(spkernel);
-    node->set_parent(nullptr);
-    if (level == 0){
-       
-
-        // nodeType is already "Empty" by default
-        // children is also empty by Default
-        return node;
-    }else{
-        set<unsigned> bagElements = s->get_bag().get_elements();
-        unsigned bagNumber = bagSetToNumber(bagElements,w);
-        //IntroVertex
-        for (auto element=bagElements.begin(); element != bagElements.end(); element++){
-            set<unsigned> bagElementsPrime = bagElements;
-            bagElementsPrime.erase(*element);
-            unsigned bagNumberPrime = bagSetToNumber(bagElementsPrime,w);
-            for (auto it = leveledSetAllStates[level-1][bagNumberPrime].begin(); it != leveledSetAllStates[level-1][bagNumberPrime].end(); it++){
-                State::ptr sprime = *it;
-
-                State::ptr temp = kernel->intro_v(sprime,*element);
-                if (*s == *temp){
-                    //this means that s is obtained from sprime by introudcing vertex *element
-                    shared_ptr<StateTreeNode> child = extractStateTreeNode(level-1,sprime, leveledSetAllStates,tree_width);
-                    child->set_parent(node);
-                    vector<shared_ptr<StateTreeNode> > children;
-                    children.push_back(child);
-                    node->set_children(children);
-                    node->set_nodeType("IntroVertex_" + to_string(*element));
-                    return node;
-                
-                }
-            }
-        }
-
-        //IntroEdge
-        pair<int,int> edge =  s->get_bag().get_edge();
-        if ((edge.first !=0) and (edge.second != 0)){
-            for (auto it = leveledSetAllStates[level-1][bagNumber].begin(); it != leveledSetAllStates[level-1][bagNumber].end(); it++){
-                State::ptr sprime = *it;
-                State::ptr temp = kernel->intro_e(sprime,edge.first, edge.second);
-                if (*s == *temp){
-                    //this means that s is obained from sprime by introudcing vertex *element
-                    shared_ptr<StateTreeNode> child = extractStateTreeNode(level-1,sprime, leveledSetAllStates, tree_width);
-                    child->set_parent(node);
-                    vector<shared_ptr<StateTreeNode> > children;
-                    children.push_back(child);
-                    node->set_children(children);
-                    node->set_nodeType("IntroEdge_" + to_string(edge.first) + "_" + to_string(edge.second));
-                    return node;
-                
-                }
-
-            }
-        }
-        
-
-        //ForgetVertex
-        set<unsigned> allElements;
-        for (size_t x = 1; x<= kernel->get_width().get_value(); x++){
-            allElements.insert(x);
-        }
-        set<unsigned> remainingElements;
-        set_difference(allElements.begin(),allElements.end(),bagElements.begin(),bagElements.end(),inserter(remainingElements,remainingElements.begin()));
-        for (auto element=remainingElements.begin(); element != remainingElements.end(); element++){
-            set<unsigned> bagElementsPrime = bagElements;
-            bagElementsPrime.insert(*element);
-            unsigned bagNumberPrime = bagSetToNumber(bagElementsPrime,kernel->get_width().get_value());
-            for (auto it = leveledSetAllStates[level-1][bagNumberPrime].begin(); it != leveledSetAllStates[level-1][bagNumberPrime].end(); it++){
-                State::ptr sprime = *it;
-                State::ptr temp = kernel->forget_v(sprime,*element);
-                if (*s == *temp){
-                    //this means that s is obained from sprime by introudcing vertex *element
-                    shared_ptr<StateTreeNode>  child = extractStateTreeNode(level-1,sprime, leveledSetAllStates, tree_width);
-                    child->set_parent(node);
-                    vector<shared_ptr<StateTreeNode> > children;
-                    children.push_back(child);
-                    node->set_children(children);
-                    node->set_nodeType("ForgetVertex_" + to_string(*element));
-                    return node;
-                }
-            }
-        }
-
-        //Join
-        if(tree_width){
-            for (auto it1 = leveledSetAllStates[level-1][bagNumber].begin(); it1 != leveledSetAllStates[level-1][bagNumber].end(); it1++){
-                State::ptr sprime1 = *it1;
-                for (unsigned j = level -1; j>=0; j--){
-                    for (auto it2 = leveledSetAllStates[j][bagNumber].begin(); it2 != leveledSetAllStates[j][bagNumber].end(); it2++){
-                        State::ptr sprime2 = *it2;
-                        State::ptr temp = kernel->join(sprime1,sprime2);
-                        if (*s == *temp){
-                            //this means that s is obained from sprime by introudcing vertex *element
-                            shared_ptr<StateTreeNode> child1 = extractStateTreeNode(level-1,sprime1, leveledSetAllStates,tree_width);
-                            shared_ptr<StateTreeNode> child2 = extractStateTreeNode(j,sprime2, leveledSetAllStates, tree_width);
-                            child1->set_parent(node);
-                            child2->set_parent(node);
-                            vector<shared_ptr<StateTreeNode> > children;
-                            children.push_back(child1);
-                            children.push_back(child2);
-                            node->set_children(children);
-                            node->set_nodeType("Join");
-                            return node;
-                        }
-                    }
-                }
-            }
-        }
-      
-    }
-    cout<<"In extract state tree node function no nodes found!"<<endl;
-    exit(20);
-
-}
-
-StateTree LeveledSetSearchPremise::extractStateTreeDecomposition(unsigned level, State::ptr s, vector<vector<set<State::ptr> > > &leveledSetAllStates, bool tree_width){
-    StateTree stateTree;
-    stateTree.root = extractStateTreeNode(level, s, leveledSetAllStates, tree_width);
-    return stateTree;
-}
+//shared_ptr<StateTreeNode> LeveledSetSearchPremise::extractStateTreeNode(unsigned level, State::ptr s, vector<vector<set<State::ptr>>> &leveledSetAllStates, bool tree_width){
+//    unsigned w  = this->kernel->get_width().get_value();
+//    shared_ptr<StateTreeNode>  node (new StateTreeNode());
+//    node->set_S(s);
+//    shared_ptr<DynamicKernel> spkernel(kernel);
+//    node->set_kernel(spkernel);
+//    node->set_parent(nullptr);
+//    if (level == 0){
+//
+//
+//        // nodeType is already "Empty" by default
+//        // children is also empty by Default
+//        return node;
+//    }else{
+//        set<unsigned> bagElements = s->get_bag().get_elements();
+//        unsigned bagNumber = bagSetToNumber(bagElements,w);
+//        //IntroVertex
+//        for (auto element=bagElements.begin(); element != bagElements.end(); element++){
+//            set<unsigned> bagElementsPrime = bagElements;
+//            bagElementsPrime.erase(*element);
+//            unsigned bagNumberPrime = bagSetToNumber(bagElementsPrime,w);
+//            for (auto it = leveledSetAllStates[level-1][bagNumberPrime].begin(); it != leveledSetAllStates[level-1][bagNumberPrime].end(); it++){
+//                State::ptr sprime = *it;
+//
+//                State::ptr temp = kernel->intro_v(sprime,*element);
+//                if (*s == *temp){
+//                    //this means that s is obtained from sprime by introudcing vertex *element
+//                    shared_ptr<StateTreeNode> child = extractStateTreeNode(level-1,sprime, leveledSetAllStates,tree_width);
+//                    child->set_parent(node);
+//                    vector<shared_ptr<StateTreeNode> > children;
+//                    children.push_back(child);
+//                    node->set_children(children);
+//                    node->set_nodeType("IntroVertex_" + to_string(*element));
+//                    return node;
+//
+//                }
+//            }
+//        }
+//
+//        //IntroEdge
+//        pair<int,int> edge =  s->get_bag().get_edge();
+//        if ((edge.first !=0) and (edge.second != 0)){
+//            for (auto it = leveledSetAllStates[level-1][bagNumber].begin(); it != leveledSetAllStates[level-1][bagNumber].end(); it++){
+//                State::ptr sprime = *it;
+//                State::ptr temp = kernel->intro_e(sprime,edge.first, edge.second);
+//                if (*s == *temp){
+//                    //this means that s is obained from sprime by introudcing vertex *element
+//                    shared_ptr<StateTreeNode> child = extractStateTreeNode(level-1,sprime, leveledSetAllStates, tree_width);
+//                    child->set_parent(node);
+//                    vector<shared_ptr<StateTreeNode> > children;
+//                    children.push_back(child);
+//                    node->set_children(children);
+//                    node->set_nodeType("IntroEdge_" + to_string(edge.first) + "_" + to_string(edge.second));
+//                    return node;
+//
+//                }
+//
+//            }
+//        }
+//
+//
+//        //ForgetVertex
+//        set<unsigned> allElements;
+//        for (size_t x = 1; x<= kernel->get_width().get_value(); x++){
+//            allElements.insert(x);
+//        }
+//        set<unsigned> remainingElements;
+//        set_difference(allElements.begin(),allElements.end(),bagElements.begin(),bagElements.end(),inserter(remainingElements,remainingElements.begin()));
+//        for (auto element=remainingElements.begin(); element != remainingElements.end(); element++){
+//            set<unsigned> bagElementsPrime = bagElements;
+//            bagElementsPrime.insert(*element);
+//            unsigned bagNumberPrime = bagSetToNumber(bagElementsPrime,kernel->get_width().get_value());
+//            for (auto it = leveledSetAllStates[level-1][bagNumberPrime].begin(); it != leveledSetAllStates[level-1][bagNumberPrime].end(); it++){
+//                State::ptr sprime = *it;
+//                State::ptr temp = kernel->forget_v(sprime,*element);
+//                if (*s == *temp){
+//                    //this means that s is obained from sprime by introudcing vertex *element
+//                    shared_ptr<StateTreeNode>  child = extractStateTreeNode(level-1,sprime, leveledSetAllStates, tree_width);
+//                    child->set_parent(node);
+//                    vector<shared_ptr<StateTreeNode> > children;
+//                    children.push_back(child);
+//                    node->set_children(children);
+//                    node->set_nodeType("ForgetVertex_" + to_string(*element));
+//                    return node;
+//                }
+//            }
+//        }
+//
+//        //Join
+//        if(tree_width){
+//            for (auto it1 = leveledSetAllStates[level-1][bagNumber].begin(); it1 != leveledSetAllStates[level-1][bagNumber].end(); it1++){
+//                State::ptr sprime1 = *it1;
+//                for (unsigned j = level -1; j>=0; j--){
+//                    for (auto it2 = leveledSetAllStates[j][bagNumber].begin(); it2 != leveledSetAllStates[j][bagNumber].end(); it2++){
+//                        State::ptr sprime2 = *it2;
+//                        State::ptr temp = kernel->join(sprime1,sprime2);
+//                        if (*s == *temp){
+//                            //this means that s is obained from sprime by introudcing vertex *element
+//                            shared_ptr<StateTreeNode> child1 = extractStateTreeNode(level-1,sprime1, leveledSetAllStates,tree_width);
+//                            shared_ptr<StateTreeNode> child2 = extractStateTreeNode(j,sprime2, leveledSetAllStates, tree_width);
+//                            child1->set_parent(node);
+//                            child2->set_parent(node);
+//                            vector<shared_ptr<StateTreeNode> > children;
+//                            children.push_back(child1);
+//                            children.push_back(child2);
+//                            node->set_children(children);
+//                            node->set_nodeType("Join");
+//                            return node;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//    }
+//    cout<<"In extract state tree node function no nodes found!"<<endl;
+//    exit(20);
+//
+//}
+//
+//StateTree LeveledSetSearchPremise::extractStateTreeDecomposition(unsigned level, State::ptr s, vector<vector<set<State::ptr> > > &leveledSetAllStates, bool tree_width){
+//    StateTree stateTree;
+//    stateTree.root = extractStateTreeNode(level, s, leveledSetAllStates, tree_width);
+//    return stateTree;
+//}
 
 void LeveledSetSearchPremise::search(){
 
@@ -458,19 +484,11 @@ void LeveledSetSearchPremise::search(){
                     }
                     ConcreteTreeDecomposition T = extractCTDDecomposition(iterationNumber + 1, *it,leveledSetAllStates);
                     cout<<"=======ABSTRACT TREE========="<<endl;
-                    T.printAbstract();
+                    AbstractTreeDecomposition abstractTreeDecomposition = T.convertToAbstractTreeDecomposition();
+                    abstractTreeDecomposition.writeToFile(this->getPropertyFilePath());
                     cout<<"=======Concrete TREE========="<<endl;
-                    T.printTree();
-                    T.writeToFileAbstractTD(this->getPropertyFilePath());
-                    T.writeToFileConcreteTD(this->getPropertyFilePath());
-                    shared_ptr<DynamicKernel> sharedKernel = make_shared<DynamicKernel>(*kernel);
-                    StateTree stateTree = T.convertToStateTree(sharedKernel);
-                    if(flags->get("StateTree")==1){
-                        cout<<"=======STATE TREE========="<<endl;
-                        stateTree.printStateTree();
-                    }
-                    stateTree.writeToFile(this->getPropertyFilePath());
-                    //
+                    T.printTermNodes();
+
                     cout << "\n ------------------Constructing Counter Example Graph-------------------"<< endl;
                     MultiGraph multiGraph = T.extractMultiGraph();
                     multiGraph.printGraph();

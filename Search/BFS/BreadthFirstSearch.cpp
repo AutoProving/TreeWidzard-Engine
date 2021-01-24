@@ -218,18 +218,16 @@ void BreadthFirstSearch::search(){
                 cout<<"=======ABSTRACT TREE========="<<endl;
                 atd.printTermNodes();
                 atd.writeToFile(this->getPropertyFilePath());
-                ConcreteTreeDecomposition ctd = atd.convertToConcreteTreeDecomposition();
                 cout<<"=======Concrete TREE========="<<endl;
-                ctd.printTree();
-                ctd.writeToFileConcreteTD(this->getPropertyFilePath());
+                ConcreteTreeDecomposition ctd = atd.convertToConcreteTreeDecomposition();
+                ctd.printTermNodes();
+            //    ctd.writeToFileConcreteTD(this->getPropertyFilePath());
                 RunTree<State::ptr,AbstractTreeDecompositionNodeContent> runTree = extractCounterExampleRun(state);
                 runTree.writeToFile(this->getPropertyFilePath());
-                StateTree stateTree = extractCounterExampleStateTree(state);
                 if(flags->get("StateTree")==1){
-                    cout<<"-----------------Run Tree-----------------------"<<endl;
+                    cout << "=======Concrete TREE=========" << endl;
                     runTree.printTermNodes();
                 }
-                stateTree.writeToFile(this->getPropertyFilePath());
                 cout << "\n ------------------Constructing Counter Example Graph-------------------"<< endl;
                 MultiGraph multiGraph = ctd.extractMultiGraph();
                 multiGraph.printGraph();

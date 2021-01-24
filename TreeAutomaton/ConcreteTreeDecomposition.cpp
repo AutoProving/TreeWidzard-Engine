@@ -1,8 +1,7 @@
-//
-// Created by farhad on 20.01.2021.
-//
+// Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 
 #include "ConcreteTreeDecomposition.h"
+#include "AbstractTreeDecomposition.h"
 
 const Bag &ConcreteNode::getBag() const {
     return bag;
@@ -146,4 +145,9 @@ void ConcreteTreeDecomposition::traverseNode(TermNode<ConcreteNode> &node, Multi
                      nVertices, nEdges);
     }
 
+}
+
+AbstractTreeDecomposition ConcreteTreeDecomposition::convertToAbstractTreeDecomposition() {
+    AbstractTreeDecomposition abstractTreeDecomposition;
+    return abstractTreeDecomposition;
 }

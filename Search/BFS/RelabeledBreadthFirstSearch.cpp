@@ -170,9 +170,13 @@ void RelabeledBreadthFirstSearch::search(){
                     cout << "BAD STATE:" << endl;
                     (**it).print();
                     bfsDAG.addFinalState(*it);
-                    cout<<"===========Run Tree============"<<endl;
+
                     RunTree<State::ptr,AbstractTreeDecompositionNodeContent> runTree = extractRunTree(*it);
                     runTree.writeToFile(this->getPropertyFilePath());
+                    if(flags->get("StateTree")==1){
+                        cout<<"===========Run Tree============"<<endl;
+                        runTree.printTermNodes();
+                    }
                     cout << "=======ABSTRACT TREE=========" << endl;
                     Term<AbstractTreeDecompositionNodeContent>* term = new AbstractTreeDecomposition;
                     *term = runTree.convertRunToTerm(runTree);
@@ -181,14 +185,17 @@ void RelabeledBreadthFirstSearch::search(){
                     atd->writeToFile(this->getPropertyFilePath());
                     ConcreteTreeDecomposition ctd = atd->convertToConcreteTreeDecomposition();
                     cout << "=======Concrete TREE=========" << endl;
-                    ctd.printTree();
-                    ctd.writeToFileConcreteTD(this->getPropertyFilePath());
+                    ctd.printTermNodes();
+                    // ctd.writeToFileConcreteTD(this->getPropertyFilePath());
+
                     cout << "\n ------------------Constructing Counter Example Graph-------------------" << endl;
                     MultiGraph multiGraph = ctd.extractMultiGraph();
                     multiGraph.printGraph();
                     multiGraph.printToFile(this->getPropertyFilePath());
                     multiGraph.convertToGML(this->getPropertyFilePath());
                     multiGraph.printToFilePACEFormat(this->getPropertyFilePath());
+
+
                     exit(20);
                 }
             }

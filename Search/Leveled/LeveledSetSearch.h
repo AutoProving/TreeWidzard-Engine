@@ -2,9 +2,9 @@
 #ifndef CURRENT_LEVELEDSETSEARCH_H
 #define CURRENT_LEVELEDSETSEARCH_H
 #include <math.h>
-#include "../../Kernel/ConcreteTreeDecomposition.h"
+#include "../../TreeAutomaton/ConcreteTreeDecomposition.h"
+#include "../../TreeAutomaton/AbstractTreeDecomposition.h"
 #include "../../Kernel/SearchStrategy.h"
-#include "../../Kernel/StateTree.h"
 
 using namespace std;
 using namespace std::chrono;
@@ -21,20 +21,20 @@ class LeveledSetSearch : public SearchStrategy {
 	~LeveledSetSearch(){};
 	static unsigned bagSetToNumber(set<unsigned> bagSet, unsigned width);
 	void search();
-	shared_ptr<CTDNodeNew> extractCTDNode(
+	shared_ptr<TermNode<ConcreteNode>> extractCTDNode(
 		unsigned level, State::ptr s,
 		vector<vector<set<State::ptr> > > &leveledSetAllStates);
 	ConcreteTreeDecomposition extractCTDDecomposition(
 		unsigned level, State::ptr s,
 		vector<vector<set<State::ptr> > > &leveledSetAllStates);
-	shared_ptr<StateTreeNode> extractStateTreeNode(
-		unsigned level, State::ptr s,
-		vector<vector<set<State::ptr> > > &leveledSetAllStates,
-		bool tree_width);
-	StateTree extractStateTreeDecomposition(
-		unsigned level, State::ptr s,
-		vector<vector<set<State::ptr> > > &leveledSetAllStates,
-		bool tree_width);
+//	shared_ptr<RunTr> extractStateTreeNode(
+//		unsigned level, State::ptr s,
+//		vector<vector<set<State::ptr> > > &leveledSetAllStates,
+//		bool tree_width);
+//	StateTree extractStateTreeDecomposition(
+//		unsigned level, State::ptr s,
+//		vector<vector<set<State::ptr> > > &leveledSetAllStates,
+//		bool tree_width);
 };
 
 #endif // CURRENT_LEVELEDSETSEARCH_H

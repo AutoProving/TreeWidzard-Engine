@@ -3,7 +3,7 @@
 #define TREEWIDZARD_RelabeledBREADTHFIRSTSEARCH_H
 #include <math.h>
 #include <algorithm>
-#include "../../Kernel/ConcreteTreeDecomposition.h"
+#include "../../TreeAutomaton/ConcreteTreeDecomposition.h"
 #include "../../Kernel/SearchStrategy.h"
 #include "../../Kernel/StateTree.h"
 #include "../../TreeAutomaton/TreeAutomaton.h"

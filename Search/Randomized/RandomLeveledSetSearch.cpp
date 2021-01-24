@@ -27,51 +27,52 @@ unsigned RandomLeveledSetSearch::bagSetToNumber(set<unsigned> bagSet,unsigned wi
     }
     return number;
 }
-shared_ptr<CTDNodeNew> RandomLeveledSetSearch::extractCTDNode( unsigned index){
-    shared_ptr<CTDNodeNew>  node (new CTDNodeNew());
-    node->set_B(generatedVector[index].first->get_bag());
-    node->set_parent(nullptr);
-    node->set_nodeType(generatedVector[index].second);
+shared_ptr<TermNode<ConcreteNode> > RandomLeveledSetSearch::extractCTDNode( unsigned index){
+    shared_ptr<TermNode <ConcreteNode > >  node (new TermNode<ConcreteNode>);
+    ConcreteNode concrete;
+    concrete.setBag(generatedVector[index].first->get_bag());
+    node->setParent(nullptr);
+    concrete.setSymbol(generatedVector[index].second);
+    node->setNodeContent(concrete);
     if(index > 0){
-        shared_ptr<CTDNodeNew> child = extractCTDNode(index-1);
-        child->set_parent(node);
-        vector<shared_ptr<CTDNodeNew> > children;
-        children.push_back(child);
-        node->set_children(children);
+        shared_ptr<TermNode<ConcreteNode> > child = extractCTDNode(index-1);
+        child->setParent(node);
+        node->addChild(child);
     }
     return node;
 }
 ConcreteTreeDecomposition RandomLeveledSetSearch::extractCTDDecomposition(){
     ConcreteTreeDecomposition T;
-    T.root = extractCTDNode(generatedVector.size()-1);
+    shared_ptr<TermNode<ConcreteNode>> root = extractCTDNode(generatedVector.size()-1);
+    T.setRoot(root);
     return T;
 }
 
-shared_ptr<StateTreeNode> RandomLeveledSetSearch::extractStateTreeNode(unsigned index){
-    shared_ptr<StateTreeNode> node (new StateTreeNode);
-    node->set_S(generatedVector[index].first);
-    node->set_parent(nullptr);
-    shared_ptr<DynamicKernel> sharedKernel(kernel);
-    node->set_kernel(sharedKernel);
-    node->set_nodeType(generatedVector[index].second);
-    if(index>0)
-    {
-        shared_ptr<StateTreeNode> child = extractStateTreeNode(index-1);
-        child->set_parent(node);
-        vector<shared_ptr<StateTreeNode>> children;
-        children.push_back(child);
-        node->set_children(children);
-    }
-    return node;
-}
-
-StateTree RandomLeveledSetSearch::extractStateTreeDecomposition(){
-
-    StateTree stateTree;
-    stateTree.root = extractStateTreeNode(generatedVector.size()-1);
-    return stateTree;
-
-}
+//shared_ptr<StateTreeNode> RandomLeveledSetSearch::extractStateTreeNode(unsigned index){
+//    shared_ptr<StateTreeNode> node (new StateTreeNode);
+//    node->set_S(generatedVector[index].first);
+//    node->set_parent(nullptr);
+//    shared_ptr<DynamicKernel> sharedKernel(kernel);
+//    node->set_kernel(sharedKernel);
+//    node->set_nodeType(generatedVector[index].second);
+//    if(index>0)
+//    {
+//        shared_ptr<StateTreeNode> child = extractStateTreeNode(index-1);
+//        child->set_parent(node);
+//        vector<shared_ptr<StateTreeNode>> children;
+//        children.push_back(child);
+//        node->set_children(children);
+//    }
+//    return node;
+//}
+//
+//StateTree RandomLeveledSetSearch::extractStateTreeDecomposition(){
+//
+//    StateTree stateTree;
+//    stateTree.root = extractStateTreeNode(generatedVector.size()-1);
+//    return stateTree;
+//
+//}
 
 void RandomLeveledSetSearch::search(){
 
@@ -174,19 +175,12 @@ void RandomLeveledSetSearch::search(){
             s->print();
             ConcreteTreeDecomposition T = extractCTDDecomposition();
             cout<<"=======ABSTRACT TREE========="<<endl;
-            T.printAbstract();
+            AbstractTreeDecomposition abstractTreeDecomposition = T.convertToAbstractTreeDecomposition();
+            abstractTreeDecomposition.printTermNodes();
+            abstractTreeDecomposition.writeToFile(this->getPropertyFilePath());
             cout<<"=======Concrete TREE========="<<endl;
-            T.printTree();
-            T.writeToFileAbstractTD(this->getPropertyFilePath());
-            T.writeToFileConcreteTD(this->getPropertyFilePath());
-            shared_ptr<DynamicKernel> sharedKernel = make_shared<DynamicKernel>(*kernel);
-            StateTree stateTree = T.convertToStateTree(sharedKernel);
-            if(flags->get("StateTree")==1){
-                cout<<"=======STATE TREE========="<<endl;
-                stateTree.printStateTree();
-            }
-            stateTree.writeToFile(this->getPropertyFilePath());
-            //
+            T.printTermNodes();
+
             cout << "\n ------------------Constructing Counter Example Graph-------------------"<< endl;
             MultiGraph multiGraph = T.extractMultiGraph();
             multiGraph.printGraph();

@@ -2,7 +2,7 @@
 #ifndef CURRENT_BREADTHFIRSTSEARCH_H
 #define CURRENT_BREADTHFIRSTSEARCH_H
 #include <math.h>
-#include "../../Kernel/ConcreteTreeDecomposition.h"
+#include "../../TreeAutomaton/ConcreteTreeDecomposition.h"
 #include "../../Kernel/SearchStrategy.h"
 #include "../../Kernel/StateTree.h"
 #include "../../TreeAutomaton/TreeAutomaton.h"

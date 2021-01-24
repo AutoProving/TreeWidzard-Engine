@@ -154,7 +154,6 @@ int ctd_construct(ConcreteTreeDecomposition &ctd, vector<tuple<shared_ptr<TermNo
     }
     // Find root
     set<int> rootIndex;
-
     for(int i=0; i< ctdVec.size();i++){
         if(get<0>(ctdVec[i])->getParent()==nullptr){
             rootIndex.insert(i);
@@ -185,7 +184,7 @@ int ctd_constructBags(ConcreteTreeDecomposition &ctd, vector<tuple<shared_ptr<Te
             int n = *(ctdChildPos[nodeNum].begin());
             if(get<0>(ctdVec[n])->getNodeContent().getBag().vertex_introducible(i)){
                 ConcreteNode concrete;
-                concrete.setSymbol(get<0>(ctdVec[n])->getNodeContent().getSymbol());
+                concrete.setSymbol(get<0>(ctdVec[nodeNum])->getNodeContent().getSymbol());
                 Bag bag = get<0>(ctdVec[n])->getNodeContent().getBag();
                 concrete.setBag(bag.intro_v(i));
                 get<0>(ctdVec[nodeNum])->setNodeContent(concrete);
@@ -198,7 +197,7 @@ int ctd_constructBags(ConcreteTreeDecomposition &ctd, vector<tuple<shared_ptr<Te
               int n = *(ctdChildPos[nodeNum].begin());
               if(get<0>(ctdVec[n])->getNodeContent().getBag().vertex_forgettable(i)){
               	ConcreteNode concrete;
-	      	concrete.setSymbol(get<0>(ctdVec[n])->getNodeContent().getSymbol());
+	      	concrete.setSymbol(get<0>(ctdVec[nodeNum])->getNodeContent().getSymbol());
 		Bag bag = get<0>(ctdVec[n])->getNodeContent().getBag();
 		concrete.setBag(bag.forget_v(i));
 		get<0>(ctdVec[nodeNum])->setNodeContent(concrete);
@@ -212,7 +211,7 @@ int ctd_constructBags(ConcreteTreeDecomposition &ctd, vector<tuple<shared_ptr<Te
             int n = *(ctdChildPos[nodeNum].begin());
             if(get<0>(ctdVec[n])->getNodeContent().getBag().edge_introducible(i,j)){
                  ConcreteNode concrete;
-		 concrete.setSymbol(get<0>(ctdVec[n])->getNodeContent().getSymbol());
+		 concrete.setSymbol(get<0>(ctdVec[nodeNum])->getNodeContent().getSymbol());
 		 Bag bag = get<0>(ctdVec[n])->getNodeContent().getBag();
 		 concrete.setBag(bag.intro_e(i,j));
 		 get<0>(ctdVec[nodeNum])->setNodeContent(concrete);

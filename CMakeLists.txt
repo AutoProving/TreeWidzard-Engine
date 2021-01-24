@@ -85,10 +85,10 @@ add_executable(
 		Multigraph/MultiGraph.cpp
 		Multigraph/MultiGraph.h
 	# SearchStrategy files
-		#Search/LeveledSetSearch.cpp
-		#Search/LeveledSetSearch.h
-		#Search/LeveledSetSearchPremise.cpp
-		#Search/LeveledSetSearchPremise.h
+		#Search/Leveled/LeveledSetSearch.cpp
+		#Search/Leveled/LeveledSetSearch.h
+		#Search/Leveled/LeveledSetSearchPremise.cpp
+		#Search/Leveled/LeveledSetSearchPremise.h
 		#Search/BFS/BreadthFirstSearch.h
 		#Search/BFS/BreadthFirstSearch.cpp
 		#Search/RelabeledLeveledSetSearch.h
@@ -97,8 +97,13 @@ add_executable(
 		#Search/BFS/RelabeledBreadthFirstSearch.cpp
 		#Search/BFS/RelabeledBreadthFirstSearch-Old.h
 		#Search/BFS/RelabeledBreadthFirstSearch-Old.cpp
-		Search/BFS/IsomorphismBreadthFirstSearch.h
-		Search/BFS/IsomorphismBreadthFirstSearch.cpp
+		#Search/BFS/IsomorphismBreadthFirstSearch.h
+		#Search/BFS/IsomorphismBreadthFirstSearch.cpp
+		#Search/Randomized/RandomLeveledSetSearch.h
+		#Search/Randomized/RandomLeveledSetSearch.cpp
+		Search/Randomized/RandomLeveledSetSearchPremise.h
+		Search/Randomized/RandomLeveledSetSearchPremise.cpp
+
 	# Parser files
 		# Command Parser
 		Controller/Parser/command_parser.hpp
