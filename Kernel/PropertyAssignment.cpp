@@ -41,3 +41,11 @@ const string &PropertyAssignment::get_label() const { return label; }
 void PropertyAssignment::set_label(const string &label) {
 	PropertyAssignment::label = label;
 }
+
+vector<int> &PropertyAssignment::get_parameters()  {
+    return parameters;
+}
+
+void PropertyAssignment::set_parameters(const vector<int> &parameters) {
+    PropertyAssignment::parameters = parameters;
+}

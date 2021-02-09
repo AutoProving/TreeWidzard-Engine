@@ -36,6 +36,7 @@ NOT                         yylval.string= strdup(yytext);  return NOT;
 \".+\"                      yylval.string= strdup(yytext);  return FILEPATH;
 \n                          yylval.string= strdup(yytext);  return NEWLINE;
 \/\/[a-zA-Z0-9\t ]*\n       yylval.string= strdup(yytext);  return COMMENT;
+,                           yylval.string= strdup(yytext);  return COMMA;
 [ \t]+                      ;
 %%
 

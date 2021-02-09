@@ -51,7 +51,10 @@ add_executable(
 		#	DynamicCores/MinDegree_AtMost.cpp
 		#	DynamicCores/CycleGirth_AtMost.h
 		#	DynamicCores/CycleGirth_AtMost.cpp
-
+        #   DynamicCores/Mod.h
+        #   DynamicCores/Mod.cpp
+            DynamicCores/PathEdgeCover.h
+            DynamicCores/PathEdgeCover.cpp
 	# Kernel files
         Kernel/Witness.cpp
         Kernel/Witness.h
@@ -101,8 +104,8 @@ add_executable(
 		#Search/BFS/IsomorphismBreadthFirstSearch.cpp
 		#Search/Randomized/RandomLeveledSetSearch.h
 		#Search/Randomized/RandomLeveledSetSearch.cpp
-		Search/Randomized/RandomLeveledSetSearchPremise.h
-		Search/Randomized/RandomLeveledSetSearchPremise.cpp
+		#Search/Randomized/RandomLeveledSetSearchPremise.h
+		#Search/Randomized/RandomLeveledSetSearchPremise.cpp
 
 	# Parser files
 		# Command Parser
@@ -145,7 +148,8 @@ add_executable(
 		TreeAutomaton/AbstractTreeDecomposition.cpp
 		TreeAutomaton/RunTree.cpp TreeAutomaton/RunTree.h
 		TreeAutomaton/ConcreteTreeDecomposition.cpp
-		TreeAutomaton/ConcreteTreeDecomposition.h)
+		TreeAutomaton/ConcreteTreeDecomposition.h
+	    )
 target_link_libraries(treewidzard ${CMAKE_DL_LIBS})
 
 execute_process (

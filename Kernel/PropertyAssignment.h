@@ -4,6 +4,7 @@
 #define PROPERTYASSIGNMENT_H
 
 #include <iostream>
+#include <vector>
 using namespace std;
 
 class PropertyAssignment {
@@ -11,7 +12,8 @@ class PropertyAssignment {
 	string name;
 	string operatorSign;
 	int value;
-	string type;	 // NoParameter, UnsignedInt, and InputFile
+	std::vector<int> parameters; // Designated for multi parameters cores.
+	string type;	 // NoParameter, UnsignedInt, InputFile, and MultiParameter
 	string filePath; // if the type is InputFile, then filePath is the location of the file
 	string label;	// label of the core
 	//Todo: change label to coreVariable
@@ -42,6 +44,11 @@ class PropertyAssignment {
 	const string &get_label() const;
 
 	void set_label(const string &label);
+
+	vector<int> &get_parameters();
+
+    void set_parameters(const vector<int> &parameters);
 };
 
 #endif
+

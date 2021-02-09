@@ -1,8 +1,9 @@
-/* A Bison parser, made by GNU Bison 3.0.4.  */
+/* A Bison parser, made by GNU Bison 3.5.1.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2020 Free Software Foundation,
+   Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,6 +31,9 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
+/* Undocumented macros, especially those whose name start with YY_,
+   are private implementation details.  Do not rely on them.  */
+
 #ifndef YY_INPUT_INPUT_PARSER_HPP_INCLUDED
 # define YY_INPUT_INPUT_PARSER_HPP_INCLUDED
 /* Debug traces.  */
@@ -48,7 +52,7 @@
 extern int input_debug;
 #endif
 /* "%code requires" blocks.  */
-#line 5 "input_parser.y" /* yacc.c:1909  */
+#line 5 "input_parser.y"
 
     #include "../Kernel/PropertyAssignment.h"
     #include "../Kernel/Conjecture.h"
@@ -56,7 +60,7 @@ extern int input_debug;
     #include <iostream>
     #include <vector>
 
-#line 60 "input_parser.hpp" /* yacc.c:1909  */
+#line 64 "input_parser.hpp"
 
 /* Token type.  */
 #ifndef INPUT_TOKENTYPE
@@ -79,25 +83,26 @@ extern int input_debug;
     TRUE = 271,
     FALSE = 272,
     COMMENT = 273,
-    INTEGER = 274
+    INTEGER = 274,
+    COMMA = 275
   };
 #endif
 
 /* Value type.  */
 #if ! defined INPUT_STYPE && ! defined INPUT_STYPE_IS_DECLARED
-
 union INPUT_STYPE
 {
-#line 32 "input_parser.y" /* yacc.c:1909  */
+#line 32 "input_parser.y"
 
      PropertyAssignment *property;
      ConjectureNode *conjecture;
      int number;
      char* string;
+     std::vector<int> * vec;
 
-#line 99 "input_parser.hpp" /* yacc.c:1909  */
+#line 104 "input_parser.hpp"
+
 };
-
 typedef union INPUT_STYPE INPUT_STYPE;
 # define INPUT_STYPE_IS_TRIVIAL 1
 # define INPUT_STYPE_IS_DECLARED 1

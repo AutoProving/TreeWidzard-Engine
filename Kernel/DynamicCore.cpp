@@ -125,3 +125,11 @@ void DynamicCore::setInitialWitnessSet(WitnessSetPointer witnessSetPointer) {
     this->initialWitnessSet = witnessSetPointer;
 }
 
+int DynamicCore::getWidth(){
+
+    return this->width;
+}
+
+void DynamicCore::setWidth(int width){
+    this->width = width;
+}

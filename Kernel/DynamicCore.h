@@ -19,6 +19,7 @@ class DynamicCore {
   private:
 	WitnessSetPointer initialWitnessSet;
     map<string,string> attributes; // Characteristics of the core. This is initialized in the constructor of the derived class.
+    int width;
   public:
 	DynamicCore() { initialWitnessSet = WitnessSetPointer(new WitnessSet); }
     virtual ~DynamicCore()= default;
@@ -29,6 +30,8 @@ class DynamicCore {
     string getAttributeValue(string x);// Returns "y" if (x,y) belongs to attributes.
     map<string,string> getAttributes();
 	void insertIntoInitialWitnessSet(WitnessPointer);
+	int getWidth();
+	void setWidth(int width);
 	virtual void createInitialWitnessSet();
 	virtual WitnessSetPointer intro_v(unsigned i, Bag &b, Witness &witness);
 	virtual WitnessSetPointer intro_e(unsigned i, unsigned j, Bag &b,
@@ -47,5 +50,6 @@ class DynamicCore {
 using DynamicCore_creator_t =  DynamicCore *(*)();
 using DynamicCore_creator_t_int =  DynamicCore *(*)(unsigned param);
 using DynamicCore_creator_t_multiGraph =  DynamicCore *(*)(MultiGraph multiGraph);
+using DynamicCore_creator_t_parameters =  DynamicCore *(*)(std::vector<int> parameters);
 
 #endif

@@ -34,6 +34,7 @@
      ConjectureNode *conjecture;
      int number;
      char* string;
+     std::vector<int> * vec;
 }
 
 %parse-param {std::vector<PropertyAssignment*> &pl}
@@ -42,11 +43,12 @@
 %parse-param {int &result}
 
 
-%token  WIDTHPARAM SEPERATOR COMPARATOR FILEPATH LEFTP RIGHTP NAME NEWLINE AND OR IFF IMPLIES NOT TRUE FALSE COMMENT INTEGER 
-%type<string> WIDTHPARAM SEPERATOR COMPARATOR FILEPATH LEFTP RIGHTP NAME NEWLINE AND OR IFF IMPLIES NOT TRUE FALSE COMMENT VARIABLE ATOMIC_PREDICATE 
+%token  WIDTHPARAM SEPERATOR COMPARATOR FILEPATH LEFTP RIGHTP NAME NEWLINE AND OR IFF IMPLIES NOT TRUE FALSE COMMENT INTEGER COMMA
+%type<string> WIDTHPARAM SEPERATOR COMPARATOR FILEPATH LEFTP RIGHTP NAME NEWLINE AND OR IFF IMPLIES NOT TRUE FALSE COMMENT VARIABLE ATOMIC_PREDICATE COMMA
 %type<number> INTEGER
 %type<property> VARIABLE_ASSIGNMENT
 %type<conjecture> FORMULA
+%type<vec> INTEGERS
 
 
 %start START
@@ -58,7 +60,7 @@
 
 %%
 
-START                   : COMMENTS WIDTH_ASSIGNMENT NEWLINE COMMENTS VARIABLES_ASSIGNMENT FORMULA FORMULACOMMENTS           { conj.root = $6; result = 0; }
+START                   : COMMENTS WIDTH_ASSIGNMENT NEWLINE COMMENTS VARIABLES_ASSIGNMENT FORMULA FORMULACOMMENTS       { conj.root = $6; result = 0; }
                         ;
 WIDTH_ASSIGNMENT        : WIDTHPARAM INTEGER                                                                            {w.set_name($1); w.set_value($2); } 
                         ;
@@ -75,9 +77,15 @@ VARIABLE_ASSIGNMENT     : VARIABLE SEPERATOR ATOMIC_PREDICATE COMPARATOR INTEGER
                                                                                                                          pl.push_back($$); variables.push_back($1); }
                         | VARIABLE SEPERATOR ATOMIC_PREDICATE                                                          {if(!check_variables($1)) exit(20);
                                                                                                                          $$ = new PropertyAssignment(); $$->set_type("NoParameter"); $$->set_label($1); $$->set_name($3);
-                                                                                                                          pl.push_back($$); variables.push_back($1); }
+                                                                                                                         pl.push_back($$); variables.push_back($1); }
+                        | VARIABLE SEPERATOR ATOMIC_PREDICATE  LEFTP INTEGERS RIGHTP 					{if(!check_variables($1)) exit(20);
+														  	$$ = new PropertyAssignment(); $$->set_type("MultiParameter"); $$->set_label($1); $$->set_name($3);
+														  	$$->set_parameters(*$5);
+														  	pl.push_back($$); variables.push_back($1);}
                         ;
-ATOMIC_PREDICATE        : NAME                                 
+INTEGERS		: INTEGERS COMMA INTEGER {$$ = new std::vector<int>; $$ = $1; $$->push_back($3);}
+			| INTEGER { $$ = new std::vector<int>;  $$->push_back($1);}
+ATOMIC_PREDICATE        : NAME
                         ;
 VARIABLE                : NAME                                  
                         ;

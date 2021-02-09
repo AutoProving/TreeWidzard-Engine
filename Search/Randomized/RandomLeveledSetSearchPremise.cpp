@@ -196,7 +196,6 @@ void RandomLeveledSetSearchPremise::search(){
                 abstractTreeDecomposition.writeToFile(this->getPropertyFilePath());
                 cout<<"=======Concrete TREE========="<<endl;
                 T.printTermNodes();
-
                 cout << "\n ------------------Constructing Counter Example Graph-------------------"<< endl;
                 MultiGraph multiGraph = T.extractMultiGraph();
                 multiGraph.printGraph();

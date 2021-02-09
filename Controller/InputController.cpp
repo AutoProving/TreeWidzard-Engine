@@ -48,6 +48,7 @@ void InputController::parse_input() {
         p.set_type(pl[i]->get_type());
         p.set_label(pl[i]->get_label());
         p.set_filePath(pl[i]->get_filePath());
+        p.set_parameters(pl[i]->get_parameters());
         propertyList.push_back(p);
         dynamicKernel.addProperty(p);
     }
@@ -71,6 +72,7 @@ void InputController::construct_dynamicKernel() {
                 factory = new DynamicCoreHandler(corePath.c_str());
                 std::unique_ptr<DynamicCore> handlerCore = factory->create();
                 DynamicCore* core = handlerCore.release();
+                core->setWidth(dynamicKernel.get_width().get_value());
                 dynamicKernel.addCore(*core);
             }else if(itMap["ParameterType"]=="UnsignedInt"){
 
@@ -89,6 +91,7 @@ void InputController::construct_dynamicKernel() {
                     factory = new DynamicCoreHandler(corePath.c_str());
                     std::unique_ptr<DynamicCore> handlerCore = factory->create_int(callingParameter);
                     DynamicCore* core = handlerCore.release();
+                    core->setWidth(dynamicKernel.get_width().get_value());
                     dynamicKernel.addCore(*core);
                 }else if(itMap["PrimaryOperator"]=="AtMost") {
                     unsigned int callingParameter = propertyList[j].get_value();
@@ -104,6 +107,23 @@ void InputController::construct_dynamicKernel() {
                     factory = new DynamicCoreHandler(corePath.c_str());
                     std::unique_ptr<DynamicCore> handlerCore = factory->create_int(callingParameter);
                     DynamicCore *core = handlerCore.release();
+                    core->setWidth(dynamicKernel.get_width().get_value());
+                    dynamicKernel.addCore(*core);
+                }else if(itMap["PrimaryOperator"]=="Equal"){
+                    unsigned int callingParameter = propertyList[j].get_value();
+                    if (propertyList[j].get_operatorSign() == "=") {
+                        callingParameter = callingParameter ;
+                    }else{
+
+                        cerr<<"\n Error: The property of "<<  propertyList[j].get_name() <<" is 'At Most', but the sign is "
+                            << propertyList[j].get_operatorSign()<<endl;
+                        exit(20);
+                    }
+                    string corePath = dynamicPluginPath + coreNamesToFiles[it->first];
+                    factory = new DynamicCoreHandler(corePath.c_str());
+                    std::unique_ptr<DynamicCore> handlerCore = factory->create_int(callingParameter);
+                    DynamicCore *core = handlerCore.release();
+                    core->setWidth(dynamicKernel.get_width().get_value());
                     dynamicKernel.addCore(*core);
                 }
             }else if(itMap["ParameterType"]=="InputFile"){
@@ -122,8 +142,19 @@ void InputController::construct_dynamicKernel() {
                     factory = new DynamicCoreHandler(corePath.c_str());
                     std::unique_ptr<DynamicCore> handlerCore = factory->create_multiGraph(multiGraph);
                     DynamicCore *core = handlerCore.release();
+                    core->setWidth(dynamicKernel.get_width().get_value());
                     dynamicKernel.addCore(*core);
                 }
+            }else if(itMap["ParameterType"]=="MultiParameter"){
+                string corePath = dynamicPluginPath + coreNamesToFiles[it->first];
+                factory = new DynamicCoreHandler(corePath.c_str());
+                std::unique_ptr<DynamicCore> handlerCore = factory->create_parameters(propertyList[j].get_parameters());
+                DynamicCore *core = handlerCore.release();
+                core->setWidth(dynamicKernel.get_width().get_value());
+                dynamicKernel.addCore(*core);
+            }else{
+                cout<<"Parameter Type  "<< itMap["ParameterType"] << " could not find!"<<endl;
+                exit(20);
             }
         }else{
             cout<<"The core "<<propertyList[j].get_name()<<" was not found."<<endl;

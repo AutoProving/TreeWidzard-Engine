@@ -1,3 +1,4 @@
-path_width 4
-a := MinDegree < 5
-NOT a
+path_width 2
+a := PathEdgeCover = 4
+b := MaxDegree > 1
+a IMPLIES b

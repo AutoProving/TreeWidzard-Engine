@@ -14,6 +14,7 @@ private:
     DynamicCore_creator_t creator = nullptr;
     DynamicCore_creator_t_int creator_int = nullptr;
     DynamicCore_creator_t_multiGraph creator_multiGraph = nullptr;
+    DynamicCore_creator_t_parameters creator_parameters = nullptr;
     static void Reset_dlerror() {
         dlerror();
     }
@@ -34,6 +35,7 @@ public:
         creator = reinterpret_cast<DynamicCore_creator_t>(dlsym(handler, "create"));
         creator_int = reinterpret_cast<DynamicCore_creator_t_int>(dlsym(handler, "create_int"));
         creator_multiGraph = reinterpret_cast<DynamicCore_creator_t_multiGraph>(dlsym(handler, "create_multiGraph"));
+        creator_parameters = reinterpret_cast<DynamicCore_creator_t_parameters>(dlsym(handler, "create_parameters"));
         //Check_dlerror();
     }
 
@@ -43,8 +45,12 @@ public:
     std::unique_ptr<DynamicCore> create_int(unsigned param) const {
         return std::unique_ptr<DynamicCore>(creator_int(param));
     }
+
     std::unique_ptr<DynamicCore> create_multiGraph(MultiGraph multiGraph) const {
         return std::unique_ptr<DynamicCore>(creator_multiGraph(multiGraph));
+    }
+    std::unique_ptr<DynamicCore> create_parameters(std::vector<int> parameters) const {
+        return std::unique_ptr<DynamicCore>(creator_parameters(parameters));
     }
     ~DynamicCoreHandler() {
         if (handler) {
