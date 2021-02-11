@@ -1,4 +1,3 @@
 path_width 2
-a := PathEdgeCover = 4
-b := MaxDegree > 1
-a IMPLIES b
+a := PathEdgeCover = 3
+TRUE

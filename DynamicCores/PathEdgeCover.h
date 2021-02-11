@@ -10,9 +10,7 @@ typedef shared_ptr<PathEdgeCover_Witness> PathEdgeCover_WitnessPointer;
 typedef shared_ptr<PathEdgeCover_Witness const > PathEdgeCover_WitnessPointerConst;
 class PathEdgeCover_Witness:public Witness, public enable_shared_from_this<PathEdgeCover_Witness>{
 public:
-    vector<vector<unsigned > > partialPathCover;
-    vector<vector<bool> > edgesFound;
-    unsigned width;
+    set<pair<vector<int >, vector<bool> > > partialPathCover; //
     bool is_equal_implementation(const PathEdgeCover_WitnessPointerConst w) const;
     bool is_less_implementation(const PathEdgeCover_WitnessPointerConst w) const;
     Witness& set_equal_implementation(PathEdgeCover_WitnessPointer w);
@@ -52,7 +50,7 @@ private:
     pair<vector<vector<vector<unsigned >>>,vector<vector<vector<bool>>>> combinePartialPathCover(pair<vector<vector<unsigned >>,vector<vector<bool>> > p1,
                                                                                                  pair<vector<vector<unsigned >>,vector<vector<bool>> > p2, unsigned width);
 public:
-    unsigned parameter;
+    unsigned parameter; // This is the length of a path, so the path has parameter+1 vertices
     PathEdgeCover_DynamicCore();
     PathEdgeCover_DynamicCore(unsigned parameter);
     ~PathEdgeCover_DynamicCore(){};

@@ -31,87 +31,77 @@
 //////////////////////////// ONLY CHANGE THE GREY AREA ///////////////////////////////////
 
 void PathEdgeCover_Witness::print() {
-    for (int l=0 ; l < partialPathCover.size(); l++) {
-        cout<<"[";
-        for (int i = 0; i < partialPathCover[l].size() ; ++i) {
-            cout<<partialPathCover[l][i];
-            if(i!= partialPathCover[l].size()-1){
-                cout<<", ";
-            }
-        }
-        cout<<"] ("; 
-        for(int i = 0; i < edgesFound[l].size(); i++){
-            cout<<edgesFound[l][i];
-            if(i!= edgesFound[l].size()-1){
-
-                cout<<",";
-            }
-        
-        }
-        cout<<")";
-    }
-    cout<<endl;
+   for(auto item:partialPathCover){
+       cout<<"{";
+       for (int i = 0; i < item.first.size(); ++i) {
+           cout<< item.first[i] ;
+           if( i != item.first.size()-1){
+               cout<<",";
+           }
+       }
+       cout<<" [";
+       for (int i = 0; i < item.second.size(); ++i) {
+           cout<< item.second[i];
+           if(i!= item.second.size()-1){
+               cout<<",";
+           }
+       }
+       cout << "]}" ;
+   }
+   cout<<endl;
 }
 
 string PathEdgeCover_Witness::witnessInformation() {
     string info="";
-    for (int l=0 ; l < partialPathCover.size(); l++) {
-        info+="[";
-        for (int i = 0; i < partialPathCover[l].size() ; ++i) {
-            info+=to_string(partialPathCover[l][i]);
-            if(i!= partialPathCover[l].size()-1){
-                info+=", ";
+    for(auto item:partialPathCover){
+        info+="{";
+        for (int i = 0; i < item.first.size(); ++i) {
+            info+= to_string(item.first[i]) ;
+            if( i != item.first.size()-1){
+                info+= ",";
             }
         }
-        info+="] ("; 
-        for(int i = 0; i < edgesFound[l].size(); i++){
-            info+=to_string(edgesFound[l][i]);
-            if(i!= edgesFound[l].size()-1){
-
-                info+=",";
+        info+= " [";
+        for (int i = 0; i < item.second.size(); ++i) {
+            info+= to_string(item.second[i]);
+            if(i!= item.second.size()-1){
+                info+= ",";
             }
-        
         }
-        info+=")";
+        info+= "]}" ;
     }
     return info+"\n";
 }
 
 bool PathEdgeCover_Witness::is_equal_implementation(const PathEdgeCover_WitnessPointerConst w) const {
-    return this->partialPathCover == w->partialPathCover and this->edgesFound == w->edgesFound;
+    return this->partialPathCover == w->partialPathCover;
 }
 bool PathEdgeCover_Witness::is_less_implementation(const PathEdgeCover_WitnessPointerConst w) const {
-    if( this->partialPathCover < w->partialPathCover) return true ;
-    if( this->partialPathCover ==  w->partialPathCover) return this->edgesFound < w->edgesFound;
-    return false;
-
+    return  this->partialPathCover < w->partialPathCover;
 }
 
 Witness & PathEdgeCover_Witness::set_equal_implementation(PathEdgeCover_WitnessPointer w) {
     this->partialPathCover = w->partialPathCover;
-    this->edgesFound = w->edgesFound;
     return *this;
 }
 
 shared_ptr<Witness> PathEdgeCover_Witness::relabel(map<unsigned int, unsigned int> relabelingMap) {
     PathEdgeCover_WitnessPointer w (new PathEdgeCover_Witness);
-    w->width = this->width;
-    w->edgesFound = this->edgesFound;
-    vector<vector<unsigned >> m;
+    set<pair<vector<int >,vector<bool> > > m;
     for (auto item:partialPathCover) {
-        vector<unsigned > nPart;
-        for (auto cell:item){
-            if(cell == 0 or cell == width+2){
+        vector<int > nPart;
+        for (auto cell:item.first){
+            if(cell == 0 or cell == -1){
                 nPart.push_back(cell);
             }else if(relabelingMap.count(cell)){
                 nPart.push_back(relabelingMap[cell]);
             }else{
                 cout<<"Error: PathEdgeCover_Witness::relabel, "<< cell << " is not in the map"<<endl;
-                cout<<"Width  "<< width<<endl;
+                print();
                 exit(20);
             }
         }
-        m.push_back(nPart);
+        m.insert(make_pair(nPart,item.second));
     }
     w->partialPathCover = m;
     return w;
@@ -129,8 +119,7 @@ PathEdgeCover_DynamicCore::PathEdgeCover_DynamicCore() {
 }
 
 PathEdgeCover_DynamicCore::PathEdgeCover_DynamicCore(unsigned parameter){
-    if(parameter < 2){
-
+    if(parameter < 1){
         cout<<"PathEdgeCover parameter should be at least 2"<<endl;
         exit(20);
     }
@@ -144,237 +133,141 @@ PathEdgeCover_DynamicCore::PathEdgeCover_DynamicCore(unsigned parameter){
 
 void PathEdgeCover_DynamicCore::createInitialWitnessSet_implementation() {
     PathEdgeCover_WitnessPointer w = createWitness();
-    w->width = this->getWidth();
     this->insertIntoInitialWitnessSet(w);
 }
 
 void PathEdgeCover_DynamicCore::intro_v_implementation(unsigned int i, Bag &b, PathEdgeCover_WitnessPointer w,
                                                            PathEdgeCover_WitnessSetPointer witnessSet) {
-    w->width = this->getWidth();
     witnessSet->insert(w);
 }
 
 void PathEdgeCover_DynamicCore::intro_e_implementation(unsigned int i, unsigned int j, Bag &b,
                                                            PathEdgeCover_WitnessPointer w,
                                                            PathEdgeCover_WitnessSetPointer witnessSet) {
-    // Go through each vector(edge partition) to check that it is possible to add {i,j}
-    // in the vector or not. If it is possible, then we create a new witness which is w but {i,j} 
-    // is added to the vector.
-    w->width = this->getWidth();
-    vector<vector<unsigned>> ppc = w->partialPathCover;
-    vector<vector<bool> > ef = w->edgesFound;
-    for(int l=0; l < ppc.size(); l++){
-      for(int index=0 ; index < ppc[l].size()-1 ; index++){
-        // if ppc[l][index] = 0 and pcc[index+1]=i, ppc[l][index+1]=j or ppc[l][index+1]=0,
-        // then it is possible add {i,j} to ppc[l].
-          if(ppc[l][index] == 0){
-                if(ppc[l][index+1]==i){
-                    bool checkOccurrence = true;
-                    for (int k = 0; k < ppc[l].size() ; ++k) {
-                        if(ppc[l][k]==j){
-                            checkOccurrence = false;
-                            break;
-                        }
-                    }
-                    if(!checkOccurrence) break;
-                    PathEdgeCover_WitnessPointer wPrime = createWitness();
-                    wPrime->width = w->width;
-                    wPrime->partialPathCover = ppc;
-                    wPrime->edgesFound = ef;
-                    wPrime->partialPathCover[l][index]= j;
-                    wPrime->edgesFound[l][index]=true;
-                    witnessSet->insert(wPrime);
-                }else if (ppc[l][index+1]==j){
-                    bool checkOccurrence = true;
-                    for (int k = 0; k < ppc[l].size() ; ++k) {
-                        if(ppc[l][k]==i){
-                            checkOccurrence = false;
-                            break;
-                        }
-                    }
-                    if(!checkOccurrence) break;
-                    PathEdgeCover_WitnessPointer wPrime = createWitness();
-                    wPrime->width = w->width;
-                    wPrime->partialPathCover = ppc;
-                    wPrime->edgesFound = ef;
-                    wPrime->partialPathCover[l][index] = i;
-                    wPrime->edgesFound[l][index]=true;
-                    witnessSet->insert(wPrime);
-                }else if (ppc[l][index+1]==0){
-                    bool checkOccurrence = true;
-                    for (int k = 0; k < ppc[l].size() ; ++k) {
-                        if(ppc[l][k]==i or ppc[l][k]==j){
-                            checkOccurrence = false;
-                            break;
-                        }
-                    }
-                    if(!checkOccurrence) break;
-                    PathEdgeCover_WitnessPointer wPrime1 = createWitness();
-                    wPrime1->width = w->width;
-                    wPrime1->partialPathCover = ppc;
-                    wPrime1->edgesFound = ef;
-                    wPrime1->partialPathCover[l][index] = i;
-                    wPrime1->partialPathCover[l][index+1] = j;
-                    wPrime1->edgesFound[l][index] = true;
-                    witnessSet->insert(wPrime1);
-                    PathEdgeCover_WitnessPointer wPrime2 = createWitness();
-                    wPrime2->width = w->width;
-                    wPrime2->partialPathCover = ppc;
-                    wPrime2->edgesFound = ef;
-                    wPrime2->partialPathCover[l][index] = j;
-                    wPrime2->partialPathCover[l][index+1] = i;
-                    wPrime2->edgesFound[l][index] = true;
-                    witnessSet->insert(wPrime2);
-                }
-          }else if((ppc[l][index]==i or ppc[l][index]==j) and (ppc[l][index+1]==0)){
-            if(ppc[l][index]==i){
-                bool checkOccurrence = true;
-                for (int k = 0; k < ppc[l].size() ; ++k) {
-                    if(ppc[l][k]==j){
-                        checkOccurrence = false;
+    auto partialPathCover = w->partialPathCover;
+    bool exists = false;
+    for(auto item:partialPathCover){
+        if(!exists){
+            for (int l = 0; l < item.first.size()-1 ; ++l) {
+                if((item.first[l] == i and item.first[l+1]==j) or (item.first[l] == j and item.first[l+1]==i) ){
+                    if(item.second[l]){
+                        exists = true;
+                        witnessSet->insert(w);
+                        break;
+                    }else{
+                        PathEdgeCover_WitnessPointer wPrime = createWitness();
+                        wPrime->partialPathCover = partialPathCover;
+                        wPrime->partialPathCover.erase(item);
+                        vector<int> cover = item.first;
+                        vector<bool> edgesBool = item.second;
+                        edgesBool[l] = true;
+                        wPrime->partialPathCover.insert(make_pair(cover,edgesBool));
+                        witnessSet->insert(wPrime);
+                        exists = true;
                         break;
                     }
                 }
-                if(!checkOccurrence) break;
-                PathEdgeCover_WitnessPointer wPrime = createWitness();
-                wPrime->width = w->width;
-                wPrime->partialPathCover = ppc;
-                wPrime->edgesFound = ef;
-                wPrime->partialPathCover[l][index+1]=j;
-                wPrime->edgesFound[l][index]=true;
-                witnessSet->insert(wPrime);
-            }else if(ppc[l][index]==j){
-                bool checkOccurrence = true;
-                for (int k = 0; k < ppc[l].size() ; ++k) {
-                    if(ppc[l][k]==i){
-                        checkOccurrence = false;
-                        break;
-                    }
-                }
-                if(!checkOccurrence) break;
-                PathEdgeCover_WitnessPointer wPrime = createWitness();
-                wPrime->width = w->width;
-                wPrime->partialPathCover = ppc;
-                wPrime->edgesFound = ef;
-                wPrime->partialPathCover[l][index+1]= i;
-                wPrime->edgesFound[l][index] = true;
-                witnessSet->insert(wPrime);
             }
-          }else if((ppc[l][index]==i and ppc[l][index+1]==j) or (ppc[l][index]==j
-                    and ppc[l][index+1]==i) and ef[l][index]==false){
-                PathEdgeCover_WitnessPointer wPrime = createWitness();
-                wPrime->width = w->width;
-                wPrime->partialPathCover = ppc;
-                wPrime->edgesFound = ef;
-                wPrime->edgesFound[l][index] = true;
-                witnessSet->insert(wPrime);
-          }
-      }
+        }
     }
-    // create new parts
-    for(int index = 0 ; index < this->parameter-1 ; index++){
-        vector<unsigned> nPart1;
-        vector<unsigned> nPart2;
-        nPart1.resize(this->parameter,0);
-        nPart2.resize(this->parameter,0);
-        nPart1[index]=i;
-        nPart1[index+1]=j;
-        nPart2[index]=j;
-        nPart2[index+1]=i;
-        vector<bool> edgesBool;
-        edgesBool.resize(this->parameter-1,false);
-        edgesBool[index]= true;
-        PathEdgeCover_WitnessPointer wPrime1 = createWitness();
-        PathEdgeCover_WitnessPointer wPrime2 = createWitness();
-        wPrime1->width = w->width;
-        wPrime2->width = w->width;
-        wPrime1->partialPathCover = w->partialPathCover;
-        wPrime2->partialPathCover = w->partialPathCover;
-        wPrime1->partialPathCover.push_back(nPart1);
-        wPrime2->partialPathCover.push_back(nPart2);
-        wPrime1->edgesFound = w->edgesFound;
-        wPrime2->edgesFound = w->edgesFound;
-        wPrime1->edgesFound.push_back(edgesBool);
-        wPrime2->edgesFound.push_back(edgesBool);
-        witnessSet->insert(wPrime1);
-        witnessSet->insert(wPrime2);
+    if(!exists){
+        for (int index = 0; index < this->parameter ; ++index) {
+            vector<int> nPart1;
+            vector<int> nPart2;
+            nPart1.resize(this->parameter+1,0);
+            nPart2.resize(this->parameter+1,0);
+            nPart1[index]=i;
+            nPart1[index+1]=j;
+            nPart2[index]=j;
+            nPart2[index+1]=i;
+            vector<bool> edgesBool;
+            edgesBool.resize(this->parameter,false);
+            edgesBool[index]= true;
+            PathEdgeCover_WitnessPointer wPrime1 = createWitness();
+            PathEdgeCover_WitnessPointer wPrime2 = createWitness();
+            wPrime1->partialPathCover = w->partialPathCover;
+            wPrime2->partialPathCover = w->partialPathCover;
+            wPrime1->partialPathCover.insert(make_pair(nPart1,edgesBool));
+            wPrime2->partialPathCover.insert(make_pair(nPart1,edgesBool));
+            witnessSet->insert(wPrime1);
+            witnessSet->insert(wPrime2);
+
+        }
     }
 }
 
 void PathEdgeCover_DynamicCore::forget_v_implementation(unsigned int i, Bag &b, PathEdgeCover_WitnessPointer w,
                                                             PathEdgeCover_WitnessSetPointer witnessSet) {
 
-    w->width = this->getWidth();
+    auto partialPathCover = w->partialPathCover;
+    bool continueLoop = true;
     PathEdgeCover_WitnessPointer wPrime = createWitness();
-    wPrime->width = w->width;
-    wPrime->partialPathCover = w->partialPathCover;
-    vector<vector<unsigned>> ppc = wPrime->partialPathCover;
-    bool flag = true;
-    for(int l = 0; l <  ppc.size() and flag; l++){
-        for(int index = 0 ; index < ppc[l].size(); index++){
-            if(ppc[l][index]==i){
-                if(index==0){
-                    if(!w->edgesFound[l][index]){
-                        flag = false;
-                        break;
+    wPrime->partialPathCover = partialPathCover;
+    for (auto &item : partialPathCover) {
+        if(continueLoop){
+            for (int l = 0; l < item.first.size() ; ++l) {
+                if(item.first[l] == i){
+                    if(l==0){
+                        if(item.second[l]){
+                            wPrime->partialPathCover.erase(item);
+                            vector<int> cover = item.first;
+                            cover[l] = -1;
+                            vector<bool> edgesBool = item.second;
+                            wPrime->partialPathCover.insert(make_pair(cover,edgesBool));
+                        }else{
+                            continueLoop = false;
+                            break;
+                        }
+                    }else if( l == item.first.size()-1){
+                        if(item.second[l-1]){
+                            wPrime->partialPathCover.erase(item);
+                            vector<int> cover = item.first;
+                            cover[l] = -1;
+                            vector<bool> edgesBool = item.second;
+                            wPrime->partialPathCover.insert(make_pair(cover,edgesBool));
+                        }else{
+                            continueLoop = false;
+                            break;
+                        }
                     }else{
-                        ppc[l][index] = this->getWidth()+2;
-                    }
-                }else if(index == ppc[l].size()-1 ){
-                    if(!w->edgesFound[l][index-1]){
-                        flag = false;
-                        break;
-                    }else{
-                        ppc[l][index] = this->getWidth()+2;
-                    }
-                }else{
-                    if(!w->edgesFound[l][index-1] or !w->edgesFound[l][index]){
-                        flag = false;
-                        break;
-                    }else{
-                        ppc[l][index] = this->getWidth()+2;
+                        if(item.second[l-1] and item.second[l]){
+                            wPrime->partialPathCover.erase(item);
+                            vector<int> cover = item.first;
+                            cover[l] = -1;
+                            vector<bool> edgesBool = item.second;
+                            wPrime->partialPathCover.insert(make_pair(cover,edgesBool));
+                        }else{
+                            continueLoop = false;
+                            break;
+                        }
                     }
                 }
             }
-        } 
+        }
     }
-    if(flag){
-        wPrime->partialPathCover = ppc;
-        wPrime->edgesFound = w->edgesFound;
+    if (continueLoop){
         witnessSet->insert(wPrime);
     }
+
 }
 
 
 void PathEdgeCover_DynamicCore::join_implementation(Bag &b, PathEdgeCover_WitnessPointer w1,
                                                         PathEdgeCover_WitnessPointer w2,
                                                         PathEdgeCover_WitnessSetPointer witnessSet) {
-
-    auto result = combinePartialPathCover(make_pair(w1->partialPathCover,w1->edgesFound), make_pair(w2->partialPathCover,w2->edgesFound),
-                                          this->getWidth());
-    for (int i = 0; i < result.first.size(); ++i) {
-        PathEdgeCover_WitnessPointer wPrime = createWitness();
-        wPrime->width = this->getWidth();
-        wPrime->partialPathCover = result.first[i];
-        wPrime->edgesFound = result.second[i];
-        witnessSet->insert(wPrime);
-    }
 }
 
 bool PathEdgeCover_DynamicCore::is_final_witness_implementation(PathEdgeCover_WitnessPointer w) {
-    vector<vector<bool>> ef = w->edgesFound;
-    if(ef.size()==0){
-        return false;
-    }else{
-        for(int l = 0; l <  ef.size(); l++){
-            for(int index = 0 ; index < ef[l].size(); index++){
-                if(!ef[l][index]){
-                    return false;
-                }
+    auto partialPathCover = w->partialPathCover;
+    for(auto item: partialPathCover){
+        for (int k = 0; k < item.second.size() ; ++k) {
+            if(!item.second[k]){
+                return false;
             }
         }
-        return true;
     }
+    return true;
+
 
 }
 
@@ -517,96 +410,96 @@ shared_ptr<WitnessSet> PathEdgeCover_DynamicCore::clean(shared_ptr<WitnessSet> w
 }
 
 
-
-pair<vector<vector<vector<unsigned >>>, vector<vector<vector<bool>>>>
-PathEdgeCover_DynamicCore::combinePartialPathCover(pair<vector<vector<unsigned int>>, vector<vector<bool>>> p1,
-                                                   pair<vector<vector<unsigned int>>, vector<vector<bool>>> p2, unsigned width) {
-    vector<vector<unsigned >> pc1 = p1.first;
-    vector<vector<bool>> ef1 = p1.second;
-    vector<vector<unsigned >> pc2 = p2.first;
-    vector<vector<bool>> ef2 = p2.second;
-    vector<vector<vector<unsigned >>> P;
-    vector<vector<vector<bool>>> B;
-    if(pc1.size() and pc2.size()){
-        vector<unsigned > partialPathCover = *(pc1.end()-1);
-        vector<bool> edgesFound = *(ef1.end()-1);
-        // first
-        vector<vector<unsigned >> a1 = pc1;
-        vector<vector<bool>> e1 = ef1;
-        a1.erase(a1.end()-1);
-        e1.erase(e1.end()-1);
-        pair<vector<vector<vector<unsigned >>>, vector<vector<vector<bool>>>> c1 = combinePartialPathCover(make_pair(a1,e1),p2,width);
-        for (int i = 0; i < c1.first.size(); ++i) {
-            c1.first[i].push_back(partialPathCover);
-            c1.second[i].push_back(edgesFound);
-            P.push_back(c1.first[i]);
-            B.push_back(c1.second[i]);
-        }
-        // second
-        for (int i = 0; i < pc2.size(); ++i) {
-            //check
-            vector<vector<unsigned >> a2 = pc2;
-            vector<vector<bool>> e2 = ef2;
-            a2.erase(a2.begin()+i);
-            e2.erase(e2.begin()+i);
-            auto result = combinePartition(make_pair(partialPathCover,edgesFound), make_pair(pc2[i],ef2[i]),width);
-            if(result.first){
-                vector<unsigned > combinedPartialCover = result.second.first;
-                vector<bool > combinedEdgesFound = result.second.second;
-                pair<vector<vector<vector<unsigned >>>, vector<vector<vector<bool>>>> c2 = combinePartialPathCover(make_pair(a1,e1),make_pair(a2,e2),width);
-                for (int j = 0; j < c2.first.size(); ++j) {
-                    c2.first[j].push_back(combinedPartialCover);
-                    c2.second[j].push_back(combinedEdgesFound);
-                    P.push_back(c2.first[j]);
-                    B.push_back(c2.second[j]);
-                }
-            }
-        }
-    }else if(pc1.size() and pc2.size()==0){
-        P.push_back(pc1);
-        B.push_back(ef1);
-    }else if(pc1.size()==0 and pc2.size()){
-        P.push_back(pc2);
-        B.push_back(ef2);
-    }
-    return make_pair(P,B);
-}
-
-pair<bool, pair<vector<unsigned >, vector<bool>> >
-PathEdgeCover_DynamicCore::combinePartition(pair<vector<unsigned int>, vector<bool>> p1,
-                                            pair<vector<unsigned int>, vector<bool>> p2, unsigned width) {
-    vector<unsigned > combinedCover;
-    combinedCover.resize(p1.first.size(),0);
-    vector<bool > edgesBool;
-    edgesBool.resize(p1.second.size(),false);
-    bool possibility = true;
-    for (int i = 0; i < p1.first.size(); ++i) {
-        if( p1.first[i]==p2.first[i] and p1.first[i]!=0 and p1.first[i]!=width+2 ){
-            combinedCover[i] = p1.first[i];
-        }else if(p1.first[i]==0 or p2.first[i]==0){
-            combinedCover[i] = max(p1.first[i],p2.first[i]);
-        }else if( (p1.first[i]==width+2 and p2.first[i]==0) or (p1.first[i]==0 and p2.first[i]==width+2) ){
-            combinedCover[i] = max(p1.first[i],p2.first[i]);
-        }else{
-            possibility = false;
-            break;
-        }
-    }
-    if(!possibility){
-        combinedCover.clear();
-        return make_pair(possibility,make_pair(combinedCover,edgesBool));
-    }
-
-    for (int i = 0; i < p1.second.size(); ++i) {
-        if(p1.second[i] and p2.second[i]){
-            possibility = false;
-            break;
-        }else{
-            edgesBool[i] = (p1.second[i] or p2.second[i]);
-        }
-    }
-    return make_pair(possibility,make_pair(combinedCover,edgesBool));
-}
+//
+//pair<vector<vector<vector<unsigned >>>, vector<vector<vector<bool>>>>
+//PathEdgeCover_DynamicCore::combinePartialPathCover(pair<vector<vector<unsigned int>>, vector<vector<bool>>> p1,
+//                                                   pair<vector<vector<unsigned int>>, vector<vector<bool>>> p2, unsigned width) {
+//    vector<vector<unsigned >> pc1 = p1.first;
+//    vector<vector<bool>> ef1 = p1.second;
+//    vector<vector<unsigned >> pc2 = p2.first;
+//    vector<vector<bool>> ef2 = p2.second;
+//    vector<vector<vector<unsigned >>> P;
+//    vector<vector<vector<bool>>> B;
+//    if(pc1.size() and pc2.size()){
+//        vector<unsigned > partialPathCover = *(pc1.end()-1);
+//        vector<bool> edgesFound = *(ef1.end()-1);
+//        // first
+//        vector<vector<unsigned >> a1 = pc1;
+//        vector<vector<bool>> e1 = ef1;
+//        a1.erase(a1.end()-1);
+//        e1.erase(e1.end()-1);
+//        pair<vector<vector<vector<unsigned >>>, vector<vector<vector<bool>>>> c1 = combinePartialPathCover(make_pair(a1,e1),p2,width);
+//        for (int i = 0; i < c1.first.size(); ++i) {
+//            c1.first[i].push_back(partialPathCover);
+//            c1.second[i].push_back(edgesFound);
+//            P.push_back(c1.first[i]);
+//            B.push_back(c1.second[i]);
+//        }
+//        // second
+//        for (int i = 0; i < pc2.size(); ++i) {
+//            //check
+//            vector<vector<unsigned >> a2 = pc2;
+//            vector<vector<bool>> e2 = ef2;
+//            a2.erase(a2.begin()+i);
+//            e2.erase(e2.begin()+i);
+//            auto result = combinePartition(make_pair(partialPathCover,edgesFound), make_pair(pc2[i],ef2[i]),width);
+//            if(result.first){
+//                vector<unsigned > combinedPartialCover = result.second.first;
+//                vector<bool > combinedEdgesFound = result.second.second;
+//                pair<vector<vector<vector<unsigned >>>, vector<vector<vector<bool>>>> c2 = combinePartialPathCover(make_pair(a1,e1),make_pair(a2,e2),width);
+//                for (int j = 0; j < c2.first.size(); ++j) {
+//                    c2.first[j].push_back(combinedPartialCover);
+//                    c2.second[j].push_back(combinedEdgesFound);
+//                    P.push_back(c2.first[j]);
+//                    B.push_back(c2.second[j]);
+//                }
+//            }
+//        }
+//    }else if(pc1.size() and pc2.size()==0){
+//        P.push_back(pc1);
+//        B.push_back(ef1);
+//    }else if(pc1.size()==0 and pc2.size()){
+//        P.push_back(pc2);
+//        B.push_back(ef2);
+//    }
+//    return make_pair(P,B);
+//}
+//
+//pair<bool, pair<vector<unsigned >, vector<bool>> >
+//PathEdgeCover_DynamicCore::combinePartition(pair<vector<unsigned int>, vector<bool>> p1,
+//                                            pair<vector<unsigned int>, vector<bool>> p2, unsigned width) {
+//    vector<unsigned > combinedCover;
+//    combinedCover.resize(p1.first.size(),0);
+//    vector<bool > edgesBool;
+//    edgesBool.resize(p1.second.size(),false);
+//    bool possibility = true;
+//    for (int i = 0; i < p1.first.size(); ++i) {
+//        if( p1.first[i]==p2.first[i] and p1.first[i]!=0 and p1.first[i]!=width+2 ){
+//            combinedCover[i] = p1.first[i];
+//        }else if(p1.first[i]==0 or p2.first[i]==0){
+//            combinedCover[i] = max(p1.first[i],p2.first[i]);
+//        }else if( (p1.first[i]==width+2 and p2.first[i]==0) or (p1.first[i]==0 and p2.first[i]==width+2) ){
+//            combinedCover[i] = max(p1.first[i],p2.first[i]);
+//        }else{
+//            possibility = false;
+//            break;
+//        }
+//    }
+//    if(!possibility){
+//        combinedCover.clear();
+//        return make_pair(possibility,make_pair(combinedCover,edgesBool));
+//    }
+//
+//    for (int i = 0; i < p1.second.size(); ++i) {
+//        if(p1.second[i] and p2.second[i]){
+//            possibility = false;
+//            break;
+//        }else{
+//            edgesBool[i] = (p1.second[i] or p2.second[i]);
+//        }
+//    }
+//    return make_pair(possibility,make_pair(combinedCover,edgesBool));
+//}
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
