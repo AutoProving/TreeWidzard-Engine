@@ -7,12 +7,19 @@
 #include "../Kernel/DynamicCore.h"
 using namespace std;
 
+class ChromaticNumber_AtMost_Witness;
+
+typedef shared_ptr<ChromaticNumber_AtMost_Witness> ChromaticNumber_AtMost_WitnessPointer;
+typedef shared_ptr<ChromaticNumber_AtMost_Witness const> ChromaticNumber_AtMost_WitnessPointerConst;
 class ChromaticNumber_AtMost_Witness: public Witness, public enable_shared_from_this<ChromaticNumber_AtMost_Witness> {
 public:
     std::map<unsigned,unsigned> coloring; //The first coordinate of each pair is a vertex and the second a color.
     //   virtual shared_ptr<Witness> relabel(map<unsigned,unsigned> relabelingMap);
     ChromaticNumber_AtMost_Witness(){};
     ~ChromaticNumber_AtMost_Witness(){};
+    bool is_equal_implementation(const ChromaticNumber_AtMost_WitnessPointerConst w) const;
+    bool is_less_implementation(const ChromaticNumber_AtMost_WitnessPointerConst w) const;
+    Witness& set_equal_implementation(ChromaticNumber_AtMost_WitnessPointer w);
     virtual bool is_equal(const Witness &rhs)const;
     virtual bool is_less(const Witness &lhs)const;
     virtual Witness& set_equal(Witness &rhs);
@@ -28,7 +35,24 @@ public:
 typedef shared_ptr<ChromaticNumber_AtMost_WitnessSet> ChromaticNumber_AtMost_WitnessSetPointer;
 
 class ChromaticNumber_AtMost_DynamicCore: public DynamicCore{
-    public:
+private:
+    void createInitialWitnessSet_implementation();
+    void copyWitness(ChromaticNumber_AtMost_WitnessPointer w_input, 
+            ChromaticNumber_AtMost_WitnessPointer w_output);
+    ChromaticNumber_AtMost_WitnessPointer createWitness();
+    void intro_v_implementation(unsigned i, Bag &b, ChromaticNumber_AtMost_WitnessPointer w,
+            ChromaticNumber_AtMost_WitnessSetPointer witnessSet);
+    void forget_v_implementation(unsigned i, Bag &b, ChromaticNumber_AtMost_WitnessPointer w,
+            ChromaticNumber_AtMost_WitnessSetPointer witnessSet);
+    void intro_e_implementation(unsigned i,unsigned j, Bag &b, ChromaticNumber_AtMost_WitnessPointer w,
+            ChromaticNumber_AtMost_WitnessSetPointer witnessSet);
+    void join_implementation(Bag &b, ChromaticNumber_AtMost_WitnessPointer w1,
+            ChromaticNumber_AtMost_WitnessPointer w2, ChromaticNumber_AtMost_WitnessSetPointer witnessSet);
+    bool is_final_witness_implementation(ChromaticNumber_AtMost_WitnessPointer w);
+    ChromaticNumber_AtMost_WitnessSetPointer clean_implementation(ChromaticNumber_AtMost_WitnessSetPointer witnessSet);
+
+
+public:
         unsigned k;
         ChromaticNumber_AtMost_DynamicCore();
         ChromaticNumber_AtMost_DynamicCore(unsigned k);

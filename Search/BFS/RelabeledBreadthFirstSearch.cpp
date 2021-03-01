@@ -186,7 +186,7 @@ void RelabeledBreadthFirstSearch::search(){
                     ConcreteTreeDecomposition ctd = atd->convertToConcreteTreeDecomposition();
                     cout << "=======Concrete TREE=========" << endl;
                     ctd.printTermNodes();
-                    // ctd.writeToFileConcreteTD(this->getPropertyFilePath());
+                    ctd.writeToFile(this->getPropertyFilePath());
 
                     cout << "\n ------------------Constructing Counter Example Graph-------------------" << endl;
                     MultiGraph multiGraph = ctd.extractMultiGraph();

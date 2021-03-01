@@ -30,10 +30,10 @@ add_executable(
 		Controller/AuxiliaryController.hpp
 		main.cpp
 	# DynamicCore files
-		#   DynamicCores/CliqueNumber_AtLeast.cpp
+		#  DynamicCores/CliqueNumber_AtLeast.cpp
 		#   DynamicCores/CliqueNumber_AtLeast.h
-		#   DynamicCores/ChromaticNumber_AtMost.cpp
-		#   DynamicCores/ChromaticNumber_AtMost.h
+		   DynamicCores/ChromaticNumber_AtMost.cpp
+		   DynamicCores/ChromaticNumber_AtMost.h
 		#	DynamicCores/MaxDegree_AtLeast.cpp
 		#	DynamicCores/MaxDegree_AtLeast.h
 		#   DynamicCores/HasMultipleEdges.cpp
@@ -53,8 +53,8 @@ add_executable(
 		#	DynamicCores/CycleGirth_AtMost.cpp
         #   DynamicCores/Mod.h
         #   DynamicCores/Mod.cpp
-            DynamicCores/PathEdgeCover.h
-            DynamicCores/PathEdgeCover.cpp
+		#   DynamicCores/PathEdgeCover.h
+        #    DynamicCores/PathEdgeCover.cpp
 	# Kernel files
         Kernel/Witness.cpp
         Kernel/Witness.h

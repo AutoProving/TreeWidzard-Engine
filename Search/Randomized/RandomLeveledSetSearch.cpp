@@ -32,9 +32,10 @@ shared_ptr<TermNode<ConcreteNode> > RandomLeveledSetSearch::extractCTDNode( unsi
     ConcreteNode concrete;
     concrete.setBag(generatedVector[index].first->get_bag());
     node->setParent(nullptr);
+
     concrete.setSymbol(generatedVector[index].second);
     node->setNodeContent(concrete);
-    if(index > 0){
+    if(index > 0 and  generatedVector[index].second !="Leaf"){
         shared_ptr<TermNode<ConcreteNode> > child = extractCTDNode(index-1);
         child->setParent(node);
         node->addChild(child);
@@ -77,7 +78,7 @@ ConcreteTreeDecomposition RandomLeveledSetSearch::extractCTDDecomposition(){
 void RandomLeveledSetSearch::search(){
 
     // Add Initial state to vector
-    generatedVector.push_back(make_pair(kernel->initialState(),"Empty"));
+    generatedVector.push_back(make_pair(kernel->initialState(),"Leaf"));
     bool foundCounterexample = false;
     unsigned iterationNumber = 1;
     int counter = 0;
@@ -174,12 +175,15 @@ void RandomLeveledSetSearch::search(){
             cout<<"COUNTER EXAMPLE FOUND"<<endl;
             s->print();
             ConcreteTreeDecomposition T = extractCTDDecomposition();
-            cout<<"=======ABSTRACT TREE========="<<endl;
-            AbstractTreeDecomposition abstractTreeDecomposition = T.convertToAbstractTreeDecomposition();
-            abstractTreeDecomposition.printTermNodes();
-            abstractTreeDecomposition.writeToFile(this->getPropertyFilePath());
             cout<<"=======Concrete TREE========="<<endl;
             T.printTermNodes();
+            T.writeToFile(this->getPropertyFilePath());
+            cout<<"=======ABSTRACT TREE========="<<endl;
+//            AbstractTreeDecomposition abstractTreeDecomposition = T.convertToAbstractTreeDecomposition();
+//            cout<<"hh"<<endl;
+//            abstractTreeDecomposition.printTermNodes();
+//            abstractTreeDecomposition.writeToFile(this->getPropertyFilePath());
+
 
             cout << "\n ------------------Constructing Counter Example Graph-------------------"<< endl;
             MultiGraph multiGraph = T.extractMultiGraph();
@@ -202,7 +206,7 @@ void RandomLeveledSetSearch::search(){
             }
             cout<<"*******"<<endl;
         }
-        if(flags->get("LoopTime")==1 and counter == 300000){
+        if(flags->get("LoopTime")==1 and counter == 100000){
             counter=0; // Reset the counter
             cout<<"----------Vector Size:"<<generatedVector.size()<<"---- Iteration number:"<<iterationNumber <<endl;
         }

@@ -221,7 +221,7 @@ void BreadthFirstSearch::search(){
                 cout<<"=======Concrete TREE========="<<endl;
                 ConcreteTreeDecomposition ctd = atd.convertToConcreteTreeDecomposition();
                 ctd.printTermNodes();
-            //    ctd.writeToFileConcreteTD(this->getPropertyFilePath());
+                ctd.writeToFile(this->getPropertyFilePath());
                 RunTree<State::ptr,AbstractTreeDecompositionNodeContent> runTree = extractCounterExampleRun(state);
                 runTree.writeToFile(this->getPropertyFilePath());
                 if(flags->get("StateTree")==1){

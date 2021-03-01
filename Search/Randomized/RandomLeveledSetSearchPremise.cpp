@@ -80,10 +80,12 @@ ConcreteTreeDecomposition RandomLeveledSetSearchPremise::extractCTDDecomposition
 
 void RandomLeveledSetSearchPremise::search(){
     // Add Initial state to vector
-    generatedVector.push_back({kernel->initialState(),"Empty"});
+    generatedVector.push_back({kernel->initialState(),"Leaf"});
     bool foundCounterexample = false;
     unsigned iterationNumber = 1;
+    int counter = 0;
     while (!foundCounterexample) {
+        counter++;
         string typeState;
         State::ptr q = generatedVector[generatedVector.size()-1].first;
         if(flags->get("PrintStates")==1){
@@ -130,26 +132,25 @@ void RandomLeveledSetSearchPremise::search(){
 		}
             }
         }
-
         unsigned numberPossibilities = introducibleVertices.size() + introducibleEdges.size() + forgettableVertices.size();
         if(generatedVector.size() > 1){
             numberPossibilities++;
         }
         if(numberPossibilities==0){
+            cout<<"There is no generated state!"<<endl;
+            exit(20);
+        }
+        if(numberPossibilities!=0){
             unsigned r = random() % numberPossibilities; // select one of the possibilities
-            cout<<" before random number"<<endl;
-
             //cout<<"introducibleVertices.size(): "<< introducibleVertices.size()<< " introducibleEdges.size(): "<<introducibleEdges.size()<<" forgettableVertices.size(): "<<forgettableVertices.size()<<" r:"<<r<<endl;
             if (r < introducibleVertices.size()) {
                 s = kernel->intro_v(q, introducibleVertices[r]);
                 typeState = "IntroVertex_"+to_string(introducibleVertices[r]);
-
             } else {
                 r = r - introducibleVertices.size();
                 if (r < introducibleEdges.size()) {
                     s = kernel->intro_e(q, introducibleEdges[r].first, introducibleEdges[r].second);
                     typeState = "IntroEdge_"+to_string(introducibleEdges[r].first)+"_"+to_string(introducibleEdges[r].second);
-
                 } else {
                     r = r - introducibleEdges.size();
                     if (r < forgettableVertices.size()) {
@@ -196,6 +197,7 @@ void RandomLeveledSetSearchPremise::search(){
                 abstractTreeDecomposition.writeToFile(this->getPropertyFilePath());
                 cout<<"=======Concrete TREE========="<<endl;
                 T.printTermNodes();
+
                 cout << "\n ------------------Constructing Counter Example Graph-------------------"<< endl;
                 MultiGraph multiGraph = T.extractMultiGraph();
                 multiGraph.printGraph();
@@ -218,7 +220,8 @@ void RandomLeveledSetSearchPremise::search(){
                 }
                 cout<<"*******"<<endl;
             }
-            if(flags->get("LoopTime")==1){
+            if(flags->get("LoopTime")==1  and counter == 10){
+                counter=0;
                 cout<<"----------Vector Size:"<<generatedVector.size()<<"---- Iteration number:"<<iterationNumber <<endl;
             }
             iterationNumber++;

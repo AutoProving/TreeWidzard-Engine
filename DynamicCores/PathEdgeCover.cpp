@@ -120,7 +120,7 @@ PathEdgeCover_DynamicCore::PathEdgeCover_DynamicCore() {
 
 PathEdgeCover_DynamicCore::PathEdgeCover_DynamicCore(unsigned parameter){
     if(parameter < 1){
-        cout<<"PathEdgeCover parameter should be at least 2"<<endl;
+        cout<<"PathEdgeCover parameter should be at least 1"<<endl;
         exit(20);
     }
     this->parameter = parameter;
@@ -141,57 +141,156 @@ void PathEdgeCover_DynamicCore::intro_v_implementation(unsigned int i, Bag &b, P
     witnessSet->insert(w);
 }
 
-void PathEdgeCover_DynamicCore::intro_e_implementation(unsigned int i, unsigned int j, Bag &b,
-                                                           PathEdgeCover_WitnessPointer w,
-                                                           PathEdgeCover_WitnessSetPointer witnessSet) {
-    auto partialPathCover = w->partialPathCover;
-    bool exists = false;
-    for(auto item:partialPathCover){
-        if(!exists){
-            for (int l = 0; l < item.first.size()-1 ; ++l) {
-                if((item.first[l] == i and item.first[l+1]==j) or (item.first[l] == j and item.first[l+1]==i) ){
-                    if(item.second[l]){
-                        exists = true;
-                        witnessSet->insert(w);
-                        break;
-                    }else{
-                        PathEdgeCover_WitnessPointer wPrime = createWitness();
-                        wPrime->partialPathCover = partialPathCover;
-                        wPrime->partialPathCover.erase(item);
-                        vector<int> cover = item.first;
-                        vector<bool> edgesBool = item.second;
-                        edgesBool[l] = true;
-                        wPrime->partialPathCover.insert(make_pair(cover,edgesBool));
-                        witnessSet->insert(wPrime);
-                        exists = true;
-                        break;
-                    }
+pair<bool, pair<vector<int>, vector<bool>>> PathEdgeCover_DynamicCore::addEdgeToPath(int i, int j,
+                                                                                     pair<vector<int>, vector<bool>> p, int position) {
+    int mapped_i = -1;
+    int mapped_j = -1;
+    for (int index = 0; index < p.first.size() ; ++index) {
+        if(p.first[index] == i){
+            mapped_i = index;
+        }else if(p.first[index]==j){
+            mapped_j = index;
+        }
+    }
+    if(!p.second[position]){
+        // In this case, the edge is available
+        if(mapped_i == -1 and mapped_j==-1){
+            p.first[position] = i;
+            p.first[position+1] = j;
+            p.second[position]= true;
+            return make_pair(true,p);
+        }else if(mapped_i==-1 and mapped_j==position+1){
+            p.first[position]=i;
+            p.second[position]=true;
+            return make_pair(true,p);
+        }else if(mapped_i == position and mapped_j == -1){
+            p.first[position+1] =j;
+            p.second[position] =true;
+            return make_pair(true,p);
+        }else if(mapped_i == position and mapped_j == position+1){
+            p.second[position]=true;
+            return make_pair(true,p);
+        }else{
+            p.first.clear();
+            p.second.clear();
+            return make_pair(false,p);
+        }
+    }else{
+        p.first.clear();
+        p.second.clear();
+        return make_pair(false,p);
+    }
+}
+bool PathEdgeCover_DynamicCore::alreadyCovered(int i, int j, set<pair<vector<int>, vector<bool>>> &pathCover) {
+    for(auto item : pathCover){
+        for (int k = 0; k < item.first.size()-1; ++k) {
+            if(item.second[k]){
+                if( (item.first[k]==i and item.first[k+1] == j) or (item.first[k]==j and item.first[k+1] == i) ){
+                    return true;
                 }
             }
         }
     }
-    if(!exists){
-        for (int index = 0; index < this->parameter ; ++index) {
-            vector<int> nPart1;
-            vector<int> nPart2;
-            nPart1.resize(this->parameter+1,0);
-            nPart2.resize(this->parameter+1,0);
-            nPart1[index]=i;
-            nPart1[index+1]=j;
-            nPart2[index]=j;
-            nPart2[index+1]=i;
-            vector<bool> edgesBool;
-            edgesBool.resize(this->parameter,false);
-            edgesBool[index]= true;
-            PathEdgeCover_WitnessPointer wPrime1 = createWitness();
-            PathEdgeCover_WitnessPointer wPrime2 = createWitness();
-            wPrime1->partialPathCover = w->partialPathCover;
-            wPrime2->partialPathCover = w->partialPathCover;
-            wPrime1->partialPathCover.insert(make_pair(nPart1,edgesBool));
-            wPrime2->partialPathCover.insert(make_pair(nPart1,edgesBool));
-            witnessSet->insert(wPrime1);
-            witnessSet->insert(wPrime2);
+    return false;
+}
+void PathEdgeCover_DynamicCore::intro_e_implementation(unsigned int i, unsigned int j, Bag &b,
+                                                           PathEdgeCover_WitnessPointer w,
+                                                           PathEdgeCover_WitnessSetPointer witnessSet) {
+    auto partialPathCover = w->partialPathCover;
+    if(!alreadyCovered(i,j,partialPathCover)){
+        for(auto item:partialPathCover) {
+            for (int position = 0; position < parameter; ++position) {
+                // Observation: addEdgePath is not symmetric with respect to i and j
+                pair<bool, pair<vector<int>, vector<bool>>> newPath = addEdgeToPath(i, j, item,position);
+                if (newPath.first) {
+                    auto auxPathCover = w->partialPathCover;
+                    auxPathCover.erase(item);
+                    auxPathCover.insert(newPath.second);
+                    PathEdgeCover_WitnessPointer wPrime = createWitness();
+                    wPrime->partialPathCover = auxPathCover;
+                    witnessSet->insert(wPrime);
+                }
+                // Observation: addEdgePath is not symmetric with respect to i and j
+                newPath = addEdgeToPath(j,i, item,position);
+                if (newPath.first) {
+                    auto auxPathCover = w->partialPathCover;
+                    auxPathCover.erase(item);
+                    auxPathCover.insert(newPath.second);
+                    PathEdgeCover_WitnessPointer wPrime = createWitness();
+                    wPrime->partialPathCover = auxPathCover;
+                    witnessSet->insert(wPrime);
+                }
+            }
+        }
+        // We create new path containing a single edge
+        for (int position = 0; position < this->parameter ; ++position) {
+            vector<int> v;
+            v.resize(this->parameter + 1, 0); // parameter is the number of the edges in the path
+            vector<bool> b;
+            b.resize(parameter,false);
+            auto emptyPair = make_pair(v,b);
+            pair<bool, pair<vector<int>, vector<bool>>> newPath = addEdgeToPath(i, j, emptyPair,position);
+            if (newPath.first) {
+                auto auxPathCover = w->partialPathCover;
+                auxPathCover.insert(newPath.second);
+                PathEdgeCover_WitnessPointer wPrime = createWitness();
+                wPrime->partialPathCover = auxPathCover;
+                witnessSet->insert(wPrime);
+            }
+            newPath = addEdgeToPath(j,i, emptyPair,position);
+            if (newPath.first) {
+                auto auxPathCover = w->partialPathCover;
+                auxPathCover.insert(newPath.second);
+                PathEdgeCover_WitnessPointer wPrime = createWitness();
+                wPrime->partialPathCover = auxPathCover;
+                witnessSet->insert(wPrime);
+            }
+        }
+    }else{
+        // This core is for simple graphs
+        // If {i,j} has been covered then it already exists as an edge and therefore, the graph is a multigraph
+    }
+}
+pair<bool, pair<vector<int>, vector<bool>>> PathEdgeCover_DynamicCore::deleteVertexFromPath(int i,
+                                                                                            pair<vector<int>, vector<bool>> p) {
 
+    int mapped_i = -1;
+    for (int index = 0; index < p.first.size() ; ++index) {
+        if(p.first[index] == i){
+            mapped_i = index;
+            break;
+        }
+    }
+    if(mapped_i == -1){
+        return make_pair(true, p);
+    }else{
+        if(mapped_i==0){
+            if(p.second[mapped_i]){
+                p.first[mapped_i] = -1;
+                return make_pair(true, p);
+            }else{
+                p.first.clear();
+                p.second.clear();
+                return make_pair(false, p);
+            }
+        }else if(mapped_i == p.first.size()-1){
+            if(p.second[mapped_i-1]){
+                p.first[mapped_i] = -1;
+                return make_pair(true, p);
+            }else{
+                p.first.clear();
+                p.second.clear();
+                return make_pair(false, p);
+            }
+        }else{
+            if(p.second[mapped_i-1] and p.second[mapped_i]){
+                p.first[mapped_i] = -1;
+                return make_pair(true, p);
+            }else{
+                p.first.clear();
+                p.second.clear();
+                return make_pair(false, p);
+            }
         }
     }
 }
@@ -200,75 +299,124 @@ void PathEdgeCover_DynamicCore::forget_v_implementation(unsigned int i, Bag &b, 
                                                             PathEdgeCover_WitnessSetPointer witnessSet) {
 
     auto partialPathCover = w->partialPathCover;
-    bool continueLoop = true;
-    PathEdgeCover_WitnessPointer wPrime = createWitness();
-    wPrime->partialPathCover = partialPathCover;
-    for (auto &item : partialPathCover) {
-        if(continueLoop){
-            for (int l = 0; l < item.first.size() ; ++l) {
-                if(item.first[l] == i){
-                    if(l==0){
-                        if(item.second[l]){
-                            wPrime->partialPathCover.erase(item);
-                            vector<int> cover = item.first;
-                            cover[l] = -1;
-                            vector<bool> edgesBool = item.second;
-                            wPrime->partialPathCover.insert(make_pair(cover,edgesBool));
-                        }else{
-                            continueLoop = false;
-                            break;
-                        }
-                    }else if( l == item.first.size()-1){
-                        if(item.second[l-1]){
-                            wPrime->partialPathCover.erase(item);
-                            vector<int> cover = item.first;
-                            cover[l] = -1;
-                            vector<bool> edgesBool = item.second;
-                            wPrime->partialPathCover.insert(make_pair(cover,edgesBool));
-                        }else{
-                            continueLoop = false;
-                            break;
-                        }
-                    }else{
-                        if(item.second[l-1] and item.second[l]){
-                            wPrime->partialPathCover.erase(item);
-                            vector<int> cover = item.first;
-                            cover[l] = -1;
-                            vector<bool> edgesBool = item.second;
-                            wPrime->partialPathCover.insert(make_pair(cover,edgesBool));
-                        }else{
-                            continueLoop = false;
-                            break;
-                        }
-                    }
+    set<pair<vector<int>, vector<bool>>> newCover;
+    bool legalVertexDeletion = true;
+    for(auto item:partialPathCover){
+        pair<bool, pair<vector<int>, vector<bool>>> newPath = deleteVertexFromPath(i, item);
+        if(!newPath.first){
+            legalVertexDeletion = false;
+            break;
+        }else{
+            bool processed = true;
+            for (int index = 0; index < newPath.second.first.size() ; ++index) {
+                if(newPath.second.first[index]!= -1){
+                    processed = false;
+                    break;
                 }
+            }
+            if(!processed){
+                newCover.insert(newPath.second);
             }
         }
     }
-    if (continueLoop){
+    if(legalVertexDeletion){
+        PathEdgeCover_WitnessPointer wPrime = createWitness();
+        wPrime->partialPathCover = newCover;
         witnessSet->insert(wPrime);
     }
+}
 
+pair<bool, pair<vector<int>, vector<bool>>> PathEdgeCover_DynamicCore::combinePaths(
+        pair<vector<int>, vector<bool>> p1, pair<vector<int>, vector<bool>> p2) {
+    vector<int > combinedVertexPath;
+    combinedVertexPath.resize(p1.first.size(),0);
+    vector<bool > combinedBoolPath;
+    combinedBoolPath.resize(p1.second.size(),false);
+    bool possibilityOfCombine = true;
+    for (int i = 0; i < p1.first.size(); ++i) {
+        if( p1.first[i]==p2.first[i] and p1.first[i]!=0 and p1.first[i]!=-1 ){
+            combinedVertexPath[i] = p1.first[i];
+        }else if(p1.first[i]==0 or p2.first[i]==0){
+            combinedVertexPath[i] = max(p1.first[i],p2.first[i]);
+        }else if( (p1.first[i]==-1 and p2.first[i]==0) or (p1.first[i]==0 and p2.first[i]==-1) ){
+            combinedVertexPath[i] = max(p1.first[i],p2.first[i]);
+        }else{
+            possibilityOfCombine = false;
+            break;
+        }
+    }
+    if(!possibilityOfCombine){
+        combinedVertexPath.clear();
+        return make_pair(possibilityOfCombine,make_pair(combinedVertexPath,combinedBoolPath));
+    }
+
+    for (int i = 0; i < p1.second.size(); ++i) {
+        if(p1.second[i] and p2.second[i]){
+            possibilityOfCombine = false;
+            combinedVertexPath.clear();
+            break;
+        }else{
+            combinedBoolPath[i] = (p1.second[i] or p2.second[i]);
+        }
+    }
+    return make_pair(possibilityOfCombine,make_pair(combinedVertexPath,combinedBoolPath));
+
+}
+
+set<set<pair<vector<int>, vector<bool>>>> PathEdgeCover_DynamicCore::combinePartialPathCover(
+        set<pair<vector<int>, vector<bool>>> p1, set<pair<vector<int>, vector<bool>>> p2) {
+
+    set<set<pair<vector<int>, vector<bool>>>> returnDecompositions;
+    if(p1.size()>0 and p2.size()>0){
+        auto auxP1 = p1;
+        auto path = *(auxP1.begin());
+        auxP1.erase(path);
+        auto pathDecompositions = combinePartialPathCover(auxP1,p2);
+        for(auto pathDecomposition:pathDecompositions){
+            pathDecomposition.insert(path);
+            returnDecompositions.insert(pathDecomposition);
+        }
+        for (auto p:p2) {
+            auto combinedPathAndP = combinePaths(path,p);
+            if(combinedPathAndP.first){
+                auto auxP2 = p2;
+                auxP2.erase(p);
+                auto subPathDecompositions = combinePartialPathCover(auxP1,auxP2);
+                for(auto pathDecomposition : subPathDecompositions){
+                    pathDecomposition.insert(combinedPathAndP.second);
+                    returnDecompositions.insert(pathDecomposition);
+                }
+            }
+        }
+    }else if(p1.size() > 0 and p2.size()==0){
+        returnDecompositions.insert(p1);
+    }else if(p1.size() == 0 and p2.size()>0){
+        returnDecompositions.insert(p2);
+    }
+    return returnDecompositions;
 }
 
 
 void PathEdgeCover_DynamicCore::join_implementation(Bag &b, PathEdgeCover_WitnessPointer w1,
-                                                        PathEdgeCover_WitnessPointer w2,
-                                                        PathEdgeCover_WitnessSetPointer witnessSet) {
+                                                        PathEdgeCover_WitnessPointer w2,PathEdgeCover_WitnessSetPointer witnessSet) {
+    auto decompositions = combinePartialPathCover(w1->partialPathCover,w2->partialPathCover);
+    for (auto decomposition : decompositions) {
+        PathEdgeCover_WitnessPointer wPrime = createWitness();
+        wPrime->partialPathCover = decomposition;
+        witnessSet->insert(wPrime);
+    }
 }
 
 bool PathEdgeCover_DynamicCore::is_final_witness_implementation(PathEdgeCover_WitnessPointer w) {
     auto partialPathCover = w->partialPathCover;
     for(auto item: partialPathCover){
-        for (int k = 0; k < item.second.size() ; ++k) {
-            if(!item.second[k]){
+        for (int index = 0; index < item.second.size() ; ++index) {
+            if(!item.second[index]){
                 return false;
             }
         }
     }
     return true;
-
-
 }
 
 shared_ptr<WitnessSet> PathEdgeCover_DynamicCore::clean_implementation(PathEdgeCover_WitnessSetPointer witnessSet) {

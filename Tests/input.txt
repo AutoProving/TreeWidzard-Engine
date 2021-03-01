@@ -1,3 +1,6 @@
-path_width 2
-a := PathEdgeCover = 3
-TRUE
+path_width 3
+a := MaxDegree > 5
+b := MaxDegree > 6
+c := EdgeColoringCompact < 7
+d := HasMultipleEdges
+(NOT d AND a AND NOT b) IMPLIES c

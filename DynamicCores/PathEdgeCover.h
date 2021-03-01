@@ -45,10 +45,17 @@ private:
     void join_implementation(Bag &b, PathEdgeCover_WitnessPointer w1, PathEdgeCover_WitnessPointer w2, PathEdgeCover_WitnessSetPointer witnessSet);
     bool is_final_witness_implementation(PathEdgeCover_WitnessPointer w);
     shared_ptr<WitnessSet> clean_implementation(PathEdgeCover_WitnessSetPointer witnessSet);
-    pair<bool, pair<vector<unsigned >, vector<bool>> > combinePartition(pair<vector<unsigned int>, vector<bool>> p1,
-                                                                                        pair<vector<unsigned int>, vector<bool>> p2, unsigned width);
-    pair<vector<vector<vector<unsigned >>>,vector<vector<vector<bool>>>> combinePartialPathCover(pair<vector<vector<unsigned >>,vector<vector<bool>> > p1,
-                                                                                                 pair<vector<vector<unsigned >>,vector<vector<bool>> > p2, unsigned width);
+    pair<bool,pair<vector<int>,vector<bool>>>  addEdgeToPath(int i, int j, pair<vector<int>,vector<bool> > p, int position);
+    bool alreadyCovered(int i, int j,set<pair<vector<int>,vector<bool> >>  &pathCover);
+    pair<bool,pair<vector<int>,vector<bool>>> deleteVertexFromPath(int i, pair<vector<int>,vector<bool> > p);
+
+    pair<bool,pair<vector<int>, vector<bool> > > combinePaths(pair<vector<int>, vector<bool> > pth1, pair<vector<int>, vector<bool> > pth2);
+    set<set<pair<vector<int>,vector<bool> >> > combinePartialPathCover(set<pair<vector<int>,vector<bool> >> p1, set<pair<vector<int>,vector<bool> >> p2);
+
+//    pair<bool, pair<vector<unsigned >, vector<bool>> > combinePartition(pair<vector<unsigned int>, vector<bool>> p1,
+//                                                                                        pair<vector<unsigned int>, vector<bool>> p2, unsigned width);
+//    set<set<vector<unsigned >>>,vector<vector<vector<bool>>>> combinePartialPathCover(set<vector<unsigned >>,vector<vector<bool>> > p1,
+//                                                                                                 set<vector<unsigned >>,vector<vector<bool>> > p2, unsigned width);
 public:
     unsigned parameter; // This is the length of a path, so the path has parameter+1 vertices
     PathEdgeCover_DynamicCore();

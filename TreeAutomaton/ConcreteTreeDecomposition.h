@@ -10,6 +10,7 @@
 
 using namespace std;
 
+namespace concrete_fs = std::experimental::filesystem;
 
 class AbstractTreeDecompositionNodeContent;
 class AbstractTreeDecomposition;
@@ -51,6 +52,8 @@ public:
     void traverseNode(TermNode<ConcreteNode> &node, MultiGraph &G, map<unsigned, unsigned> &colorToVertexMap, unsigned &nVertices, unsigned &nEdges);
     MultiGraph extractMultiGraph();
     AbstractTreeDecomposition convertToAbstractTreeDecomposition();
+    void writeToFile(string fileName);
+
 
 };
 

@@ -151,3 +151,17 @@ AbstractTreeDecomposition ConcreteTreeDecomposition::convertToAbstractTreeDecomp
     AbstractTreeDecomposition abstractTreeDecomposition;
     return abstractTreeDecomposition;
 }
+
+void ConcreteTreeDecomposition::writeToFile(string fileName) {
+    fileName = "Counterexample_ConcreteTreeDec_"+concrete_fs::path(fileName).filename().string();
+    ofstream atdFile (fileName);
+    if (atdFile.is_open())
+    {
+        atdFile << termInformation();
+        atdFile.close();
+    }
+    else {
+        cout << "Unable to open "<< fileName << endl;
+        exit(20);
+    }
+}
