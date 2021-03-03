@@ -1,3 +1,5 @@
-tree_width 2
-a := ChromaticNumber  < 2
-TRUE
+tree_width 3
+a := ChromaticNumber  < 4
+b := MaxDegree > 2
+c := HasMultipleEdges
+b AND NOT c IMPLIES a

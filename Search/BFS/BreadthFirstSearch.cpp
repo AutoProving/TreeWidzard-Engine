@@ -94,6 +94,8 @@ void BreadthFirstSearch::search(){
     Transition<State::ptr,AbstractTreeDecompositionNodeContent> initialTransition(initialState,initialTransitionContent,initialAntecedents);
 	bfsDAG.addTransition(initialTransition);
     unsigned int width = kernel->get_width().get_value();
+    vector<unsigned > numberOfWitnesses;
+    numberOfWitnesses.resize(initialState->numberOfComponents());
 	int iterationNumber = 0;
 	while(!newStatesSet.empty()){
 	    iterationNumber++;
@@ -124,6 +126,10 @@ void BreadthFirstSearch::search(){
                         antecedentStates.push_back(statePointer);
                         Transition<State::ptr,AbstractTreeDecompositionNodeContent> transition(consequentState,transitionContent,antecedentStates);
                         bfsDAG.addTransition(transition);
+                        // size of witnessSets
+                        for (int component = 0; component < numberOfWitnesses.size(); ++component) {
+                            numberOfWitnesses[component] = max(numberOfWitnesses[component],(unsigned)consequentState->getWitnessSet(component)->size());
+                        }
                     }
                 }
 			}
@@ -141,6 +147,10 @@ void BreadthFirstSearch::search(){
                     antecedentStates.push_back(statePointer);
                     Transition<State::ptr,AbstractTreeDecompositionNodeContent> transition(consequentState,transitionContent,antecedentStates);
                     bfsDAG.addTransition(transition);
+                    // size of witnessSets
+                    for (int component = 0; component < numberOfWitnesses.size(); ++component) {
+                        numberOfWitnesses[component] = max(numberOfWitnesses[component],(unsigned)consequentState->getWitnessSet(component)->size());
+                    }
                 }
 			}
             //Introduce Edge
@@ -160,6 +170,10 @@ void BreadthFirstSearch::search(){
                                 antecedentStates.push_back(statePointer);
                                 Transition<State::ptr,AbstractTreeDecompositionNodeContent> transition(consequentState,transitionContent,antecedentStates);
                                 bfsDAG.addTransition(transition);
+                                // size of witnessSets
+                                for (int component = 0; component < numberOfWitnesses.size(); ++component) {
+                                    numberOfWitnesses[component] = max(numberOfWitnesses[component],(unsigned)consequentState->getWitnessSet(component)->size());
+                                }
                             }
                         }
                     }
@@ -184,6 +198,10 @@ void BreadthFirstSearch::search(){
                                                                                                     transitionContent,
                                                                                                     antecedentStates);
                             bfsDAG.addTransition(transition);
+                            // size of witnessSets
+                            for (int component = 0; component < numberOfWitnesses.size(); ++component) {
+                                numberOfWitnesses[component] = max(numberOfWitnesses[component],(unsigned)consequentState->getWitnessSet(component)->size());
+                            }
                         }
                     }
                 }
@@ -242,8 +260,14 @@ void BreadthFirstSearch::search(){
 		allStatesSet = setUnion;
 		setUnion.clear();
         if(flags->get("LoopTime") == 1){
-            cout<<"AllState:"<<allStatesSet.size()<<" new State: "<<newStatesSet.size()<<endl;
+            cout<<"AllState:"<<allStatesSet.size()<<" new State: "<<newStatesSet.size()<<" Max witnessSet size:";
+            for (int component = 0; component < numberOfWitnesses.size() ; ++component) {
+                cout<< numberOfWitnesses[component];
+                if(component != numberOfWitnesses.size()-1)
+                    cout<<",";
+            }
             cout << endl << "----------------- End Iteration: " << iterationNumber << " ----------------------------" << endl << endl;
+
         }
 	}
     cout<<"Finish"<<endl;

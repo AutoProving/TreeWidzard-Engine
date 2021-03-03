@@ -394,7 +394,7 @@ void LeveledSetSearch::search() {
 								if (maxWitnessSetSize[m] <
 									static_cast<unsigned>(
 										newState->getWitnessSet(m)->size())) {
-maxWitnessSetSize[m] =
+                                        maxWitnessSetSize[m] =
 										newState->getWitnessSet(m)->size();
 								}
 							}

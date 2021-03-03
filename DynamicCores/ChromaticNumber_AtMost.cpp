@@ -52,7 +52,7 @@ string ChromaticNumber_AtMost_Witness::witnessInformation() {
         }
         info+="}";
     }
-    info= info + "}";
+    info= info + "\n";
     return info;
 
 }
