@@ -33,7 +33,7 @@ class MaxDegree_AtLeast_Witness:public Witness, public enable_shared_from_this<M
 
 class MaxDegree_AtLeast_WitnessSet : public WitnessSetTypeOne<MaxDegree_AtLeast_WitnessSet>{
 public:
-   // shared_ptr<WitnessSet> createEmptyWitnessSet() override;
+    shared_ptr<WitnessSet> createEmptyWitnessSet() override;
 };
 
 // Pointer type for Generic_Operator_WitnessSet.

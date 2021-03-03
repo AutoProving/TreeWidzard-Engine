@@ -424,3 +424,8 @@ void Connectivity_DynamicCore::copyWitness(Connectivity_WitnessPointer w_input,
                                            Connectivity_WitnessPointer w_output) {
     w_output->set_equal_implementation(w_input);
 }
+
+void Connectivity_DynamicCore::createInitialWitnessSet() {
+    Connectivity_WitnessSetPointer witnessSet(new Connectivity_WitnessSet);
+    return witnessSet;
+}

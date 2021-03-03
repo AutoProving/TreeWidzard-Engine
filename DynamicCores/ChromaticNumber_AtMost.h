@@ -13,8 +13,9 @@ typedef shared_ptr<ChromaticNumber_AtMost_Witness> ChromaticNumber_AtMost_Witnes
 typedef shared_ptr<ChromaticNumber_AtMost_Witness const> ChromaticNumber_AtMost_WitnessPointerConst;
 class ChromaticNumber_AtMost_Witness: public Witness, public enable_shared_from_this<ChromaticNumber_AtMost_Witness> {
 public:
-    std::map<unsigned,unsigned> coloring; //The first coordinate of each pair is a vertex and the second a color.
-    //   virtual shared_ptr<Witness> relabel(map<unsigned,unsigned> relabelingMap);
+    //std::map<unsigned,unsigned> coloring; //The first coordinate of each pair is a vertex and the second a color.
+    set<set<unsigned>> partialColoring;
+    //unsigned numberUsedColors;
     ChromaticNumber_AtMost_Witness(){};
     ~ChromaticNumber_AtMost_Witness(){};
     bool is_equal_implementation(const ChromaticNumber_AtMost_WitnessPointerConst w) const;

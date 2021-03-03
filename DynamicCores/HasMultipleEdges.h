@@ -23,8 +23,9 @@ public:
 };
 
 class HasMultipleEdges_WitnessSet : public WitnessSetTypeOne<HasMultipleEdges_WitnessSet>{
-
+    shared_ptr<WitnessSet> createEmptyWitnessSet() override;
 };
+typedef shared_ptr<HasMultipleEdges_WitnessSet> HasMultipleEdges_WitnessSetPointer;
 
 class HasMultipleEdges_DynamicCore: public DynamicCore{
 public:

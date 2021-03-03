@@ -2,56 +2,77 @@
 
 #include "ChromaticNumber_AtMost.h"
 
-
-
 bool ChromaticNumber_AtMost_Witness::is_equal_implementation(const ChromaticNumber_AtMost_WitnessPointerConst w) const{
-    return this->coloring == w->coloring;
+    /*return this->partialColoring == w->partialColoring and 
+        this->numberUsedColors == w->numberUsedColors;*/
+    return this->partialColoring  == w->partialColoring;
 }
 
 bool ChromaticNumber_AtMost_Witness::is_less_implementation(const ChromaticNumber_AtMost_WitnessPointerConst w) const{
-       return this->coloring < w->coloring;
+       /*if(this->numberUsedColors < w->numberUsedColors) return true;
+       if(this->numberUsedColors == w->numberUsedColors) return this->partialColoring < w->partialColoring;
+       retrun false;*/
+        return this->partialColoring < w->partialColoring;
 }
 
 Witness& ChromaticNumber_AtMost_Witness::set_equal_implementation(ChromaticNumber_AtMost_WitnessPointer w){
-    this->coloring = w->coloring; 
+   // this->numberUsedColors = w->numberUsedColors;
+    this->partialColoring = w->partialColoring;
     return *this;
 }
 
 void ChromaticNumber_AtMost_Witness::print() {
-    cout<<"{";
-    for (map<unsigned,unsigned>::iterator it = coloring.begin(); it != coloring.end() ; ++it) {
-        cout<< it->first <<" -> "<< it->second << ", ";
+    cout<<"partialColoring:";
+    for(auto cell:partialColoring){
+        cout<<"{ ";
+        for(auto item:cell){
+
+            cout<<item;
+            if(item!= *cell.crbegin()){
+                cout<<",";
+            }
+        }
+        cout<<"}";
     }
-    cout<<"}";
+    cout<<endl;
 }
 
 
 string ChromaticNumber_AtMost_Witness::witnessInformation() {
     string info;
-    info = "{";
-    for (map<unsigned,unsigned>::iterator it = coloring.begin(); it != coloring.end() ; ++it) {
-        info = info + to_string( it->first) + " -> " + to_string( it->second) + ", ";
+    info = "partialColoring:";
+    for(auto cell:partialColoring){
+        info = info + "{ ";
+        for(auto item:cell){
+
+            info+= to_string(item);
+            if(item!= *cell.crbegin()){
+                info+=",";
+            }
+        }
+        info+="}";
     }
     info= info + "}";
     return info;
+
 }
 
 shared_ptr<Witness> ChromaticNumber_AtMost_Witness::relabel(map<unsigned,unsigned> relabelingMap){
     shared_ptr<ChromaticNumber_AtMost_Witness> relabeledWitness(new ChromaticNumber_AtMost_Witness);
-    for (auto it = this->coloring.begin(); it!=this->coloring.end();it++){
-        pair<unsigned,unsigned> relabeledPair;
-        if(relabelingMap.count(it->first)){
-            relabeledPair.first = relabelingMap[it->first];
-            relabeledPair.second = it->second;
-            relabeledWitness->coloring.insert(relabeledPair);
-        }else{
-            cout<<"Error: ChromaticNumber_AtMost_Witness::relabel "<< it->first << " is not in the map"<<endl;
-            exit(20);
+    for(auto cell:this->partialColoring){
+        set<unsigned> relabeledCell;
+        for(auto item:cell){
+            if(relabelingMap.count(item)){
+                relabeledCell.insert(relabelingMap[item]);
+            }else{
+                cout<<"Error: ChromaticNumber_AtMost_Witness::relabel function error"<<endl;
+                exit(20);
+            }
         }
-    }
+        relabeledWitness->partialColoring.insert(relabeledCell);
+    } 
     return relabeledWitness;
 }
-
 
 ChromaticNumber_AtMost_DynamicCore::ChromaticNumber_AtMost_DynamicCore() {
     // Initializing attributes
@@ -71,15 +92,29 @@ ChromaticNumber_AtMost_DynamicCore::ChromaticNumber_AtMost_DynamicCore(unsigned 
 
 void ChromaticNumber_AtMost_DynamicCore::createInitialWitnessSet_implementation(){
     shared_ptr<ChromaticNumber_AtMost_Witness> witness = createWitness();
+    //witness->numberUsedColors = 0;
     this->insertIntoInitialWitnessSet(witness);
 }
 
 void ChromaticNumber_AtMost_DynamicCore::intro_v_implementation(unsigned i, Bag &b,
                                                                 ChromaticNumber_AtMost_WitnessPointer w, ChromaticNumber_AtMost_WitnessSetPointer witnessSet){
-    for (unsigned color = 1; color < k+1 ; color++) {
+    // insert to one of the cells of  w->partialColoring
+    for(auto cell:w->partialColoring){
         ChromaticNumber_AtMost_WitnessPointer witness = createWitness();
-        witness->coloring = w->coloring;
-        witness->coloring.insert(make_pair(i,color));
+        witness->set_equal(*w);
+        witness->partialColoring.erase(cell);
+        cell.insert(i);
+        witness->partialColoring.insert(cell);
+        witnessSet->insert(witness);
+    }
+    if(w->partialColoring.size() < this->k ){
+        // i can be added as an separated cell to the partition
+        ChromaticNumber_AtMost_WitnessPointer witness = createWitness();
+        witness->set_equal(*w);
+        //witness->numberUsedColors = witness->numberUsedColors +1;
+        set<unsigned> iCell;
+        iCell.insert(i);
+        witness->partialColoring.insert(iCell);
         witnessSet->insert(witness);
     }
 }
@@ -87,22 +122,43 @@ void ChromaticNumber_AtMost_DynamicCore::intro_v_implementation(unsigned i, Bag 
 void ChromaticNumber_AtMost_DynamicCore::intro_e_implementation(unsigned int i, unsigned int j, Bag &b,
                                                                 ChromaticNumber_AtMost_WitnessPointer w,
                                                                 ChromaticNumber_AtMost_WitnessSetPointer witnessSet) {
-    if(w->coloring.find(i)->second != w->coloring.find(j)->second){
+      // If i and j are in different cell then w will be returned, otherwise, it is invalid
+      set<unsigned> iCell;
+      set<unsigned> jCell;
+      for(auto cell:w->partialColoring){
+            if(cell.count(i)){
+                iCell = cell;
+            }
+            if(cell.count(j)){
+                jCell = cell;
+            }
+      }
+      if(jCell!=iCell){
         witnessSet->insert(w);
-    }
+      }
 }
 
 void ChromaticNumber_AtMost_DynamicCore::forget_v_implementation(unsigned i, Bag &b,
                                                                  ChromaticNumber_AtMost_WitnessPointer w,ChromaticNumber_AtMost_WitnessSetPointer witnessSet){
-    ChromaticNumber_AtMost_WitnessPointer witness = createWitness();
-    witness->coloring = w->coloring;
-    witness->coloring.erase(i);
-    witnessSet->insert(witness);
+  for(auto cell:w->partialColoring){
+    if(cell.count(i)){
+        ChromaticNumber_AtMost_WitnessPointer witness = createWitness();
+        witness->set_equal(*w);
+        witness->partialColoring.erase(cell);
+        cell.erase(i);
+        if(!cell.empty()){
+            witness->partialColoring.insert(cell);
+        }
+        witnessSet->insert(witness);
+        break;
+    }
+  }
 }
 
 void ChromaticNumber_AtMost_DynamicCore::join_implementation(Bag &b, ChromaticNumber_AtMost_WitnessPointer w1,
                                                              ChromaticNumber_AtMost_WitnessPointer w2, ChromaticNumber_AtMost_WitnessSetPointer witnessSet){
-    if(w1->coloring == w2->coloring){
+
+    if(w1->partialColoring == w2->partialColoring){
         witnessSet->insert(w1);
     }
 }
@@ -148,6 +204,8 @@ Witness &ChromaticNumber_AtMost_Witness::set_equal(Witness &witness) {
 
 
 void ChromaticNumber_AtMost_DynamicCore::createInitialWitnessSet() {
+    ChromaticNumber_AtMost_WitnessSetPointer witnessSet(new ChromaticNumber_AtMost_WitnessSet);
+    setInitialWitnessSet(witnessSet);
     createInitialWitnessSet_implementation();  
 }
 

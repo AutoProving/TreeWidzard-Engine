@@ -275,10 +275,10 @@ Witness &MaxDegree_AtLeast_Witness::set_equal(Witness &witness) {
     }
 }
 
-/*shared_ptr<WitnessSet> MaxDegree_AtLeast_WitnessSet::createEmptyWitnessSet() {
+shared_ptr<WitnessSet> MaxDegree_AtLeast_WitnessSet::createEmptyWitnessSet() {
     MaxDegree_AtLeast_WitnessSetPointer witnessSet(new MaxDegree_AtLeast_WitnessSet);
     return witnessSet;
-}*/
+}
 
 MaxDegree_AtLeast_WitnessPointer MaxDegree_AtLeast_DynamicCore::createWitness() {
     MaxDegree_AtLeast_WitnessPointer w(new MaxDegree_AtLeast_Witness);
@@ -291,6 +291,8 @@ void MaxDegree_AtLeast_DynamicCore::copyWitness(MaxDegree_AtLeast_WitnessPointer
 }
 
 void MaxDegree_AtLeast_DynamicCore::createInitialWitnessSet() {
+    MaxDegree_AtLeast_WitnessSetPointer  witnessSet (new MaxDegree_AtLeast_WitnessSet);
+    setInitialWitnessSet(witnessSet);
     createInitialWitnessSet_implementation();
 }
 

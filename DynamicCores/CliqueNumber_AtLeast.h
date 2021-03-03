@@ -13,6 +13,8 @@ class CliqueNumber_AtLeast_Witness: public Witness, public enable_shared_from_th
 public:
 	bool found; // Set to true if and only if a clique of the right size was found
 	set<pair<unsigned,unsigned>> edges;
+	// map<unsigned,unsigned> partialClique;
+	// unsigned size;
 	CliqueNumber_AtLeast_Witness(){};
 	~CliqueNumber_AtLeast_Witness(){};
     bool is_equal_implementation(const CliqueNumber_AtLeast_WitnessPointerConst w) const;
@@ -30,7 +32,7 @@ public:
 
 
 class CliqueNumber_AtLeast_WitnessSet : public WitnessSetTypeOne<CliqueNumber_AtLeast_WitnessSet>{
-
+ shared_ptr<WitnessSet> createEmptyWitnessSet() override;
 };
 // Pointer type for Generic_Operator_WitnessSet.
 typedef shared_ptr<CliqueNumber_AtLeast_WitnessSet> CliqueNumber_AtLeast_WitnessSetPointer ;

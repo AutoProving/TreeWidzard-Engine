@@ -91,8 +91,10 @@ set<unsigned> neighborsOnPartialClique(set<pair<unsigned,unsigned>> edges, int i
 CliqueNumber_AtLeast_DynamicCore::CliqueNumber_AtLeast_DynamicCore() {
     // Initializing attributes
     addAttribute("CoreName","CliqueNumber");
+    addAttribute("Restriction","SimpleGraphs");
     addAttribute("ParameterType","UnsignedInt");
     addAttribute("PrimaryOperator","AtLeast");
+
 }
 
 CliqueNumber_AtLeast_DynamicCore::CliqueNumber_AtLeast_DynamicCore(unsigned cliqueSize){
@@ -362,7 +364,9 @@ Witness &CliqueNumber_AtLeast_Witness::set_equal(Witness &witness) {
 
 
 void CliqueNumber_AtLeast_DynamicCore::createInitialWitnessSet() {
- createInitialWitnessSet_implementation();
+    CliqueNumber_AtLeast_WitnessSetPointer witnessSet(new CliqueNumber_AtLeast_WitnessSet);
+    setInitialWitnessSet(witnessSet);
+    createInitialWitnessSet_implementation();
 }
 
 void CliqueNumber_AtLeast_DynamicCore::copyWitness(CliqueNumber_AtLeast_WitnessPointer w_input,
@@ -452,7 +456,10 @@ bool CliqueNumber_AtLeast_DynamicCore::is_final_witness(Witness &witness) {
         exit(20);
     }
 }
-
+shared_ptr<WitnessSet> CliqueNumber_AtLeast_WitnessSet::createEmptyWitnessSet() {
+    CliqueNumber_AtLeast_WitnessSetPointer witnessSet(new CliqueNumber_AtLeast_WitnessSet);
+    return witnessSet;
+}
 ///////////////////////////////////////////////////////////////////////////////////////
 extern "C" {
 DynamicCore * create() {

@@ -32,7 +32,7 @@ public:
 };
 
 class Connectivity_WitnessSet: public WitnessSetTypeOne<Connectivity_WitnessSet>{
-
+    shared_ptr<WitnessSet> createEmptyWitnessSet() override;
 };
 
 typedef shared_ptr<Connectivity_WitnessSet> Connectivity_WitnessSetPointer;

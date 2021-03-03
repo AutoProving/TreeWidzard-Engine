@@ -3,7 +3,8 @@
 #include "DynamicCore.h"
 #include "../DynamicCores/EdgeConnected_AtMost.h"
 WitnessSetPointer DynamicCore::getInitialSet() {
-    return initialWitnessSet; }
+    return initialWitnessSet;
+}
 
 void DynamicCore::insertIntoInitialWitnessSet(WitnessPointer w) {
 	initialWitnessSet->insert(w);

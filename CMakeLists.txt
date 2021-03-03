@@ -32,10 +32,10 @@ add_executable(
 	# DynamicCore files
 		#  DynamicCores/CliqueNumber_AtLeast.cpp
 		#   DynamicCores/CliqueNumber_AtLeast.h
-		   DynamicCores/ChromaticNumber_AtMost.cpp
-		   DynamicCores/ChromaticNumber_AtMost.h
-		#	DynamicCores/MaxDegree_AtLeast.cpp
-		#	DynamicCores/MaxDegree_AtLeast.h
+		#  DynamicCores/ChromaticNumber_AtMost.cpp
+		#   DynamicCores/ChromaticNumber_AtMost.h
+			DynamicCores/MaxDegree_AtLeast.cpp
+				DynamicCores/MaxDegree_AtLeast.h
 		#   DynamicCores/HasMultipleEdges.cpp
 		#   DynamicCores/HasMultipleEdges.h
 		#	DynamicCores/TriangleFreeWidthFour.cpp

@@ -288,8 +288,6 @@ void MinDegree_AtMost_DynamicCore::copyWitness(MinDegree_AtMost_WitnessPointer w
 }
 
 void MinDegree_AtMost_DynamicCore::createInitialWitnessSet() {
-    shared_ptr<MinDegree_AtMost_Witness> w(new MinDegree_AtMost_Witness);
-    w->found=false;
     shared_ptr<MinDegree_AtMost_WitnessSet> witnessSet(new MinDegree_AtMost_WitnessSet);
     setInitialWitnessSet(witnessSet);
     createInitialWitnessSet_implementation();

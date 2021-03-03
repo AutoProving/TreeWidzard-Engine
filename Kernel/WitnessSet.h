@@ -66,7 +66,7 @@ public:
     virtual shared_ptr<WitnessSet> relabel(map<unsigned,unsigned> map){cout<<"Error: Base WitnessSet relabel function"<<endl; exit(20);}
     virtual BaseIterator begin(){cout<<"Error: WitnessSet begin()."<<endl; exit(20);};
     virtual BaseIterator end(){cout<< "Error: WitnessSet end()"<<endl; exit(20);};
-    virtual void insert(shared_ptr<Witness> w){cout<<"Error: WitnessSet insert."<<endl; exit(20);};
+    virtual void insert(shared_ptr<Witness> w){cout<<" \n Error: WitnessSet insert."<<endl; exit(20);};
     virtual void union_set_witness(shared_ptr<WitnessSet> witnessSet){cout<<"Error: Set union of witnessSet class."<<endl; exit(20);};
     virtual void print(){cout<<"Error: WitnessSet print."<<endl; exit(20);};
     virtual string witnessSetInformation(){cout<<"Error: WitnessSet witnessSetInformation"<<endl; exit(20);}

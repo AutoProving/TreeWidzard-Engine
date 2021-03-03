@@ -235,3 +235,7 @@ WitnessSetPointer HasMultipleEdges_DynamicCore::clean(WitnessSetPointer witnessS
     return witnessSet;
 }
 
+shared_ptr<WitnessSet> HasMultipleEdges_WitnessSet::createEmptyWitnessSet() {
+    HasMultipleEdges_WitnessSetPointer witnessSet(new HasMultipleEdges_WitnessSet);
+    return witnessSet;
+}

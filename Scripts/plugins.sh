@@ -7,7 +7,6 @@ do
     echo $name
     echo $eachfile
     g++ -fPIC -shared $p/../Kernel/WitnessSet.cpp $p/../Kernel/Witness.cpp $p/../Kernel/DynamicCore.cpp $eachfile -o $p/../DynamicPlugins/$name.so
-
 done
 # rm -r $PWD/../SearchPlugins/*
 # for eachfile in $(find $PWD/../Search -type f -name "*.cpp")

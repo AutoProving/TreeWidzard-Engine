@@ -54,7 +54,7 @@ private:
 public:
     unsigned parameter;
     MinDegree_AtMost_DynamicCore();
-    MinDegree_AtMost_DynamicCore(unsigned maxDegree);
+    MinDegree_AtMost_DynamicCore(unsigned minDegree);
     ~MinDegree_AtMost_DynamicCore(){};
     void createInitialWitnessSet();
     WitnessSetPointer intro_v(unsigned i, Bag &b, Witness &witness);

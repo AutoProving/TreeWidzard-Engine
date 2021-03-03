@@ -37,7 +37,6 @@ public:
 };
 
 class CycleGirth_AtMost_WitnessSet : public WitnessSetTypeOne<CycleGirth_AtMost_WitnessSet>{
-
     shared_ptr<WitnessSet> createEmptyWitnessSet() override;
 };
 
