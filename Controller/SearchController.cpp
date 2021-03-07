@@ -6,10 +6,11 @@
 
 SearchController::SearchController(const string &inputPath, const string &searchStrategy, const Flags &flags)
         : searchStrategy(searchStrategy), flags(flags) {
-    string file_path = __FILE__;
+   // string file_path = __FILE__;
+    string file_path = "";
     string path = file_path.substr(0, file_path.rfind("/"));
-    inputController = new InputController(inputPath, path+"/../DynamicPlugins/");
-    searchPluginPath = path+"/../SearchPlugins/";
+    inputController = new InputController(inputPath, path+"../DynamicPlugins/");
+    searchPluginPath = path+"../SearchPlugins/";
 }
 
 

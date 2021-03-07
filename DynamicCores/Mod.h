@@ -12,7 +12,7 @@ typedef shared_ptr<Mod_Witness const > Mod_WitnessPointerConst;
 //Defines the type of a witness for the core MaxDegree_GreaterThanOrEqual
 class Mod_Witness:public Witness, public enable_shared_from_this<Mod_Witness>{
 public:
-    int remainder; // Keep the remmainder Mod of number of vertices which have been introduced  until the witness creation.
+    int remainder; // Keep the remainder Mod of number of vertices which have been introduced  until the witness creation.
     bool is_equal_implementation(const Mod_WitnessPointerConst w) const;
     bool is_less_implementation(const Mod_WitnessPointerConst w) const;
     Witness& set_equal_implementation(Mod_WitnessPointer w);

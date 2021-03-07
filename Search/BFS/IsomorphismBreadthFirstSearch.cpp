@@ -40,6 +40,8 @@ void IsomorphismBreadthFirstSearch::search(){
 	int iterationNumber = 0;
     unsigned allStatesSize = 1;
     unsigned newStatesSize = 1;
+    vector<unsigned > numberOfWitnesses;
+    numberOfWitnesses.resize(initialState->numberOfComponents());
     while(newStatesSize) {
         iterationNumber++;
         // Initializing newStatesVector.
@@ -86,6 +88,10 @@ void IsomorphismBreadthFirstSearch::search(){
                                 cout << "Intro Vertex " << i << endl;
                                 consequentState.print();
                             }
+                            // size of witnessSets
+                            for (int component = 0; component < numberOfWitnesses.size(); ++component) {
+                                numberOfWitnesses[component] = max(numberOfWitnesses[component],(unsigned)consequentState->getWitnessSet(component)->size());
+                            }
                         }
                     }
                 }
@@ -112,6 +118,10 @@ void IsomorphismBreadthFirstSearch::search(){
                         if (flags->get("PrintStates") == 1) {
                             cout<<"Forget Vertex "<< *it <<endl;
                             consequentState.print();
+                        }
+                        // size of witnessSets
+                        for (int component = 0; component < numberOfWitnesses.size(); ++component) {
+                            numberOfWitnesses[component] = max(numberOfWitnesses[component],(unsigned)consequentState->getWitnessSet(component)->size());
                         }
                     }
                 }
@@ -140,6 +150,10 @@ void IsomorphismBreadthFirstSearch::search(){
                                     if (flags->get("PrintStates") == 1) {
                                         cout<<"Intro Edge "<< *it<< " " << *itPrime<<endl;
                                         consequentState.print();
+                                    }
+                                    // size of witnessSets
+                                    for (int component = 0; component < numberOfWitnesses.size(); ++component) {
+                                        numberOfWitnesses[component] = max(numberOfWitnesses[component],(unsigned)consequentState->getWitnessSet(component)->size());
                                     }
                                 }
                             }
@@ -173,6 +187,10 @@ void IsomorphismBreadthFirstSearch::search(){
                                 if (flags->get("PrintStates") == 1) {
                                     cout<<"Join "<<endl;
                                     consequentState.print();
+                                }
+                                // size of witnessSets
+                                for (int component = 0; component < numberOfWitnesses.size(); ++component) {
+                                    numberOfWitnesses[component] = max(numberOfWitnesses[component],(unsigned)consequentState->getWitnessSet(component)->size());
                                 }
                             }
                         }while(nextPermutation(m));
@@ -221,7 +239,12 @@ void IsomorphismBreadthFirstSearch::search(){
         }
 
         if(flags->get("LoopTime") == 1){
-            cout<<"AllState:"<<allStatesSize<<" new State: "<<newStatesSize<<endl;
+            cout<<"AllState:"<<allStatesSize<<" new State: "<<newStatesSize<<" Max witnessSet size:";
+            for (int component = 0; component < numberOfWitnesses.size() ; ++component) {
+                cout<< numberOfWitnesses[component];
+                if(component != numberOfWitnesses.size()-1)
+                    cout<<",";
+            }
             cout << endl << "----------------- End Iteration: " << iterationNumber << " ----------------------------" << endl << endl;
         }
 	}

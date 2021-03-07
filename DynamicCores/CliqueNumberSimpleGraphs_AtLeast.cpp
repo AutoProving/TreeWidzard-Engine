@@ -55,7 +55,7 @@ void CliqueNumberSimpleGraphs_AtLeast_Witness::print() {
             cout<<", ";
         }
     }
-    cout<<"}"; 
+    cout<<"}"<<endl;
 }
 
 string CliqueNumberSimpleGraphs_AtLeast_Witness::witnessInformation() {
@@ -68,7 +68,7 @@ string CliqueNumberSimpleGraphs_AtLeast_Witness::witnessInformation() {
             info = info + ",";
         }
     }
-    info = info + "}";
+    info = info + "}\n";
     return info;
 }
 
@@ -94,12 +94,13 @@ CliqueNumberSimpleGraphs_AtLeast_DynamicCore::CliqueNumberSimpleGraphs_AtLeast_D
 void CliqueNumberSimpleGraphs_AtLeast_DynamicCore::createInitialWitnessSet_implementation() {
     CliqueNumberSimpleGraphs_AtLeast_WitnessPointer w = createWitness();
     w->found = false;
+    w->size = 0;
     this->insertIntoInitialWitnessSet(w);
 }
 
 void CliqueNumberSimpleGraphs_AtLeast_DynamicCore::intro_v_implementation(unsigned i, Bag &b, CliqueNumberSimpleGraphs_AtLeast_WitnessPointer w,
             CliqueNumberSimpleGraphs_AtLeast_WitnessSetPointer witnessSet){
-     if(w->found or w->size==this->cliqueSize){
+     if(w->found or w->size == this->cliqueSize){
         witnessSet->insert(w);
      }else{
          // Either i can be added to the clique or not.

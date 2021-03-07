@@ -15,7 +15,11 @@ endif()
 add_compile_options(-O2)
 include_directories(Scripts)
 link_libraries(stdc++fs)
+set(CMAKE_EXE_LINKER_FLAGS "-static")
+set(CMAKE_EXE_LINKER_FLAGS "-rdynamic")
+
 include_directories(DynamicCores)
+
 project("treewidzard")
 add_executable(
 	# Executable file name
@@ -34,8 +38,8 @@ add_executable(
 		#   DynamicCores/CliqueNumber_AtLeast.h
 		#  DynamicCores/ChromaticNumber_AtMost.cpp
 		#   DynamicCores/ChromaticNumber_AtMost.h
-			DynamicCores/MaxDegree_AtLeast.cpp
-		    DynamicCores/MaxDegree_AtLeast.h
+		#	DynamicCores/MaxDegree_AtLeast.cpp
+		#   DynamicCores/MaxDegree_AtLeast.h
 		#   DynamicCores/HasMultipleEdges.cpp
 		#   DynamicCores/HasMultipleEdges.h
 		#	DynamicCores/TriangleFreeWidthFour.cpp
@@ -92,8 +96,8 @@ add_executable(
 		#Search/Leveled/LeveledSetSearch.h
 		#Search/Leveled/LeveledSetSearchPremise.cpp
 		#Search/Leveled/LeveledSetSearchPremise.h
-		Search/BFS/BreadthFirstSearch.h
-		Search/BFS/BreadthFirstSearch.cpp
+		#Search/BFS/BreadthFirstSearch.h
+		#Search/BFS/BreadthFirstSearch.cpp
 		#Search/RelabeledLeveledSetSearch.h
 		#Search/RelabeledLeveledSetSearch.cpp
 		#Search/BFS/RelabeledBreadthFirstSearch.h

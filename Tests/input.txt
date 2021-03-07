@@ -1,5 +1,6 @@
-tree_width 3
-a := ChromaticNumber  < 4
-b := MaxDegree > 2
-c := HasMultipleEdges
-b AND NOT c IMPLIES a
+path_width 4
+c := CliqueNumberSimpleGraphs > 2
+m := MaxDegree > 3
+x := ChromaticNumber < 4
+h := HasMultipleEdges
+NOT c AND NOT m AND NOT h IMPLIES x
