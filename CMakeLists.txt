@@ -36,7 +36,7 @@ add_executable(
 	# DynamicCore files
 		#  DynamicCores/CliqueNumber_AtLeast.cpp
 		#   DynamicCores/CliqueNumber_AtLeast.h
-		#  DynamicCores/ChromaticNumber_AtMost.cpp
+		#   DynamicCores/ChromaticNumber_AtMost.cpp
 		#   DynamicCores/ChromaticNumber_AtMost.h
 		#	DynamicCores/MaxDegree_AtLeast.cpp
 		#   DynamicCores/MaxDegree_AtLeast.h
@@ -59,6 +59,8 @@ add_executable(
         #   DynamicCores/Mod.cpp
 		#   DynamicCores/PathEdgeCover.h
         #    DynamicCores/PathEdgeCover.cpp
+		DynamicCores/VertexConnected_AtMost.cpp
+		DynamicCores/VertexConnected_AtMost.h
 	# Kernel files
         Kernel/Witness.cpp
         Kernel/Witness.h

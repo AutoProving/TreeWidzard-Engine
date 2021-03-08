@@ -6,6 +6,7 @@
 #include "../Kernel/DynamicCore.h"
 #include "../Kernel/WitnessSet.h"
 
+
 using namespace std;
 class Connectivity_Witness;
 

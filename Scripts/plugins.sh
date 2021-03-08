@@ -1,20 +1,20 @@
   #!/bin/bash
   p=$PWD;
   rm -r $PWD/../DynamicPlugins/*
-  for eachfile in $(find $PWD/../DynamicCores -type f -name "*.cpp")
+  for eachfile in $(find $PWD/../DynamicCores -type f -name "VertexCon*.cpp")
   do
       name=$(basename "$eachfile" .cpp)
       echo $name
       echo $eachfile
       g++ -fPIC -shared $p/../Kernel/WitnessSet.cpp $p/../Kernel/Witness.cpp $p/../Kernel/DynamicCore.cpp $eachfile -o $p/../DynamicPlugins/$name.so
   done
-   rm -r $PWD/../SearchPlugins/*
-   for eachfile in $(find $PWD/../Search -type f -name "*.cpp")
-   do
-       name=$(basename "$eachfile" .cpp)
-       echo $name
-       echo $eachfile
-       echo $p
-       g++ -fPIC -shared $p/../Kernel/DynamicKernel.cpp  $p/../Kernel/DynamicCore.cpp  $p/../Kernel/Conjecture.cpp  $p/../Kernel/SearchStrategy.cpp  $eachfile  -o  $p/../SearchPlugins/$name.so
-
-   done
+#   rm -r $PWD/../SearchPlugins/*
+#   for eachfile in $(find $PWD/../Search -type f -name "*.cpp")
+#   do
+#       name=$(basename "$eachfile" .cpp)
+#       echo $name
+#       echo $eachfile
+#       echo $p
+#       g++ -fPIC -shared $p/../Kernel/DynamicKernel.cpp  $p/../Kernel/DynamicCore.cpp  $p/../Kernel/Conjecture.cpp  $p/../Kernel/SearchStrategy.cpp  $eachfile  -o  $p/../SearchPlugins/$name.so
+#
+#   done

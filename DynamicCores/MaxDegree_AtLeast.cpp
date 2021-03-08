@@ -270,7 +270,7 @@ Witness &MaxDegree_AtLeast_Witness::set_equal(Witness &witness) {
         shared_ptr<MaxDegree_AtLeast_Witness> w = e->shared_from_this();
         return set_equal_implementation(w);
     }else{
-        cerr<<"ERROR: in MaxDegree_AtLeast_Witness::is_less cast error"<<endl;
+        cerr<<"ERROR: in MaxDegree_AtLeast_Witness::set_equal cast error"<<endl;
         exit(20);
     }
 }
