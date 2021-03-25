@@ -37,7 +37,7 @@ public:
     // set, and is used to keep track of connectivity as the decomposition is read. The third component is a boolean flag
     // that is true if the component has been completely processed. 
     vector<tuple<set<unsigned >, set<set<unsigned >>,bool> > partitions;
-    // Each coordinate of the next vector corresponds to an edge of the pattern graph, and contains a pair a pair reprenenting a The following vector has one coordinate for each edge of the graph. The 
+    // Each coordinate of the next vector corresponds to an edge of the pattern graph, and contains a pair a pair representing a The following vector has one coordinate for each edge of the graph. The
     //vector<pair<unsigned,bool>> edgeFoundVector;
     set<unsigned int> foundEdges; // i belongs to the set if the edge labeled i has been found. 
     //*****************************

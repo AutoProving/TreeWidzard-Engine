@@ -1,3 +1,4 @@
-tree_width 4
-a := VertexConnected < 4
-TRUE
+path_width 1
+a := Minor("../Tests/graphs/k_7.txt")
+b := Minor("../Tests/graphs/k_4.txt")
+NOT a AND NOT b
