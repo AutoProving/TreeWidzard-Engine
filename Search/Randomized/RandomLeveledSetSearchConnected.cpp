@@ -76,7 +76,34 @@ ConcreteTreeDecomposition RandomLeveledSetSearchConnected::extractCTDDecompositi
 //}
 
 void RandomLeveledSetSearchConnected::search(){
+    
+    // Default Values	
+    unsigned seedValue = time(NULL);
+    int numberOfIterations = 1000; 
+    float probAddVertex = 0.3; // Test if probAddVertex  + probForgetVertex <= 1.0
+    float probForgetVertex = 0.2; 
+    float probBacktrack = 1 - (probAddVertex + probForgetVertex); // Note: probAddVertex + probForgetVertex + probBacktrack = 1.0
+    // auto it = flags.find("seedValue"); 
+    // if (it =! flags.end()){
+    //	seedValue = flags["seedValue"]; 	
+    //}
+    // it = flags.find("numberIterations"); 
+    // if (it =! flags.end()){
+    //	numberIterations = flags["numberIterations"]; 	
+    //}
+    // it = flags.find("probAddVertex"); 
+    // if (it =! flags.end()){
+    //	probAddVertex = flags["probAddVertex"]; 	
+    //}
+    // it = flags.find("probForgetVertex"); 
+    // if (it =! flags.end()){
+    //	probForgetVertex  = flags["probForgetVertex"]; 	
+    //}
 
+
+
+    srand(seedValue); 
+    cout << "SeedValue: " << seedValue << endl; 
     // Add Initial state to vector
     generatedVector.push_back(make_pair(kernel->initialState(),"Leaf")); // This vector records a path decomposition + states
     vector<int> offsetVector; // Instructions are added in blocks. For instance: adding a vertex together with edges. This vector records
@@ -109,12 +136,14 @@ void RandomLeveledSetSearchConnected::search(){
             q->print();
 	    cout<<" ------------------------------------"<<endl; 
         }
-	unsigned option = random() % 3; // 0 add vertex + edges,  1 forget vertex, 2,3 backtrack one step.
+
+	float option = (rand() % 10000)/(10000.0);
+	//cout << "option: " <<  option << endl; 
 	
         if(flags->get("PrintStates")==1){
 		cout << "Option: " << option << endl;
 	}
-	if (option == 0){
+	if (option <= probAddVertex and (currentBagSet.size()< kernel->get_width().get_value())){
 		//Add a vertex and random edges (at least 1)
 		//STEP 1: Select the first label not in the set and push it to the stack
 		int el = 1;
@@ -154,14 +183,14 @@ void RandomLeveledSetSearchConnected::search(){
 			int maxDegree = oldBagSet.size(); // add this as a parameter
 			int maxNElements = oldBagSet.size();
 			if (maxNElements > maxDegree) maxNElements = maxDegree;
-			int nElements = (random() % maxNElements) + 1; //number of edges to be added
+			int nElements = (rand() % maxNElements) + 1; //number of edges to be added
 		       	//STEP 3: Construct a random subset 
 
 			//cout << "Position C " << endl;  
 			set<unsigned> randomSubset = oldBagSet;
 			int sizeOldBag = randomSubset.size(); 
 	   		for (int i=0; i< sizeOldBag-nElements; i++ ){
-				int x = random() % randomSubset.size(); 
+				int x = rand() % randomSubset.size(); 
 				randomSubset.erase(next(randomSubset.begin(),x)); 
 			}
 			//STEP 4: Introduce the edges
@@ -208,10 +237,10 @@ void RandomLeveledSetSearchConnected::search(){
 				generatedVector.erase(prev(generatedVector.end(),offset), generatedVector.end()); // deletes the block
 	        	}
 		}
-	} else if (option == 1){
+	} else if (option <= probAddVertex + probForgetVertex){
 		//Forget a random vertex
 		if(currentBagSet.size() >=2 ){ 
-        		unsigned toDeletePos = random() % currentBagSet.size();
+        		unsigned toDeletePos = rand() % currentBagSet.size();
 			unsigned toDelete = *(next(currentBagSet.begin(),toDeletePos));  
         		State::ptr s;
 		        s = kernel->forget_v(q,toDelete);
@@ -281,7 +310,7 @@ void RandomLeveledSetSearchConnected::search(){
             }
             cout<<"*******"<<endl;
         }
-        if(flags->get("LoopTime")==1 and counter == 1000){
+        if(flags->get("LoopTime")==1 and counter == numberOfIterations){
             counter=0; // Reset the counter
             cout<<"----------Vector Size:"<<generatedVector.size()<<"---- Iteration number:"<<iterationNumber <<endl;
         }
