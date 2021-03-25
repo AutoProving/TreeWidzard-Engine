@@ -1,0 +1,60 @@
+In file included from /mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/DynamicCore.h:14,
+                 from /mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/DynamicKernel.h:8,
+                 from /mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/DynamicKernel.cpp:3:
+/mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/WitnessSet.h: In member function ‘virtual valueType AbstractIterator::dereference()’:
+/mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/WitnessSet.h:16:37: warning: no return statement in function returning non-void [-Wreturn-type]
+   16 |     virtual valueType dereference(){};
+      |                                     ^
+/mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/WitnessSet.h:20:53: warning: no return statement in function returning non-void [-Wreturn-type]
+   20 |     virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                     ^
+In file included from /mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/DynamicCore.h:14,
+                 from /mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/DynamicCore.cpp:3:
+/mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/WitnessSet.h: In member function ‘virtual valueType AbstractIterator::dereference()’:
+/mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/WitnessSet.h:16:37: warning: no return statement in function returning non-void [-Wreturn-type]
+   16 |     virtual valueType dereference(){};
+      |                                     ^
+/mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/WitnessSet.h:20:53: warning: no return statement in function returning non-void [-Wreturn-type]
+   20 |     virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                     ^
+In file included from /mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/DynamicCore.h:14,
+                 from /mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/DynamicKernel.h:8,
+                 from /mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/Conjecture.h:5,
+                 from /mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/Conjecture.cpp:2:
+/mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/WitnessSet.h: In member function ‘virtual valueType AbstractIterator::dereference()’:
+/mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/WitnessSet.h:16:37: warning: no return statement in function returning non-void [-Wreturn-type]
+   16 |     virtual valueType dereference(){};
+      |                                     ^
+/mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/WitnessSet.h:20:53: warning: no return statement in function returning non-void [-Wreturn-type]
+   20 |     virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                     ^
+In file included from /mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/DynamicCore.h:14,
+                 from /mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/DynamicKernel.h:8,
+                 from /mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/Conjecture.h:5,
+                 from /mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/SearchStrategy.h:9,
+                 from /mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/SearchStrategy.cpp:3:
+/mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/WitnessSet.h: In member function ‘virtual valueType AbstractIterator::dereference()’:
+/mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/WitnessSet.h:16:37: warning: no return statement in function returning non-void [-Wreturn-type]
+   16 |     virtual valueType dereference(){};
+      |                                     ^
+/mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Kernel/WitnessSet.h:20:53: warning: no return statement in function returning non-void [-Wreturn-type]
+   20 |     virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                     ^
+In file included from /mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Search/Randomized/../../Kernel/DynamicCore.h:14,
+                 from /mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Search/Randomized/../../Kernel/DynamicKernel.h:8,
+                 from /mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Search/Randomized/../../Kernel/Conjecture.h:5,
+                 from /mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Search/Randomized/../../Kernel/SearchStrategy.h:9,
+                 from /mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Search/Randomized/RandomLeveledSetSearchConnected.h:5,
+                 from /mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Search/Randomized/RandomLeveledSetSearchConnected.cpp:3:
+/mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Search/Randomized/../../Kernel/WitnessSet.h: In member function ‘virtual valueType AbstractIterator::dereference()’:
+/mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Search/Randomized/../../Kernel/WitnessSet.h:16:37: warning: no return statement in function returning non-void [-Wreturn-type]
+   16 |     virtual valueType dereference(){};
+      |                                     ^
+/mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Search/Randomized/../../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/mnt/c/Users/Mateus/Dropbox/Work/projects/01-PriorityOne/dynamictheoremproving-program-versions/dynamictheoremproving-program/Optimized_Plugin_Program/Scripts/../Search/Randomized/../../Kernel/WitnessSet.h:20:53: warning: no return statement in function returning non-void [-Wreturn-type]
+   20 |     virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                     ^
