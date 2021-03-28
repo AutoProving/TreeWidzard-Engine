@@ -320,16 +320,16 @@ typedef int yytype_uint16;
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  18
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   28
+#define YYLAST   40
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  15
+#define YYNTOKENS  17
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  8
+#define YYNNTS  9
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  15
+#define YYNRULES  17
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  36
+#define YYNSTATES  45
 /* YYMAXRHS -- Maximum number of symbols on right-hand side of rule.  */
 #define YYMAXRHS 7
 /* YYMAXLEFT -- Maximum number of symbols to the left of a handle
@@ -337,7 +337,7 @@ typedef int yytype_uint16;
 #define YYMAXLEFT 0
 
 /* YYMAXUTOK -- Last valid token number (for yychar).  */
-#define YYMAXUTOK   269
+#define YYMAXUTOK   271
 /* YYUNDEFTOK -- Symbol number (for yytoken) that denotes an unknown
    token.  */
 #define YYUNDEFTOK  2
@@ -377,15 +377,16 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8,     9,    10,    11,    12,    13,    14
+       5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
+      15,    16
 };
 
 #if COMMAND_DEBUG
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    48,    48,    49,    50,    51,    53,    59,    60,    61,
-      62,    65,    67,    69,    71,    74
+       0,    50,    50,    51,    52,    53,    55,    59,    66,    75,
+      76,    77,    78,    81,    83,    85,    87,    90
 };
 #endif
 
@@ -399,23 +400,25 @@ static const char *const yytname[] =
   "command_print_loop_flag", "command_string", "command_help",
   "command_end", "command_parse_signature", "command_parse_pace",
   "command_parse_abstract", "command_term_signature",
-  "command_print_state_tree", "$accept", "command_start", "command_search",
+  "command_print_state_tree", "command_random_signature", "command_number",
+  "$accept", "command_start", "command_search", "command_random",
   "command_flags", "command_input_file", "command_search_strategy",
   "command_parse", "command_term", YY_NULLPTR
 };
 #endif
 
-#define YYPACT_NINF (-12)
+#define YYPACT_NINF (-26)
 #define YYTABLE_NINF (-1)
 
   /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -4,    -3,    -8,     4,    -2,     7,   -12,   -12,   -12,    -3,
-      -3,    -3,     1,   -12,    -3,    -3,   -12,    10,   -12,   -12,
-     -12,   -12,   -12,    -2,    -2,    -2,   -12,    15,    -2,    -2,
-     -12,    -2,    16,    19,   -12,   -12
+       5,    11,    -5,     8,    -1,    10,   -26,   -26,   -26,    11,
+      11,    11,    -4,   -26,    11,    11,   -26,    15,   -26,   -26,
+     -26,   -26,   -26,    -2,    21,    -1,    -1,    -1,   -26,    13,
+      -1,    22,    -1,    -1,    14,    23,   -26,    -1,    24,    18,
+     -26,    26,   -26,   -26,   -26
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -423,22 +426,23 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,    10,     0,     0,     0,     0,     2,     4,     5,    10,
-      10,    10,     0,     3,    10,    10,    11,     0,     1,     7,
-       8,     9,    12,     0,     0,     0,    15,     0,     0,     0,
-       6,     0,     0,     0,    14,    13
+       0,    12,     0,     0,     0,     0,     2,     4,     5,    12,
+      12,    12,     0,     3,    12,    12,    13,     0,     1,     9,
+      10,    11,    14,     0,     0,     0,     0,     0,    17,     0,
+       0,     0,     0,     0,     0,     0,     6,     0,     0,     0,
+       7,     0,    16,     8,    15
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -12,   -12,   -12,    12,   -11,   -12,   -12,   -12
+     -26,   -26,   -26,   -26,    12,   -25,    16,   -26,   -26
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     5,     6,    12,    17,    23,     7,     8
+      -1,     5,     6,    24,    12,    17,    25,     7,     8
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -446,40 +450,45 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       1,    13,     9,    10,     2,    16,     3,    18,    22,     4,
-       0,    11,    27,    28,    29,    14,    15,    31,    32,    26,
-      33,    19,    20,    21,    30,    34,    24,    25,    35
+      31,    32,    33,    22,    13,    35,    16,    37,    38,     1,
+      18,    23,    41,     2,    29,     3,     9,    10,     4,    14,
+      15,    19,    20,    21,    28,    11,    26,    27,    22,    34,
+      39,    36,    40,    42,    43,    44,     0,     0,     0,     0,
+      30
 };
 
 static const yytype_int8 yycheck[] =
 {
-       4,     9,     5,     6,     8,     7,    10,     0,     7,    13,
-      -1,    14,    23,    24,    25,    11,    12,    28,    29,     9,
-      31,     9,    10,    11,     9,     9,    14,    15,     9
+      25,    26,    27,     7,     9,    30,     7,    32,    33,     4,
+       0,    15,    37,     8,    16,    10,     5,     6,    13,    11,
+      12,     9,    10,    11,     9,    14,    14,    15,     7,    16,
+      16,     9,     9,     9,    16,     9,    -1,    -1,    -1,    -1,
+      24
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     4,     8,    10,    13,    16,    17,    21,    22,     5,
-       6,    14,    18,     9,    11,    12,     7,    19,     0,    18,
-      18,    18,     7,    20,    18,    18,     9,    19,    19,    19,
-       9,    19,    19,    19,     9,     9
+       0,     4,     8,    10,    13,    18,    19,    24,    25,     5,
+       6,    14,    21,     9,    11,    12,     7,    22,     0,    21,
+      21,    21,     7,    15,    20,    23,    21,    21,     9,    16,
+      23,    22,    22,    22,    16,    22,     9,    22,    22,    16,
+       9,    22,     9,    16,     9
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    15,    16,    16,    16,    16,    17,    18,    18,    18,
-      18,    19,    20,    21,    21,    22
+       0,    17,    18,    18,    18,    18,    19,    19,    20,    21,
+      21,    21,    21,    22,    23,    24,    24,    25
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     1,     2,     1,     1,     5,     2,     2,     2,
-       0,     1,     1,     7,     6,     3
+       0,     2,     1,     2,     1,     1,     5,     6,     5,     2,
+       2,     2,     0,     1,     1,     7,     6,     3
 };
 
 
@@ -487,14 +496,14 @@ static const yytype_int8 yyr2[] =
 static const yytype_int8 yydprec[] =
 {
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0
+       0,     0,     0,     0,     0,     0,     0,     0
 };
 
 /* YYMERGER[RULE-NUM] -- Index of merging function for rule #RULE-NUM.  */
 static const yytype_int8 yymerger[] =
 {
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0
+       0,     0,     0,     0,     0,     0,     0,     0
 };
 
 /* YYIMMEDIATE[RULE-NUM] -- True iff rule #RULE-NUM is not to be deferred, as
@@ -502,7 +511,7 @@ static const yytype_int8 yymerger[] =
 static const yybool yyimmediate[] =
 {
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0
+       0,     0,     0,     0,     0,     0,     0,     0
 };
 
 /* YYCONFLP[YYPACT[STATE-NUM]] -- Pointer into YYCONFL of start of
@@ -513,7 +522,9 @@ static const yytype_int8 yyconflp[] =
 {
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,     0
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0
 };
 
 /* YYCONFL[I] -- lists of conflicting rule numbers, each terminated by
@@ -1053,75 +1064,97 @@ yyuserAction (yyRuleNum yyn, int yyrhslen, yyGLRStackItem* yyvsp,
   switch (yyn)
     {
   case 3:
-#line 49 "command_parser.y"
+#line 51 "command_parser.y"
                                                {show_manual();}
-#line 1059 "command_parser.cpp"
+#line 1070 "command_parser.cpp"
     break;
 
   case 6:
-#line 54 "command_parser.y"
+#line 56 "command_parser.y"
                                                                               { SearchController search((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yysval.string),(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yysval.string),flags);
                                                                                 search.action();
                                                                                 }
-#line 1067 "command_parser.cpp"
+#line 1078 "command_parser.cpp"
     break;
 
   case 7:
-#line 59 "command_parser.y"
-                                                             {flags.add_flag("PrintStates", 1);}
-#line 1073 "command_parser.cpp"
+#line 60 "command_parser.y"
+                                                                                                    {
+                                            							      SearchController search((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yysval.string),(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yysval.string),flags);
+                                                                                                      search.action();
+                                                                                                     }
+#line 1087 "command_parser.cpp"
     break;
 
   case 8:
-#line 60 "command_parser.y"
-                                                             {flags.add_flag("LoopTime", 1);}
-#line 1079 "command_parser.cpp"
+#line 66 "command_parser.y"
+                                                                                                           {cout<<"random command called"<<endl;
+													    if((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yysval.number)+(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yysval.number)>1){cout<<"sum of the probalities is bigger than 1"<<endl;
+													    YYERROR;}
+													    flags.add_flag("seedValue", (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-3)].yystate.yysemantics.yysval.number));
+													    flags.add_flag("probAddVertex", (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yysval.number));
+													    flags.add_flag("probForgetVertex", (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yysval.number));
+													    flags.add_flag("numberOfIterations", (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.number));
+												        	}
+#line 1100 "command_parser.cpp"
     break;
 
   case 9:
-#line 61 "command_parser.y"
-                                                             {flags.add_flag("StateTree", 1);}
-#line 1085 "command_parser.cpp"
+#line 75 "command_parser.y"
+                                                             {flags.add_flag("PrintStates", 1);}
+#line 1106 "command_parser.cpp"
     break;
 
   case 10:
-#line 62 "command_parser.y"
-                                                             {}
-#line 1091 "command_parser.cpp"
+#line 76 "command_parser.y"
+                                                             {flags.add_flag("LoopTime", 1);}
+#line 1112 "command_parser.cpp"
     break;
 
   case 11:
-#line 65 "command_parser.y"
-                                     { ((*yyvalp).string)=(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.string);}
-#line 1097 "command_parser.cpp"
+#line 77 "command_parser.y"
+                                                             {flags.add_flag("StateTree", 1);}
+#line 1118 "command_parser.cpp"
     break;
 
   case 12:
-#line 67 "command_parser.y"
-                                         { ((*yyvalp).string)=(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.string);}
-#line 1103 "command_parser.cpp"
+#line 78 "command_parser.y"
+                                                             {}
+#line 1124 "command_parser.cpp"
     break;
 
   case 13:
-#line 70 "command_parser.y"
-                                  { ParseController parsePACE(flags, (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-3)].yystate.yysemantics.yysval.string)); parsePACE.parse_pace((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yysval.string), (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yysval.string)); }
-#line 1109 "command_parser.cpp"
+#line 81 "command_parser.y"
+                                     { ((*yyvalp).string)=(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.string);}
+#line 1130 "command_parser.cpp"
     break;
 
   case 14:
-#line 72 "command_parser.y"
-                        { ParseController parsePACE(flags, (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yysval.string)); parsePACE.parse_abstract((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yysval.string));}
-#line 1115 "command_parser.cpp"
+#line 83 "command_parser.y"
+                                         { ((*yyvalp).string)=(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.string);}
+#line 1136 "command_parser.cpp"
     break;
 
   case 15:
-#line 74 "command_parser.y"
+#line 86 "command_parser.y"
+                                  { ParseController parsePACE(flags, (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-3)].yystate.yysemantics.yysval.string)); parsePACE.parse_pace((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yysval.string), (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yysval.string)); }
+#line 1142 "command_parser.cpp"
+    break;
+
+  case 16:
+#line 88 "command_parser.y"
+                        { ParseController parsePACE(flags, (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yysval.string)); parsePACE.parse_abstract((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yysval.string));}
+#line 1148 "command_parser.cpp"
+    break;
+
+  case 17:
+#line 90 "command_parser.y"
                                                                            {ParseController parseTest(flags,(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yysval.string)); parseTest.test_term();}
-#line 1121 "command_parser.cpp"
+#line 1154 "command_parser.cpp"
     break;
 
 
-#line 1125 "command_parser.cpp"
+#line 1158 "command_parser.cpp"
 
       default: break;
     }
@@ -2859,12 +2892,12 @@ yypdumpstack (yyGLRStack* yystackp)
 #define yynerrs command_nerrs
 #define yylloc  command_lloc
 
-#line 76 "command_parser.y"
+#line 92 "command_parser.y"
 
 
 void yyerror(int &result, char const* msg){
-  std::cerr<<"Syntax Error: "<< msg << " on line " <<command_lineno << std::endl;
-  cout<<"command not found. use --help to see help";
+  //std::cerr<<"Syntax Error: "<< msg << " on line " <<command_lineno << std::endl;
+  cout<<"Wrong number of inputs. Please execute treewidzard --help for more information."<<endl;
   // error printing  disabled, it is handeled in main.cpp
 }
 

@@ -8,9 +8,16 @@ Flags::Flags() {
 	content.insert({"stateSize", 0});		// prints size of state
 }
 
-int Flags::get(string s) { return content[s]; }
+float Flags::get(string s)
+{
+    if(content.find(s)!=content.end()){
+        return content[s];
+    }else{
+        return -1;
+    }
+}
 
-void Flags::add_flag(string s, int value) {
+void Flags::add_flag(string s, float value) {
 	if (content.find(s) != content.end()) {
 		cout << "Error: flag already set!" << endl;
 		exit(1);

@@ -31,15 +31,17 @@
   %}
 %locations
 %union{
-     unsigned number;
+     float number;
      char* string;
 }
 %parse-param {int &result}
 %token command_newline command_search_signature command_print_state_flag command_print_loop_flag command_string command_help command_end
-        command_parse_signature command_parse_pace command_parse_abstract command_term_signature command_print_state_tree
+        command_parse_signature command_parse_pace command_parse_abstract command_term_signature command_print_state_tree command_random_signature
+        command_number
 %type<string> command_newline command_search_signature command_print_state_flag command_print_loop_flag
-              command_string command_input_file command_search_strategy command_help command_end
+              command_string command_input_file command_search_strategy command_help command_end command_random_signature
               command_parse_signature command_parse_pace command_parse_abstract command_term_signature command_print_state_tree
+%type<number> command_number
 %start command_start
 %glr-parser
 
@@ -54,8 +56,22 @@ command_search      : command_search_signature command_flags
                       command_search_strategy  command_input_file command_end { SearchController search($4,$3,flags);
                                                                                 search.action();
                                                                                 }
+		    | command_search_signature command_flags command_random
+                                            command_search_strategy  command_input_file command_end {
+                                            							      SearchController search($5,$4,flags);
+                                                                                                      search.action();
+                                                                                                     }
 
                     ;
+command_random	    : command_random_signature command_number command_number command_number command_number {cout<<"random command called"<<endl;
+													    if($3+$4>1){cout<<"sum of the probalities is bigger than 1"<<endl;
+													    YYERROR;}
+													    flags.add_flag("seedValue", $2);
+													    flags.add_flag("probAddVertex", $3);
+													    flags.add_flag("probForgetVertex", $4);
+													    flags.add_flag("numberOfIterations", $5);
+												        	}
+		    ;
 command_flags       : command_print_state_flag command_flags {flags.add_flag("PrintStates", 1);}
                     | command_print_loop_flag command_flags  {flags.add_flag("LoopTime", 1);}
                     | command_print_state_tree command_flags {flags.add_flag("StateTree", 1);}

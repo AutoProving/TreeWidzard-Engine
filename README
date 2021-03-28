@@ -1,5 +1,7 @@
     For SEARCH:
         ./treewidzard -search [Flag Options] <search method> <property file>
+        Random Setting:
+        ./treewidzard -search [Flag Options] -random <seed> <add vertex probability> <forget vertex probability> <iteration> <search method> <property file>
     Flag Options:
         -pl       print loop
         -ps       print states

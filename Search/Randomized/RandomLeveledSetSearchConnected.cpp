@@ -82,28 +82,25 @@ void RandomLeveledSetSearchConnected::search(){
     int numberOfIterations = 1000; 
     float probAddVertex = 0.3; // Test if probAddVertex  + probForgetVertex <= 1.0
     float probForgetVertex = 0.2; 
+    if(flags->get("seedValue")!=-1){
+        seedValue = flags->get("seedValue");
+    }
+    if(flags->get("numberOfIterations")!=-1){
+        numberOfIterations = flags->get("numberOfIterations");
+    }
+    if(flags->get("probAddVertex")!=-1){
+        probAddVertex = flags->get("probAddVertex");
+    }
+
+    if(flags->get("probForgetVertex")!=-1){
+        probForgetVertex = flags->get("probForgetVertex");
+    }
     float probBacktrack = 1 - (probAddVertex + probForgetVertex); // Note: probAddVertex + probForgetVertex + probBacktrack = 1.0
-    // auto it = flags.find("seedValue"); 
-    // if (it =! flags.end()){
-    //	seedValue = flags["seedValue"]; 	
-    //}
-    // it = flags.find("numberIterations"); 
-    // if (it =! flags.end()){
-    //	numberIterations = flags["numberIterations"]; 	
-    //}
-    // it = flags.find("probAddVertex"); 
-    // if (it =! flags.end()){
-    //	probAddVertex = flags["probAddVertex"]; 	
-    //}
-    // it = flags.find("probForgetVertex"); 
-    // if (it =! flags.end()){
-    //	probForgetVertex  = flags["probForgetVertex"]; 	
-    //}
 
-
+    cout << " seedValue: "<<seedValue<<" probAddVertex: "<<
+        probAddVertex<<" probForgetVertex: "<<probForgetVertex<<" probBacktrack: "<<probBacktrack << " number of iterations: "<< numberOfIterations<<endl;
 
     srand(seedValue); 
-    cout << "SeedValue: " << seedValue << endl; 
     // Add Initial state to vector
     generatedVector.push_back(make_pair(kernel->initialState(),"Leaf")); // This vector records a path decomposition + states
     vector<int> offsetVector; // Instructions are added in blocks. For instance: adding a vertex together with edges. This vector records
@@ -312,7 +309,7 @@ void RandomLeveledSetSearchConnected::search(){
         }
         if(flags->get("LoopTime")==1 and counter == numberOfIterations){
             counter=0; // Reset the counter
-            cout<<"----------Vector Size:"<<generatedVector.size()<<"---- Iteration number:"<<iterationNumber <<endl;
+            cout<<"----------Vector Size:"<<generatedVector.size()<<"---- Iteration number:"<< iterationNumber <<endl;
         }
         iterationNumber++;
     }

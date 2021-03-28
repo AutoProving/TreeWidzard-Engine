@@ -142,45 +142,45 @@ void EdgeColoringCompact_AtMost_DynamicCore::intro_e_implementation(unsigned int
     //*****************************
     //*****************************
     for (auto it = w->colorIncidence.begin(); it!=w->colorIncidence.end(); it++){
-	bool equalPrevious = false; 
-	if (it!=w->colorIncidence.begin()){
-		auto itPrime = it;
-		itPrime--; 
-		if (*itPrime == *it){
-			equalPrevious = true; 
-		}
-	}
-	if (!equalPrevious){
-		if ( (it->find(i)== it->end()) and (it->find(j)==it->end())){
-			multiset<set<unsigned> > newColorIncidence; 
-		        // copies all sets except the one represented by the iterator it
-			for (auto itPrime = w->colorIncidence.begin(); itPrime !=w->colorIncidence.end(); itPrime++){
-				if (itPrime != it){
-					newColorIncidence.insert(*itPrime);
-				}
-			}
-			// adds the mofied version of the set represneted by it
-			set<unsigned> modifiedSet = *it;
-			modifiedSet.insert(i);
-			modifiedSet.insert(j);
-			newColorIncidence.insert(modifiedSet); 
-			// creates a new witness
-		        EdgeColoringCompact_AtMost_WitnessPointer witness = createWitness();
-        		witness->set_equal(*w);
-			witness->colorIncidence = newColorIncidence;
-	 		witnessSet->insert(witness);
-		}
-	}	
+        bool equalPrevious = false;
+        if (it!=w->colorIncidence.begin()){
+            auto itPrime = it;
+            itPrime--;
+            if (*itPrime == *it){
+                equalPrevious = true;
+            }
+	    }
+        if (!equalPrevious){
+            if ( (it->find(i)== it->end()) and (it->find(j)==it->end())){
+                multiset<set<unsigned> > newColorIncidence;
+                    // copies all sets except the one represented by the iterator it
+                for (auto itPrime = w->colorIncidence.begin(); itPrime !=w->colorIncidence.end(); itPrime++){
+                    if (itPrime != it){
+                        newColorIncidence.insert(*itPrime);
+                    }
+                }
+                // adds the mofied version of the set represneted by it
+                set<unsigned> modifiedSet = *it;
+                modifiedSet.insert(i);
+                modifiedSet.insert(j);
+                newColorIncidence.insert(modifiedSet);
+                // creates a new witness
+                EdgeColoringCompact_AtMost_WitnessPointer witness = createWitness();
+                witness->set_equal(*w);
+                witness->colorIncidence = newColorIncidence;
+                witnessSet->insert(witness);
+            }
+        }
     }
     if (w->colorIncidence.size()<this->parameter){
-    	// In this case, there is a possibility of creating a new color for the edge {i,j}
-	EdgeColoringCompact_AtMost_WitnessPointer witness = createWitness();
+        // In this case, there is a possibility of creating a new color for the edge {i,j}
+        EdgeColoringCompact_AtMost_WitnessPointer witness = createWitness();
         witness->set_equal(*w);
-	set<unsigned> newColor; 
-	newColor.insert(i);
-	newColor.insert(j); 
-	witness->colorIncidence.insert(newColor);
-	witnessSet->insert(witness);
+        set<unsigned> newColor;
+        newColor.insert(i);
+        newColor.insert(j);
+        witness->colorIncidence.insert(newColor);
+        witnessSet->insert(witness);
     }
     //*****************************
     //*****************************
@@ -197,13 +197,13 @@ void EdgeColoringCompact_AtMost_DynamicCore::forget_v_implementation(unsigned in
     multiset<set<unsigned> > newColorIncidence; 
     for (auto s:w->colorIncidence){
     	if (s.find(i)== s.end()){
-		newColorIncidence.insert(s);
-	}else{
-		s.erase(i); 
-		if (s.size()>0){
-			newColorIncidence.insert(s); 
-		}
-	}
+		    newColorIncidence.insert(s);
+        }else{
+            s.erase(i);
+            if (s.size()>0){
+                newColorIncidence.insert(s);
+            }
+        }
     }
     witness->colorIncidence = newColorIncidence;
     witnessSet->insert(witness);
@@ -220,7 +220,6 @@ void  EdgeColoringCompact_AtMost_DynamicCore::constructCombinations(multiset<set
 			for (auto s:m_2){
 				newResult.insert(s); 
 			}
-
 //			cout << endl; 	
 //			cout << "----------------------------------" << endl; 
 //			cout << "----------BEGIN CASE 1--------------" << endl;

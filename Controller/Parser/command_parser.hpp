@@ -75,7 +75,9 @@ extern int command_debug;
     command_parse_pace = 266,
     command_parse_abstract = 267,
     command_term_signature = 268,
-    command_print_state_tree = 269
+    command_print_state_tree = 269,
+    command_random_signature = 270,
+    command_number = 271
   };
 #endif
 
@@ -85,10 +87,10 @@ union COMMAND_STYPE
 {
 #line 33 "command_parser.y"
 
-     unsigned number;
+     float number;
      char* string;
 
-#line 92 "command_parser.hpp"
+#line 94 "command_parser.hpp"
 
 };
 typedef union COMMAND_STYPE COMMAND_STYPE;

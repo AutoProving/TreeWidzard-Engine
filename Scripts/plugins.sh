@@ -1,9 +1,5 @@
-  #!/bin/bash
-  p=$PWD;
-<<<<<<< HEAD
-  rm -r $PWD/../DynamicPlugins/*
-  for eachfile in $(find $PWD/../DynamicCores -type f -name "*.cpp")
-=======
+#!/bin/bash
+p=$PWD;
 #  rm -r $PWD/../DynamicPlugins/*
 #  for eachfile in $(find $PWD/../DynamicCores -type f -name "*.cpp")
 #  do
@@ -14,7 +10,6 @@
 #  done
 #  rm -r $PWD/../SearchPlugins/*
   for eachfile in $(find $PWD/../Search -type f -name "Random*Connected.cpp")
->>>>>>> 615c773609c623af396775136a943d061600dd59
   do
       name=$(basename "$eachfile" .cpp)
       echo $name
@@ -22,16 +17,4 @@
       echo $p
       g++ -fPIC -shared $p/../Kernel/DynamicKernel.cpp  $p/../Kernel/DynamicCore.cpp  $p/../Kernel/Conjecture.cpp  $p/../Kernel/SearchStrategy.cpp  $eachfile  -o  $p/../SearchPlugins/$name.so
   done
-<<<<<<< HEAD
-  rm -r $PWD/../SearchPlugins/*
-  for eachfile in $(find $PWD/../Search -type f -name "*.cpp")
-  do
-      name=$(basename "$eachfile" .cpp)
-      echo $name
-      echo $eachfile
-      echo $p
-      g++ -fPIC -shared $p/../Kernel/DynamicKernel.cpp  $p/../Kernel/DynamicCore.cpp  $p/../Kernel/Conjecture.cpp  $p/../Kernel/SearchStrategy.cpp  $eachfile  -o  $p/../SearchPlugins/$name.so
 
-  done
-=======
->>>>>>> 615c773609c623af396775136a943d061600dd59

@@ -19,9 +19,11 @@
 -st                         yylval.string = strdup(yytext); return command_print_state_tree;
 --help                      yylval.string = strdup(yytext); return command_help;
 -term                       yylval.string = strdup(yytext); return command_term_signature;
+-random                     yylval.string = strdup(yytext); return command_random_signature;
 PACE                        yylval.string = strdup(yytext); return command_parse_pace;
 ABSTRACT                    yylval.string = strdup(yytext); return command_parse_abstract;
 ;                           yylval.string = strdup(yytext); return command_end;
+[0-9\.]+                    yylval.number = stof(yytext);   return command_number;
 .+                          yylval.string = strdup(yytext); return command_string;
 [\n \t \r]                  ;
 %%

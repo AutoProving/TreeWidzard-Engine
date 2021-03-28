@@ -11,11 +11,11 @@ using namespace std;
 class Flags {
   public:
 	Flags();
-	int get(string);
-	void add_flag(string, int);
+	float get(string);
+	void add_flag(string, float);
 
   private:
-	map<string, int> content;
+	map<string, float> content;
 };
 
 #endif
