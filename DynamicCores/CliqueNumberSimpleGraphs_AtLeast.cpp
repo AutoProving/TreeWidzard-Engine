@@ -128,15 +128,18 @@ void CliqueNumberSimpleGraphs_AtLeast_DynamicCore::intro_e_implementation(unsign
             witness->set_equal(*w);
             unsigned iCounter = w->partialClique[i];
             unsigned jCounter = w->partialClique[j];
-            witness->partialClique.erase(i);
-            witness->partialClique.erase(j);
-            witness->partialClique.insert(make_pair(i,iCounter+1));
-            witness->partialClique.insert(make_pair(j,jCounter+1));
-            if(isCompleteClique(witness)){
-                witness->found = true;
-                witness->partialClique.clear();
+            if(iCounter<cliqueSize-1 and jCounter<cliqueSize-1){
+                witness->partialClique.erase(i);
+                witness->partialClique.erase(j);
+                witness->partialClique.insert(make_pair(i,iCounter+1));
+                witness->partialClique.insert(make_pair(j,jCounter+1));
+                if(isCompleteClique(witness)){
+                    witness->found = true;
+                    witness->partialClique.clear();
+                }
+                witnessSet->insert(witness);
             }
-            witnessSet->insert(witness);
+          
        }else{
            // Either i or j is not in the clique, so that {i,j} cannpt be added to the clique.
             witnessSet->insert(w);
