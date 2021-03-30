@@ -2,10 +2,11 @@
 
 #include "Flags.h"
 Flags::Flags() {
-	content.insert({"printStates", 0});		// print all states
-	content.insert({"loopTime", 0});		// time for loop
-	content.insert({"createStateTime", 0}); // time to create a state
-	content.insert({"stateSize", 0});		// prints size of state
+	content.insert({"PrintStates", 0});		// print all states
+	content.insert({"LoopTime", 0});		// time for loop
+	content.insert({"CreateStateTime", 0}); // time to create a state
+	content.insert({"StateSize", 0});		// prints size of state
+	content.insert({"Premise", 0});
 }
 
 float Flags::get(string s)
@@ -18,9 +19,11 @@ float Flags::get(string s)
 }
 
 void Flags::add_flag(string s, float value) {
-	if (content.find(s) != content.end()) {
-		cout << "Error: flag already set!" << endl;
-		exit(1);
-	}
-	content[s] = value;
+	auto it = content.find(s);
+	if(it==content.end()){
+        content.insert({s,value});
+    }else{
+	    content.erase(s);
+        content.insert({s,value});
+    }
 }

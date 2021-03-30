@@ -12,9 +12,11 @@ typedef shared_ptr<CliqueNumberSimpleGraphs_AtLeast_Witness const> CliqueNumberS
 class CliqueNumberSimpleGraphs_AtLeast_Witness: public Witness, public enable_shared_from_this<CliqueNumberSimpleGraphs_AtLeast_Witness>{
 public:
 	bool found; // Set to true if and only if a clique of the right size was found
-	//set<pair<unsigned,unsigned>> edges;
 	map<unsigned,unsigned> partialClique;
 	unsigned size; // size of the clique has been found
+
+	set<set<unsigned >> markedEdges;
+
 	CliqueNumberSimpleGraphs_AtLeast_Witness(){};
 	~CliqueNumberSimpleGraphs_AtLeast_Witness(){};
     bool is_equal_implementation(const CliqueNumberSimpleGraphs_AtLeast_WitnessPointerConst w) const;
@@ -26,6 +28,8 @@ public:
 	virtual void print();
 	string witnessInformation() override;
 	shared_ptr<Witness> relabel(map<unsigned int, unsigned int> relabelingMap) override;
+
+
 };
 
 

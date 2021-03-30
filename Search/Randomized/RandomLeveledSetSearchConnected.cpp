@@ -98,7 +98,10 @@ void RandomLeveledSetSearchConnected::search(){
     float probBacktrack = 1 - (probAddVertex + probForgetVertex); // Note: probAddVertex + probForgetVertex + probBacktrack = 1.0
 
     cout << " seedValue: "<<seedValue<<" probAddVertex: "<<
-        probAddVertex<<" probForgetVertex: "<<probForgetVertex<<" probBacktrack: "<<probBacktrack << " number of iterations: "<< numberOfIterations<<endl;
+        probAddVertex<<" probForgetVertex: "<<probForgetVertex<<" probBacktrack: "<<probBacktrack << " number of iterations: "<< numberOfIterations <<endl;
+    if(flags->get("Premise")){
+        cout<<"Premise search active!"<<endl;
+    }
 
     srand(seedValue); 
     // Add Initial state to vector
@@ -124,155 +127,148 @@ void RandomLeveledSetSearchConnected::search(){
 	foundCounterexample = !(conjecture->evaluateConjectureOnState(*s,kernel));
     }
     while (!foundCounterexample){
-	counter++; 
+	    counter++;
         State::ptr q = generatedVector.back().first;
-	string typeState = generatedVector.back().second;
-	set<unsigned> currentBagSet = q->get_bag().get_elements();  
+	    string typeState = generatedVector.back().second;
+	    set<unsigned> currentBagSet = q->get_bag().get_elements();
         if(flags->get("PrintStates")==1){
             cout<<"-----Currently Processing State------"<<endl;
             q->print();
-	    cout<<" ------------------------------------"<<endl; 
+	        cout<<" ------------------------------------"<<endl;
         }
-
-	float option = (rand() % 10000)/(10000.0);
-	//cout << "option: " <<  option << endl; 
+	    float option = (rand() % 10000)/(10000.0);
+	    //cout << "option: " <<  option << endl;
 	
         if(flags->get("PrintStates")==1){
-		cout << "Option: " << option << endl;
-	}
-	if (option <= probAddVertex and (currentBagSet.size()< kernel->get_width().get_value())){
-		//Add a vertex and random edges (at least 1)
-		//STEP 1: Select the first label not in the set and push it to the stack
-		int el = 1;
-		for (auto x:currentBagSet){
-			if (x==el){
-				el++;
-			} else{
-				break;
-			}
-		} // Result el is the smallest element not in the bag.
-		s = kernel->intro_v(q,el); // insert the vertex
-       	        typeState = "IntroVertex_"+to_string(el);
-		if(flags->get("PrintStates")==1){
-			cout << "Last Introduced Vertex" << el << endl; 
-			cout << "Generated State" << endl;
-			s.print(); 
-			cout << "----------";
-		}
-        	//auto it = mapState.find(s);
-       		//if(it != mapState.end()){
-		//	if(flags->get("PrintStates")==1){
-               	//		cout<<"Duplicate State."<<endl;
-		//	}
-         	//}else{
-		//cout << "Position A " << endl;  
-       	   		generatedVector.push_back({s,typeState});
+		    cout << "Option: " << option << endl;
+	    }
+        if (option <= probAddVertex and (currentBagSet.size()< kernel->get_width().get_value())){
+		    //Add a vertex and random edges (at least 1)
+		    //STEP 1: Select the first label not in the set and push it to the stack
+		    int el = 1;
+		    for (auto x:currentBagSet){
+			    if (x==el){
+				    el++;
+			    }else{
+				    break;
+			    }
+		    } // Result el is the smallest element not in the bag.
+		    s = kernel->intro_v(q,el); // insert the vertex
+            typeState = "IntroVertex_"+to_string(el);
+		    if(flags->get("PrintStates")==1){
+			    cout << "Last Introduced Vertex" << el << endl;
+			    cout << "Generated State" << endl;
+			    s.print();
+			    cout << "----------";
+		    }
+        	generatedVector.push_back({s,typeState});
 			offset=1; 
-			//mapState.insert({s,generatedVector.size()-1});
-			//currentBagSet = s->get_bag().get_elements();  
-			//foundCounterexample = !(conjecture->evaluateConjectureOnState(*s,kernel));
-			foundCounterexample = false; // we will only test the conjecture after adding an edge. 
+			foundCounterexample = false; // we will only test the conjecture after adding an edge.
 			set<unsigned> oldBagSet = currentBagSet; // The bag with out the introduced vertex
-		//}
-		if (!foundCounterexample){
-			//STEP 2: Select at random the number of edges to be added
-			//cout << "Position B " << endl;  
-			int maxDegree = oldBagSet.size(); // add this as a parameter
-			int maxNElements = oldBagSet.size();
-			if (maxNElements > maxDegree) maxNElements = maxDegree;
-			int nElements = (rand() % maxNElements) + 1; //number of edges to be added
+		    if (!foundCounterexample){
+			    //STEP 2: Select at random the number of edges to be added
+			    //cout << "Position B" << endl;
+			    int maxDegree = oldBagSet.size(); // add this as a parameter
+			    int maxNElements = oldBagSet.size();
+			    if (maxNElements > maxDegree) maxNElements = maxDegree;
+			    int nElements = (rand() % maxNElements) + 1; //number of edges to be added
 		       	//STEP 3: Construct a random subset 
 
-			//cout << "Position C " << endl;  
-			set<unsigned> randomSubset = oldBagSet;
-			int sizeOldBag = randomSubset.size(); 
-	   		for (int i=0; i< sizeOldBag-nElements; i++ ){
-				int x = rand() % randomSubset.size(); 
-				randomSubset.erase(next(randomSubset.begin(),x)); 
-			}
-			//STEP 4: Introduce the edges
-
-			//cout << "Position D " << endl;  
-			for (auto y:randomSubset){
-				int a = std::min(el,int(y));
-				int b = std::max(el,int(y));
-				//s->get_bag().print();
-			        s = kernel->intro_e(s,a,b);
-        	        	typeState = "IntroEdge_"+to_string(a)+"_"+ to_string(b);
-		        	//auto it = mapState.find(s);
-		       		//if(it != mapState.end()){
-				//	if(flags->get("PrintStates")==1){
-                		//		cout<<"Duplicate State."<<endl;
-				//	}
-   		         	//}else{
-        		   	generatedVector.push_back({s,typeState});
-				if(flags->get("PrintStates")==1){
+			    //cout << "Position C " << endl;
+			    set<unsigned> randomSubset = oldBagSet;
+			    int sizeOldBag = randomSubset.size();
+	   		    for (int i=0; i< sizeOldBag-nElements; i++ ){
+				    int x = rand() % randomSubset.size();
+				    randomSubset.erase(next(randomSubset.begin(),x));
+			    }
+			    //STEP 4: Introduce the edges
+			    for (auto y:randomSubset){
+				    int a = std::min(el,int(y));
+				    int b = std::max(el,int(y));
+                    s = kernel->intro_e(s,a,b);
+                    typeState = "IntroEdge_"+to_string(a)+"_"+ to_string(b);
+                    generatedVector.push_back({s,typeState});
+                    if(flags->get("PrintStates")==1){
 			            cout<<"-----Generated State------"<<endl;
-				    cout<<"------Added Edge a:" << a  << " b:" << b << endl; 
+				        cout<<"------Added Edge a:" << a  << " b:" << b << endl;
 		        	    s->print();
-				    cout <<"------------------" << endl;
-			        }
-				offset++;
-				//mapState.insert({s,generatedVector.size()-1});
-				foundCounterexample = !(conjecture->evaluateConjectureOnState(*s,kernel));
-				if (foundCounterexample) break; 
-				// ADD offset
-				//}
-			}
-			//cout << "Position E " << endl;  
-		}
-		offsetVector.push_back(offset); 
-		auto it = mapState.find(s);
-	        if(it != mapState.end()){
-	    		if(flags->get("PrintStates")==1){
-        	    		cout<<"Duplicate State."<<endl; 
-		        }else{
-				offset = offsetVector[offsetVector.size()-1];
-				offsetVector.pop_back(); 
-				pair<State::ptr,string>  deletedState = generatedVector[generatedVector.size()-1];
-	                	mapState.erase(deletedState.first); // Obs: only the last state of the block is deleted/added to mapState
-				generatedVector.erase(prev(generatedVector.end(),offset), generatedVector.end()); // deletes the block
-	        	}
-		}
-	} else if (option <= probAddVertex + probForgetVertex){
-		//Forget a random vertex
-		if(currentBagSet.size() >=2 ){ 
-        		unsigned toDeletePos = rand() % currentBagSet.size();
-			unsigned toDelete = *(next(currentBagSet.begin(),toDeletePos));  
-        		State::ptr s;
-		        s = kernel->forget_v(q,toDelete);
-	                typeState = "ForgetVertex_"+to_string(toDelete);
-	        	auto it = mapState.find(s);
-       			if(it != mapState.end()){
-				if(flags->get("PrintStates")==1){
-                			cout<<"Duplicate State."<<endl;
-				}
-        	    	}else{
-	           		generatedVector.push_back({s,typeState});
-				mapState.insert({s,generatedVector.size()-1});
-				if(flags->get("PrintStates")==1){
-			            cout<<"-----Generated State: Forgot: " << toDelete << " ------ "<<endl;
-			            s->print();
-				    cout << "--------" << endl; 
-		        	}
-				offset = 1;
-				offsetVector.push_back(offset); 
-				foundCounterexample = !(conjecture->evaluateConjectureOnState(*s,kernel));
-			}
-		}
+				        cout <<"------------------" << endl;
+                    }
+				    offset++;
+				    foundCounterexample = !(conjecture->evaluateConjectureOnState(*s,kernel));
+				    if (foundCounterexample) break;
+			    }
+		    }
+		    offsetVector.push_back(offset);
+            if(flags->get("Premise") ){
+                if(!conjecture->evaluatePremiseOnState(*s,kernel)){
+                    if(flags->get("PrintStates")==1){
+                        cout<<"Duplicate State."<<endl;
+                    }else{
+                        offset = offsetVector[offsetVector.size()-1];
+                        offsetVector.pop_back();
+                        pair<State::ptr,string>  deletedState = generatedVector[generatedVector.size()-1];
+                        mapState.erase(deletedState.first); // Obs: only the last state of the block is deleted/added to mapState
+                        generatedVector.erase(prev(generatedVector.end(),offset), generatedVector.end()); // deletes the block
+                    }
+                }
+            }
+            auto it = mapState.find(s); // This tries to determine if the state has been added before, and if yes we will delete it.
+            // Note that if the premise flag is activated and s does not satisfy the premise, then s has already been removed and no state will be found.
+            if(it != mapState.end()){
+                if(flags->get("PrintStates")==1){
+                    cout<<"Duplicate State."<<endl;
+                }else{
+                    offset = offsetVector[offsetVector.size()-1];
+                    offsetVector.pop_back();
+                    pair<State::ptr,string>  deletedState = generatedVector[generatedVector.size()-1];
+                    mapState.erase(deletedState.first); // Obs: only the last state of the block is deleted/added to mapState
+                    generatedVector.erase(prev(generatedVector.end(),offset), generatedVector.end()); // deletes the block
+                }
+            }
+	    } else if (option <= probAddVertex + probForgetVertex){
+		    //Forget a random vertex
+            if(currentBagSet.size() >=2 ){
+                unsigned toDeletePos = rand() % currentBagSet.size();
+                unsigned toDelete = *(next(currentBagSet.begin(),toDeletePos));
+                State::ptr s;
+                s = kernel->forget_v(q,toDelete);
+                typeState = "ForgetVertex_"+to_string(toDelete);
+                if(flags->get("Premise")){
+                    if(conjecture->evaluatePremiseOnState(*s,kernel)){
+                        auto it = mapState.find(s);
+                        if(it != mapState.end()){
+                            if(flags->get("PrintStates")==1){
+                                cout<<"Duplicate State."<<endl;
+                            }
+                        }else{
+                            generatedVector.push_back({s,typeState});
+                            mapState.insert({s,generatedVector.size()-1});
+                            if(flags->get("PrintStates")==1){
+                                cout<<"-----Generated State: Forgot: " << toDelete << " ------ "<<endl;
+                                s->print();
+                                cout << "--------" << endl;
+                            }
+                            offset = 1;
+                            offsetVector.push_back(offset);
+                            foundCounterexample = !(conjecture->evaluateConjectureOnState(*s,kernel));
+                        }
+                    }
+                }
+            }
         } else { // option = 2 or 3, then backtrack
-		// Backtrack. Delete the last added block
-		if (generatedVector.size() >= 3){ // obs: the first position is the initial state. The second the state with one vertex
-			offset = offsetVector[offsetVector.size()-1];
-			offsetVector.pop_back(); 
-			pair<State::ptr,string>  deletedState = generatedVector[generatedVector.size()-1];
-                	mapState.erase(deletedState.first); // Obs: only the last state of the block is deleted/added to mapState
-			generatedVector.erase(prev(generatedVector.end(),offset), generatedVector.end()); // deletes the block
-	                //s = generatedVector[generatedVector.size()-1].first;
-                	//typeState = generatedVector[generatedVector.size()-1].second;
-		}
-	}
-	if(foundCounterexample){
+            // Backtrack. Delete the last added block
+            if (generatedVector.size() >= 3){ // obs: the first position is the initial state. The second the state with one vertex
+                offset = offsetVector[offsetVector.size()-1];
+                offsetVector.pop_back();
+                pair<State::ptr,string>  deletedState = generatedVector[generatedVector.size()-1];
+                        mapState.erase(deletedState.first); // Obs: only the last state of the block is deleted/added to mapState
+                generatedVector.erase(prev(generatedVector.end(),offset), generatedVector.end()); // deletes the block
+                        //s = generatedVector[generatedVector.size()-1].first;
+                        //typeState = generatedVector[generatedVector.size()-1].second;
+            }
+	    }
+	    if(foundCounterexample){
             cout<<"COUNTER EXAMPLE FOUND"<<endl;
             s->print();
             ConcreteTreeDecomposition T = extractCTDDecomposition();
@@ -280,12 +276,6 @@ void RandomLeveledSetSearchConnected::search(){
             T.printTermNodes();
             T.writeToFile(this->getPropertyFilePath());
             cout<<"=======ABSTRACT TREE========="<<endl;
-//            AbstractTreeDecomposition abstractTreeDecomposition = T.convertToAbstractTreeDecomposition();
-//            cout<<"hh"<<endl;
-//            abstractTreeDecomposition.printTermNodes();
-//            abstractTreeDecomposition.writeToFile(this->getPropertyFilePath());
-
-
             cout << "\n ------------------Constructing Counter Example Graph-------------------"<< endl;
             MultiGraph multiGraph = T.extractMultiGraph();
             multiGraph.printGraph();

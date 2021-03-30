@@ -81,6 +81,7 @@ public:
     friend bool operator<(WitnessSet &lhs,WitnessSet &rhs){
         return lhs.isLess(rhs);
     };
+
     virtual bool isLess(WitnessSet &rhs){cout<<"Error: WitnessSet isLess."<<endl; exit(20); };
     virtual int size(){cout<<"Error: WitnessSet size function."<<endl; exit(20);};
     virtual shared_ptr<WitnessSet> createEmptyWitnessSet(){cout<<"Error: WitnessSet createEmptyWitnessSet"<<endl; exit(20);};

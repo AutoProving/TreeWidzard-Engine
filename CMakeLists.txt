@@ -36,6 +36,8 @@ add_executable(
 	# DynamicCore files
 		#  DynamicCores/CliqueNumber_AtLeast.cpp
 		#   DynamicCores/CliqueNumber_AtLeast.h
+		   DynamicCores/CliqueNumberSimpleGraphs_AtLeast.h
+		   DynamicCores/CliqueNumberSimpleGraphs_AtLeast.cpp
 		#   DynamicCores/ChromaticNumber_AtMost.cpp
 		#   DynamicCores/ChromaticNumber_AtMost.h
 		#	DynamicCores/MaxDegree_AtLeast.cpp
@@ -58,9 +60,9 @@ add_executable(
         #   DynamicCores/Mod.h
         #   DynamicCores/Mod.cpp
 		#   DynamicCores/PathEdgeCover.h
-        #    DynamicCores/PathEdgeCover.cpp
-		DynamicCores/VertexConnected_AtMost.cpp
-		DynamicCores/VertexConnected_AtMost.h
+        #   DynamicCores/PathEdgeCover.cpp
+		#	DynamicCores/VertexConnected_AtMost.cpp
+		#	DynamicCores/VertexConnected_AtMost.h
 	# Kernel files
         Kernel/Witness.cpp
         Kernel/Witness.h
@@ -100,6 +102,8 @@ add_executable(
 		#Search/Leveled/LeveledSetSearchPremise.h
 		#Search/BFS/BreadthFirstSearch.h
 		#Search/BFS/BreadthFirstSearch.cpp
+		#Search/BFS/BreadthFirstSearchStatistic.h
+		#Search/BFS/BreadthFirstSearchStatistic.cpp
 		#Search/RelabeledLeveledSetSearch.h
 		#Search/RelabeledLeveledSetSearch.cpp
 		#Search/BFS/RelabeledBreadthFirstSearch.h

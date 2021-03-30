@@ -17,6 +17,7 @@
 -ps                         yylval.string = strdup(yytext); return command_print_state_flag;
 -pl                         yylval.string = strdup(yytext); return command_print_loop_flag;
 -st                         yylval.string = strdup(yytext); return command_print_state_tree;
+-premise                    yylval.string = strdup(yytext); return command_premise;
 --help                      yylval.string = strdup(yytext); return command_help;
 -term                       yylval.string = strdup(yytext); return command_term_signature;
 -random                     yylval.string = strdup(yytext); return command_random_signature;

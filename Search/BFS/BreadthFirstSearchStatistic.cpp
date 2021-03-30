@@ -1,30 +1,30 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
-#include "BreadthFirstSearch.h"
+#include "BreadthFirstSearchStatistic.h"
 
 #include <utility>
 
 extern "C" {
-    BreadthFirstSearch * create() {
-        return new BreadthFirstSearch();
+    BreadthFirstSearchStatistic * create() {
+        return new BreadthFirstSearchStatistic();
     }
-    BreadthFirstSearch * create_parameter(DynamicKernel* dynamicKernel, Conjecture* conjecture,Flags* flags) {
-        return new BreadthFirstSearch(dynamicKernel,conjecture,flags);
+    BreadthFirstSearchStatistic * create_parameter(DynamicKernel* dynamicKernel, Conjecture* conjecture,Flags* flags) {
+        return new BreadthFirstSearchStatistic(dynamicKernel,conjecture,flags);
     }
 }
 
-BreadthFirstSearch::BreadthFirstSearch() {
-    addAttribute("SearchName","BreadthFirstSearch");
+BreadthFirstSearchStatistic::BreadthFirstSearchStatistic() {
+    addAttribute("SearchName","BreadthFirstSearchStatistic");
 }
 
-BreadthFirstSearch::BreadthFirstSearch(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags): SearchStrategy(dynamicKernel, conjecture, flags) {
+BreadthFirstSearchStatistic::BreadthFirstSearchStatistic(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags): SearchStrategy(dynamicKernel, conjecture, flags) {
     this->kernel = kernel;
 	this->conjecture = conjecture;
 	this->flags = flags;
-    addAttribute("SearchName","BreadthFirstSearch");
+    addAttribute("SearchName","BreadthFirstSearchStatistic");
 }
 
 
-AbstractTreeDecomposition BreadthFirstSearch::extractCounterExampleTerm(State::ptr state) {
+AbstractTreeDecomposition BreadthFirstSearchStatistic::extractCounterExampleTerm(State::ptr state) {
     AbstractTreeDecomposition atd;
     shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> rootNode;
     rootNode = bfsDAG.retrieveTermAcyclicAutomaton(state);
@@ -32,7 +32,7 @@ AbstractTreeDecomposition BreadthFirstSearch::extractCounterExampleTerm(State::p
     return atd;
 }
 
-StateTree BreadthFirstSearch::extractCounterExampleStateTree(State::ptr state) {
+StateTree BreadthFirstSearchStatistic::extractCounterExampleStateTree(State::ptr state) {
     StateTree stateTree;
     shared_ptr<StateTreeNode> root(new StateTreeNode());
     shared_ptr<DynamicKernel> sharedKernel = make_shared<DynamicKernel>(*kernel);
@@ -42,7 +42,7 @@ StateTree BreadthFirstSearch::extractCounterExampleStateTree(State::ptr state) {
     return stateTree;
 }
 
-void BreadthFirstSearch::extractCounterExampleStateTreeNode(State::ptr state, shared_ptr<StateTreeNode> node) {
+void BreadthFirstSearchStatistic::extractCounterExampleStateTreeNode(State::ptr state, shared_ptr<StateTreeNode> node) {
     //Assumes that the automaton is acyclic and that each state has a transition in which the state is the consequent
     if (!bfsDAG.getTransitions().empty()){
         AbstractTreeDecompositionNodeContent a;
@@ -87,7 +87,12 @@ struct cmpTest {
          return *l < *r;
     }
 };
-void BreadthFirstSearch::search(){
+void BreadthFirstSearchStatistic::search(){
+
+    //////////
+    vector<set<shared_ptr<WitnessSet>, cmpTest>> allWitnessSets;
+    set<Bag> allBags;
+    //////////
 	State::ptr initialState = kernel->initialState();
 	allStatesSet.insert(initialState);
 	newStatesSet.insert(initialState);
@@ -99,6 +104,16 @@ void BreadthFirstSearch::search(){
     unsigned int width = kernel->get_width().get_value();
     vector<unsigned > numberOfWitnesses;
     numberOfWitnesses.resize(initialState->numberOfComponents());
+    ///////////////////////test number of bags and witnessSet
+    allWitnessSets.resize(initialState->numberOfComponents());
+    //////////Insert to allBags and allWitnessSets/////////
+    allBags.insert(initialState->get_bag());
+    for (int component = 0; component < numberOfWitnesses.size(); ++component) {
+
+        allWitnessSets[component].insert(initialState->getWitnessSet(component));
+    }
+    //////////
+    /////////////////////
 	int iterationNumber = 0;
 	while(!newStatesSet.empty()){
 	    iterationNumber++;
@@ -133,6 +148,13 @@ void BreadthFirstSearch::search(){
                         for (int component = 0; component < numberOfWitnesses.size(); ++component) {
                             numberOfWitnesses[component] = max(numberOfWitnesses[component],(unsigned)consequentState->getWitnessSet(component)->size());
                         }
+
+                        //////////Insert to allBags and allWitnessSets/////////
+                        allBags.insert(consequentState->get_bag());
+                        for (int component = 0; component < numberOfWitnesses.size(); ++component) {
+                            allWitnessSets[component].insert(consequentState->getWitnessSet(component));
+                        }
+                        //////////
                     }
                 }
 			}
@@ -154,6 +176,12 @@ void BreadthFirstSearch::search(){
                     for (int component = 0; component < numberOfWitnesses.size(); ++component) {
                         numberOfWitnesses[component] = max(numberOfWitnesses[component],(unsigned)consequentState->getWitnessSet(component)->size());
                     }
+                    //////////Insert to allBags and allWitnessSets/////////
+                    allBags.insert(consequentState->get_bag());
+                    for (int component = 0; component < numberOfWitnesses.size(); ++component) {
+                        allWitnessSets[component].insert(consequentState->getWitnessSet(component));
+                    }
+                    //////////
                 }
 			}
             //Introduce Edge
@@ -177,6 +205,12 @@ void BreadthFirstSearch::search(){
                                 for (int component = 0; component < numberOfWitnesses.size(); ++component) {
                                     numberOfWitnesses[component] = max(numberOfWitnesses[component],(unsigned)consequentState->getWitnessSet(component)->size());
                                 }
+                                //////////Insert to allBags and allWitnessSets/////////
+                                allBags.insert(consequentState->get_bag());
+                                for (int component = 0; component < numberOfWitnesses.size(); ++component) {
+                                    allWitnessSets[component].insert(consequentState->getWitnessSet(component));
+                                }
+                                //////////
                             }
                         }
                     }
@@ -205,6 +239,12 @@ void BreadthFirstSearch::search(){
                             for (int component = 0; component < numberOfWitnesses.size(); ++component) {
                                 numberOfWitnesses[component] = max(numberOfWitnesses[component],(unsigned)consequentState->getWitnessSet(component)->size());
                             }
+                            //////////Insert to allBags and allWitnessSets/////////
+                            allBags.insert(consequentState->get_bag());
+                            for (int component = 0; component < numberOfWitnesses.size(); ++component) {
+                                allWitnessSets[component].insert(consequentState->getWitnessSet(component));
+                            }
+                            //////////
                         }
                     }
                 }
@@ -269,6 +309,15 @@ void BreadthFirstSearch::search(){
                 if(component != numberOfWitnesses.size()-1)
                     cout<<",";
             }
+            ////////////////////////////////////
+            cout << "\nall bags: " << allBags.size()<< "  all witnesses: ";
+            for (int component = 0; component < numberOfWitnesses.size() ; ++component) {
+                cout<< allWitnessSets[component].size();
+                if(component != numberOfWitnesses.size()-1)
+                    cout<<",";
+            }
+            cout<<endl;
+            ////////////////////////////////////
             cout << endl << "----------------- End Iteration: " << iterationNumber << " ----------------------------" << endl << endl;
 
         }
@@ -276,7 +325,7 @@ void BreadthFirstSearch::search(){
     cout<<"Finish"<<endl;
 }
 RunTree<State::ptr, AbstractTreeDecompositionNodeContent>
-BreadthFirstSearch::extractCounterExampleRun(State::ptr state) {
+BreadthFirstSearchStatistic::extractCounterExampleRun(State::ptr state) {
     RunTree<State::ptr,AbstractTreeDecompositionNodeContent> runTree = bfsDAG.retrieveRunAcyclicAutomaton(state);
     return runTree;
 }

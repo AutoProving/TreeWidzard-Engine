@@ -1,4 +1,4 @@
 path_width 1
-a := Minor("../Tests/graphs/k_7.txt")
-b := Minor("../Tests/graphs/k_4.txt")
-NOT a AND NOT b
+a := Minor ("../Tests/graphs/k_3.txt")
+b := Minor ("../Tests/graphs/k_7.txt")
+NOT b IMPLIES a

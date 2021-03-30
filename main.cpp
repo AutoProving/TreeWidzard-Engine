@@ -19,12 +19,14 @@ int main(int argc, char *arg[]) {
     }
     //cout<<_all_arg;
     // Create and open a text file
-    ofstream MyFile("command.txt");
+    string s = "auxfiles/"+to_string(time(NULL))+".txt";
+    cout<<s<<endl;
+    ofstream MyFile(s);
     // Write to the file
     MyFile << _all_arg;
     // Close the file
     MyFile.close();
-    command_in = fopen("command.txt", "r");
+    command_in = fopen(s.c_str(), "r");
     if (!command_in) {
         std::perror("File opening failed");
         return EXIT_FAILURE;
