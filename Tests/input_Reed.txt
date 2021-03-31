@@ -1,0 +1,6 @@
+path_width 4
+a := CliqueNumberSimpleGraphs > 2
+b := MaxDegree > 3
+c := HasMultipleEdges
+d := ChromaticNumber < 4
+NOT a AND NOT b AND NOT c IMPLIES d

@@ -92,6 +92,7 @@ void BreadthFirstSearchStatistic::search(){
     //////////
     vector<set<shared_ptr<WitnessSet>, cmpTest>> allWitnessSets;
     set<Bag> allBags;
+
     //////////
 	State::ptr initialState = kernel->initialState();
 	allStatesSet.insert(initialState);
@@ -310,7 +311,7 @@ void BreadthFirstSearchStatistic::search(){
                     cout<<",";
             }
             ////////////////////////////////////
-            cout << "\nall bags: " << allBags.size()<< "  all witnesses: ";
+            cout << "\nNumber of bags: " << allBags.size()<< "  Number of witness sets: ";
             for (int component = 0; component < numberOfWitnesses.size() ; ++component) {
                 cout<< allWitnessSets[component].size();
                 if(component != numberOfWitnesses.size()-1)

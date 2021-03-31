@@ -14,6 +14,7 @@ public:
 	bool found; // Set to true if and only if a clique of the right size was found
 	map<unsigned,unsigned> partialClique;
 	unsigned size; // size of the clique has been found
+	//216
 
 
 	CliqueNumberSimpleGraphs_AtLeast_Witness(){};

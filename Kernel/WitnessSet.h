@@ -146,7 +146,7 @@ public:
         }
         return witnessSet;
     }
-
+    int witnessVectorSize(){return witnessVector.size();}
 };
 
 template <class T>

@@ -1,10 +1,10 @@
 #include "InputController.h"
 void InputController::check_available_cores() {
-    cout<<"Available Cores:"<<endl;
+    //cout<<"Available Cores:"<<endl;
     for (const auto & entry : fs::directory_iterator(dynamicPluginPath)){
         string s = entry.path();
         if (s.find(".so") != std::string::npos) {
-            cout<<s<<endl;
+           // cout<<s<<endl;
             char *MyClassLibraryName = const_cast<char *>(s.c_str());
             DynamicCoreHandler factory(MyClassLibraryName);
             std::unique_ptr<DynamicCore> core = factory.create();
@@ -12,10 +12,10 @@ void InputController::check_available_cores() {
             string fileName = entry.path().filename();
             coreNamesToFiles.insert(make_pair(core->getAttributeValue("CoreName"),fileName));
             coreList.insert(make_pair(core->getAttributeValue("CoreName"),attributes));
-            for (auto it : attributes) {
-                cout << it.first << " " << it.second << endl;
-            }
-            cout << "----------------------------------------------------------------" << endl;
+//            for (auto it : attributes) {
+//                cout << it.first << " " << it.second << endl;
+//            }
+//            cout << "----------------------------------------------------------------" << endl;
         }
     }
 }

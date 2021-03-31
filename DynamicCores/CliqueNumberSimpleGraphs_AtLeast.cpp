@@ -135,7 +135,7 @@ void CliqueNumberSimpleGraphs_AtLeast_DynamicCore::intro_e_implementation(unsign
                 witness->partialClique.insert(make_pair(j,jCounter+1));
                 if(isCompleteClique(witness)){
                     witness->found = true;
-                    witness->partialClique.clear();
+                  //  witness->partialClique.clear();
                 }
                 witnessSet->insert(witness);
             }
@@ -171,34 +171,68 @@ void CliqueNumberSimpleGraphs_AtLeast_DynamicCore::forget_v_implementation(unsig
 }
 
 void CliqueNumberSimpleGraphs_AtLeast_DynamicCore::join_implementation(Bag &b, CliqueNumberSimpleGraphs_AtLeast_WitnessPointer w1,
-        CliqueNumberSimpleGraphs_AtLeast_WitnessPointer w2, CliqueNumberSimpleGraphs_AtLeast_WitnessSetPointer witnessSet){
-   if (w1->found){
-       witnessSet->insert(w1);
-   } else if (w2->found){
-       witnessSet->insert(w2);
-   } else{
-      if(w1->size == w1->partialClique.size() and w2->size == w2->partialClique.size() and w1->size == w2->size){
-          CliqueNumberSimpleGraphs_AtLeast_WitnessPointer witness = createWitness();
-          witness->set_equal(*w1);
-          for(auto p:w2->partialClique){
-              if(witness->partialClique.count(p.first)){
-                  unsigned pCounter = p.second + witness->partialClique[p.first];
-                  witness->partialClique.erase(p.first);
-                  witness->partialClique.insert(make_pair(p.first,pCounter));
-              }else{
-                  // w1 and w2 have different domains, so they cannot be joined.
-                  return;
-              }
-          }
-          // Check that the clique is a complete clique or not,
-          // if yes found will be true and partialClique will be cleared.
-          if(isCompleteClique(witness)){
-              witness->found = true;
-              witness->partialClique.clear();
-          }
-          witnessSet->insert(witness);
-       }
-   }   
+                                                                       CliqueNumberSimpleGraphs_AtLeast_WitnessPointer w2, CliqueNumberSimpleGraphs_AtLeast_WitnessSetPointer witnessSet){
+    if (w1->found){
+        CliqueNumberSimpleGraphs_AtLeast_WitnessPointer witness = createWitness();
+        witness->set_equal(*w1);
+        witness->partialClique.clear();
+        witnessSet->insert(witness);
+    } else if (w2->found){
+        CliqueNumberSimpleGraphs_AtLeast_WitnessPointer witness = createWitness();
+        witness->set_equal(*w2);
+        witness->partialClique.clear();
+        witnessSet->insert(witness);
+    } else{
+
+        // At the same time it is not possible to have forget vertices in both witnesses
+        // If there is a forgotten vertex v in w1, and a forgotten vertex u in w2, then v and u can not be connected to together
+        bool b  = (w1->partialClique.size()==w1->size or w2->partialClique.size() == w2->size);
+        if(w1->partialClique.size() == w2->partialClique.size() and b){
+            CliqueNumberSimpleGraphs_AtLeast_WitnessPointer witness = createWitness();
+            witness->set_equal(*w1);
+            witness->size = w1->size + w2->size - w1->partialClique.size();
+            for(auto p:w2->partialClique){
+                if(witness->partialClique.count(p.first)){
+                    unsigned pCounter = p.second + witness->partialClique[p.first];
+                    witness->partialClique.erase(p.first);
+                    witness->partialClique.insert(make_pair(p.first,pCounter));
+                }else{
+                    // w1 and w2 have different domains, so they cannot be joined.
+                    return;
+                }
+            }
+
+            // Check that the clique is a complete clique or not,
+            // if yes found will be true and partialClique will be cleared.
+            if(isCompleteClique(witness)){
+                witness->found = true;
+            }
+            witnessSet->insert(witness);
+        }else{
+            return;
+        }
+//      if(w1->size == w1->partialClique.size() and w2->size == w2->partialClique.size() and w1->size == w2->size){
+//          CliqueNumberSimpleGraphs_AtLeast_WitnessPointer witness = createWitness();
+//          witness->set_equal(*w1);
+//          for(auto p:w2->partialClique){
+//              if(witness->partialClique.count(p.first)){
+//                  unsigned pCounter = p.second + witness->partialClique[p.first];
+//                  witness->partialClique.erase(p.first);
+//                  witness->partialClique.insert(make_pair(p.first,pCounter));
+//              }else{
+//                  // w1 and w2 have different domains, so they cannot be joined.
+//                  return;
+//              }
+//          }
+//          // Check that the clique is a complete clique or not,
+//          // if yes found will be true and partialClique will be cleared.
+//          if(isCompleteClique(witness)){
+//              witness->found = true;
+//              witness->partialClique.clear();
+//          }
+//          witnessSet->insert(witness);
+//       }
+    }
 }
 
 CliqueNumberSimpleGraphs_AtLeast_WitnessSetPointer CliqueNumberSimpleGraphs_AtLeast_DynamicCore::clean_implementation

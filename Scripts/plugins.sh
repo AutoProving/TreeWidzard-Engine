@@ -1,6 +1,6 @@
 #!/bin/bash
 p=$PWD;
-  rm -r $PWD/../DynamicPlugins/Clique*
+  rm -r $PWD/../DynamicPlugins/*
   for eachfile in $(find $PWD/../DynamicCores -type f -name "*.cpp")
   do
       name=$(basename "$eachfile" .cpp)

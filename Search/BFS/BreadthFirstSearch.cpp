@@ -82,12 +82,11 @@ void BreadthFirstSearch::extractCounterExampleStateTreeNode(State::ptr state, sh
         exit(20);
     }
 }
-struct cmpTest {
-    bool operator() (const shared_ptr<WitnessSet> l,const shared_ptr<WitnessSet> r)const{
-         return *l < *r;
-    }
-};
+
 void BreadthFirstSearch::search(){
+    if(flags->get("Premise")){
+        cout<< " Premise Search is Activated"<<endl;
+    }
 	State::ptr initialState = kernel->initialState();
 	allStatesSet.insert(initialState);
 	newStatesSet.insert(initialState);
@@ -120,18 +119,25 @@ void BreadthFirstSearch::search(){
 			for (int i=1; i<= width+1; i++){
                 if(bag.vertex_introducible(i)){
                     State::ptr newStatePointer = kernel->intro_v(statePointer, i);
-                    if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer) ){
-                        newStatesSet.insert(newStatePointer);
-                        State::ptr consequentState = newStatePointer;
-                        bfsDAG.addState(consequentState);
-                        AbstractTreeDecompositionNodeContent transitionContent("IntroVertex_"+ to_string(i));
-                        vector<State::ptr> antecedentStates;
-                        antecedentStates.push_back(statePointer);
-                        Transition<State::ptr,AbstractTreeDecompositionNodeContent> transition(consequentState,transitionContent,antecedentStates);
-                        bfsDAG.addTransition(transition);
-                        // size of witnessSets
-                        for (int component = 0; component < numberOfWitnesses.size(); ++component) {
-                            numberOfWitnesses[component] = max(numberOfWitnesses[component],(unsigned)consequentState->getWitnessSet(component)->size());
+                    bool premiseFlag = flags->get("Premise");
+                    bool satisfiesPremise = false;
+                    if(premiseFlag){
+                        satisfiesPremise = conjecture->evaluatePremiseOnState(*newStatePointer,kernel);
+                    }
+                    if(!premiseFlag or (premiseFlag and satisfiesPremise) ){
+                        if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer) ){
+                            newStatesSet.insert(newStatePointer);
+                            State::ptr consequentState = newStatePointer;
+                            bfsDAG.addState(consequentState);
+                            AbstractTreeDecompositionNodeContent transitionContent("IntroVertex_"+ to_string(i));
+                            vector<State::ptr> antecedentStates;
+                            antecedentStates.push_back(statePointer);
+                            Transition<State::ptr,AbstractTreeDecompositionNodeContent> transition(consequentState,transitionContent,antecedentStates);
+                            bfsDAG.addTransition(transition);
+                            // size of witnessSets
+                            for (int component = 0; component < numberOfWitnesses.size(); ++component) {
+                                numberOfWitnesses[component] = max(numberOfWitnesses[component],(unsigned)consequentState->getWitnessSet(component)->size());
+                            }
                         }
                     }
                 }
@@ -141,18 +147,29 @@ void BreadthFirstSearch::search(){
 			///////////////////////////////////////////////////////
 			for (auto it= bagElement.begin(); it!=bagElement.end(); it++){
                 State::ptr newStatePointer = kernel->forget_v(statePointer, *it);
-                if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer)){
-                    newStatesSet.insert(newStatePointer);
-                    State::ptr consequentState = newStatePointer;
-                    AbstractTreeDecompositionNodeContent transitionContent("ForgetVertex_"+ to_string(*it));
-                    bfsDAG.addState(consequentState);
-                    vector<State::ptr> antecedentStates;
-                    antecedentStates.push_back(statePointer);
-                    Transition<State::ptr,AbstractTreeDecompositionNodeContent> transition(consequentState,transitionContent,antecedentStates);
-                    bfsDAG.addTransition(transition);
-                    // size of witnessSets
-                    for (int component = 0; component < numberOfWitnesses.size(); ++component) {
-                        numberOfWitnesses[component] = max(numberOfWitnesses[component],(unsigned)consequentState->getWitnessSet(component)->size());
+                bool premiseFlag = flags->get("Premise");
+                bool satisfiesPremise = false;
+                if(premiseFlag){
+                    satisfiesPremise = conjecture->evaluatePremiseOnState(*newStatePointer,kernel);
+                }
+                if(!premiseFlag or (premiseFlag and satisfiesPremise) ) {
+                    if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer)) {
+                        newStatesSet.insert(newStatePointer);
+                        State::ptr consequentState = newStatePointer;
+                        AbstractTreeDecompositionNodeContent transitionContent("ForgetVertex_" + to_string(*it));
+                        bfsDAG.addState(consequentState);
+                        vector<State::ptr> antecedentStates;
+                        antecedentStates.push_back(statePointer);
+                        Transition<State::ptr, AbstractTreeDecompositionNodeContent> transition(consequentState,
+                                                                                                transitionContent,
+                                                                                                antecedentStates);
+                        bfsDAG.addTransition(transition);
+                        // size of witnessSets
+                        for (int component = 0; component < numberOfWitnesses.size(); ++component) {
+                            numberOfWitnesses[component] = max(numberOfWitnesses[component],
+                                                               (unsigned) consequentState->getWitnessSet(
+                                                                       component)->size());
+                        }
                     }
                 }
 			}
@@ -164,18 +181,25 @@ void BreadthFirstSearch::search(){
                     if(itX!=bagElement.end()){
                         for (auto itPrime = itX ; itPrime != bagElement.end(); itPrime++){
                             State::ptr newStatePointer = kernel->intro_e(statePointer, *it, *itPrime);
-                            if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer)){
-                                newStatesSet.insert(newStatePointer);
-                                State::ptr consequentState = newStatePointer;
-                                AbstractTreeDecompositionNodeContent transitionContent("IntroEdge_"+ to_string(*it)+"_"+to_string(*itPrime));
-                                bfsDAG.addState(consequentState);
-                                vector<State::ptr> antecedentStates;
-                                antecedentStates.push_back(statePointer);
-                                Transition<State::ptr,AbstractTreeDecompositionNodeContent> transition(consequentState,transitionContent,antecedentStates);
-                                bfsDAG.addTransition(transition);
-                                // size of witnessSets
-                                for (int component = 0; component < numberOfWitnesses.size(); ++component) {
-                                    numberOfWitnesses[component] = max(numberOfWitnesses[component],(unsigned)consequentState->getWitnessSet(component)->size());
+                            bool premiseFlag = flags->get("Premise");
+                            bool satisfiesPremise = false;
+                            if(premiseFlag){
+                                satisfiesPremise = conjecture->evaluatePremiseOnState(*newStatePointer,kernel);
+                            }
+                            if(!premiseFlag or (premiseFlag and satisfiesPremise) ){
+                                if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer)){
+                                    newStatesSet.insert(newStatePointer);
+                                    State::ptr consequentState = newStatePointer;
+                                    AbstractTreeDecompositionNodeContent transitionContent("IntroEdge_"+ to_string(*it)+"_"+to_string(*itPrime));
+                                    bfsDAG.addState(consequentState);
+                                    vector<State::ptr> antecedentStates;
+                                    antecedentStates.push_back(statePointer);
+                                    Transition<State::ptr,AbstractTreeDecompositionNodeContent> transition(consequentState,transitionContent,antecedentStates);
+                                    bfsDAG.addTransition(transition);
+                                    // size of witnessSets
+                                    for (int component = 0; component < numberOfWitnesses.size(); ++component) {
+                                        numberOfWitnesses[component] = max(numberOfWitnesses[component],(unsigned)consequentState->getWitnessSet(component)->size());
+                                    }
                                 }
                             }
                         }
@@ -189,21 +213,28 @@ void BreadthFirstSearch::search(){
                 for (auto it = allStatesSet.begin(); it != allStatesSet.end(); it++) {
                     if (statePointer->get_bag().joinable((*it)->get_bag())) {
                         State::ptr newStatePointer = kernel->join(statePointer, *it);
-                        if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer)) {
-                            newStatesSet.insert(newStatePointer);
-                            State::ptr consequentState = newStatePointer;
-                            AbstractTreeDecompositionNodeContent transitionContent("Join");
-                            bfsDAG.addState(consequentState);
-                            vector<State::ptr> antecedentStates;
-                            antecedentStates.push_back(statePointer);
-                            antecedentStates.push_back(*it);
-                            Transition<State::ptr, AbstractTreeDecompositionNodeContent> transition(consequentState,
-                                                                                                    transitionContent,
-                                                                                                    antecedentStates);
-                            bfsDAG.addTransition(transition);
-                            // size of witnessSets
-                            for (int component = 0; component < numberOfWitnesses.size(); ++component) {
-                                numberOfWitnesses[component] = max(numberOfWitnesses[component],(unsigned)consequentState->getWitnessSet(component)->size());
+                        bool premiseFlag = flags->get("Premise");
+                        bool satisfiesPremise = false;
+                        if(premiseFlag){
+                            satisfiesPremise = conjecture->evaluatePremiseOnState(*newStatePointer,kernel);
+                        }
+                        if(!premiseFlag or (premiseFlag and satisfiesPremise) ){
+                            if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer)) {
+                                newStatesSet.insert(newStatePointer);
+                                State::ptr consequentState = newStatePointer;
+                                AbstractTreeDecompositionNodeContent transitionContent("Join");
+                                bfsDAG.addState(consequentState);
+                                vector<State::ptr> antecedentStates;
+                                antecedentStates.push_back(statePointer);
+                                antecedentStates.push_back(*it);
+                                Transition<State::ptr, AbstractTreeDecompositionNodeContent> transition(consequentState,
+                                                                                                        transitionContent,
+                                                                                                        antecedentStates);
+                                bfsDAG.addTransition(transition);
+                                // size of witnessSets
+                                for (int component = 0; component < numberOfWitnesses.size(); ++component) {
+                                    numberOfWitnesses[component] = max(numberOfWitnesses[component],(unsigned)consequentState->getWitnessSet(component)->size());
+                                }
                             }
                         }
                     }
