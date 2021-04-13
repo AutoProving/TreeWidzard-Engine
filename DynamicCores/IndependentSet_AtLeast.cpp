@@ -32,7 +32,6 @@ Witness & IndependentSet_AtLeast_Witness::set_equal_implementation(IndependentSe
     //*****************************
 }
 shared_ptr<Witness> IndependentSet_AtLeast_Witness::relabel(map<unsigned int, unsigned int> relabelingMap) {
-
     if(this->found){
         return this->shared_from_this();
     }else{
@@ -130,12 +129,13 @@ void IndependentSet_AtLeast_DynamicCore::intro_v_implementation(unsigned int i, 
     // witness == (S, r),
     // then intro_i results in the witnessSet: {(S, r), (S U {i}, r + 1)} (when r < k)
     //                                      or {(S, r)}                   (when r >= k)
-
     IndependentSet_AtLeast_WitnessPointer w1 = createWitness();
     // w1 = (S, r)
     w1->set_equal(*w);
     witnessSet->insert(w1);
-    if (!w->found){
+    //cout << "Before If" << endl; 
+    if (!(w->found)){
+    	//cout << "Inside If" << endl; 
         IndependentSet_AtLeast_WitnessPointer w2 = createWitness();
         // w2 = (S U {i}, r + 1)
         w2->set_equal(*w);
@@ -144,8 +144,11 @@ void IndependentSet_AtLeast_DynamicCore::intro_v_implementation(unsigned int i, 
         // Verifying if r reached k. If it did, an indSet with size at least k was already found.
         if (w2->size == this->parameter) {
             w2->found = true;
-            witnessSet->insert(w2);
         }
+        witnessSet->insert(w2);
+	//cout<< "WitnessSet:" << endl;
+	//witnessSet->print();
+	//cout << endl; 
     }
     //*****************************
     //*****************************
@@ -204,18 +207,19 @@ void IndependentSet_AtLeast_DynamicCore::join_implementation(Bag &b, Independent
 }
 
 shared_ptr<WitnessSet> IndependentSet_AtLeast_DynamicCore::clean_implementation(IndependentSet_AtLeast_WitnessSetPointer  witnessSet) {
-    for(auto witness:(*witnessSet)){
-        if (IndependentSet_AtLeast_WitnessPointer w = dynamic_pointer_cast<IndependentSet_AtLeast_Witness>(witness)) {
-            if(w->found){
-                IndependentSet_AtLeast_WitnessSetPointer newWitnessSet (new IndependentSet_AtLeast_WitnessSet);
-                newWitnessSet->insert(w);
-                return newWitnessSet;
-            }
-        }else{
-            cerr<<"ERROR: in IndependentSet_AtLeast_DynamicCore::clean_implementation cast error"<<endl;
-            exit(20);
-        }
-    }
+// OBS: This is wrong, since this cleaning only works if the property is closed under supergraphs
+//    for(auto witness:(*witnessSet)){
+//        if (IndependentSet_AtLeast_WitnessPointer w = dynamic_pointer_cast<IndependentSet_AtLeast_Witness>(witness)) {
+//            if(w->found){
+//                IndependentSet_AtLeast_WitnessSetPointer newWitnessSet (new IndependentSet_AtLeast_WitnessSet);
+//                newWitnessSet->insert(w);
+//                return newWitnessSet;
+//            }
+//        }else{
+//            cerr<<"ERROR: in IndependentSet_AtLeast_DynamicCore::clean_implementation cast error"<<endl;
+//            exit(20);
+//        }
+//    }
     return witnessSet;
 }
 
