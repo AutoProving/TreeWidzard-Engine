@@ -133,9 +133,9 @@ void IndependentSet_AtLeast_DynamicCore::intro_v_implementation(unsigned int i, 
     // w1 = (S, r)
     w1->set_equal(*w);
     witnessSet->insert(w1);
-    //cout << "Before If" << endl; 
-    if (!(w->found)){
-    	//cout << "Inside If" << endl; 
+    //cout << "Before If" << endl;
+    if (!(w->found) ){
+    	//cout << "Inside If" << endl;
         IndependentSet_AtLeast_WitnessPointer w2 = createWitness();
         // w2 = (S U {i}, r + 1)
         w2->set_equal(*w);
@@ -148,7 +148,7 @@ void IndependentSet_AtLeast_DynamicCore::intro_v_implementation(unsigned int i, 
         witnessSet->insert(w2);
 	//cout<< "WitnessSet:" << endl;
 	//witnessSet->print();
-	//cout << endl; 
+	//cout << endl;
     }
     //*****************************
     //*****************************

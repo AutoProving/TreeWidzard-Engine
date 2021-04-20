@@ -34,21 +34,21 @@ add_executable(
 		Controller/AuxiliaryController.hpp
 		main.cpp
 	# DynamicCore files
-		#  DynamicCores/CliqueNumber_AtLeast.cpp
-		#   DynamicCores/CliqueNumber_AtLeast.h
-		   DynamicCores/CliqueNumberSimpleGraphs_AtLeast.h
-		   DynamicCores/CliqueNumberSimpleGraphs_AtLeast.cpp
-		#   DynamicCores/ChromaticNumber_AtMost.cpp
-		#   DynamicCores/ChromaticNumber_AtMost.h
+		# DynamicCores/CliqueNumber_AtLeast.cpp
+		# DynamicCores/CliqueNumber_AtLeast.h
+	  # DynamicCores/CliqueNumberSimpleGraphs_AtLeast.h
+		# DynamicCores/CliqueNumberSimpleGraphs_AtLeast.cpp
+		# DynamicCores/ChromaticNumber_AtMost.cpp
+		# DynamicCores/ChromaticNumber_AtMost.h
 		#	DynamicCores/MaxDegree_AtLeast.cpp
-		#   DynamicCores/MaxDegree_AtLeast.h
-		#   DynamicCores/HasMultipleEdges.cpp
-		#   DynamicCores/HasMultipleEdges.h
+		# DynamicCores/MaxDegree_AtLeast.h
+		# DynamicCores/HasMultipleEdges.cpp
+		# DynamicCores/HasMultipleEdges.h
 		#	DynamicCores/TriangleFreeWidthFour.cpp
 		#	DynamicCores/EdgeConnected_AtMost.cpp
 		#	DynamicCores/EdgeColoring_AtMost.cpp
 		#	DynamicCores/Minor.cpp
-		#   DynamicCores/NoWhereZeroFlow_AtMost.cpp
+		# DynamicCores/NoWhereZeroFlow_AtMost.cpp
 		#	DynamicCores/AuxiliaryFunctions.h
 		#	DynamicCores/HamiltonianCycle.cpp
 		#	DynamicCores/MaxDegree_AtLeast.h
@@ -57,36 +57,38 @@ add_executable(
 		#	DynamicCores/MinDegree_AtMost.cpp
 		#	DynamicCores/CycleGirth_AtMost.h
 		#	DynamicCores/CycleGirth_AtMost.cpp
-        #   DynamicCores/Mod.h
-        #   DynamicCores/Mod.cpp
-		#   DynamicCores/PathEdgeCover.h
-        #   DynamicCores/PathEdgeCover.cpp
+    # DynamicCores/Mod.h
+    # DynamicCores/Mod.cpp
+		# DynamicCores/PathEdgeCover.h
+    # DynamicCores/PathEdgeCover.cpp
 		#	DynamicCores/VertexConnected_AtMost.cpp
 		#	DynamicCores/VertexConnected_AtMost.h
+		#	DynamicCores/HasCycle.h
+		#	DynamicCores/HasCycle.cpp
 	# Kernel files
-        Kernel/Witness.cpp
-        Kernel/Witness.h
-        Kernel/WitnessSet.cpp
-        Kernel/WitnessSet.h
-        Kernel/PropertyAssignment.cpp
-        Kernel/PropertyAssignment.h
-        Kernel/Bag.cpp
-        Kernel/Bag.h
+    Kernel/Witness.cpp
+    Kernel/Witness.h
+    Kernel/WitnessSet.cpp
+    Kernel/WitnessSet.h
+    Kernel/PropertyAssignment.cpp
+    Kernel/PropertyAssignment.h
+    Kernel/Bag.cpp
+    Kernel/Bag.h
 		Kernel/DynamicCore.cpp
 		Kernel/DynamicCore.h
-        Kernel/DynamicKernel.cpp
-        Kernel/DynamicKernel.h
-        Kernel/Conjecture.cpp
-        Kernel/Conjecture.h
-        Kernel/Flags.cpp
-        Kernel/Flags.h
-		Kernel/SearchStrategy.cpp
+    Kernel/DynamicKernel.cpp
+    Kernel/DynamicKernel.h
+    Kernel/Conjecture.cpp
+    Kernel/Conjecture.h
+    Kernel/Flags.cpp
+    Kernel/Flags.h
+	  Kernel/SearchStrategy.cpp
 		Kernel/SearchStrategy.h
-        Kernel/State.cpp
-        Kernel/State.h
-        Kernel/Width.h
-        Kernel/Width.cpp
-		Kernel/StateTree.cpp
+    Kernel/State.cpp
+    Kernel/State.h
+    Kernel/Width.h
+    Kernel/Width.cpp
+    Kernel/StateTree.cpp
 		Kernel/StateTree.h
 		Kernel/DynamicCoreHandler.cpp
 		Kernel/DynamicCoreHandler.h
@@ -131,11 +133,11 @@ add_executable(
 		ConcreteTreeDecomposition/ctd_parser.cpp
 		ConcreteTreeDecomposition/ctd_lexer.cpp
     # BitVector files
-        BitVector/BitVector.cpp
-        BitVector/BitVector.h
-        BitVector/BitSet.cpp
-        BitVector/BitSet.h
-	# Translation
+    BitVector/BitVector.cpp
+    BitVector/BitVector.h
+    BitVector/BitSet.cpp
+    BitVector/BitSet.h
+	  # Translation
 		Translation/PACE/TreeDecompositionPACE.cpp
 		Translation/PACE/TreeDecompositionPACE.h
 		Translation/PACE/WitnessTreePACE.cpp
@@ -149,7 +151,7 @@ add_executable(
 		Translation/TreeAutomaton/term_parser.cpp
 		Translation/TreeAutomaton/term_parser.cpp
 		Translation/TreeAutomaton/term_lexer.cpp
-	# TreeAutomaton
+	  # TreeAutomaton
 		TreeAutomaton/TreeAutomaton.h
 		TreeAutomaton/TreeAutomaton.cpp
 		TreeAutomaton/Term.h
