@@ -34,7 +34,7 @@ bool ConjectureNode::evaluateState(State &q, DynamicKernel *kernel) {
 						"operator does not have 2 children";
 				exit(20);
 			} else {
-				return (!(children[0]->evaluateState(q, kernel)) or
+                return (!(children[0]->evaluateState(q, kernel)) or
 						children[1]->evaluateState(q, kernel));
 			}
 		} else if (logicalOperator == "IMPLIEDBY") {

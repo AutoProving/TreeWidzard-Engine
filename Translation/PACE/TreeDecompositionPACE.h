@@ -8,6 +8,7 @@
 #include "../../TreeAutomaton/ConcreteTreeDecomposition.h"
 
 using namespace std;
+// TODO: vertex_t -> bag_set
 typedef set<unsigned> vertex_t;
 
 class RawAbstractTreeDecomposition{
@@ -57,6 +58,7 @@ class TreeDecompositionPACE {
         shared_ptr<RawAbstractTreeDecomposition> constructInnerNodes(set<unsigned> &visited_bags, unsigned neighbor);
         bool constructRaw();
         bool convertToBinary(shared_ptr<RawAbstractTreeDecomposition> node);// Converts a tree decomposition to a binary tree decomposition
+        bool eliminateDuplicate(shared_ptr<RawAbstractTreeDecomposition> node); // If a node has one child and the bag is identical, we merge these two nodes
         bool joinFormat(shared_ptr<RawAbstractTreeDecomposition> node);// Adds join nodes to a tree decomposition
         bool addEmptyNodes(shared_ptr<RawAbstractTreeDecomposition> node);// Adds empty nodes to a tree decomposition
         bool addIntroVertex(shared_ptr<RawAbstractTreeDecomposition> node);// Adds introVertex nodes to a tree decomposition
@@ -67,6 +69,8 @@ class TreeDecompositionPACE {
         bool updateInnerNodeTD(shared_ptr<RawAbstractTreeDecomposition> node, unsigned &number,unsigned parentno);
         bool updateTD();
         void construct();
+        bool validateTree(shared_ptr<RawAbstractTreeDecomposition> node);
+
         void createCTDNode(shared_ptr<TermNode<ConcreteNode>> cnode, shared_ptr<RawAbstractTreeDecomposition> rnode);
         shared_ptr<ConcreteTreeDecomposition> convertToConcreteTreeDecomposition();
 };

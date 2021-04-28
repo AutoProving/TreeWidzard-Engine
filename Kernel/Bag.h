@@ -21,6 +21,7 @@ class Bag {
 	void set_edge(unsigned i, unsigned j);
 	pair<unsigned, unsigned> get_edge() const;
 	void print();
+	void print() const;
 	string bagInformation();
 	bool operator<(const Bag& rhs) const;
 	bool operator==(const Bag& rhs) const;

@@ -1,0 +1,3 @@
+tree_width 2
+y := CliqueNumberSimpleGraphs > 2
+y

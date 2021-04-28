@@ -1,4 +1,4 @@
-tree_width 1
+tree_width 0
 x := MaxDegree > 1
 y := CliqueNumberSimpleGraphs > 2
 z := HasMultipleEdges

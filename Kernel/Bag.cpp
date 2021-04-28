@@ -29,6 +29,15 @@ void Bag::print() {
 	std::cout << "} , {" << i << ", " << j << "}]";
 }
 
+void Bag::print() const {
+    std::cout << "[{";
+    for (auto element : elements) {
+        std::cout << element;
+        if(element!=*(--elements.end()))
+            cout<<",";
+    }
+    std::cout << "} , {" << i << ", " << j << "}]";
+}
 string Bag::bagInformation() {
     string info;
     info = "[{";
@@ -132,5 +141,6 @@ Bag Bag::relabel(map<unsigned int, unsigned int> relabelingMap) {
     b.set_edge(relabelingMap[this->i],relabelingMap[this->j]);
     return b;
 }
+
 
 

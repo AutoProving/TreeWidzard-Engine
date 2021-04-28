@@ -7,6 +7,7 @@
 #include "Term.h"
 #include "../Kernel/Bag.h"
 #include "../Multigraph/MultiGraph.h"
+#include "../Kernel/Conjecture.h"
 
 using namespace std;
 
@@ -53,6 +54,8 @@ public:
     MultiGraph extractMultiGraph();
     AbstractTreeDecomposition convertToAbstractTreeDecomposition();
     void writeToFile(string fileName);
+    State::ptr constructWitnesses(Conjecture &conjecture, shared_ptr<TermNode<ConcreteNode>> node);
+    bool conjectureCheck(Conjecture &conjecture);
 
 
 };

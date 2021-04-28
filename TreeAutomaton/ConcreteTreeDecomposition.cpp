@@ -144,7 +144,6 @@ void ConcreteTreeDecomposition::traverseNode(TermNode<ConcreteNode> &node, Multi
         traverseNode(*(node.getChildren()[1]), G, colorToVertexMapCopy,
                      nVertices, nEdges);
     }
-
 }
 
 AbstractTreeDecomposition ConcreteTreeDecomposition::convertToAbstractTreeDecomposition() {
@@ -163,5 +162,90 @@ void ConcreteTreeDecomposition::writeToFile(string fileName) {
     else {
         cout << "Unable to open "<< fileName << endl;
         exit(20);
+    }
+}
+
+State::ptr ConcreteTreeDecomposition::constructWitnesses(Conjecture &conjecture, shared_ptr<TermNode<ConcreteNode>> node) {
+    // First, We check the type of the node
+    if (node->getNodeContent().getSymbol() == "Leaf") {
+        // if it is an empty, then it is a leaf
+        State::ptr q = conjecture.kernel->initialState();
+        return q;
+    } else if (strstr(node->getNodeContent().getSymbol().c_str(), "IntroVertex")) {
+        State::ptr childState = constructWitnesses(conjecture, node->getChildren()[0]);
+        // find the introduced vertex
+        set<unsigned> bagSet = node->getNodeContent().getBag().get_elements();
+        set<unsigned> childBagSet = childState->get_bag().get_elements();
+        set<unsigned> bagSetDifference;
+        set_difference( bagSet.begin(), bagSet.end(), childBagSet.begin(),
+                childBagSet.end(),
+                std::inserter(bagSetDifference, bagSetDifference.begin()));
+        if (bagSetDifference.size() != 1) {
+            cout
+                    << "ERROR: ConcreteTreeDecomposition::constructWitnesses "
+                       "in IntroVertex child's bag and node's bag are not valid"
+                    << endl;
+            exit(20);
+        }
+        State::ptr q = conjecture.kernel->intro_v(
+                childState, *bagSetDifference.begin());
+        return q;
+
+    } else if (strstr(node->getNodeContent().getSymbol().c_str(), "ForgetVertex")) {
+        State::ptr childState =
+                constructWitnesses(conjecture, node->getChildren()[0]);
+        // find the forgotten vertex
+        set<unsigned> bagSet = node->getNodeContent().getBag().get_elements();
+        set<unsigned> childBagSet = childState->get_bag().get_elements();
+        set<unsigned> bagSetDifference;
+        set_difference(
+                childBagSet.begin(), childBagSet.end(), bagSet.begin(),
+                bagSet.end(),
+                std::inserter(bagSetDifference, bagSetDifference.begin()));
+        if (bagSetDifference.size() != 1) {
+            cout << "ERROR: ConcreteTreeDecomposition::constructWitnesses "
+                    "in ForgetVertex child's bag and node's bag are not "
+                    "valid"
+                 << endl;
+            exit(20);
+        }
+        State::ptr q = conjecture.kernel->forget_v(childState, *bagSetDifference.begin());
+        return q;
+
+    } else if (strstr(node->getNodeContent().getSymbol().c_str(), "IntroEdge")) {
+        State::ptr childState = constructWitnesses(conjecture, node->getChildren()[0]);
+        pair<unsigned, unsigned> e =
+                node->getNodeContent().getBag().get_edge();
+        State::ptr q = conjecture.kernel->intro_e(childState,e.first, e.second);
+        bool conjectureEvaluationResult =
+                conjecture.evaluateConjectureOnState(*q, conjecture.kernel);
+        return q;
+
+    } else if (strstr(node->getNodeContent().getSymbol().c_str(), "Join")) {
+        State::ptr childState1 = constructWitnesses(conjecture, node->getChildren()[0]);
+        State::ptr childState2 = constructWitnesses(conjecture, node->getChildren()[1]);
+        State::ptr q = conjecture.kernel->join(childState1,childState2);
+        return q;
+    } else {
+        cout << "ERROR in constructWitnesses: The function could not recognize "
+                "the type of the node"
+             << endl;
+        cout << "The devastated node is: " << endl;
+        node->getNodeContent().print();
+        exit(20);
+    }
+}
+
+bool ConcreteTreeDecomposition::conjectureCheck(Conjecture &conjecture) {
+    State::ptr q = constructWitnesses(conjecture, getRoot());
+    if (!conjecture.evaluateConjectureOnState(*q, conjecture.kernel)) {
+        cout << " Concrete Tree Decomposition does not satisfy the conjecture"
+             << endl;
+        cout << " Printing bad State: " << endl;
+        q.print();
+        return false;
+    } else {
+        cout << " Concrete Tree Decomposition satisfies the conjecture" << endl;
+        return true;
     }
 }

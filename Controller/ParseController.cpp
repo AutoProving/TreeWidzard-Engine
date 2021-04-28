@@ -1,6 +1,4 @@
-
 #include "ParseController.h"
-
 ParseController::ParseController(const Flags &flag, const string &inputPath) : flag(flag) {
     //string file_path = __FILE__;
     string file_path = "";
@@ -42,17 +40,17 @@ void ParseController::parse_pace(string graphPath, string decompositionPath) {
     }
 
     /// Value and type of width should be same in tree decomposition and input's file
-    if(td.getWidthType()!= inputController->getDynamicKernel().get_width().get_name()){
-        cerr<<"Error: width types in tree decomposition and input's file.";
-        cerr<<" tree decomposition width type: "<< td.getWidthType()<< ", input width type: "
-        <<inputController->getDynamicKernel().get_width().get_name()<<endl;
-        exit(20);
-    }else if(td.getWidth() != inputController->getDynamicKernel().get_width().get_value()){
-        cerr<<"Error: width value in tree decomposition and input's file.";
-        cerr<<" tree decomposition width value: "<< td.getWidth()<< ", input width value: "
-            <<inputController->getDynamicKernel().get_width().get_value()<<endl;
-        exit(20);
-    }
+//    if(td.getWidthType()!= inputController->getDynamicKernel().get_width().get_name()){
+//        cerr<<"Error: width types in tree decomposition and input's file.";
+//        cerr<<" tree decomposition width type: "<< td.getWidthType()<< ", input width type: "
+//        <<inputController->getDynamicKernel().get_width().get_name()<<endl;
+//        exit(20);
+//    }else if(td.getWidth() != inputController->getDynamicKernel().get_width().get_value()){
+//        cerr<<"Error: width value in tree decomposition and input's file.";
+//        cerr<<" tree decomposition width value: "<< td.getWidth()<< ", input width value: "
+//            <<inputController->getDynamicKernel().get_width().get_value()<<endl;
+//        exit(20);
+//    }
     /////////////////////////////////////////////////////////////////////////////////
     cout<<"Tree Decomposition "<<endl;
     td.construct();
@@ -61,8 +59,9 @@ void ParseController::parse_pace(string graphPath, string decompositionPath) {
     shared_ptr<ConcreteTreeDecomposition> concreteTreeDecomposition;
     concreteTreeDecomposition = td.convertToConcreteTreeDecomposition();
     concreteTreeDecomposition->printTermNodes();
-
-    cout<<"---------------------------------------------State Tree"<<endl;
+    cout<<"----Evaluating-----:"<<endl;
+    concreteTreeDecomposition->conjectureCheck(this->inputController->getConjecture());
+    //cout<<"---------------------------------------------State Tree"<<endl;
     //concreteTreeDecomposition->conjectureCheck(inputController->getConjecture());
     //WitnessTreePACE witnessTreePace;
     //witnessTreePace.stateTreeToWitnessTreePACE(stateTree, inputController->getDynamicKernel());
