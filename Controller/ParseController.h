@@ -11,6 +11,7 @@
 #include "../Translation/PACE/Parser/td_parser.hpp"
 #include "../Translation/PACE/Parser/gr_parser.hpp"
 #include "../ConcreteTreeDecomposition/ctd_parser.hpp"
+#include "../Translation/PACE/Parser/atd_parser.hpp"
 #include "../TreeAutomaton/TreeAutomaton.h"
 #include "../TreeAutomaton/AbstractTreeDecomposition.h"
 
@@ -18,6 +19,7 @@ using namespace std;
 extern FILE *gr_in;
 extern FILE *td_in;
 extern FILE *ctd_in;
+extern FILE *atd_in;
 class ParseController {
 private:
     Flags flag;

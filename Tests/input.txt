@@ -1,3 +1,4 @@
 tree_width 2
-y := CliqueNumberSimpleGraphs > 2
-y
+y := ChromaticNumber < 4
+z := CliqueNumber > 2
+y AND z

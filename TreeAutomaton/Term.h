@@ -214,12 +214,19 @@ public:
 template<class TermNodeContent>
 void Term<TermNodeContent>::printTermNodes() {
     unsigned label=0;
+    if(!root){
+        cout<< "Term is empty"<<endl;
+        return;
+    }
     root->printTermNode(label);
 }
 
 template<class TermNodeContent>
 string Term<TermNodeContent>::termInformation() {
     unsigned label = 0;
+    if(!root){
+        return "Term is empty";
+    }
     return root->nodeInformation(label);
 }
 

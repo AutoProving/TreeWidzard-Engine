@@ -148,6 +148,9 @@ add_executable(
 		Translation/PACE/Parser/td_lexer.cpp
 		Translation/PACE/Parser/td_parser.cpp
 		Translation/PACE/Parser/td_parser.hpp
+		Translation/PACE/Parser/atd_lexer.cpp
+		Translation/PACE/Parser/atd_parser.cpp
+		Translation/PACE/Parser/atd_parser.hpp
 		Translation/TreeAutomaton/term_parser.cpp
 		Translation/TreeAutomaton/term_parser.cpp
 		Translation/TreeAutomaton/term_lexer.cpp

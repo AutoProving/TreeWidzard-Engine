@@ -146,13 +146,34 @@ void ConcreteTreeDecomposition::traverseNode(TermNode<ConcreteNode> &node, Multi
     }
 }
 
+
+shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> ConcreteTreeDecomposition::constructATDNode(TermNode<ConcreteNode> &node) {
+
+    shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> atdNode(new TermNode<AbstractTreeDecompositionNodeContent>);
+    vector<shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>>> children;
+    string symbol = node.getNodeContent().getSymbol();
+    AbstractTreeDecompositionNodeContent abstract;
+    abstract.setSymbol(symbol);
+    for(auto &child:node.getChildren()){
+        shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> atdChild = constructATDNode(*child);
+        atdChild->setParent(atdNode);
+        children.push_back(atdChild);
+    }
+    atdNode->setNodeContent(abstract);
+    atdNode->setChildren(children);
+    return atdNode;
+}
+
+
 AbstractTreeDecomposition ConcreteTreeDecomposition::convertToAbstractTreeDecomposition() {
     AbstractTreeDecomposition abstractTreeDecomposition;
+    shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> root  = constructATDNode(*this->getRoot());
+    abstractTreeDecomposition.setRoot(root);
     return abstractTreeDecomposition;
 }
 
 void ConcreteTreeDecomposition::writeToFile(string fileName) {
-    fileName = "Counterexample_ConcreteTreeDec_"+concrete_fs::path(fileName).filename().string();
+    fileName = "ConcreteTreeDecomposition_"+concrete_fs::path(fileName).filename().string();
     ofstream atdFile (fileName);
     if (atdFile.is_open())
     {
@@ -183,8 +204,12 @@ State::ptr ConcreteTreeDecomposition::constructWitnesses(Conjecture &conjecture,
         if (bagSetDifference.size() != 1) {
             cout
                     << "ERROR: ConcreteTreeDecomposition::constructWitnesses "
-                       "in IntroVertex child's bag and node's bag are not valid"
+                       "in "<<node->getNodeContent().getSymbol()<<":child's bag and node's bag are not valid"
                     << endl;
+                cout<<"node's bag: ";
+                node->getNodeContent().getBag().print();
+                cout<<"\nchild's bag: ";
+                node->getChildren()[0]->getNodeContent().getBag().print();
             exit(20);
         }
         State::ptr q = conjecture.kernel->intro_v(
@@ -239,13 +264,12 @@ State::ptr ConcreteTreeDecomposition::constructWitnesses(Conjecture &conjecture,
 bool ConcreteTreeDecomposition::conjectureCheck(Conjecture &conjecture) {
     State::ptr q = constructWitnesses(conjecture, getRoot());
     if (!conjecture.evaluateConjectureOnState(*q, conjecture.kernel)) {
-        cout << " Concrete Tree Decomposition does not satisfy the conjecture"
-             << endl;
-        cout << " Printing bad State: " << endl;
+        cout << "satisfied" << endl;
+        cout << "Printing bad State: " << endl;
         q.print();
         return false;
     } else {
-        cout << " Concrete Tree Decomposition satisfies the conjecture" << endl;
+        cout << "not satisfied"<< endl;
         return true;
     }
 }

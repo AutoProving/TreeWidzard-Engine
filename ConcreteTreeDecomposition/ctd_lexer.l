@@ -15,7 +15,7 @@
 %%
 
 [0-9]+                      yylval.number = atoi(yytext); return CTD_NUM;
-Empty                       yylval.string = strdup(yytext); return CTD_EMPTY;
+Leaf                       yylval.string = strdup(yytext); return CTD_EMPTY;
 IntroVertex                 yylval.string = strdup(yytext); return CTD_INTROVERTEX;
 IntroEdge                   yylval.string = strdup(yytext); return CTD_INTROEDGE;
 ForgetVertex                yylval.string = strdup(yytext); return CTD_FORGETVERTEX;

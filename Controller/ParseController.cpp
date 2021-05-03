@@ -58,9 +58,13 @@ void ParseController::parse_pace(string graphPath, string decompositionPath) {
     cout<<"--------------------------------------------Concrete decomposition"<<endl;
     shared_ptr<ConcreteTreeDecomposition> concreteTreeDecomposition;
     concreteTreeDecomposition = td.convertToConcreteTreeDecomposition();
-    concreteTreeDecomposition->printTermNodes();
+    //concreteTreeDecomposition->printTermNodes();
     cout<<"----Evaluating-----:"<<endl;
     concreteTreeDecomposition->conjectureCheck(this->inputController->getConjecture());
+    AbstractTreeDecomposition abstractTreeDecomposition = concreteTreeDecomposition->convertToAbstractTreeDecomposition();
+    abstractTreeDecomposition.writeToFile(this->inputController->getInputPath());
+    concreteTreeDecomposition->writeToFile(this->inputController->getInputPath());
+
     //cout<<"---------------------------------------------State Tree"<<endl;
     //concreteTreeDecomposition->conjectureCheck(inputController->getConjecture());
     //WitnessTreePACE witnessTreePace;
@@ -69,15 +73,15 @@ void ParseController::parse_pace(string graphPath, string decompositionPath) {
 }
 
 void ParseController::parse_abstract(string abstractPath) {
-    ctd_in = fopen(abstractPath.c_str(), "r");
+  /*  ctd_in = fopen(abstractPath.c_str(), "r");
     if (!ctd_in) {
         std::perror("File opening failed");
         cerr<<"\n "<<abstractPath<<" could not open."<<endl;
         exit(20);
     }
-    ConcreteTreeDecomposition ctd;
+    ConcreteTreeDecomposition concreteTreeDecomposition;
     int resultCTD = 0; // if parsing successful result will be 0 otherwise 1
-    resultCTD = ctd_parse(ctd, resultCTD); // Parser function from Parser.hpp
+    resultCTD = ctd_parse(concreteTreeDecomposition, resultCTD); // Parser function from Parser.hpp
     cout<<"result: "<<resultCTD<<endl;
     // check for successful parsing
     if (resultCTD != 0) {
@@ -85,12 +89,36 @@ void ParseController::parse_abstract(string abstractPath) {
              << endl;
         exit(20);
     }
-    ctd.printTermNodes();
-//    if(!ctd.conjectureCheck(inputController->getConjecture())){
-//        shared_ptr<DynamicKernel> sharedKernel = make_shared<DynamicKernel>(inputController->getDynamicKernel());
-//        ctd.convertToStateTree(sharedKernel).printStateTree();
-//        ctd.extractMultiGraph().printGraph();
-//    };
+    concreteTreeDecomposition.printTermNodes();
+    concreteTreeDecomposition.conjectureCheck(this->inputController->getConjecture());
+   */
+    atd_in = fopen(abstractPath.c_str(), "r");
+    if (!atd_in) {
+        std::perror("File opening failed");
+        cerr<<"\n "<<abstractPath<<" could not open."<<endl;
+        exit(20);
+    }
+    AbstractTreeDecomposition abstractTreeDecomposition;
+    int resultATD = 0; // if parsing successful result will be 0 otherwise 1
+    resultATD = atd_parse(abstractTreeDecomposition, resultATD); // Parser function from Parser.hpp
+    cout<<"result: "<<resultATD<<endl;
+    // check for successful parsing
+    if (resultATD != 0) {
+        cout << " Error: input file " << abstractPath << " is not in valid format"
+             << endl;
+        exit(20);
+    }
+    abstractTreeDecomposition.printTermNodes();
+    ConcreteTreeDecomposition concreteTreeDecomposition = abstractTreeDecomposition.convertToConcreteTreeDecomposition();
+    
+    cout<<"----Evaluating-----:"<<endl;
+    concreteTreeDecomposition.conjectureCheck(this->inputController->getConjecture());
+    /*if(!ctd.conjectureCheck(inputController->getConjecture())){
+      cout<<"not satisfied"<<endl;
+        //  shared_ptr<DynamicKernel> sharedKernel = make_shared<DynamicKernel>(inputController->getDynamicKernel());
+      //  ctd.convertToStateTree(sharedKernel).printStateTree();
+      //  ctd.extractMultiGraph().printGraph();
+    };*/
 
 }
 

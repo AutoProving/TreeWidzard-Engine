@@ -9,6 +9,16 @@ const string &AbstractTreeDecompositionNodeContent::getSymbol() const {
     return symbol;
 }
 
+void AbstractTreeDecompositionNodeContent::setSymbol(const string &symbol){
+    this->symbol = symbol;
+}
+
+AbstractTreeDecompositionNodeContent &
+AbstractTreeDecompositionNodeContent::operator=(const AbstractTreeDecompositionNodeContent &other) {
+    setSymbol(other.getSymbol());
+    return *this;
+}
+
 bool AbstractTreeDecompositionNodeContent::operator==(const AbstractTreeDecompositionNodeContent &rhs) const {
     return symbol == rhs.symbol;
 }
@@ -74,6 +84,10 @@ vector<int> AbstractTreeDecompositionNodeContent::symbolNumbers(string s) const 
     return extractIntegerWords(s);
 }
 
+string AbstractTreeDecompositionNodeContent::smallestContent(){
+        return "Leaf";
+}
+
 void AbstractTreeDecompositionNodeContent::print() {
     cout<< symbol;
 }
@@ -112,13 +126,6 @@ AbstractTreeDecompositionNodeContent::AbstractTreeDecompositionNodeContent(
 string AbstractTreeDecompositionNodeContent::nodeInformation() {
     return symbol;
 }
-
-AbstractTreeDecompositionNodeContent &
-AbstractTreeDecompositionNodeContent::operator=(const AbstractTreeDecompositionNodeContent &other) {
-    setSymbol(other.getSymbol());
-    return *this;
-}
-
 
 shared_ptr<TermNode<ConcreteNode>> AbstractTreeDecomposition::constructCTDNode(TermNode<AbstractTreeDecompositionNodeContent> &node) {
 
@@ -190,7 +197,7 @@ ConcreteTreeDecomposition AbstractTreeDecomposition::convertToConcreteTreeDecomp
 
 
 void AbstractTreeDecomposition::writeToFile(string fileName) {
-    fileName = "Counterexample_AbstractTreeDec_"+abstract_fs::path(fileName).filename().string();
+    fileName = "AbstractTreeDecomposition_"+abstract_fs::path(fileName).filename().string();
     ofstream atdFile (fileName);
     if (atdFile.is_open())
     {

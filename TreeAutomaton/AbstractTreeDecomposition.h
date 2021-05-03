@@ -13,10 +13,8 @@
 #include "ConcreteTreeDecomposition.h"
 using namespace std;
 namespace abstract_fs = std::experimental::filesystem;
-
 class AbstractTreeDecompositionNodeContent : public TermNodeContentType {
 private:
-
     string symbol="Leaf";
 public:
     AbstractTreeDecompositionNodeContent();
@@ -41,9 +39,7 @@ public:
 
     const string &getSymbol() const;
 
-    void setSymbol(const string &symbol){
-        this->symbol = symbol;
-    };
+    void setSymbol(const string &symbol);
 
     string nodeInformation() override;
 
@@ -55,15 +51,12 @@ public:
 
     vector<int> extractIntegerWords(string s) const;
     //Define the lexicographically smallest content.
-    string smallestContent(){
-        return "Leaf";
-    }
+    string smallestContent();
 
 };
 
 class AbstractTreeDecomposition: public Term<AbstractTreeDecompositionNodeContent>{
 public:
-
     void writeToFile(string fileName);
     shared_ptr<TermNode<ConcreteNode>> constructCTDNode(TermNode<AbstractTreeDecompositionNodeContent> &node);
     ConcreteTreeDecomposition convertToConcreteTreeDecomposition();

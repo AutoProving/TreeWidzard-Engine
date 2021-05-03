@@ -52,6 +52,7 @@ class ConcreteTreeDecomposition: public Term<ConcreteNode> {
 public:
     void traverseNode(TermNode<ConcreteNode> &node, MultiGraph &G, map<unsigned, unsigned> &colorToVertexMap, unsigned &nVertices, unsigned &nEdges);
     MultiGraph extractMultiGraph();
+    shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> constructATDNode(TermNode<ConcreteNode> &node);
     AbstractTreeDecomposition convertToAbstractTreeDecomposition();
     void writeToFile(string fileName);
     State::ptr constructWitnesses(Conjecture &conjecture, shared_ptr<TermNode<ConcreteNode>> node);
