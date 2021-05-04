@@ -85,7 +85,9 @@ void BreadthFirstSearch::extractCounterExampleStateTreeNode(State::ptr state, sh
 
 void BreadthFirstSearch::search(){
     if(flags->get("Premise")){
-        cout<< " Premise Search is Activated"<<endl;
+        cout<< " Premise is ACTIVATED"<<endl;
+    }else{
+        cout<<"Premise is NOT ACTIVATED"<<endl;
     }
 	State::ptr initialState = kernel->initialState();
 	allStatesSet.insert(initialState);
@@ -99,6 +101,9 @@ void BreadthFirstSearch::search(){
     vector<unsigned > numberOfWitnesses;
     numberOfWitnesses.resize(initialState->numberOfComponents());
 	int iterationNumber = 0;
+	
+   // printf("%-20s%-20s%-20s\n", "AllStates", "NewStates", "WitnessSetSize");
+	cout<<left<<setw(25)<<"Iteration"<<setw(25)<<"ALLSTATES" << setw(25)<< "NEWSTATES"<<"Max WITNESSSET SIZE"<<endl;
 	while(!newStatesSet.empty()){
 	    iterationNumber++;
 		newStatesVector.clear();
@@ -294,15 +299,27 @@ void BreadthFirstSearch::search(){
 		allStatesSet = setUnion;
 		setUnion.clear();
         if(flags->get("LoopTime") == 1){
-            cout<<"AllState:"<<allStatesSet.size()<<" new State: "<<newStatesSet.size()<<" Max witnessSet size:";
+            cout<<left<<setw(25)<<iterationNumber<<setw(25)<<allStatesSet.size()<<setw(25)<<newStatesSet.size();
             for (int component = 0; component < numberOfWitnesses.size() ; ++component) {
                 cout<< numberOfWitnesses[component];
                 if(component != numberOfWitnesses.size()-1)
                     cout<<",";
             }
-            cout << endl << "----------------- End Iteration: " << iterationNumber << " ----------------------------" << endl << endl;
+
+            cout << endl;
 
         }
+       /*if(flags->get("LoopTime") == 1){
+            cout<<setw(15)<<"AllState:"<<allStatesSet.size()<<" new State: "<<newStatesSet.size()<<" Max witnessSet size:";
+            for (int component = 0; component < numberOfWitnesses.size() ; ++component) {
+                cout<< numberOfWitnesses[component];
+                if(component != numberOfWitnesses.size()-1)
+                    cout<<",";
+            }
+
+            cout << endl << "----------------- End Iteration: " << iterationNumber << " ----------------------------" << endl << endl;
+
+        }*/
 	}
     cout<<"Finish"<<endl;
 }
@@ -311,4 +328,5 @@ BreadthFirstSearch::extractCounterExampleRun(State::ptr state) {
     RunTree<State::ptr,AbstractTreeDecompositionNodeContent> runTree = bfsDAG.retrieveRunAcyclicAutomaton(state);
     return runTree;
 }
+
 

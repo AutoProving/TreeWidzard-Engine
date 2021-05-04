@@ -10,6 +10,7 @@
 #include "DynamicKernel.h"
 #include "Flags.h"
 #include "State.h"
+#include <iomanip>
 
 class SearchStrategy {
   protected:
