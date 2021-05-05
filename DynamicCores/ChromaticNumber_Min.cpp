@@ -5,23 +5,27 @@
 bool ChromaticNumber_Min_Witness::is_equal_implementation(const ChromaticNumber_Min_WitnessPointerConst w) const{
     /*return this->partialColoring == w->partialColoring and
         this->numberUsedColors == w->numberUsedColors;*/
-    return this->partialColoring  == w->partialColoring;
+    return this->partialColoring  == w->partialColoring and this->numberUsedColors == w->numberUsedColors;
 }
 
 bool ChromaticNumber_Min_Witness::is_less_implementation(const ChromaticNumber_Min_WitnessPointerConst w) const{
     /*if(this->numberUsedColors < w->numberUsedColors) return true;
     if(this->numberUsedColors == w->numberUsedColors) return this->partialColoring < w->partialColoring;
     retrun false;*/
-    return this->partialColoring < w->partialColoring;
+    if(this->numberUsedColors < w->numberUsedColors) return true;
+    if (this->numberUsedColors == w->numberUsedColors) return this->partialColoring < w->partialColoring;
+    return false;
 }
 
 Witness& ChromaticNumber_Min_Witness::set_equal_implementation(ChromaticNumber_Min_WitnessPointer w){
     // this->numberUsedColors = w->numberUsedColors;
     this->partialColoring = w->partialColoring;
+    this->numberUsedColors = w->numberUsedColors;
     return *this;
 }
 
 void ChromaticNumber_Min_Witness::print() {
+    cout<<"numberUsedColors: " << numberUsedColors<<" ";
     cout<<"partialColoring:";
     for(auto cell:partialColoring){
         cout<<"{ ";
@@ -40,6 +44,7 @@ void ChromaticNumber_Min_Witness::print() {
 
 string ChromaticNumber_Min_Witness::witnessInformation() {
     string info;
+    info = "numberUsedColors: " + to_string(numberUsedColors)+" ";
     info = "partialColoring:";
     for(auto cell:partialColoring){
         info = info + "{ ";
@@ -59,6 +64,7 @@ string ChromaticNumber_Min_Witness::witnessInformation() {
 
 shared_ptr<Witness> ChromaticNumber_Min_Witness::relabel(map<unsigned,unsigned> relabelingMap){
     shared_ptr<ChromaticNumber_Min_Witness> relabeledWitness(new ChromaticNumber_Min_Witness);
+    relabeledWitness->numberUsedColors = this->numberUsedColors;
     for(auto cell:this->partialColoring){
         set<unsigned> relabeledCell;
         for(auto item:cell){
@@ -83,14 +89,6 @@ ChromaticNumber_Min_DynamicCore::ChromaticNumber_Min_DynamicCore() {
     //addAttribute("PrimaryOperator","");
 }
 
-ChromaticNumber_Min_DynamicCore::ChromaticNumber_Min_DynamicCore(unsigned k){
-    this->k = k;
-    createInitialWitnessSet();
-    // Initializing attributes
-    addAttribute("CoreName","ChromaticNumber");
-    addAttribute("ParameterType","UnsignedInt");
-    addAttribute("PrimaryOperator","AtMost");
-}
 
 void ChromaticNumber_Min_DynamicCore::createInitialWitnessSet_implementation(){
     shared_ptr<ChromaticNumber_Min_Witness> witness = createWitness();
@@ -109,16 +107,15 @@ void ChromaticNumber_Min_DynamicCore::intro_v_implementation(unsigned i, Bag &b,
         witness->partialColoring.insert(cell);
         witnessSet->insert(witness);
     }
-    if(w->partialColoring.size() < this->k ){
-        // i can be added as an separated cell to the partition
-        ChromaticNumber_Min_WitnessPointer witness = createWitness();
-        witness->set_equal(*w);
-        //witness->numberUsedColors = witness->numberUsedColors +1;
-        set<unsigned> iCell;
-        iCell.insert(i);
-        witness->partialColoring.insert(iCell);
-        witnessSet->insert(witness);
-    }
+
+    // i can be added as an separated cell to the partition
+    ChromaticNumber_Min_WitnessPointer witness = createWitness();
+    witness->set_equal(*w);
+    witness->numberUsedColors = witness->numberUsedColors +1;
+    set<unsigned> iCell;
+    iCell.insert(i);
+    witness->partialColoring.insert(iCell);
+    witnessSet->insert(witness);
 }
 
 void ChromaticNumber_Min_DynamicCore::intro_e_implementation(unsigned int i, unsigned int j, Bag &b,
@@ -161,12 +158,19 @@ void ChromaticNumber_Min_DynamicCore::join_implementation(Bag &b, ChromaticNumbe
                                                              ChromaticNumber_Min_WitnessPointer w2, ChromaticNumber_Min_WitnessSetPointer witnessSet){
 
     if(w1->partialColoring == w2->partialColoring){
-        witnessSet->insert(w1);
+        ChromaticNumber_Min_WitnessPointer witness = createWitness();
+        witness->partialColoring = w1->partialColoring;
+        witness->numberUsedColors = w1->numberUsedColors+w2->numberUsedColors-w1->partialColoring.size();
+        witnessSet->insert(witness);
     }
 }
 
 bool ChromaticNumber_Min_DynamicCore::is_final_witness_implementation(ChromaticNumber_Min_WitnessPointer w){
     return true;
+}
+
+int ChromaticNumber_Min_DynamicCore::weight_implementation(ChromaticNumber_Min_WitnessPointer w){
+    return w->numberUsedColors;
 }
 
 ChromaticNumber_Min_WitnessSetPointer ChromaticNumber_Min_DynamicCore::clean_implementation(
@@ -298,6 +302,16 @@ WitnessSetPointer ChromaticNumber_Min_DynamicCore::clean(WitnessSetPointer witne
     }
 }
 
+int ChromaticNumber_Min_DynamicCore::weight(Witness &witness){
+    if (ChromaticNumber_Min_Witness *e = dynamic_cast<ChromaticNumber_Min_Witness *>(&witness)) {
+        ChromaticNumber_Min_WitnessPointer w = e->shared_from_this();
+        return weight_implementation(w);
+    }else{
+        cerr<<"ERROR: in ChromaticNumber_Min_Witness::weight cast error"<<endl;
+        exit(20);
+    }
+
+}
 shared_ptr<WitnessSet> ChromaticNumber_Min_WitnessSet::createEmptyWitnessSet() {
     ChromaticNumber_Min_WitnessSetPointer witnessSet(new ChromaticNumber_Min_WitnessSet);
     return witnessSet;
@@ -306,8 +320,5 @@ shared_ptr<WitnessSet> ChromaticNumber_Min_WitnessSet::createEmptyWitnessSet() {
 extern "C" {
 DynamicCore * create() {
     return new ChromaticNumber_Min_DynamicCore;
-}
-DynamicCore * create_int(unsigned param) {
-    return new ChromaticNumber_Min_DynamicCore(param);
 }
 }

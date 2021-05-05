@@ -41,11 +41,13 @@ class DynamicCore {
 								   Witness &witness2);
 	virtual bool is_final_witness(Witness &witness);
 	virtual WitnessSetPointer clean(WitnessSetPointer witnessSet);
+	virtual int weight(Witness &witness);
 	WitnessSetPointer intro_v(unsigned i, Bag &b, WitnessSetPointer witnessSet);
 	WitnessSetPointer intro_e(unsigned i, unsigned j, Bag &b,WitnessSetPointer witnessSet);
 	WitnessSetPointer forget_v(unsigned i, Bag &b, WitnessSetPointer witnessSet);
 	WitnessSetPointer join(Bag &b, WitnessSetPointer witnessSet1,WitnessSetPointer witnessSet2);
 	bool is_final_set_witness(Bag &b, WitnessSetPointer witnessSet);
+	int weight(WitnessSetPointer witnessSet);
 };
 using DynamicCore_creator_t =  DynamicCore *(*)();
 using DynamicCore_creator_t_int =  DynamicCore *(*)(unsigned param);

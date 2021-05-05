@@ -92,26 +92,29 @@ void BreadthFirstSearch::search(){
 	State::ptr initialState = kernel->initialState();
 	allStatesSet.insert(initialState);
 	newStatesSet.insert(initialState);
+	// Initialize the DAG 
     bfsDAG.addState(initialState);
     AbstractTreeDecompositionNodeContent initialTransitionContent("Leaf");
     vector<State::ptr> initialAntecedents; // Empty vector since there are no children.
     Transition<State::ptr,AbstractTreeDecompositionNodeContent> initialTransition(initialState,initialTransitionContent,initialAntecedents);
 	bfsDAG.addTransition(initialTransition);
+    //////////////////////////////////// 
     unsigned int width = kernel->get_width().get_value();
     vector<unsigned > numberOfWitnesses;
     numberOfWitnesses.resize(initialState->numberOfComponents());
+	
 	int iterationNumber = 0;
 	
-   // printf("%-20s%-20s%-20s\n", "AllStates", "NewStates", "WitnessSetSize");
 	cout<<left<<setw(25)<<"Iteration"<<setw(25)<<"ALLSTATES" << setw(25)<< "NEWSTATES"<<"Max WITNESSSET SIZE"<<endl;
 	while(!newStatesSet.empty()){
 	    iterationNumber++;
-		newStatesVector.clear();
-		newStatesVector.resize(newStatesSet.size());
+		////////////////////////////////////////////////////////////////////////////////////
+		newStatesVector.clear(); // clear newStatesVector to add states in newStatesSet in it
+		newStatesVector.resize(newStatesSet.size()); //
 		std::copy(newStatesSet.begin(),newStatesSet.end(),newStatesVector.begin());
-		newStatesSet.clear();
+		newStatesSet.clear(); // clear newStatesSet to add new states that are generated in this loop
 		//This loop is suitable for parallelization
-		for(int l=0;l<newStatesVector.size();l++){
+		for(size_t l=0; l < newStatesVector.size(); l++){
 			State::ptr statePointer = newStatesVector[l];
 			Bag bag = statePointer->get_bag();
 			set<unsigned > bagElement  = bag.get_elements();
@@ -266,7 +269,23 @@ void BreadthFirstSearch::search(){
 		}
 		for(auto it = newStatesSet.begin(); it!=newStatesSet.end(); it++){
 		    if(!conjecture->evaluateConjectureOnState(**it,kernel)){
-                cout<<"BAD STATE:"<<endl;
+                State::ptr badState = *it;
+                bfsDAG.addFinalState(badState);
+                AbstractTreeDecomposition atd  = extractCounterExampleTerm(badState);
+                atd.writeToFile(this->getPropertyFilePath());
+                ConcreteTreeDecomposition ctd = atd.convertToConcreteTreeDecomposition();
+                ctd.writeToFile(this->getPropertyFilePath());
+                RunTree<State::ptr,AbstractTreeDecompositionNodeContent> runTree = extractCounterExampleRun(badState);
+                runTree.writeToFile(this->getPropertyFilePath());
+                MultiGraph multiGraph = ctd.extractMultiGraph();
+                multiGraph.printGraph();
+                multiGraph.printToFile(this->getPropertyFilePath());
+                multiGraph.convertToGML(this->getPropertyFilePath());
+                multiGraph.printToFilePACEFormat(this->getPropertyFilePath());
+ 
+
+
+/*                cout<<"BAD STATE:"<<endl;
                 State::ptr state = *it;
                 (**it).print();
                 bfsDAG.addFinalState(*it);
@@ -290,8 +309,9 @@ void BreadthFirstSearch::search(){
                 multiGraph.printGraph();
                 multiGraph.printToFile(this->getPropertyFilePath());
                 multiGraph.convertToGML(this->getPropertyFilePath());
-                multiGraph.printToFilePACEFormat(this->getPropertyFilePath());
-                exit(20);
+                multiGraph.printToFilePACEFormat(this->getPropertyFilePath());*/
+                cout<<"Conjecture: Not Satisfied"<<endl;
+                return;
 		    }
 		}
         set<State::ptr> setUnion;
@@ -309,19 +329,8 @@ void BreadthFirstSearch::search(){
             cout << endl;
 
         }
-       /*if(flags->get("LoopTime") == 1){
-            cout<<setw(15)<<"AllState:"<<allStatesSet.size()<<" new State: "<<newStatesSet.size()<<" Max witnessSet size:";
-            for (int component = 0; component < numberOfWitnesses.size() ; ++component) {
-                cout<< numberOfWitnesses[component];
-                if(component != numberOfWitnesses.size()-1)
-                    cout<<",";
-            }
-
-            cout << endl << "----------------- End Iteration: " << iterationNumber << " ----------------------------" << endl << endl;
-
-        }*/
 	}
-    cout<<"Finish"<<endl;
+    cout<<"Conjecture: Satisfied"<<endl;
 }
 RunTree<State::ptr, AbstractTreeDecompositionNodeContent>
 BreadthFirstSearch::extractCounterExampleRun(State::ptr state) {

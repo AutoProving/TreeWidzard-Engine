@@ -63,6 +63,29 @@ WitnessSetPointer DynamicCore::clean(WitnessSetPointer witnessSet) {
 	return witnessSet;
 }
 
+int DynamicCore::weight(WitnessSetPointer witnessSet) {
+	set<int> values;
+	for(auto temp : *witnessSet){
+
+        values.insert(weight(*temp) );
+	}
+    string coreType = getAttributeValue("CoreType");
+    if(coreType=="NULL"){
+        cout<<"Error: DynamicCore::weight CoreType has not specified"<<endl;
+        exit(20);
+    }else if(coreType=="Min" or coreType=="Max"){
+        if(values.size()==0){
+            return 0;
+        }else{
+            if(coreType=="Min"){
+                return *values.begin();
+            }else{
+                return *values.rbegin();
+            }
+        }
+    }
+}
+
 WitnessSetPointer DynamicCore::intro_v(unsigned i, Bag &b, Witness &witness) {
 	cout << "ERROR: DynamicCore::intro_v";
 	exit(20);
@@ -87,6 +110,11 @@ WitnessSetPointer DynamicCore::join(Bag &b, Witness &witness1,
 
 bool DynamicCore::is_final_witness(Witness &witness) {
 	cout << "ERROR: DynamicCore::is_final_witness";
+	exit(20);
+}
+
+int DynamicCore::weight(Witness &witness) {
+	cout << "ERROR: DynamicCore::weight";
 	exit(20);
 }
 
