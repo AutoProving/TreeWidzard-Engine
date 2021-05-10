@@ -103,7 +103,7 @@ void RandomLeveledSetSearchPremise::search(){
             for (size_t i = 1; i < kernel->get_width().get_value() + 2; ++i) {
                 if (bag.vertex_introducible(i)) {
                     State::ptr aux = kernel->intro_v(q,i);
-                    if (conjecture->evaluatePremiseOnState(*aux,kernel)){
+                    if (conjecture->evaluatePremiseOnState(*aux)){
                         introducibleVertices.push_back(i);
                     }
                 }
@@ -117,7 +117,7 @@ void RandomLeveledSetSearchPremise::search(){
                 if (q->get_bag().edge_introducible(*it, *itr)){
                     pair<unsigned, unsigned> p = make_pair(*it, *itr);
 		    State::ptr aux = kernel->intro_e(q,*it,*itr);
-		    if (conjecture->evaluatePremiseOnState(*aux,kernel)){
+		    if (conjecture->evaluatePremiseOnState(*aux)){
 		            introducibleEdges.push_back(p);
 		    }
 		}
@@ -127,7 +127,7 @@ void RandomLeveledSetSearchPremise::search(){
         for (size_t i = 1; i < kernel->get_width().get_value() + 2; ++i) {
             if (q->get_bag().vertex_forgettable(i)) {
 		State::ptr aux = kernel->forget_v(q,i);
-		if (conjecture->evaluatePremiseOnState(*aux,kernel)){
+		if (conjecture->evaluatePremiseOnState(*aux)){
 	                forgettableVertices.push_back(i);
 		}
             }
@@ -186,7 +186,7 @@ void RandomLeveledSetSearchPremise::search(){
                 generatedVector.push_back({s,typeState});
                 mapState.insert({s,generatedVector.size()-1});
             }
-            foundCounterexample = !(conjecture->evaluateConjectureOnState(*s,kernel));
+            foundCounterexample = !(conjecture->evaluateConjectureOnState(*s));
             if(foundCounterexample){
                 cout<<"COUNTER EXAMPLE FOUND"<<endl;
                 s->print();

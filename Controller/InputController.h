@@ -7,6 +7,7 @@
 #include "../Conjecture/Conjecture.h"
 #include "../Parser/PropertyParser/input_parser.hpp"
 #include "../Conjecture/PropertyAssignment.h"
+#include <iomanip>
 
 using namespace std;
 namespace fs = std::experimental::filesystem;

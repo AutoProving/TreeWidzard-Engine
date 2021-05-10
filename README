@@ -1,4 +1,4 @@
-    For SEARCH:
+    Searching for a Counterexample:
         ./treewidzard -search [Width] [Flag Options] <search method> <property file>
         Random Setting:
         ./treewidzard -search [Width] [Flag Options] [-random <seed> <intro vertex probability> <forget vertex probability> <ping number>] <search method> <property file>
@@ -10,12 +10,14 @@
         -pl       print loop
         -ps       print states
         -st       print state tree decomposition if a counterexample is found
+
     Random Search Parameters:
          seed: The seed that initializes the random generator. This is an unsigned int.
          intro vertex probability: The probability of introducing a new vertex. This is a float between 0 and 1.
          forget vertex probability: The probability of forgetting a vertex. This is a float between 0 and 1.
          ping number: At each "ping number" times the program prints the number of iterations executed so far. This parameter only has an effect if the -pl flag is on.
-    For PARSE:
+
+    Parsing a Tree Decomposition:
         1- For PACE Format
             ./treewidzard -parse PACE <property file> <graph file> <tree decomposition file>
         2- For ABSTRACT Decomposition Verify

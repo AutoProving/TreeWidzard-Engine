@@ -29,19 +29,22 @@ void InputController::parse_input() {
              << endl;
         exit(20);
     }
+    cout<< "CONJECTURE: ";
     conjecture.print();
+    cout<< endl;
     conjecture.setVariablesToCoreName(varToCoreName);
     if(!conjecture.checkConjectureStructure(conjecture.getRoot())){
         exit(20);
     }
-    cout<< "varToCoreName"<<endl;
-    for(auto item: varToCoreName){
-        cout<<item.first << " ,"<< item.second<<endl;
-    }
-    cout<< "nameToProperty"<<endl;
-    for(auto item:varToProperty){
-        cout<< item.first<< " ,"  << item.second->getName()<< ", "<<item.second->getType()<<endl;
-    }
+
+//    cout<< "varToCoreName"<<endl;
+//    for(auto item: varToCoreName){
+//        cout<<item.first << " ,"<< item.second<<endl;
+//    }
+//    cout<< "nameToProperty"<<endl;
+//    for(auto item:varToProperty){
+//        cout<< item.first<< " ,"  << item.second->getName()<< ", "<<item.second->getType()<<endl;
+//    }
 
     width.print();
     dynamicKernel.set_width(width);
@@ -66,12 +69,13 @@ void InputController::parse_input() {
 
 void InputController::construct_dynamicKernel() {
     DynamicCoreHandler* factory;
-    int coreIndex = 0;
+    int coreIndex = 1;
     for (auto core:varToProperty) {
         if(coreList.count(core.second->getName())){
-            cout<< "NAME: " << core.second->getName()<<endl;
+            cout<<left << setw(2)<< coreIndex << setw(5)<<"- Variable: " <<setw(5)<<core.first<<setw(5)<< "NAME: " <<setw(30)<< core.second->getName() ;
+            coreIndex++;
             if(coreList[core.second->getName()].count("ParameterType")){
-                cout<<"ParameterType: " << coreList[core.second->getName()]["ParameterType"]<<endl;
+                cout<< setw(10)<<"ParameterType: " << setw(10)<< coreList[core.second->getName()]["ParameterType"]<<endl;
                 if(coreList[core.second->getName()]["ParameterType"]=="ParameterLess" and core.second->getParameterType() == "ParameterLess" ){
                     string corePath = dynamicPluginPath+coreNamesToFiles[core.second->getName()];
                     factory = new DynamicCoreHandler(corePath.c_str());

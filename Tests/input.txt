@@ -3,4 +3,4 @@ x := ChromaticNumber  < 5
 y := HasMultipleEdges
 z := ChromaticNumberMin
 Formula
-z < x OR z > x OR z >= x
+TRUE OR h AND x OR floor(z) AND TRUE AND NOT y

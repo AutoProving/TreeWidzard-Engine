@@ -1,6 +1,8 @@
 #ifndef CONJECTURE_H
 #define CONJECTURE_H
 #include "../Kernel/DynamicKernel.h"
+#include <math.h>       /* pow */
+
 //struct Token {
 //    double x;
 //    asl::String val;
@@ -11,8 +13,9 @@
 //    Token(double v) : type(NUMBER), x(v) {}
 //    Token(asl::String& v) : type(NAME), val(v) {}
 //};
-enum TokenType { OPERATOR , EXP_VARIABLE , NUMBER, FUNC, CORE_VARIABLE };
-typedef double(*Function)(double);
+enum TokenType { OPERATOR , EXP_VARIABLE , NUMBER, FUNCTION_BINARY, FUNCTION_UNARY, CORE_VARIABLE };
+typedef double(*Function_Unary)(double);
+typedef double(*Function_Binary)(double,double);
 
 class ConjectureNode{
     private:
@@ -50,7 +53,7 @@ class ConjectureNode{
     void setParent(ConjectureNode *parent);
 
     void printWithNumbers(unsigned &label);
-
+    void printInfix();
     void print();
 
 };
@@ -58,19 +61,21 @@ class ConjectureNode{
 class Conjecture {
     private:
         map<string,string> variablesToCoreName; // Map from variables To CoreName
-        map<string,Function> functions;
+        map<string,Function_Binary> functions_binary;
+        map<string,Function_Unary> functions_unary;
         ConjectureNode* root;
         DynamicKernel* kernel;
     public:
+    Conjecture();
 
     ConjectureNode *getRoot() const;
 
     void setRoot(ConjectureNode *root);
 
     // evaluate the conjectureNode for a given state
-        int evaluateConjectureNodeOnState(State &q, ConjectureNode* node);
+        double evaluateConjectureNodeOnState(State &q, ConjectureNode* node);
         // evaluate the conjecture for a given state
-        int evaluateConjectureOnState(State &q);
+        double evaluateConjectureOnState(State &q);
 
 
         int evaluatePremiseOnState(State &q);
@@ -85,9 +90,9 @@ class Conjecture {
 
         void print();
 
-    const map<string, string> &getVariablesToCoreName() const;
+        const map<string, string> &getVariablesToCoreName() const;
 
-    void setVariablesToCoreName(const map<string, string> &variablesToCoreName);
+        void setVariablesToCoreName(const map<string, string> &variablesToCoreName);
 };
 
 #endif

@@ -21,11 +21,11 @@ void SearchController::check_search() {
             string fileName = entry.path().filename();
             searchNamesToFiles.insert(make_pair(search->getAttributeValue("SearchName"),fileName));
             searchList.insert(make_pair(search->getAttributeValue("SearchName"),attributes));
-            cout<<"file name: "<<fileName<<endl;
-            for (auto it : attributes) {
-                cout << it.first << " " << it.second << endl;
-            }
-            cout << "-----" << endl;
+            //cout<<"file name: "<<fileName<<endl;
+//            for (auto it : attributes) {
+//                cout << it.first << " " << it.second << endl;
+//            }
+//            cout << "-----" << endl;
         }
     }
 }

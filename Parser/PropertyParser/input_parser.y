@@ -51,14 +51,13 @@
 
 
 %token SEPERATOR  FILEPATH LEFTP RIGHTP NAME NEWLINE AND OR IFF IMPLIES NOT TRUE FALSE COMMENT NUMBER_DOUBLE COMMA
-        FORMULA_NAME EXP ATLEAST ATMOST LESS BIGGER
+        FORMULA_NAME EXP ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION
 %type<string> COMPARATOR SEPERATOR FILEPATH LEFTP RIGHTP NAME NEWLINE AND OR IFF IMPLIES NOT TRUE FALSE COMMENT VARIABLE ATOMIC_PREDICATE COMMA FORMULA_NAME EXP
-            ATLEAST ATMOST LESS BIGGER
+            ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION
 %type<number> NUMBER_DOUBLE
 %type<property> VARIABLE_CORE_ASSIGNMENT
 %type<conjectureNode> FORMULA SUB_FORMULA FORMULA_TERMINAL
 %type<vec> NUMBER_DOUBLES
-
 
 %start START
 %left IFF 
@@ -69,8 +68,11 @@
 %left BIGGER
 %left ATLEAST
 %left ATMOST
+%left BINARY_ARITHMETIC_OPERATOR
 %right NOT
 %left NEWLINE
+%right BINARY_FUNCTION
+%right UNARY_FUNCTION
 %%
 
 START            :COMMENTS VARIABLES_CORES_ASSIGNMENT FORMULA_NAME NEWLINE VARIABLES_SUBFORMULA_ASSIGNMENTS  FORMULA FORMULACOMMENTS
@@ -128,12 +130,12 @@ VARIABLES_SUBFORMULA_ASSIGNMENTS : EXP VARIABLE SEPERATOR SUB_FORMULA NEWLINE  V
 				  | %empty
 				  ;
 
-SUB_FORMULA : SUB_FORMULA AND SUB_FORMULA {$$= new ConjectureNode(OPERATOR,"and");    
+SUB_FORMULA : SUB_FORMULA AND SUB_FORMULA {$$= new ConjectureNode(OPERATOR,"and");
                 vector<ConjectureNode*> children; children.push_back($1); children.push_back($3);
                 $$->setChildren(children);
                 $1->setParent($$); $3->setParent($$);
                 }
-            
+
             | NOT SUB_FORMULA  {$$= new ConjectureNode(OPERATOR,"not");
                 vector<ConjectureNode*> children; children.push_back($2);
                 $$->setChildren(children);
@@ -141,69 +143,83 @@ SUB_FORMULA : SUB_FORMULA AND SUB_FORMULA {$$= new ConjectureNode(OPERATOR,"and"
                 }
 
             | LEFTP SUB_FORMULA RIGHTP {$$ = $2;}
-           
-            
+
+
             | VARIABLE {if(check_varToProperty($1,varToProperty) and !check_sub_formula_variables($1) ){
                     $$ = new ConjectureNode(CORE_VARIABLE, $1);
                 }else if(check_sub_formula_variables($1) and !check_varToProperty($1,varToProperty) ) {
-                    $$ = sub_formula_variables[$1];    
+                    $$ = sub_formula_variables[$1];
                 }else{
                     cout<<" variable "<< $1 << " is not valid"<< endl; YYERROR;
                 }
             }
-            
-            | TRUE {$$ = new ConjectureNode(NUMBER,1);} 
-            
+
+            | TRUE {$$ = new ConjectureNode(NUMBER,1);}
+
             | FALSE {$$ = new ConjectureNode(NUMBER,0);}
-            
+
             | NUMBER_DOUBLE {$$= new ConjectureNode(NUMBER,$1);}
             ;
 FORMULA     : FORMULA AND FORMULA {$$ = new ConjectureNode(OPERATOR,"and");
+            vector<ConjectureNode*> children;
+            children.push_back($1); children.push_back($3);	$$->setChildren(children);
+            $1->setParent($$); $3->setParent($$);
+            }
+            | FORMULA OR FORMULA {$$ = new ConjectureNode(OPERATOR,"or");
                     vector<ConjectureNode*> children;
                     children.push_back($1); children.push_back($3);	$$->setChildren(children);
                     $1->setParent($$); $3->setParent($$);
             }
-            | FORMULA OR FORMULA {$$ = new ConjectureNode(OPERATOR,"or");
-                                  vector<ConjectureNode*> children;
-                                  children.push_back($1); children.push_back($3);	$$->setChildren(children);
-                                  $1->setParent($$); $3->setParent($$);
-                          }
-	        | FORMULA IMPLIES FORMULA {$$ = new ConjectureNode(OPERATOR,"implies");
-					    vector<ConjectureNode*> children;
-					    children.push_back($1); children.push_back($3);	$$->setChildren(children);
-					    $1->setParent($$); $3->setParent($$);
-				    }
-	       | FORMULA IFF FORMULA {$$ = new ConjectureNode(OPERATOR,"iff");
-						    vector<ConjectureNode*> children;
-						    children.push_back($1); children.push_back($3);	$$->setChildren(children);
-						    $1->setParent($$); $3->setParent($$);
-					    }
+            | FORMULA IMPLIES FORMULA {$$ = new ConjectureNode(OPERATOR,"implies");
+            vector<ConjectureNode*> children;
+            children.push_back($1); children.push_back($3);	$$->setChildren(children);
+            $1->setParent($$); $3->setParent($$);
+            }
+            | FORMULA IFF FORMULA {$$ = new ConjectureNode(OPERATOR,"iff");
+            vector<ConjectureNode*> children;
+            children.push_back($1); children.push_back($3);	$$->setChildren(children);
+            $1->setParent($$); $3->setParent($$);
+            }
             | FORMULA ATLEAST FORMULA {$$ = new ConjectureNode(OPERATOR,">=");
-						    vector<ConjectureNode*> children;
-						    children.push_back($1); children.push_back($3);	$$->setChildren(children);
-						    $1->setParent($$); $3->setParent($$);
-					    }
-          | FORMULA ATMOST FORMULA {$$ = new ConjectureNode(OPERATOR,"<=");
-						    vector<ConjectureNode*> children;
-						    children.push_back($1); children.push_back($3);	$$->setChildren(children);
-						    $1->setParent($$); $3->setParent($$);
-					    }
-          | FORMULA LESS FORMULA {$$ = new ConjectureNode(OPERATOR,"<");
-						    vector<ConjectureNode*> children;
-						    children.push_back($1); children.push_back($3);	$$->setChildren(children);
-						    $1->setParent($$); $3->setParent($$);
-					    }
-   | FORMULA BIGGER  FORMULA {$$ = new ConjectureNode(OPERATOR,">");
-						    vector<ConjectureNode*> children;
-						    children.push_back($1); children.push_back($3);	$$->setChildren(children);
-						    $1->setParent($$); $3->setParent($$);
-					    }
-
-            | NOT FORMULA  {$$ = new ConjectureNode(OPERATOR,"not");
-                    vector<ConjectureNode*> children;
-                    children.push_back($2);	$$->setChildren(children); $2->setParent($$);
+            vector<ConjectureNode*> children;
+            children.push_back($1); children.push_back($3);	$$->setChildren(children);
+            $1->setParent($$); $3->setParent($$);
+            }
+            | FORMULA ATMOST FORMULA {$$ = new ConjectureNode(OPERATOR,"<=");
+            vector<ConjectureNode*> children;
+            children.push_back($1); children.push_back($3);	$$->setChildren(children);
+            $1->setParent($$); $3->setParent($$);
+            }
+            | FORMULA LESS FORMULA {$$ = new ConjectureNode(OPERATOR,"<");
+            vector<ConjectureNode*> children;
+            children.push_back($1); children.push_back($3);	$$->setChildren(children);
+            $1->setParent($$); $3->setParent($$);
+            }
+            | FORMULA BIGGER  FORMULA {$$ = new ConjectureNode(OPERATOR,">");
+            vector<ConjectureNode*> children;
+            children.push_back($1); children.push_back($3);	$$->setChildren(children);
+            $1->setParent($$); $3->setParent($$);
             }
 
+            | NOT FORMULA  {$$ = new ConjectureNode(OPERATOR,"not");
+            vector<ConjectureNode*> children;
+            children.push_back($2);	$$->setChildren(children); $2->setParent($$);
+            }
+            | FORMULA BINARY_ARITHMETIC_OPERATOR  FORMULA {$$ = new ConjectureNode(OPERATOR,$2);
+            vector<ConjectureNode*> children;
+            children.push_back($1); children.push_back($3);	$$->setChildren(children);
+            $1->setParent($$); $3->setParent($$);
+            }
+            |BINARY_FUNCTION LEFTP  FORMULA COMMA FORMULA RIGHTP {$$ = new ConjectureNode(FUNCTION_BINARY,$1);
+            vector<ConjectureNode*> children;
+            children.push_back($3); children.push_back($5);	$$->setChildren(children);
+            $3->setParent($$); $5->setParent($$);
+            }
+            |UNARY_FUNCTION LEFTP  FORMULA RIGHTP {$$ = new ConjectureNode(FUNCTION_UNARY,$1);
+            vector<ConjectureNode*> children;
+            children.push_back($3);	$$->setChildren(children);
+            $3->setParent($$);
+            }
             | LEFTP FORMULA RIGHTP      {$$ = $2;}
             | FORMULA_TERMINAL
             ;

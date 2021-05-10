@@ -204,7 +204,7 @@ void IsomorphismBreadthFirstSearch::search(){
         // Verifying the conjecture with new states
         for(int index = 0 ; index < width+2 ; index++){
             for (auto it = newStatesSet[index].begin(); it != newStatesSet[index].end(); it++) {
-                if (!conjecture->evaluateConjectureOnState(**it, kernel)) {
+                if (!conjecture->evaluateConjectureOnState(**it)) {
                     cout << "BAD STATE:" << endl;
                     (**it).print();
                     bfsDAG.addFinalState(*it);

@@ -527,7 +527,7 @@ void RelabeledLeveledSetSearch::search() {
 			 bagSetIndex++) {
 			for (auto it = setNewStates[bagSetIndex].begin();
 				 it != setNewStates[bagSetIndex].end(); it++) {
-				if (!conjecture->evaluateConjectureOnState(*(*it), kernel)) {
+				if (!conjecture->evaluateConjectureOnState(*(*it))) {
                     cout<< "-----------------------BAD STATE FOUND---------------------"<< endl;
                     (*it)->print();
                     bool tree_width = false;

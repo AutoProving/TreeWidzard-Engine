@@ -124,7 +124,7 @@ void RandomLeveledSetSearchConnected::search(){
     }else{
     	generatedVector.push_back(make_pair(s,typeState));
 	mapState.insert({s,generatedVector.size()-1});
-	foundCounterexample = !(conjecture->evaluateConjectureOnState(*s,kernel));
+	foundCounterexample = !(conjecture->evaluateConjectureOnState(*s));
     }
     while (!foundCounterexample){
 	    counter++;
@@ -195,7 +195,7 @@ void RandomLeveledSetSearchConnected::search(){
 				        cout <<"------------------" << endl;
                     }
 				    offset++;
-				    foundCounterexample = !(conjecture->evaluateConjectureOnState(*s,kernel));
+				    foundCounterexample = !(conjecture->evaluateConjectureOnState(*s));
 				    if (foundCounterexample) break;
 			    }
 		    }
@@ -251,7 +251,7 @@ void RandomLeveledSetSearchConnected::search(){
                             }
                             offset = 1;
                             offsetVector.push_back(offset);
-                            foundCounterexample = !(conjecture->evaluateConjectureOnState(*s,kernel));
+                            foundCounterexample = !(conjecture->evaluateConjectureOnState(*s));
                         }
                     }
                 }

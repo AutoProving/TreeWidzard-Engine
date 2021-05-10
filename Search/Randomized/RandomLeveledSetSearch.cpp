@@ -170,7 +170,7 @@ void RandomLeveledSetSearch::search(){
             generatedVector.push_back({s,typeState});
             mapState.insert({s,generatedVector.size()-1});
         }
-        foundCounterexample = !(conjecture->evaluateConjectureOnState(*s,kernel));
+        foundCounterexample = !(conjecture->evaluateConjectureOnState(*s));
         if(foundCounterexample){
             cout<<"COUNTER EXAMPLE FOUND"<<endl;
             s->print();

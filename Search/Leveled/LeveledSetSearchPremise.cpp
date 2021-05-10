@@ -343,7 +343,7 @@ void LeveledSetSearchPremise::search(){
                 for (unsigned i = 1; i < width+2; ++i) {
                     if((*iteratorNewStates)->get_bag().vertex_introducible(i)){
                         State::ptr newState = kernel->intro_v(*iteratorNewStates,i);
-                        if(conjecture->evaluatePremiseOnState(*newState,kernel)){
+                        if(conjecture->evaluatePremiseOnState(*newState)){
                             unsigned index =  bagSetToNumber(newState->get_bag().get_elements(), width);
                             setIntermediateStates[index].insert(newState);
                             // The next two ifs are for statistics
@@ -373,7 +373,7 @@ void LeveledSetSearchPremise::search(){
                                 if((*iteratorNewStates)->get_bag().edge_introducible(*itBagEl1, *itBagEl2)){
 
                                     State::ptr newState = kernel->intro_e(*iteratorNewStates,*itBagEl1,*itBagEl2);
-                                    if(conjecture->evaluatePremiseOnState(*newState,kernel)){
+                                    if(conjecture->evaluatePremiseOnState(*newState)){
                                         unsigned index =  bagSetToNumber(newState->get_bag().get_elements(), width);
                                         setIntermediateStates[index].insert(newState);
                                     
@@ -400,7 +400,7 @@ void LeveledSetSearchPremise::search(){
                 for (size_t i = 1; i < kernel->get_width().get_value()+2; ++i) {
                     if((*iteratorNewStates)->get_bag().vertex_forgettable(i)){
                         State::ptr newState = kernel->forget_v(*iteratorNewStates,i);
-                        if(conjecture->evaluatePremiseOnState(*newState,kernel)){
+                        if(conjecture->evaluatePremiseOnState(*newState)){
                             unsigned index =  bagSetToNumber(newState->get_bag().get_elements(), width);
                             setIntermediateStates[index].insert(newState);
                             // Statistics
@@ -427,7 +427,7 @@ void LeveledSetSearchPremise::search(){
                         // the new states come before the old states and one in which the old states come first
                         // Otherwise, we could potentially miss some terms (VERIFY IF THIS IS THE CASE).
                         State::ptr newState = kernel->join(*iteratorNewStates,*it);
-                        if(conjecture->evaluatePremiseOnState(*newState,kernel)){
+                        if(conjecture->evaluatePremiseOnState(*newState)){
                             int index =  bagSetToNumber(newState->get_bag().get_elements(), width);
                             setIntermediateStates[index].insert(newState);
                             // Statistics
@@ -449,7 +449,7 @@ void LeveledSetSearchPremise::search(){
                     }
                     for(auto itrJoin = setNewStates[k].begin() ; itrJoin != setNewStates[k].end() ; itrJoin++){
                         State::ptr newState = kernel->join(*iteratorNewStates, *itrJoin);
-                        if(conjecture->evaluatePremiseOnState(*newState,kernel)){
+                        if(conjecture->evaluatePremiseOnState(*newState)){
                             setIntermediateStates[k].insert(newState);
                         }
                     }
@@ -475,7 +475,7 @@ void LeveledSetSearchPremise::search(){
         for (unsigned bagSetIndex = 0; bagSetIndex < numberBagSets; bagSetIndex++){
       
             for(auto it = setNewStates[bagSetIndex].begin(); it!= setNewStates[bagSetIndex].end(); it++){
-                if(!conjecture->evaluateConjectureOnState(*(*it),kernel)){
+                if(!conjecture->evaluateConjectureOnState(*(*it))){
                     cout<< "-----------------------BAD STATE FOUND---------------------"<< endl;
                     (*it)->print();
                     bool tree_width = false;

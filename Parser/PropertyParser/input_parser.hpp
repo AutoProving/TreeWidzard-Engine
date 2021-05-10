@@ -90,7 +90,10 @@ extern int input_debug;
     ATLEAST = 276,
     ATMOST = 277,
     LESS = 278,
-    BIGGER = 279
+    BIGGER = 279,
+    BINARY_ARITHMETIC_OPERATOR = 280,
+    BINARY_FUNCTION = 281,
+    UNARY_FUNCTION = 282
   };
 #endif
 
@@ -106,7 +109,7 @@ union INPUT_STYPE
      std::vector<int> * vec;
      PropertyAssignment *property;
 
-#line 110 "input_parser.hpp"
+#line 113 "input_parser.hpp"
 
 };
 typedef union INPUT_STYPE INPUT_STYPE;

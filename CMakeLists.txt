@@ -65,8 +65,8 @@ add_executable(
     #	DynamicCores/VertexConnected_AtMost.h
     #	DynamicCores/HasCycle.h
     #	DynamicCores/HasCycle.cpp
-        DynamicCores/ChromaticNumber_Min.h
-        DynamicCores/ChromaticNumber_Min.cpp
+     #   DynamicCores/ChromaticNumber_Min.h
+      #  DynamicCores/ChromaticNumber_Min.cpp
     # Kernel files
     Kernel/Witness.cpp
     Kernel/Witness.h
