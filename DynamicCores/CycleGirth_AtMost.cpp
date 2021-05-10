@@ -140,6 +140,7 @@ CycleGirth_AtMost_Witness::~CycleGirth_AtMost_Witness() {
 CycleGirth_AtMost_DynamicCore::CycleGirth_AtMost_DynamicCore() {
     // Initializing attributes
     addAttribute("CoreName","CycleGirth");
+    addAttribute("CoreType","Bool");
     addAttribute("ParameterType","UnsignedInt");
     addAttribute("PrimaryOperator","AtMost");
     createInitialWitnessSet();

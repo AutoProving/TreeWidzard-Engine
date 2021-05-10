@@ -11,7 +11,6 @@ class Width {
   private:
 	string name; // Typical width names are "treewidth", "pathwidth", etc
 	unsigned int value;
-
   public:
 	string get_name();
 	void set_name(string s);

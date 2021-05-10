@@ -77,7 +77,7 @@ shared_ptr<Witness> ChromaticNumber_AtMost_Witness::relabel(map<unsigned,unsigne
 ChromaticNumber_AtMost_DynamicCore::ChromaticNumber_AtMost_DynamicCore() {
     // Initializing attributes
     addAttribute("CoreName","ChromaticNumber");
-    addAttribute("CoreType","Boolean");
+    addAttribute("CoreType","Bool");
     addAttribute("ParameterType","UnsignedInt");
     addAttribute("PrimaryOperator","AtMost");
 }
@@ -87,6 +87,7 @@ ChromaticNumber_AtMost_DynamicCore::ChromaticNumber_AtMost_DynamicCore(unsigned 
     createInitialWitnessSet();
     // Initializing attributes
     addAttribute("CoreName","ChromaticNumber");
+    addAttribute("CoreType","Bool");
     addAttribute("ParameterType","UnsignedInt");
     addAttribute("PrimaryOperator","AtMost");
 }

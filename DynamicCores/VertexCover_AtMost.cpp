@@ -101,6 +101,7 @@ VertexCover_AtMost_Witness::~VertexCover_AtMost_Witness()
 VertexCover_AtMost_DynamicCore::VertexCover_AtMost_DynamicCore() {
     // Initializing attributes
     addAttribute("CoreName","VertexCover");
+    addAttribute("CoreType","Bool");
     addAttribute("ParameterType","UnsignedInt");
     addAttribute("PrimaryOperator","AtMost");
 }
@@ -114,6 +115,7 @@ VertexCover_AtMost_DynamicCore::VertexCover_AtMost_DynamicCore(unsigned paramete
     //*****************************
     // Initializing attributes
     addAttribute("CoreName","VertexCover");
+    addAttribute("CoreType","Bool");
     addAttribute("ParameterType","UnsignedInt");
     addAttribute("PrimaryOperator","AtMost");
     this->parameter = parameter;

@@ -113,6 +113,7 @@ MinDegree_AtMost_Witness::~MinDegree_AtMost_Witness() {
 MinDegree_AtMost_DynamicCore::MinDegree_AtMost_DynamicCore() {
     // Initializing attributes
     addAttribute("CoreName","MinDegree");
+    addAttribute("CoreType","Bool");
     addAttribute("ParameterType","UnsignedInt");
     addAttribute("PrimaryOperator","AtMost");
 }
@@ -122,6 +123,7 @@ MinDegree_AtMost_DynamicCore::MinDegree_AtMost_DynamicCore(unsigned maxDegree){
     createInitialWitnessSet();
     // Initializing attributes
     addAttribute("CoreName","MinDegree");
+    addAttribute("CoreType","Bool");
     addAttribute("ParameterType","UnsignedInt");
     addAttribute("PrimaryOperator","AtMost");
 }

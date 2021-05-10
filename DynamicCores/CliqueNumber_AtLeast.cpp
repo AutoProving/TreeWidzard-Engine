@@ -91,6 +91,7 @@ set<unsigned> neighborsOnPartialClique(set<pair<unsigned,unsigned>> edges, int i
 CliqueNumber_AtLeast_DynamicCore::CliqueNumber_AtLeast_DynamicCore() {
     // Initializing attributes
     addAttribute("CoreName","CliqueNumber");
+    addAttribute("CoreType","Bool");
     addAttribute("Restriction","SimpleGraphs");
     addAttribute("ParameterType","UnsignedInt");
     addAttribute("PrimaryOperator","AtLeast");

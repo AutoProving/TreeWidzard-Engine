@@ -60,7 +60,7 @@
 
 %%
 
-START                   : COMMENTS WIDTH_ASSIGNMENT NEWLINE COMMENTS VARIABLES_ASSIGNMENT FORMULA FORMULACOMMENTS       { conj.root = $6; result = 0; }
+START                   : COMMENTS WIDTH_ASSIGNMENT NEWLINE COMMENTS VARIABLES_ASSIGNMENT FORMULA FORMULACOMMENTS       { conj.setRoot($6); result = 0; }
                         ;
 WIDTH_ASSIGNMENT        : WIDTHPARAM INTEGER                                                                            {w.set_name($1); w.set_value($2); } 
                         ;

@@ -94,6 +94,7 @@ IndependentSet_AtLeast_Witness::~IndependentSet_AtLeast_Witness() {
 IndependentSet_AtLeast_DynamicCore::IndependentSet_AtLeast_DynamicCore() {
     // Initializing attributes
     addAttribute("CoreName","IndependentSet");
+    addAttribute("CoreType","Bool");
     addAttribute("ParameterType","UnsignedInt");
     addAttribute("PrimaryOperator","AtLeast");
 }
@@ -106,6 +107,7 @@ IndependentSet_AtLeast_DynamicCore::IndependentSet_AtLeast_DynamicCore(unsigned 
     //*****************************
     // Initializing attributes
     addAttribute("CoreName","IndependentSet");
+    addAttribute("CoreType","Bool");
     addAttribute("ParameterType","UnsignedInt");
     addAttribute("PrimaryOperator","AtLeast");
     this->parameter = parameter;

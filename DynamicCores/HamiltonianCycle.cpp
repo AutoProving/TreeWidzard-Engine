@@ -163,7 +163,8 @@ HamiltonianCycle_DynamicCore::HamiltonianCycle_DynamicCore(){
     //*****************************
     // Initializing attributes
     addAttribute("CoreName","HamiltonianCycle");
-    addAttribute("ParameterType","NoParameter");
+    addAttribute("CoreType","Bool");
+    addAttribute("ParameterType","ParameterLess");
     addAttribute("PrimaryOperator","---");
     createInitialWitnessSet();
 }

@@ -190,7 +190,7 @@ State::ptr ConcreteTreeDecomposition::constructWitnesses(Conjecture &conjecture,
     // First, We check the type of the node
     if (node->getNodeContent().getSymbol() == "Leaf") {
         // if it is an empty, then it is a leaf
-        State::ptr q = conjecture.kernel->initialState();
+        State::ptr q = conjecture.getKernel()->initialState();
         return q;
     } else if (strstr(node->getNodeContent().getSymbol().c_str(), "IntroVertex")) {
         State::ptr childState = constructWitnesses(conjecture, node->getChildren()[0]);
@@ -212,7 +212,7 @@ State::ptr ConcreteTreeDecomposition::constructWitnesses(Conjecture &conjecture,
                 node->getChildren()[0]->getNodeContent().getBag().print();
             exit(20);
         }
-        State::ptr q = conjecture.kernel->intro_v(
+        State::ptr q = conjecture.getKernel()->intro_v(
                 childState, *bagSetDifference.begin());
         return q;
 
@@ -234,22 +234,22 @@ State::ptr ConcreteTreeDecomposition::constructWitnesses(Conjecture &conjecture,
                  << endl;
             exit(20);
         }
-        State::ptr q = conjecture.kernel->forget_v(childState, *bagSetDifference.begin());
+        State::ptr q = conjecture.getKernel()->forget_v(childState, *bagSetDifference.begin());
         return q;
 
     } else if (strstr(node->getNodeContent().getSymbol().c_str(), "IntroEdge")) {
         State::ptr childState = constructWitnesses(conjecture, node->getChildren()[0]);
         pair<unsigned, unsigned> e =
                 node->getNodeContent().getBag().get_edge();
-        State::ptr q = conjecture.kernel->intro_e(childState,e.first, e.second);
+        State::ptr q = conjecture.getKernel()->intro_e(childState,e.first, e.second);
         bool conjectureEvaluationResult =
-                conjecture.evaluateConjectureOnState(*q, conjecture.kernel);
+                conjecture.evaluateConjectureOnState(*q);
         return q;
 
     } else if (strstr(node->getNodeContent().getSymbol().c_str(), "Join")) {
         State::ptr childState1 = constructWitnesses(conjecture, node->getChildren()[0]);
         State::ptr childState2 = constructWitnesses(conjecture, node->getChildren()[1]);
-        State::ptr q = conjecture.kernel->join(childState1,childState2);
+        State::ptr q = conjecture.getKernel()->join(childState1,childState2);
         return q;
     } else {
         cout << "ERROR in constructWitnesses: The function could not recognize "
@@ -263,7 +263,7 @@ State::ptr ConcreteTreeDecomposition::constructWitnesses(Conjecture &conjecture,
 
 bool ConcreteTreeDecomposition::conjectureCheck(Conjecture &conjecture) {
     State::ptr q = constructWitnesses(conjecture, getRoot());
-    if (!conjecture.evaluateConjectureOnState(*q, conjecture.kernel)) {
+    if (!conjecture.evaluateConjectureOnState(*q)) {
         cout << "satisfied" << endl;
         cout << "Printing bad State: " << endl;
         q.print();

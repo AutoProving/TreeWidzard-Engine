@@ -79,6 +79,7 @@ NVertices_AtMost_Witness::~NVertices_AtMost_Witness() {
 NVertices_AtMost_DynamicCore::NVertices_AtMost_DynamicCore() {
     // Initializing attributes
     addAttribute("CoreName","NVertices");
+    addAttribute("CoreType","Bool");
     addAttribute("ParameterType","UnsignedInt");
     addAttribute("PrimaryOperator","AtMost");
 }
@@ -88,6 +89,7 @@ NVertices_AtMost_DynamicCore::NVertices_AtMost_DynamicCore(unsigned nVertices){
     createInitialWitnessSet();
     // Initializing attributes
     addAttribute("CoreName","NVertices");
+    addAttribute("CoreType","Bool");
     addAttribute("ParameterType","UnsignedInt");
     addAttribute("PrimaryOperator","AtMost");
 }

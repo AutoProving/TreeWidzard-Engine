@@ -110,6 +110,44 @@ Width& DynamicKernel::get_width() { return width; }
 
 void DynamicKernel::set_width(Width& width) { DynamicKernel::width = width; }
 
+
+bool DynamicKernel::isVarExists(string var) {
+    if(varToNameAndIndex.count(var)){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+const map<string, pair<string, int>> &DynamicKernel::getVarToNameAndIndex() const {
+    return varToNameAndIndex;
+}
+
+void DynamicKernel::setVarToNameAndIndex(const map<string, pair<string, int>> &varToNameAndIndex) {
+    DynamicKernel::varToNameAndIndex = varToNameAndIndex;
+}
+
+
+DynamicCore* DynamicKernel::getCoreByVar(string var) {
+    if(isVarExists(var)){
+        return cores[varToNameAndIndex[var].second] ;
+    }else{
+        cout<<"Error DynamicKernel::getCoreByVar core doesn't exist"<<endl;
+        exit(20);
+    }
+}
+
+int DynamicKernel::getIndexByVar(string var) {
+    if(isVarExists(var)){
+        return varToNameAndIndex[var].second ;
+    }else{
+        cout<<"Error DynamicKernel::getCoreByVar core doesn't exist"<<endl;
+        exit(20);
+    }
+}
+
+
+/* The old code
 void DynamicKernel::addProperty(PropertyAssignment& p) {
 	properties.push_back(p);
 }
@@ -117,3 +155,4 @@ void DynamicKernel::addProperty(PropertyAssignment& p) {
 const vector<PropertyAssignment>& DynamicKernel::get_properties() const {
 	return properties;
 }
+*/

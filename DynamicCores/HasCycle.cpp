@@ -78,7 +78,8 @@ HasCycle_DynamicCore::HasCycle_DynamicCore() {
     //*****************************
     // Initializing attributes
     addAttribute("CoreName", "CycleGirth");
-    addAttribute("ParameterType","NoParameter");
+    addAttribute("CoreType","Bool");
+    addAttribute("ParameterType","ParameterLess");
     addAttribute("PrimaryOperator","---");
     createInitialWitnessSet();
     //*****************************

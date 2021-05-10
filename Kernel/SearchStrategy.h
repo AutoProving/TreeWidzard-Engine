@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <chrono>
 #include "../TreeAutomaton/ConcreteTreeDecomposition.h"
-#include "Conjecture.h"
+#include "../Conjecture/Conjecture.h"
 #include "DynamicKernel.h"
 #include "Flags.h"
 #include "State.h"

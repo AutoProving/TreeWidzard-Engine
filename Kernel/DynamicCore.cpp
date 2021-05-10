@@ -59,18 +59,18 @@ bool DynamicCore::is_final_set_witness(Bag &b, WitnessSetPointer witnessSet) {
 
 WitnessSetPointer DynamicCore::clean(WitnessSetPointer witnessSet) {
 	// By default, if this function is not implemented by a derived class
-	// this function simply returns a pointer to the input witness set. 
+	// this function simply returns a pointer to the input witness set.
+	cout<< "generic clean is called"<<endl;
 	return witnessSet;
 }
 
 int DynamicCore::weight(WitnessSetPointer witnessSet) {
 	set<int> values;
 	for(auto temp : *witnessSet){
-
         values.insert(weight(*temp) );
 	}
     string coreType = getAttributeValue("CoreType");
-    if(coreType=="NULL"){
+    if(coreType=="NULL" or  coreType==""){
         cout<<"Error: DynamicCore::weight CoreType has not specified"<<endl;
         exit(20);
     }else if(coreType=="Min" or coreType=="Max"){

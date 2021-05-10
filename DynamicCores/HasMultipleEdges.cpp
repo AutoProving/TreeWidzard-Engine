@@ -98,7 +98,8 @@ string HasMultipleEdges_Witness::witnessInformation() {
 HasMultipleEdges_DynamicCore::HasMultipleEdges_DynamicCore() {
     // Initializing attributes
     addAttribute("CoreName","HasMultipleEdges");
-    addAttribute("ParameterType","NoParameter");
+    addAttribute("CoreType","Bool");
+    addAttribute("ParameterType","ParameterLess");
     addAttribute("PrimaryOperator","---");
     createInitialWitnessSet();
 }

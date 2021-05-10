@@ -94,6 +94,7 @@ TopologicalMinor_DynamicCore::TopologicalMinor_DynamicCore(){
     //*****************************
 
     addAttribute("CoreName","TopologicalMinor"); // Obligatory attribute. Replace GenericName by the name of the core.
+    addAttribute("CoreType","Bool");
     addAttribute("ParameterType","InputFile"); // Obligatory attribute. Replace GenericType by the type of the core: "NoParameter", "UnsignedInt", "InputFile".
     //  addAttribute("PrimaryOperator","GenericOperator"); //  This line should be uncommented if the type of the core is "UnsignedInt".
     //  Replace GenericOperator with "AtLeast" or "AtMost". The correct initialization depends on the core.

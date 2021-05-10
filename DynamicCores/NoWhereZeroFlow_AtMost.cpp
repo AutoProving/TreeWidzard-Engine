@@ -120,6 +120,7 @@ NoWhereZeroFlow_AtMost_DynamicCore::NoWhereZeroFlow_AtMost_DynamicCore(){
     // In this function you can initialize the map attributes. These attributes are used to describe properties of the core.
     // Example:
     addAttribute("CoreName","NoWhereZeroFlow"); // Obligatory attribute. Replace GenericName by the name of the core.
+    addAttribute("CoreType","Bool");
     addAttribute("ParameterType","UnsignedInt"); // Obligatory attribute. Replace GenericType by the type of the core: "NoParameter", "UnsignedInt", "InputFile".
     addAttribute("PrimaryOperator","AtMost"); //  This line should be uncommented if the type of the core is "UnsignedInt".
     //  Replace GenericOperator with "AtLeast" or "AtMost". The correct initialization depends on the core.
@@ -134,6 +135,7 @@ NoWhereZeroFlow_AtMost_DynamicCore::NoWhereZeroFlow_AtMost_DynamicCore(unsigned 
     //*****************************
     //*****************************
     addAttribute("CoreName","NoWhereZeroFlow"); // Obligatory attribute. Replace GenericName by the name of the core.
+    addAttribute("CoreType","Bool");
     addAttribute("ParameterType","UnsignedInt"); // Obligatory attribute. Replace GenericType by the type of the core: "NoParameter", "UnsignedInt", "InputFile".
     addAttribute("PrimaryOperator","AtMost"); //  This line should be uncommented if the type of the core is "UnsignedInt".
     //*****************************

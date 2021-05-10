@@ -7,7 +7,7 @@
 #include "Term.h"
 #include "../Kernel/Bag.h"
 #include "../Multigraph/MultiGraph.h"
-#include "../Kernel/Conjecture.h"
+#include "../Conjecture/Conjecture.h"
 
 using namespace std;
 

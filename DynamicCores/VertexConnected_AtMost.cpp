@@ -153,6 +153,7 @@ VertexConnected_AtMost_DynamicCore::VertexConnected_AtMost_DynamicCore(unsigned 
     createInitialWitnessSet();
      // Initializing attributes
     addAttribute("CoreName","VertexConnected");
+    addAttribute("CoreType","Bool");
     addAttribute("ParameterType","UnsignedInt");
     addAttribute("PrimaryOperator","AtMost");
 }

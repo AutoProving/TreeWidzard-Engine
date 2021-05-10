@@ -84,15 +84,15 @@ ChromaticNumber_Min_DynamicCore::ChromaticNumber_Min_DynamicCore() {
     // Initializing attributes
     addAttribute("CoreName","ChromaticNumberMin");
     addAttribute("CoreType","Min");
-
-    //addAttribute("ParameterType","UnsignedInt");
+    addAttribute("ParameterType","ParameterLess");
+    createInitialWitnessSet();
     //addAttribute("PrimaryOperator","");
 }
 
 
 void ChromaticNumber_Min_DynamicCore::createInitialWitnessSet_implementation(){
     shared_ptr<ChromaticNumber_Min_Witness> witness = createWitness();
-    //witness->numberUsedColors = 0;
+    witness->numberUsedColors = 0;
     this->insertIntoInitialWitnessSet(witness);
 }
 
@@ -312,6 +312,7 @@ int ChromaticNumber_Min_DynamicCore::weight(Witness &witness){
     }
 
 }
+
 shared_ptr<WitnessSet> ChromaticNumber_Min_WitnessSet::createEmptyWitnessSet() {
     ChromaticNumber_Min_WitnessSetPointer witnessSet(new ChromaticNumber_Min_WitnessSet);
     return witnessSet;

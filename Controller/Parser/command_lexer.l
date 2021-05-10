@@ -13,6 +13,9 @@
 
 %%
 -search                     yylval.string = strdup(yytext); return command_search_signature;
+tw                          yylval.string = strdup(yytext); return command_tw;
+pw                          yylval.string = strdup(yytext); return command_pw;
+=                          yylval.string = strdup(yytext);  return command_equal;
 -parse                      yylval.string = strdup(yytext); return command_parse_signature;
 -ps                         yylval.string = strdup(yytext); return command_print_state_flag;
 -pl                         yylval.string = strdup(yytext); return command_print_loop_flag;

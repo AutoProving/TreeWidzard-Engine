@@ -114,6 +114,7 @@ PathEdgeCover_Witness::~PathEdgeCover_Witness() {
 PathEdgeCover_DynamicCore::PathEdgeCover_DynamicCore() {
     // Initializing attributes
     addAttribute("CoreName","PathEdgeCover");
+    addAttribute("CoreType","Bool");
     addAttribute("ParameterType","UnsignedInt");
     addAttribute("PrimaryOperator","Equal");
 }
@@ -127,6 +128,7 @@ PathEdgeCover_DynamicCore::PathEdgeCover_DynamicCore(unsigned parameter){
     createInitialWitnessSet(); 
     // Initializing attributes
     addAttribute("CoreName","PathEdgeCover");
+    addAttribute("CoreType","Bool");
     addAttribute("ParameterType","UnsignedInt");
     addAttribute("PrimaryOperator","Equal");
 }

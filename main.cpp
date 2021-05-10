@@ -51,7 +51,9 @@ int main(int argc, char *arg[]) {
         return EXIT_FAILURE;
     }
     int result_arg=10;
-    result_arg = command_parse(result_arg);
+    string width_type;
+    int width_value;
+    result_arg = command_parse(result_arg,width_type,width_value);
 
 	return 0;
 }

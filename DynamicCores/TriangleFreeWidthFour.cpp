@@ -189,6 +189,7 @@ TriangleFreeWidthFour_Witness::~TriangleFreeWidthFour_Witness(){}
 TriangleFreeWidthFour_DynamicCore::TriangleFreeWidthFour_DynamicCore(){
     // Initializing attributes
     addAttribute("CoreName","TriangleFreeWidthFour");
+    addAttribute("CoreType","Bool");
     addAttribute("ParameterType","UnsignedInt");
     addAttribute("PrimaryOperator","AtLeast");
 }
@@ -198,7 +199,8 @@ TriangleFreeWidthFour_DynamicCore::TriangleFreeWidthFour_DynamicCore(unsigned in
 	createInitialWitnessSet();
 	// Initializing attributes
 	addAttribute("CoreName","TriangleFreeWidthFour");
-	addAttribute("ParameterType","UnsignedInt");
+    addAttribute("CoreType","Bool");
+    addAttribute("ParameterType","UnsignedInt");
 	addAttribute("PrimaryOperator","AtLeast");
 }
 

@@ -93,7 +93,8 @@ Connectivity_Witness::~Connectivity_Witness() {
 Connectivity_DynamicCore::Connectivity_DynamicCore() {
     // Initializing attributes
     addAttribute("CoreName","Connectivity");
-    addAttribute("ParameterType","NoParameter");
+    addAttribute("CoreType","Bool");
+    addAttribute("ParameterType","ParameterLess");
     addAttribute("PrimaryOperator","---");
     createInitialWitnessSet();
 }
@@ -423,9 +424,4 @@ Connectivity_WitnessPointer Connectivity_DynamicCore::createWitness() {
 void Connectivity_DynamicCore::copyWitness(Connectivity_WitnessPointer w_input,
                                            Connectivity_WitnessPointer w_output) {
     w_output->set_equal_implementation(w_input);
-}
-
-void Connectivity_DynamicCore::createInitialWitnessSet() {
-    Connectivity_WitnessSetPointer witnessSet(new Connectivity_WitnessSet);
-    return witnessSet;
 }

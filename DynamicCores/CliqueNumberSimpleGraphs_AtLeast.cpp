@@ -76,6 +76,7 @@ string CliqueNumberSimpleGraphs_AtLeast_Witness::witnessInformation() {
 CliqueNumberSimpleGraphs_AtLeast_DynamicCore::CliqueNumberSimpleGraphs_AtLeast_DynamicCore() {
     // Initializing attributes
     addAttribute("CoreName","CliqueNumberSimpleGraphs");
+    addAttribute("CoreType","Bool");
     addAttribute("Restriction","SimpleGraphs");
     addAttribute("ParameterType","UnsignedInt");
     addAttribute("PrimaryOperator","AtLeast");

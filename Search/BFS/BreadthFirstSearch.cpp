@@ -102,7 +102,6 @@ void BreadthFirstSearch::search(){
     unsigned int width = kernel->get_width().get_value();
     vector<unsigned > numberOfWitnesses;
     numberOfWitnesses.resize(initialState->numberOfComponents());
-	
 	int iterationNumber = 0;
 	
 	cout<<left<<setw(25)<<"Iteration"<<setw(25)<<"ALLSTATES" << setw(25)<< "NEWSTATES"<<"Max WITNESSSET SIZE"<<endl;
@@ -130,7 +129,7 @@ void BreadthFirstSearch::search(){
                     bool premiseFlag = flags->get("Premise");
                     bool satisfiesPremise = false;
                     if(premiseFlag){
-                        satisfiesPremise = conjecture->evaluatePremiseOnState(*newStatePointer,kernel);
+                        satisfiesPremise = conjecture->evaluatePremiseOnState(*newStatePointer);
                     }
                     if(!premiseFlag or (premiseFlag and satisfiesPremise) ){
                         if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer) ){
@@ -158,7 +157,7 @@ void BreadthFirstSearch::search(){
                 bool premiseFlag = flags->get("Premise");
                 bool satisfiesPremise = false;
                 if(premiseFlag){
-                    satisfiesPremise = conjecture->evaluatePremiseOnState(*newStatePointer,kernel);
+                    satisfiesPremise = conjecture->evaluatePremiseOnState(*newStatePointer);
                 }
                 if(!premiseFlag or (premiseFlag and satisfiesPremise) ) {
                     if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer)) {
@@ -192,7 +191,7 @@ void BreadthFirstSearch::search(){
                             bool premiseFlag = flags->get("Premise");
                             bool satisfiesPremise = false;
                             if(premiseFlag){
-                                satisfiesPremise = conjecture->evaluatePremiseOnState(*newStatePointer,kernel);
+                                satisfiesPremise = conjecture->evaluatePremiseOnState(*newStatePointer);
                             }
                             if(!premiseFlag or (premiseFlag and satisfiesPremise) ){
                                 if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer)){
@@ -224,7 +223,7 @@ void BreadthFirstSearch::search(){
                         bool premiseFlag = flags->get("Premise");
                         bool satisfiesPremise = false;
                         if(premiseFlag){
-                            satisfiesPremise = conjecture->evaluatePremiseOnState(*newStatePointer,kernel);
+                            satisfiesPremise = conjecture->evaluatePremiseOnState(*newStatePointer);
                         }
                         if(!premiseFlag or (premiseFlag and satisfiesPremise) ){
                             if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer)) {
@@ -268,7 +267,7 @@ void BreadthFirstSearch::search(){
             }
 		}
 		for(auto it = newStatesSet.begin(); it!=newStatesSet.end(); it++){
-		    if(!conjecture->evaluateConjectureOnState(**it,kernel)){
+		    if(!conjecture->evaluateConjectureOnState(**it)){
                 State::ptr badState = *it;
                 bfsDAG.addFinalState(badState);
                 AbstractTreeDecomposition atd  = extractCounterExampleTerm(badState);
@@ -325,7 +324,6 @@ void BreadthFirstSearch::search(){
                 if(component != numberOfWitnesses.size()-1)
                     cout<<",";
             }
-
             cout << endl;
 
         }

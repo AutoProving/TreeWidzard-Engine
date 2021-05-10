@@ -95,6 +95,7 @@ Mod_DynamicCore::Mod_DynamicCore(vector<int> parameters){
     createInitialWitnessSet();
     // Initializing attributes
     addAttribute("CoreName","Mod");
+    addAttribute("CoreType","Bool");
     addAttribute("ParameterType","MultiParameter");
     addAttribute("PrimaryOperator","-");
 }

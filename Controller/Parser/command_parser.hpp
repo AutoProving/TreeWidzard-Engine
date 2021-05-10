@@ -78,7 +78,10 @@ extern int command_debug;
     command_print_state_tree = 269,
     command_random_signature = 270,
     command_number = 271,
-    command_premise = 272
+    command_premise = 272,
+    command_pw = 273,
+    command_tw = 274,
+    command_equal = 275
   };
 #endif
 
@@ -91,7 +94,7 @@ union COMMAND_STYPE
      float number;
      char* string;
 
-#line 95 "command_parser.hpp"
+#line 98 "command_parser.hpp"
 
 };
 typedef union COMMAND_STYPE COMMAND_STYPE;
@@ -116,6 +119,6 @@ struct COMMAND_LTYPE
 
 extern COMMAND_STYPE command_lval;
 extern COMMAND_LTYPE command_lloc;
-int command_parse (int &result);
+int command_parse (int &result, string &width_type, int &width_value);
 
 #endif /* !YY_COMMAND_COMMAND_PARSER_HPP_INCLUDED  */

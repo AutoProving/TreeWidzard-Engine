@@ -152,7 +152,8 @@ HamiltonianPath_DynamicCore::HamiltonianPath_DynamicCore(){
     //*****************************
     // Initializing attributes
     addAttribute("CoreName","HamiltonianPath");
-    addAttribute("ParameterType","NoParameter");
+    addAttribute("CoreType","Bool");
+    addAttribute("ParameterType","ParameterLess");
     addAttribute("PrimaryOperator","---");
     createInitialWitnessSet();
 }

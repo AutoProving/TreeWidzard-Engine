@@ -1,4 +1,6 @@
-tree_width 2
-y := ChromaticNumber < 4
-z := CliqueNumber > 2
-y AND z
+h := MaxDegree > 4
+x := ChromaticNumber  < 5
+y := HasMultipleEdges
+z := ChromaticNumberMin
+Formula
+z < x OR z > x OR z >= x

@@ -91,6 +91,8 @@ EdgeColoring_AtMost_Witness::~EdgeColoring_AtMost_Witness() {
 EdgeColoring_AtMost_DynamicCore::EdgeColoring_AtMost_DynamicCore() {
     // Initializing attributes
     addAttribute("CoreName","EdgeColoring");
+    addAttribute("CoreType","Bool");
+
     addAttribute("ParameterType","UnsignedInt");
     addAttribute("PrimaryOperator","AtMost");
 }
@@ -103,6 +105,7 @@ EdgeColoring_AtMost_DynamicCore::EdgeColoring_AtMost_DynamicCore(unsigned parame
     //*****************************
     // Initializing attributes
     addAttribute("CoreName","EdgeColoring");
+    addAttribute("CoreType","Bool");
     addAttribute("ParameterType","UnsignedInt");
     addAttribute("PrimaryOperator","AtMost");
     this->parameter = parameter;

@@ -1,8 +1,11 @@
     For SEARCH:
-        ./treewidzard -search [Flag Options] <search method> <property file>
+        ./treewidzard -search [Width] [Flag Options] <search method> <property file>
         Random Setting:
-        ./treewidzard -search [Flag Options] [-random <seed> <intro vertex probability> <forget vertex probability> <ping number>] <search method> <property file>
+        ./treewidzard -search [Width] [Flag Options] [-random <seed> <intro vertex probability> <forget vertex probability> <ping number>] <search method> <property file>
 
+    [Width]: tw|pw = number
+                example: tw = 2 (The program will search graphs with tree-width at most 2)
+                example: pw = 2 (The program will search graphs with path-width at most 2)
     Flag Options:
         -pl       print loop
         -ps       print states

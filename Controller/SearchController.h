@@ -19,9 +19,12 @@ private:
     map<string, map<string,string> > searchList; // Each entry is a pair of core name and core attributes.
     map<string, string> searchNamesToFiles;
     InputController* inputController;
+    Width width;
 
 public:
-    SearchController(const string &inputPath, const string &searchStrategy, const Flags &flags);
+    SearchController(const string &searchStrategy, const string &searchPluginPath, const Flags &flags,
+                     const Width &width);
+
     ///////////////////////////////////////////////////////////////////////////
     void check_search();
     void action();
