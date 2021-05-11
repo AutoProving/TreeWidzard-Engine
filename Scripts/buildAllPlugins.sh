@@ -15,7 +15,7 @@ p=$PWD;
       echo $name
       echo $eachfile
       echo $p
-      g++ -fPIC -shared $p/../Kernel/DynamicKernel.cpp  $p/../Kernel/DynamicCore.cpp  $p/../Kernel/Conjecture.cpp  $p/../Kernel/SearchStrategy.cpp  $eachfile  -o  $p/../SearchPlugins/$name.so
+      g++ -fPIC -shared $p/../Kernel/DynamicKernel.cpp  $p/../Kernel/DynamicCore.cpp  $p/../Conjecture/Conjecture.cpp  $p/../Kernel/SearchStrategy.cpp  $eachfile  -o  $p/../SearchPlugins/$name.so
   done
   mkdir $PWD/auxfiles
 
