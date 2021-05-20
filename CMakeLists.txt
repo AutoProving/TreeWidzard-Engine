@@ -32,6 +32,8 @@ add_executable(
     Controller/InputController.cpp
     Controller/InputController.h
     Controller/AuxiliaryController.hpp
+    Controller/ErrorController.cpp
+    Controller/ErrorController.h
     main.cpp
     # DynamicCore files
     # DynamicCores/CliqueNumber_AtLeast.cpp
@@ -123,8 +125,8 @@ add_executable(
 	# Conjecture
 	Conjecture/Conjecture.cpp
 	Conjecture/Conjecture.h
-        Conjecture/PropertyAssignment.cpp
-        Conjecture/PropertyAssignment.h
+    Conjecture/PropertyAssignment.cpp
+    Conjecture/PropertyAssignment.h
     # Parser files
     # Command Parser
     Controller/Parser/command_parser.hpp

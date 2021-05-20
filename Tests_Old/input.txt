@@ -1,5 +1,5 @@
-h := MaxDegree > 4
-x := ChromaticNumber  < 5
+h := MaxDegree > 3
+x := Connectivity
 y := HasMultipleEdges
 z := ChromaticNumberMin
 Formula
