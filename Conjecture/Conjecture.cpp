@@ -5,23 +5,24 @@ double Conjecture::evaluateConjectureNodeOnState(State &q, ConjectureNode* node)
      //evaluate a node based on its type
     switch(node->getType()) {
         case CORE_VARIABLE:
-
             if (variablesToCoreName.count(node->getVal())) {
                 string coreType = kernel->getCoreByVar(node->getVal())->getAttributeValue("CoreType");
                 if (coreType == "Min" or coreType == "Max") {
                     return kernel->getCoreByVar(node->getVal())
                             ->weight(q.getWitnessSet(kernel->getIndexByVar(node->getVal())));
                 } else if (coreType == "Bool") {
-                    Bag bag =q.get_bag();
+                    Bag bag = q.get_bag();
                     return kernel->getCoreByVar(node->getVal())
                             ->is_final_set_witness(bag,q.getWitnessSet(kernel->getIndexByVar(node->getVal())));
                 } else {
                     //error
+                    cout<<"Error in Conjecture::evaluateConjectureNodeOnState: coreType " << coreType << " is not defined.";
                     exit(20);
                 }
 
             } else {
                 // error
+                cout<<"Error in Conjecture::evaluateConjectureNodeOnState.";
                 exit(20);
             }
         case EXP_VARIABLE:
@@ -246,7 +247,11 @@ int Conjecture::evaluatePremiseOnState(State &q) {
                     "does not have 2 children";
             exit(20);
         } else {
-            return evaluateConjectureNodeOnState(q, root);
+            bool result = evaluateConjectureNodeOnState(q, root->getChildren()[0]);
+            // cout<< result << " ";
+            // root->getChildren()[0]->printInfix();
+            // cout<<endl;
+            return result;
         }
     } else {
         cout << "ERROR: could not determine the premise. The conjecture is not "
@@ -431,4 +436,3 @@ void ConjectureNode::printInfix() {
 
     }
 }
-

@@ -1,17 +1,17 @@
 #include "InputController.h"
 void InputController::check_available_cores() {
-    for (const auto & entry : fs::directory_iterator(dynamicPluginPath)){
-        string s = entry.path();
-        if (s.find(".so") != std::string::npos) {
-            char *MyClassLibraryName = const_cast<char *>(s.c_str());
-            DynamicCoreHandler factory(MyClassLibraryName);
-            std::unique_ptr<DynamicCore> core = factory.create();
-            map<string,string> attributes = core->getAttributes();
-            string fileName = entry.path().filename();
-            coreNamesToFiles.insert(make_pair(core->getAttributeValue("CoreName"),fileName));
-            coreList.insert(make_pair(core->getAttributeValue("CoreName"),attributes));
-        }
+  for (const auto & entry : fs::directory_iterator(dynamicPluginPath)){
+    string s = entry.path();
+    if (s.find(".so") != std::string::npos) {
+      char *MyClassLibraryName = const_cast<char *>(s.c_str());
+      DynamicCoreHandler factory(MyClassLibraryName);
+      std::unique_ptr<DynamicCore> core = factory.create();
+      map<string,string> attributes = core->getAttributes();
+      string fileName = entry.path().filename();
+      coreNamesToFiles.insert(make_pair(core->getAttributeValue("CoreName"),fileName));
+      coreList.insert(make_pair(core->getAttributeValue("CoreName"),attributes));
     }
+  }
 }
 
 void InputController::parse_input() {

@@ -88,6 +88,8 @@ CliqueNumberSimpleGraphs_AtLeast_DynamicCore::CliqueNumberSimpleGraphs_AtLeast_D
     createInitialWitnessSet();
     // Initializing attributes
     addAttribute("CoreName","CliqueNumberSimpleGraphs");
+    addAttribute("CoreType","Bool");
+    addAttribute("Restriction","SimpleGraphs");
     addAttribute("ParameterType","UnsignedInt");
     addAttribute("PrimaryOperator","AtLeast");
 }
@@ -140,7 +142,7 @@ void CliqueNumberSimpleGraphs_AtLeast_DynamicCore::intro_e_implementation(unsign
                 }
                 witnessSet->insert(witness);
             }
-          
+
        }else{
            // Either i or j is not in the clique, so that {i,j} cannpt be added to the clique.
             witnessSet->insert(w);
@@ -393,7 +395,7 @@ WitnessSetPointer CliqueNumberSimpleGraphs_AtLeast_DynamicCore::forget_v(unsigne
     }else{
         cerr<<"ERROR: in CliqueNumberSimpleGraphs_AtLeast_Witness::forget_v cast error"<<endl;
         exit(20);
-    }  
+    }
 }
 
 WitnessSetPointer CliqueNumberSimpleGraphs_AtLeast_DynamicCore::join(Bag &b, Witness &witness1, Witness &witness2) {

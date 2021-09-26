@@ -1,4 +1,6 @@
-path_width 3
-a := MaxDegree > 3
-b := MaxDegree > 4
-a OR NOT b
+x := MaxDegree > 100
+y := CliqueNumberSimpleGraphs > 4
+z := HasMultipleEdges
+w := ChromaticNumber < 2
+Formula
+NOT x AND NOT y AND NOT z IMPLIES  w
