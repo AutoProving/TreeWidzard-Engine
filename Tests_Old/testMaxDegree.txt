@@ -1,4 +1,4 @@
-x := MaxDegree > 100
+x := MaxDegree > 10
 y := CliqueNumberSimpleGraphs > 4
 z := HasMultipleEdges
 w := ChromaticNumber < 2

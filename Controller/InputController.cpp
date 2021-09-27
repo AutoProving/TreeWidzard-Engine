@@ -72,10 +72,15 @@ void InputController::construct_dynamicKernel() {
     int coreIndex = 1;
     for (auto core:varToProperty) {
         if(coreList.count(core.second->getName())){
-            cout<<left << setw(2)<< coreIndex << setw(5)<<"- Variable: " <<setw(5)<<core.first<<setw(5)<< "NAME: " <<setw(30)<< core.second->getName() ;
+            cout<<left << setw(2)<< coreIndex << setw(5)<<"- Variable: " <<setw(5)<<core.first<<setw(5)<< "NAME: " <<setw(30)<< core.second->getName();
             coreIndex++;
             if(coreList[core.second->getName()].count("ParameterType")){
-                cout<< setw(10)<<"ParameterType: " << setw(10)<< coreList[core.second->getName()]["ParameterType"]<<endl;
+
+                cout<< setw(10)<<"ParameterType: " << setw(10)<< coreList[core.second->getName()]["ParameterType"];
+                if(coreList[core.second->getName()]["ParameterType"]=="UnsignedInt" and core.second->getParameterType() == "UnsignedInt"){
+                  cout<<" " << core.second->getParameter(); 
+                }
+                cout<<endl;
                 if(coreList[core.second->getName()]["ParameterType"]=="ParameterLess" and core.second->getParameterType() == "ParameterLess" ){
                     string corePath = dynamicPluginPath+coreNamesToFiles[core.second->getName()];
                     factory = new DynamicCoreHandler(corePath.c_str());
