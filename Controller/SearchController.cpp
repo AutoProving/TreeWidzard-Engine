@@ -4,11 +4,11 @@ SearchController::SearchController(const string &inputPath, const string &search
                                    const Width &width) : searchStrategy(searchStrategy),
                                                          searchPluginPath(searchPluginPath), flags(flags),
                                                          width(width) {
-    // string file_path = __FILE__;
-    string file_path = "";
+    string file_path = __FILE__;
+    //string file_path = "";
     string path = file_path.substr(0, file_path.rfind("/"));
-    inputController = new InputController(inputPath, path+"../DynamicPlugins/",width);
-    searchPluginPath = path+"../SearchPlugins/";
+    inputController = new InputController(inputPath, path+"/../DynamicPlugins/",width);
+    searchPluginPath = path+"/../SearchPlugins/";
 }
 void SearchController::check_search() {
     for (const auto & entry : fs::directory_iterator(searchPluginPath)){

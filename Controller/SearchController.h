@@ -9,6 +9,8 @@
 
 using namespace std;
 namespace fs = std::experimental::filesystem;
+
+using std::experimental::filesystem::current_path;
 extern FILE *input_in;
 
 class SearchController {
