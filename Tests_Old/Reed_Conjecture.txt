@@ -1,0 +1,3 @@
+z := HasMultipleEdges
+Formula
+TRUE

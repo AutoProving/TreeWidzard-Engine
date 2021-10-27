@@ -41,7 +41,7 @@ void MaxDegree_AtLeast_Witness::print() {
 
     for(map<unsigned,unsigned>::iterator it = degreeCounter.begin(); it != degreeCounter.end() ; it++){
         auto tempIt = it;
-        cout<<it->first << " -> "<< it->second;
+        cout << it->first << " -> " << it->second;
         if(++tempIt != degreeCounter.end()){
             cout<<", ";
         }
@@ -163,6 +163,7 @@ void MaxDegree_AtLeast_DynamicCore::intro_e_implementation(unsigned int i, unsig
         wPrime->found = false;
         witnessSet->insert(wPrime);
     }else if(i==j and w->degreeCounter.find(i)->second < this->maxDegree-2){
+        // This case is inactive at the moment. It would be active if self-loops were allowed.
         MaxDegree_AtLeast_WitnessPointer wPrime = createWitness();
         wPrime->degreeCounter = w->degreeCounter;
         wPrime->degreeCounter.erase(i);

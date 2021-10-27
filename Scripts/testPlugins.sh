@@ -1,5 +1,5 @@
 #!/bin/bash
-p=$PWD;
+p=$PWD
 #rm -r $PWD/../DynamicPlugins/ChromaticNumber_M*
 #for eachfile in $(find $PWD/../DynamicCores -type f -name "ChromaticNumber_M*.cpp")
 #do
@@ -9,13 +9,11 @@ p=$PWD;
 #    g++ -fPIC -shared $p/../Kernel/WitnessSet.cpp $p/../Kernel/Witness.cpp $p/../Kernel/DynamicCore.cpp $eachfile -o $p/../DynamicPlugins/$name.so
 #done
 rm -r $PWD/../SearchPlugins/*
-for eachfile in $(find $PWD/../Search -type f -name "*.cpp")
-do
-    name=$(basename "$eachfile" .cpp)
-    echo $name
-    echo $eachfile
-    echo $p
-    g++ -fPIC -shared $p/../Kernel/DynamicKernel.cpp  $p/../Kernel/DynamicCore.cpp  $p/../Conjecture/Conjecture.cpp  $p/../Kernel/SearchStrategy.cpp  $eachfile  -o  $p/../SearchPlugins/$name.so
+for eachfile in $(find $PWD/../Search -type f -name "*.cpp"); do
+  name=$(basename "$eachfile" .cpp)
+  echo $name
+  echo $eachfile
+  echo $p
+  g++ -fPIC -shared $p/../Kernel/DynamicKernel.cpp $p/../Kernel/DynamicCore.cpp $p/../Conjecture/Conjecture.cpp $p/../Kernel/SearchStrategy.cpp $eachfile -o $p/../SearchPlugins/$name.so
 done
 # mkdir $PWD/auxfiles
-
