@@ -184,10 +184,16 @@ void CliqueNumberSimpleGraphs_AtLeast_DynamicCore::join_implementation(Bag &b, C
         // At the same time it is not possible to have forget vertices in both witnesses
         // If there is a forgotten vertex v in w1, and a forgotten vertex u in w2, then v and u can not be connected to together
         if (w1->partialClique.size()==w1->size or w2->partialClique.size() == w2->size) {
+            // The domains of two partialCliques should be the same, and therefore, they should have the same size.
+            // Do not confuse w->size with w->partialClique.size().
             if (w1->partialClique.size() == w2->partialClique.size()) {
                 CliqueNumberSimpleGraphs_AtLeast_WitnessPointer witness = createWitness();
                 witness->set_equal(*w1);
+                // The size of the new witness is the sum of the sizes of the two witnesses minus the size of the partialClique
+                // Note that, w1->partialClique.size() = w2->partialClique.size().
                 witness->size = w1->size + w2->size - w1->partialClique.size();
+                // Now we check if the domains of the partialCliques are the same.
+                // If the in the checking process we realize that they do not have the same domains, we return the empty set.
                 for (auto p: w2->partialClique) {
                     if (witness->partialClique.count(p.first)) {
                         unsigned pCounter = p.second + witness->partialClique[p.first];
@@ -198,11 +204,11 @@ void CliqueNumberSimpleGraphs_AtLeast_DynamicCore::join_implementation(Bag &b, C
                         return;
                     }
                 }
-
                 // Check that the clique is a complete clique or not,
-                // if yes found will be true and partialClique will be cleared.
+                // if yes, found will be true and partialClique will be cleared.
                 if (isCompleteClique(witness)) {
                     witness->found = true;
+                    witness->partialClique.clear();
                 }
                 witnessSet->insert(witness);
             } else {
