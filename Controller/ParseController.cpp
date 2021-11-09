@@ -1,9 +1,8 @@
 #include "ParseController.h"
 ParseController::ParseController(const Flags &flag, const string &inputPath) : flag(flag) {
-    //string file_path = __FILE__;
-    string file_path = "";
+    string file_path = __FILE__;
     string path = file_path.substr(0, file_path.rfind("/"));
-    string dynamicPluginPath =path+"../DynamicPlugins/";
+    string dynamicPluginPath =path+"/../DynamicPlugins/";
     inputController = new InputController(inputPath, dynamicPluginPath);
 }
 
@@ -55,12 +54,12 @@ void ParseController::parse_pace(string graphPath, string decompositionPath) {
     cout<<"Tree Decomposition "<<endl;
     td.construct();
     td.printTree();
-    cout<<"--------------------------------------------Concrete decomposition"<<endl;
+    cout<<"-----------Concrete decomposition"<<endl;
     shared_ptr<ConcreteTreeDecomposition> concreteTreeDecomposition;
     concreteTreeDecomposition = td.convertToConcreteTreeDecomposition();
     //concreteTreeDecomposition->printTermNodes();
     cout<<"----Evaluating-----:"<<endl;
-    concreteTreeDecomposition->conjectureCheck(this->inputController->getConjecture());
+    concreteTreeDecomposition->conjectureCheck(this->inputController->getConjecture(),flag);
     AbstractTreeDecomposition abstractTreeDecomposition = concreteTreeDecomposition->convertToAbstractTreeDecomposition();
     abstractTreeDecomposition.writeToFile(this->inputController->getInputPath());
     concreteTreeDecomposition->writeToFile(this->inputController->getInputPath());
@@ -110,9 +109,9 @@ void ParseController::parse_abstract(string abstractPath) {
     }
     abstractTreeDecomposition.printTermNodes();
     ConcreteTreeDecomposition concreteTreeDecomposition = abstractTreeDecomposition.convertToConcreteTreeDecomposition();
-    
+    //concreteTreeDecomposition.printTermNodes();
     cout<<"----Evaluating-----:"<<endl;
-    concreteTreeDecomposition.conjectureCheck(this->inputController->getConjecture());
+    concreteTreeDecomposition.conjectureCheck(this->inputController->getConjecture(), flag);
     /*if(!ctd.conjectureCheck(inputController->getConjecture())){
       cout<<"not satisfied"<<endl;
         //  shared_ptr<DynamicKernel> sharedKernel = make_shared<DynamicKernel>(inputController->getDynamicKernel());

@@ -186,14 +186,17 @@ void ConcreteTreeDecomposition::writeToFile(string fileName) {
     }
 }
 
-State::ptr ConcreteTreeDecomposition::constructWitnesses(Conjecture &conjecture, shared_ptr<TermNode<ConcreteNode>> node) {
+State::ptr ConcreteTreeDecomposition::constructWitnesses(Conjecture &conjecture, shared_ptr<TermNode<ConcreteNode>> node, Flags &flags) {
     // First, We check the type of the node
     if (node->getNodeContent().getSymbol() == "Leaf") {
         // if it is an empty, then it is a leaf
         State::ptr q = conjecture.getKernel()->initialState();
+        if(flags.get("PrintStates")) {
+            q->print();
+        }
         return q;
     } else if (strstr(node->getNodeContent().getSymbol().c_str(), "IntroVertex")) {
-        State::ptr childState = constructWitnesses(conjecture, node->getChildren()[0]);
+        State::ptr childState = constructWitnesses(conjecture, node->getChildren()[0],flags);
         // find the introduced vertex
         set<unsigned> bagSet = node->getNodeContent().getBag().get_elements();
         set<unsigned> childBagSet = childState->get_bag().get_elements();
@@ -214,11 +217,14 @@ State::ptr ConcreteTreeDecomposition::constructWitnesses(Conjecture &conjecture,
         }
         State::ptr q = conjecture.getKernel()->intro_v(
                 childState, *bagSetDifference.begin());
+        if(flags.get("PrintStates")) {
+            q->print();
+        }
         return q;
 
     } else if (strstr(node->getNodeContent().getSymbol().c_str(), "ForgetVertex")) {
         State::ptr childState =
-                constructWitnesses(conjecture, node->getChildren()[0]);
+                constructWitnesses(conjecture, node->getChildren()[0],flags);
         // find the forgotten vertex
         set<unsigned> bagSet = node->getNodeContent().getBag().get_elements();
         set<unsigned> childBagSet = childState->get_bag().get_elements();
@@ -235,21 +241,31 @@ State::ptr ConcreteTreeDecomposition::constructWitnesses(Conjecture &conjecture,
             exit(20);
         }
         State::ptr q = conjecture.getKernel()->forget_v(childState, *bagSetDifference.begin());
+        if(flags.get("PrintStates")) {
+            q->print();
+        }
         return q;
 
     } else if (strstr(node->getNodeContent().getSymbol().c_str(), "IntroEdge")) {
-        State::ptr childState = constructWitnesses(conjecture, node->getChildren()[0]);
+        State::ptr childState = constructWitnesses(conjecture, node->getChildren()[0],flags);
+
         pair<unsigned, unsigned> e =
                 node->getNodeContent().getBag().get_edge();
         State::ptr q = conjecture.getKernel()->intro_e(childState,e.first, e.second);
         bool conjectureEvaluationResult =
                 conjecture.evaluateConjectureOnState(*q);
+        if(flags.get("PrintStates")) {
+            q->print();
+        }
         return q;
 
     } else if (strstr(node->getNodeContent().getSymbol().c_str(), "Join")) {
-        State::ptr childState1 = constructWitnesses(conjecture, node->getChildren()[0]);
-        State::ptr childState2 = constructWitnesses(conjecture, node->getChildren()[1]);
+        State::ptr childState1 = constructWitnesses(conjecture, node->getChildren()[0],flags);
+        State::ptr childState2 = constructWitnesses(conjecture, node->getChildren()[1],flags);
         State::ptr q = conjecture.getKernel()->join(childState1,childState2);
+        if(flags.get("PrintStates")) {
+            q->print();
+        }
         return q;
     } else {
         cout << "ERROR in constructWitnesses: The function could not recognize "
@@ -261,15 +277,15 @@ State::ptr ConcreteTreeDecomposition::constructWitnesses(Conjecture &conjecture,
     }
 }
 
-bool ConcreteTreeDecomposition::conjectureCheck(Conjecture &conjecture) {
-    State::ptr q = constructWitnesses(conjecture, getRoot());
+bool ConcreteTreeDecomposition::conjectureCheck(Conjecture &conjecture,Flags &flags) {
+    State::ptr q = constructWitnesses(conjecture, getRoot(),flags);
     if (!conjecture.evaluateConjectureOnState(*q)) {
-        cout << "satisfied" << endl;
+        cout << "not satisfied" << endl;
         cout << "Printing bad State: " << endl;
         q.print();
         return false;
     } else {
-        cout << "not satisfied"<< endl;
+        cout << "satisfied"<< endl;
         return true;
     }
 }

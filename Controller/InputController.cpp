@@ -97,8 +97,8 @@ void InputController::construct_dynamicKernel() {
                     dynamicKernel.setVarToNameAndIndex(varToNameAndIndex);
                 }else if(coreList[core.second->getName()]["ParameterType"]=="UnsignedInt" and core.second->getParameterType() == "UnsignedInt"){
                     unsigned parameter = core.second->getParameter();
-                    if(core.second->getOp()==">") parameter+1;
-                    if(core.second->getOp()=="<") parameter-1;
+                    if(core.second->getOp()==">") parameter++;
+                    if(core.second->getOp()=="<") parameter--;
                     string corePath = dynamicPluginPath + coreNamesToFiles[core.second->getName()];
                     factory = new DynamicCoreHandler(corePath.c_str());
                     std::unique_ptr<DynamicCore> handlerCore = factory->create_int(parameter);

@@ -1,3 +1,5 @@
+x := MaxDegree > 3
 z := HasMultipleEdges
+w := ChromaticNumber < 2
 Formula
-TRUE
+NOT x AND NOT z IMPLIES w

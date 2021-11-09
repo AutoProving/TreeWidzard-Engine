@@ -8,7 +8,7 @@
 #include "../Kernel/Bag.h"
 #include "../Multigraph/MultiGraph.h"
 #include "../Conjecture/Conjecture.h"
-
+#include "../Kernel/Flags.h"
 using namespace std;
 
 namespace concrete_fs = std::experimental::filesystem;
@@ -55,10 +55,8 @@ public:
     shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> constructATDNode(TermNode<ConcreteNode> &node);
     AbstractTreeDecomposition convertToAbstractTreeDecomposition();
     void writeToFile(string fileName);
-    State::ptr constructWitnesses(Conjecture &conjecture, shared_ptr<TermNode<ConcreteNode>> node);
-    bool conjectureCheck(Conjecture &conjecture);
-
-
+    State::ptr constructWitnesses(Conjecture &conjecture, shared_ptr<TermNode<ConcreteNode>> node, Flags &flags);
+    bool conjectureCheck(Conjecture &conjecture, Flags &flags);
 };
 
 

@@ -89,6 +89,8 @@ void BreadthFirstSearch::search(){
   }else{
     cout<<"Premise is NOT ACTIVATED"<<endl;
   }
+  bool printStateFlag = flags->get("PrintStates");
+
   State::ptr initialState = kernel->initialState();
   allStatesSet.insert(initialState);
   newStatesSet.insert(initialState);
@@ -141,6 +143,18 @@ void BreadthFirstSearch::search(){
               antecedentStates.push_back(statePointer);
               Transition<State::ptr,AbstractTreeDecompositionNodeContent> transition(consequentState,transitionContent,antecedentStates);
               bfsDAG.addTransition(transition);
+              if(printStateFlag){
+                  cout<<endl;
+                  cout<< "========================================================================" <<endl;
+                  cout<< " Introduce Vertex: " << i << endl;
+                  cout<< "========================================================================" <<endl;
+                  cout<< " Current State:"<<endl;
+                  statePointer->print();
+                  cout<< " New State:"<<endl;
+                  newStatePointer->print();
+                  cout<< "========================================================================" <<endl;
+                  cout<<endl;
+              }
               // size of witnessSets
               for (int component = 0; component < numberOfWitnesses.size(); ++component) {
                 numberOfWitnesses[component] = max(numberOfWitnesses[component],(unsigned)consequentState->getWitnessSet(component)->size());
@@ -171,6 +185,18 @@ void BreadthFirstSearch::search(){
               transitionContent,
               antecedentStates);
               bfsDAG.addTransition(transition);
+              if(printStateFlag){
+                  cout<<endl;
+                  cout<< "========================================================================" <<endl;
+                  cout<< " Forget Vertex: " << *it << endl;
+                  cout<< "========================================================================" <<endl;
+                  cout<< " Current State:"<<endl;
+                  statePointer->print();
+                  cout<< " New State:"<<endl;
+                  newStatePointer->print();
+                  cout<< "========================================================================" <<endl;
+                  cout<<endl;
+              }
               // size of witnessSets
               for (int component = 0; component < numberOfWitnesses.size(); ++component) {
                 numberOfWitnesses[component] = max(numberOfWitnesses[component],
@@ -195,18 +221,30 @@ void BreadthFirstSearch::search(){
                     }
                     if(!premiseFlag or (premiseFlag and satisfiesPremise) ){
                       if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(newStatePointer)){
-                        newStatesSet.insert(newStatePointer);
-                        State::ptr consequentState = newStatePointer;
-                        AbstractTreeDecompositionNodeContent transitionContent("IntroEdge_"+ to_string(*it)+"_"+to_string(*itPrime));
-                        bfsDAG.addState(consequentState);
-                        vector<State::ptr> antecedentStates;
-                        antecedentStates.push_back(statePointer);
-                        Transition<State::ptr,AbstractTreeDecompositionNodeContent> transition(consequentState,transitionContent,antecedentStates);
-                        bfsDAG.addTransition(transition);
-                        // size of witnessSets
-                        for (int component = 0; component < numberOfWitnesses.size(); ++component) {
-                          numberOfWitnesses[component] = max(numberOfWitnesses[component],(unsigned)consequentState->getWitnessSet(component)->size());
-                        }
+                            newStatesSet.insert(newStatePointer);
+                            State::ptr consequentState = newStatePointer;
+                            AbstractTreeDecompositionNodeContent transitionContent("IntroEdge_"+ to_string(*it)+"_"+to_string(*itPrime));
+                            bfsDAG.addState(consequentState);
+                            vector<State::ptr> antecedentStates;
+                            antecedentStates.push_back(statePointer);
+                            Transition<State::ptr,AbstractTreeDecompositionNodeContent> transition(consequentState,transitionContent,antecedentStates);
+                            bfsDAG.addTransition(transition);
+                          if(printStateFlag){
+                              cout<<endl;
+                              cout<< "========================================================================" <<endl;
+                              cout<< " Introduce Edge: " << *it << " " << *itPrime<< endl;
+                              cout<< "========================================================================" <<endl;
+                              cout<< " Current State:"<<endl;
+                              statePointer->print();
+                              cout<< " New State:"<<endl;
+                              newStatePointer->print();
+                              cout<< "========================================================================" <<endl;
+                              cout<<endl;
+                          }
+                            // size of witnessSets
+                            for (int component = 0; component < numberOfWitnesses.size(); ++component) {
+                              numberOfWitnesses[component] = max(numberOfWitnesses[component],(unsigned)consequentState->getWitnessSet(component)->size());
+                            }
                       }
                     }
                   }
@@ -238,6 +276,20 @@ void BreadthFirstSearch::search(){
                         transitionContent,
                         antecedentStates);
                         bfsDAG.addTransition(transition);
+                        if(printStateFlag){
+                            cout<<endl;
+                            cout<< "========================================================================" <<endl;
+                            cout<< " Join: " <<endl;
+                            cout<< "========================================================================" <<endl;
+                            cout<< " State One:"<<endl;
+                            statePointer->print();
+                            cout<< " State Two:"<<endl;
+                            (*it)->print();
+                            cout<< " New State:"<<endl;
+                            newStatePointer->print();
+                            cout<< "========================================================================" <<endl;
+                            cout<<endl;
+                        }
                         // size of witnessSets
                         for (int component = 0; component < numberOfWitnesses.size(); ++component) {
                           numberOfWitnesses[component] = max(numberOfWitnesses[component],(unsigned)consequentState->getWitnessSet(component)->size());
