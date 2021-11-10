@@ -139,6 +139,7 @@ string TermNode<TermNodeContent>::nodeInformation(unsigned int &label) {
         childrenLabel.insert(label);
     }
     label++;
+
     string t = to_string(label) + " "+ nodeContent.nodeInformation();
     if(childrenLabel.size()){
         t+= "(";

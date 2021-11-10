@@ -173,7 +173,8 @@ AbstractTreeDecomposition ConcreteTreeDecomposition::convertToAbstractTreeDecomp
 }
 
 void ConcreteTreeDecomposition::writeToFile(string fileName) {
-    fileName = "ConcreteTreeDecomposition_"+concrete_fs::path(fileName).filename().string();
+    //fileName = "CounterExample_ConcreteTreeDecomposition_"+concrete_fs::path(fileName).filename().string();
+    fileName = "ConcreteTree_"+fileName;
     ofstream atdFile (fileName);
     if (atdFile.is_open())
     {
@@ -186,7 +187,8 @@ void ConcreteTreeDecomposition::writeToFile(string fileName) {
     }
 }
 
-State::ptr ConcreteTreeDecomposition::constructWitnesses(Conjecture &conjecture, shared_ptr<TermNode<ConcreteNode>> node, Flags &flags) {
+
+shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> ConcreteTreeDecomposition::constructWitnesses(Conjecture &conjecture, shared_ptr<TermNode<ConcreteNode>> node, Flags &flags, string &str) {
     // First, We check the type of the node
     if (node->getNodeContent().getSymbol() == "Leaf") {
         // if it is an empty, then it is a leaf
@@ -194,9 +196,16 @@ State::ptr ConcreteTreeDecomposition::constructWitnesses(Conjecture &conjecture,
         if(flags.get("PrintStates")) {
             q->print();
         }
-        return q;
+        shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNode(new TermNode<RunNodeContent<State::ptr,ConcreteNode>>);
+        shared_ptr<RunNodeContent<State::ptr,ConcreteNode>> runNodeContent (new RunNodeContent<State::ptr,ConcreteNode>);
+        runNodeContent->setState(q);
+        runNodeContent->setRunNodeContent(node->getNodeContent());
+        runNode->setNodeContent(*runNodeContent);
+        return runNode;
     } else if (strstr(node->getNodeContent().getSymbol().c_str(), "IntroVertex")) {
-        State::ptr childState = constructWitnesses(conjecture, node->getChildren()[0],flags);
+
+        shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNodeChild = constructWitnesses(conjecture, node->getChildren()[0],flags, str);
+        State::ptr childState =runNodeChild->getNodeContent().getState();
         // find the introduced vertex
         set<unsigned> bagSet = node->getNodeContent().getBag().get_elements();
         set<unsigned> childBagSet = childState->get_bag().get_elements();
@@ -220,11 +229,21 @@ State::ptr ConcreteTreeDecomposition::constructWitnesses(Conjecture &conjecture,
         if(flags.get("PrintStates")) {
             q->print();
         }
-        return q;
+
+        shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNode(new TermNode<RunNodeContent<State::ptr,ConcreteNode>>);
+        shared_ptr<RunNodeContent<State::ptr,ConcreteNode>> runNodeContent (new RunNodeContent<State::ptr,ConcreteNode>);
+        runNodeContent->setState(q);
+        runNodeContent->setRunNodeContent(node->getNodeContent());
+        runNode->setNodeContent(*runNodeContent);
+        str += node->getNodeContent().getSymbol() +"\n"+q->stateInformation();
+        runNode->addChild(runNodeChild);
+        runNodeChild->setParent(runNode);
+        return runNode;
 
     } else if (strstr(node->getNodeContent().getSymbol().c_str(), "ForgetVertex")) {
-        State::ptr childState =
-                constructWitnesses(conjecture, node->getChildren()[0],flags);
+        shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNodeChild = constructWitnesses(conjecture, node->getChildren()[0],flags, str);
+        State::ptr childState =runNodeChild->getNodeContent().getState();
+
         // find the forgotten vertex
         set<unsigned> bagSet = node->getNodeContent().getBag().get_elements();
         set<unsigned> childBagSet = childState->get_bag().get_elements();
@@ -244,10 +263,19 @@ State::ptr ConcreteTreeDecomposition::constructWitnesses(Conjecture &conjecture,
         if(flags.get("PrintStates")) {
             q->print();
         }
-        return q;
+        shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNode(new TermNode<RunNodeContent<State::ptr,ConcreteNode>>);
+        shared_ptr<RunNodeContent<State::ptr,ConcreteNode>> runNodeContent (new RunNodeContent<State::ptr,ConcreteNode>);
+        runNodeContent->setState(q);
+        runNodeContent->setRunNodeContent(node->getNodeContent());
+        runNode->setNodeContent(*runNodeContent);
+        str += node->getNodeContent().getSymbol() +"\n"+q->stateInformation();
+        runNode->addChild(runNodeChild);
+        runNodeChild->setParent(runNode);
+        return runNode;
 
     } else if (strstr(node->getNodeContent().getSymbol().c_str(), "IntroEdge")) {
-        State::ptr childState = constructWitnesses(conjecture, node->getChildren()[0],flags);
+        shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNodeChild = constructWitnesses(conjecture, node->getChildren()[0],flags, str);
+        State::ptr childState =runNodeChild->getNodeContent().getState();
 
         pair<unsigned, unsigned> e =
                 node->getNodeContent().getBag().get_edge();
@@ -257,16 +285,37 @@ State::ptr ConcreteTreeDecomposition::constructWitnesses(Conjecture &conjecture,
         if(flags.get("PrintStates")) {
             q->print();
         }
-        return q;
+        shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNode(new TermNode<RunNodeContent<State::ptr,ConcreteNode>>);
+        shared_ptr<RunNodeContent<State::ptr,ConcreteNode>> runNodeContent (new RunNodeContent<State::ptr,ConcreteNode>);
+        runNodeContent->setState(q);
+        runNodeContent->setRunNodeContent(node->getNodeContent());
+        runNode->setNodeContent(*runNodeContent);
+        str += node->getNodeContent().getSymbol() +"\n"+q->stateInformation();
+        runNode->addChild(runNodeChild);
+        runNodeChild->setParent(runNode);
+        return runNode;
 
     } else if (strstr(node->getNodeContent().getSymbol().c_str(), "Join")) {
-        State::ptr childState1 = constructWitnesses(conjecture, node->getChildren()[0],flags);
-        State::ptr childState2 = constructWitnesses(conjecture, node->getChildren()[1],flags);
+
+        shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNodeChild1 = constructWitnesses(conjecture, node->getChildren()[0],flags, str);
+        State::ptr childState1 =runNodeChild1->getNodeContent().getState();
+        shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNodeChild2 = constructWitnesses(conjecture, node->getChildren()[1],flags, str);
+        State::ptr childState2 =runNodeChild2->getNodeContent().getState();
         State::ptr q = conjecture.getKernel()->join(childState1,childState2);
         if(flags.get("PrintStates")) {
             q->print();
         }
-        return q;
+        shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNode(new TermNode<RunNodeContent<State::ptr,ConcreteNode>>);
+        shared_ptr<RunNodeContent<State::ptr,ConcreteNode>> runNodeContent (new RunNodeContent<State::ptr,ConcreteNode>);
+        runNodeContent->setState(q);
+        runNodeContent->setRunNodeContent(node->getNodeContent());
+        runNode->setNodeContent(*runNodeContent);
+        str += node->getNodeContent().getSymbol() +"\n"+q->stateInformation();
+        runNode->addChild(runNodeChild1);
+        runNodeChild1->setParent(runNode);
+        runNode->addChild(runNodeChild2);
+        runNodeChild2->setParent(runNode);
+        return runNode;
     } else {
         cout << "ERROR in constructWitnesses: The function could not recognize "
                 "the type of the node"
@@ -277,15 +326,25 @@ State::ptr ConcreteTreeDecomposition::constructWitnesses(Conjecture &conjecture,
     }
 }
 
-bool ConcreteTreeDecomposition::conjectureCheck(Conjecture &conjecture,Flags &flags) {
-    State::ptr q = constructWitnesses(conjecture, getRoot(),flags);
-    if (!conjecture.evaluateConjectureOnState(*q)) {
-        cout << "not satisfied" << endl;
+bool ConcreteTreeDecomposition::conjectureCheck(Conjecture &conjecture,Flags &flags, string path) {
+    string str = "";
+    RunTree<State::ptr,ConcreteNode> runTree;
+    shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNode = constructWitnesses(conjecture, getRoot(),flags,str);
+    runTree.setRoot(runNode);
+    if (!conjecture.evaluateConjectureOnState(*runNode->getNodeContent().getState())) {
         cout << "Printing bad State: " << endl;
-        q.print();
+        runNode->getNodeContent().getState().print();
+        path = "Parser_Counterexample_" + run_fs::path(path).filename().string();
+        runTree.writeToFile(path);
+        cout << "CONJECTURE NOT SATISFIED" << endl;
         return false;
     } else {
-        cout << "satisfied"<< endl;
+        cout << "CONJECTURE SATISFIED"<< endl;
+        path = "Parser_" + run_fs::path(path).filename().string();
+        runTree.writeToFile(path);
         return true;
     }
+
 }
+
+

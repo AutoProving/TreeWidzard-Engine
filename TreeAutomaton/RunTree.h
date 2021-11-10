@@ -33,7 +33,7 @@ public:
     }
 
     void setState(StateType state) {
-        RunNodeContent::state = state;
+        this->state = state;
     }
 
     RunNodeContent<StateType,TermNodeContent> & operator=(const RunNodeContent<StateType,TermNodeContent> & other);
@@ -77,6 +77,9 @@ public:
     string nodeInformation() override {
         string info;
         info = runNodeContent.nodeInformation() +" " + state.stateInformation();
+        info+= "---------------------------------------------------------------\n";
+        info+= "---------------------------------------------------------------\n";
+
         return info;
     }
 
@@ -108,7 +111,7 @@ public:
 
 template<class StateType, class TermNodeContent>
 void RunTree<StateType, TermNodeContent>::writeToFile(string fileName) {
-    fileName = "Counterexample_RunTreeDec_" + run_fs::path(fileName).filename().string();
+    fileName = "RunTree_"+fileName;
     ofstream runFile (fileName);
     if (runFile.is_open())
     {

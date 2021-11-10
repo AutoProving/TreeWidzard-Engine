@@ -59,7 +59,7 @@ void ParseController::parse_pace(string graphPath, string decompositionPath) {
     concreteTreeDecomposition = td.convertToConcreteTreeDecomposition();
     //concreteTreeDecomposition->printTermNodes();
     cout<<"----Evaluating-----:"<<endl;
-    concreteTreeDecomposition->conjectureCheck(this->inputController->getConjecture(),flag);
+    concreteTreeDecomposition->conjectureCheck(this->inputController->getConjecture(),flag, inputController->getInputPath());
     AbstractTreeDecomposition abstractTreeDecomposition = concreteTreeDecomposition->convertToAbstractTreeDecomposition();
     abstractTreeDecomposition.writeToFile(this->inputController->getInputPath());
     concreteTreeDecomposition->writeToFile(this->inputController->getInputPath());
@@ -111,7 +111,7 @@ void ParseController::parse_abstract(string abstractPath) {
     ConcreteTreeDecomposition concreteTreeDecomposition = abstractTreeDecomposition.convertToConcreteTreeDecomposition();
     //concreteTreeDecomposition.printTermNodes();
     cout<<"----Evaluating-----:"<<endl;
-    concreteTreeDecomposition.conjectureCheck(this->inputController->getConjecture(), flag);
+    concreteTreeDecomposition.conjectureCheck(this->inputController->getConjecture(), flag, inputController->getInputPath());
     /*if(!ctd.conjectureCheck(inputController->getConjecture())){
       cout<<"not satisfied"<<endl;
         //  shared_ptr<DynamicKernel> sharedKernel = make_shared<DynamicKernel>(inputController->getDynamicKernel());

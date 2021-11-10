@@ -334,8 +334,6 @@ void BreadthFirstSearch::search(){
                 multiGraph.convertToGML(this->getPropertyFilePath());
                 multiGraph.printToFilePACEFormat(this->getPropertyFilePath());
 
-
-
                 /*                cout<<"BAD STATE:"<<endl;
                 State::ptr state = *it;
                 (**it).print();
