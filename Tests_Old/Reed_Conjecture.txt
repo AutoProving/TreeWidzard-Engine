@@ -1,4 +1,4 @@
-x := MaxDegree > 2
-w := ChromaticNumber < 3
+x := MaxDegree > 1
+y := ChromaticNumber < 2
 Formula
-NOT x IMPLIES w
+NOT x IMPLIES y

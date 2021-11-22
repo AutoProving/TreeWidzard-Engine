@@ -105,7 +105,6 @@ void BreadthFirstSearch::search(){
   vector<unsigned > numberOfWitnesses;
   numberOfWitnesses.resize(initialState->numberOfComponents());
   int iterationNumber = 0;
-
   cout<<left<<setw(25)<<"Iteration"<<setw(25)<<"ALLSTATES" << setw(25)<< "NEWSTATES"<<"Max WITNESSSET SIZE"<<endl;
   while(!newStatesSet.empty()){
     iterationNumber++;

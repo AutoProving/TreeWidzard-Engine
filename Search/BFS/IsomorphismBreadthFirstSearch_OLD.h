@@ -16,10 +16,11 @@ using namespace std::chrono;
 class IsomorphismBreadthFirstSearch : public SearchStrategy {
   private:
 	TreeAutomaton<State::ptr,AbstractTreeDecompositionNodeContent> bfsDAG; // Constructs a DAG corresponding to the BFS.
-    set<State::ptr> allStatesSet;
-    set<State::ptr> intermediateStatesSet;
-    set<State::ptr>  newStatesSet;
-    vector<State::ptr> newStatesVector; // This will make it easier to do parallel search
+	// The vector has width+2 positions. Index 0 contains states with an empty bag, and index i contains states with bags of size i.
+	// Recall that for width "w", the bag has "w+1" elements.
+	vector<set<State::ptr>> allStatesSet;
+	vector<set<State::ptr>>  newStatesSet;
+	vector<vector<State::ptr>> newStatesVector; // This will make it easier to do parallel search
   public:
     IsomorphismBreadthFirstSearch();
 	IsomorphismBreadthFirstSearch(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags);

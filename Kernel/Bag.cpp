@@ -19,55 +19,95 @@ void Bag::set_elements(const std::set<unsigned> &elements) {
 	this->elements = elements;
 }
 
+//void Bag::print() {
+//	std::cout << "[{";
+//	for (auto element : elements) {
+//		std::cout << element;
+//        if(element!=*(--elements.end()))
+//            cout<<",";
+//    }
+//	std::cout << "} , {" << i << ", " << j << "}]";
+//}
+
+//void Bag::print() const {
+//    std::cout << "[{";
+//    for (auto element : elements) {
+//        std::cout << element;
+//        if(element!=*(--elements.end()))
+//            cout<<",";
+//    }
+//    std::cout << "} , {" << i << ", " << j << "}]";
+//}
+//string Bag::bagInformation() {
+//    string info;
+//    info = "[{";
+//    for (auto element : elements) {
+//        info = info + to_string(element);
+//        if(element!=*(--elements.end()))
+//            info = info + ",";
+//    }
+//    info = info + "} , {" + to_string(i) +", " +to_string(j) + "}]";
+//    return info;
+//}
+
 void Bag::print() {
-	std::cout << "[{";
+	std::cout << "{";
 	for (auto element : elements) {
 		std::cout << element;
-        if(element!=*(--elements.end()))
-            cout<<",";
-    }
-	std::cout << "} , {" << i << ", " << j << "}]";
+		if(element!=*(--elements.end()))
+			cout<<",";
+	}
+	std::cout << "}";
 }
 
 void Bag::print() const {
-    std::cout << "[{";
-    for (auto element : elements) {
-        std::cout << element;
-        if(element!=*(--elements.end()))
-            cout<<",";
-    }
-    std::cout << "} , {" << i << ", " << j << "}]";
+	std::cout << "{";
+	for (auto element : elements) {
+		std::cout << element;
+		if(element!=*(--elements.end()))
+			cout<<",";
+	}
+	std::cout << "}";
 }
 string Bag::bagInformation() {
-    string info;
-    info = "[{";
-    for (auto element : elements) {
-        info = info + to_string(element);
-        if(element!=*(--elements.end()))
-            info = info + ",";
-    }
-    info = info + "} , {" + to_string(i) +", " +to_string(j) + "}]";
-    return info;
+	string info;
+	info = "{";
+	for (auto element : elements) {
+		info = info + to_string(element);
+		if(element!=*(--elements.end()))
+			info = info + ",";
+	}
+	info = info + "}";
+	return info;
 }
+
+//bool Bag::operator<(const Bag &rhs) const {
+//	if (elements < rhs.get_elements()) {
+//		return true;
+//	} else if (rhs.get_elements() < elements) {
+//		return false;
+//	} else if (this->get_edge() < rhs.get_edge()) {
+//		return true;
+//	} else {
+//		return false;
+//	}
+//}
 
 bool Bag::operator<(const Bag &rhs) const {
-	if (elements < rhs.get_elements()) {
-		return true;
-	} else if (rhs.get_elements() < elements) {
-		return false;
-	} else if (this->get_edge() < rhs.get_edge()) {
-		return true;
-	} else {
-		return false;
-	}
+	return elements < rhs.get_elements();
+
 }
 
+//bool Bag::operator==(const Bag &rhs) const {
+//	if (elements == rhs.get_elements() and this->get_edge() == rhs.get_edge()) {
+//		return true;
+//	} else {
+//		return false;
+//	}
+//}
+
 bool Bag::operator==(const Bag &rhs) const {
-	if (elements == rhs.get_elements() and this->get_edge() == rhs.get_edge()) {
-		return true;
-	} else {
-		return false;
-	}
+	return elements == rhs.get_elements();
 }
 
 bool Bag::vertex_introducible(unsigned i) const {

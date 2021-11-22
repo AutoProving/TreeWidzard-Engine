@@ -116,8 +116,8 @@ add_executable(
     #Search/BFS/RelabeledBreadthFirstSearch.cpp
     #Search/BFS/RelabeledBreadthFirstSearch-Old.h
     #Search/BFS/RelabeledBreadthFirstSearch-Old.cpp
-    #Search/BFS/IsomorphismBreadthFirstSearch.h
-    #Search/BFS/IsomorphismBreadthFirstSearch.cpp
+    Search/BFS/IsomorphismBreadthFirstSearch.h
+    Search/BFS/IsomorphismBreadthFirstSearch.cpp
     #Search/Randomized/RandomLeveledSetSearch.h
     #Search/Randomized/RandomLeveledSetSearch.cpp
     #Search/Randomized/RandomLeveledSetSearchPremise.h

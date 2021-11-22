@@ -29,69 +29,72 @@ void IsomorphismBreadthFirstSearch::search(){
     }
     bool printStateFlag = flags->get("PrintStates");
 
+
+
     State::ptr initialState = kernel->initialState();
-    allStatesSet.insert(initialState);
-    newStatesSet.insert(initialState);
     // Initialize the DAG
     bfsDAG.addState(initialState);
     AbstractTreeDecompositionNodeContent initialTransitionContent("Leaf");
     vector<State::ptr> initialAntecedents; // Empty vector since there are no children.
     Transition<State::ptr,AbstractTreeDecompositionNodeContent> initialTransition(initialState,initialTransitionContent,initialAntecedents);
     bfsDAG.addTransition(initialTransition);
-    ////////////////////////////////////
+
     unsigned int width = kernel->get_width().get_value();
+    // Initialization of the acyclic tree automaton bfsDag.
+    bfsDAG.addTransition(initialTransition);
+    // Initialization of the search containers.
+    allStatesSet.resize(width+2);
+    newStatesSet.resize(width+2);
+    newStatesVector.resize(width+2);
+	allStatesSet[0].insert(initialState);
+	newStatesSet[0].insert(initialState);
+	// Search Algorithm
+	int iterationNumber = 0;
+    unsigned allStatesSize = 1;
+    unsigned newStatesSize = 1;
     vector<unsigned > numberOfWitnesses;
     numberOfWitnesses.resize(initialState->numberOfComponents());
-    int iterationNumber = 0;
-    cout<<left<<setw(25)<<"Iteration"<<setw(25)<<"ALLSTATES" << setw(25)<< "NEWSTATES"<<"Max WITNESSSET SIZE"<<endl;
-    while(!newStatesSet.empty()){
+    while(newStatesSize) {
         iterationNumber++;
-        ////////////////////////////////////////////////////////////////////////////////////
-        newStatesVector.clear(); // clear newStatesVector to add states in newStatesSet in it
-        newStatesVector.resize(newStatesSet.size()); //
-        std::copy(newStatesSet.begin(),newStatesSet.end(),newStatesVector.begin());
-        newStatesSet.clear(); // clear newStatesSet to add new states that are generated in this loop
-        //This loop is suitable for parallelization
-        for(size_t l=0; l < newStatesVector.size(); l++){
-            State::ptr statePointer = newStatesVector[l];
-            Bag bag = statePointer->get_bag();
-            set<unsigned > bagElement  = bag.get_elements();
-            ///////////////////////////////////////////////////////
-            //////////////////// Introduce Vertex /////////////////
-            ///////////////////////////////////////////////////////
-            // the +1 below comes from the fact that treewidth is
-            // size of the bag minus one. So the loop iterates
-            // from 1 to number of elements inteh bag.
-            for (int i=1; i<= width+1; i++){
-                if(bag.vertex_introducible(i)){
-                    State::ptr newStatePointer = kernel->intro_v(statePointer, i);
-                    State::ptr relabeledNewStatePointer = canonicalState(newStatePointer); // Computes the canonical state derived from newStatePointer.
-                    bool premiseFlag = flags->get("Premise");
-                    bool satisfiesPremise = false;
-                    if(premiseFlag){
-                        satisfiesPremise = conjecture->evaluatePremiseOnState(*relabeledNewStatePointer);
-                    }
-                    if(!premiseFlag or (premiseFlag and satisfiesPremise) ){
-                        if (!allStatesSet.count(relabeledNewStatePointer) and !newStatesSet.count(relabeledNewStatePointer) ){
-                            newStatesSet.insert(relabeledNewStatePointer);
+        // Initializing newStatesVector.
+        for(int index = 0; index < width + 2; index++){
+            newStatesVector[index].clear();
+            newStatesVector[index].resize(newStatesSet[index].size());
+            std::copy(newStatesSet[index].begin(), newStatesSet[index].end(), newStatesVector[index].begin());
+            newStatesSet[index].clear();
+        }
+        for (int index = 0; index < width + 2; index++) {
+            //This loop is suitable for parallelization
+            for (int l = 0; l < newStatesVector[index].size(); l++) {
+                State::ptr statePointer = newStatesVector[index][l];
+                Bag bag = statePointer->get_bag();
+                set<unsigned> bagElements = bag.get_elements();
+                ///////////////////////////////////////////////////////
+                //////////////////// Introduce Vertex /////////////////
+                ///////////////////////////////////////////////////////
+                // the +1 below comes from the fact that treewidth is
+                // size of the bag minus one. So the loop iterates
+                // from 1 to number of elements in the bag.
+                if (bagElements.size() < width + 1) {
+                    unsigned i = bagElements.size() + 1;
+                    if (bag.vertex_introducible(i)) {
+                        State::ptr newStatePointer = kernel->intro_v(statePointer, i);
+                        State::ptr relabeledNewStatePointer = canonicalState(newStatePointer); // Computes the canonical state derived from newStatePointer.
+                        if (!allStatesSet[bagElements.size()+1].count(relabeledNewStatePointer) and
+                            !newStatesSet[bagElements.size()+1].count(relabeledNewStatePointer)) {
+                            newStatesSet[bagElements.size() + 1].insert(relabeledNewStatePointer);
                             State::ptr consequentState = relabeledNewStatePointer;
                             bfsDAG.addState(consequentState);
-                            AbstractTreeDecompositionNodeContent transitionContent("IntroVertex_"+ to_string(i));
+                            AbstractTreeDecompositionNodeContent transitionContent("IntroVertex_" + to_string(i));
                             vector<State::ptr> antecedentStates;
-                            antecedentStates.push_back(statePointer);
-                            Transition<State::ptr,AbstractTreeDecompositionNodeContent> transition(consequentState,transitionContent,antecedentStates);
+                            antecedentStates.push_back(statePointer); // StatePointer is the only antecedent state.
+                            Transition<State::ptr, AbstractTreeDecompositionNodeContent> transition(consequentState,
+                                                                                                    transitionContent,
+                                                                                                    antecedentStates);
                             bfsDAG.addTransition(transition);
-                            if(printStateFlag){
-                                cout<<endl;
-                                cout<< "========================================================================" <<endl;
-                                cout<< " Introduce Vertex: " << i << endl;
-                                cout<< "========================================================================" <<endl;
-                                cout<< " Current State:"<<endl;
-                                statePointer->print();
-                                cout<< " New State:"<<endl;
-                                relabeledNewStatePointer->print();
-                                cout<< "========================================================================" <<endl;
-                                cout<<endl;
+                            if (flags->get("PrintStates") == 1) {
+                                cout << "Intro Vertex " << i << endl;
+                                consequentState.print();
                             }
                             // size of witnessSets
                             for (int component = 0; component < numberOfWitnesses.size(); ++component) {
@@ -100,21 +103,17 @@ void IsomorphismBreadthFirstSearch::search(){
                         }
                     }
                 }
-            }
-            ///////////////////////////////////////////////////////
-            //////////////////// Forget Vertex ////////////////////
-            ///////////////////////////////////////////////////////
-            for (auto it= bagElement.begin(); it!=bagElement.end(); it++){
-                State::ptr newStatePointer = kernel->forget_v(statePointer, *it);
-                State::ptr relabeledNewStatePointer = canonicalState(newStatePointer); // Computes the canonical state derived from newStatePointer.
-                bool premiseFlag = flags->get("Premise");
-                bool satisfiesPremise = false;
-                if(premiseFlag){
-                    satisfiesPremise = conjecture->evaluatePremiseOnState(*relabeledNewStatePointer);
-                }
-                if(!premiseFlag or (premiseFlag and satisfiesPremise) ) {
-                    if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(relabeledNewStatePointer)) {
-                        newStatesSet.insert(relabeledNewStatePointer);
+
+                ///////////////////////////////////////////////////////
+                //////////////////// Forget Vertex ////////////////////
+                ///////////////////////////////////////////////////////
+                for (auto it = bagElements.begin(); it != bagElements.end(); it++) {
+                    State::ptr newStatePointer = kernel->forget_v(statePointer, *it);
+                    // We need to normalized the bag so that the bag.elements is equal to {1,...,k} for some k.
+                    State::ptr intermediateStatePointer = newStatePointer->relabel(relabeledMapGenerator(newStatePointer->get_bag().get_elements()));
+                    State::ptr relabeledNewStatePointer = canonicalState(intermediateStatePointer); // Computes the canonical state derived from newStatePointer.
+                    if (!allStatesSet[bagElements.size()-1].count(relabeledNewStatePointer) and !newStatesSet[bagElements.size()-1].count(relabeledNewStatePointer)) {
+                        newStatesSet[bagElements.size()-1].insert(relabeledNewStatePointer);
                         State::ptr consequentState = relabeledNewStatePointer;
                         AbstractTreeDecompositionNodeContent transitionContent("ForgetVertex_" + to_string(*it));
                         bfsDAG.addState(consequentState);
@@ -124,62 +123,41 @@ void IsomorphismBreadthFirstSearch::search(){
                                                                                                 transitionContent,
                                                                                                 antecedentStates);
                         bfsDAG.addTransition(transition);
-                        if(printStateFlag){
-                            cout<<endl;
-                            cout<< "========================================================================" <<endl;
-                            cout<< " Forget Vertex: " << *it << endl;
-                            cout<< "========================================================================" <<endl;
-                            cout<< " Current State:"<<endl;
-                            statePointer->print();
-                            cout<< " New State:"<<endl;
-                            relabeledNewStatePointer->print();
-                            cout<< "========================================================================" <<endl;
-                            cout<<endl;
+                        if (flags->get("PrintStates") == 1) {
+                            cout<<"Forget Vertex "<< *it <<endl;
+                            consequentState.print();
                         }
                         // size of witnessSets
                         for (int component = 0; component < numberOfWitnesses.size(); ++component) {
-                            numberOfWitnesses[component] = max(numberOfWitnesses[component],
-                                                               (unsigned) consequentState->getWitnessSet(
-                                                                       component)->size());
+                            numberOfWitnesses[component] = max(numberOfWitnesses[component],(unsigned)consequentState->getWitnessSet(component)->size());
                         }
                     }
                 }
-            }
-            //Introduce Edge
-            if(bag.get_elements().size()>1){
-                for (auto it=bagElement.begin(); it!=bagElement.end(); it++){
-                    auto itX = it;
-                    itX++; // TODO write this more elegantly
-                    if(itX!=bagElement.end()){
-                        for (auto itPrime = itX ; itPrime != bagElement.end(); itPrime++){
-                            State::ptr newStatePointer = kernel->intro_e(statePointer, *it, *itPrime);
-                            State::ptr relabeledNewStatePointer = canonicalState(newStatePointer); // Computes the canonical state derived from newStatePointer.
-                            bool premiseFlag = flags->get("Premise");
-                            bool satisfiesPremise = false;
-                            if(premiseFlag){
-                                satisfiesPremise = conjecture->evaluatePremiseOnState(*relabeledNewStatePointer);
-                            }
-                            if(!premiseFlag or (premiseFlag and satisfiesPremise) ){
-                                if (!allStatesSet.count(relabeledNewStatePointer) and !newStatesSet.count(relabeledNewStatePointer)){
-                                    newStatesSet.insert(relabeledNewStatePointer);
+                //Introduce Edge
+                if (bag.get_elements().size() > 1) {
+                    for (auto it = bagElements.begin(); it != bagElements.end(); it++) {
+                        auto itX = it;
+                        itX++; // TODO write this more elegantly
+                        if (itX != bagElements.end()) {
+                            for (auto itPrime = itX; itPrime != bagElements.end(); itPrime++) {
+                                State::ptr newStatePointer = kernel->intro_e(statePointer, *it, *itPrime);
+                                State::ptr relabeledNewStatePointer = canonicalState(newStatePointer); // Computes the canonical state derived from newStatePointer.                                if (!allStatesSet[bagElements.size()].count(relabeledNewStatePointer) and
+                                if (!allStatesSet[index].count(relabeledNewStatePointer) and
+                                        !newStatesSet[bagElements.size()].count(relabeledNewStatePointer)) {
+                                    newStatesSet[bagElements.size()].insert(relabeledNewStatePointer);
                                     State::ptr consequentState = relabeledNewStatePointer;
-                                    AbstractTreeDecompositionNodeContent transitionContent("IntroEdge_"+ to_string(*it)+"_"+to_string(*itPrime));
+                                    AbstractTreeDecompositionNodeContent transitionContent(
+                                            "IntroEdge_" + to_string(*it) + "_" + to_string(*itPrime));
                                     bfsDAG.addState(consequentState);
                                     vector<State::ptr> antecedentStates;
                                     antecedentStates.push_back(statePointer);
-                                    Transition<State::ptr,AbstractTreeDecompositionNodeContent> transition(consequentState,transitionContent,antecedentStates);
+                                    Transition<State::ptr, AbstractTreeDecompositionNodeContent> transition(consequentState,
+                                                                                                            transitionContent,
+                                                                                                            antecedentStates);
                                     bfsDAG.addTransition(transition);
-                                    if(printStateFlag){
-                                        cout<<endl;
-                                        cout<< "========================================================================" <<endl;
-                                        cout<< " Introduce Edge: " << *it << " " << *itPrime<< endl;
-                                        cout<< "========================================================================" <<endl;
-                                        cout<< " Current State:"<<endl;
-                                        statePointer->print();
-                                        cout<< " New State:"<<endl;
-                                        relabeledNewStatePointer->print();
-                                        cout<< "========================================================================" <<endl;
-                                        cout<<endl;
+                                    if (flags->get("PrintStates") == 1) {
+                                        cout<<"Intro Edge "<< *it<< " " << *itPrime<<endl;
+                                        consequentState.print();
                                     }
                                     // size of witnessSets
                                     for (int component = 0; component < numberOfWitnesses.size(); ++component) {
@@ -190,23 +168,20 @@ void IsomorphismBreadthFirstSearch::search(){
                         }
                     }
                 }
-            }
 
-            // join
-            if (kernel->get_width().get_name() == "tree_width") {
                 // join
-                for (auto it = allStatesSet.begin(); it != allStatesSet.end(); it++) {
-                    if (statePointer->get_bag().joinable((*it)->get_bag())) {
-                        State::ptr newStatePointer = kernel->join(statePointer, *it);
-                        State::ptr relabeledNewStatePointer = canonicalState(newStatePointer); // Computes the canonical state derived from newStatePointer.
-                        bool premiseFlag = flags->get("Premise");
-                        bool satisfiesPremise = false;
-                        if(premiseFlag){
-                            satisfiesPremise = conjecture->evaluatePremiseOnState(*relabeledNewStatePointer);
-                        }
-                        if(!premiseFlag or (premiseFlag and satisfiesPremise) ){
-                            if (!allStatesSet.count(relabeledNewStatePointer) and !newStatesSet.count(relabeledNewStatePointer)) {
-                                newStatesSet.insert(relabeledNewStatePointer);
+                if (kernel->get_width().get_name() == "tree_width") {
+                    // join new states with past states.
+                    for (auto it = allStatesSet[index].begin(); it != allStatesSet[index].end(); it++) {
+                        // Testing possibility of joining with each permuted version of "it".
+                        map<unsigned ,unsigned > m = identityMap(statePointer->get_bag().get_elements());
+                        do{
+                            State::ptr permutedState = (*it)->relabel(m);
+                            State::ptr newStatePointer = kernel->join(statePointer, permutedState);
+                            State::ptr relabeledNewStatePointer = canonicalState(newStatePointer); // Computes the canonical state derived from newStatePointer.                            // for each relabeling of the bag from it, you do the join between the statePointer and the relabeled version of it.
+                            if (!allStatesSet[index].count(relabeledNewStatePointer) and
+                                !newStatesSet[index].count(relabeledNewStatePointer)) {
+                                newStatesSet[index].insert(relabeledNewStatePointer);
                                 State::ptr consequentState = relabeledNewStatePointer;
                                 AbstractTreeDecompositionNodeContent transitionContent("Join");
                                 bfsDAG.addState(consequentState);
@@ -217,69 +192,71 @@ void IsomorphismBreadthFirstSearch::search(){
                                                                                                         transitionContent,
                                                                                                         antecedentStates);
                                 bfsDAG.addTransition(transition);
-                                if(printStateFlag){
-                                    cout<<endl;
-                                    cout<< "========================================================================" <<endl;
-                                    cout<< " Join: " <<endl;
-                                    cout<< "========================================================================" <<endl;
-                                    cout<< " State One:"<<endl;
-                                    statePointer->print();
-                                    cout<< " State Two:"<<endl;
-                                    (*it)->print();
-                                    cout<< " New State:"<<endl;
-                                    relabeledNewStatePointer->print();
-                                    cout<< "========================================================================" <<endl;
-                                    cout<<endl;
+                                if (flags->get("PrintStates") == 1) {
+                                    cout<<"Join "<<endl;
+                                    consequentState.print();
                                 }
                                 // size of witnessSets
                                 for (int component = 0; component < numberOfWitnesses.size(); ++component) {
                                     numberOfWitnesses[component] = max(numberOfWitnesses[component],(unsigned)consequentState->getWitnessSet(component)->size());
                                 }
                             }
-                        }
+                        }while(nextPermutation(m));
                     }
                 }
             }
         }
-        for(auto it = newStatesSet.begin(); it!=newStatesSet.end(); it++){
-            if(!conjecture->evaluateConjectureOnState(**it)){
-                State::ptr badState = *it;
-                bfsDAG.addFinalState(badState);
-                RunTree<State::ptr,AbstractTreeDecompositionNodeContent> runTree = extractRunTree(*it);
-                runTree.writeToFile(this->getPropertyFilePath());
-                ///=======ABSTRACT TREE=========///
-                Term<AbstractTreeDecompositionNodeContent>* term = new AbstractTreeDecomposition;
-                *term = runTree.convertRunToTerm(runTree);
-                AbstractTreeDecomposition* atd = static_cast<AbstractTreeDecomposition *>(term);
-                atd->writeToFile(this->getPropertyFilePath());
-                ///=======Concrete TREE=========///
+        // Counters for new states and all states
+        allStatesSize = 0;
+        newStatesSize = 0;
+        // Verifying the conjecture with new states
+        for(int index = 0 ; index < width+2 ; index++){
+            for (auto it = newStatesSet[index].begin(); it != newStatesSet[index].end(); it++) {
+                if (!conjecture->evaluateConjectureOnState(**it)) {
+                    cout << "BAD STATE:" << endl;
+                    (**it).print();
+                    bfsDAG.addFinalState(*it);
+                    cout<<"===========Run Tree============"<<endl;
+                    RunTree<State::ptr,AbstractTreeDecompositionNodeContent> runTree = extractRunTree(*it);
+                    runTree.writeToFile(this->getPropertyFilePath());
                 ConcreteTreeDecomposition ctd = atd->convertToConcreteTreeDecomposition();
-                ctd.writeToFile(this->getPropertyFilePath());
-                MultiGraph multiGraph = ctd.extractMultiGraph();
-                multiGraph.printGraph();
-                multiGraph.printToFile(this->getPropertyFilePath());
-                multiGraph.convertToGML(this->getPropertyFilePath());
-                multiGraph.printToFilePACEFormat(this->getPropertyFilePath());
-                cout<<"Conjecture: Not Satisfied"<<endl;
-                return;
+                    Term<AbstractTreeDecompositionNodeContent>* term = new AbstractTreeDecomposition;
+                    *term = runTree.convertRunToTerm(runTree);
+                    AbstractTreeDecomposition* atd = static_cast<AbstractTreeDecomposition *>(term);
+                    atd->printTermNodes();
+                    atd->writeToFile(this->getPropertyFilePath());
+                    ConcreteTreeDecomposition ctd = atd->convertToConcreteTreeDecomposition();
+                    cout << "=======Concrete TREE=========" << endl;
+                    ctd.printTermNodes();
+                    ctd.writeToFile(this->getPropertyFilePath());
+                    cout << "\n ------------------Constructing Counter Example Graph-------------------" << endl;
+                    MultiGraph multiGraph = ctd.extractMultiGraph();
+                    multiGraph.printGraph();
+                    multiGraph.printToFile(this->getPropertyFilePath());
+                    multiGraph.convertToGML(this->getPropertyFilePath());
+                    multiGraph.printToFilePACEFormat(this->getPropertyFilePath());
+                    exit(20);
+                }
             }
+            set<State::ptr> setUnion;
+            set_union(allStatesSet[index].begin(),allStatesSet[index].end(),newStatesSet[index].begin(),newStatesSet[index].end(),inserter(setUnion,setUnion.begin()));
+            allStatesSet[index] = setUnion;
+            setUnion.clear();
+            allStatesSize = allStatesSize + allStatesSet[index].size();
+            newStatesSize = newStatesSize + newStatesSet[index].size();
         }
-        set<State::ptr> setUnion;
-        set_union(allStatesSet.begin(),allStatesSet.end(),newStatesSet.begin(),newStatesSet.end(),inserter(setUnion,setUnion.begin()));
-        allStatesSet = setUnion;
-        setUnion.clear();
+
         if(flags->get("LoopTime") == 1){
-            cout<<left<<setw(25)<<iterationNumber<<setw(25)<<allStatesSet.size()<<setw(25)<<newStatesSet.size();
+            cout<<"AllState:"<<allStatesSize<<" new State: "<<newStatesSize<<" Max witnessSet size:";
             for (int component = 0; component < numberOfWitnesses.size() ; ++component) {
                 cout<< numberOfWitnesses[component];
                 if(component != numberOfWitnesses.size()-1)
                     cout<<",";
             }
-            cout << endl;
-
+            cout << endl << "----------------- End Iteration: " << iterationNumber << " ----------------------------" << endl << endl;
         }
-    }
-    cout<<"Conjecture: Satisfied"<<endl;
+	}
+    cout<<"Finished :)"<<endl;
 }
 
 map<unsigned, unsigned> IsomorphismBreadthFirstSearch::relabeledMapGenerator(set<unsigned int> bagElements) {
@@ -348,15 +325,15 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
         map<unsigned int, unsigned int> &m) {
     string wrongSymbol = wrongRunNode->getNodeContent().getRunNodeContent().getSymbol();
     ///////////////////////////////////////////////////////
-//    cout<<wrongSymbol<<endl;
-//    cout<<"Input Map"<<endl;
-//    for(auto item:m){
-//        cout<<item.first<<"->"<<item.second<<" ";
-//    }
-//    cout<<endl;
-//    cout<<"Wrong node"<<endl;
-//    wrongRunNode->getNodeContent().getState().print();
-//    cout<<endl;
+    cout<<wrongSymbol<<endl;
+    cout<<"Input Map"<<endl;
+    for(auto item:m){
+        cout<<item.first<<"->"<<item.second<<" ";
+    }
+    cout<<endl;
+    cout<<"Wrong node"<<endl;
+    wrongRunNode->getNodeContent().getState().print();
+    cout<<endl;
     //////////////////////////////////////////////////////
     if(strstr(wrongSymbol.c_str(),"Leaf")){
         if(m.empty()){
@@ -372,12 +349,11 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
     }else if(strstr(wrongSymbol.c_str(),"IntroVertex")){
         State::ptr correctedState = wrongRunNode->getNodeContent().getState()->relabel(m);
         /////////////////////////////////////////////////////////////////////
-//        cout<<"corrected state"<<endl;
-//        correctedState.print();
-//        cout<<endl;
-//        cout<<"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"<<endl;
+        cout<<"corrected state"<<endl;
+        correctedState.print();
+        cout<<endl;
         /////////////////////////////////////////////////////////////////////
-
+        cout<<"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"<<endl;
         // discovers IntroducedVertex and child's map;
         set<unsigned > setElements = correctedState->get_bag().get_elements();
         unsigned introducedVertex = 0;
@@ -414,17 +390,17 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
                 State::ptr childState = wrongRunNode->getChildren()[0]->getNodeContent().getState()->relabel(compositionMap);
                 State::ptr testState = kernel->intro_v(childState,v);
                 if(testState == correctedState){
-//                    cout<<"child state"<<endl;
-//                    childState.print();
-//                    cout<<endl;
-//                    cout<<"test state"<<endl;
-//                    testState.print();
-//                    cout<<endl;
-//                    cout<<"THE MAP"<<endl;
-//                    for(auto item:compositionMap){
-//                        cout<<item.first<<"->"<<item.second<<" ";
-//                    }
-//                    cout<<"#####################################"<<endl;
+                    cout<<"child state"<<endl;
+                    childState.print();
+                    cout<<endl;
+                    cout<<"test state"<<endl;
+                    testState.print();
+                    cout<<endl;
+                    cout<<"THE MAP"<<endl;
+                    for(auto item:compositionMap){
+                        cout<<item.first<<"->"<<item.second<<" ";
+                    }
+                    cout<<"#####################################"<<endl;
                     ///////////////////////////////////////////////////////
                     introducedVertex = v;
                     childMap = compositionMap;
@@ -458,12 +434,11 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
     }else if(strstr(wrongSymbol.c_str(),"ForgetVertex")){
         State::ptr correctedState = wrongRunNode->getNodeContent().getState()->relabel(m);
         /////////////////////////////////////////////////////////////////////
-//        cout<<"corrected state"<<endl;
-//        correctedState.print();
-//        cout<<endl;
-//        cout<<"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"<<endl;
-
+        cout<<"corrected state"<<endl;
+        correctedState.print();
+        cout<<endl;
         /////////////////////////////////////////////////////////////////////
+        cout<<"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"<<endl;
         // discovers ForgottenVertex and child's map;
         set<unsigned > setElements = correctedState->get_bag().get_elements();
         unsigned forgottenVertex = 0;
@@ -492,17 +467,17 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
                 State::ptr childState = wrongRunNode->getChildren()[0]->getNodeContent().getState()->relabel(compositionMap);
                 State::ptr testState = kernel->forget_v(childState,v);
                 if(testState == correctedState){
-//                    cout<<"child state"<<endl;
-//                    childState.print();
-//                    cout<<endl;
-//                    cout<<"test state"<<endl;
-//                    testState.print();
-//                    cout<<endl;
-//                    cout<<"THE MAP"<<endl;
-//                    for(auto item:compositionMap){
-//                        cout<<item.first<<"->"<<item.second<<" ";
-//                    }
-//                    cout<<"#####################################"<<endl;
+                    cout<<"child state"<<endl;
+                    childState.print();
+                    cout<<endl;
+                    cout<<"test state"<<endl;
+                    testState.print();
+                    cout<<endl;
+                    cout<<"THE MAP"<<endl;
+                    for(auto item:compositionMap){
+                        cout<<item.first<<"->"<<item.second<<" ";
+                    }
+                    cout<<"#####################################"<<endl;
                     ///////////////////////////////////////////////////////
                     forgottenVertex = v;
                     childMap = compositionMap;
