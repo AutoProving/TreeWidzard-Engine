@@ -1,6 +1,3 @@
-x := MaxDegree > 10
-y := CliqueNumberSimpleGraphs > 3
-z := HasMultipleEdges
-w := ChromaticNumber < 2
+x := MaxDegree > 3
 Formula
-NOT x AND NOT y AND NOT z IMPLIES  w
+NOT x IMPLIES TRUE

@@ -11,14 +11,14 @@ extern "C" {
 }
 
 IsomorphismBreadthFirstSearch::IsomorphismBreadthFirstSearch() {
-    addAttribute("SearchName","IsomorphismBreadthFirstSearch");
+    addAttribute("SearchName","IsomorphismBreadthFirstSearch_OLD");
 }
 
 IsomorphismBreadthFirstSearch::IsomorphismBreadthFirstSearch(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags): SearchStrategy(dynamicKernel, conjecture, flags) {
     this->kernel = kernel;
 	this->conjecture = conjecture;
 	this->flags = flags;
-    addAttribute("SearchName","IsomorphismBreadthFirstSearch");
+    addAttribute("SearchName","IsomorphismBreadthFirstSearch_OLD");
 }
 
 void IsomorphismBreadthFirstSearch::search(){

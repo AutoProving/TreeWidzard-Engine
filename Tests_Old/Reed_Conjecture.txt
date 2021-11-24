@@ -1,4 +1,3 @@
-x := MaxDegree > 1
-y := ChromaticNumber < 2
+x := Connectivity
 Formula
-NOT x IMPLIES y
+TRUE

@@ -1,5 +1,6 @@
 #include "ParseController.h"
-ParseController::ParseController(const Flags &flag, const string &inputPath) : flag(flag) {
+ParseController::ParseController(const Flags &flag, const string &inputPath){
+    this->flag = flag;
     string file_path = __FILE__;
     string path = file_path.substr(0, file_path.rfind("/"));
     string dynamicPluginPath =path+"/../DynamicPlugins/";

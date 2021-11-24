@@ -18,6 +18,18 @@ class Width {
 	void set_value(unsigned int value);
 	void print();
 	Width& operator=(Width& rhs);
+
+    bool operator==(const Width &rhs) const;
+
+    bool operator!=(const Width &rhs) const;
+
+    bool operator<(const Width &rhs) const;
+
+    bool operator>(const Width &rhs) const;
+
+    bool operator<=(const Width &rhs) const;
+
+    bool operator>=(const Width &rhs) const;
 };
 
 #endif

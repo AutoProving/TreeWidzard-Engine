@@ -25,7 +25,7 @@ private:
 
 public:
     SearchController(const string &searchStrategy, const string &searchPluginPath, const Flags &flags,
-                     const Width &width);
+                      Width &width);
 
     ///////////////////////////////////////////////////////////////////////////
     void check_search();

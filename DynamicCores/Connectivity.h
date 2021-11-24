@@ -1,10 +1,8 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 #ifndef DYNAMIC_GENERIC_H
 #define DYNAMIC_GENERIC_H
-#include "../Kernel/Bag.h"
-#include "../Kernel/Witness.h"
-#include "../Kernel/DynamicCore.h"
 #include "../Kernel/WitnessSet.h"
+#include "../Kernel/DynamicCore.h"
 
 
 using namespace std;
@@ -34,6 +32,7 @@ public:
 
 class Connectivity_WitnessSet: public WitnessSetTypeOne<Connectivity_WitnessSet>{
     shared_ptr<WitnessSet> createEmptyWitnessSet() override;
+
 };
 
 typedef shared_ptr<Connectivity_WitnessSet> Connectivity_WitnessSetPointer;
@@ -49,16 +48,15 @@ private:
     void join_implementation(Bag &b, Connectivity_WitnessPointer w1, Connectivity_WitnessPointer w2, Connectivity_WitnessSetPointer witnessSet);
     bool is_final_witness_implementation(Connectivity_WitnessPointer w);
 public:
-    unsigned parameter;
     Connectivity_DynamicCore();
-    Connectivity_DynamicCore(unsigned parameter);
+    ~Connectivity_DynamicCore(){};
     void createInitialWitnessSet();
-    virtual WitnessSetPointer intro_v(unsigned i, Bag &b, Witness &witness);
-    virtual WitnessSetPointer intro_e(unsigned i, unsigned j, Bag &b, Witness &witness);
-    virtual WitnessSetPointer forget_v(unsigned i, Bag &b,Witness &witness);
-    virtual WitnessSetPointer join(Bag &b, Witness &witness1, Witness &witness2);
-    virtual WitnessSetPointer clean(WitnessSetPointer witnessSet);
-    virtual bool is_final_witness(Witness &witness);
+    WitnessSetPointer intro_v(unsigned i, Bag &b, Witness &witness);
+    WitnessSetPointer intro_e(unsigned i, unsigned j, Bag &b, Witness &witness);
+    WitnessSetPointer forget_v(unsigned i, Bag &b,Witness &witness);
+    WitnessSetPointer join(Bag &b, Witness &witness1, Witness &witness2);
+    WitnessSetPointer clean(WitnessSetPointer witnessSet);
+    bool is_final_witness(Witness &witness);
     //*****************************
     //*****************************
     // Only change this part. Here you can define attributes and functions that are specific to your core.

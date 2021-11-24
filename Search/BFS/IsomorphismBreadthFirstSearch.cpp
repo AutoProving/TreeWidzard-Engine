@@ -88,7 +88,10 @@ void IsomorphismBreadthFirstSearch::search(){
                                 cout<< "========================================================================" <<endl;
                                 cout<< " Current State:"<<endl;
                                 statePointer->print();
-                                cout<< " New State:"<<endl;
+                                cout<< " New State (Not Relabeled):"<<endl;
+                                newStatePointer->print();
+                                cout<< "========================================================================" <<endl;
+                                cout<< " New State (Relabeled):"<<endl;
                                 relabeledNewStatePointer->print();
                                 cout<< "========================================================================" <<endl;
                                 cout<<endl;
@@ -131,7 +134,10 @@ void IsomorphismBreadthFirstSearch::search(){
                             cout<< "========================================================================" <<endl;
                             cout<< " Current State:"<<endl;
                             statePointer->print();
-                            cout<< " New State:"<<endl;
+                            cout<< " New State (Not Relabeled):"<<endl;
+                            newStatePointer->print();
+                            cout<< "========================================================================" <<endl;
+                            cout<< " New State (Relabeled):"<<endl;
                             relabeledNewStatePointer->print();
                             cout<< "========================================================================" <<endl;
                             cout<<endl;
@@ -176,7 +182,10 @@ void IsomorphismBreadthFirstSearch::search(){
                                         cout<< "========================================================================" <<endl;
                                         cout<< " Current State:"<<endl;
                                         statePointer->print();
-                                        cout<< " New State:"<<endl;
+                                        cout<< " New State (Not Relabeled):"<<endl;
+                                        newStatePointer->print();
+                                        cout<< "========================================================================" <<endl;
+                                        cout<< " New State (Relabeled):"<<endl;
                                         relabeledNewStatePointer->print();
                                         cout<< "========================================================================" <<endl;
                                         cout<<endl;
@@ -197,46 +206,70 @@ void IsomorphismBreadthFirstSearch::search(){
                 // join
                 for (auto it = allStatesSet.begin(); it != allStatesSet.end(); it++) {
                     if (statePointer->get_bag().joinable((*it)->get_bag())) {
-                        State::ptr newStatePointer = kernel->join(statePointer, *it);
-                        State::ptr relabeledNewStatePointer = canonicalState(newStatePointer); // Computes the canonical state derived from newStatePointer.
-                        bool premiseFlag = flags->get("Premise");
-                        bool satisfiesPremise = false;
-                        if(premiseFlag){
-                            satisfiesPremise = conjecture->evaluatePremiseOnState(*relabeledNewStatePointer);
-                        }
-                        if(!premiseFlag or (premiseFlag and satisfiesPremise) ){
-                            if (!allStatesSet.count(relabeledNewStatePointer) and !newStatesSet.count(relabeledNewStatePointer)) {
-                                newStatesSet.insert(relabeledNewStatePointer);
-                                State::ptr consequentState = relabeledNewStatePointer;
-                                AbstractTreeDecompositionNodeContent transitionContent("Join");
-                                bfsDAG.addState(consequentState);
-                                vector<State::ptr> antecedentStates;
-                                antecedentStates.push_back(statePointer);
-                                antecedentStates.push_back(*it);
-                                Transition<State::ptr, AbstractTreeDecompositionNodeContent> transition(consequentState,
-                                                                                                        transitionContent,
-                                                                                                        antecedentStates);
-                                bfsDAG.addTransition(transition);
-                                if(printStateFlag){
-                                    cout<<endl;
-                                    cout<< "========================================================================" <<endl;
-                                    cout<< " Join: " <<endl;
-                                    cout<< "========================================================================" <<endl;
-                                    cout<< " State One:"<<endl;
-                                    statePointer->print();
-                                    cout<< " State Two:"<<endl;
-                                    (*it)->print();
-                                    cout<< " New State:"<<endl;
-                                    relabeledNewStatePointer->print();
-                                    cout<< "========================================================================" <<endl;
-                                    cout<<endl;
-                                }
-                                // size of witnessSets
-                                for (int component = 0; component < numberOfWitnesses.size(); ++component) {
-                                    numberOfWitnesses[component] = max(numberOfWitnesses[component],(unsigned)consequentState->getWitnessSet(component)->size());
+                        map<unsigned, unsigned> m = identityMap(statePointer->get_bag().get_elements());
+                        do {
+                            State::ptr relabeledState = (*it)->relabel(m);
+                            State::ptr newStatePointer = kernel->join(statePointer, relabeledState);
+                            State::ptr relabeledNewStatePointer = canonicalState(
+                                    newStatePointer); // Computes the canonical state derived from newStatePointer.
+                            bool premiseFlag = flags->get("Premise");
+                            bool satisfiesPremise = false;
+                            if (premiseFlag) {
+                                satisfiesPremise = conjecture->evaluatePremiseOnState(*relabeledNewStatePointer);
+                            }
+                            if (!premiseFlag or (premiseFlag and satisfiesPremise)) {
+                                if (!allStatesSet.count(relabeledNewStatePointer) and
+                                    !newStatesSet.count(relabeledNewStatePointer)) {
+                                    newStatesSet.insert(relabeledNewStatePointer);
+                                    State::ptr consequentState = relabeledNewStatePointer;
+                                    AbstractTreeDecompositionNodeContent transitionContent("Join");
+                                    bfsDAG.addState(consequentState);
+                                    vector<State::ptr> antecedentStates;
+                                    antecedentStates.push_back(statePointer);
+                                    antecedentStates.push_back(relabeledNewStatePointer);
+                                    Transition<State::ptr, AbstractTreeDecompositionNodeContent> transition(
+                                            consequentState,
+                                            transitionContent,
+                                            antecedentStates);
+                                    bfsDAG.addTransition(transition);
+                                    if (printStateFlag) {
+                                        cout << endl;
+                                        cout
+                                                << "========================================================================"
+                                                << endl;
+                                        cout << " Join: " << endl;
+                                        cout
+                                                << "========================================================================"
+                                                << endl;
+                                        cout << " State One:" << endl;
+                                        statePointer->print();
+                                        cout << " State Two:" << endl;
+                                        relabeledState->print();
+                                        cout
+                                                << "========================================================================"
+                                                << endl;
+                                        cout << " New State (Not Relabeled):" << endl;
+                                        newStatePointer->print();
+                                        cout
+                                                << "========================================================================"
+                                                << endl;
+                                        cout << " New State (Relabeled):" << endl;
+                                        relabeledNewStatePointer->print();
+                                        cout
+                                                << "========================================================================"
+                                                << endl;
+                                        cout << endl;
+                                    }
+                                    // size of witnessSets
+                                    for (int component = 0; component < numberOfWitnesses.size(); ++component) {
+                                        numberOfWitnesses[component] = max(numberOfWitnesses[component],
+                                                                           (unsigned) consequentState->getWitnessSet(
+                                                                                   component)->size());
+                                    }
+
                                 }
                             }
-                        }
+                        } while (nextPermutation(m));
                     }
                 }
             }
@@ -326,18 +359,33 @@ bool IsomorphismBreadthFirstSearch::nextPermutation(map<unsigned int, unsigned i
         }
         return true;
     }
+
 }
 
 
 State::ptr IsomorphismBreadthFirstSearch::canonicalState(State::ptr state) {
    // Assume that the bag.elements is equal to {1,...,k} for some k.
     State::ptr canonicalState = state;
-    map<unsigned ,unsigned > m = identityMap(state->get_bag().get_elements());
+    //map<unsigned ,unsigned > m = identityMap(state->get_bag().get_elements());
+    map<unsigned ,unsigned > m;
+    set<unsigned> bagElements = state->get_bag().get_elements();
+    unsigned i =1;
+    for(auto v:bagElements){
+        m.insert(make_pair(v,i));
+        i++;
+    }
     do{
+
         State::ptr relabeledState = state->relabel(m);
         if(relabeledState < canonicalState){
             canonicalState = relabeledState;
         }
+
+//        for(auto item: m){cout<< item.first << " -> " << item.second << ", "; }
+//        cout <<"------------------------------------------------====" <<  endl;
+////        cout << "canonicalState: " << endl;
+////        canonicalState.print();
+
     }while(nextPermutation(m));
     return canonicalState;
 }

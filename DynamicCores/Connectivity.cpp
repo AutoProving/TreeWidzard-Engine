@@ -1,11 +1,6 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 
 #include "Connectivity.h"
-extern "C" {
-DynamicCore * create() {
-    return new Connectivity_DynamicCore;
-}
-}
 
 //////////////////////Implementation/////////////////////////////
 ////////////////////////////////////////////////////////////////
@@ -99,19 +94,6 @@ Connectivity_DynamicCore::Connectivity_DynamicCore() {
     createInitialWitnessSet();
 }
 
-Connectivity_DynamicCore::Connectivity_DynamicCore(unsigned parameter){
-    //*****************************
-    //*****************************
-    // In most cases, you will not to need to change this function.
-    //*****************************
-    //*****************************
-    // Initializing attributes
-    addAttribute("CoreName","Connectivity");
-    addAttribute("ParameterType","NoParameter");
-    addAttribute("PrimaryOperator","---");
-    this->parameter = parameter;
-    createInitialWitnessSet();
-}
 void Connectivity_DynamicCore::createInitialWitnessSet_implementation() {
     Connectivity_WitnessPointer witness = createWitness();
     //*****************************
@@ -420,8 +402,19 @@ Connectivity_WitnessPointer Connectivity_DynamicCore::createWitness() {
     Connectivity_WitnessPointer w(new Connectivity_Witness);
     return w;
 }
+shared_ptr<WitnessSet> Connectivity_WitnessSet::createEmptyWitnessSet() {
+    Connectivity_WitnessSetPointer witnessSet(new Connectivity_WitnessSet);
+    return witnessSet;
+}
 
 void Connectivity_DynamicCore::copyWitness(Connectivity_WitnessPointer w_input,
                                            Connectivity_WitnessPointer w_output) {
     w_output->set_equal_implementation(w_input);
+}
+
+#include "Connectivity.h"
+extern "C" {
+DynamicCore * create() {
+    return new Connectivity_DynamicCore;
+}
 }

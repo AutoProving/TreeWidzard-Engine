@@ -1,5 +1,0 @@
-path_width 3
-b := MaxDegree > 2
-a := MaxDegree > 3
-c := EdgeColoring < 5
-NOT a AND b IMPLIES c

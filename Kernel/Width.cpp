@@ -17,3 +17,32 @@ Width &Width::operator=(Width &rhs) {
 	value = rhs.get_value();
 	return *this;
 }
+
+bool Width::operator==(const Width &rhs) const {
+    return name == rhs.name &&
+           value == rhs.value;
+}
+
+bool Width::operator!=(const Width &rhs) const {
+    return !(rhs == *this);
+}
+
+bool Width::operator<(const Width &rhs) const {
+    if (name < rhs.name)
+        return true;
+    if (rhs.name < name)
+        return false;
+    return value < rhs.value;
+}
+
+bool Width::operator>(const Width &rhs) const {
+    return rhs < *this;
+}
+
+bool Width::operator<=(const Width &rhs) const {
+    return !(rhs < *this);
+}
+
+bool Width::operator>=(const Width &rhs) const {
+    return !(*this < rhs);
+}

@@ -1,11 +1,13 @@
 #include "SearchController.h"
 
 SearchController::SearchController(const string &inputPath, const string &searchStrategy, const Flags &flags,
-                                   const Width &width) : searchStrategy(searchStrategy),
-                                                         searchPluginPath(searchPluginPath), flags(flags),
-                                                         width(width) {
+                                    Width &width){
     string file_path = __FILE__;
     //string file_path = "";
+    this->searchStrategy = searchStrategy;
+    this->searchPluginPath = inputPath;
+    this->flags = flags;
+    this->width = width;
     string path = file_path.substr(0, file_path.rfind("/"));
     inputController = new InputController(inputPath, path+"/../DynamicPlugins/",width);
     searchPluginPath = path+"/../SearchPlugins/";
