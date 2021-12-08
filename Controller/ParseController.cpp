@@ -22,7 +22,12 @@ void ParseController::parse_pace(string graphPath, string decompositionPath) {
         cout<<" Error: input file "<< graphPath<< " is not in valid format"<<endl;
         exit(20);
     }
+
+    string path = "PACE_" + run_fs::path(inputController->getInputPath()).filename().string();
+    string path_1 = "PACE_Correct_" + run_fs::path(inputController->getInputPath()).filename().string();
+
     multigraph->printGraph();
+    multigraph->convertToGML(path_1);
     TreeDecompositionPACE td;
     td.multigraph= multigraph;
     td_in = fopen(decompositionPath.c_str(),"r");
@@ -62,8 +67,12 @@ void ParseController::parse_pace(string graphPath, string decompositionPath) {
     cout<<"----Evaluating-----:"<<endl;
     concreteTreeDecomposition->conjectureCheck(this->inputController->getConjecture(),flag, inputController->getInputPath());
     AbstractTreeDecomposition abstractTreeDecomposition = concreteTreeDecomposition->convertToAbstractTreeDecomposition();
-    abstractTreeDecomposition.writeToFile(this->inputController->getInputPath());
-    concreteTreeDecomposition->writeToFile(this->inputController->getInputPath());
+
+    abstractTreeDecomposition.writeToFile(path);
+    concreteTreeDecomposition->writeToFile(path);
+    MultiGraph multiGraph = concreteTreeDecomposition->extractMultiGraph();
+    multiGraph.convertToGML(path);
+
 
     //cout<<"---------------------------------------------State Tree"<<endl;
     //concreteTreeDecomposition->conjectureCheck(inputController->getConjecture());
@@ -113,6 +122,9 @@ void ParseController::parse_abstract(string abstractPath) {
     //concreteTreeDecomposition.printTermNodes();
     cout<<"----Evaluating-----:"<<endl;
     concreteTreeDecomposition.conjectureCheck(this->inputController->getConjecture(), flag, inputController->getInputPath());
+    string path = "PACE_" + run_fs::path(inputController->getInputPath()).filename().string();
+    MultiGraph multiGraph = concreteTreeDecomposition.extractMultiGraph();
+    multiGraph.convertToGML(path);
     /*if(!ctd.conjectureCheck(inputController->getConjecture())){
       cout<<"not satisfied"<<endl;
         //  shared_ptr<DynamicKernel> sharedKernel = make_shared<DynamicKernel>(inputController->getDynamicKernel());

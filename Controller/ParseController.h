@@ -33,9 +33,4 @@ public:
 
 };
 
-class FarhadState{
-public:
-    string name;
-
-};
 #endif //TREEWIDZARD_PARSECONTROLLER_H

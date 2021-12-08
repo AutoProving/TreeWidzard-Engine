@@ -198,7 +198,6 @@ ConcreteTreeDecomposition AbstractTreeDecomposition::convertToConcreteTreeDecomp
 
 void AbstractTreeDecomposition::writeToFile(string fileName) {
     //fileName = "CounterExample_AbstractTreeDecomposition_"+abstract_fs::path(fileName).filename().string();
-    fileName = "AbstractTreeDecomposition_"+fileName;
     ofstream atdFile (fileName);
     if (atdFile.is_open())
     {

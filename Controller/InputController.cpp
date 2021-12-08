@@ -99,6 +99,7 @@ void InputController::construct_dynamicKernel() {
                     unsigned parameter = core.second->getParameter();
                     if(core.second->getOp()==">") parameter++;
                     if(core.second->getOp()=="<") parameter--;
+                    if(parameter < 0){cout<< " The given parameter for the core " << core.second->getName() << " is " << parameter << ". Parameter could not be negative." << endl; exit(20);}
                     string corePath = dynamicPluginPath + coreNamesToFiles[core.second->getName()];
                     factory = new DynamicCoreHandler(corePath.c_str());
                     std::unique_ptr<DynamicCore> handlerCore = factory->create_int(parameter);

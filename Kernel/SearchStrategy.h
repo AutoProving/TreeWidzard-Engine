@@ -19,6 +19,7 @@ class SearchStrategy {
 	Conjecture* conjecture;
     map<string,string> attributes; // Characteristics of the search. This is initialized in the constructor of the derived class.
     string propertyFilePath;
+    string outputsPath;
   public:
     SearchStrategy(DynamicKernel* dynamicKernel, Conjecture* conjecture, Flags* flags);
     SearchStrategy();
@@ -30,9 +31,14 @@ class SearchStrategy {
     map<string,string> getAttributes();
     virtual void search();
 
+    const string &getOutputsPath() const;
+
+    void setOutputsPath(const string &outputsPath);
+
 };
 using SearchStrategy_creator_t =  SearchStrategy *(*)();
 using SearchStrategy_creator_t_parameter =  SearchStrategy *(*)(DynamicKernel*, Conjecture*,Flags*);
 
-
 #endif
+
+

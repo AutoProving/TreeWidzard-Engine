@@ -90,7 +90,6 @@ void BreadthFirstSearch::search(){
     cout<<"Premise is NOT ACTIVATED"<<endl;
   }
   bool printStateFlag = flags->get("PrintStates");
-
   State::ptr initialState = kernel->initialState();
   allStatesSet.insert(initialState);
   newStatesSet.insert(initialState);
@@ -123,7 +122,7 @@ void BreadthFirstSearch::search(){
       ///////////////////////////////////////////////////////
       // the +1 below comes from the fact that treewidth is
       // size of the bag minus one. So the loop iterates
-      // from 1 to number of elements inteh bag.
+      // from 1 to number of elements in the  bag.
       for (int i=1; i<= width+1; i++){
         if(bag.vertex_introducible(i)){
           State::ptr newStatePointer = kernel->intro_v(statePointer, i);
@@ -322,16 +321,19 @@ void BreadthFirstSearch::search(){
                 State::ptr badState = *it;
                 bfsDAG.addFinalState(badState);
                 AbstractTreeDecomposition atd  = extractCounterExampleTerm(badState);
-                atd.writeToFile(this->getPropertyFilePath());
+                string file = this->getOutputsPath();
+                if(flags->get("Premise")){file + "_Premise";}
+                file+="_CounterExample";
+                atd.writeToFile(file+"_AbstractDecomposition.txt");
                 ConcreteTreeDecomposition ctd = atd.convertToConcreteTreeDecomposition();
-                ctd.writeToFile(this->getPropertyFilePath());
+                ctd.writeToFile(file+"_ConcreteDecomposition.txt");
                 RunTree<State::ptr,AbstractTreeDecompositionNodeContent> runTree = extractCounterExampleRun(badState);
-                runTree.writeToFile(this->getPropertyFilePath());
+                runTree.writeToFile(file+"_RunTree.txt");
                 MultiGraph multiGraph = ctd.extractMultiGraph();
                 multiGraph.printGraph();
-                multiGraph.printToFile(this->getPropertyFilePath());
-                multiGraph.convertToGML(this->getPropertyFilePath());
-                multiGraph.printToFilePACEFormat(this->getPropertyFilePath());
+                multiGraph.printToFile(file+"_Graph.txt");
+                multiGraph.convertToGML(file+"_GMLGraph.gml");
+                multiGraph.printToFilePACEFormat(file+"_GraphPaceFormat.gr");
 
                 /*                cout<<"BAD STATE:"<<endl;
                 State::ptr state = *it;

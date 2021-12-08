@@ -145,7 +145,7 @@ void MultiGraph::readFromFile(ifstream &file) {
 }
 
 void MultiGraph::printToFile(string fileName) {
-    fileName = "Counterexample_Graph_"+multigraph_fs::path(fileName).filename().string();
+   // fileName = "Counterexample_Graph_"+multigraph_fs::path(fileName).filename().string();
     ofstream multiGraphFile (fileName);
     if (multiGraphFile.is_open())
     {
@@ -172,8 +172,7 @@ void MultiGraph::printToFile(string fileName) {
 }
 
 void MultiGraph::printToFilePACEFormat(string fileName) {
-    string modifiedFileName = "Counterexample_GraphPACEFormat_"+multigraph_fs::path(fileName).stem().string()+".gr";
-    ofstream multiGraphFile (modifiedFileName);
+    ofstream multiGraphFile (fileName);
     if (multiGraphFile.is_open())
     {
         multiGraphFile << "c This is the counter example for "<<fileName << endl;
@@ -205,7 +204,6 @@ bool MultiGraph::isMultigraph() {
 }
 
 bool MultiGraph::convertToGML(string fileName) {
-    fileName = "Counterexample_GraphGml_"+multigraph_fs::path(fileName).stem().string()+".gml";
     ofstream gmlFile(fileName);
 	gmlFile << "graph [\n";
 	for (auto it = vertices.begin(); it != vertices.end(); it++) {

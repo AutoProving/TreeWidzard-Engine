@@ -9,8 +9,8 @@
 
 using namespace std;
 namespace fs = std::experimental::filesystem;
-
 using std::experimental::filesystem::current_path;
+
 extern FILE *input_in;
 
 class SearchController {
@@ -26,8 +26,6 @@ private:
 public:
     SearchController(const string &searchStrategy, const string &searchPluginPath, const Flags &flags,
                       Width &width);
-
-    ///////////////////////////////////////////////////////////////////////////
     void check_search();
     void action();
 

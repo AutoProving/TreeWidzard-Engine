@@ -57,4 +57,11 @@ void SearchStrategy::setPropertyFilePath(const string &propertyFilePath) {
     SearchStrategy::propertyFilePath = propertyFilePath;
 }
 
+const string &SearchStrategy::getOutputsPath() const {
+    return outputsPath;
+}
+
+void SearchStrategy::setOutputsPath(const string &outputsPath) {
+    SearchStrategy::outputsPath = outputsPath;
+}
 
