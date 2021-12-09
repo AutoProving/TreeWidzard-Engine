@@ -23,12 +23,12 @@ void ParseController::parse_pace(string graphPath, string decompositionPath) {
         exit(20);
     }
 
-    string path = "PACE_" + run_fs::path(inputController->getInputPath()).filename().string();
-    string path_1 = "PACE_Correct_" + run_fs::path(inputController->getInputPath()).filename().string();
-
-    multigraph->printGraph();
-    multigraph->convertToGML(path_1);
+    string output_file_path = fs::path(inputController->getInputPath()).parent_path().string();
+    string abstract_file_name = fs::path(decompositionPath).stem().string();
+    string property_file_name = fs::path(inputController->getInputPath()).stem().string();
+    string name = output_file_path+"/PARSE_PACE_"+property_file_name+"_"+abstract_file_name;
     TreeDecompositionPACE td;
+
     td.multigraph= multigraph;
     td_in = fopen(decompositionPath.c_str(),"r");
     if(!td_in) {
@@ -43,36 +43,26 @@ void ParseController::parse_pace(string graphPath, string decompositionPath) {
         cout<<" Error: input file "<< decompositionPath<< " is not in valid format"<<endl;
         exit(20);
     }
-
-    /// Value and type of width should be same in tree decomposition and input's file
-//    if(td.getWidthType()!= inputController->getDynamicKernel().get_width().get_name()){
-//        cerr<<"Error: width types in tree decomposition and input's file.";
-//        cerr<<" tree decomposition width type: "<< td.getWidthType()<< ", input width type: "
-//        <<inputController->getDynamicKernel().get_width().get_name()<<endl;
-//        exit(20);
-//    }else if(td.getWidth() != inputController->getDynamicKernel().get_width().get_value()){
-//        cerr<<"Error: width value in tree decomposition and input's file.";
-//        cerr<<" tree decomposition width value: "<< td.getWidth()<< ", input width value: "
-//            <<inputController->getDynamicKernel().get_width().get_value()<<endl;
-//        exit(20);
-//    }
+//    cout<< " tree decomposition read from input"<<endl;
+//    td.print();
     /////////////////////////////////////////////////////////////////////////////////
-    cout<<"Tree Decomposition "<<endl;
     td.construct();
-    td.printTree();
-    cout<<"-----------Concrete decomposition"<<endl;
+//    td.print();
+//    td.printTree();
+ //   cout<<"-----------Concrete decomposition"<<endl;
     shared_ptr<ConcreteTreeDecomposition> concreteTreeDecomposition;
     concreteTreeDecomposition = td.convertToConcreteTreeDecomposition();
-    //concreteTreeDecomposition->printTermNodes();
+  //  concreteTreeDecomposition->printTermNodes();
     cout<<"----Evaluating-----:"<<endl;
-    concreteTreeDecomposition->conjectureCheck(this->inputController->getConjecture(),flag, inputController->getInputPath());
+    concreteTreeDecomposition->conjectureCheck(this->inputController->getConjecture(),flag, name);
     AbstractTreeDecomposition abstractTreeDecomposition = concreteTreeDecomposition->convertToAbstractTreeDecomposition();
 
-    abstractTreeDecomposition.writeToFile(path);
-    concreteTreeDecomposition->writeToFile(path);
+    abstractTreeDecomposition.writeToFile(name+"_AbstractDecomposition.txt");
+    concreteTreeDecomposition->writeToFile(name+"_ConcreteDecomposition.txt");
     MultiGraph multiGraph = concreteTreeDecomposition->extractMultiGraph();
-    multiGraph.convertToGML(path);
-
+    multiGraph.printToFile(name+"_Graph.txt");
+    multiGraph.convertToGML(name+"_GMLGraph.gml");
+    multiGraph.printToFilePACEFormat(name+"_GraphPaceFormat.gr");
 
     //cout<<"---------------------------------------------State Tree"<<endl;
     //concreteTreeDecomposition->conjectureCheck(inputController->getConjecture());
@@ -82,25 +72,6 @@ void ParseController::parse_pace(string graphPath, string decompositionPath) {
 }
 
 void ParseController::parse_abstract(string abstractPath) {
-  /*  ctd_in = fopen(abstractPath.c_str(), "r");
-    if (!ctd_in) {
-        std::perror("File opening failed");
-        cerr<<"\n "<<abstractPath<<" could not open."<<endl;
-        exit(20);
-    }
-    ConcreteTreeDecomposition concreteTreeDecomposition;
-    int resultCTD = 0; // if parsing successful result will be 0 otherwise 1
-    resultCTD = ctd_parse(concreteTreeDecomposition, resultCTD); // Parser function from Parser.hpp
-    cout<<"result: "<<resultCTD<<endl;
-    // check for successful parsing
-    if (resultCTD != 0) {
-        cout << " Error: input file " << abstractPath << " is not in valid format"
-             << endl;
-        exit(20);
-    }
-    concreteTreeDecomposition.printTermNodes();
-    concreteTreeDecomposition.conjectureCheck(this->inputController->getConjecture());
-   */
     atd_in = fopen(abstractPath.c_str(), "r");
     if (!atd_in) {
         std::perror("File opening failed");
@@ -110,7 +81,6 @@ void ParseController::parse_abstract(string abstractPath) {
     AbstractTreeDecomposition abstractTreeDecomposition;
     int resultATD = 0; // if parsing successful result will be 0 otherwise 1
     resultATD = atd_parse(abstractTreeDecomposition, resultATD); // Parser function from Parser.hpp
-    cout<<"result: "<<resultATD<<endl;
     // check for successful parsing
     if (resultATD != 0) {
         cout << " Error: input file " << abstractPath << " is not in valid format"
@@ -121,16 +91,16 @@ void ParseController::parse_abstract(string abstractPath) {
     ConcreteTreeDecomposition concreteTreeDecomposition = abstractTreeDecomposition.convertToConcreteTreeDecomposition();
     //concreteTreeDecomposition.printTermNodes();
     cout<<"----Evaluating-----:"<<endl;
-    concreteTreeDecomposition.conjectureCheck(this->inputController->getConjecture(), flag, inputController->getInputPath());
-    string path = "PACE_" + run_fs::path(inputController->getInputPath()).filename().string();
+    string output_file_path = fs::path(inputController->getInputPath()).parent_path().string();
+    string abstract_file_name = fs::path(abstractPath).stem().string();
+    string property_file_name = fs::path(inputController->getInputPath()).stem().string();
+    string name = output_file_path+"/PARSE_ABSTRACT_"+property_file_name+"_"+abstract_file_name;
+    concreteTreeDecomposition.conjectureCheck(this->inputController->getConjecture(), flag, name);
+    concreteTreeDecomposition.writeToFile(name+"_ConcreteDecomposition.txt");
     MultiGraph multiGraph = concreteTreeDecomposition.extractMultiGraph();
-    multiGraph.convertToGML(path);
-    /*if(!ctd.conjectureCheck(inputController->getConjecture())){
-      cout<<"not satisfied"<<endl;
-        //  shared_ptr<DynamicKernel> sharedKernel = make_shared<DynamicKernel>(inputController->getDynamicKernel());
-      //  ctd.convertToStateTree(sharedKernel).printStateTree();
-      //  ctd.extractMultiGraph().printGraph();
-    };*/
+    multiGraph.printToFile(name+"_Graph.txt");
+    multiGraph.convertToGML(name+"_GMLGraph.gml");
+    multiGraph.printToFilePACEFormat(name+"_GraphPaceFormat.gr");
 
 }
 

@@ -334,35 +334,9 @@ void BreadthFirstSearch::search(){
                 multiGraph.printToFile(file+"_Graph.txt");
                 multiGraph.convertToGML(file+"_GMLGraph.gml");
                 multiGraph.printToFilePACEFormat(file+"_GraphPaceFormat.gr");
-
-                /*                cout<<"BAD STATE:"<<endl;
-                State::ptr state = *it;
-                (**it).print();
-                bfsDAG.addFinalState(*it);
-                cout<<"-----------------Term Print---------------------"<<endl;
-                AbstractTreeDecomposition atd  = extractCounterExampleTerm(state);
-                cout<<"=======ABSTRACT TREE========="<<endl;
-                atd.printTermNodes();
-                atd.writeToFile(this->getPropertyFilePath());
-                cout<<"=======Concrete TREE========="<<endl;
-                ConcreteTreeDecomposition ctd = atd.convertToConcreteTreeDecomposition();
-                ctd.printTermNodes();
-                ctd.writeToFile(this->getPropertyFilePath());
-                RunTree<State::ptr,AbstractTreeDecompositionNodeContent> runTree = extractCounterExampleRun(state);
-                runTree.writeToFile(this->getPropertyFilePath());
-                if(flags->get("StateTree")==1){
-                cout << "=======Concrete TREE=========" << endl;
-                runTree.printTermNodes();
+                cout<<"Conjecture: Not Satisfied"<<endl;
+                return;
               }
-              cout << "\n ------------------Constructing Counter Example Graph-------------------"<< endl;
-              MultiGraph multiGraph = ctd.extractMultiGraph();
-              multiGraph.printGraph();
-              multiGraph.printToFile(this->getPropertyFilePath());
-              multiGraph.convertToGML(this->getPropertyFilePath());
-              multiGraph.printToFilePACEFormat(this->getPropertyFilePath());*/
-              cout<<"Conjecture: Not Satisfied"<<endl;
-              return;
-            }
           }
           set<State::ptr> setUnion;
           set_union(allStatesSet.begin(),allStatesSet.end(),newStatesSet.begin(),newStatesSet.end(),inserter(setUnion,setUnion.begin()));

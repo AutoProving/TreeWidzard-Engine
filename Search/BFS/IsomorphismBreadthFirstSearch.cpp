@@ -2,12 +2,12 @@
 #include "IsomorphismBreadthFirstSearch.h"
 
 extern "C" {
-    IsomorphismBreadthFirstSearch * create() {
-        return new IsomorphismBreadthFirstSearch();
-    }
-    IsomorphismBreadthFirstSearch * create_parameter(DynamicKernel* dynamicKernel, Conjecture* conjecture,Flags* flags) {
-        return new IsomorphismBreadthFirstSearch(dynamicKernel,conjecture,flags);
-    }
+IsomorphismBreadthFirstSearch * create() {
+    return new IsomorphismBreadthFirstSearch();
+}
+IsomorphismBreadthFirstSearch * create_parameter(DynamicKernel* dynamicKernel, Conjecture* conjecture,Flags* flags) {
+    return new IsomorphismBreadthFirstSearch(dynamicKernel,conjecture,flags);
+}
 }
 
 IsomorphismBreadthFirstSearch::IsomorphismBreadthFirstSearch() {
@@ -16,8 +16,8 @@ IsomorphismBreadthFirstSearch::IsomorphismBreadthFirstSearch() {
 
 IsomorphismBreadthFirstSearch::IsomorphismBreadthFirstSearch(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags): SearchStrategy(dynamicKernel, conjecture, flags) {
     this->kernel = kernel;
-	this->conjecture = conjecture;
-	this->flags = flags;
+    this->conjecture = conjecture;
+    this->flags = flags;
     addAttribute("SearchName","IsomorphismBreadthFirstSearch");
 }
 
@@ -364,7 +364,7 @@ bool IsomorphismBreadthFirstSearch::nextPermutation(map<unsigned int, unsigned i
 
 
 State::ptr IsomorphismBreadthFirstSearch::canonicalState(State::ptr state) {
-   // Assume that the bag.elements is equal to {1,...,k} for some k.
+    // Assume that the bag.elements is equal to {1,...,k} for some k.
     State::ptr canonicalState = state;
     //map<unsigned ,unsigned > m = identityMap(state->get_bag().get_elements());
     map<unsigned ,unsigned > m;

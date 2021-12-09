@@ -158,6 +158,7 @@ bool TreeDecompositionPACE::constructRaw(){
         cout<<"ERROR in TreeDecompositionPACE::constructRaw bags size is zero"<<endl;
         return false;
     }
+
 }
 
 bool TreeDecompositionPACE::convertToBinary(shared_ptr<RawAbstractTreeDecomposition> node){
@@ -354,82 +355,85 @@ bool TreeDecompositionPACE::addForgetVertex(shared_ptr<RawAbstractTreeDecomposit
     return true;
 }
 
-bool TreeDecompositionPACE::addIntroEdge(shared_ptr<RawAbstractTreeDecomposition> node,set<unsigned> &visited_edges){
-    if(strstr(node->type.c_str(),"IntroVertex")){
+bool TreeDecompositionPACE::addIntroEdge(shared_ptr<RawAbstractTreeDecomposition> node, set<unsigned> &visited_edges) {
+    if (strstr(node->type.c_str(), "IntroVertex")) {
         set<unsigned> set_diff;
         set<unsigned> elements_node = node->bag.get_elements();
         set<unsigned> elements_node_child = node->children[0]->bag.get_elements();
-        set_difference(elements_node.begin(),elements_node.end(), elements_node_child.begin(), elements_node_child.end(), inserter(set_diff, set_diff.begin()));
-        if(set_diff.size()!=1){
-            cout<<"ERROR in TreeDecompositionPACE::addIntroEdgeRecursion, set_diff is not verified"<<endl;
+        set_difference(elements_node.begin(), elements_node.end(), elements_node_child.begin(),
+                       elements_node_child.end(), inserter(set_diff, set_diff.begin()));
+        if (set_diff.size() != 1) {
+            cout << "ERROR in TreeDecompositionPACE::addIntroEdgeRecursion, set_diff is not verified" << endl;
             node->bag.print();
-            cout<<"\n"<<node->type<<endl;
+            cout << "\n" << node->type << endl;
             node->children[0]->bag.print();
-            cout<<"\n"<<node->children[0]->type<<endl;
+            cout << "\n" << node->children[0]->type << endl;
             node->children[0]->children[0]->bag.print();
-            cout<<"\n"<<node->children[0]->children[0]->type<<endl;
+            cout << "\n" << node->children[0]->children[0]->type << endl;
             node->children[0]->children[0]->children[0]->bag.print();
-            cout<<"\n"<<node->children[0]->children[0]->children[0]->type<<endl;
+            cout << "\n" << node->children[0]->children[0]->children[0]->type << endl;
             exit(20);
-        }else{
-            unsigned introducedVertex = (unsigned)*set_diff.begin();
-            multimap<unsigned,unsigned> incidence = multigraph->getIncidenceMap();
+        } else {
+            unsigned introducedVertex = (unsigned) *set_diff.begin();
+            multimap<unsigned, unsigned> incidence = multigraph->getIncidenceMap();
             vector<shared_ptr<RawAbstractTreeDecomposition> > generated_nodes;
-            for(auto it=incidence.begin(); it!=incidence.end(); it++){
-                if(it->second == introducedVertex){
-                    if(visited_edges.find(it->first)==visited_edges.end()){
-                            visited_edges.insert(it->first);
-                            auto range_it = incidence.equal_range(it->first);
-                            for(auto itr=range_it.first;itr!=range_it.second; itr++){
-                                if(itr->second != it->second and (node->bag.get_elements().count(itr->second) > 0)){
-                                    shared_ptr<RawAbstractTreeDecomposition> new_node(new RawAbstractTreeDecomposition);
-                                    new_node->bag = node->bag;
-                                    if(it->second<itr->second){
-                                        new_node->type= "IntroEdge_"+to_string(it->second)+"_"+to_string(itr->second);
-                                        new_node->bag.set_edge(it->second,itr->second);
-                                    }else{
-                                        new_node->type= "IntroEdge_"+to_string(itr->second)+"_"+to_string(it->second);
-                                        new_node->bag.set_edge(itr->second,it->second);
-                                    }
-                                    generated_nodes.push_back(new_node);
+            for (auto it = incidence.begin(); it != incidence.end(); it++) {
+                if (it->second == introducedVertex) {
+                    if (visited_edges.find(it->first) == visited_edges.end()) {
+                        for (auto itr = incidence.begin(); itr != incidence.end(); itr++) {
+                            if (itr->second != it->second and itr->first==it->first and (node->bag.get_elements().count(itr->second) > 0)) {
+                                visited_edges.insert(it->first);
+                                shared_ptr<RawAbstractTreeDecomposition> new_node(new RawAbstractTreeDecomposition);
+                                new_node->bag = node->bag;
+                                if (it->second < itr->second) {
+                                    new_node->type =
+                                            "IntroEdge_" + to_string(it->second) + "_" + to_string(itr->second);
+                                    new_node->bag.set_edge(it->second, itr->second);
+                                } else {
+                                    new_node->type =
+                                            "IntroEdge_" + to_string(itr->second) + "_" + to_string(it->second);
+                                    new_node->bag.set_edge(itr->second, it->second);
                                 }
+                                generated_nodes.push_back(new_node);
+                                break;
                             }
                         }
+                    }
                 }
             }
-            for(size_t i=0 ; i<generated_nodes.size();i++){
-                if(i==0){
-                    if(!node->parent){
+            for (size_t i = 0; i < generated_nodes.size(); i++) {
+                if (i == 0) {
+                    if (!node->parent) {
                         root = generated_nodes[0];
-                    }else{
+                    } else {
                         generated_nodes[0]->parent = node->parent;
-                        for(size_t t=0 ;t<node->parent->children.size(); t++){
-                                    if(node->parent->children[t]==node){
-                                        node->parent->children[t]=generated_nodes[0];
-                                        break;
-                                    }
-                                }
+                        for (size_t t = 0; t < node->parent->children.size(); t++) {
+                            if (node->parent->children[t] == node) {
+                                node->parent->children[t] = generated_nodes[0];
+                                break;
                             }
-                        }else{
-                            generated_nodes[i]->parent = generated_nodes[i-1];
-                            generated_nodes[i-1]->children.push_back(generated_nodes[i]);
                         }
                     }
-                    if(generated_nodes.size()>0){
-                        generated_nodes[generated_nodes.size()-1]->children.push_back(node);
-                        node->parent = generated_nodes[generated_nodes.size()-1];
-                    }
-                    return addIntroEdge(node->children[0],visited_edges);
-
+                } else {
+                    generated_nodes[i]->parent = generated_nodes[i - 1];
+                    generated_nodes[i - 1]->children.push_back(generated_nodes[i]);
                 }
-    }else if(strstr(node->type.c_str(),"Join")){
-        return addIntroEdge(node->children[0],visited_edges) and addIntroEdge(node->children[1],visited_edges);
-    }else if(strstr(node->type.c_str(),"ForgetVertex")){
-       return addIntroEdge(node->children[0],visited_edges);
-    }else if(strstr(node->type.c_str(),"Leaf")){
+            }
+            if (generated_nodes.size() > 0) {
+                generated_nodes[generated_nodes.size() - 1]->children.push_back(node);
+                node->parent = generated_nodes[generated_nodes.size() - 1];
+            }
+            return addIntroEdge(node->children[0], visited_edges);
+
+        }
+    } else if (strstr(node->type.c_str(), "Join")) {
+        return addIntroEdge(node->children[0], visited_edges) and addIntroEdge(node->children[1], visited_edges);
+    } else if (strstr(node->type.c_str(), "ForgetVertex")) {
+        return addIntroEdge(node->children[0], visited_edges);
+    } else if (strstr(node->type.c_str(), "Leaf")) {
         return true;
-    }else{
-        cout<<"ERROR in TreeDecompositionPACE::addIntroEdgeRecursion, node type is not satisfied"<<endl;
+    } else {
+        cout << "ERROR in TreeDecompositionPACE::addIntroEdgeRecursion, node type is not satisfied" << endl;
         exit(20);
     }
 
@@ -520,8 +524,10 @@ void TreeDecompositionPACE::construct() {
     addEmptyNodes(root);
     addIntroVertex(root);
     addForgetVertex(root);
+
     set<unsigned> visited_edges;
     addIntroEdge(root,visited_edges);
+
     colorTree();
     updateTD();
     validateTree(root);

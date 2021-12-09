@@ -325,22 +325,19 @@ shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> ConcreteTreeDecomp
     }
 }
 
-bool ConcreteTreeDecomposition::conjectureCheck(Conjecture &conjecture,Flags &flags, string path) {
+bool ConcreteTreeDecomposition::conjectureCheck(Conjecture &conjecture,Flags &flags, string name) {
     string str = "";
     RunTree<State::ptr,ConcreteNode> runTree;
     shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNode = constructWitnesses(conjecture, getRoot(),flags,str);
     runTree.setRoot(runNode);
+    name += "_RunTree.txt";
     if (!conjecture.evaluateConjectureOnState(*runNode->getNodeContent().getState())) {
-        cout << "Printing bad State: " << endl;
-        runNode->getNodeContent().getState().print();
-        path = "Parser_Counterexample_" + run_fs::path(path).filename().string();
-        runTree.writeToFile(path);
+        runTree.writeToFile(name);
         cout << "CONJECTURE NOT SATISFIED" << endl;
         return false;
     } else {
         cout << "CONJECTURE SATISFIED"<< endl;
-        path = "Parser_" + run_fs::path(path).filename().string();
-        runTree.writeToFile(path);
+        runTree.writeToFile(name);
         return true;
     }
 

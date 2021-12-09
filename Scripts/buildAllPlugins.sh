@@ -8,7 +8,7 @@ p=$PWD
 #  g++ -fPIC -shared $p/../Kernel/WitnessSet.cpp $p/../Kernel/Witness.cpp $p/../Kernel/DynamicCore.cpp $eachfile -o $p/../DynamicPlugins/$name.so
 #done
 rm -r $PWD/../SearchPlugins/*
-for eachfile in $(find $PWD/../Search -type f -name "BreadthFirstSearch*.cpp"); do
+for eachfile in $(find $PWD/../Search -type f -name "IsomorphismBreadthFirstSearch.cpp"); do
   name=$(basename "$eachfile" .cpp)
   echo $name
   echo $eachfile

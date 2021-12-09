@@ -38,7 +38,6 @@ class TreeDecompositionPACE {
         shared_ptr<RawAbstractTreeDecomposition> root;
         shared_ptr<MultiGraph> multigraph;
         TreeDecompositionPACE();
-
         void setNum_vertices(unsigned n);
         void setNum_graph_vertices(unsigned n);
         void setWidth(unsigned w);
@@ -70,7 +69,6 @@ class TreeDecompositionPACE {
         bool updateTD();
         void construct();
         bool validateTree(shared_ptr<RawAbstractTreeDecomposition> node);
-
         void createCTDNode(shared_ptr<TermNode<ConcreteNode>> cnode, shared_ptr<RawAbstractTreeDecomposition> rnode);
         shared_ptr<ConcreteTreeDecomposition> convertToConcreteTreeDecomposition();
 };
