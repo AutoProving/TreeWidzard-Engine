@@ -48,7 +48,7 @@ void SearchController::action() {
         SearchStrategy* searchStrategy = search.release();
         searchStrategy->setPropertyFilePath(inputController->getInputPath());
         string output_file_path = fs::path(inputController->getInputPath()).parent_path().string();
-        output_file_path = output_file_path+"/" + fs::path(inputController->getInputPath()).stem().string()+"_"+this->searchStrategy;
+        output_file_path = output_file_path+"/" + fs::path(inputController->getInputPath()).stem().string()+"_"+this->searchStrategy+"_"+width.get_name()+"_"+to_string(width.get_value());
         searchStrategy->setOutputsPath(output_file_path);
         searchStrategy->search();
     }else{
