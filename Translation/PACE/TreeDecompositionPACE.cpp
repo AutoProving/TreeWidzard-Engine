@@ -36,6 +36,7 @@ void TreeDecompositionPACE::setNum_vertices(unsigned n){
     num_vertices = n;
 }
 
+
 void TreeDecompositionPACE::setNum_graph_vertices(unsigned n){
     num_graph_vertices=n;
 }
@@ -167,7 +168,6 @@ bool TreeDecompositionPACE::convertToBinary(shared_ptr<RawAbstractTreeDecomposit
         // and set  "new_node" as a second child of "node", and set n-1 children of "node" as children of "new_node".
         shared_ptr<RawAbstractTreeDecomposition> new_node(new RawAbstractTreeDecomposition);
         new_node->bag = node->bag;
-        // TODO: make this function more efficient
         for(size_t i=1; i<node->children.size();i++){
             new_node->children.push_back(node->children[i]);
             node->children[i]->parent = new_node;
@@ -227,9 +227,9 @@ bool TreeDecompositionPACE::addEmptyNodes(shared_ptr<RawAbstractTreeDecompositio
     if(node->children.size()==0){
         if(node->bag.get_elements().size()>0){
             shared_ptr<RawAbstractTreeDecomposition> empty_node(new RawAbstractTreeDecomposition);
+            empty_node->type = "Leaf";
             node->children.push_back(empty_node);
             empty_node->parent = node;
-            empty_node->type = "Leaf";
         }else{
             node->type = "Leaf";
         }
@@ -267,14 +267,23 @@ bool TreeDecompositionPACE::addIntroVertex(shared_ptr<RawAbstractTreeDecompositi
     }else if(node->children.size()==2){
         addIntroVertex(node->children[0]);
         addIntroVertex(node->children[1]);
+    }else if(node->children.size() >2){
+
+        cout << "ERROR in TreeDecompositionPACE::addIntroVertex, node has more that two children. Number of Children = " << node->children.size()<<endl;
+        exit(20);
     }
-    for(auto it:node->children){
-        if(node->type == it->type and node->type!="Join"){
-            cout<<"ERROR in TreeDecompositionPACE::addIntroVertex, has same IntroVertex type"<<endl;
-            cout<<node->type<<" "<<it->type<<endl;
-            exit(20);
-        }
-    }
+//    for(auto it:node->children){
+//        if(node->type == it->type and node->type!="Join"){
+//            cout<<"ERROR in TreeDecompositionPACE::addIntroVertex, has same IntroVertex type"<<endl;
+//            cout<<node->type<<" "<<it->type<<endl;
+////            node->bag.print();
+////            cout<<endl;
+////            it->bag.print();
+////            cout<<"\n"<<it->children.size()<<endl;
+////            printTree();
+//            exit(20);
+//        }
+//    }
     return true;
 }
 
@@ -523,11 +532,12 @@ void TreeDecompositionPACE::construct() {
     joinFormat(root);
     addEmptyNodes(root);
     addIntroVertex(root);
+
     addForgetVertex(root);
 
     set<unsigned> visited_edges;
     addIntroEdge(root,visited_edges);
-
+   // for(auto item:visited_edges){cout<<item<<",";}cout<<endl;
     colorTree();
     updateTD();
     validateTree(root);

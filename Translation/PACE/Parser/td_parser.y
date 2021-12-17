@@ -45,7 +45,7 @@
 
 TD_START                   : TD_COMMENTS TD_TDINFO TD_COMMENTS TD_BAGS TD_EDGES     {}
                            ;
-TD_TDINFO                  : TD_S TD_TD TD_NUM TD_NUM TD_NUM TD_NEWLINE   {td.setWidthType($2); td.setNum_vertices($3); td.setWidth($4-1);
+TD_TDINFO                  : TD_S TD_TD TD_NUM TD_NUM TD_NUM TD_NEWLINE   {td.setWidthType("tree_width"); td.setNum_vertices($3); td.setWidth($4-1);
                                                                            td.setNum_graph_vertices($5); }
                            ;
 TD_BAGS                    : TD_BAG TD_NEWLINE TD_COMMENTS TD_BAGS

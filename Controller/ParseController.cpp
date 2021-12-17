@@ -30,6 +30,7 @@ void ParseController::parse_pace(string graphPath, string decompositionPath) {
     TreeDecompositionPACE td;
 
     td.multigraph= multigraph;
+    multigraph->printToFile(name+"_GraphMAIN.txt");
     td_in = fopen(decompositionPath.c_str(),"r");
     if(!td_in) {
         std::perror("Reading Tree Decomposition: File opening failed");

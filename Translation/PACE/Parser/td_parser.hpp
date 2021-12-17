@@ -1,8 +1,9 @@
-/* A Bison parser, made by GNU Bison 3.0.4.  */
+/* A Bison parser, made by GNU Bison 3.5.1.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2020 Free Software Foundation,
+   Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -30,6 +31,9 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
+/* Undocumented macros, especially those whose name start with YY_,
+   are private implementation details.  Do not rely on them.  */
+
 #ifndef YY_TD_TD_PARSER_HPP_INCLUDED
 # define YY_TD_TD_PARSER_HPP_INCLUDED
 /* Debug traces.  */
@@ -48,7 +52,7 @@
 extern int td_debug;
 #endif
 /* "%code requires" blocks.  */
-#line 3 "td_parser.y" /* yacc.c:1909  */
+#line 3 "td_parser.y"
 
     #include "../TreeDecompositionPACE.h"
     #include <iostream>
@@ -56,7 +60,7 @@ extern int td_debug;
     #include <set>
 
 
-#line 60 "td_parser.hpp" /* yacc.c:1909  */
+#line 64 "td_parser.hpp"
 
 /* Token type.  */
 #ifndef TD_TOKENTYPE
@@ -74,18 +78,17 @@ extern int td_debug;
 
 /* Value type.  */
 #if ! defined TD_STYPE && ! defined TD_STYPE_IS_DECLARED
-
 union TD_STYPE
 {
-#line 26 "td_parser.y" /* yacc.c:1909  */
+#line 26 "td_parser.y"
 
      int number;
      char* string;
      set<unsigned>* set_unsigned;
 
-#line 87 "td_parser.hpp" /* yacc.c:1909  */
-};
+#line 90 "td_parser.hpp"
 
+};
 typedef union TD_STYPE TD_STYPE;
 # define TD_STYPE_IS_TRIVIAL 1
 # define TD_STYPE_IS_DECLARED 1
