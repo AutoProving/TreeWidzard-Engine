@@ -81,7 +81,8 @@ extern int command_debug;
     command_premise = 272,
     command_pw = 273,
     command_tw = 274,
-    command_equal = 275
+    command_equal = 275,
+    command_print_directed_bipartite_graph = 276
   };
 #endif
 
@@ -94,7 +95,7 @@ union COMMAND_STYPE
      float number;
      char* string;
 
-#line 98 "command_parser.hpp"
+#line 99 "command_parser.hpp"
 
 };
 typedef union COMMAND_STYPE COMMAND_STYPE;

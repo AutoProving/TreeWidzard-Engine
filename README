@@ -10,6 +10,7 @@
         -pl       print loop
         -ps       print states
         -st       print state tree decomposition if a counterexample is found
+        -pdbgn     print directed bipartite graph if a counterexample is found
 
     Random Search Parameters:
          seed: The seed that initializes the random generator. This is an unsigned int.
@@ -19,6 +20,8 @@
 
     Parsing a Tree Decomposition:
         1- For PACE Format
-            ./treewidzard -parse PACE <property file> <graph file> <tree decomposition file>
+            ./treewidzard -parse PACE [Flag Options] <property file> <graph file> <tree decomposition file>
         2- For ABSTRACT Decomposition Verify
-            ./treewidzard -parse ABSTRACT <property file> <abstract tree decomposition file>
+            ./treewidzard -parse ABSTRACT [Flag Options] <property file> <abstract tree decomposition file>
+     Flag Options:
+            -pdbgn     print directed bipartite graph in NAUTY format

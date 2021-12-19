@@ -39,11 +39,11 @@
 %parse-param {int &width_value}
 %token command_newline command_search_signature command_print_state_flag command_print_loop_flag command_string command_help command_end
         command_parse_signature command_parse_pace command_parse_abstract command_term_signature command_print_state_tree command_random_signature
-        command_number command_premise command_pw command_tw command_equal
+        command_number command_premise command_pw command_tw command_equal command_print_directed_bipartite_graph
 %type<string> command_newline command_search_signature command_print_state_flag command_print_loop_flag
               command_string command_input_file command_search_strategy command_help command_end command_random_signature
               command_parse_signature command_parse_pace command_parse_abstract command_term_signature command_print_state_tree command_premise
-              command_pw command_tw command_equal
+              command_pw command_tw command_equal command_print_directed_bipartite_graph
 %type<number> command_number
 %start command_start
 %glr-parser
@@ -86,6 +86,7 @@ command_flags       : command_print_state_flag command_flags {flags.add_flag("Pr
                     | command_print_loop_flag command_flags  {flags.add_flag("LoopTime", 1);}
                     | command_print_state_tree command_flags {flags.add_flag("StateTree", 1);}
                     | command_premise command_flags {flags.add_flag("Premise", 1);}
+                    | command_print_directed_bipartite_graph command_flags {flags.add_flag("PrintDirectedBipartiteGraphNAUTY", 1);}
                     |                                        {}
                     ;
 

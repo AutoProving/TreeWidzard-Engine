@@ -320,16 +320,16 @@ typedef int yytype_uint16;
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  17
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   45
+#define YYLAST   48
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  21
+#define YYNTOKENS  22
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  10
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  20
+#define YYNRULES  21
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  54
+#define YYNSTATES  56
 /* YYMAXRHS -- Maximum number of symbols on right-hand side of rule.  */
 #define YYMAXRHS 7
 /* YYMAXLEFT -- Maximum number of symbols to the left of a handle
@@ -337,7 +337,7 @@ typedef int yytype_uint16;
 #define YYMAXLEFT 0
 
 /* YYMAXUTOK -- Last valid token number (for yychar).  */
-#define YYMAXUTOK   275
+#define YYMAXUTOK   276
 /* YYUNDEFTOK -- Symbol number (for yytoken) that denotes an unknown
    token.  */
 #define YYUNDEFTOK  2
@@ -378,7 +378,7 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
-      15,    16,    17,    18,    19,    20
+      15,    16,    17,    18,    19,    20,    21
 };
 
 #if COMMAND_DEBUG
@@ -386,8 +386,8 @@ static const yytype_int8 yytranslate[] =
 static const yytype_int8 yyrline[] =
 {
        0,    53,    53,    54,    55,    56,    58,    65,    74,    75,
-      76,    85,    86,    87,    88,    89,    92,    94,    96,    98,
-     101
+      76,    85,    86,    87,    88,    89,    90,    93,    95,    97,
+      99,   102
 };
 #endif
 
@@ -403,25 +403,26 @@ static const char *const yytname[] =
   "command_parse_abstract", "command_term_signature",
   "command_print_state_tree", "command_random_signature", "command_number",
   "command_premise", "command_pw", "command_tw", "command_equal",
-  "$accept", "command_start", "command_search", "command_width",
-  "command_random", "command_flags", "command_input_file",
-  "command_search_strategy", "command_parse", "command_term", YY_NULLPTR
+  "command_print_directed_bipartite_graph", "$accept", "command_start",
+  "command_search", "command_width", "command_random", "command_flags",
+  "command_input_file", "command_search_strategy", "command_parse",
+  "command_term", YY_NULLPTR
 };
 #endif
 
-#define YYPACT_NINF (-26)
+#define YYPACT_NINF (-27)
 #define YYTABLE_NINF (-1)
 
   /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      28,   -15,    -2,    -6,     4,    15,   -26,   -26,   -26,    -1,
-       5,     3,   -26,     3,     3,   -26,    14,   -26,    10,    11,
-       3,     3,     3,     3,    -5,     4,     4,   -26,   -26,   -26,
-     -26,   -26,   -26,   -26,   -26,    17,    27,     4,     4,     4,
-      19,     4,    30,     4,    31,    21,    33,   -26,    34,   -26,
-      29,   -26,   -26,   -26
+      -2,     8,    -6,    23,     0,     5,   -27,   -27,   -27,    -4,
+      16,     4,   -27,     4,     4,   -27,    11,   -27,    12,    21,
+       4,     4,     4,     4,     4,    -3,     0,     0,   -27,   -27,
+     -27,   -27,   -27,   -27,   -27,   -27,   -27,    22,    17,     0,
+       0,     0,    24,     0,    30,     0,    32,    26,    34,   -27,
+      35,   -27,    29,   -27,   -27,   -27
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -430,23 +431,23 @@ static const yytype_int8 yypact[] =
 static const yytype_int8 yydefact[] =
 {
        0,     0,     0,     0,     0,     0,     2,     4,     5,     0,
-       0,    15,     3,    15,    15,    16,     0,     1,     0,     0,
-      15,    15,    15,    15,     0,     0,     0,    20,     8,     9,
-      11,    12,    13,    14,    17,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     6,     0,    19,
-       0,     7,    18,    10
+       0,    16,     3,    16,    16,    17,     0,     1,     0,     0,
+      16,    16,    16,    16,    16,     0,     0,     0,    21,     8,
+       9,    11,    12,    13,    14,    15,    18,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     6,
+       0,    20,     0,     7,    19,    10
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -26,   -26,   -26,   -26,   -26,     8,   -25,   -12,   -26,   -26
+     -27,   -27,   -27,   -27,   -27,     9,   -26,    10,   -27,   -27
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     5,     6,    11,    36,    24,    16,    37,     7,     8
+      -1,     5,     6,    11,    38,    25,    16,    39,     7,     8
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -454,48 +455,48 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      38,    39,    34,     9,    10,    13,    14,    12,    20,    21,
-      35,    15,    42,    43,    44,    17,    46,    22,    48,    18,
-      23,    25,    26,    27,    41,    19,    28,    29,    30,    31,
-      32,    33,     1,    40,    34,    45,     2,    50,     3,    47,
-      49,     4,    51,    52,     0,    53
+      40,    41,     1,    12,    36,    17,     2,    15,     3,    20,
+      21,     4,    37,    44,    45,    46,    18,    48,    22,    50,
+      28,    23,    26,    27,    36,    24,     9,    10,    29,    31,
+      32,    33,    34,    35,    13,    14,    19,    30,    42,    49,
+      47,    51,    52,    53,    54,    55,     0,     0,    43
 };
 
 static const yytype_int8 yycheck[] =
 {
-      25,    26,     7,    18,    19,    11,    12,     9,     5,     6,
-      15,     7,    37,    38,    39,     0,    41,    14,    43,    20,
-      17,    13,    14,     9,    36,    20,    16,    16,    20,    21,
-      22,    23,     4,    16,     7,    16,     8,    16,    10,     9,
-       9,    13,     9,     9,    -1,    16
+      26,    27,     4,     9,     7,     0,     8,     7,    10,     5,
+       6,    13,    15,    39,    40,    41,    20,    43,    14,    45,
+       9,    17,    13,    14,     7,    21,    18,    19,    16,    20,
+      21,    22,    23,    24,    11,    12,    20,    16,    16,     9,
+      16,     9,    16,     9,     9,    16,    -1,    -1,    38
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     4,     8,    10,    13,    22,    23,    29,    30,    18,
-      19,    24,     9,    11,    12,     7,    27,     0,    20,    20,
-       5,     6,    14,    17,    26,    26,    26,     9,    16,    16,
-      26,    26,    26,    26,     7,    15,    25,    28,    27,    27,
-      16,    28,    27,    27,    27,    16,    27,     9,    27,     9,
-      16,     9,     9,    16
+       0,     4,     8,    10,    13,    23,    24,    30,    31,    18,
+      19,    25,     9,    11,    12,     7,    28,     0,    20,    20,
+       5,     6,    14,    17,    21,    27,    27,    27,     9,    16,
+      16,    27,    27,    27,    27,    27,     7,    15,    26,    29,
+      28,    28,    16,    29,    28,    28,    28,    16,    28,     9,
+      28,     9,    16,     9,     9,    16
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    21,    22,    22,    22,    22,    23,    23,    24,    24,
-      25,    26,    26,    26,    26,    26,    27,    28,    29,    29,
-      30
+       0,    22,    23,    23,    23,    23,    24,    24,    25,    25,
+      26,    27,    27,    27,    27,    27,    27,    28,    29,    30,
+      30,    31
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_int8 yyr2[] =
 {
        0,     2,     1,     2,     1,     1,     6,     7,     3,     3,
-       5,     2,     2,     2,     2,     0,     1,     1,     7,     6,
-       3
+       5,     2,     2,     2,     2,     2,     0,     1,     1,     7,
+       6,     3
 };
 
 
@@ -504,7 +505,7 @@ static const yytype_int8 yydprec[] =
 {
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0
+       0,     0
 };
 
 /* YYMERGER[RULE-NUM] -- Index of merging function for rule #RULE-NUM.  */
@@ -512,7 +513,7 @@ static const yytype_int8 yymerger[] =
 {
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0
+       0,     0
 };
 
 /* YYIMMEDIATE[RULE-NUM] -- True iff rule #RULE-NUM is not to be deferred, as
@@ -521,7 +522,7 @@ static const yybool yyimmediate[] =
 {
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0
+       0,     0
 };
 
 /* YYCONFLP[YYPACT[STATE-NUM]] -- Pointer into YYCONFL of start of
@@ -534,7 +535,7 @@ static const yytype_int8 yyconflp[] =
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0
+       0,     0,     0,     0,     0,     0,     0,     0,     0
 };
 
 /* YYCONFL[I] -- lists of conflicting rule numbers, each terminated by
@@ -1082,7 +1083,7 @@ yyuserAction (yyRuleNum yyn, int yyrhslen, yyGLRStackItem* yyvsp,
   case 3:
 #line 54 "command_parser.y"
                                                {show_manual();}
-#line 1086 "command_parser.cpp"
+#line 1087 "command_parser.cpp"
     break;
 
   case 6:
@@ -1093,7 +1094,7 @@ yyuserAction (yyRuleNum yyn, int yyrhslen, yyGLRStackItem* yyvsp,
                       								SearchController search((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yysval.string),(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yysval.string),flags,width);
                                                                                 search.action();
                                                                                 }
-#line 1097 "command_parser.cpp"
+#line 1098 "command_parser.cpp"
     break;
 
   case 7:
@@ -1104,19 +1105,19 @@ yyuserAction (yyRuleNum yyn, int yyrhslen, yyGLRStackItem* yyvsp,
                                             							      	SearchController search((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yysval.string),(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yysval.string),flags,width);
                                                                                                       	search.action();
                                                                                                      }
-#line 1108 "command_parser.cpp"
+#line 1109 "command_parser.cpp"
     break;
 
   case 8:
 #line 74 "command_parser.y"
                                                                {width_type = "path_width"; if((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.number)<0){cout<< "width value should be not negative" << endl; YYERROR;} width_value=(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.number);}
-#line 1114 "command_parser.cpp"
+#line 1115 "command_parser.cpp"
     break;
 
   case 9:
 #line 75 "command_parser.y"
                                                               {width_type = "tree_width"; if((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.number)<0){cout<< "width value should be not negative" << endl; YYERROR;} width_value=(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.number);}
-#line 1120 "command_parser.cpp"
+#line 1121 "command_parser.cpp"
     break;
 
   case 10:
@@ -1129,71 +1130,77 @@ yyuserAction (yyRuleNum yyn, int yyrhslen, yyGLRStackItem* yyvsp,
 													    flags.add_flag("probForgetVertex", (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yysval.number));
 													    flags.add_flag("numberOfIterations", (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.number));
 												        	}
-#line 1133 "command_parser.cpp"
+#line 1134 "command_parser.cpp"
     break;
 
   case 11:
 #line 85 "command_parser.y"
                                                              {flags.add_flag("PrintStates", 1);}
-#line 1139 "command_parser.cpp"
+#line 1140 "command_parser.cpp"
     break;
 
   case 12:
 #line 86 "command_parser.y"
                                                              {flags.add_flag("LoopTime", 1);}
-#line 1145 "command_parser.cpp"
+#line 1146 "command_parser.cpp"
     break;
 
   case 13:
 #line 87 "command_parser.y"
                                                              {flags.add_flag("StateTree", 1);}
-#line 1151 "command_parser.cpp"
+#line 1152 "command_parser.cpp"
     break;
 
   case 14:
 #line 88 "command_parser.y"
                                                     {flags.add_flag("Premise", 1);}
-#line 1157 "command_parser.cpp"
+#line 1158 "command_parser.cpp"
     break;
 
   case 15:
 #line 89 "command_parser.y"
-                                                             {}
-#line 1163 "command_parser.cpp"
+                                                                           {flags.add_flag("PrintDirectedBipartiteGraphNAUTY", 1);}
+#line 1164 "command_parser.cpp"
     break;
 
   case 16:
-#line 92 "command_parser.y"
-                                     { ((*yyvalp).string)=(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.string);}
-#line 1169 "command_parser.cpp"
+#line 90 "command_parser.y"
+                                                             {}
+#line 1170 "command_parser.cpp"
     break;
 
   case 17:
-#line 94 "command_parser.y"
-                                         { ((*yyvalp).string)=(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.string);}
-#line 1175 "command_parser.cpp"
+#line 93 "command_parser.y"
+                                     { ((*yyvalp).string)=(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.string);}
+#line 1176 "command_parser.cpp"
     break;
 
   case 18:
-#line 97 "command_parser.y"
-                                  { ParseController parsePACE(flags, (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-3)].yystate.yysemantics.yysval.string)); parsePACE.parse_pace((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yysval.string), (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yysval.string)); }
-#line 1181 "command_parser.cpp"
+#line 95 "command_parser.y"
+                                         { ((*yyvalp).string)=(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.string);}
+#line 1182 "command_parser.cpp"
     break;
 
   case 19:
-#line 99 "command_parser.y"
-                        { ParseController parsePACE(flags, (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yysval.string)); parsePACE.parse_abstract((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yysval.string));}
-#line 1187 "command_parser.cpp"
+#line 98 "command_parser.y"
+                                  { ParseController parsePACE(flags, (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-3)].yystate.yysemantics.yysval.string)); parsePACE.parse_pace((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yysval.string), (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yysval.string)); }
+#line 1188 "command_parser.cpp"
     break;
 
   case 20:
-#line 101 "command_parser.y"
+#line 100 "command_parser.y"
+                        { ParseController parsePACE(flags, (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yysval.string)); parsePACE.parse_abstract((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yysval.string));}
+#line 1194 "command_parser.cpp"
+    break;
+
+  case 21:
+#line 102 "command_parser.y"
                                                                            {ParseController parseTest(flags,(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yysval.string)); parseTest.test_term();}
-#line 1193 "command_parser.cpp"
+#line 1200 "command_parser.cpp"
     break;
 
 
-#line 1197 "command_parser.cpp"
+#line 1204 "command_parser.cpp"
 
       default: break;
     }
@@ -2933,7 +2940,7 @@ yypdumpstack (yyGLRStack* yystackp)
 #define yynerrs command_nerrs
 #define yylloc  command_lloc
 
-#line 103 "command_parser.y"
+#line 104 "command_parser.y"
 
 
 void yyerror(int &result, string &width_type, int &width_value, char const* msg){

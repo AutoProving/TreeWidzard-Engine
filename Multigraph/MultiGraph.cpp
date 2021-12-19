@@ -138,7 +138,7 @@ void MultiGraph::readFromFile(ifstream &file) {
 			exit(20);
 		}
 	}
-	if (!isMultigraph()) {
+	if (!isMultiGraph()) {
 		cout << "The graph is not valid multigraph" << endl;
 		exit(20);
 	}
@@ -193,7 +193,23 @@ void MultiGraph::printToFilePACEFormat(string fileName) {
 
 }
 
-bool MultiGraph::isMultigraph() {
+void MultiGraph::printToFileDirectedBipartiteGraphNAUTY(string fileName) {
+    ofstream multiGraphFile (fileName);
+    if (multiGraphFile.is_open())
+    {
+        multiGraphFile << "n="<<this->vertices.size()+this->edgesSize()<< " g" << endl;
+        for(auto edge: this->incidenceMap){
+            multiGraphFile<< edge.first << ":" << edge.second+edgesSize() << endl;
+        }
+        multiGraphFile.close();
+    }else {
+        cout << "Unable to open "<< fileName << endl;
+        exit(20);
+    }
+
+}
+
+bool MultiGraph::isMultiGraph() {
 	for (set<unsigned>::iterator itr = this->edges.begin();
 		 itr != this->edges.end(); ++itr) {
 		if (this->incidenceMap.count(*itr) != 2) {

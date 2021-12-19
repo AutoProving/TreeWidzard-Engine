@@ -30,7 +30,7 @@ void ParseController::parse_pace(string graphPath, string decompositionPath) {
     TreeDecompositionPACE td;
 
     td.multigraph= multigraph;
-    multigraph->printToFile(name+"_GraphMAIN.txt");
+   // multigraph->printToFile(name+"_GraphMAIN.txt");
     td_in = fopen(decompositionPath.c_str(),"r");
     if(!td_in) {
         std::perror("Reading Tree Decomposition: File opening failed");
@@ -64,6 +64,9 @@ void ParseController::parse_pace(string graphPath, string decompositionPath) {
     multiGraph.printToFile(name+"_Graph.txt");
     multiGraph.convertToGML(name+"_GMLGraph.gml");
     multiGraph.printToFilePACEFormat(name+"_GraphPaceFormat.gr");
+    if(flag.get("PrintDirectedBipartiteGraphNAUTY")){
+        multiGraph.printToFileDirectedBipartiteGraphNAUTY(name+"_DirectedBipartiteGraphNAUTY.txt");
+    }
 
     //cout<<"---------------------------------------------State Tree"<<endl;
     //concreteTreeDecomposition->conjectureCheck(inputController->getConjecture());
@@ -102,6 +105,9 @@ void ParseController::parse_abstract(string abstractPath) {
     multiGraph.printToFile(name+"_Graph.txt");
     multiGraph.convertToGML(name+"_GMLGraph.gml");
     multiGraph.printToFilePACEFormat(name+"_GraphPaceFormat.gr");
+    if(flag.get("PrintDirectedBipartiteGraphNAUTY")){
+        multiGraph.printToFileDirectedBipartiteGraphNAUTY(name+"_DirectedBipartiteGraphNAUTY.txt");
+    }
 
 }
 

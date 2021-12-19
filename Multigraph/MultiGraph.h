@@ -74,12 +74,16 @@ class MultiGraph {
 
 	void printToFilePACEFormat(string fileName);
 
-	bool isMultigraph(); // Tests if for each edge there is exactly two distinct
+    void printToFileDirectedBipartiteGraphNAUTY(string fileName);
+
+    bool isMultiGraph(); // Tests if for each edge there is exactly two distinct
 						 // elements in the map.
 
 	bool convertToGML(string fileName);
 
 	bool convertFromGML();
+
+
 };
 
 /*
