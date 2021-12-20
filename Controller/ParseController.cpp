@@ -91,7 +91,6 @@ void ParseController::parse_abstract(string abstractPath) {
              << endl;
         exit(20);
     }
-    abstractTreeDecomposition.printTermNodes();
     ConcreteTreeDecomposition concreteTreeDecomposition = abstractTreeDecomposition.convertToConcreteTreeDecomposition();
     //concreteTreeDecomposition.printTermNodes();
     cout<<"----Evaluating-----:"<<endl;

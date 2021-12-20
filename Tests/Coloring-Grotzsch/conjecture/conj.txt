@@ -1,3 +1,4 @@
-z := ChromaticNumber <= 3
+y := MaxDegree > 3
+z := ChromaticNumber <= 2
 Formula
-z
+NOT y IMPLIES z

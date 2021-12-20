@@ -116,7 +116,7 @@ void IsomorphismBreadthFirstSearch::search(){
                     satisfiesPremise = conjecture->evaluatePremiseOnState(*relabeledNewStatePointer);
                 }
                 if(!premiseFlag or (premiseFlag and satisfiesPremise) ) {
-                    if (!allStatesSet.count(newStatePointer) and !newStatesSet.count(relabeledNewStatePointer)) {
+                    if (!allStatesSet.count(relabeledNewStatePointer) and !newStatesSet.count(relabeledNewStatePointer)) {
                         newStatesSet.insert(relabeledNewStatePointer);
                         State::ptr consequentState = relabeledNewStatePointer;
                         AbstractTreeDecompositionNodeContent transitionContent("ForgetVertex_" + to_string(*it));
@@ -276,24 +276,31 @@ void IsomorphismBreadthFirstSearch::search(){
         }
         for(auto it = newStatesSet.begin(); it!=newStatesSet.end(); it++){
             if(!conjecture->evaluateConjectureOnState(**it)){
+                cout<<"Conjecture: Not Satisfied"<<endl;
                 State::ptr badState = *it;
                 bfsDAG.addFinalState(badState);
+                string file = this->getOutputsPath();
+                if (flags->get("Premise")) { file + "_Premise"; }
+                file += "_CounterExample";
+
                 RunTree<State::ptr,AbstractTreeDecompositionNodeContent> runTree = extractRunTree(*it);
-                runTree.writeToFile(this->getPropertyFilePath());
+                runTree.writeToFile(file + "_RunTree.txt");
                 ///=======ABSTRACT TREE=========///
                 Term<AbstractTreeDecompositionNodeContent>* term = new AbstractTreeDecomposition;
                 *term = runTree.convertRunToTerm(runTree);
                 AbstractTreeDecomposition* atd = static_cast<AbstractTreeDecomposition *>(term);
-                atd->writeToFile(this->getPropertyFilePath());
+                atd->writeToFile(file + "_AbstractDecomposition.txt");
                 ///=======Concrete TREE=========///
                 ConcreteTreeDecomposition ctd = atd->convertToConcreteTreeDecomposition();
-                ctd.writeToFile(this->getPropertyFilePath());
+                ctd.writeToFile(file + "_ConcreteDecomposition.txt");
                 MultiGraph multiGraph = ctd.extractMultiGraph();
                 multiGraph.printGraph();
-                multiGraph.printToFile(this->getPropertyFilePath());
-                multiGraph.convertToGML(this->getPropertyFilePath());
-                multiGraph.printToFilePACEFormat(this->getPropertyFilePath());
-                cout<<"Conjecture: Not Satisfied"<<endl;
+                multiGraph.printToFile(file + "_Graph.txt");
+                multiGraph.convertToGML(file + "_GMLGraph.gml");
+                multiGraph.printToFilePACEFormat(file + "_GraphPaceFormat.gr");
+                if(flags->get("PrintDirectedBipartiteGraphNAUTY")){
+                    multiGraph.printToFileDirectedBipartiteGraphNAUTY(file+"_DirectedBipartiteGraphNAUTY.txt");
+                }
                 return;
             }
         }

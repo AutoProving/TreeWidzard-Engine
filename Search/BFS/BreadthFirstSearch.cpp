@@ -317,26 +317,30 @@ void BreadthFirstSearch::search(){
               }
             }
             for(auto it = newStatesSet.begin(); it!=newStatesSet.end(); it++){
-              if(!conjecture->evaluateConjectureOnState(**it)){
-                State::ptr badState = *it;
-                bfsDAG.addFinalState(badState);
-                AbstractTreeDecomposition atd  = extractCounterExampleTerm(badState);
-                string file = this->getOutputsPath();
-                if(flags->get("Premise")){file + "_Premise";}
-                file+="_CounterExample";
-                atd.writeToFile(file+"_AbstractDecomposition.txt");
-                ConcreteTreeDecomposition ctd = atd.convertToConcreteTreeDecomposition();
-                ctd.writeToFile(file+"_ConcreteDecomposition.txt");
-                RunTree<State::ptr,AbstractTreeDecompositionNodeContent> runTree = extractCounterExampleRun(badState);
-                runTree.writeToFile(file+"_RunTree.txt");
-                MultiGraph multiGraph = ctd.extractMultiGraph();
-                multiGraph.printGraph();
-                multiGraph.printToFile(file+"_Graph.txt");
-                multiGraph.convertToGML(file+"_GMLGraph.gml");
-                multiGraph.printToFilePACEFormat(file+"_GraphPaceFormat.gr");
-                cout<<"Conjecture: Not Satisfied"<<endl;
-                return;
-              }
+                if (!conjecture->evaluateConjectureOnState(**it)) {
+                    cout << "Conjecture: Not Satisfied" << endl;
+                    State::ptr badState = *it;
+                    bfsDAG.addFinalState(badState);
+                    AbstractTreeDecomposition atd = extractCounterExampleTerm(badState);
+                    string file = this->getOutputsPath();
+                    if (flags->get("Premise")) { file + "_Premise"; }
+                    file += "_CounterExample";
+                    atd.writeToFile(file + "_AbstractDecomposition.txt");
+                    ConcreteTreeDecomposition ctd = atd.convertToConcreteTreeDecomposition();
+                    ctd.writeToFile(file + "_ConcreteDecomposition.txt");
+                    RunTree<State::ptr, AbstractTreeDecompositionNodeContent> runTree = extractCounterExampleRun(
+                            badState);
+                    runTree.writeToFile(file + "_RunTree.txt");
+                    MultiGraph multiGraph = ctd.extractMultiGraph();
+                    multiGraph.printGraph();
+                    multiGraph.printToFile(file + "_Graph.txt");
+                    multiGraph.convertToGML(file + "_GMLGraph.gml");
+                    multiGraph.printToFilePACEFormat(file + "_GraphPaceFormat.gr");
+                    if(flags->get("PrintDirectedBipartiteGraphNAUTY")){
+                        multiGraph.printToFileDirectedBipartiteGraphNAUTY(file+"_DirectedBipartiteGraphNAUTY.txt");
+                    }
+                    return;
+                }
           }
           set<State::ptr> setUnion;
           set_union(allStatesSet.begin(),allStatesSet.end(),newStatesSet.begin(),newStatesSet.end(),inserter(setUnion,setUnion.begin()));
