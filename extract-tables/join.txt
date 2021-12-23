@@ -1,0 +1,10 @@
+\begin{table}[] 
+\centering 
+\begin{tabularx}{\textwidth}{|p{1cm}
+|X|X|X||X|X|X||X|X|X||X|X|X|}
+\hline
+\multicolumn{1}{|c}{ } & \multicolumn{3}{c}{\thead{BFS}} &  \multicolumn{3}{c}{\thead{Iso-BFS}}&  \multicolumn{3}{c}{\thead{BFS-Premise}} &  \multicolumn{3}{c|}{\thead{Iso-BFS-Premie}}\\ \hline 
+\diagbox{pw}{v} & 5 & 6 & 7 & 5 & 6 & 7 & 5 & 6 & 7 & 5 & 6 & 7\\ \hline 
+1 & 94 & 115 & 138 & 56 & 67 & 79 & 33 & 39 & 45 & 18 & 21 & 24 \\ \hline 
+2 & 19466 & 35851 & 61182 & 3504 & 6317 & 10638 & 977 & 1421 & 1949 & 194 & 274 & 368 \\ \hline 
+3 & 15991831 & 16675604$>$ & 9468389 & 680667 & 2125693 & 5606711 & 60690 & 113232 & 189954 & 3002 & 5411 & 8870 \\ \hline 

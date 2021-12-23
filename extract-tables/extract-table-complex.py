@@ -3,6 +3,7 @@ if __name__ == '__main__':
     import pandas as pd
     import math
     import matplotlib.pyplot as plt
+    import os
 
     parser = argparse.ArgumentParser(description="This is a script for generating a latex table.")
     parser.add_argument('--input-file', type=argparse.FileType('r'), nargs=1, required=True, help="excel file")
@@ -17,7 +18,9 @@ if __name__ == '__main__':
     number_of_search = 4
     property_name = "MaxDegree"
     # print(data.loc[(data["error-output"]=="Error" )& (data["MaxDegree"]==3)])
-    table_file = open("table.txt", "w")
+    # print(os.path.splitext(file.name)[0])
+
+    table_file = open(os.path.splitext(file.name)[0] + "-table.txt", "w")
     table_file.write("\\begin{table}[] \n")
     table_file.write("\centering \n")
     table_file.write("\\begin{tabularx}{\\textwidth}{|p{1cm}\n")
@@ -38,7 +41,7 @@ if __name__ == '__main__':
     table_file.write("\diagbox{pw}{v}")
 
     for i in range(number_of_search):
-        for v in value_range:
+      for v in value_range:
             table_file.write(" & " + str(v))
     table_file.write("\\\ \hline \n")
     for p in path_value:
@@ -47,20 +50,23 @@ if __name__ == '__main__':
             for s in searches:
                 for m in value_range:
                     l = data.loc[(data[" Search Type"] == s) & (data[property_name] == m) & (
-                            data["width"] == " pw = " + str(p)) & (data["Search Options"] == flag)]
+                            data["width"] == " pw = " + str(p)) & (data["Search Options"] == flag) & (
+                                     pd.notnull(data["all-states"]))]
                     if len(l.index) > 0:
                         print(p, s, flag, m)
                         print(len(l.index))
                         print("--------------------------------------------------------------------------------")
                         if "TIME LIMIT" in str(l.iloc[0]["error"]):
-                            # row = row + " & " + str(math.isqrt(l.iloc[0]["all-states"])) + "$>$"
-                            row = row + " & " + str(l.iloc[0]["all-states"]) + "$>$"
-                        elif "" in str(l.iloc[0]["error"]):
-                            # row = row + " & " + str(math.isqrt(l.iloc[0]["all-states"]))
-                            row = row + " & " + str(l.iloc[0]["all-states"])
-                            print(l["error"])
+                            row = row + " & " + str(math.isqrt(int(l.iloc[0]["all-states"]))) + "$>$"
+                            # row = row + " & " + str(l.iloc[0]["all-states"]) + "$>$"
+                        elif "MEMORY LIMIT" in str(l.iloc[0]["error"]):
+                            row = row + " & " + str(math.isqrt(int(l.iloc[0]["all-states"]))) + "$>$"
+                            # row = row + " & " + str(l.iloc[0]["all-states"]) + "$>$"
+                        elif pd.isnull(l.iloc[0]["error"]):
+                            row = row + " & " + str(math.isqrt(int(l.iloc[0]["all-states"])))
+                            # row = row + " & " + str(l.iloc[0]["all-states"])
                         else:
-                            row = row + " & err"
+                            row = row + " & c"
                     else:
                         print(p, s, flag, m)
                         print(len(l.index))
@@ -83,12 +89,12 @@ if __name__ == '__main__':
     l4 = data.loc[(data["width"] == " pw = " + pw) & (data[" Search Type"] == "IsomorphismBreadthFirstSearch") & (
             data["Search Options"] == "-premise") & (pd.isnull(data["error"]))]
 
-    print(l1)
+    # print(l1)
     fig = plt.figure()
     plt.plot(l1[property_name], l1['all-states'], label='bfs')
-    #plt.plot(l2[property_name], l2['all-states'], label='bfs-premise')
-    #plt.plot(l3[property_name], l3['all-states'], label='iso-bfs')
-    #plt.plot(l4[property_name], l4['all-states'], label='iso-bfs-premise')
+    plt.plot(l2[property_name], l2['all-states'], label='bfs-premise')
+    plt.plot(l3[property_name], l3['all-states'], label='iso-bfs')
+    plt.plot(l4[property_name], l4['all-states'], label='iso-bfs-premise')
     # plt.yscale('log')
     plt.grid(True)
 
