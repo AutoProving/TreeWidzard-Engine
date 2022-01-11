@@ -169,6 +169,14 @@ void ConcreteTreeDecomposition::buildDecompositionBags(shared_ptr<DecompositionN
             exit(20);
         }
         //////////// End of Finding the introduced vertex ///////////
+        
+        //shared_ptr<DecompositionNode> nNode (new DecompositionNode());
+        //set<unsigned> vertices = node->getVertices();
+        //vertices.erase(*(bagSetDifference.begin()));
+        //nNode->setVertices(vertices);
+        //nNode->setParent(node);
+        //node->addChild(nNode);
+
         colorToVertexMapCopy.erase(*(bagSetDifference.begin()));
         
         buildDecompositionBags(node,*(cNode.getChildren()[0]), colorToVertexMapCopy,
@@ -191,12 +199,13 @@ void ConcreteTreeDecomposition::buildDecompositionBags(shared_ptr<DecompositionN
         }
         //////////// End of Finding the Forgotten vertex ///////////
         nVertices = nVertices + 1;
+        colorToVertexMapCopy[*(bagSetDifference.begin())] = nVertices;
         shared_ptr<DecompositionNode> nNode (new DecompositionNode());
-        nNode->setVertices(node->getVertices());
-        nNode->addVertex(nVertices);
+        for(auto item:colorToVertexMapCopy) nNode->addVertex(item.second);
+       // nNode->setVertices(node->getVertices());
+      //  nNode->addVertex(nVertices);
         nNode->setParent(node);
         node->addChild(nNode);
-        colorToVertexMapCopy[*(bagSetDifference.begin())] = nVertices;
         buildDecompositionBags(nNode,*(cNode.getChildren()[0]), colorToVertexMapCopy,
                 nVertices); // Nothing happens. Just process the next bag.
     } else if (strstr(cNode.getNodeContent().getSymbol().c_str(), "IntroEdge")) {

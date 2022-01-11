@@ -5,6 +5,9 @@
 #include <memory>
 #include<set>
 #include<vector>
+#include<list>
+#include <utility>      // std::pair, std::make_pair
+#include <string>
 using namespace std;
 
 class DecompositionNode {
@@ -32,6 +35,7 @@ class Decomposition{
         Decomposition();
         void setRoot(shared_ptr<DecompositionNode> node);
         void print();
+        string printNode(shared_ptr<DecompositionNode> node,int &labeli,int parentLabel,list<pair<int,int>> &edges);
 };
 
 #endif

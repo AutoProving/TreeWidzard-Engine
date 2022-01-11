@@ -30,7 +30,7 @@ void ParseController::parse_pace(string graphPath, string decompositionPath) {
     TreeDecompositionPACE td;
 
     td.multigraph= multigraph;
-   // multigraph->printToFile(name+"_GraphMAIN.txt");
+    // multigraph->printToFile(name+"_GraphMAIN.txt");
     td_in = fopen(decompositionPath.c_str(),"r");
     if(!td_in) {
         std::perror("Reading Tree Decomposition: File opening failed");
@@ -44,16 +44,16 @@ void ParseController::parse_pace(string graphPath, string decompositionPath) {
         cout<<" Error: input file "<< decompositionPath<< " is not in valid format"<<endl;
         exit(20);
     }
-//    cout<< " tree decomposition read from input"<<endl;
-//    td.print();
+    //    cout<< " tree decomposition read from input"<<endl;
+    //    td.print();
     /////////////////////////////////////////////////////////////////////////////////
     td.construct();
-//    td.print();
-//    td.printTree();
- //   cout<<"-----------Concrete decomposition"<<endl;
+    //    td.print();
+    //    td.printTree();
+    //   cout<<"-----------Concrete decomposition"<<endl;
     shared_ptr<ConcreteTreeDecomposition> concreteTreeDecomposition;
     concreteTreeDecomposition = td.convertToConcreteTreeDecomposition();
-  //  concreteTreeDecomposition->printTermNodes();
+    //  concreteTreeDecomposition->printTermNodes();
     cout<<"----Evaluating-----:"<<endl;
     concreteTreeDecomposition->conjectureCheck(this->inputController->getConjecture(),flag, name);
     AbstractTreeDecomposition abstractTreeDecomposition = concreteTreeDecomposition->convertToAbstractTreeDecomposition();
@@ -67,7 +67,8 @@ void ParseController::parse_pace(string graphPath, string decompositionPath) {
     if(flag.get("PrintDirectedBipartiteGraphNAUTY")){
         multiGraph.printToFileDirectedBipartiteGraphNAUTY(name+"_DirectedBipartiteGraphNAUTY.txt");
     }
-
+    Decomposition decomposition = concreteTreeDecomposition->extractDecomposition(); 
+    decomposition.print();
     //cout<<"---------------------------------------------State Tree"<<endl;
     //concreteTreeDecomposition->conjectureCheck(inputController->getConjecture());
     //WitnessTreePACE witnessTreePace;
@@ -88,7 +89,7 @@ void ParseController::parse_abstract(string abstractPath) {
     // check for successful parsing
     if (resultATD != 0) {
         cout << " Error: input file " << abstractPath << " is not in valid format"
-             << endl;
+            << endl;
         exit(20);
     }
     ConcreteTreeDecomposition concreteTreeDecomposition = abstractTreeDecomposition.convertToConcreteTreeDecomposition();
@@ -112,20 +113,20 @@ void ParseController::parse_abstract(string abstractPath) {
 
 void ParseController::test_term() {
 
-//    AbstractTreeDecompositionNodeContent abstractTreeDecompositionNodeContent1("IntroVertex_13456");
-//    AbstractTreeDecompositionNodeContent abstractTreeDecompositionNodeContent2("IntroVertex_7_9");
-//    ConcreteTreeDecomposition abstractTreeDecomposition;
-//    shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> a1(new TermNode<AbstractTreeDecompositionNodeContent>);
-//    shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> a2(new TermNode<AbstractTreeDecompositionNodeContent>);
-//    a1->setNodeContent(abstractTreeDecompositionNodeContent1);
-//    a2->setNodeContent(abstractTreeDecompositionNodeContent2);
-//    vector<shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> > children;
-//    children.push_back(a2);
-//    a2->setParent(a1);
-//    a1->setChildren(children);
-//    abstractTreeDecomposition.setRoot(a1);
-//    abstractTreeDecomposition.printTermNodes();
-//    TreeAutomaton<FarhadState,AbstractTreeDecompositionNodeContent> treeAutomaton;
+    //    AbstractTreeDecompositionNodeContent abstractTreeDecompositionNodeContent1("IntroVertex_13456");
+    //    AbstractTreeDecompositionNodeContent abstractTreeDecompositionNodeContent2("IntroVertex_7_9");
+    //    ConcreteTreeDecomposition abstractTreeDecomposition;
+    //    shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> a1(new TermNode<AbstractTreeDecompositionNodeContent>);
+    //    shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> a2(new TermNode<AbstractTreeDecompositionNodeContent>);
+    //    a1->setNodeContent(abstractTreeDecompositionNodeContent1);
+    //    a2->setNodeContent(abstractTreeDecompositionNodeContent2);
+    //    vector<shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> > children;
+    //    children.push_back(a2);
+    //    a2->setParent(a1);
+    //    a1->setChildren(children);
+    //    abstractTreeDecomposition.setRoot(a1);
+    //    abstractTreeDecomposition.printTermNodes();
+    //    TreeAutomaton<FarhadState,AbstractTreeDecompositionNodeContent> treeAutomaton;
 
 }
 

@@ -46,3 +46,32 @@ void Decomposition::setRoot(shared_ptr<DecompositionNode> node){
     this->root = node;
 
 }
+
+void Decomposition::print(){
+    list<pair<int,int>> edges;
+    int label = 0;
+    int parentLabel = 0;
+    string s = printNode(root,label,parentLabel,edges);
+    for(auto item:edges){
+        s+=to_string(item.first)+" "+to_string(item.second)+"\n";
+    }
+    cout<<s;
+}
+
+string Decomposition::printNode(shared_ptr<DecompositionNode> node, int &label, int parentLabel,list<pair<int,int>> &edges){
+    label++;
+    if(parentLabel != 0)
+        edges.push_back(make_pair(parentLabel,label));
+    int l = label;
+    string str = "b " + to_string(label);
+    set<unsigned> v = node->getVertices();
+    for(auto item:v){
+        str+= " "+to_string(item); 
+    }
+    str+= "\n";
+    vector<shared_ptr<DecompositionNode>> children = node->getChildren();
+    for(int i = 0; i < children.size() ; i++){
+        str += printNode(children[i],label,l,edges);
+    }
+    return str;
+}
