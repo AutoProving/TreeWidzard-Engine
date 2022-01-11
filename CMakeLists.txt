@@ -170,6 +170,9 @@ add_executable(
         TreeAutomaton/RunTree.cpp TreeAutomaton/RunTree.h
         TreeAutomaton/ConcreteTreeDecomposition.cpp
         TreeAutomaton/ConcreteTreeDecomposition.h
+        TreeAutomaton/DecompositionTree.h
+        TreeAutomaton/DecompositionTree.cpp
+
 )
 target_link_libraries(treewidzard ${CMAKE_DL_LIBS})
 
