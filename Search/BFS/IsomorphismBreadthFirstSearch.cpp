@@ -280,7 +280,7 @@ void IsomorphismBreadthFirstSearch::search(){
                 State::ptr badState = *it;
                 bfsDAG.addFinalState(badState);
                 string file = this->getOutputsPath();
-                if (flags->get("Premise")) { file + "_Premise"; }
+                if (flags->get("Premise")) { file += "_Premise"; }
                 file += "_CounterExample";
 
                 RunTree<State::ptr,AbstractTreeDecompositionNodeContent> runTree = extractRunTree(*it);

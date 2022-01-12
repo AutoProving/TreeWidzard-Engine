@@ -55,6 +55,8 @@ void Decomposition::print(){
     for(auto item:edges){
         s+=to_string(item.first)+" "+to_string(item.second)+"\n";
     }
+    findMaxBagSizeAndVertices(root);
+    s  = "s td " + to_string(label)+ " " + to_string(maxBagSize) + " " + to_string(vertices.size())+"\n" + s;
     cout<<s;
 }
 
@@ -75,3 +77,46 @@ string Decomposition::printNode(shared_ptr<DecompositionNode> node, int &label, 
     }
     return str;
 }
+
+string Decomposition::stringPrint(){
+    list<pair<int,int>> edges;
+    int label = 0;
+    int parentLabel = 0;
+    string s = printNode(root,label,parentLabel,edges);
+    for(auto item:edges){
+        s+=to_string(item.first)+" "+to_string(item.second)+"\n";
+    }
+    findMaxBagSizeAndVertices(root);
+    s  = "s td " + to_string(label)+ " " + to_string(maxBagSize) + " " + to_string(vertices.size())+"\n" + s;
+    return s;
+}
+
+void Decomposition::writeToFile(string fileName) {
+    ofstream decFile(fileName);
+    if (decFile.is_open())
+    {
+        decFile << stringPrint();
+        decFile.close();
+    }
+    else {
+        cout << "Unable to open "<< fileName << endl;
+        exit(20);
+    }
+}
+
+void Decomposition::findMaxBagSizeAndVertices(shared_ptr<DecompositionNode> node){
+        if(maxBagSize < node->getVertices().size())
+        {
+            maxBagSize = node->getVertices().size();
+        }
+        set<unsigned> nVertices;
+        set<unsigned> nodeVertices = node->getVertices();
+        set_union(nodeVertices.begin(),nodeVertices.end(),vertices.begin(),vertices.end(),inserter(nVertices,nVertices.begin()));
+        vertices = nVertices;
+        for(int i = 0; i < node->getChildren().size(); i++){
+            findMaxBagSizeAndVertices(node->getChildren()[i]);
+        }
+}
+
+
+

@@ -8,6 +8,8 @@
 #include<list>
 #include <utility>      // std::pair, std::make_pair
 #include <string>
+#include<fstream>
+#include<algorithm>
 using namespace std;
 
 class DecompositionNode {
@@ -31,11 +33,16 @@ class DecompositionNode {
 class Decomposition{
     private: 
         shared_ptr<DecompositionNode> root;
+        int maxBagSize = 0;
+        set<unsigned> vertices; // vertices of the orginal graphs
     public:
         Decomposition();
         void setRoot(shared_ptr<DecompositionNode> node);
         void print();
+        string stringPrint();
         string printNode(shared_ptr<DecompositionNode> node,int &labeli,int parentLabel,list<pair<int,int>> &edges);
+        void writeToFile(string fileName);
+        void findMaxBagSizeAndVertices(shared_ptr<DecompositionNode> node);
 };
 
 #endif

@@ -176,13 +176,18 @@ void MultiGraph::printToFilePACEFormat(string fileName) {
     if (multiGraphFile.is_open())
     {
         multiGraphFile << "c This is the counter example for "<<fileName << endl;
-        multiGraphFile<< "p td " << this->vertices.size() << " " << edges.size() << endl;
+        multiGraphFile<< "p tw " << this->vertices.size() << " " << edges.size() << endl;
         for (set<unsigned>::iterator itr = this->edges.begin(); itr != this->edges.end(); ++itr) {
-           // multiGraphFile << *itr << "\t";
             auto equalIt = incidenceMap.equal_range(*itr);
+            bool spaceFlag = false; // This is used to put spaces between endpoints of an edge.
             for (auto it = equalIt.first; it != equalIt.second; ++it) {
-                multiGraphFile << it->second << " ";
+                if(spaceFlag){
+                    multiGraphFile << " " ;
+                }
+                multiGraphFile << it->second;
+                spaceFlag = true;
             }
+
             multiGraphFile << endl;
         }
         multiGraphFile.close();

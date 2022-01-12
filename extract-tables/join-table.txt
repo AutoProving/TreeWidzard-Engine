@@ -1,14 +1,13 @@
 \begin{table}[] 
 \centering 
-\begin{tabularx}{\textwidth}{|p{1cm}
-|X|X|X||X|X|X||X|X|X||X|X|X|}
+\begin{tabularx}{\textwidth}{|p{1cm}| X|X|X|X|X|X|X|X|X|X|}
 \hline
-\multicolumn{1}{|c}{ } & \multicolumn{3}{c}{\thead{BFS}} &  \multicolumn{3}{c}{\thead{Iso-BFS}}&  \multicolumn{3}{c}{\thead{BFS-Premise}} &  \multicolumn{3}{c|}{\thead{Iso-BFS-Premie}}\\ \hline 
-\diagbox{pw}{v} & 5 & 6 & 7 & 5 & 6 & 7 & 5 & 6 & 7 & 5 & 6 & 7\\ \hline 
-1 & 9 & 10 & 11 & 7 & 8 & 8 & 5 & 6 & 6 & 4 & 4 & 4 \\ \hline 
-2 & 139 & 189 & 247 & 59 & 79 & 103 & 31 & 37 & 44 & 13 & 16 & 19 \\ \hline 
-3 & 3998 & 4083$>$ & c & 825 & 1457 & c & 246 & 336 & 435 & 54 & 73 & 94 \\ \hline 
-4 & c & c &  & c & c &  & c & c &  & 275 & 429 &  \\ \hline 
-5 & c & c &  & c & c &  & c & c &  & c &  &  \\ \hline 
+\multicolumn{1}{|c|}{ }& \multicolumn{5}{c|}{\thead{IsomorphismBreadthFirstSearch }}& \multicolumn{5}{c|}{\thead{IsomorphismBreadthFirstSearch-premise}}\\ \hline 
+\diagbox{pw}{v} & 1 & 2 & 3 & 4 & 5 & 1 & 2 & 3 & 4 & 5\\ \hline 
+ pw = 1 & err & err & 7 & 8 & 9 & err & err & 7 & 8 & 9 \\ \hline 
+ pw = 2 & err & err & 42 & 64 & 93 & err & err & 42 & 64 & 93 \\ \hline 
+ pw = 3 & err & err & 4471393$>$ & 2515 & 5924 & err & err & 4471388$>$ & 2515 & 5924 \\ \hline 
+ pw = 4 & err & err & 3758146$>$ & 1680971$>$ & 2443772 & err & err & 3758140$>$ & 1680965$>$ & 2443772 \\ \hline 
+ pw = 5 & err & err & 255019$>$ & 136361$>$ & 65347$>$ & err & err & 255012$>$ & 136356$>$ & 65347$>$ \\ \hline 
 \end{tabularx}
 \end{table}

@@ -1,0 +1,13 @@
+\begin{table}[] 
+\centering 
+\begin{tabularx}{\textwidth}{|p{1cm}| X|X|X|X|X|X|X|X|X|X|}
+\hline
+\multicolumn{1}{|c|}{ }& \multicolumn{5}{c|}{\thead{IsomorphismBreadthFirstSearch }}& \multicolumn{5}{c|}{\thead{IsomorphismBreadthFirstSearch-premise}}\\ \hline 
+\diagbox{pw}{v} & 1 & 2 & 3 & 4 & 5 & 1 & 2 & 3 & 4 & 5\\ \hline 
+ pw = 1 & 6 & 4 & 4 & 4 & 4 & 3 & 4 & 4 & 4 & 4 \\ \hline 
+ pw = 2 & 8 & 13 & 8 & 8 & 8 & 4 & 9 & 8 & 8 & 8 \\ \hline 
+ pw = 3 & 10 & 24 & 61 & 19 & 19 & 5 & 19 & 56 & 19 & 19 \\ \hline 
+ pw = 4 & 12 & 43 & 5220 & 1271 & 53 & 6 & 37 & 5214 & 1265 & 53 \\ \hline 
+ pw = 5 & 14 & 77 & 474443$>$ & 229147$>$ & 134674$>$ & 7 & 70 & 474436$>$ & 229140$>$ & 134667$>$ \\ \hline 
+\end{tabularx}
+\end{table}

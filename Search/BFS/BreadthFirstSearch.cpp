@@ -323,7 +323,7 @@ void BreadthFirstSearch::search(){
                     bfsDAG.addFinalState(badState);
                     AbstractTreeDecomposition atd = extractCounterExampleTerm(badState);
                     string file = this->getOutputsPath();
-                    if (flags->get("Premise")) { file + "_Premise"; }
+                    if (flags->get("Premise")) { file += "_Premise"; }
                     file += "_CounterExample";
                     atd.writeToFile(file + "_AbstractDecomposition.txt");
                     ConcreteTreeDecomposition ctd = atd.convertToConcreteTreeDecomposition();

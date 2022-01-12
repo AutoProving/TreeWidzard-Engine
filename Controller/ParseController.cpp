@@ -68,7 +68,8 @@ void ParseController::parse_pace(string graphPath, string decompositionPath) {
         multiGraph.printToFileDirectedBipartiteGraphNAUTY(name+"_DirectedBipartiteGraphNAUTY.txt");
     }
     Decomposition decomposition = concreteTreeDecomposition->extractDecomposition(); 
-    decomposition.print();
+//    decomposition.print();
+    decomposition.writeToFile(name+"_Decomposition.td");
     //cout<<"---------------------------------------------State Tree"<<endl;
     //concreteTreeDecomposition->conjectureCheck(inputController->getConjecture());
     //WitnessTreePACE witnessTreePace;
@@ -108,6 +109,9 @@ void ParseController::parse_abstract(string abstractPath) {
     if(flag.get("PrintDirectedBipartiteGraphNAUTY")){
         multiGraph.printToFileDirectedBipartiteGraphNAUTY(name+"_DirectedBipartiteGraphNAUTY.txt");
     }
+    Decomposition decomposition = concreteTreeDecomposition->extractDecomposition(); 
+//    decomposition.print();
+    decomposition.writeToFile(name+"_Decomposition.td"); 
 
 }
 
