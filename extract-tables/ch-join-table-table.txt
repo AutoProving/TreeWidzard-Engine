@@ -1,0 +1,6 @@
+\begin{table}[] 
+\centering 
+\begin{tabularx}{\textwidth}{|p{1cm}| X|X|X|X|X|X|X|X|X|X|}
+\hline
+\multicolumn{1}{|c|}{ }& \multicolumn{5}{c|}{\thead{IsomorphismBreadthFirstSearch }}& \multicolumn{5}{c|}{\thead{IsomorphismBreadthFirstSearch-premise}}\\ \hline 
+\diagbox{pw}{v} & 1 & 2 & 3 & 4 & 5 & 1 & 2 & 3 & 4 & 5\\ \hline 

@@ -4,10 +4,10 @@
 \hline
 \multicolumn{1}{|c|}{ }& \multicolumn{5}{c|}{\thead{IsomorphismBreadthFirstSearch }}& \multicolumn{5}{c|}{\thead{IsomorphismBreadthFirstSearch-premise}}\\ \hline 
 \diagbox{pw}{v} & 1 & 2 & 3 & 4 & 5 & 1 & 2 & 3 & 4 & 5\\ \hline 
- pw = 1 & err & err & 7 & 8 & 9 & err & err & 7 & 8 & 9 \\ \hline 
- pw = 2 & err & err & 42 & 64 & 93 & err & err & 42 & 64 & 93 \\ \hline 
- pw = 3 & err & err & 4471393$>$ & 2515 & 5924 & err & err & 4471388$>$ & 2515 & 5924 \\ \hline 
- pw = 4 & err & err & 3758146$>$ & 1680971$>$ & 2443772 & err & err & 3758140$>$ & 1680965$>$ & 2443772 \\ \hline 
- pw = 5 & err & err & 255019$>$ & 136361$>$ & 65347$>$ & err & err & 255012$>$ & 136356$>$ & 65347$>$ \\ \hline 
+ pw = 1 & err & err & 0 & 0 & 0 & err & err & 0 & 0 & 0 \\ \hline 
+ pw = 2 & err & err & 0 & 0 & 0 & err & err & 0 & 0 & 0 \\ \hline 
+ pw = 3 & err & err & 4188968K$>$ & 2380K & 6096K & err & err & 4185464K$>$ & 2380K & 6100K \\ \hline 
+ pw = 4 & err & err & 4194272K$>$ & 4093724K$>$ & 3090288K & err & err & 4194076K$>$ & 4094928K$>$ & 3090288K \\ \hline 
+ pw = 5 & err & err & 802692K$>$ & 896852K$>$ & 893088K$>$ & err & err & 803176K$>$ & 897616K$>$ & 892988K$>$ \\ \hline 
 \end{tabularx}
 \end{table}

@@ -10,9 +10,11 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     searches = ["IsomorphismBreadthFirstSearch"]
+    searchesName = {"IsomorphismBreadthFirstSearch":"IsoBfs"}
     searchFlag = [" ", "-premise"]
     property_range = range(1, 6)
     property_name = "ChromaticNumber"
+    #property_name = "CliqueNumberSimpleGraphs"
     width_value = range(1, 6)
     width_name = [" pw = "]
     #comparing_key = "all-states"
@@ -148,20 +150,42 @@ if __name__ == '__main__':
 #
     pw = "4"
 #
+    ls = ["-","--","-.",".."]
+    k = 0
+    op = 0
     fig = plt.figure()
     for s in searches:
-        for p in searchFlag:
-
+        for p in searchFlag: 
             l = data.loc[
                 (data["width"] == width_name[0] + pw) & (data[" Search Type"] == s) & (
-                data["Search Options"] == p) & (pd.isnull(data["error"]))]
-            print(l)
-            plt.plot(l[property_name], l[comparing_key], label=s+p)
+                data["Search Options"] == p)]
+           # l = data.loc[
+           #     (data["width"] == width_name[0] + pw) & (data[" Search Type"] == s) & (
+           #     data["Search Options"] == p) & (pd.isnull(data["error"]))]
+            if comparing_key == "max-rss":
+                x = []
+                y = []
+                for r in range(len(l)):
+                    #print(l.iloc[r][comparing_key])
+                    m = re.match("(\d*)K?$",l.iloc[r][comparing_key])
+                    if m:
+                    
+                        y.append(int(m.group(1)))
+                        x.append(l.iloc[r][property_name])
+                    else:
+                        print("regular expression error")
+                        exit()
+                        
+                plt.plot(x,y, marker = 'o',label=searchesName[s]+p,alpha=1-op,linestyle=ls[k],linewidth =8-3*k)
+                k+=1
+                op+=.3
+            else:
+                plt.plot(l[property_name], l[comparing_key], label=searchesName[s]+p)
     #plt.plot(l2[property_name], l2['all-states'], label='bfs-premise')
     #plt.plot(l3[property_name], l3['all-states'], label='iso-bfs')
     #plt.plot(l4[property_name], l4['all-states'], label='iso-bfs-premise')
     # plt.yscale('log')
     plt.grid(True)
-
-    plt.legend(loc='best')
+    #plt.legend(loc='best')
+    plt.legend(loc=1,bbox_to_anchor=(1,1))
     plt.show()
