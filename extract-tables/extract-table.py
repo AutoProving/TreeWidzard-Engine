@@ -4,6 +4,7 @@ if __name__ == '__main__':
     import math
     import matplotlib.pyplot as plt
     import os
+    import re
     parser = argparse.ArgumentParser(description="This is a script for generating a latex table.")
     parser.add_argument('--input-file', type=argparse.FileType('r'), nargs=1, required=True, help="excel file")
     args = parser.parse_args()
@@ -14,8 +15,10 @@ if __name__ == '__main__':
     property_name = "ChromaticNumber"
     width_value = range(1, 6)
     width_name = [" pw = "]
-    comparing_key = "all-states"
-
+    #comparing_key = "all-states"
+    comparing_key = "max-rss"
+    #comparing_key = "elapsed"
+    
     file = args.input_file[0]
     data = pd.read_csv(file)
 
@@ -56,7 +59,25 @@ if __name__ == '__main__':
                         l = data.loc[(data[" Search Type"] == s) & (data[property_name] == m) & (
                             data["width"] == w + str(p)) & (data["Search Options"] == flag)]
                         if len(l.index) > 0:
-                            print(l)
+                            # print(l)
+                            cellinfo = ""
+                            if comparing_key=="elapsed":
+                                m = re.match("((\d\d|\d\d)-)?(\d\d):(\d\d):(\d\d|\d)$",str(l.iloc[0][comparing_key]))
+                                if m:
+                                   # cellinfo = str(l.iloc[0][comparing_key])
+                                   # cellinfo = str(m.group(2))+m.group(3)+m.group(4)+m.group(5)
+                                   day = 0
+                                   if m.group(2)==None:
+                                       day = 0
+                                   else:
+                                       day = int(m.group(2))
+                                   hour = int(m.group(3)); minute = int(m.group(4)); sec = int(m.group(5))
+                                   cellinfo = str(day*24*60*60 + hour*60*60 + minute*60 + sec) 
+                                else:
+                                    cellinfo = "N"
+                            else:
+                                cellinfo = str(l.iloc[0][comparing_key])
+
                             if pd.isnull(l.iloc[0][comparing_key]):
                                 print("comparing key is null")
                                 exit()
@@ -65,16 +86,18 @@ if __name__ == '__main__':
                                 print("There is error")
                                 print(l.iloc[0]["error"])
                                 if "TIME LIMIT" in l.iloc[0]["error"]:
-                                    print("TIME LIMIT error")
-                                    row = row + " & " + str(l.iloc[0][comparing_key]) + "$>$"
+                                    print("TIME LIMIT error")  
+                                    cellinfo = cellinfo +  "$>$"
+                                    print(cellinfo)
                                 elif "out-of-memory handler" in l.iloc[0]["error"]: 
                                     print("memory limit error")
-                                    row = row + " & " + str(l.iloc[0][comparing_key]) + "$>$"
+                                    cellinfo+="$>$"
                                 else:
-                                    print("unknown error")
+                                    print("unknown error check data")
                                     exit()
-                            else:
-                                row = row + " & " + str(l.iloc[0][comparing_key])
+                            
+                            row = row + " & " + str(cellinfo)
+                        
                         else:
                             row = row + " & err"
             row = row + " \\\ \hline \n"
@@ -123,26 +146,22 @@ if __name__ == '__main__':
 #    table_file.write("\end{tabularx}\n")
 #    table_file.write("\end{table}\n")
 #
-#    pw = "3"
+    pw = "4"
 #
-#    l1 = data.loc[
-#            (data["width"] == " pw = " + pw) & (data[" Search Type"] == "BreadthFirstSearch") & (
-#                data["Search Options"] == " ") & (pd.isnull(data["error"]))]
-#            l2 = data.loc[(data["width"] == " pw = " + pw) & (data[" Search Type"] == "BreadthFirstSearch") & (
-#                data["Search Options"] == "-premise") & (pd.isnull(data["error"]))]
-#            l3 = data.loc[(data["width"] == " pw = " + pw) & (data[" Search Type"] == "IsomorphismBreadthFirstSearch") & (
-#                data["Search Options"] == " ") & (pd.isnull(data["error"]))]
-#            l4 = data.loc[(data["width"] == " pw = " + pw) & (data[" Search Type"] == "IsomorphismBreadthFirstSearch") & (
-#                data["Search Options"] == "-premise") & (pd.isnull(data["error"]))]
-#
-#            print(l1)
-#    fig = plt.figure()
-#    plt.plot(l1[property_name], l1['all-states'], label='bfs')
-#    #plt.plot(l2[property_name], l2['all-states'], label='bfs-premise')
-#    #plt.plot(l3[property_name], l3['all-states'], label='iso-bfs')
-#    #plt.plot(l4[property_name], l4['all-states'], label='iso-bfs-premise')
-#    # plt.yscale('log')
-#    plt.grid(True)
-#
-#    plt.legend(loc='best')
+    fig = plt.figure()
+    for s in searches:
+        for p in searchFlag:
+
+            l = data.loc[
+                (data["width"] == width_name[0] + pw) & (data[" Search Type"] == s) & (
+                data["Search Options"] == p) & (pd.isnull(data["error"]))]
+            print(l)
+            plt.plot(l[property_name], l[comparing_key], label=s+p)
+    #plt.plot(l2[property_name], l2['all-states'], label='bfs-premise')
+    #plt.plot(l3[property_name], l3['all-states'], label='iso-bfs')
+    #plt.plot(l4[property_name], l4['all-states'], label='iso-bfs-premise')
+    # plt.yscale('log')
+    plt.grid(True)
+
+    plt.legend(loc='best')
     plt.show()
