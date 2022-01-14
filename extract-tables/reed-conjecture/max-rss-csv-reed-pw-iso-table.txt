@@ -1,0 +1,14 @@
+\begin{table}[H] 
+\centering 
+\begin{tabularx}{\textwidth}{|p{1.2cm}| X|X|X|X|X|X|X|X|X|X|}
+\hline
+\multicolumn{1}{|c|}{ }& \multicolumn{ 5 }{c|}{\thead{\footnotesize{ ISO-BFS  } }}& \multicolumn{ 5 }{c|}{\thead{\footnotesize{ ISO-BFS-premise } }}\\ \hline 
+\diagbox{\footnotesize pw}{ \footnotesize v} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{6} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{6}\\ \hline 
+\tiny{  pw = 1 } & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} \\ \hline 
+\tiny{  pw = 2 } & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{5108K} & \tiny{8100K} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} \\ \hline 
+\tiny{  pw = 3 } & \tiny{1210876K} & \tiny{1234496K} & \tiny{281908K} & \tiny{944832K} & \tiny{3412152K} & \tiny{0} & \tiny{0} & \tiny{3200K} & \tiny{5676K} & \tiny{10324K} \\ \hline 
+\tiny{  pw = 4 } & \tiny{\textcolor{red}{ 7463256K}} & \tiny{\textcolor{red}{ 6484044K}} & \tiny{\textcolor{red}{ 4595456K}} & \tiny{\textcolor{red}{ 5828500K}} & \tiny{\textcolor{red}{ 7087184K}} & \tiny{2248K} & \tiny{20196K} & \tiny{46848K} & \tiny{190656K} & \tiny{680732K} \\ \hline 
+\tiny{  pw = 5 } & \tiny{\textcolor{red}{ 845768K}} & \tiny{\textcolor{red}{ 1016340K}} & \tiny{\textcolor{red}{ 971072K}} & \tiny{\textcolor{red}{ 1757300K}} & \tiny{\textcolor{red}{ 1863300K}} & \tiny{8020K} & \tiny{\textcolor{red}{ 397532K}} & \tiny{\textcolor{red}{ 404124K}} & \tiny{\textcolor{red}{ 473064K}} & \tiny{\textcolor{red}{ 487804K}} \\ \hline 
+\end{tabularx}
+\caption{csv-reed-pw-iso.csv-max-rss}
+\end{table}
