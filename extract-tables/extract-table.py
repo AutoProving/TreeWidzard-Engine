@@ -19,9 +19,9 @@ if __name__ == '__main__':
     property_name = "MaxDegree"
     width_value = range(1, 6)
     width_name = [" pw = "]
-    comparing_key = "all-states"
+    #comparing_key = "all-states"
     #comparing_key = "max-rss"
-    #comparing_key = "elapsed"
+    comparing_key = "elapsed"
     
     file = args.input_file[0]
     data = pd.read_csv(file)
@@ -161,7 +161,7 @@ if __name__ == '__main__':
 #    table_file.write("\end{tabularx}\n")
 #    table_file.write("\end{table}\n")
 #
-    pw = "4"
+    pw = "3"
 #
     ls = ["-","--","-.",".."]
     ss = ["X","o","s","p"]
@@ -182,35 +182,56 @@ if __name__ == '__main__':
             ny = []
             print(l[comparing_key])
             for r in range(len(l)):
-                #print(l.iloc[r][comparing_key])
-                yp = l.iloc[r][comparing_key] 
-                xp = l.iloc[r][property_name]
-                if comparing_key == "max-rss":
-                    m = re.match("(\d*)K?$",l.iloc[r][comparing_key])
-                    if m:
-                        yp = int(m.group(1))
-                    else:
-                        print("regular expression error")
-                        exit()
-                if not pd.isnull(l.iloc[r]["error"]):
-                    nx.append(xp)
-                    ny.append(yp)
-                x.append(xp)
-                y.append(yp)
+                if l.iloc[r][property_name] in property_range:
+                    #print(l.iloc[r][comparing_key])
+                    yp = l.iloc[r][comparing_key] 
+                    xp = l.iloc[r][property_name]
+                    if comparing_key == "max-rss":
+                        m = re.match("(\d*)K?$",l.iloc[r][comparing_key])
+                        if m:
+                            yp = int(m.group(1))
+                        else:
+                            print("regular expression error")
+                            exit()
+                    elif comparing_key=="elapsed":
+                        m = re.match("((\d\d|\d)-)?(\d\d):(\d\d):(\d\d|\d)$",str(l.iloc[r][comparing_key]))
+                        if m:
+                            day = 0
+                            if m.group(2)==None:
+                                day = 0
+                            else:
+                                day = int(m.group(2))
+                            hour = int(m.group(3)); minute = int(m.group(4)); sec = int(m.group(5))
+                            yp = int((day*24*60*60 + hour*60*60 + minute*60 + sec)/60)
+                            print(day,hour,minute,sec,yp,s,p,l.iloc[r][comparing_key],l.iloc[r][property_name])
+                        else:
+                            print("error in regular expression 1")
+                            print(str(l.iloc[r][comparing_key]))
+                            print(m)
+                            print(l.iloc[r]["job-name"])
+                            break
+        
+                    if not pd.isnull(l.iloc[r]["error"]):
+                        nx.append(xp)
+                        ny.append(yp)
+                    x.append(xp)
+                    y.append(yp)
             plt.plot(x,y, marker='',label=searchesName[s]+p,alpha=1-op,linestyle=ls[k],linewidth =8-3*k)
-            plt.scatter(nx,ny, marker=ss[k],zorder = 10-k,s=100+100*k, label=searchesName[s]+p, alpha=1-op)
+            plt.scatter(nx,ny, marker=ss[k],zorder = 10-k,s=100+100*k, label=searchesName[s]+p+" not finished", alpha=1-op)
             k+=1
             op+=.3
       
     #plt.plot(l2[property_name], l2['all-states'], label='bfs-premise')
     #plt.plot(l3[property_name], l3['all-states'], label='iso-bfs')
     #plt.plot(l4[property_name], l4['all-states'], label='iso-bfs-premise')
-    plt.yscale('log')
-    
+    #plt.yscale('log')
+    plt.yscale('symlog')
   #  plt.plot(nx,ny, marker = 'X')
     plt.grid(True)
     plt.ylabel(comparing_key)
     plt.xlabel(property_name)
-    #plt.legend(loc='best')
-    plt.legend(loc=1,bbox_to_anchor=(1,1))
+    plt.legend(loc='best')
+    #plt.legend(loc=1,bbox_to_anchor=(1,1))
+    
+    plt.savefig(os.path.dirname(file.name)+"/"+comparing_key+"-"+os.path.splitext(base)[0]+"-fig.png")
     plt.show()

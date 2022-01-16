@@ -1,0 +1,14 @@
+\begin{table}[H] 
+\centering 
+\begin{tabularx}{\textwidth}{|p{1.2cm}| X|X|X|X|X|X|X|X|X|X|}
+\hline
+\multicolumn{1}{|c|}{ }& \multicolumn{ 5 }{c|}{\thead{\footnotesize{ BFS  } }}& \multicolumn{ 5 }{c|}{\thead{\footnotesize{ BFS-premise } }}\\ \hline 
+\diagbox{\footnotesize pw}{ \footnotesize v} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{6} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{6}\\ \hline 
+\tiny{  pw = 1 } & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} \\ \hline 
+\tiny{  pw = 2 } & \tiny{0} & \tiny{0} & \tiny{1} & \tiny{2} & \tiny{6} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} \\ \hline 
+\tiny{  pw = 3 } & \tiny{9452} & \tiny{10336} & \tiny{3543} & \tiny{19072} & \tiny{\textcolor{red}{ 20160}} & \tiny{0} & \tiny{2} & \tiny{9} & \tiny{31} & \tiny{87} \\ \hline 
+\tiny{  pw = 4 } & \tiny{\textcolor{red}{ 20160}} & \tiny{\textcolor{red}{ 20160}} & \tiny{\textcolor{red}{ 16595}} & \tiny{\textcolor{red}{ 16595}} & \tiny{\textcolor{red}{ 16595}} & \tiny{16} & \tiny{1257} & \tiny{6191} & \tiny{\textcolor{red}{ 16595}} & \tiny{\textcolor{red}{ 16595}} \\ \hline 
+\tiny{  pw = 5 } & \tiny{\textcolor{red}{ 20160}} & \tiny{\textcolor{red}{ 20160}} & \tiny{\textcolor{red}{ 16595}} & \tiny{\textcolor{red}{ 16595}} & \tiny{\textcolor{red}{ 16216}} & \tiny{1289} & \tiny{\textcolor{red}{ 20160}} & \tiny{\textcolor{red}{ 16595}} & \tiny{\textcolor{red}{ 16595}} & \tiny{\textcolor{red}{ 10403}} \\ \hline 
+\end{tabularx}
+\caption{csv-reed-pw-bfs.csv-elapsed}
+\end{table}
