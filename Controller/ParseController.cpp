@@ -109,7 +109,7 @@ void ParseController::parse_abstract(string abstractPath) {
     if(flag.get("PrintDirectedBipartiteGraphNAUTY")){
         multiGraph.printToFileDirectedBipartiteGraphNAUTY(name+"_DirectedBipartiteGraphNAUTY.txt");
     }
-    Decomposition decomposition = concreteTreeDecomposition->extractDecomposition(); 
+    Decomposition decomposition = concreteTreeDecomposition.extractDecomposition(); 
 //    decomposition.print();
     decomposition.writeToFile(name+"_Decomposition.td"); 
 
