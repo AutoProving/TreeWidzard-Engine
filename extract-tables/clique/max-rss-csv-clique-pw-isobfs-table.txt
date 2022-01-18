@@ -1,0 +1,16 @@
+\begin{table}[H] 
+\centering 
+\begin{tabularx}{\textwidth}{|p{1.2cm}| X|X|X|X|X|X|X|X|}
+\hline
+\multicolumn{1}{|c|}{ }& \multicolumn{ 4 }{c|}{\thead{\footnotesize{ ISO-BFS  } }}& \multicolumn{ 4 }{c|}{\thead{\footnotesize{ ISO-BFS-premise } }}\\ \hline 
+\diagbox{\footnotesize pw}{ \footnotesize v} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5}\\ \hline 
+\tiny{  pw = 1 } & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} \\ \hline 
+\tiny{  pw = 2 } & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} \\ \hline 
+\tiny{  pw = 3 } & \tiny{74824} & \tiny{\textcolor{red}{ 4188968}} & \tiny{2380} & \tiny{6096} & \tiny{74820} & \tiny{\textcolor{red}{ 4185464}} & \tiny{2380} & \tiny{6100} \\ \hline 
+\tiny{  pw = 4 } & \tiny{\textcolor{red}{ 2096816}} & \tiny{\textcolor{red}{ 4194272}} & \tiny{\textcolor{red}{ 4093724}} & \tiny{3090288} & \tiny{\textcolor{red}{ 2096948}} & \tiny{\textcolor{red}{ 4194076}} & \tiny{\textcolor{red}{ 4094928}} & \tiny{3090288} \\ \hline 
+\tiny{  pw = 5 } & \tiny{\textcolor{red}{ 1448104}} & \tiny{\textcolor{red}{ 802692}} & \tiny{\textcolor{red}{ 896852}} & \tiny{\textcolor{red}{ 893088}} & \tiny{\textcolor{red}{ 1437648}} & \tiny{\textcolor{red}{ 803176}} & \tiny{\textcolor{red}{ 897616}} & \tiny{\textcolor{red}{ 892988}} \\ \hline 
+\tiny{  pw = 6 } & \tiny{\textcolor{red}{ 263040}} & \tiny{\textcolor{red}{ 221384}} & \tiny{\textcolor{red}{ 216916}} & \tiny{\textcolor{red}{ 334620}} & \tiny{\textcolor{red}{ 265524}} & \tiny{\textcolor{red}{ 218508}} & \tiny{\textcolor{red}{ 216848}} & \tiny{\textcolor{red}{ 334364}} \\ \hline 
+\tiny{  pw = 7 } & \tiny{\textcolor{red}{ 48748}} & \tiny{\textcolor{red}{ 40176}} & \tiny{\textcolor{red}{ 129788}} & \tiny{\textcolor{red}{ 287148}} & \tiny{\textcolor{red}{ 48740}} & \tiny{\textcolor{red}{ 40244}} & \tiny{\textcolor{red}{ 129404}} & \tiny{\textcolor{red}{ 286760}} \\ \hline 
+\end{tabularx}
+\caption{csv-clique-pw-isobfs.csv-max-rss}
+\end{table}

@@ -1,0 +1,12 @@
+\begin{table}[H] 
+\centering 
+\begin{tabularx}{\textwidth}{|p{1.2cm}| X|X|X|X|X|X|X|X|}
+\hline
+\multicolumn{1}{|c|}{ }& \multicolumn{ 4 }{c|}{\thead{\footnotesize{ ISO-BFS  } }}& \multicolumn{ 4 }{c|}{\thead{\footnotesize{ ISO-BFS-premise } }}\\ \hline 
+\diagbox{\footnotesize pw}{ \footnotesize v} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5}\\ \hline 
+\tiny{  tw = 1 } & \tiny{\textcolor{red}{ 8196}} & \tiny{\textcolor{red}{ 8196}} & \tiny{\textcolor{red}{ 8196}} & \tiny{\textcolor{red}{ 8196}} & \tiny{\textcolor{red}{ 8196}} & \tiny{\textcolor{red}{ 8196}} & \tiny{\textcolor{red}{ 8196}} & \tiny{\textcolor{red}{ 8196}} \\ \hline 
+\tiny{  tw = 2 } & \tiny{\textcolor{red}{ 25164}} & \tiny{\textcolor{red}{ 16971}} & \tiny{\textcolor{red}{ 16935}} & \tiny{\textcolor{red}{ 15483}} & \tiny{\textcolor{red}{ 25160}} & \tiny{\textcolor{red}{ 16971}} & \tiny{\textcolor{red}{ 16935}} & \tiny{\textcolor{red}{ 15483}} \\ \hline 
+\tiny{  tw = 3 } & \tiny{\textcolor{red}{ 67065}} & \tiny{\textcolor{red}{ 14806}} & \tiny{\textcolor{red}{ 10007}} & \tiny{\textcolor{red}{ 5973}} & \tiny{\textcolor{red}{ 67060}} & \tiny{\textcolor{red}{ 14804}} & \tiny{\textcolor{red}{ 10007}} & \tiny{\textcolor{red}{ 5973}} \\ \hline 
+\end{tabularx}
+\caption{csv-clique-tw-isobfs.csv-all-states}
+\end{table}

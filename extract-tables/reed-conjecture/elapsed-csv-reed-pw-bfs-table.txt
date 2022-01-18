@@ -4,11 +4,11 @@
 \hline
 \multicolumn{1}{|c|}{ }& \multicolumn{ 5 }{c|}{\thead{\footnotesize{ BFS  } }}& \multicolumn{ 5 }{c|}{\thead{\footnotesize{ BFS-premise } }}\\ \hline 
 \diagbox{\footnotesize pw}{ \footnotesize v} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{6} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{6}\\ \hline 
-\tiny{  pw = 1 } & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} \\ \hline 
-\tiny{  pw = 2 } & \tiny{0} & \tiny{0} & \tiny{1} & \tiny{2} & \tiny{6} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} \\ \hline 
-\tiny{  pw = 3 } & \tiny{9452} & \tiny{10336} & \tiny{3543} & \tiny{19072} & \tiny{\textcolor{red}{ 20160}} & \tiny{0} & \tiny{2} & \tiny{9} & \tiny{31} & \tiny{87} \\ \hline 
-\tiny{  pw = 4 } & \tiny{\textcolor{red}{ 20160}} & \tiny{\textcolor{red}{ 20160}} & \tiny{\textcolor{red}{ 16595}} & \tiny{\textcolor{red}{ 16595}} & \tiny{\textcolor{red}{ 16595}} & \tiny{16} & \tiny{1257} & \tiny{6191} & \tiny{\textcolor{red}{ 16595}} & \tiny{\textcolor{red}{ 16595}} \\ \hline 
-\tiny{  pw = 5 } & \tiny{\textcolor{red}{ 20160}} & \tiny{\textcolor{red}{ 20160}} & \tiny{\textcolor{red}{ 16595}} & \tiny{\textcolor{red}{ 16595}} & \tiny{\textcolor{red}{ 16216}} & \tiny{1289} & \tiny{\textcolor{red}{ 20160}} & \tiny{\textcolor{red}{ 16595}} & \tiny{\textcolor{red}{ 16595}} & \tiny{\textcolor{red}{ 10403}} \\ \hline 
+\tiny{  pw = 1 } & \tiny{0} & \tiny{1} & \tiny{1} & \tiny{1} & \tiny{1} & \tiny{0} & \tiny{1} & \tiny{1} & \tiny{1} & \tiny{0} \\ \hline 
+\tiny{  pw = 2 } & \tiny{13} & \tiny{26} & \tiny{63} & \tiny{160} & \tiny{388} & \tiny{2} & \tiny{1} & \tiny{2} & \tiny{5} & \tiny{8} \\ \hline 
+\tiny{  pw = 3 } & \tiny{567125} & \tiny{620202} & \tiny{212628} & \tiny{1144325} & \tiny{\textcolor{red}{ 1209601}} & \tiny{17} & \tiny{126} & \tiny{569} & \tiny{1877} & \tiny{5223} \\ \hline 
+\tiny{  pw = 4 } & \tiny{\textcolor{red}{ 1209600}} & \tiny{\textcolor{red}{ 1209601}} & \tiny{\textcolor{red}{ 995704}} & \tiny{\textcolor{red}{ 995704}} & \tiny{\textcolor{red}{ 995704}} & \tiny{1009} & \tiny{75458} & \tiny{371502} & \tiny{\textcolor{red}{ 995704}} & \tiny{\textcolor{red}{ 995704}} \\ \hline 
+\tiny{  pw = 5 } & \tiny{\textcolor{red}{ 1209600}} & \tiny{\textcolor{red}{ 1209601}} & \tiny{\textcolor{red}{ 995704}} & \tiny{\textcolor{red}{ 995704}} & \tiny{\textcolor{red}{ 972964}} & \tiny{77363} & \tiny{\textcolor{red}{ 1209601}} & \tiny{\textcolor{red}{ 995704}} & \tiny{\textcolor{red}{ 995704}} & \tiny{\textcolor{red}{ 624230}} \\ \hline 
 \end{tabularx}
 \caption{csv-reed-pw-bfs.csv-elapsed}
 \end{table}

@@ -1,0 +1,16 @@
+\begin{table}[H] 
+\centering 
+\begin{tabularx}{\textwidth}{|p{1.2cm}| X|X|X|X|X|X|X|X|}
+\hline
+\multicolumn{1}{|c|}{ }& \multicolumn{ 4 }{c|}{\thead{\footnotesize{ ISO-BFS  } }}& \multicolumn{ 4 }{c|}{\thead{\footnotesize{ ISO-BFS-premise } }}\\ \hline 
+\diagbox{\footnotesize pw}{ \footnotesize v} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5}\\ \hline 
+\tiny{  pw = 1 } & \tiny{6} & \tiny{7} & \tiny{8} & \tiny{9} & \tiny{6} & \tiny{7} & \tiny{8} & \tiny{9} \\ \hline 
+\tiny{  pw = 2 } & \tiny{259} & \tiny{42} & \tiny{64} & \tiny{93} & \tiny{255} & \tiny{42} & \tiny{64} & \tiny{93} \\ \hline 
+\tiny{  pw = 3 } & \tiny{91894} & \tiny{\textcolor{red}{ 4471393}} & \tiny{2515} & \tiny{5924} & \tiny{91889} & \tiny{\textcolor{red}{ 4471388}} & \tiny{2515} & \tiny{5924} \\ \hline 
+\tiny{  pw = 4 } & \tiny{\textcolor{red}{ 2207940}} & \tiny{\textcolor{red}{ 3758146}} & \tiny{\textcolor{red}{ 1680971}} & \tiny{2443772} & \tiny{\textcolor{red}{ 2207934}} & \tiny{\textcolor{red}{ 3758140}} & \tiny{\textcolor{red}{ 1680965}} & \tiny{2443772} \\ \hline 
+\tiny{  pw = 5 } & \tiny{\textcolor{red}{ 1141147}} & \tiny{\textcolor{red}{ 255019}} & \tiny{\textcolor{red}{ 136361}} & \tiny{\textcolor{red}{ 65347}} & \tiny{\textcolor{red}{ 1141140}} & \tiny{\textcolor{red}{ 255012}} & \tiny{\textcolor{red}{ 136356}} & \tiny{\textcolor{red}{ 65347}} \\ \hline 
+\tiny{  pw = 6 } & \tiny{\textcolor{red}{ 125344}} & \tiny{\textcolor{red}{ 54109}} & \tiny{\textcolor{red}{ 12679}} & \tiny{\textcolor{red}{ 8705}} & \tiny{\textcolor{red}{ 125336}} & \tiny{\textcolor{red}{ 54101}} & \tiny{\textcolor{red}{ 12678}} & \tiny{\textcolor{red}{ 8705}} \\ \hline 
+\tiny{  pw = 7 } & \tiny{\textcolor{red}{ 19886}} & \tiny{\textcolor{red}{ 7845}} & \tiny{\textcolor{red}{ 5408}} & \tiny{\textcolor{red}{ 1875}} & \tiny{\textcolor{red}{ 19877}} & \tiny{\textcolor{red}{ 7836}} & \tiny{\textcolor{red}{ 5408}} & \tiny{\textcolor{red}{ 1875}} \\ \hline 
+\end{tabularx}
+\caption{csv-clique-pw-isobfs.csv-all-states}
+\end{table}

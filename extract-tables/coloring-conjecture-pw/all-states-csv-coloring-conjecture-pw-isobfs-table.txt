@@ -1,0 +1,12 @@
+\begin{table}[H] 
+\centering 
+\begin{tabularx}{\textwidth}{|p{1.2cm}| X|X|}
+\hline
+\multicolumn{1}{|c|}{ }& \multicolumn{ 1 }{c|}{\thead{\footnotesize{ ISO-BFS  } }}& \multicolumn{ 1 }{c|}{\thead{\footnotesize{ ISO-BFS-premise } }}\\ \hline 
+\diagbox{\footnotesize pw}{ \footnotesize v} & \tiny{3} & \tiny{3}\\ \hline 
+\tiny{  pw = 4 } & \tiny{\textcolor{red}{ 5129519}} & \tiny{\textcolor{OliveGreen}{ 73563}} \\ \hline 
+\tiny{  pw = 5 } & \tiny{\textcolor{red}{ 258690}} & \tiny{\textcolor{red}{ 190167}} \\ \hline 
+\tiny{  pw = 6 } & \tiny{\textcolor{red}{ 21409}} & \tiny{\textcolor{red}{ 3679}} \\ \hline 
+\end{tabularx}
+\caption{csv-coloring-conjecture-pw-isobfs.csv-all-states}
+\end{table}

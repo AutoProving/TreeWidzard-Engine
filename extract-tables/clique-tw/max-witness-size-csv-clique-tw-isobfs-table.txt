@@ -1,0 +1,12 @@
+\begin{table}[H] 
+\centering 
+\begin{tabularx}{\textwidth}{|p{1.2cm}| X|X|X|X|X|X|X|X|}
+\hline
+\multicolumn{1}{|c|}{ }& \multicolumn{ 4 }{c|}{\thead{\footnotesize{ ISO-BFS  } }}& \multicolumn{ 4 }{c|}{\thead{\footnotesize{ ISO-BFS-premise } }}\\ \hline 
+\diagbox{\footnotesize pw}{ \footnotesize v} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5}\\ \hline 
+\tiny{  tw = 1 } & \tiny{\textcolor{red}{ 4}} & \tiny{\textcolor{red}{ 4}} & \tiny{\textcolor{red}{ 4}} & \tiny{\textcolor{red}{ 4}} & \tiny{\textcolor{red}{ 4}} & \tiny{\textcolor{red}{ 4}} & \tiny{\textcolor{red}{ 4}} & \tiny{\textcolor{red}{ 4}} \\ \hline 
+\tiny{  tw = 2 } & \tiny{\textcolor{red}{ 12}} & \tiny{\textcolor{red}{ 8}} & \tiny{\textcolor{red}{ 8}} & \tiny{\textcolor{red}{ 8}} & \tiny{\textcolor{red}{ 12}} & \tiny{\textcolor{red}{ 8}} & \tiny{\textcolor{red}{ 8}} & \tiny{\textcolor{red}{ 8}} \\ \hline 
+\tiny{  tw = 3 } & \tiny{\textcolor{red}{ 19}} & \tiny{\textcolor{red}{ 17}} & \tiny{\textcolor{red}{ 16}} & \tiny{\textcolor{red}{ 16}} & \tiny{\textcolor{red}{ 19}} & \tiny{\textcolor{red}{ 17}} & \tiny{\textcolor{red}{ 16}} & \tiny{\textcolor{red}{ 16}} \\ \hline 
+\end{tabularx}
+\caption{csv-clique-tw-isobfs.csv-max-witness-size}
+\end{table}

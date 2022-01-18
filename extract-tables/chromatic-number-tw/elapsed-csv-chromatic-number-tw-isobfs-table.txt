@@ -1,0 +1,12 @@
+\begin{table}[H] 
+\centering 
+\begin{tabularx}{\textwidth}{|p{1.2cm}| X|X|X|X|X|X|X|X|}
+\hline
+\multicolumn{1}{|c|}{ }& \multicolumn{ 4 }{c|}{\thead{\footnotesize{ ISO-BFS  } }}& \multicolumn{ 4 }{c|}{\thead{\footnotesize{ ISO-BFS-premise } }}\\ \hline 
+\diagbox{\footnotesize pw}{ \footnotesize v} & \tiny{1} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{1} & \tiny{2} & \tiny{3} & \tiny{4}\\ \hline 
+\tiny{  tw = 1 } & \tiny{1} & \tiny{2} & \tiny{3} & \tiny{2} & \tiny{2} & \tiny{2} & \tiny{1} & \tiny{2} \\ \hline 
+\tiny{  tw = 2 } & \tiny{1} & \tiny{3} & \tiny{1} & \tiny{1} & \tiny{1} & \tiny{3} & \tiny{1} & \tiny{1} \\ \hline 
+\tiny{  tw = 3 } & \tiny{1} & \tiny{2} & \tiny{1161} & \tiny{5} & \tiny{1} & \tiny{2} & \tiny{1153} & \tiny{5} \\ \hline 
+\end{tabularx}
+\caption{csv-chromatic-number-tw-isobfs.csv-elapsed}
+\end{table}

@@ -1,0 +1,14 @@
+\begin{table}[H] 
+\centering 
+\begin{tabularx}{\textwidth}{|p{1.2cm}| X|X|X|X|X|X|X|X|X|X|}
+\hline
+\multicolumn{1}{|c|}{ }& \multicolumn{ 5 }{c|}{\thead{\footnotesize{ ISO-BFS  } }}& \multicolumn{ 5 }{c|}{\thead{\footnotesize{ ISO-BFS-premise } }}\\ \hline 
+\diagbox{\footnotesize pw}{ \footnotesize v} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{6} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{6}\\ \hline 
+\tiny{  tw = 1 } & \tiny{\textcolor{red}{ 1209602}} & \tiny{\textcolor{red}{ 1209602}} & \tiny{\textcolor{red}{ 1209602}} & err & err & \tiny{0} & \tiny{0} & \tiny{0} & err & err \\ \hline 
+\tiny{  tw = 2 } & \tiny{\textcolor{red}{ 1209602}} & \tiny{\textcolor{red}{ 1209602}} & \tiny{\textcolor{red}{ 1209602}} & err & err & \tiny{11} & \tiny{94} & \tiny{465} & err & err \\ \hline 
+\tiny{  tw = 3 } & \tiny{\textcolor{red}{ 1209602}} & \tiny{\textcolor{red}{ 1209602}} & \tiny{\textcolor{red}{ 1209602}} & err & err & \tiny{2487} & \tiny{130601} & \tiny{\textcolor{red}{ 1209602}} & err & err \\ \hline 
+\tiny{  tw = 4 } & err & err & err & err & err & err & err & err & err & err \\ \hline 
+\tiny{  tw = 5 } & err & err & err & err & err & err & err & err & err & err \\ \hline 
+\end{tabularx}
+\caption{csv-reed-conjecture-tw-isobfs.csv-elapsed}
+\end{table}

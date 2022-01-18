@@ -1,0 +1,13 @@
+\begin{table}[H] 
+\centering 
+\begin{tabularx}{\textwidth}{|p{1.2cm}| X|X|X|X|X|X|X|X|X|X|}
+\hline
+\multicolumn{1}{|c|}{ }& \multicolumn{ 5 }{c|}{\thead{\footnotesize{ ISO-BFS  } }}& \multicolumn{ 5 }{c|}{\thead{\footnotesize{ ISO-BFS-premise } }}\\ \hline 
+\diagbox{\footnotesize pw}{ \footnotesize v} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{6} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{6}\\ \hline 
+\tiny{  pw = 1 } & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} \\ \hline 
+\tiny{  pw = 2 } & \tiny{\textcolor{red}{\textbf{0}$^*$}} & \tiny{\textcolor{red}{\textbf{0}$^*$}} & \tiny{0} & \tiny{5064} & \tiny{8104} & \tiny{\textcolor{red}{\textbf{0}$^*$}} & \tiny{\textcolor{red}{\textbf{0}$^*$}} & \tiny{0} & \tiny{0} & \tiny{0} \\ \hline 
+\tiny{  pw = 3 } & \tiny{\textcolor{red}{\textbf{0}$^*$}} & \tiny{\textcolor{red}{\textbf{0}$^*$}} & \tiny{1922120} & \tiny{6284628} & \tiny{3412140} & \tiny{\textcolor{red}{\textbf{0}$^*$}} & \tiny{\textcolor{red}{\textbf{0}$^*$}} & \tiny{3244} & \tiny{5932} & \tiny{10324} \\ \hline 
+\tiny{  pw = 4 } & \tiny{\textcolor{red}{\textbf{0}$^*$}} & \tiny{\textcolor{red}{\textbf{0}$^*$}} & \tiny{\textcolor{blue}{$>$6619948}} & \tiny{\textcolor{blue}{$>$8152444}} & \tiny{\textcolor{blue}{$>$7288548}} & \tiny{\textcolor{red}{\textbf{0}$^*$}} & \tiny{\textcolor{red}{\textbf{0}$^*$}} & \tiny{\textcolor{red}{\textbf{2965580}$^*$}} & \tiny{\textcolor{blue}{$>$5257400}} & \tiny{686300} \\ \hline 
+\end{tabularx}
+\caption{csv-reed-conjecture-minus-one-pw-isobfs.csv-max-rss}
+\end{table}

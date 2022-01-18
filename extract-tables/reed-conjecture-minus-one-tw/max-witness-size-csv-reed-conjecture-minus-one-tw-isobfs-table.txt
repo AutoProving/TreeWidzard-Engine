@@ -1,0 +1,14 @@
+\begin{table}[H] 
+\centering 
+\begin{tabularx}{\textwidth}{|p{1.2cm}| X|X|X|X|X|X|X|X|X|X|}
+\hline
+\multicolumn{1}{|c|}{ }& \multicolumn{ 5 }{c|}{\thead{\footnotesize{ ISO-BFS  } }}& \multicolumn{ 5 }{c|}{\thead{\footnotesize{ ISO-BFS-premise } }}\\ \hline 
+\diagbox{\footnotesize pw}{ \footnotesize v} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{6} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{6}\\ \hline 
+\tiny{  tw = 1 } & \tiny{\textcolor{red}{ 2,1,4,1}} & \tiny{\textcolor{red}{ 2,1,4,1}} & \tiny{\textcolor{red}{ 2,1,4,1}} & err & err & \tiny{2,1,4,1} & \tiny{2,1,4,1} & \tiny{2,1,4,1} & err & err \\ \hline 
+\tiny{  tw = 2 } & \tiny{\textcolor{purple}{ 4,1,10,1}} & \tiny{\textcolor{purple}{ 4,1,10,1}} & \tiny{\textcolor{red}{ 5,1,12,1}} & err & err & \tiny{\textcolor{purple}{ 4,1,10,1}} & \tiny{\textcolor{purple}{ 4,1,10,1}} & \tiny{5,1,11,1} & err & err \\ \hline 
+\tiny{  tw = 3 } & \tiny{\textcolor{purple}{ 8,1,17,1}} & \tiny{\textcolor{purple}{ 8,1,17,1}} & \tiny{\textcolor{red}{ 14,1,19,1}} & err & err & \tiny{\textcolor{purple}{ 8,1,16,1}} & \tiny{\textcolor{purple}{ 8,1,16,1}} & \tiny{\textcolor{red}{ 14,1,21,1}} & err & err \\ \hline 
+\tiny{  tw = 4 } & err & err & err & err & err & err & err & err & err & err \\ \hline 
+\tiny{  tw = 5 } & err & err & err & err & err & err & err & err & err & err \\ \hline 
+\end{tabularx}
+\caption{csv-reed-conjecture-minus-one-tw-isobfs.csv-max-witness-size}
+\end{table}

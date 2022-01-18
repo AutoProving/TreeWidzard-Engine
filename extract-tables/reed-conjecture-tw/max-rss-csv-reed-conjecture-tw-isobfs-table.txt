@@ -1,0 +1,14 @@
+\begin{table}[H] 
+\centering 
+\begin{tabularx}{\textwidth}{|p{1.2cm}| X|X|X|X|X|X|X|X|X|X|}
+\hline
+\multicolumn{1}{|c|}{ }& \multicolumn{ 5 }{c|}{\thead{\footnotesize{ ISO-BFS  } }}& \multicolumn{ 5 }{c|}{\thead{\footnotesize{ ISO-BFS-premise } }}\\ \hline 
+\diagbox{\footnotesize pw}{ \footnotesize v} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{6} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{6}\\ \hline 
+\tiny{  tw = 1 } & \tiny{\textcolor{red}{ 42224}} & \tiny{\textcolor{red}{ 42868}} & \tiny{\textcolor{red}{ 42972}} & err & err & \tiny{0} & \tiny{0} & \tiny{0} & err & err \\ \hline 
+\tiny{  tw = 2 } & \tiny{\textcolor{red}{ 530068}} & \tiny{\textcolor{red}{ 529624}} & \tiny{\textcolor{red}{ 529432}} & err & err & \tiny{0} & \tiny{1236} & \tiny{1476} & err & err \\ \hline 
+\tiny{  tw = 3 } & \tiny{\textcolor{red}{ 770696}} & \tiny{\textcolor{red}{ 772580}} & \tiny{\textcolor{red}{ 859240}} & err & err & \tiny{1396} & \tiny{2904} & \tiny{\textcolor{red}{ 7024}} & err & err \\ \hline 
+\tiny{  tw = 4 } & err & err & err & err & err & err & err & err & err & err \\ \hline 
+\tiny{  tw = 5 } & err & err & err & err & err & err & err & err & err & err \\ \hline 
+\end{tabularx}
+\caption{csv-reed-conjecture-tw-isobfs.csv-max-rss}
+\end{table}

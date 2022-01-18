@@ -1,0 +1,16 @@
+\begin{table}[H] 
+\centering 
+\begin{tabularx}{\textwidth}{|p{1.2cm}| X|X|X|X|X|X|X|X|}
+\hline
+\multicolumn{1}{|c|}{ }& \multicolumn{ 4 }{c|}{\thead{\footnotesize{ ISO-BFS  } }}& \multicolumn{ 4 }{c|}{\thead{\footnotesize{ ISO-BFS-premise } }}\\ \hline 
+\diagbox{\footnotesize pw}{ \footnotesize v} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5}\\ \hline 
+\tiny{  pw = 1 } & \tiny{4} & \tiny{4} & \tiny{4} & \tiny{4} & \tiny{4} & \tiny{4} & \tiny{4} & \tiny{4} \\ \hline 
+\tiny{  pw = 2 } & \tiny{12} & \tiny{8} & \tiny{8} & \tiny{8} & \tiny{12} & \tiny{8} & \tiny{8} & \tiny{8} \\ \hline 
+\tiny{  pw = 3 } & \tiny{26} & \tiny{\textcolor{red}{ 24}} & \tiny{16} & \tiny{16} & \tiny{26} & \tiny{\textcolor{red}{ 24}} & \tiny{16} & \tiny{16} \\ \hline 
+\tiny{  pw = 4 } & \tiny{\textcolor{red}{ 41}} & \tiny{\textcolor{red}{ 41}} & \tiny{\textcolor{red}{ 35}} & \tiny{32} & \tiny{\textcolor{red}{ 41}} & \tiny{\textcolor{red}{ 41}} & \tiny{\textcolor{red}{ 35}} & \tiny{32} \\ \hline 
+\tiny{  pw = 5 } & \tiny{\textcolor{red}{ 58}} & \tiny{\textcolor{red}{ 73}} & \tiny{\textcolor{red}{ 71}} & \tiny{\textcolor{red}{ 65}} & \tiny{\textcolor{red}{ 58}} & \tiny{\textcolor{red}{ 73}} & \tiny{\textcolor{red}{ 71}} & \tiny{\textcolor{red}{ 65}} \\ \hline 
+\tiny{  pw = 6 } & \tiny{\textcolor{red}{ 79}} & \tiny{\textcolor{red}{ 119}} & \tiny{\textcolor{red}{ 135}} & \tiny{\textcolor{red}{ 133}} & \tiny{\textcolor{red}{ 79}} & \tiny{\textcolor{red}{ 119}} & \tiny{\textcolor{red}{ 135}} & \tiny{\textcolor{red}{ 133}} \\ \hline 
+\tiny{  pw = 7 } & \tiny{\textcolor{red}{ 103}} & \tiny{\textcolor{red}{ 178}} & \tiny{\textcolor{red}{ 239}} & \tiny{\textcolor{red}{ 247}} & \tiny{\textcolor{red}{ 103}} & \tiny{\textcolor{red}{ 178}} & \tiny{\textcolor{red}{ 239}} & \tiny{\textcolor{red}{ 247}} \\ \hline 
+\end{tabularx}
+\caption{csv-clique-pw-isobfs.csv-max-witness-size}
+\end{table}
