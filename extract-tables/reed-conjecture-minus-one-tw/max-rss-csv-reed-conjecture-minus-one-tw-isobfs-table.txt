@@ -1,14 +1,12 @@
 \begin{table}[H] 
 \centering 
-\begin{tabularx}{\textwidth}{|p{1.2cm}| X|X|X|X|X|X|X|X|X|X|}
+\begin{tabularx}{\textwidth}{|p{1.2cm}| X|X|X|X|X|X|}
 \hline
-\multicolumn{1}{|c|}{ }& \multicolumn{ 5 }{c|}{\thead{\footnotesize{ ISO-BFS  } }}& \multicolumn{ 5 }{c|}{\thead{\footnotesize{ ISO-BFS-premise } }}\\ \hline 
-\diagbox{\footnotesize pw}{ \footnotesize v} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{6} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{6}\\ \hline 
-\tiny{  tw = 1 } & \tiny{\textcolor{red}{ 42328}} & \tiny{\textcolor{red}{ 42996}} & \tiny{\textcolor{red}{ 42988}} & err & err & \tiny{0} & \tiny{0} & \tiny{0} & err & err \\ \hline 
-\tiny{  tw = 2 } & \tiny{\textcolor{purple}{ 8383844}} & \tiny{\textcolor{purple}{ 8386504}} & \tiny{\textcolor{red}{ 523908}} & err & err & \tiny{\textcolor{purple}{ 8384320}} & \tiny{\textcolor{purple}{ 8356960}} & \tiny{1480} & err & err \\ \hline 
-\tiny{  tw = 3 } & \tiny{\textcolor{purple}{ 33554204}} & \tiny{\textcolor{purple}{ 33540804}} & \tiny{\textcolor{red}{ 749344}} & err & err & \tiny{\textcolor{purple}{ 33530588}} & \tiny{\textcolor{purple}{ 33538020}} & \tiny{\textcolor{red}{ 7480}} & err & err \\ \hline 
-\tiny{  tw = 4 } & err & err & err & err & err & err & err & err & err & err \\ \hline 
-\tiny{  tw = 5 } & err & err & err & err & err & err & err & err & err & err \\ \hline 
+\multicolumn{1}{|c|}{ }& \multicolumn{ 3 }{c|}{\thead{\footnotesize{ ISO-BFS  } }}& \multicolumn{ 3 }{c|}{\thead{\footnotesize{ ISO-BFS-premise } }}\\ \hline 
+\diagbox{\footnotesize pw}{ \footnotesize v} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{2} & \tiny{3} & \tiny{4}\\ \hline 
+\tiny{  tw = 1 } & \tiny{\textcolor{blue}{$>$42328}} & \tiny{\textcolor{blue}{$>$42996}} & \tiny{\textcolor{blue}{$>$42988}} & \tiny{0} & \tiny{0} & \tiny{0} \\ \hline 
+\tiny{  tw = 2 } & \tiny{\textcolor{red}{\textbf{8383844}$^*$}} & \tiny{\textcolor{red}{\textbf{8386504}$^*$}} & \tiny{\textcolor{blue}{$>$523908}} & \tiny{\textcolor{red}{\textbf{8384320}$^*$}} & \tiny{\textcolor{red}{\textbf{8356960}$^*$}} & \tiny{1480} \\ \hline 
+\tiny{  tw = 3 } & \tiny{\textcolor{red}{\textbf{33554204}$^*$}} & \tiny{\textcolor{red}{\textbf{33540804}$^*$}} & \tiny{\textcolor{blue}{$>$749344}} & \tiny{\textcolor{red}{\textbf{33530588}$^*$}} & \tiny{\textcolor{red}{\textbf{33538020}$^*$}} & \tiny{\textcolor{blue}{$>$7480}} \\ \hline 
 \end{tabularx}
-\caption{csv-reed-conjecture-minus-one-tw-isobfs.csv-max-rss}
+\caption{Reed's Conjecture Minus One. Memory in Kilo Bytes used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search. }
 \end{table}

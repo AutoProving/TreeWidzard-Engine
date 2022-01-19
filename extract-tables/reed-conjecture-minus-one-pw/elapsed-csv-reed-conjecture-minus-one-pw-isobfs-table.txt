@@ -8,6 +8,7 @@
 \tiny{  pw = 2 } & \tiny{\textcolor{red}{\textbf{2}$^*$}} & \tiny{\textcolor{red}{\textbf{3}$^*$}} & \tiny{17} & \tiny{37} & \tiny{79} & \tiny{\textcolor{red}{\textbf{2}$^*$}} & \tiny{\textcolor{red}{\textbf{2}$^*$}} & \tiny{3} & \tiny{4} & \tiny{4} \\ \hline 
 \tiny{  pw = 3 } & \tiny{\textcolor{red}{\textbf{7}$^*$}} & \tiny{\textcolor{red}{\textbf{8}$^*$}} & \tiny{87999} & \tiny{375406} & \tiny{292667} & \tiny{\textcolor{red}{\textbf{2}$^*$}} & \tiny{\textcolor{red}{\textbf{4}$^*$}} & \tiny{71} & \tiny{167} & \tiny{394} \\ \hline 
 \tiny{  pw = 4 } & \tiny{\textcolor{red}{\textbf{20}$^*$}} & \tiny{\textcolor{red}{\textbf{23}$^*$}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{red}{\textbf{8}$^*$}} & \tiny{\textcolor{red}{\textbf{10}$^*$}} & \tiny{\textcolor{red}{\textbf{852430}$^*$}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{217378} \\ \hline 
+\tiny{  pw = 5 } & \tiny{\textcolor{red}{\textbf{110}$^*$}} & \tiny{\textcolor{red}{\textbf{125}$^*$}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{red}{\textbf{59}$^*$}} & \tiny{\textcolor{red}{\textbf{70}$^*$}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{$>$1209601}} \\ \hline 
 \end{tabularx}
-\caption{csv-reed-conjecture-minus-one-pw-isobfs.csv-elapsed}
+\caption{Reed's Conjecture Minus One. Time in second used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search. }
 \end{table}

@@ -1,0 +1,16 @@
+\begin{table}[H] 
+\centering 
+\begin{tabularx}{\textwidth}{|p{1.2cm}| X|X|X|X|X|X|X|X|X|X|X|X|X|X|}
+\hline
+\multicolumn{1}{|c|}{ }& \multicolumn{ 7 }{c|}{\thead{\footnotesize{ ISO-BFS  } }}& \multicolumn{ 7 }{c|}{\thead{\footnotesize{ ISO-BFS-premise } }}\\ \hline 
+\diagbox{\footnotesize pw}{ \footnotesize v} & \tiny{1} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{6} & \tiny{7} & \tiny{1} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{6} & \tiny{7}\\ \hline 
+\tiny{  pw = 1 } & \tiny{1} & \tiny{2} & \tiny{0} & \tiny{1} & \tiny{2} & \tiny{5} & \tiny{2} & \tiny{1} & \tiny{2} & \tiny{1} & \tiny{1} & \tiny{2} & \tiny{5} & \tiny{1} \\ \hline 
+\tiny{  pw = 2 } & \tiny{1} & \tiny{2} & \tiny{1} & \tiny{1} & \tiny{3} & \tiny{6} & \tiny{2} & \tiny{1} & \tiny{2} & \tiny{0} & \tiny{1} & \tiny{3} & \tiny{6} & \tiny{2} \\ \hline 
+\tiny{  pw = 3 } & \tiny{1} & \tiny{3} & \tiny{2} & \tiny{3} & \tiny{6} & \tiny{16} & \tiny{28} & \tiny{1} & \tiny{3} & \tiny{1} & \tiny{4} & \tiny{7} & \tiny{15} & \tiny{28} \\ \hline 
+\tiny{  pw = 4 } & \tiny{1} & \tiny{6} & \tiny{9} & \tiny{47} & \tiny{190} & \tiny{707} & \tiny{2294} & \tiny{1} & \tiny{6} & \tiny{9} & \tiny{47} & \tiny{190} & \tiny{707} & \tiny{2297} \\ \hline 
+\tiny{  pw = 5 } & \tiny{5} & \tiny{30} & \tiny{298} & \tiny{2396} & \tiny{14451} & \tiny{71034} & \tiny{290938} & \tiny{4} & \tiny{29} & \tiny{298} & \tiny{2395} & \tiny{14387} & \tiny{70916} & \tiny{292210} \\ \hline 
+\tiny{  pw = 6 } & \tiny{40} & \tiny{661} & \tiny{12709} & \tiny{159188} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{37} & \tiny{660} & \tiny{12705} & \tiny{159220} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{\textcolor{blue}{$>$1209602}} \\ \hline 
+\tiny{  pw = 7 } & \tiny{549} & \tiny{20708} & \tiny{672697} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{524} & \tiny{20682} & \tiny{671629} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{\textcolor{blue}{$>$1209602}} \\ \hline 
+\end{tabularx}
+\caption{Maximum Degree. Time in second used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search. }
+\end{table}

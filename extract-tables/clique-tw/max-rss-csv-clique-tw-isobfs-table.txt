@@ -4,9 +4,9 @@
 \hline
 \multicolumn{1}{|c|}{ }& \multicolumn{ 4 }{c|}{\thead{\footnotesize{ ISO-BFS  } }}& \multicolumn{ 4 }{c|}{\thead{\footnotesize{ ISO-BFS-premise } }}\\ \hline 
 \diagbox{\footnotesize pw}{ \footnotesize v} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5}\\ \hline 
-\tiny{  tw = 1 } & \tiny{\textcolor{red}{ 35996}} & \tiny{\textcolor{red}{ 36016}} & \tiny{\textcolor{red}{ 36032}} & \tiny{\textcolor{red}{ 36012}} & \tiny{\textcolor{red}{ 35968}} & \tiny{\textcolor{red}{ 35960}} & \tiny{\textcolor{red}{ 35524}} & \tiny{\textcolor{red}{ 35948}} \\ \hline 
-\tiny{  tw = 2 } & \tiny{\textcolor{red}{ 474496}} & \tiny{\textcolor{red}{ 89388}} & \tiny{\textcolor{red}{ 88876}} & \tiny{\textcolor{red}{ 84600}} & \tiny{\textcolor{red}{ 474496}} & \tiny{\textcolor{red}{ 89388}} & \tiny{\textcolor{red}{ 88880}} & \tiny{\textcolor{red}{ 84592}} \\ \hline 
-\tiny{  tw = 3 } & \tiny{\textcolor{red}{ 811868}} & \tiny{\textcolor{red}{ 1051540}} & \tiny{\textcolor{red}{ 484344}} & \tiny{\textcolor{red}{ 1196784}} & \tiny{\textcolor{red}{ 811876}} & \tiny{\textcolor{red}{ 1047692}} & \tiny{\textcolor{red}{ 485092}} & \tiny{\textcolor{red}{ 1196220}} \\ \hline 
+\tiny{  tw = 1 } & \tiny{\textcolor{blue}{$>$35996}} & \tiny{\textcolor{blue}{$>$36016}} & \tiny{\textcolor{blue}{$>$36032}} & \tiny{\textcolor{blue}{$>$36012}} & \tiny{\textcolor{blue}{$>$35968}} & \tiny{\textcolor{blue}{$>$35960}} & \tiny{\textcolor{blue}{$>$35524}} & \tiny{\textcolor{blue}{$>$35948}} \\ \hline 
+\tiny{  tw = 2 } & \tiny{\textcolor{blue}{$>$474496}} & \tiny{\textcolor{blue}{$>$89388}} & \tiny{\textcolor{blue}{$>$88876}} & \tiny{\textcolor{blue}{$>$84600}} & \tiny{\textcolor{blue}{$>$474496}} & \tiny{\textcolor{blue}{$>$89388}} & \tiny{\textcolor{blue}{$>$88880}} & \tiny{\textcolor{blue}{$>$84592}} \\ \hline 
+\tiny{  tw = 3 } & \tiny{\textcolor{blue}{$>$811868}} & \tiny{\textcolor{blue}{$>$1051540}} & \tiny{\textcolor{blue}{$>$484344}} & \tiny{\textcolor{blue}{$>$1196784}} & \tiny{\textcolor{blue}{$>$811876}} & \tiny{\textcolor{blue}{$>$1047692}} & \tiny{\textcolor{blue}{$>$485092}} & \tiny{\textcolor{blue}{$>$1196220}} \\ \hline 
 \end{tabularx}
-\caption{csv-clique-tw-isobfs.csv-max-rss}
+\caption{Clique Number. Memory in Kilo Bytes used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search. }
 \end{table}

@@ -1,0 +1,16 @@
+\begin{table}[H] 
+\centering 
+\begin{tabularx}{\textwidth}{|p{1.2cm}| X|X|X|X|X|X|X|X|X|X|X|X|X|X|}
+\hline
+\multicolumn{1}{|c|}{ }& \multicolumn{ 7 }{c|}{\thead{\footnotesize{ ISO-BFS  } }}& \multicolumn{ 7 }{c|}{\thead{\footnotesize{ ISO-BFS-premise } }}\\ \hline 
+\diagbox{\footnotesize pw}{ \footnotesize v} & \tiny{1} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{6} & \tiny{7} & \tiny{1} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{6} & \tiny{7}\\ \hline 
+\tiny{  pw = 1 } & \tiny{1} & \tiny{5} & \tiny{1} & \tiny{2} & \tiny{1} & \tiny{3} & \tiny{3} & \tiny{1} & \tiny{4} & \tiny{1} & \tiny{3} & \tiny{3} & \tiny{1} & \tiny{2} \\ \hline 
+\tiny{  pw = 2 } & \tiny{1} & \tiny{4} & \tiny{1} & \tiny{3} & \tiny{2} & \tiny{2} & \tiny{3} & \tiny{1} & \tiny{5} & \tiny{2} & \tiny{3} & \tiny{3} & \tiny{2} & \tiny{2} \\ \hline 
+\tiny{  pw = 3 } & \tiny{2} & \tiny{5} & \tiny{2} & \tiny{3} & \tiny{3} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{4} & \tiny{2} & \tiny{4} & \tiny{3} & \tiny{2} & \tiny{3} \\ \hline 
+\tiny{  pw = 4 } & \tiny{5} & \tiny{5} & \tiny{1106} & \tiny{354} & \tiny{15} & \tiny{15} & \tiny{15} & \tiny{5} & \tiny{5} & \tiny{1123} & \tiny{356} & \tiny{15} & \tiny{13} & \tiny{15} \\ \hline 
+\tiny{  pw = 5 } & \tiny{4} & \tiny{33} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{1334} & \tiny{1245} & \tiny{4} & \tiny{33} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{1326} & \tiny{1243} \\ \hline 
+\tiny{  pw = 6 } & \tiny{6} & \tiny{694} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{255818} & \tiny{6} & \tiny{687} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{256152} \\ \hline 
+\tiny{  pw = 7 } & \tiny{33} & \tiny{19586} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{19} & \tiny{19606} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} \\ \hline 
+\end{tabularx}
+\caption{Chromatic Number. Time in second used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search. }
+\end{table}

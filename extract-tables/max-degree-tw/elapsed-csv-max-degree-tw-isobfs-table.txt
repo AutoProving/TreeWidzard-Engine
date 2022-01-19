@@ -8,5 +8,5 @@
 \tiny{  tw = 2 } & \tiny{1} & \tiny{3} & \tiny{1} & \tiny{4} & \tiny{1} & \tiny{3} & \tiny{2} & \tiny{3} \\ \hline 
 \tiny{  tw = 3 } & \tiny{2} & \tiny{5} & \tiny{17} & \tiny{86} & \tiny{2} & \tiny{4} & \tiny{16} & \tiny{80} \\ \hline 
 \end{tabularx}
-\caption{csv-max-degree-tw-isobfs.csv-elapsed}
+\caption{Maximum Degree. Time in second used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search. }
 \end{table}

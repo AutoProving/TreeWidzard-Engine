@@ -1,0 +1,14 @@
+\begin{table}[H] 
+\centering 
+\begin{tabularx}{\textwidth}{|p{1.2cm}| X|X|X|X|X|X|X|X|X|X|}
+\hline
+\multicolumn{1}{|c|}{ }& \multicolumn{ 5 }{c|}{\thead{\footnotesize{ ISO-BFS  } }}& \multicolumn{ 5 }{c|}{\thead{\footnotesize{ ISO-BFS-premise } }}\\ \hline 
+\diagbox{\footnotesize pw}{ \footnotesize v} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{6} & \tiny{2} & \tiny{3} & \tiny{4} & \tiny{5} & \tiny{6}\\ \hline 
+\tiny{  pw = 1 } & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} \\ \hline 
+\tiny{  pw = 2 } & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{5108} & \tiny{8100} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} \\ \hline 
+\tiny{  pw = 3 } & \tiny{1210876} & \tiny{1234496} & \tiny{281908} & \tiny{944832} & \tiny{3412152} & \tiny{0} & \tiny{0} & \tiny{3200} & \tiny{5676} & \tiny{10324} \\ \hline 
+\tiny{  pw = 4 } & \tiny{\textcolor{blue}{$>$7463256}} & \tiny{\textcolor{blue}{$>$6484044}} & \tiny{\textcolor{blue}{$>$4595456}} & \tiny{\textcolor{blue}{$>$5828500}} & \tiny{\textcolor{blue}{$>$7087184}} & \tiny{2248} & \tiny{20196} & \tiny{46848} & \tiny{190656} & \tiny{680732} \\ \hline 
+\tiny{  pw = 5 } & \tiny{\textcolor{blue}{$>$845768}} & \tiny{\textcolor{blue}{$>$1016340}} & \tiny{\textcolor{blue}{$>$971072}} & \tiny{\textcolor{blue}{$>$1757300}} & \tiny{\textcolor{blue}{$>$1863300}} & \tiny{8020} & \tiny{\textcolor{blue}{$>$397532}} & \tiny{\textcolor{blue}{$>$404124}} & \tiny{\textcolor{blue}{$>$473064}} & \tiny{\textcolor{blue}{$>$487804}} \\ \hline 
+\end{tabularx}
+\caption{Reed's Conjecture. Memory in Kilo Bytes used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search. }
+\end{table}
