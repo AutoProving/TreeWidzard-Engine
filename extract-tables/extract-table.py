@@ -283,3 +283,4 @@ if __name__ == '__main__':
                     plt.savefig(os.path.dirname(filename)+"/"+comparing_key+"-"+os.path.splitext(base)[0]+"-"+str(w)+"-fig.png")
                     #plt.show()
                     #plt.clf() # clearing the plot
+
