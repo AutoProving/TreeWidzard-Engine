@@ -8,5 +8,5 @@
 \tiny{  tw = 2 } & \tiny{\textcolor{blue}{$>$474496}} & \tiny{\textcolor{blue}{$>$89388}} & \tiny{\textcolor{blue}{$>$88876}} & \tiny{\textcolor{blue}{$>$84600}} & \tiny{\textcolor{blue}{$>$474496}} & \tiny{\textcolor{blue}{$>$89388}} & \tiny{\textcolor{blue}{$>$88880}} & \tiny{\textcolor{blue}{$>$84592}} \\ \hline 
 \tiny{  tw = 3 } & \tiny{\textcolor{blue}{$>$811868}} & \tiny{\textcolor{blue}{$>$1051540}} & \tiny{\textcolor{blue}{$>$484344}} & \tiny{\textcolor{blue}{$>$1196784}} & \tiny{\textcolor{blue}{$>$811876}} & \tiny{\textcolor{blue}{$>$1047692}} & \tiny{\textcolor{blue}{$>$485092}} & \tiny{\textcolor{blue}{$>$1196220}} \\ \hline 
 \end{tabularx}
-\caption{Clique Number. Memory in Kilo Bytes used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search. }
+\caption{Clique Number. Memory in Kilo Bytes used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search.}
 \end{table}

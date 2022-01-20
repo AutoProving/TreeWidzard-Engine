@@ -10,5 +10,5 @@
 \tiny{  pw = 4 } & \tiny{\textcolor{blue}{$>$47339872}} & \tiny{\textcolor{blue}{$>$41330384}} & \tiny{\textcolor{blue}{ $>$21562312}} & \tiny{\textcolor{blue}{ $>$20115492}} & \tiny{\textcolor{blue}{ $>$20367512}} & \tiny{40772} & \tiny{1935792} & \tiny{5131712} & \tiny{\textcolor{blue}{ $>$15341876}} & \tiny{\textcolor{blue}{ $>$16790084}} \\ \hline 
 \tiny{  pw = 5 } & \tiny{\textcolor{blue}{$>$31488268}} & \tiny{\textcolor{blue}{$>$25984680}} & \tiny{\textcolor{blue}{ $>$22233604}} & \tiny{\textcolor{blue}{ $>$30083984}} & \tiny{\textcolor{blue}{ $>$24888544}} & \tiny{973080} & \tiny{\textcolor{blue}{$>$25294804}} & \tiny{\textcolor{blue}{ $>$18558736}} & \tiny{\textcolor{blue}{ $>$20000060}} & \tiny{\textcolor{blue}{ $>$12580224}} \\ \hline 
 \end{tabularx}
-\caption{Reed's Conjecture. Memory in Kilo Bytes used by Breadth-First Search and Premise Breadth-First Search. }
+\caption{Reed's Conjecture. Memory in Kilo Bytes used by Breadth-First Search and Premise Breadth-First Search.}
 \end{table}

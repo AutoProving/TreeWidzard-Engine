@@ -12,5 +12,5 @@
 \tiny{  pw = 6 } & \tiny{40} & \tiny{661} & \tiny{12709} & \tiny{159188} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{37} & \tiny{660} & \tiny{12705} & \tiny{159220} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{\textcolor{blue}{$>$1209602}} \\ \hline 
 \tiny{  pw = 7 } & \tiny{549} & \tiny{20708} & \tiny{672697} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{524} & \tiny{20682} & \tiny{671629} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{\textcolor{blue}{$>$1209602}} \\ \hline 
 \end{tabularx}
-\caption{Maximum Degree. Time in second used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search. }
+\caption{Maximum Degree. Time in seconds used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search.}
 \end{table}

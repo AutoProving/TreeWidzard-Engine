@@ -10,5 +10,5 @@
 \tiny{  pw = 4 } & \tiny{\textcolor{red}{\textbf{20}$^*$}} & \tiny{\textcolor{red}{\textbf{23}$^*$}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{red}{\textbf{8}$^*$}} & \tiny{\textcolor{red}{\textbf{10}$^*$}} & \tiny{\textcolor{red}{\textbf{852430}$^*$}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{217378} \\ \hline 
 \tiny{  pw = 5 } & \tiny{\textcolor{red}{\textbf{110}$^*$}} & \tiny{\textcolor{red}{\textbf{125}$^*$}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{red}{\textbf{59}$^*$}} & \tiny{\textcolor{red}{\textbf{70}$^*$}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{$>$1209601}} \\ \hline 
 \end{tabularx}
-\caption{Reed's Conjecture Minus One. Time in second used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search. }
+\caption{Reed's Conjecture Minus One. Time in seconds used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search.}
 \end{table}

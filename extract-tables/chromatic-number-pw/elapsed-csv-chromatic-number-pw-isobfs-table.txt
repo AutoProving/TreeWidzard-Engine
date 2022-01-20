@@ -12,5 +12,5 @@
 \tiny{  pw = 6 } & \tiny{6} & \tiny{694} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{255818} & \tiny{6} & \tiny{687} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{256152} \\ \hline 
 \tiny{  pw = 7 } & \tiny{33} & \tiny{19586} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{19} & \tiny{19606} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209600}} \\ \hline 
 \end{tabularx}
-\caption{Chromatic Number. Time in second used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search. }
+\caption{Chromatic Number. Time in seconds used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search.}
 \end{table}

@@ -10,5 +10,5 @@
 \tiny{  pw = 4 } & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{ $>$995704}} & \tiny{\textcolor{blue}{ $>$995704}} & \tiny{\textcolor{blue}{ $>$995704}} & \tiny{1009} & \tiny{75458} & \tiny{371502} & \tiny{\textcolor{blue}{ $>$995704}} & \tiny{\textcolor{blue}{ $>$995704}} \\ \hline 
 \tiny{  pw = 5 } & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{ $>$995704}} & \tiny{\textcolor{blue}{ $>$995704}} & \tiny{\textcolor{blue}{ $>$972964}} & \tiny{77363} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{ $>$995704}} & \tiny{\textcolor{blue}{ $>$995704}} & \tiny{\textcolor{blue}{ $>$624230}} \\ \hline 
 \end{tabularx}
-\caption{Reed's Conjecture. Time in second used by Breadth-First Search and Premise Breadth-First Search. }
+\caption{Reed's Conjecture. Time in seconds used by Breadth-First Search and Premise Breadth-First Search.}
 \end{table}

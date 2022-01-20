@@ -8,5 +8,5 @@
 \tiny{  tw = 2 } & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{11} & \tiny{94} & \tiny{465} \\ \hline 
 \tiny{  tw = 3 } & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{2487} & \tiny{130601} & \tiny{\textcolor{blue}{$>$1209602}} \\ \hline 
 \end{tabularx}
-\caption{Reed's Conjecture. Time in second used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search. }
+\caption{Reed's Conjecture. Time in seconds used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search.}
 \end{table}

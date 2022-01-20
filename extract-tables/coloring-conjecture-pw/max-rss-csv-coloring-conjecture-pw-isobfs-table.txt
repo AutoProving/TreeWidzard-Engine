@@ -8,5 +8,5 @@
 \tiny{  pw = 5 } & \tiny{\textcolor{blue}{$>$755740}} & \tiny{\textcolor{blue}{$>$336992}} \\ \hline 
 \tiny{  pw = 6 } & \tiny{\textcolor{blue}{$>$494076}} & \tiny{\textcolor{blue}{$>$412104}} \\ \hline 
 \end{tabularx}
-\caption{Coloring Conjecture. Memory in Kilo Bytes used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search. }
+\caption{Coloring Conjecture. Memory in Kilo Bytes used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search.}
 \end{table}

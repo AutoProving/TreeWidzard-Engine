@@ -12,5 +12,5 @@
 \tiny{  pw = 6 } & err & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{\textcolor{blue}{$>$1209602}} & err & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{\textcolor{blue}{$>$1209602}} \\ \hline 
 \tiny{  pw = 7 } & err & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{\textcolor{blue}{$>$1209602}} & err & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{\textcolor{blue}{$>$1209602}} \\ \hline 
 \end{tabularx}
-\caption{Maximum Degree. Time in second used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search. }
+\caption{Maximum Degree. Time in seconds used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search.}
 \end{table}

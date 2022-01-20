@@ -10,5 +10,5 @@
 \tiny{  pw = 4 } & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{221} & \tiny{6267} & \tiny{17670} & \tiny{72248} & \tiny{221457} \\ \hline 
 \tiny{  pw = 5 } & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{14602} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{$>$1209601}} \\ \hline 
 \end{tabularx}
-\caption{Reed's Conjecture. Time in second used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search. }
+\caption{Reed's Conjecture. Time in seconds used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search.}
 \end{table}

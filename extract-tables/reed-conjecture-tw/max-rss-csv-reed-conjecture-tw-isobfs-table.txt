@@ -8,5 +8,5 @@
 \tiny{  tw = 2 } & \tiny{\textcolor{blue}{$>$530068}} & \tiny{\textcolor{blue}{$>$529624}} & \tiny{\textcolor{blue}{$>$529432}} & \tiny{0} & \tiny{1236} & \tiny{1476} \\ \hline 
 \tiny{  tw = 3 } & \tiny{\textcolor{blue}{$>$770696}} & \tiny{\textcolor{blue}{$>$772580}} & \tiny{\textcolor{blue}{$>$859240}} & \tiny{1396} & \tiny{2904} & \tiny{\textcolor{blue}{$>$7024}} \\ \hline 
 \end{tabularx}
-\caption{Reed's Conjecture. Memory in Kilo Bytes used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search. }
+\caption{Reed's Conjecture. Memory in Kilo Bytes used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search.}
 \end{table}
