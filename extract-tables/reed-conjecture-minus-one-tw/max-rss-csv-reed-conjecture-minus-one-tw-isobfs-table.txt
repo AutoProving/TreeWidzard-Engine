@@ -7,6 +7,7 @@
 \tiny{  tw = 1 } & \tiny{\textcolor{blue}{$>$42328}} & \tiny{\textcolor{blue}{$>$42996}} & \tiny{\textcolor{blue}{$>$42988}} & \tiny{0} & \tiny{0} & \tiny{0} \\ \hline 
 \tiny{  tw = 2 } & \tiny{\textcolor{red}{\textbf{8383844}$^*$}} & \tiny{\textcolor{red}{\textbf{8386504}$^*$}} & \tiny{\textcolor{blue}{$>$523908}} & \tiny{\textcolor{red}{\textbf{8384320}$^*$}} & \tiny{\textcolor{red}{\textbf{8356960}$^*$}} & \tiny{1480} \\ \hline 
 \tiny{  tw = 3 } & \tiny{\textcolor{red}{\textbf{33554204}$^*$}} & \tiny{\textcolor{red}{\textbf{33540804}$^*$}} & \tiny{\textcolor{blue}{$>$749344}} & \tiny{\textcolor{red}{\textbf{33530588}$^*$}} & \tiny{\textcolor{red}{\textbf{33538020}$^*$}} & \tiny{\textcolor{blue}{$>$7480}} \\ \hline 
+\tiny{  tw = 4 } & err & err & err & err & err & err \\ \hline 
 \end{tabularx}
 \caption{Reed's Conjecture Minus One. Memory in Kilo Bytes used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search.}
 \end{table}

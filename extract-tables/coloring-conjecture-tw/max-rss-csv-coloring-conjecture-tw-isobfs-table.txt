@@ -1,0 +1,12 @@
+\begin{table}[H] 
+\centering 
+\begin{tabularx}{\textwidth}{|p{1.2cm}| X|X|}
+\hline
+\multicolumn{1}{|c|}{ }& \multicolumn{ 1 }{c|}{\thead{\footnotesize{ ISO-BFS  } }}& \multicolumn{ 1 }{c|}{\thead{\footnotesize{ ISO-BFS-premise } }}\\ \hline 
+\diagbox{\footnotesize pw}{ \footnotesize v} & \tiny{3} & \tiny{3}\\ \hline 
+\tiny{  tw = 4 } & \tiny{\textcolor{blue}{$>$1197632}} & \tiny{\textcolor{blue}{$>$2948}} \\ \hline 
+\tiny{  tw = 5 } & \tiny{\textcolor{blue}{$>$1196076}} & \tiny{\textcolor{blue}{$>$23008}} \\ \hline 
+\tiny{  tw = 6 } & \tiny{\textcolor{blue}{$>$636860}} & \tiny{\textcolor{blue}{$>$16668}} \\ \hline 
+\end{tabularx}
+\caption{Coloring Conjecture. Memory in Kilo Bytes used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search.}
+\end{table}

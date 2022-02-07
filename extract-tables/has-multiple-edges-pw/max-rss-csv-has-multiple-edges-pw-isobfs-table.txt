@@ -1,0 +1,16 @@
+\begin{table}[H] 
+\centering 
+\begin{tabularx}{\textwidth}{|p{1.2cm}| X|X|}
+\hline
+\multicolumn{1}{|c|}{ }& \multicolumn{ 1 }{c|}{\thead{\footnotesize{ ISO-BFS  } }}& \multicolumn{ 1 }{c|}{\thead{\footnotesize{ ISO-BFS-premise } }}\\ \hline 
+\diagbox{\footnotesize pw}{ \footnotesize v} & \tiny{} & \tiny{}\\ \hline 
+\tiny{  pw = 1 } & \tiny{0} & \tiny{0} \\ \hline 
+\tiny{  pw = 2 } & \tiny{0} & \tiny{0} \\ \hline 
+\tiny{  pw = 3 } & \tiny{0} & \tiny{0} \\ \hline 
+\tiny{  pw = 4 } & \tiny{0} & \tiny{0} \\ \hline 
+\tiny{  pw = 5 } & \tiny{19960} & \tiny{19976} \\ \hline 
+\tiny{  pw = 6 } & \tiny{\textcolor{blue}{$>$690984}} & \tiny{\textcolor{blue}{$>$690436}} \\ \hline 
+\tiny{  pw = 7 } & \tiny{\textcolor{blue}{$>$685780}} & \tiny{\textcolor{blue}{$>$683952}} \\ \hline 
+\end{tabularx}
+\caption{Simple Graph. Memory in Kilo Bytes used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search.}
+\end{table}

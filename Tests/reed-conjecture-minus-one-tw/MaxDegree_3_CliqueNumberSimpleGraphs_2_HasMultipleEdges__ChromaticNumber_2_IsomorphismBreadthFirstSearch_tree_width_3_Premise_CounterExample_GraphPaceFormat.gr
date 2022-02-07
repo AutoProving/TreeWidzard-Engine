@@ -1,0 +1,7 @@
+c This is the counter example for ../Tests/reed-conjecture-minus-one-tw/MaxDegree_3_CliqueNumberSimpleGraphs_2_HasMultipleEdges__ChromaticNumber_2_IsomorphismBreadthFirstSearch_tree_width_3_Premise_CounterExample_GraphPaceFormat.gr
+p tw 5 5
+2 3
+1 4
+4 3
+1 5
+2 5

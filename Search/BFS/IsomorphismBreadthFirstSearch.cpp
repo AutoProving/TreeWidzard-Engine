@@ -226,7 +226,7 @@ void IsomorphismBreadthFirstSearch::search(){
                                     bfsDAG.addState(consequentState);
                                     vector<State::ptr> antecedentStates;
                                     antecedentStates.push_back(statePointer);
-                                    antecedentStates.push_back(relabeledNewStatePointer);
+                                    antecedentStates.push_back(*it);
                                     Transition<State::ptr, AbstractTreeDecompositionNodeContent> transition(
                                             consequentState,
                                             transitionContent,
@@ -469,18 +469,6 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
                 State::ptr childState = wrongRunNode->getChildren()[0]->getNodeContent().getState()->relabel(compositionMap);
                 State::ptr testState = kernel->intro_v(childState,v);
                 if(testState == correctedState){
-//                    cout<<"child state"<<endl;
-//                    childState.print();
-//                    cout<<endl;
-//                    cout<<"test state"<<endl;
-//                    testState.print();
-//                    cout<<endl;
-//                    cout<<"THE MAP"<<endl;
-//                    for(auto item:compositionMap){
-//                        cout<<item.first<<"->"<<item.second<<" ";
-//                    }
-//                    cout<<"#####################################"<<endl;
-                    ///////////////////////////////////////////////////////
                     introducedVertex = v;
                     childMap = compositionMap;
                     breakFor = true;
@@ -689,7 +677,7 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
                 child2(new TermNode<RunNodeContent<State::ptr,AbstractTreeDecompositionNodeContent>>);
         child2->setParent(correctedRunNode);
         children.push_back(child2);
-        extractRunTreeNode(wrongRunNode->getChildren()[0],child2,childMap2);
+        extractRunTreeNode(wrongRunNode->getChildren()[1],child2,childMap2);
         correctedRunNode->setChildren(children);
     }else{
         cout<<"Error: Node Type is not valid."<<endl;

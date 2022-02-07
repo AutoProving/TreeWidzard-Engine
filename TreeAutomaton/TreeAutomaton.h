@@ -254,11 +254,11 @@ void TreeAutomaton<StateType,TermNodeContent>::retrieveTermNodeAcyclicAutomaton(
             itAux++;
             if(itAux != transitions.end()){
                 if (itAux->getConsequentState() != state){
-                    cout << "Error: No transition with consequent equal to the input state.";
+                    cout << "Error1: No transition with consequent equal to the input state." ;
                     exit(20);
                 }
             }else{
-                cout << "Error: No transition with consequent equal to the input state.";
+                cout << "Error2: No transition with consequent equal to the input state.";
                 exit(20);
             }
         }
@@ -303,11 +303,11 @@ void TreeAutomaton<StateType, TermNodeContent>::retrieveRunNodeAcyclicAutomaton(
             itAux++;
             if (itAux != transitions.end()) {
                 if (itAux->getConsequentState() != state) {
-                    cout << "Error: No transition with consequent equal to the input state.";
+                    cout << "Error1: No transition with consequent equal to the input state.";
                     exit(20);
                 }
             } else {
-                cout << "Error: No transition with consequent equal to the input state.";
+                cout << "Error2: No transition with consequent equal to the input state.";
                 exit(20);
             }
         }

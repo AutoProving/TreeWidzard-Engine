@@ -1,0 +1,12 @@
+\begin{table}[H] 
+\centering 
+\begin{tabularx}{\textwidth}{|p{1.2cm}| X|X|}
+\hline
+\multicolumn{1}{|c|}{ }& \multicolumn{ 1 }{c|}{\thead{\footnotesize{ ISO-BFS  } }}& \multicolumn{ 1 }{c|}{\thead{\footnotesize{ ISO-BFS-premise } }}\\ \hline 
+\diagbox{\footnotesize pw}{ \footnotesize v} & \tiny{3} & \tiny{3}\\ \hline 
+\tiny{  tw = 4 } & \tiny{\textcolor{blue}{$>$1209600}} & \tiny{\textcolor{blue}{$>$1209602}} \\ \hline 
+\tiny{  tw = 5 } & \tiny{\textcolor{blue}{$>$1209602}} & \tiny{\textcolor{blue}{$>$1209602}} \\ \hline 
+\tiny{  tw = 6 } & \tiny{\textcolor{blue}{$>$1209601}} & \tiny{\textcolor{blue}{$>$1209601}} \\ \hline 
+\end{tabularx}
+\caption{Coloring Conjecture. Time in seconds used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search.}
+\end{table}

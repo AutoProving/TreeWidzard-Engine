@@ -7,6 +7,7 @@
 \tiny{  tw = 1 } & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} \\ \hline 
 \tiny{  tw = 2 } & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{0} \\ \hline 
 \tiny{  tw = 3 } & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{1440} & \tiny{0} & \tiny{0} & \tiny{0} & \tiny{1452} \\ \hline 
+\tiny{  tw = 4 } & \tiny{0} & \tiny{1236} & \tiny{1796} & \tiny{3132} & \tiny{0} & \tiny{1236} & \tiny{1788} & \tiny{3128} \\ \hline 
 \end{tabularx}
 \caption{Maximum Degree. Memory in Kilo Bytes used by Isomorphism Breadth-First Search and Premise Isomorphism Breadth-First Search.}
 \end{table}

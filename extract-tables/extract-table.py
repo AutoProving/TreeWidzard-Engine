@@ -6,6 +6,8 @@ if __name__ == '__main__':
     import os
     import re
     from inspect import currentframe, getframeinfo
+    import numpy as np
+
     
     #parser = argparse.ArgumentParser(description="This is a script for generating a latex table.")
     #parser.add_argument('--input-file', type=argparse.FileType('r'), nargs=1, required=True, help="excel file")
@@ -24,33 +26,40 @@ if __name__ == '__main__':
     e.append(e1)
     e2 = ["reed-conjecture-pw/csv-reed-pw-bfs.csv",["BreadthFirstSearch"],"MaxDegree",[" pw = "],[1,2,3,4,5],[2,3,4,5,6],searchFlag,"Reed's Conjecture.","The numbers are for witness size of Chromatic Number, Maximum Degree, Clique Number, and Has Multiple Edges, respectively."]
     e.append(e2)
-    e3 = ["reed-conjecture-tw/csv-reed-conjecture-tw-isobfs.csv",["IsomorphismBreadthFirstSearch"],"MaxDegree",[" tw = "],[1,2,3],[2,3,4],searchFlag, "Reed's Conjecture.","The numbers are for witness size of Chromatic Number, Maximum Degree, Clique Number, and Has Multiple Edges, respectively."]
+    e3 = ["reed-conjecture-tw/csv-reed-conjecture-tw-isobfs.csv",["IsomorphismBreadthFirstSearch"],"MaxDegree",[" tw = "],[1,2,3,4],[2,3,4],searchFlag, "Reed's Conjecture.","The numbers are for witness size of Chromatic Number, Maximum Degree, Clique Number, and Has Multiple Edges, respectively."]
     e.append(e3)
     e4 = ["chromatic-number-pw/csv-chromatic-number-pw-isobfs.csv",["IsomorphismBreadthFirstSearch"],"ChromaticNumber",[" pw = "],[1,2,3,4,5,6,7],[1,2,3,4,5,6,7],searchFlag, "Chromatic Number.",""]
     e.append(e4) 
-    e5 = ["chromatic-number-tw/csv-chromatic-number-tw-isobfs.csv",["IsomorphismBreadthFirstSearch"],"ChromaticNumber",[" tw = "],[1,2,3],[1,2,3,4],searchFlag,"Chromatic Number.",""]
+    e5 = ["chromatic-number-tw/csv-chromatic-number-tw-isobfs.csv",["IsomorphismBreadthFirstSearch"],"ChromaticNumber",[" tw = "],[1,2,3,4],[1,2,3,4],searchFlag,"Chromatic Number.",""]
     e.append(e5)
    
     e6 = ["max-degree-pw/csv-max-degree-pw-isobfs.csv",["IsomorphismBreadthFirstSearch"],"MaxDegree",[" pw = "],[1,2,3,4,5,6,7],[1,2,3,4,5,6,7],searchFlag,"Maximum Degree.",""]
     e.append(e6)
     
-    e7 = ["max-degree-tw/csv-max-degree-tw-isobfs.csv",["IsomorphismBreadthFirstSearch"],"MaxDegree",[" tw = "],[1,2,3],[1,2,3,4],searchFlag, "Maximum Degree.",""]
+    e7 = ["max-degree-tw/csv-max-degree-tw-isobfs.csv",["IsomorphismBreadthFirstSearch"],"MaxDegree",[" tw = "],[1,2,3,4],[1,2,3,4],searchFlag, "Maximum Degree.",""]
     e.append(e7)
   
-    e8 = ["clique-pw/csv-clique-pw-isobfs.csv",["IsomorphismBreadthFirstSearch"],"CliqueNumberSimpleGraphs",[" pw = "],[1,2,3,4,5,6,7],[1,2,3,4,5],searchFlag, "Maximum Degree.",""]
+    e8 = ["clique-pw/csv-clique-pw-isobfs.csv",["IsomorphismBreadthFirstSearch"],"CliqueNumberSimpleGraphs",[" pw = "],[1,2,3,4,5,6,7],[2,3,4,5],searchFlag, "Clique Number.",""]
+    
     e.append(e8)
    
-    e9 = ["clique-tw/csv-clique-tw-isobfs.csv",["IsomorphismBreadthFirstSearch"],"CliqueNumberSimpleGraphs",[" tw = "],[1,2,3],[2,3,4,5],searchFlag, "Clique Number.",""]
+    e9 = ["clique-tw/csv-clique-tw-isobfs.csv",["IsomorphismBreadthFirstSearch"],"CliqueNumberSimpleGraphs",[" tw = "],[1,2,3,4],[2,3,4,5],searchFlag, "Clique Number.",""]
     e.append(e9)
 
     e10 = ["coloring-conjecture-pw/csv-coloring-conjecture-pw-isobfs.csv",["IsomorphismBreadthFirstSearch"],"ChromaticNumber",[" pw = "],[4,5,6],[3],searchFlag,"Coloring Conjecture.","The numbers are for witness size of Clique Number, Has Multiple Edges, and Chromatic Number, respectively."]
     e.append(e10)
-    e.append(e10)
+    
     e11 = ["reed-conjecture-minus-one-pw/csv-reed-conjecture-minus-one-pw-isobfs.csv",["IsomorphismBreadthFirstSearch"],"MaxDegree",[" pw = "],[1,2,3,4,5],[2,3,4,5,6],searchFlag,"Reed's Conjecture Minus One.","The numbers are for witness size of Chromatic Number, Maximum Degree, Clique Number, and Has Multiple Edges, respectively."]
     e.append(e11)
 
-    e12 = ["reed-conjecture-minus-one-tw/csv-reed-conjecture-minus-one-tw-isobfs.csv",["IsomorphismBreadthFirstSearch"],"MaxDegree",[" tw = "],[1,2,3],[2,3,4],searchFlag, "Reed's Conjecture Minus One.","The numbers are for witness size of Chromatic Number, Maximum Degree, Clique Number, and Has Multiple Edges, respectively."]
+    e12 = ["reed-conjecture-minus-one-tw/csv-reed-conjecture-minus-one-tw-isobfs.csv",["IsomorphismBreadthFirstSearch"],"MaxDegree",[" tw = "],[1,2,3,4],[2,3,4],searchFlag, "Reed's Conjecture Minus One.","The numbers are for witness size of Chromatic Number, Maximum Degree, Clique Number, and Has Multiple Edges, respectively."]
     e.append(e12)
+    e13 = ["has-multiple-edges-pw/csv-has-multiple-edges-pw-isobfs.csv",["IsomorphismBreadthFirstSearch"],"HasMultipleEdges",[" pw = "],[1,2,3,4,5,6,7],[""],searchFlag, "Simple Graph.",""]
+    e.append(e13)
+    e14 = ["has-multiple-edges-tw/csv-has-multiple-edges-tw-isobfs.csv",["IsomorphismBreadthFirstSearch"],"HasMultipleEdges",[" tw = "],[1,2,3,4,5],[""],searchFlag, "Simple Graph.",""]
+    e.append(e14)
+    e15 = ["coloring-conjecture-tw/csv-coloring-conjecture-tw-isobfs.csv",["IsomorphismBreadthFirstSearch"],"ChromaticNumber",[" tw = "],[4,5,6],[3],searchFlag,"Coloring Conjecture.","The numbers are for witness size of Clique Number, Has Multiple Edges, and Chromatic Number, respectively."]
+    e.append(e15)
 #property_range = range(1, 8) # individual cores pw
     #property_range = range(2, 6) # individual cores pw cl
     #property_range = range(1,5) # individual cores tw
@@ -122,6 +131,10 @@ if __name__ == '__main__':
                             for m in property_range:
                                 l = data.loc[(data[" Search Type"] == s) & (data[property_name] == m) & (
                                     data["width"] == w + str(p)) & (data["Search Options"] == flag)]
+                                if property_name == "HasMultipleEdges":
+                                    l = data.loc[(data[" Search Type"] == s) & (
+                                    data["width"] == w + str(p)) & (data["Search Options"] == flag)]
+
                                 if len(l.index) > 0:
                                     # print(l)
                                     cellinfo = ""
@@ -203,6 +216,7 @@ if __name__ == '__main__':
                 for w in width_value:
                     ls = ["-","--","-.",".."]
                     ss = ["X","o","s","p"]
+                    color = ["green","blue","red","orange","purple"]
                     k = 0
                     op = 0.1
                     for s in searches:
@@ -210,7 +224,7 @@ if __name__ == '__main__':
                         for p in searchFlag: 
                             l = data.loc[
                                 (data["width"] == width + str(w)) & (data[" Search Type"] == s) & (
-                                data["Search Options"] == p)]
+                                data["Search Options"] == p)]    
                             l =l.sort_values(by=property_name)    
                            # l = data.loc[
                            #     (data["width"] == width_name[0] + pw) & (data[" Search Type"] == s) & (
@@ -265,8 +279,9 @@ if __name__ == '__main__':
                                     x.append(xp)
                                     y.append(yp)
 
-                            plt.plot(x,y, marker='',label=searchesName[s]+p,alpha=1-op,linestyle=ls[k],linewidth =6-3*k)
-                            plt.scatter(nx,ny, marker=ss[0],zorder = 10-k,s=300,  alpha=1-op)
+                            plt.plot(x,y, marker='',label=searchesName[s]+p,alpha=1-op,linestyle=ls[k],linewidth =6-3*k,color=color[k])
+                            
+                            plt.scatter(nx,ny, marker=ss[k],zorder = 10-k,s=200+100*k,  alpha=1-op,color=color[k])
                             #print(x,y)
                             k+=1
                             op+=.3
