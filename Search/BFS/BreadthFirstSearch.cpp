@@ -325,20 +325,23 @@ void BreadthFirstSearch::search(){
                     string file = this->getOutputsPath();
                     if (flags->get("Premise")) { file += "_Premise"; }
                     file += "_CounterExample";
-                    atd.writeToFile(file + "_AbstractDecomposition.txt");
                     ConcreteTreeDecomposition ctd = atd.convertToConcreteTreeDecomposition();
-                    ctd.writeToFile(file + "_ConcreteDecomposition.txt");
                     RunTree<State::ptr, AbstractTreeDecompositionNodeContent> runTree = extractCounterExampleRun(
                             badState);
-                    runTree.writeToFile(file + "_RunTree.txt");
                     MultiGraph multiGraph = ctd.extractMultiGraph();
                     multiGraph.printGraph();
+
+                    atd.writeToFile(file + "_AbstractDecomposition.txt");
+                    ctd.writeToFile(file + "_ConcreteDecomposition.txt");
+                    runTree.writeToFile(file + "_RunTree.txt");
                     multiGraph.printToFile(file + "_Graph.txt");
                     multiGraph.convertToGML(file + "_GMLGraph.gml");
                     multiGraph.printToFilePACEFormat(file + "_GraphPaceFormat.gr");
+
                     if(flags->get("PrintDirectedBipartiteGraphNAUTY")){
                         multiGraph.printToFileDirectedBipartiteGraphNAUTY(file+"_DirectedBipartiteGraphNAUTY.txt");
                     }
+
                     return;
                 }
           }

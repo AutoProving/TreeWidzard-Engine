@@ -111,7 +111,8 @@ public:
 
 template<class StateType, class TermNodeContent>
 void RunTree<StateType, TermNodeContent>::writeToFile(string fileName) {
-    ofstream runFile (fileName);
+    ofstream runFile;
+    runFile.open(fileName,ios::out);
     if (runFile.is_open())
     {
         runFile << this->termInformation();

@@ -284,23 +284,27 @@ void IsomorphismBreadthFirstSearch::search(){
                 file += "_CounterExample";
 
                 RunTree<State::ptr,AbstractTreeDecompositionNodeContent> runTree = extractRunTree(*it);
-                runTree.writeToFile(file + "_RunTree.txt");
+
                 ///=======ABSTRACT TREE=========///
                 Term<AbstractTreeDecompositionNodeContent>* term = new AbstractTreeDecomposition;
                 *term = runTree.convertRunToTerm(runTree);
                 AbstractTreeDecomposition* atd = static_cast<AbstractTreeDecomposition *>(term);
-                atd->writeToFile(file + "_AbstractDecomposition.txt");
                 ///=======Concrete TREE=========///
                 ConcreteTreeDecomposition ctd = atd->convertToConcreteTreeDecomposition();
-                ctd.writeToFile(file + "_ConcreteDecomposition.txt");
                 MultiGraph multiGraph = ctd.extractMultiGraph();
                 multiGraph.printGraph();
+
+                runTree.writeToFile(file + "_RunTree.txt");
+                atd->writeToFile(file + "_AbstractDecomposition.txt");
+                ctd.writeToFile(file + "_ConcreteDecomposition.txt");
                 multiGraph.printToFile(file + "_Graph.txt");
                 multiGraph.convertToGML(file + "_GMLGraph.gml");
                 multiGraph.printToFilePACEFormat(file + "_GraphPaceFormat.gr");
+
                 if(flags->get("PrintDirectedBipartiteGraphNAUTY")){
                     multiGraph.printToFileDirectedBipartiteGraphNAUTY(file+"_DirectedBipartiteGraphNAUTY.txt");
                 }
+
                 return;
             }
         }

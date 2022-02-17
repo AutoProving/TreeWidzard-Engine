@@ -26,7 +26,12 @@ void ParseController::parse_pace(string graphPath, string decompositionPath) {
     string output_file_path = fs::path(inputController->getInputPath()).parent_path().string();
     string abstract_file_name = fs::path(decompositionPath).stem().string();
     string property_file_name = fs::path(inputController->getInputPath()).stem().string();
-    string name = output_file_path+"/PARSE_PACE_"+property_file_name+"_"+abstract_file_name;
+    string name;
+    if(output_file_path == ""){
+        name = "PARSE_PACE_"+property_file_name+"_"+abstract_file_name;
+    }else{
+        name = output_file_path+"/PARSE_PACE_"+property_file_name+"_"+abstract_file_name;
+    }
     TreeDecompositionPACE td;
 
     td.multigraph= multigraph;
@@ -99,7 +104,12 @@ void ParseController::parse_abstract(string abstractPath) {
     string output_file_path = fs::path(inputController->getInputPath()).parent_path().string();
     string abstract_file_name = fs::path(abstractPath).stem().string();
     string property_file_name = fs::path(inputController->getInputPath()).stem().string();
-    string name = output_file_path+"/PARSE_ABSTRACT_"+property_file_name+"_"+abstract_file_name;
+    string name;
+    if(output_file_path == ""){
+        name = "PARSE_ABSTRACT_"+property_file_name+"_"+abstract_file_name;
+    }else{
+        name = output_file_path+"/PARSE_ABSTRACT_"+property_file_name+"_"+abstract_file_name;
+    }
     concreteTreeDecomposition.conjectureCheck(this->inputController->getConjecture(), flag, name);
     concreteTreeDecomposition.writeToFile(name+"_ConcreteDecomposition.txt");
     MultiGraph multiGraph = concreteTreeDecomposition.extractMultiGraph();
