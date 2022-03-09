@@ -209,6 +209,9 @@ void VertexCover_AtMost_DynamicCore::forget_v_implementation(unsigned int i, Bag
  * If C1 == C2, then we have (C1, k1 + k2 - |C1|) to avoid double counting
  * If C1 != C2, then we return empty set
  */
+
+// TODO: check join, is it correct that two vertex covers should be equal? example, suppose in one side we have two
+// Isolated vertices and in the other side there is an edge between these two vertices.
 void VertexCover_AtMost_DynamicCore::join_implementation(Bag &b, VertexCover_AtMost_WitnessPointer w1,
                                                          VertexCover_AtMost_WitnessPointer w2,
                                                          VertexCover_AtMost_WitnessSetPointer witnessSet) {
