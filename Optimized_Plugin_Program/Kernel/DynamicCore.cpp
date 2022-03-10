@@ -1,7 +1,7 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 
 #include "DynamicCore.h"
-#include "../DynamicCores/EdgeConnected_AtMost.h"
+
 WitnessSetPointer DynamicCore::getInitialSet() {
     return initialWitnessSet;
 }

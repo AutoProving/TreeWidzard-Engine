@@ -1,0 +1,3 @@
+/home/farhad/Documents/github/treewidzard-Temp/Optimized_Plugin_Program/Build/CMakeFiles/rebuild_cache.dir
+/home/farhad/Documents/github/treewidzard-Temp/Optimized_Plugin_Program/Build/CMakeFiles/edit_cache.dir
+/home/farhad/Documents/github/treewidzard-Temp/Optimized_Plugin_Program/Build/CMakeFiles/treewidzard.dir
