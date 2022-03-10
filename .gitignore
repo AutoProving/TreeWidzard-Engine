@@ -11,3 +11,4 @@
 *~
 */.idea/*
 */cmake-build-debug/*
+*.so
