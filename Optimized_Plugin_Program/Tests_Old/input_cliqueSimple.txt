@@ -1,4 +1,0 @@
-path_width 3
-a := CliqueNumber > 2
-b := HasMultipleEdges
-NOT b IMPLIES (a IMPLIES TRUE)

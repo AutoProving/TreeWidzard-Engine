@@ -1,3 +1,0 @@
-path_width 1
-c := CliqueNumber > 4
-c OR NOT c

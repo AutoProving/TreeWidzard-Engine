@@ -1,5 +1,0 @@
-path_width 4
-a := Minor("../Tests/k5.txt")
-b := Minor("../Tests/k33.txt")
-c := ChromaticNumber < 5
-a AND b IMPLIES c

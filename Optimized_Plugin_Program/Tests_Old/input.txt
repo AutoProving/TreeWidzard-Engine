@@ -1,6 +1,0 @@
-h := MaxDegree > 3
-x := Connectivity
-y := HasMultipleEdges
-z := ChromaticNumberMin
-Formula
-TRUE OR h AND x OR floor(z) AND TRUE AND NOT y

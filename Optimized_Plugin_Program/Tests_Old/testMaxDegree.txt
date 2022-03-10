@@ -1,3 +1,0 @@
-x := MaxDegree > 3
-Formula
-NOT x IMPLIES TRUE
