@@ -1,0 +1,3 @@
+path_width 3
+a := IndependentSet > 2
+TRUE

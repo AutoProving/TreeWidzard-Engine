@@ -1,0 +1,3 @@
+x := ChromaticNumber < 4
+Formula
+x
