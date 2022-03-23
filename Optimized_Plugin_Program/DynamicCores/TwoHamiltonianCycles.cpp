@@ -154,7 +154,7 @@ void TwoHamiltonianCycles_Witness::print() {
         cout << ',';
     }
 
-    cout << "closed=" << this->closed << "} ";
+    cout << "] closed=" << this->closed[version] << "} ";
   }
   cout << "was_different=" << this->was_different << endl;
   //*****************************
@@ -191,7 +191,7 @@ string TwoHamiltonianCycles_Witness::witnessInformation() {
         info << ',';
     }
 
-    info << "closed=" << this->closed << "} ";
+    info << "] closed=" << this->closed[version] << "} ";
   }
   info << "was_different=" << this->was_different << endl;
   return info.str();
@@ -262,6 +262,8 @@ void TwoHamiltonianCycles_DynamicCore::intro_e_implementation(unsigned int i, un
   auto try_use_edge = [&](TwoHamiltonianCycles_WitnessPointer w1, int v) -> bool {
     // attempt using the edge i,j in version v
     // returns true on success
+    assert(w1->degree[v][i] != -1U);
+    assert(w1->degree[v][j] != -1U);
 
     // Only introduces an edge if it's open
     if (w1->closed[v])
@@ -279,6 +281,7 @@ void TwoHamiltonianCycles_DynamicCore::intro_e_implementation(unsigned int i, un
       w1->degree[v][i] = 1;
       w1->degree[v][j] = 2;
       unsigned m = w1->matching[v][j];
+      assert(m != -1U);
       w1->matching[v][i] = m;
       w1->matching[v][m] = i;
       w1->matching[v][j] = -1U;
@@ -289,6 +292,7 @@ void TwoHamiltonianCycles_DynamicCore::intro_e_implementation(unsigned int i, un
       w1->degree[v][i] = 2;
       w1->degree[v][j] = 1;
       unsigned m = w1->matching[v][i];
+      assert(m != -1U);
       w1->matching[v][j] = m;
       w1->matching[v][m] = j;
       w1->matching[v][i] = -1U;
@@ -298,11 +302,15 @@ void TwoHamiltonianCycles_DynamicCore::intro_e_implementation(unsigned int i, un
     if (w1->degree[v][i] == 1 && w1->degree[v][j] == 1) {
 
       if (w1->matching[v][i] != j) {
+        assert(w1->matching[v][j] != i);
+
         w1->degree[v][i] = 2;
         w1->degree[v][j] = 2;
 
         unsigned mi = w1->matching[v][i];
         unsigned mj = w1->matching[v][j];
+        assert(mi != -1U);
+        assert(mj != -1U);
 
         w1->matching[v][i] = -1U;
         w1->matching[v][j] = -1U;
@@ -312,6 +320,8 @@ void TwoHamiltonianCycles_DynamicCore::intro_e_implementation(unsigned int i, un
       }
 
       // i is matched to j
+      assert(w1->matching[v][j] == i);
+      assert(w1->matching[v][i] == j);
 
       // does the path include every vertex?
       unsigned cnt_0 = 0, cnt_1 = 0;
@@ -368,6 +378,8 @@ void TwoHamiltonianCycles_DynamicCore::forget_v_implementation(unsigned int i, B
   if (w->degree[0][i] == 2 && w->degree[1][i] == 2) {
     TwoHamiltonianCycles_WitnessPointer w1=createWitness();
     w1->set_equal(*w);
+    assert(w1->matching[0][i] == -1U);
+    assert(w1->matching[1][i] == -1U);
     w1->degree[0][i] = -1U;
     w1->degree[1][i] = -1U;
     witnessSet->insert(w1);
@@ -380,43 +392,78 @@ void TwoHamiltonianCycles_DynamicCore::join_implementation(Bag &, TwoHamiltonian
     TwoHamiltonianCycles_WitnessSetPointer witnessSet) {
   //*****************************
   //*****************************
-  TwoHamiltonianCycles_WitnessPointer wPrime1 = createWitness();
-  wPrime1->set_equal(*w1); // Working Witness
-  wPrime1->was_different |= w2->was_different;
+  TwoHamiltonianCycles_WitnessPointer wPrime = createWitness();
+  wPrime->was_different |= w1->was_different;
+  wPrime->was_different |= w2->was_different;
+
+  unsigned sz = (unsigned)std::max({
+    w1->degree[0].size(),  w2->degree[0].size(),
+    w1->degree[1].size(),  w2->degree[1].size(),
+    w1->matching[0].size(), w2->matching[0].size(),
+    w1->matching[1].size(), w2->matching[1].size(),
+  });
 
   auto merge_version = [&](int v) -> bool {
-    if (wPrime1->degree[v].size() < w2->degree[v].size())
-      wPrime1->degree[v].resize(w2->degree[v].size(), -1U);
+    wPrime->degree[v].assign(sz, -1U);
+    wPrime->matching[v].assign(sz, -1U);
 
-    wPrime1->matching[v].assign(
-      std::max(w1->matching[v].size(), w2->matching[v].size()),
-      -1U
-    );
+    for (unsigned i = 0; i < wPrime->degree[v].size(); ++i) {
+      unsigned d1 = -1U;
+      unsigned d2 = -1U;
 
-    for (unsigned i = 0; i < w2->degree[v].size(); ++i) {
-      if (w2->degree[v][i] == -1U)
+      if (i < w1->degree[v].size())
+        d1 = w1->degree[v][i];
+      if (i < w2->degree[v].size())
+        d2 = w2->degree[v][i];
+
+      if (d1 == -1U && d2 == -1U)
         continue;
 
-      if (wPrime1->degree[v][i] == -1U)
-        wPrime1->degree[v][i] = 0;
+      if (d1 == -1U) d1 = 0;
+      if (d2 == -1U) d2 = 0;
 
-      wPrime1->degree[v][i] += w2->degree[v][i];
+      wPrime->degree[v][i] = d1+d2;
 
-      if (wPrime1->degree[v][i] > 2)
+      if (wPrime->degree[v][i] > 2)
         return false; // impossible
     }
 
     int cnt_0 = 0, cnt_1 = 0;
 
     std::vector<unsigned> endpoints;
-    std::vector<unsigned> vis(wPrime1->degree[v].size());
+    std::vector<unsigned> vis(sz);
+    std::vector<unsigned> in_graph(sz);
+    std::vector<unsigned> is_endpoint(sz);
+    std::vector<std::vector<unsigned>> g(sz);
 
-    for (unsigned i = 0; i < wPrime1->degree[v].size(); ++i) {
-      cnt_0 += wPrime1->degree[v][i] == 0;
-      cnt_1 += wPrime1->degree[v][i] == 1;
+    for (unsigned i = 0; i < sz; ++i) {
+      if (wPrime->degree[v][i] == -1U)
+        continue;
 
-      if (wPrime1->degree[v][i] == 1)
+      cnt_0 += wPrime->degree[v][i] == 0;
+      cnt_1 += wPrime->degree[v][i] == 1;
+
+      if (wPrime->degree[v][i] == 1) {
         endpoints.push_back(i);
+        is_endpoint[i] = 1;
+      }
+
+      if (i < w1->matching[v].size()) {
+        unsigned j = w1->matching[v][i];
+        if (j != -1U) {
+          in_graph[i] = 1;
+          assert(w1->degree[v][i] == 1);
+          g[i].push_back(j);
+        }
+      }
+      if (i < w2->matching[v].size()) {
+        unsigned j = w2->matching[v][i];
+        if (j != -1U) {
+          in_graph[i] = 1;
+          assert(w2->degree[v][i] == 1);
+          g[i].push_back(j);
+        }
+      }
     }
 
     while (endpoints.size()) {
@@ -424,16 +471,17 @@ void TwoHamiltonianCycles_DynamicCore::join_implementation(Bag &, TwoHamiltonian
       endpoints.pop_back();
       if (vis[start])
         continue;
+      if (!in_graph[start])
+        continue;
 
       unsigned current = start;
       bool found = true;
       while (found) {
         vis[current] = 1;
-        unsigned w1j = w1->matching[v][current];
-        unsigned w2j = w2->matching[v][current];
         found = false;
-        for (unsigned j : {w1j, w2j}) {
+        for (unsigned j : g[current]) {
           if (j == -1U) continue;
+          assert(j < vis.size());
           if (vis[j]) continue;
 
           current = j;
@@ -443,18 +491,20 @@ void TwoHamiltonianCycles_DynamicCore::join_implementation(Bag &, TwoHamiltonian
       }
 
       assert(start != current);
-      assert(wPrime1->degree[v][start] == 1);
-      assert(wPrime1->degree[v][current] == 1);
+      assert(is_endpoint[start]);
+      assert(is_endpoint[current]);
+      assert(wPrime->degree[v][start] == 1);
+      assert(wPrime->degree[v][current] == 1);
 
-      wPrime1->matching[v][start] = current;
-      wPrime1->matching[v][current] = start;
+      wPrime->matching[v][start] = current;
+      wPrime->matching[v][current] = start;
     }
 
     int cycle_count = 0;
 
     unsigned last_unvis = (unsigned)vis.size() - 1;
     while (last_unvis != -1U) {
-      if (vis[last_unvis]) {
+      if (vis[last_unvis] || !in_graph[last_unvis]) {
         --last_unvis;
         continue;
       }
@@ -465,11 +515,11 @@ void TwoHamiltonianCycles_DynamicCore::join_implementation(Bag &, TwoHamiltonian
       bool found = true;
       while (found) {
         vis[current] = 1;
-        unsigned w1j = w1->matching[v][current];
-        unsigned w2j = w2->matching[v][current];
         found = false;
-        for (unsigned j : {w1j, w2j}) {
+        assert(g[current].size() == 2);
+        for (unsigned j : g[current]) {
           if (j == -1U) continue;
+          assert(j < vis.size());
           if (vis[j]) continue;
 
           current = j;
@@ -477,6 +527,9 @@ void TwoHamiltonianCycles_DynamicCore::join_implementation(Bag &, TwoHamiltonian
           break;
         }
       }
+
+      assert(g[current][0] == last_unvis || g[current][1] == last_unvis);
+      assert(g[last_unvis][0] == current || g[last_unvis][1] == current);
     }
 
     if (cycle_count > 1)
@@ -492,7 +545,7 @@ void TwoHamiltonianCycles_DynamicCore::join_implementation(Bag &, TwoHamiltonian
     if (!merge_version(version))
       return; // impossible
 
-  witnessSet->insert(wPrime1);
+  witnessSet->insert(wPrime);
   //*****************************
   //*****************************
 }
@@ -514,12 +567,10 @@ bool TwoHamiltonianCycles_DynamicCore::is_final_witness_implementation(TwoHamilt
       return false;
 
     for (unsigned d : w->degree[version])
-      if (d == 0 || d == 1)
-        return false;
+      assert(d == -1U || d == 2);
 
     for (unsigned j : w->matching[version])
-      if (j != -1U)
-        return false;
+      assert(j == -1U);
   }
 
   return true;
