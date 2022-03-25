@@ -295,177 +295,114 @@ void HamiltonianCycle_DynamicCore::forget_v_implementation(unsigned int i, Bag &
 void HamiltonianCycle_DynamicCore::join_implementation(Bag &b, HamiltonianCycle_WitnessPointer w1,
                                                        HamiltonianCycle_WitnessPointer w2,
                                                        HamiltonianCycle_WitnessSetPointer witnessSet) {
-//*****************************
-    //*****************************
-    HamiltonianCycle_WitnessPointer wPrime1 = createWitness();
-    wPrime1->set_equal(*w1); // Working Witness
-    bool impossible = false;
-    //We have copied the input witness1 into w1 and the input witness2 into w2.
-    //The final witness will be w1.
-    //Treating vertices of degree 0 in p1
-    for (unsigned i: w1->degree_0)
-    {
-        // If i has degree 0 in p2 then it will have degree 0 in w1. Therefore this case does need to be treated.
-        if (w1->degree_2.count(i))
-        {
-            // In this case, i will have degree 2 in the new w1
-            wPrime1->degree_0.erase(i);
-            wPrime1->degree_2.insert(i);
-        }
-    }
-    //Treating vertices of degree 2 in p1
-    for (unsigned i: w1->degree_2)
-    {
-        // If i has degree 0 in p2 then it will have degree 2 in w1. Therefore this case does need to be treated.
-        if (w2->degree_2.count(i))
-        {
-            // in this case, i is being overused. This means that there is no way of combining the input witnesses into a valid witness
-            impossible = true;
-            break;
-        }
-    }
+  //*****************************
+  //*****************************
+  HamiltonianCycle_WitnessPointer wPrime = createWitness();
+  map<unsigned, int> new_degree;
 
-    if (not impossible){
-        //Treating the edges of the matching.
-        map<unsigned,unsigned> auxMatching = w2->matching;
-        while(auxMatching.size())
-        {
-            pair<unsigned,unsigned> edge = *(auxMatching.begin());
-            auxMatching.erase(edge.first);
-            auxMatching.erase(edge.second);
-            //We will treat case by case
-            if(wPrime1->degree_0.count(edge.first) and wPrime1->degree_0.count(edge.second))
-            {
-                // degrees 0 and 0
-                wPrime1->degree_0.erase(edge.first);
-                wPrime1->degree_1.insert(edge.first);
-                wPrime1->degree_0.erase(edge.second);
-                wPrime1->degree_1.insert(edge.second);
-                wPrime1->matching[edge.first]=edge.second;
-                wPrime1->matching[edge.second]=edge.first;
-            }
-            else if(wPrime1->degree_0.count(edge.first) and wPrime1->degree_1.count(edge.second))
-            {
-                // degrees 0 and 1
-                wPrime1->degree_0.erase(edge.first);
-                wPrime1->degree_1.insert(edge.first);
-                const unsigned m = wPrime1->matching[edge.second];
-                wPrime1->matching[edge.first] = m;
-                wPrime1->matching[m] = edge.first;
-                wPrime1->matching.erase(edge.second);
-                wPrime1->degree_1.erase(edge.second);
-                wPrime1->degree_2.insert(edge.second);
-            }
-            else if(wPrime1->degree_0.count(edge.first) and wPrime1->degree_2.count(edge.second))
-            {
-                // degrees 0 and 2
-                // vertices in overuse
-                // BAD WITNESS JOIN...
-                impossible = true;
-                break;
-            }
-            else if(wPrime1->degree_1.count(edge.first) and wPrime1->degree_0.count(edge.second))
-            {
-                // degrees 1 and 0
-                wPrime1->degree_0.erase(edge.second);
-                wPrime1->degree_1.insert(edge.second);
-                const unsigned m = wPrime1->matching[edge.first];
-                wPrime1->matching[edge.second] = m;
-                wPrime1->matching[m] = edge.second;
-                wPrime1->matching.erase(edge.first);
-                wPrime1->degree_1.erase(edge.first);
-                wPrime1->degree_2.insert(edge.first);
-            }
-            else if(wPrime1->degree_1.count(edge.first) and wPrime1->degree_1.count(edge.second))
-            {
-                // degrees 1 and 1
-                const unsigned m1 = wPrime1->matching[edge.first]; // matching of edge.first
-                const unsigned m2 = wPrime1->matching[edge.second]; // matching of edge.second
-                // Checking for closing cycles
-                if(m1 == edge.second)
-                {
-                    if(not wPrime1->closed)
-                    {
-                        // if not yet closed
-                        wPrime1->closed = true;
-                        wPrime1->matching.erase(m1);
-                        wPrime1->matching.erase(m2);
-                        wPrime1->degree_1.erase(m1);
-                        wPrime1->degree_1.erase(m2);
-                        wPrime1->degree_2.insert(m1);
-                        wPrime1->degree_2.insert(m2);
-                    }else{
-                        // impossible to close again
-                        // BAD WITNESS JOIN...
-                        impossible = true;
-                        break;
-                    }
-                }else
-                {
-                    // Not closing cycle
-                    wPrime1->degree_1.erase(edge.first);
-                    wPrime1->degree_1.erase(edge.second);
-                    wPrime1->degree_2.insert(edge.first);
-                    wPrime1->degree_2.insert(edge.second);
-                    wPrime1->matching.erase(edge.first);
-                    wPrime1->matching.erase(edge.second);
-                    wPrime1->matching[m1] = m2;
-                    wPrime1->matching[m2] = m1;
-                }
-            }
-            else if(wPrime1->degree_1.count(edge.first) and wPrime1->degree_2.count(edge.second))
-            {
-                // degrees 1 and 2
-                // vertices in overuse
-                // BAD WITNESS JOIN...
-                impossible = true;
-                break;
-            }
-            else if(wPrime1->degree_2.count(edge.first) and wPrime1->degree_0.count(edge.second))
-            {
-                // degrees 2 and 2
-                // vertices in overuse
-                // BAD WITNESS JOIN...
-                impossible = true;
-                break;
-            }
-            else if(wPrime1->degree_2.count(edge.first) and wPrime1->degree_1.count(edge.second))
-            {
-                // degrees 2 and 2
-                // vertices in overuse
-                // BAD WITNESS JOIN...
-                impossible = true;
-                break;
-            }
-            else if(wPrime1->degree_2.count(edge.first) and wPrime1->degree_2.count(edge.second))
-            {
-                // degrees 2 and 2
-                // vertices in overuse
-                // BAD WITNESS JOIN...
-                impossible = true;
-                break;
-            }
-        }
+  for (auto w : {w1, w2}) {
+    for (unsigned i : w->degree_0)
+      new_degree[i] += 0;
+    for (unsigned i : w->degree_1)
+      new_degree[i] += 1;
+    for (unsigned i : w->degree_2)
+      new_degree[i] += 2;
+  }
 
-        // Verifying if it is a valid join
-        if (not impossible)
-        {
-            if(wPrime1->closed)
-            {
-                if(wPrime1->degree_0.size() == 0 and wPrime1->degree_1.size() == 0)
-                {
-                    // Only finishes closed if it's empty
-                    witnessSet->insert(wPrime1);
-                }
-            }
-            else
-            {
-                witnessSet->insert(wPrime1);
-            }
-        }
+  for (auto [i, d] : new_degree) {
+    if (d > 2)
+      return; // impossible
+
+    if (d == 0)
+      wPrime->degree_0.insert(i);
+    if (d == 1)
+      wPrime->degree_1.insert(i);
+    if (d == 2)
+      wPrime->degree_2.insert(i);
+  }
+
+  map<unsigned, vector<unsigned>> graph;
+
+  for (auto w : {w1, w2})
+    for (auto [i, j] : w->matching)
+      if (graph[i].size() == 0 || graph[i][0] != j)
+        graph[i].push_back(j);
+
+  set<unsigned> endpoints;
+  for (auto [i, d] : new_degree)
+    if (d == 1)
+      endpoints.insert(i);
+
+
+  while (endpoints.size()) {
+    unsigned start = *endpoints.begin();
+    endpoints.erase(endpoints.begin());
+
+    unsigned end = start;
+    while (graph.count(end)) {
+      unsigned next = graph[end].back();
+      graph[end].pop_back();
+      if (graph[end].size() == 0)
+        graph.erase(end);
+
+      if (graph[next].back() == end) {
+        graph[next].pop_back();
+      } else {
+        graph[next].erase(graph[next].begin());
+      }
+
+      if (graph[next].size() == 0)
+        graph.erase(next);
+
+      end = next;
     }
-    //*****************************
-    //*****************************
+    
+    endpoints.erase(end);
+
+    wPrime->matching[start] = end;
+    wPrime->matching[end] = start;
+  }
+
+  int cycle_count = 0;
+  while (graph.size()) {
+    ++cycle_count;
+    unsigned start = graph.begin()->first;
+
+    unsigned end = start;
+    while (graph.count(end)) {
+      unsigned next = graph[end].back();
+      graph[end].pop_back();
+      if (graph[end].size() == 0)
+        graph.erase(end);
+
+      if (graph[next].back() == end) {
+        graph[next].pop_back();
+      } else {
+        graph[next].erase(graph[next].begin());
+      }
+
+      if (graph[next].size() == 0)
+        graph.erase(next);
+
+      end = next;
+    }
+  }
+
+  if (cycle_count >= 2)
+    return; // impossible
+
+  if (cycle_count == 1) {
+    // check if allowed to close
+
+    for (auto [i, d] : new_degree)
+      if (d != 2) return; // impossible
+
+    wPrime->closed = true;
+  }
+
+  witnessSet->insert(wPrime);
+  //*****************************
+  //*****************************
 }
 
 HamiltonianCycle_WitnessSetPointer HamiltonianCycle_DynamicCore::clean_implementation(
