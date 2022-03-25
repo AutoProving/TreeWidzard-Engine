@@ -25,8 +25,17 @@ public:
     string witnessInformation() override;
     //*****************************
     //*****************************
-    std::vector<unsigned> degree[2];
-    std::vector<unsigned> matching[2];
+    struct VertexInfo {
+      unsigned degree = -1U;
+      unsigned match = -1U;
+      bool operator<(const VertexInfo &other) const {
+        return tie(degree, match) < tie(other.degree, other.match);
+      }
+      bool operator==(const VertexInfo &other) const {
+        return tie(degree, match) == tie(other.degree, other.match);
+      }
+    };
+    vector<VertexInfo> info[2];
     bool closed[2] = {false, false};
     bool was_different = false;
     //*****************************
