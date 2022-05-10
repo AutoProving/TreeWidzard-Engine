@@ -1,0 +1,1 @@
+ ./treewidzard -search pw = 3 -pl -pdbgn  BreadthFirstSearch ../hamiltonian-test/hamiltonian.txt
