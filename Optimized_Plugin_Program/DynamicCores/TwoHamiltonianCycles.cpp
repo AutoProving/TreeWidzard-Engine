@@ -352,6 +352,9 @@ void TwoHamiltonianCycles_DynamicCore::join_implementation(Bag &, TwoHamiltonian
     TwoHamiltonianCycles_WitnessSetPointer witnessSet) {
   //*****************************
   //*****************************
+
+  // can only join closed if the other side didn't use any edges
+
   TwoHamiltonianCycles_WitnessPointer wPrime = createWitness();
   wPrime->was_different |= w1->was_different;
   wPrime->was_different |= w2->was_different;
@@ -458,7 +461,7 @@ void TwoHamiltonianCycles_DynamicCore::join_implementation(Bag &, TwoHamiltonian
       wPrime->info[v][end].match = start;
     }
 
-    int cycle_count = 0;
+    int cycle_count = w1->closed[v] + w2->closed[v];
 
     unsigned start = sz-1;
     while (start != -1U) {

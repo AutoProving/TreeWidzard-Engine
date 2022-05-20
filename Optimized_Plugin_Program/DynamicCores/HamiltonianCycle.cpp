@@ -363,7 +363,7 @@ void HamiltonianCycle_DynamicCore::join_implementation(Bag &b, HamiltonianCycle_
     wPrime->matching[end] = start;
   }
 
-  int cycle_count = 0;
+  int cycle_count = w1->closed + w2->closed;
   while (graph.size()) {
     ++cycle_count;
     unsigned start = graph.begin()->first;
