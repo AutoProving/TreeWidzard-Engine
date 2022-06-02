@@ -11,7 +11,7 @@ void Bag::set_edge(unsigned i, unsigned j) {
 	}
 }
 
-pair<unsigned, unsigned> Bag::get_edge() const { return make_pair(i, j); }
+std::pair<unsigned, unsigned> Bag::get_edge() const { return std::make_pair(i, j); }
 
 std::set<unsigned> Bag::get_elements() const { return elements; }
 
@@ -55,7 +55,7 @@ void Bag::print() {
 	for (auto element : elements) {
 		std::cout << element;
 		if(element!=*(--elements.end()))
-			cout<<",";
+			std::cout<<",";
 	}
 	std::cout << "}";
 }
@@ -65,15 +65,15 @@ void Bag::print() const {
 	for (auto element : elements) {
 		std::cout << element;
 		if(element!=*(--elements.end()))
-			cout<<",";
+			std::cout<<",";
 	}
 	std::cout << "}";
 }
-string Bag::bagInformation() {
-	string info;
+std::string Bag::bagInformation() {
+	std::string info;
 	info = "{";
 	for (auto element : elements) {
-		info = info + to_string(element);
+		info = info + std::to_string(element);
 		if(element!=*(--elements.end()))
 			info = info + ",";
 	}
@@ -166,14 +166,14 @@ Bag Bag::forget_v(unsigned i) {
 	return *this;
 }
 
-Bag Bag::relabel(map<unsigned int, unsigned int> relabelingMap) {
+Bag Bag::relabel(std::map<unsigned int, unsigned int> relabelingMap) {
     Bag b;
-    set<unsigned > bagElements;
+    std::set<unsigned > bagElements;
     for(auto v:this->elements){
         if(relabelingMap.count(v)) {
             bagElements.insert(relabelingMap[v]);
         }else{
-            cout<<"Error: Bag::relabel "<< v <<" is not in the relabeling map"<<endl;
+            std::cout<<"Error: Bag::relabel "<< v <<" is not in the relabeling map"<<std::endl;
             exit(20);
         }
     }
@@ -181,6 +181,3 @@ Bag Bag::relabel(map<unsigned int, unsigned int> relabelingMap) {
     b.set_edge(relabelingMap[this->i],relabelingMap[this->j]);
     return b;
 }
-
-
-

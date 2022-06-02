@@ -2,13 +2,12 @@
 #define TREEWIDZARD_ERRORCONTROLLER_H
 
 #include <iostream>
-using namespace std;
 
 class ErrorController {
 private:
 
 public:
-    void error_handle(string err, int errno);
+    void error_handle(std::string err, int errno);
 };
 
 

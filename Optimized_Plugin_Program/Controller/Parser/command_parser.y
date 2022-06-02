@@ -6,7 +6,6 @@
     #include <memory>
     #include <set>
     #include <tuple>
-    using namespace std;
 }
 %{
     #include <iostream>
@@ -108,4 +107,3 @@ void yyerror(int &result, string &width_type, int &width_value, char const* msg)
   cout<<"Wrong number of inputs. Please execute treewidzard --help for more information."<<endl;
   // error printing  disabled, it is handeled in main.cpp
 }
-

@@ -5,15 +5,14 @@
 
 #include <iostream>
 #include <vector>
-using namespace std;
 
 class Width {
   private:
-	string name; // Typical width names are "treewidth", "pathwidth", etc
+	std::string name; // Typical width names are "treewidth", "pathwidth", etc
 	unsigned int value;
   public:
-	string get_name();
-	void set_name(string s);
+	std::string get_name();
+	void set_name(std::string s);
 	unsigned int get_value() const;
 	void set_value(unsigned int value);
 	void print();

@@ -7,18 +7,17 @@
 #include "Bag.h"
 #include "WitnessSet.h"
 
-using namespace std;
 class State : private std::enable_shared_from_this<State> {
   private:
 	Bag bag;
-	std::vector<shared_ptr<WitnessSet>> witnessSetVector;
+	std::vector<std::shared_ptr<WitnessSet>> witnessSetVector;
   public:
 	class ptr {
 	  private:
-		shared_ptr<State> pointer;
+		std::shared_ptr<State> pointer;
 	  public:
-		ptr() { pointer = make_shared<State>(); }
-		ptr(shared_ptr<State> pointer_) : pointer(pointer_) {}
+		ptr() { pointer = std::make_shared<State>(); }
+		ptr(std::shared_ptr<State> pointer_) : pointer(pointer_) {}
 		State &operator*() const { return *pointer; }
 		State *operator->() const { return &*pointer; }
 		bool operator<(const ptr &rhs) const { return **this < *rhs; }
@@ -40,7 +39,7 @@ class State : private std::enable_shared_from_this<State> {
         void print(){
 		    pointer->print();
 		}
-		string stateInformation(){
+		std::string stateInformation(){
             return pointer->stateInformation();
 		}
     };
@@ -50,9 +49,9 @@ class State : private std::enable_shared_from_this<State> {
 
 	void set_bag(const Bag &bag);
 
-    void setWitnessSetVector(const vector<shared_ptr<WitnessSet>> &witnessSetVector);
+    void setWitnessSetVector(const std::vector<std::shared_ptr<WitnessSet>> &witnessSetVector);
 
-    void addWitnessSet(shared_ptr<WitnessSet>);
+    void addWitnessSet(std::shared_ptr<WitnessSet>);
 
     bool operator==(const State &rhs) const;
 
@@ -70,13 +69,13 @@ class State : private std::enable_shared_from_this<State> {
 
     void print();
 
-    string stateInformation();
+    std::string stateInformation();
 
-    shared_ptr<WitnessSet> getWitnessSet(int) const;
+    std::shared_ptr<WitnessSet> getWitnessSet(int) const;
 
     int numberOfComponents() const;
 
-    shared_ptr<State> relabel(map<unsigned,unsigned> relabelingMap); // relabelingMap is a relabeling of the vertices in a bag. The relabel function propagates this relabeling to a State
+    std::shared_ptr<State> relabel(std::map<unsigned, unsigned> relabelingMap); // relabelingMap is a relabeling of the vertices in a bag. The relabel function propagates this relabeling to a State
 
 
 };

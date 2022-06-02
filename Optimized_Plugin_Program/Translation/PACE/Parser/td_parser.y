@@ -26,7 +26,7 @@
 %union{
      int number;
      char* string;
-     set<unsigned>* set_unsigned;
+     std::set<unsigned>* set_unsigned;
 }
 
 // external parameters which will be passed by the program to the Parser.
@@ -51,15 +51,15 @@ TD_TDINFO                  : TD_S TD_TD TD_NUM TD_NUM TD_NUM TD_NEWLINE   {td.se
 TD_BAGS                    : TD_BAG TD_NEWLINE TD_COMMENTS TD_BAGS
                            |
                            ;
-TD_BAG                     : TD_B TD_NUM TD_NUMS                           {if(!td.setABag(*$3,$2)) {cout<<"number of bags is incorrect!"<<endl; YYERROR;}}
+TD_BAG                     : TD_B TD_NUM TD_NUMS                           {if(!td.setABag(*$3,$2)) {std::cout<<"number of bags is incorrect!"<<std::endl; YYERROR;}}
                            ;
-TD_NUMS                    : TD_NUM TD_NUMS                                {$$= new set<unsigned>(*$2);  $$->insert($1);}
-                           |                                               {$$=new set<unsigned>;}
+TD_NUMS                    : TD_NUM TD_NUMS                                {$$= new std::set<unsigned>(*$2);  $$->insert($1);}
+                           |                                               {$$=new std::set<unsigned>;}
                            ;
 TD_EDGES                   : TD_EDGE TD_NEWLINE TD_COMMENTS TD_EDGES                                    {}                
                            |
                            ;
-TD_EDGE                    : TD_NUM TD_NUM      {if(!td.addEdge($1,$2)) {cout<<"Edges" <<$1<< "and"<< $2 <<" are not correct"; YYERROR;}}
+TD_EDGE                    : TD_NUM TD_NUM      {if(!td.addEdge($1,$2)) {std::cout<<"Edges" <<$1<< "and"<< $2 <<" are not correct"; YYERROR;}}
                            ;
 
 TD_COMMENTS                : TD_COMMENT  TD_COMMENTS                                       {}
@@ -74,4 +74,3 @@ void yyerror(TreeDecompositionPACE &td, int &result, char const* msg){
   std::cout<<"\n Syntax Error in Tree Decomposition's File: "<< msg << " " <<td_lineno << std::endl;
   // error printing  disabled, it is handeled in main.cpp 
 }
-

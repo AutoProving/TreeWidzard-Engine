@@ -6,7 +6,7 @@
 #include <iostream>
 #include <set>
 #include <map>
-using namespace std;
+#include <utility>
 
 class Bag {
   private:
@@ -19,10 +19,10 @@ class Bag {
 	std::set<unsigned> get_elements() const;
 	void set_elements(const std::set<unsigned>& elements);
 	void set_edge(unsigned i, unsigned j);
-	pair<unsigned, unsigned> get_edge() const;
+	std::pair<unsigned, unsigned> get_edge() const;
 	void print();
 	void print() const;
-	string bagInformation();
+	std::string bagInformation();
 	bool operator<(const Bag& rhs) const;
 	bool operator==(const Bag& rhs) const;
 
@@ -38,7 +38,7 @@ class Bag {
 	Bag intro_v(unsigned i);			 // add vertex
 	Bag intro_e(unsigned i, unsigned j); // add edge
 	Bag forget_v(unsigned i);			 // remove vertex
-    Bag relabel(map<unsigned,unsigned> relabelingMap); // relabelingMap is a relabeling of the vertices in a bag. example: B = ({1,3,5},{1,5})
+    Bag relabel(std::map<unsigned,unsigned> relabelingMap); // relabelingMap is a relabeling of the vertices in a bag. example: B = ({1,3,5},{1,5})
     // and relabelingmap = 1->1, 3->2, 5->3, then the relabled bag is B'=({1,2,3},{1,3})
 
 };

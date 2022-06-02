@@ -11,14 +11,13 @@
 #include <sstream>
 #include <experimental/filesystem>
 
-using namespace std;
 namespace multigraph_fs = std::experimental::filesystem;
 
 class MultiGraph {
   private:
-	set<unsigned> vertices;
-	set<unsigned> edges;
-	multimap<unsigned, unsigned> incidenceMap; // incidenceMap(e,v) indicates that v belongs to e
+	std::set<unsigned> vertices;
+	std::set<unsigned> edges;
+	std::multimap<unsigned, unsigned> incidenceMap; // incidenceMap(e,v) indicates that v belongs to e
   public:
 	MultiGraph();
 	// copy constructor
@@ -29,18 +28,18 @@ class MultiGraph {
 	unsigned edgesSize();
 	// set functions
 
-	void setVertices(const set<unsigned> &vertices);
+	void setVertices(const std::set<unsigned> &vertices);
 
-	void setEdges(const set<unsigned> &edges);
+	void setEdges(const std::set<unsigned> &edges);
 
-	void setIncidenceMap(const multimap<unsigned, unsigned> &incidenceMap);
+	void setIncidenceMap(const std::multimap<unsigned, unsigned> &incidenceMap);
 
 	// get functions
-	const set<unsigned> &getVertices() const;
+	const std::set<unsigned> &getVertices() const;
 
-	const set<unsigned> &getEdges() const;
+	const std::set<unsigned> &getEdges() const;
 
-	const multimap<unsigned, unsigned> &getIncidenceMap() const;
+	const std::multimap<unsigned, unsigned> &getIncidenceMap() const;
 
 	unsigned nthVertex(unsigned n); // get nth vertex's label in the vertex set
 
@@ -52,9 +51,9 @@ class MultiGraph {
 
 	unsigned addEdgeEndPoints(unsigned i, unsigned j); // Adds i and j as an edge and returns a label of the new edge
 
-	set<unsigned> edgesBetweenVertices(unsigned i, unsigned j); // Returns label of the edges between i and j
+	std::set<unsigned> edgesBetweenVertices(unsigned i, unsigned j); // Returns label of the edges between i and j
 
-	set<unsigned> edgesVertex(unsigned i); // Returns labels of the incident edges to i
+	std::set<unsigned> edgesVertex(unsigned i); // Returns labels of the incident edges to i
 
 	void deleteEdgeEndpoints(unsigned i, unsigned j);
 
@@ -66,20 +65,20 @@ class MultiGraph {
 
 	void printGraph(); // prints the vertices and edges in lexicographical order
 
-	void readFromFile(ifstream &file);
+	void readFromFile(std::ifstream &file);
 
 	void readGraph();
 
-	void printToFile(string fileName);
+	void printToFile(std::string fileName);
 
-	void printToFilePACEFormat(string fileName);
+	void printToFilePACEFormat(std::string fileName);
 
-    void printToFileDirectedBipartiteGraphNAUTY(string fileName);
+    void printToFileDirectedBipartiteGraphNAUTY(std::string fileName);
 
     bool isMultiGraph(); // Tests if for each edge there is exactly two distinct
 						 // elements in the map.
 
-	bool convertToGML(string fileName);
+	bool convertToGML(std::string fileName);
 
 	bool convertFromGML();
 

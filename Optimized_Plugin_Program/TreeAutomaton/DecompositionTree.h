@@ -1,48 +1,47 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 #ifndef TREEWIDZARD_DECOMPOSITIONTREE_H
 #define TREEWIDZARD_DECOMPOSITIONTREE_H
+#include <algorithm>
+#include <fstream>
 #include <iostream>
+#include <list>
 #include <memory>
-#include<set>
-#include<vector>
-#include<list>
-#include <utility>      // std::pair, std::make_pair
+#include <set>
 #include <string>
-#include<fstream>
-#include<algorithm>
-using namespace std;
+#include <utility>  // std::pair, std::make_pair
+#include <vector>
 
 class DecompositionNode {
 
     private:
-        set<unsigned> vertices;
-        shared_ptr<DecompositionNode> parent;
-        vector<shared_ptr<DecompositionNode>> children;
+        std::set<unsigned> vertices;
+        std::shared_ptr<DecompositionNode> parent;
+        std::vector<std::shared_ptr<DecompositionNode>> children;
     public:
         DecompositionNode();
-        set<unsigned> getVertices();
+        std::set<unsigned> getVertices();
         void addVertex(unsigned i);
-        void setVertices(set<unsigned> vertices);
-        void setParent(shared_ptr<DecompositionNode> node);
-        shared_ptr<DecompositionNode> getParent();
-        vector<shared_ptr<DecompositionNode>>  getChildren();
-        void addChild(shared_ptr<DecompositionNode> child);
-        void setChildren(vector<shared_ptr<DecompositionNode>> children);
+        void setVertices(std::set<unsigned> vertices);
+        void setParent(std::shared_ptr<DecompositionNode> node);
+        std::shared_ptr<DecompositionNode> getParent();
+        std::vector<std::shared_ptr<DecompositionNode>>  getChildren();
+        void addChild(std::shared_ptr<DecompositionNode> child);
+        void setChildren(std::vector<std::shared_ptr<DecompositionNode>> children);
 };
 
 class Decomposition{
     private: 
-        shared_ptr<DecompositionNode> root;
+        std::shared_ptr<DecompositionNode> root;
         int maxBagSize = 0;
-        set<unsigned> vertices; // vertices of the orginal graphs
+        std::set<unsigned> vertices; // vertices of the orginal graphs
     public:
         Decomposition();
-        void setRoot(shared_ptr<DecompositionNode> node);
+        void setRoot(std::shared_ptr<DecompositionNode> node);
         void print();
-        string stringPrint();
-        string printNode(shared_ptr<DecompositionNode> node,int &labeli,int parentLabel,list<pair<int,int>> &edges);
-        void writeToFile(string fileName);
-        void findMaxBagSizeAndVertices(shared_ptr<DecompositionNode> node);
+        std::string stringPrint();
+        std::string printNode(std::shared_ptr<DecompositionNode> node,int &labeli,int parentLabel,std::list<std::pair<int,int>> &edges);
+        void writeToFile(std::string fileName);
+        void findMaxBagSizeAndVertices(std::shared_ptr<DecompositionNode> node);
 };
 
 #endif

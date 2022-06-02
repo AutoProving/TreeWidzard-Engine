@@ -14,21 +14,20 @@
 #include "WitnessSet.h"
 #include "../Multigraph/MultiGraph.h"
 
-using namespace std;
 class DynamicCore {
   private:
 	WitnessSetPointer initialWitnessSet;
-    map<string,string> attributes; // Characteristics of the core. This is initialized in the constructor of the derived class.
+    std::map<std::string, std::string> attributes; // Characteristics of the core. This is initialized in the constructor of the derived class.
     int width;
   public:
 	DynamicCore() { initialWitnessSet = WitnessSetPointer(new WitnessSet); }
     virtual ~DynamicCore()= default;
 	WitnessSetPointer getInitialSet(); // returns initialSet
 	void setInitialWitnessSet(WitnessSetPointer witnessSetPointer);
-    void addAttribute(string x, string y);
-    bool isAttribute(string x, string y);
-    string getAttributeValue(string x);// Returns "y" if (x,y) belongs to attributes.
-    map<string,string> getAttributes();
+    void addAttribute(std::string x, std::string y);
+    bool isAttribute(std::string x, std::string y);
+    std::string getAttributeValue(std::string x);// Returns "y" if (x,y) belongs to attributes.
+    std::map<std::string, std::string> getAttributes();
 	void insertIntoInitialWitnessSet(WitnessPointer);
 	int getWidth();
 	void setWidth(int width);

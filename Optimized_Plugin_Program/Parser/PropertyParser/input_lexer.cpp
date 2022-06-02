@@ -1,6 +1,5 @@
-#line 2 "input_lexer.cpp"
 
-#line 4 "input_lexer.cpp"
+#line 2 "lex.input_.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -815,10 +814,10 @@ char *yytext;
     #include "input_parser.hpp"
     #define yylval input_lval
 
-    extern int yyparse(Conjecture &conj, int &result,map<string,map<string,string>> &coreList, map<string,string> &varToCoreName, map<string, PropertyAssignment*> varToProperty, char const* msg);
+    extern int yyparse(Conjecture &conj, int &result,std::map<std::string,std::map<std::string,std::string>> &coreList, std::map<std::string,std::string> &varToCoreName, std::map<std::string, PropertyAssignment*> varToProperty, char const* msg);
 
-#line 821 "input_lexer.cpp"
-#line 822 "input_lexer.cpp"
+#line 819 "lex.input_.c"
+#line 820 "lex.input_.c"
 
 #define INITIAL 0
 
@@ -1037,7 +1036,7 @@ YY_DECL
 	{
 #line 20 "input_lexer.l"
 
-#line 1041 "input_lexer.cpp"
+#line 1039 "lex.input_.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1187,7 +1186,7 @@ yylval.string = strdup(yytext); return UNARY_FUNCTION;
 case 17:
 YY_RULE_SETUP
 #line 37 "input_lexer.l"
-yylval.number = atoi(yytext);   return NUMBER_DOUBLE;
+yylval.number = std::atoi(yytext); return NUMBER_DOUBLE;
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
@@ -1241,7 +1240,7 @@ YY_RULE_SETUP
 #line 47 "input_lexer.l"
 ECHO;
 	YY_BREAK
-#line 1245 "input_lexer.cpp"
+#line 1243 "lex.input_.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2259,6 +2258,5 @@ void yyfree (void * ptr )
 #define YYTABLES_NAME "yytables"
 
 #line 47 "input_lexer.l"
-
 
 

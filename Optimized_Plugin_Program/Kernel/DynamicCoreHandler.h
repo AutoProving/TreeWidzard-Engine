@@ -6,8 +6,6 @@
 #include <iostream>
 #include "../Multigraph/MultiGraph.h"
 
-using namespace std;
-
 class DynamicCoreHandler {
 private:
     void * handler = nullptr;

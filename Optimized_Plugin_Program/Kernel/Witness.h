@@ -6,29 +6,28 @@
 #include <memory>
 #include <map>
 
-using namespace std;
 class Witness {
 protected:
     virtual bool is_equal(const Witness &rhs) const;
     virtual bool is_less(const Witness &rhs) const;
     virtual Witness &set_equal(Witness &witness);
 public:
-    virtual shared_ptr<Witness> relabel(map<unsigned,unsigned> relabelingMap);
+    virtual std::shared_ptr<Witness> relabel(std::map<unsigned,unsigned> relabelingMap);
     virtual void print();
-    virtual string witnessInformation();
+    virtual std::string witnessInformation();
     virtual ~Witness();
     friend bool operator==(const Witness &lhs, const Witness &rhs);
     friend bool operator<(const Witness &lhs, const Witness &rhs);
     virtual Witness &operator=(Witness &rhs);
     bool operator!=(Witness &rhs);
     struct IsLessSharedPtr{
-        bool operator()(const shared_ptr<Witness> lhs,
-                        const shared_ptr<Witness> rhs) const {
+        bool operator()(const std::shared_ptr<Witness> lhs,
+                        const std::shared_ptr<Witness> rhs) const {
             return *lhs < *rhs;
         }
     };
 };
 
-typedef shared_ptr<Witness> WitnessPointer;
+typedef std::shared_ptr<Witness> WitnessPointer;
 
 #endif

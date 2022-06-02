@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.5.1.  */
+/* A Bison parser, made by GNU Bison 3.8.2.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2020 Free Software Foundation,
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2021 Free Software Foundation,
    Inc.
 
    This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+   along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -31,11 +31,12 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-/* Undocumented macros, especially those whose name start with YY_,
-   are private implementation details.  Do not rely on them.  */
+/* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
+   especially those whose name start with YY_ or yy_.  They are
+   private implementation details that can be changed or removed.  */
 
-#ifndef YY_TD_TD_PARSER_HPP_INCLUDED
-# define YY_TD_TD_PARSER_HPP_INCLUDED
+#ifndef YY_TD_TD_PARSER_TAB_H_INCLUDED
+# define YY_TD_TD_PARSER_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef TD_DEBUG
 # if defined YYDEBUG
@@ -60,20 +61,25 @@ extern int td_debug;
     #include <set>
 
 
-#line 64 "td_parser.hpp"
+#line 65 "td_parser.tab.h"
 
-/* Token type.  */
+/* Token kinds.  */
 #ifndef TD_TOKENTYPE
 # define TD_TOKENTYPE
   enum td_tokentype
   {
-    TD_S = 258,
-    TD_TD = 259,
-    TD_B = 260,
-    TD_NUM = 261,
-    TD_COMMENT = 262,
-    TD_NEWLINE = 263
+    TD_EMPTY = -2,
+    TD_EOF = 0,                    /* "end of file"  */
+    TD_error = 256,                /* error  */
+    TD_UNDEF = 257,                /* "invalid token"  */
+    TD_S = 258,                    /* TD_S  */
+    TD_TD = 259,                   /* TD_TD  */
+    TD_B = 260,                    /* TD_B  */
+    TD_NUM = 261,                  /* TD_NUM  */
+    TD_COMMENT = 262,              /* TD_COMMENT  */
+    TD_NEWLINE = 263               /* TD_NEWLINE  */
   };
+  typedef enum td_tokentype td_token_kind_t;
 #endif
 
 /* Value type.  */
@@ -84,9 +90,9 @@ union TD_STYPE
 
      int number;
      char* string;
-     set<unsigned>* set_unsigned;
+     std::set<unsigned>* set_unsigned;
 
-#line 90 "td_parser.hpp"
+#line 96 "td_parser.tab.h"
 
 };
 typedef union TD_STYPE TD_STYPE;
@@ -111,6 +117,8 @@ struct TD_LTYPE
 
 extern TD_STYPE td_lval;
 extern TD_LTYPE td_lloc;
+
 int td_parse (TreeDecompositionPACE &td, int &result);
 
-#endif /* !YY_TD_TD_PARSER_HPP_INCLUDED  */
+
+#endif /* !YY_TD_TD_PARSER_TAB_H_INCLUDED  */

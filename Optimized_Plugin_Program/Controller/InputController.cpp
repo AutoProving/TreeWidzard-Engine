@@ -1,15 +1,15 @@
 #include "InputController.h"
 void InputController::check_available_cores() {
   for (const auto & entry : fs::directory_iterator(dynamicPluginPath)){
-    string s = entry.path();
+    std::string s = entry.path();
     if (s.find(".so") != std::string::npos) {
       char *MyClassLibraryName = const_cast<char *>(s.c_str());
       DynamicCoreHandler factory(MyClassLibraryName);
       std::unique_ptr<DynamicCore> core = factory.create();
-      map<string,string> attributes = core->getAttributes();
-      string fileName = entry.path().filename();
-      coreNamesToFiles.insert(make_pair(core->getAttributeValue("CoreName"),fileName));
-      coreList.insert(make_pair(core->getAttributeValue("CoreName"),attributes));
+      std::map<std::string, std::string> attributes = core->getAttributes();
+      std::string fileName = entry.path().filename();
+      coreNamesToFiles.insert(std::make_pair(core->getAttributeValue("CoreName"),fileName));
+      coreList.insert(std::make_pair(core->getAttributeValue("CoreName"),attributes));
     }
   }
 }
@@ -18,20 +18,20 @@ void InputController::parse_input() {
     input_in = fopen(inputPath.c_str(), "r");
     if (!input_in) {
         std::perror("Input File opening failed, given path: ");
-        cout<< inputPath <<endl;
+        std::cout<< inputPath <<std::endl;
         exit(20);
     }
     int result = 1; // if parsing successful result will be 0 otherwise 1
     result = input_parse(conjecture, result, coreList,varToCoreName,varToProperty); // Parser function from Parser.hpp
     // check for successful parsing
     if (result != 0) {
-        cout << " Error: input file " << inputPath << " is not in valid format"
-             << endl;
+        std::cout << " Error: input file " << inputPath << " is not in valid format"
+             << std::endl;
         exit(20);
     }
-    cout<< "CONJECTURE: ";
+    std::cout<< "CONJECTURE: ";
     conjecture.print();
-    cout<< endl;
+    std::cout<< std::endl;
     conjecture.setVariablesToCoreName(varToCoreName);
     if(!conjecture.checkConjectureStructure(conjecture.getRoot())){
         exit(20);
@@ -72,23 +72,23 @@ void InputController::construct_dynamicKernel() {
     int coreIndex = 1;
     for (auto core:varToProperty) {
         if(coreList.count(core.second->getName())){
-            cout<<left << setw(2)<< coreIndex << setw(5)<<"- Variable: " <<setw(5)<<core.first<<setw(5)<< "NAME: " <<setw(30)<< core.second->getName();
+            std::cout<<std::left << std::setw(2)<< coreIndex << std::setw(5)<<"- Variable: " <<std::setw(5)<<core.first<<std::setw(5)<< "NAME: " <<std::setw(30)<< core.second->getName();
             coreIndex++;
             if(coreList[core.second->getName()].count("ParameterType")){
 
-                cout<< setw(10)<<"ParameterType: " << setw(10)<< coreList[core.second->getName()]["ParameterType"];
+                std::cout<< std::setw(10)<<"ParameterType: " << std::setw(10)<< coreList[core.second->getName()]["ParameterType"];
                 if(coreList[core.second->getName()]["ParameterType"]=="UnsignedInt" and core.second->getParameterType() == "UnsignedInt"){
-                  cout<<" " << core.second->getParameter(); 
+                  std::cout<<" " << core.second->getParameter(); 
                 }
-                cout<<endl;
+                std::cout<<std::endl;
                 if(coreList[core.second->getName()]["ParameterType"]=="ParameterLess" and core.second->getParameterType() == "ParameterLess" ){
-                    string corePath = dynamicPluginPath+coreNamesToFiles[core.second->getName()];
+                    std::string corePath = dynamicPluginPath+coreNamesToFiles[core.second->getName()];
                     factory = new DynamicCoreHandler(corePath.c_str());
                     std::unique_ptr<DynamicCore> handlerCore = factory->create();
                     DynamicCore* corePointer = handlerCore.release();
                     corePointer->setWidth(dynamicKernel.get_width().get_value());
                     if(dynamicKernel.isVarExists(core.first)){
-                       cout<< "ERROR: " << core.first << " exists in DynamicKernel"<<endl;
+                       std::cout<< "ERROR: " << core.first << " exists in DynamicKernel"<<std::endl;
                        exit(20);
                     }
                     dynamicKernel.addCore(*corePointer);
@@ -99,8 +99,8 @@ void InputController::construct_dynamicKernel() {
                     unsigned parameter = core.second->getParameter();
                     if(core.second->getOp()==">") parameter++;
                     if(core.second->getOp()=="<") parameter--;
-                    if(parameter < 0){cout<< " The given parameter for the core " << core.second->getName() << " is " << parameter << ". Parameter could not be negative." << endl; exit(20);}
-                    string corePath = dynamicPluginPath + coreNamesToFiles[core.second->getName()];
+                    if(parameter < 0){std::cout<< " The given parameter for the core " << core.second->getName() << " is " << parameter << ". Parameter could not be negative." << std::endl; exit(20);}
+                    std::string corePath = dynamicPluginPath + coreNamesToFiles[core.second->getName()];
                     factory = new DynamicCoreHandler(corePath.c_str());
                     std::unique_ptr<DynamicCore> handlerCore = factory->create_int(parameter);
                     DynamicCore *corePointer = handlerCore.release();
@@ -110,20 +110,20 @@ void InputController::construct_dynamicKernel() {
                     varToNameAndIndex.insert(make_pair(core.first, make_pair(core.second->getName(),dynamicKernel.coreSize()-1)));
                     dynamicKernel.setVarToNameAndIndex(varToNameAndIndex);
                 }else{
-                    cout<< "ERROR: ParameterType of the core " << core.second->getName()<<"  is not valid. The Given ParameterType is "<<core.second->getParameterType()<<endl;
+                    std::cout<< "ERROR: ParameterType of the core " << core.second->getName()<<"  is not valid. The Given ParameterType is "<<core.second->getParameterType()<<std::endl;
                     exit(20);
                 }
             }else{
-                cout<< "ERROR: " << core.first << " hasn't ParameterType, check the properties of the core. "<<endl;
+                std::cout<< "ERROR: " << core.first << " hasn't ParameterType, check the properties of the core. "<<std::endl;
                 exit(20);
             }
         }else{
-            cout<< "Core "<< core.first << " is not exist"<<endl;
+            std::cout<< "Core "<< core.first << " is not exist"<<std::endl;
             exit(20);
         }
     }
     conjecture.setKernel(&dynamicKernel);
-    cout<< "core size: " << dynamicKernel.coreSize()<<endl;
+    std::cout<< "core size: " << dynamicKernel.coreSize()<<std::endl;
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // adding Cores to dynamicKernel
 //    for (size_t j = 0; j < nameToProperty.size(); ++j) {
@@ -248,7 +248,7 @@ Conjecture &InputController::getConjecture() {
     return conjecture;
 }
 
-InputController::InputController(const string &inputPath, const string &dynamicPluginPath) : inputPath(inputPath),
+InputController::InputController(const std::string &inputPath, const std::string &dynamicPluginPath) : inputPath(inputPath),
                                                                                              dynamicPluginPath(
                                                                                                      dynamicPluginPath) {
     check_available_cores();
@@ -256,11 +256,11 @@ InputController::InputController(const string &inputPath, const string &dynamicP
     construct_dynamicKernel();
 }
 
-const string &InputController::getInputPath() const {
+const std::string &InputController::getInputPath() const {
     return inputPath;
 }
 
-InputController::InputController(const string &inputPath, const string &dynamicPluginPath, const Width &width)
+InputController::InputController(const std::string &inputPath, const std::string &dynamicPluginPath, const Width &width)
         : inputPath(inputPath), dynamicPluginPath(dynamicPluginPath), width(width) {
     check_available_cores();
     parse_input();

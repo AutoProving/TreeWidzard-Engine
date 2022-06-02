@@ -29,9 +29,9 @@ State::ptr DynamicKernel::intro_v(State::ptr q, unsigned i) {
 		aux->set_bag(b.intro_v(i));
 		return aux;
 	} else {
-		cerr << "Error in function DynamicKernel::intro_v. The bag is not "<<i<<
+		std::cerr << "Error in function DynamicKernel::intro_v. The bag is not "<<i<<
 				" introducible"
-			 << endl;
+			 << std::endl;
 		exit(10);
 	}
 }
@@ -48,9 +48,9 @@ State::ptr DynamicKernel::intro_e(const State::ptr q, const unsigned i,
 		aux->set_bag(b.intro_e(i, j));
 		return aux;
 	} else {
-		cerr << "Error in function DynamicKernel::intro_e. The bag is not "<<i <<", "<<j<<
+		std::cerr << "Error in function DynamicKernel::intro_e. The bag is not "<<i <<", "<<j<<
 				" introducible"
-			 << endl;
+			 << std::endl;
 		exit(10);
 	}
 }
@@ -66,9 +66,9 @@ State::ptr DynamicKernel::forget_v(State::ptr q, unsigned i) {
 		aux->set_bag(b.forget_v(i));
 		return aux;
 	} else {
-		cerr << "Error in function DynamicKernel::forget_v. The bag is not "<<i<<
+		std::cerr << "Error in function DynamicKernel::forget_v. The bag is not "<<i<<
 				" forgettable"
-			 << endl;
+			 << std::endl;
 		exit(10);
 	}
 }
@@ -76,7 +76,7 @@ State::ptr DynamicKernel::forget_v(State::ptr q, unsigned i) {
 State::ptr DynamicKernel::join(State::ptr q1, State::ptr q2) {
 	if (q1->get_bag().joinable(q2->get_bag())) {
 		State::ptr aux;
-		set<unsigned> elements = q1->get_bag().get_elements();
+		std::set<unsigned> elements = q1->get_bag().get_elements();
 		Bag b;
 		b.set_elements(elements);
 		// in join the new state should not have an edge
@@ -86,9 +86,9 @@ State::ptr DynamicKernel::join(State::ptr q1, State::ptr q2) {
 		aux->set_bag(b);
 		return aux;
 	} else {
-		cerr << "Error in function DynamicKernel::join. The bags are not "
+		std::cerr << "Error in function DynamicKernel::join. The bags are not "
 				"joinable"
-			 << endl;
+			 << std::endl;
 		exit(10);
 	}
 }
@@ -97,9 +97,9 @@ State::ptr DynamicKernel::join(State::ptr q1, State::ptr q2) {
 DynamicCore* DynamicKernel::pointerToCoreNumber(unsigned i) {
 	size_t j = i;
 	if (cores.size() - 1 < j) {
-		cerr << "ERROR: In DynamicKernel::pointerToCoreNumber, asked index "
+		std::cerr << "ERROR: In DynamicKernel::pointerToCoreNumber, asked index "
 				"bigger than the size of cores"
-			 << endl;
+			 << std::endl;
 		exit(20);
 	} else {
 		return cores[i];
@@ -111,7 +111,7 @@ Width& DynamicKernel::get_width() { return width; }
 void DynamicKernel::set_width(Width& width) { DynamicKernel::width = width; }
 
 
-bool DynamicKernel::isVarExists(string var) {
+bool DynamicKernel::isVarExists(std::string var) {
     if(varToNameAndIndex.count(var)){
         return true;
     }else{
@@ -119,29 +119,29 @@ bool DynamicKernel::isVarExists(string var) {
     }
 }
 
-const map<string, pair<string, int>> &DynamicKernel::getVarToNameAndIndex() const {
+const std::map<std::string, std::pair<std::string, int>> &DynamicKernel::getVarToNameAndIndex() const {
     return varToNameAndIndex;
 }
 
-void DynamicKernel::setVarToNameAndIndex(const map<string, pair<string, int>> &varToNameAndIndex) {
+void DynamicKernel::setVarToNameAndIndex(const std::map<std::string, std::pair<std::string, int>> &varToNameAndIndex) {
     DynamicKernel::varToNameAndIndex = varToNameAndIndex;
 }
 
 
-DynamicCore* DynamicKernel::getCoreByVar(string var) {
+DynamicCore* DynamicKernel::getCoreByVar(std::string var) {
     if(isVarExists(var)){
         return cores[varToNameAndIndex[var].second] ;
     }else{
-        cout<<"Error DynamicKernel::getCoreByVar core doesn't exist"<<endl;
+        std::cout<<"Error DynamicKernel::getCoreByVar core doesn't exist"<<std::endl;
         exit(20);
     }
 }
 
-int DynamicKernel::getIndexByVar(string var) {
+int DynamicKernel::getIndexByVar(std::string var) {
     if(isVarExists(var)){
         return varToNameAndIndex[var].second ;
     }else{
-        cout<<"Error DynamicKernel::getCoreByVar core doesn't exist"<<endl;
+        std::cout<<"Error DynamicKernel::getCoreByVar core doesn't exist"<<std::endl;
         exit(20);
     }
 }

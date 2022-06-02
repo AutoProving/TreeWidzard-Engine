@@ -4,37 +4,37 @@
 #define PROPERTYASSIGNMENT_H
 
 #include <iostream>
+#include <string>
 #include <vector>
-using namespace std;
 
 class PropertyAssignment {
   private:
-	string name;
-	string op;
+	std::string name;
+	std::string op;
 	int parameter;
 	std::vector<int> parameters; // Designated for multi parameters cores.
-	string parameterType;	 // NoParameter, UnSignedInt, InputFile, and MultiParameter
-	string type; // Bool, Min, Max
+	std::string parameterType;	 // NoParameter, UnSignedInt, InputFile, and MultiParameter
+	std::string type; // Bool, Min, Max
   public:
-    const string &getName() const;
+    const std::string &getName() const;
 
-    void setName(const string &name);
+    void setName(const std::string &name);
 
-    const string &getOp() const;
+    const std::string &getOp() const;
 
-    void setOp(const string &op);
+    void setOp(const std::string &op);
 
-    const vector<int> &getParameters() const;
+    const std::vector<int> &getParameters() const;
 
-    void setParameters(const vector<int> &parameters);
+    void setParameters(const std::vector<int> &parameters);
 
-    const string &getParameterType() const;
+    const std::string &getParameterType() const;
 
-    void setParameterType(const string &parameterType);
+    void setParameterType(const std::string &parameterType);
 
-    const string &getType() const;
+    const std::string &getType() const;
 
-    void setType(const string &type);
+    void setType(const std::string &type);
 
     int getParameter() const;
 
@@ -43,4 +43,3 @@ class PropertyAssignment {
 };
 
 #endif
-

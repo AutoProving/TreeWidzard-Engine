@@ -3,7 +3,7 @@
 #include "SearchStrategy.h"
 
 void SearchStrategy::search() {
-	cout << "ERROR: Based class search function called!" << endl;
+	std::cout << "ERROR: Based class search function called!" << std::endl;
 	exit(20);
 }
 
@@ -22,11 +22,11 @@ SearchStrategy::SearchStrategy(DynamicKernel *dynamicKernel,
 }
 
 
-void SearchStrategy::addAttribute(string x, string y) {
+void SearchStrategy::addAttribute(std::string x, std::string y) {
     attributes.insert(make_pair(x,y));
 }
 
-bool SearchStrategy::isAttribute(string x, string y) {
+bool SearchStrategy::isAttribute(std::string x, std::string y) {
     auto it = attributes.find(x);
     if(it!=attributes.end()){
         if(it->second==y){
@@ -36,7 +36,7 @@ bool SearchStrategy::isAttribute(string x, string y) {
     return false;
 }
 
-string SearchStrategy::getAttributeValue(string x) {
+std::string SearchStrategy::getAttributeValue(std::string x) {
     auto it = attributes.find(x);
     if(it!=attributes.end()){
         return it->second;
@@ -45,23 +45,22 @@ string SearchStrategy::getAttributeValue(string x) {
     }
 
 }
-map<string, string> SearchStrategy::getAttributes() {
+std::map<std::string, std::string> SearchStrategy::getAttributes() {
     return attributes;
 }
 
-const string &SearchStrategy::getPropertyFilePath() const {
+const std::string &SearchStrategy::getPropertyFilePath() const {
     return propertyFilePath;
 }
 
-void SearchStrategy::setPropertyFilePath(const string &propertyFilePath) {
+void SearchStrategy::setPropertyFilePath(const std::string &propertyFilePath) {
     SearchStrategy::propertyFilePath = propertyFilePath;
 }
 
-const string &SearchStrategy::getOutputsPath() const {
+const std::string &SearchStrategy::getOutputsPath() const {
     return outputsPath;
 }
 
-void SearchStrategy::setOutputsPath(const string &outputsPath) {
+void SearchStrategy::setOutputsPath(const std::string &outputsPath) {
     SearchStrategy::outputsPath = outputsPath;
 }
-

@@ -55,7 +55,6 @@ extern int command_debug;
     #include <memory>
     #include <set>
     #include <tuple>
-    using namespace std;
 
 #line 61 "command_parser.hpp"
 
@@ -120,6 +119,6 @@ struct COMMAND_LTYPE
 
 extern COMMAND_STYPE command_lval;
 extern COMMAND_LTYPE command_lloc;
-int command_parse (int &result, string &width_type, int &width_value);
+int command_parse (int &result, std::string &width_type, int &width_value);
 
 #endif /* !YY_COMMAND_COMMAND_PARSER_HPP_INCLUDED  */

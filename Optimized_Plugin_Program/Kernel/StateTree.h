@@ -12,39 +12,39 @@
 #include "Bag.h"
 #include "DynamicKernel.h"
 #include "State.h"
-using namespace std;
+
 namespace state_fs = std::experimental::filesystem;
 
 class StateTreeNode : public std::enable_shared_from_this<StateTreeNode> {
   protected:
-	string nodeType;							// Default: "Empty"
+	std::string nodeType;							// Default: "Empty"
 	State::ptr S;								// Default: Empty State
-	shared_ptr<StateTreeNode> parent = nullptr; // Default Value
-	vector<shared_ptr<StateTreeNode>> children; // Default: no child
-	shared_ptr<DynamicKernel> kernel;
+	std::shared_ptr<StateTreeNode> parent = nullptr; // Default Value
+	std::vector<std::shared_ptr<StateTreeNode>> children; // Default: no child
+	std::shared_ptr<DynamicKernel> kernel;
 
   public:
 	// Constructors
 	StateTreeNode();
-	StateTreeNode(string nodeType, State::ptr s);
-	StateTreeNode(string nodeType, State::ptr s,vector<shared_ptr<StateTreeNode>> children);
-	StateTreeNode(string nodeType, State::ptr s,vector<shared_ptr<StateTreeNode>> children,shared_ptr<DynamicKernel>);
+	StateTreeNode(std::string nodeType, State::ptr s);
+	StateTreeNode(std::string nodeType, State::ptr s, std::vector<std::shared_ptr<StateTreeNode>> children);
+	StateTreeNode(std::string nodeType, State::ptr s, std::vector<std::shared_ptr<StateTreeNode>> children, std::shared_ptr<DynamicKernel>);
 
 	// Get Functions
-	string get_nodeType();
+	std::string get_nodeType();
 	State::ptr get_S();
-	shared_ptr<StateTreeNode> get_parent();
-	vector<shared_ptr<StateTreeNode>> get_children();
-	shared_ptr<DynamicKernel> get_kernel();
+	std::shared_ptr<StateTreeNode> get_parent();
+	std::vector<std::shared_ptr<StateTreeNode>> get_children();
+	std::shared_ptr<DynamicKernel> get_kernel();
 	// Set Functions
-	void set_nodeType(string nodeType);
+	void set_nodeType(std::string nodeType);
 	void set_S(State::ptr S);
-	void set_parent(shared_ptr<StateTreeNode> parent);
-	void set_children(vector<shared_ptr<StateTreeNode>> children);
-	void set_kernel(shared_ptr<DynamicKernel> kernel);
+	void set_parent(std::shared_ptr<StateTreeNode> parent);
+	void set_children(std::vector<std::shared_ptr<StateTreeNode>> children);
+	void set_kernel(std::shared_ptr<DynamicKernel> kernel);
 	// Print Functions
-	string printStateTreeNode(); // prints the State
-	string printAbstract();	// Prints the State type
+	std::string printStateTreeNode(); // prints the State
+	std::string printAbstract();	// Prints the State type
 	// Decomposition Functions
 	StateTreeNode introVertex(unsigned i);
 	StateTreeNode forgetVertex(unsigned i);
@@ -52,20 +52,20 @@ class StateTreeNode : public std::enable_shared_from_this<StateTreeNode> {
 	friend StateTreeNode join(StateTreeNode &left, StateTreeNode &right);
 };
 
-typedef shared_ptr<StateTreeNode> StateTreeNodePointer;
+typedef std::shared_ptr<StateTreeNode> StateTreeNodePointer;
 
 class StateTree {
   public:
 	StateTreeNodePointer root;
-	void traverseNode(StateTreeNode &node, MultiGraph &G, map<unsigned, unsigned> &colorToVertexMap,
+	void traverseNode(StateTreeNode &node, MultiGraph &G, std::map<unsigned, unsigned> &colorToVertexMap,
 					  unsigned &nVertices, unsigned &nEdges);
 	MultiGraph extractMultiGraph();
 	///////
-	string printAbstractRecursive(StateTreeNode &node, unsigned &label); // This prints the tree recursively
+	std::string printAbstractRecursive(StateTreeNode &node, unsigned &label); // This prints the tree recursively
 	void printAbstract(); // This prints the tree of State Types
-	string printTreeRecursive(StateTreeNode &node, unsigned &label);
+	std::string printTreeRecursive(StateTreeNode &node, unsigned &label);
 	void printStateTree();
-	void writeToFile(string fileName);
+	void writeToFile(std::string fileName);
 
 //	bool readToken(string::iterator &it, string token);
 //	unsigned readInteger( string::iterator &it); // Reads a string, if the string starts with integers then it

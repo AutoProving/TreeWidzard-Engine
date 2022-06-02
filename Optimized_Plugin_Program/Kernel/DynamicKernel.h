@@ -9,14 +9,12 @@
 #include "State.h"
 #include "Width.h"
 
-using namespace std;
-
 class DynamicKernel : public std::enable_shared_from_this<DynamicKernel> {
 private:
   Width width;
   //vector<PropertyAssignment> properties;
-  vector<DynamicCore *> cores;
-  map<string ,pair<string,int> > varToNameAndIndex;
+  std::vector<DynamicCore *> cores;
+  std::map<std::string, std::pair<std::string, int>> varToNameAndIndex;
 
 public:
   void addCore(DynamicCore& core);
@@ -24,13 +22,13 @@ public:
   Width &get_width();
   void set_width(Width &width);
 
-  const map<string, pair<string, int>> &getVarToNameAndIndex() const;
+  const std::map<std::string, std::pair<std::string, int>> &getVarToNameAndIndex() const;
 
-  void setVarToNameAndIndex(const map<string, pair<string, int>> &varToNameAndIndex);
+  void setVarToNameAndIndex(const std::map<std::string, std::pair<std::string, int>> &varToNameAndIndex);
 
-  DynamicCore* getCoreByVar(string var);
-  bool isVarExists(string var);
-  int getIndexByVar(string var);
+  DynamicCore* getCoreByVar(std::string var);
+  bool isVarExists(std::string var);
+  int getIndexByVar(std::string var);
   //void addProperty(PropertyAssignment &);
   //const vector<PropertyAssignment> &get_properties() const;
 

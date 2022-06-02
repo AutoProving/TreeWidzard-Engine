@@ -2,44 +2,44 @@
 
 #include "PropertyAssignment.h"
 
-const string &PropertyAssignment::getName() const {
+const std::string &PropertyAssignment::getName() const {
     return name;
 }
 
-void PropertyAssignment::setName(const string &name) {
+void PropertyAssignment::setName(const std::string &name) {
     PropertyAssignment::name = name;
 }
 
-const string &PropertyAssignment::getOp() const {
+const std::string &PropertyAssignment::getOp() const {
     return op;
 }
 
-void PropertyAssignment::setOp(const string &op) {
+void PropertyAssignment::setOp(const std::string &op) {
     PropertyAssignment::op = op;
 }
 
 
-const vector<int> &PropertyAssignment::getParameters() const {
+const std::vector<int> &PropertyAssignment::getParameters() const {
     return parameters;
 }
 
-void PropertyAssignment::setParameters(const vector<int> &parameters) {
+void PropertyAssignment::setParameters(const std::vector<int> &parameters) {
     PropertyAssignment::parameters = parameters;
 }
 
-const string &PropertyAssignment::getParameterType() const {
+const std::string &PropertyAssignment::getParameterType() const {
     return parameterType;
 }
 
-void PropertyAssignment::setParameterType(const string &parameterType) {
+void PropertyAssignment::setParameterType(const std::string &parameterType) {
     PropertyAssignment::parameterType = parameterType;
 }
 
-const string &PropertyAssignment::getType() const {
+const std::string &PropertyAssignment::getType() const {
     return type;
 }
 
-void PropertyAssignment::setType(const string &type) {
+void PropertyAssignment::setType(const std::string &type) {
     PropertyAssignment::type = type;
 }
 

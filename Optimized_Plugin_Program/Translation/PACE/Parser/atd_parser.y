@@ -28,11 +28,11 @@
 	// First coordinate is for node, second coordinate is for labels of the children of the node, third coordinate is for label of the node
 	// forth coordinate is for integers inside the symbol.
 	//Example 4 IntroVertex_2 (3) => 4 is the third coordinate, 2 is the forth, {3} is the second.
-   // vector<tuple<shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>>,int,set<int>>> atdVec;
+   // std::vector<std::tuple<std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>>,int,std::set<int>>> atdVec;
    	// It is the positions of the children of a node in atdVec. It construts inside atd_construct.
-    map<int,shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>>> labelToNode;
-    map<int,int> labelToParentLabel;
-    int atd_construct(AbstractTreeDecomposition &atd, map<int,shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>>> &labelToNode, map<int,int> &labelToParentLabel);
+    std::map<int,std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>>> labelToNode;
+    std::map<int,int> labelToParentLabel;
+    int atd_construct(AbstractTreeDecomposition &atd, std::map<int,std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>>> &labelToNode, std::map<int,int> &labelToParentLabel);
   %}
 %locations
 %union{
@@ -53,58 +53,58 @@
 
 %%
 
-atd_START                  : atd_NODE                            {if(!atd_construct(atd,labelToNode,labelToParentLabel)){YYERROR;}; cout<<"DONE!"<<endl;}
+atd_START                  : atd_NODE                            {if(!atd_construct(atd,labelToNode,labelToParentLabel)){YYERROR;}; std::cout<<"DONE!"<<std::endl;}
                            ;
-atd_NODE                   : atd_COMMENTS atd_NUM atd_LEAF atd_NODES {shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> node(new TermNode<AbstractTreeDecompositionNodeContent>);
+atd_NODE                   : atd_COMMENTS atd_NUM atd_LEAF atd_NODES {std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> node(new TermNode<AbstractTreeDecompositionNodeContent>);
  									AbstractTreeDecompositionNodeContent atd_node;
  									atd_node.setSymbol("Leaf");
  									node->setNodeContent(atd_node);
- 									if(labelToNode.count($2)){cout<< "label "<<$2<< " is repeated"<<endl; YYERROR;}
+ 									if(labelToNode.count($2)){std::cout<< "label "<<$2<< " is repeated"<<std::endl; YYERROR;}
  									labelToNode[$2]=node;
 
                                     }
                            | atd_COMMENTS atd_NUM atd_INTROVERTEX atd_SEP1 atd_NUM atd_LEFTP atd_NUM atd_RIGHTP atd_NODES {
-                                    shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> node(new TermNode<AbstractTreeDecompositionNodeContent>);
+                                    std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> node(new TermNode<AbstractTreeDecompositionNodeContent>);
  									AbstractTreeDecompositionNodeContent atd_node;
-									atd_node.setSymbol("IntroVertex_"+to_string($5));
+									atd_node.setSymbol("IntroVertex_"+std::to_string($5));
 									node->setNodeContent(atd_node);
- 									if(labelToNode.count($2)){cout<< "label "<<$2<< " is repeated"<<endl; YYERROR;}
+ 									if(labelToNode.count($2)){std::cout<< "label "<<$2<< " is repeated"<<std::endl; YYERROR;}
  									labelToNode[$2]=node;
- 									if(labelToParentLabel.count($7)){cout<< "node "<<$7<<" has two parents" << labelToParentLabel[$7] << " and "<<$2<<endl; YYERROR;}
+ 									if(labelToParentLabel.count($7)){std::cout<< "node "<<$7<<" has two parents" << labelToParentLabel[$7] << " and "<<$2<<std::endl; YYERROR;}
 									labelToParentLabel[$7]=$2;
 
 									}
                            | atd_COMMENTS atd_NUM atd_INTROEDGE atd_SEP1 atd_NUM atd_SEP1 atd_NUM atd_LEFTP atd_NUM atd_RIGHTP atd_NODES {
-									shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> node(new TermNode<AbstractTreeDecompositionNodeContent>);
+									std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> node(new TermNode<AbstractTreeDecompositionNodeContent>);
  									AbstractTreeDecompositionNodeContent atd_node;
-									atd_node.setSymbol("IntroEdge_"+to_string($5)+"_"+to_string($7));
+									atd_node.setSymbol("IntroEdge_"+std::to_string($5)+"_"+std::to_string($7));
 									node->setNodeContent(atd_node);
-                            		if(labelToNode.count($2)){cout<< "label "<<$2<< " is repeated"<<endl; YYERROR;}
+                            		if(labelToNode.count($2)){std::cout<< "label "<<$2<< " is repeated"<<std::endl; YYERROR;}
  									labelToNode[$2]=node;
- 									if(labelToParentLabel.count($9)){cout<< "node "<<$9<<" has two parents" << labelToParentLabel[$9] << " and "<<$2<<endl; YYERROR;}
+ 									if(labelToParentLabel.count($9)){std::cout<< "node "<<$9<<" has two parents" << labelToParentLabel[$9] << " and "<<$2<<std::endl; YYERROR;}
 									labelToParentLabel[$9]=$2;
                                     
 									}
                            | atd_COMMENTS atd_NUM atd_FORGETVERTEX atd_SEP1 atd_NUM atd_LEFTP atd_NUM atd_RIGHTP atd_NODES {
-                                    shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> node(new TermNode<AbstractTreeDecompositionNodeContent>);
+                                    std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> node(new TermNode<AbstractTreeDecompositionNodeContent>);
  									AbstractTreeDecompositionNodeContent atd_node;
-									atd_node.setSymbol("ForgetVertex_"+to_string($5));
+									atd_node.setSymbol("ForgetVertex_"+std::to_string($5));
 									node->setNodeContent(atd_node);
-									if(labelToNode.count($2)){cout<< "label "<<$2<< " is repeated"<<endl; YYERROR;}
+									if(labelToNode.count($2)){std::cout<< "label "<<$2<< " is repeated"<<std::endl; YYERROR;}
  									labelToNode[$2]=node;
- 									if(labelToParentLabel.count($7)){cout<< "node "<<$7<<" has two parents" << labelToParentLabel[$7] << " and "<<$2<<endl; YYERROR;}
+ 									if(labelToParentLabel.count($7)){std::cout<< "node "<<$7<<" has two parents" << labelToParentLabel[$7] << " and "<<$2<<std::endl; YYERROR;}
 									labelToParentLabel[$7]=$2;
 								    }
                            | atd_COMMENTS atd_NUM atd_JOIN atd_LEFTP atd_NUM atd_SEP2 atd_NUM atd_RIGHTP atd_NODES {
-                                    shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> node(new TermNode<AbstractTreeDecompositionNodeContent>);
+                                    std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> node(new TermNode<AbstractTreeDecompositionNodeContent>);
  									AbstractTreeDecompositionNodeContent atd_node;
 									atd_node.setSymbol("Join");
 									node->setNodeContent(atd_node);
-                            		if(labelToNode.count($2)){cout<< "label "<<$2<< " is repeated"<<endl; YYERROR;}
+                            		if(labelToNode.count($2)){std::cout<< "label "<<$2<< " is repeated"<<std::endl; YYERROR;}
  									labelToNode[$2]=node;
- 									if(labelToParentLabel.count($5)){cout<< "node "<<$5<<" has two parents" << labelToParentLabel[$5] << " and "<<$2<<endl; YYERROR;}
+ 									if(labelToParentLabel.count($5)){std::cout<< "node "<<$5<<" has two parents" << labelToParentLabel[$5] << " and "<<$2<<std::endl; YYERROR;}
 									labelToParentLabel[$5]=$2;
-                                	if(labelToParentLabel.count($7)){cout<< "node "<<$7<<" has two parents" << labelToParentLabel[$7] << " and "<<$2<<endl; YYERROR;}
+                                	if(labelToParentLabel.count($7)){std::cout<< "node "<<$7<<" has two parents" << labelToParentLabel[$7] << " and "<<$2<<std::endl; YYERROR;}
 									labelToParentLabel[$7]=$2;
 
                                     }
@@ -125,16 +125,16 @@ void yyerror(AbstractTreeDecomposition &atd, int &result, char const* msg){
   // error printing  disabled, it is handeled in main.cpp
 }
 
-int atd_construct(AbstractTreeDecomposition &atd,  map<int,shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>>> &labelToNode, map<int,int> &labelToParentLabel){
-   set<int> rootCandidate;
+int atd_construct(AbstractTreeDecomposition &atd,  std::map<int,std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>>> &labelToNode, std::map<int,int> &labelToParentLabel){
+   std::set<int> rootCandidate;
    for(auto node:labelToNode){
         if(!labelToParentLabel.count(node.first)){
             if(rootCandidate.size()!=0){
-                cout<< " there are more than two root candidate"<<endl;
+                std::cout<< " there are more than two root candidate"<<std::endl;
                 for(auto item:rootCandidate){
-                    cout<<item<<",";
+                    std::cout<<item<<",";
                 }
-                cout<<endl;
+                std::cout<<std::endl;
                 return 0;
                 //YYERROR;
             }else{
@@ -142,8 +142,8 @@ int atd_construct(AbstractTreeDecomposition &atd,  map<int,shared_ptr<TermNode<A
             }
         }else{
 
-            shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> parent_node = labelToNode[labelToParentLabel[node.first]];
-            vector<shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> > children = parent_node->getChildren();
+            std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> parent_node = labelToNode[labelToParentLabel[node.first]];
+            std::vector<std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> > children = parent_node->getChildren();
             children.push_back(node.second);
             node.second->setParent(parent_node);
             parent_node->setChildren(children);
@@ -151,16 +151,14 @@ int atd_construct(AbstractTreeDecomposition &atd,  map<int,shared_ptr<TermNode<A
         }
     }
     if(rootCandidate.size()!=1){
-        cout<< "Candidate nodes for root are not valid"<<endl;
+        std::cout<< "Candidate nodes for root are not valid"<<std::endl;
         for(auto item:rootCandidate){
-            cout<<item<<",";
+            std::cout<<item<<",";
         }
-        cout<<endl;
+        std::cout<<std::endl;
         return 0;
     
     }
     atd.setRoot(labelToNode[*rootCandidate.begin()]);
     return 1;
 }
-
-

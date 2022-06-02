@@ -26,7 +26,7 @@
      char* string;
 
 }
-%parse-param {Term<string> &term}
+%parse-param {Term<std::string> &term}
 %parse-param {int &result}
 
 %token TR_NODE_NUM TR_COMMENT TR_NEWLINE TR_NODE_SYMBOL TR_SEPARATOR
@@ -62,4 +62,3 @@ void yyerror(Term<S> &term, int &result, char const* msg){
   std::cout<<"Syntax Error: "<< msg << " " <<term_lineno << std::endl;
   // error printing  disabled, it is handeled in main.cpp 
 }
-

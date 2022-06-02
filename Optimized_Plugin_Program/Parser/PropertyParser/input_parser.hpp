@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.5.1.  */
+/* A Bison parser, made by GNU Bison 3.8.2.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2020 Free Software Foundation,
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2021 Free Software Foundation,
    Inc.
 
    This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+   along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -31,11 +31,12 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-/* Undocumented macros, especially those whose name start with YY_,
-   are private implementation details.  Do not rely on them.  */
+/* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
+   especially those whose name start with YY_ or yy_.  They are
+   private implementation details that can be changed or removed.  */
 
-#ifndef YY_INPUT_INPUT_PARSER_HPP_INCLUDED
-# define YY_INPUT_INPUT_PARSER_HPP_INCLUDED
+#ifndef YY_INPUT_INPUT_PARSER_TAB_H_INCLUDED
+# define YY_INPUT_INPUT_PARSER_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef INPUT_DEBUG
 # if defined YYDEBUG
@@ -62,39 +63,44 @@ extern int input_debug;
     #include <utility>
 
 
-#line 66 "input_parser.hpp"
+#line 67 "input_parser.tab.h"
 
-/* Token type.  */
+/* Token kinds.  */
 #ifndef INPUT_TOKENTYPE
 # define INPUT_TOKENTYPE
   enum input_tokentype
   {
-    SEPERATOR = 258,
-    FILEPATH = 259,
-    LEFTP = 260,
-    RIGHTP = 261,
-    NAME = 262,
-    NEWLINE = 263,
-    AND = 264,
-    OR = 265,
-    IFF = 266,
-    IMPLIES = 267,
-    NOT = 268,
-    TRUE = 269,
-    FALSE = 270,
-    COMMENT = 271,
-    NUMBER_DOUBLE = 272,
-    COMMA = 273,
-    FORMULA_NAME = 274,
-    EXP = 275,
-    ATLEAST = 276,
-    ATMOST = 277,
-    LESS = 278,
-    BIGGER = 279,
-    BINARY_ARITHMETIC_OPERATOR = 280,
-    BINARY_FUNCTION = 281,
-    UNARY_FUNCTION = 282
+    INPUT_EMPTY = -2,
+    INPUT_EOF = 0,                 /* "end of file"  */
+    INPUT_error = 256,             /* error  */
+    INPUT_UNDEF = 257,             /* "invalid token"  */
+    SEPERATOR = 258,               /* SEPERATOR  */
+    FILEPATH = 259,                /* FILEPATH  */
+    LEFTP = 260,                   /* LEFTP  */
+    RIGHTP = 261,                  /* RIGHTP  */
+    NAME = 262,                    /* NAME  */
+    NEWLINE = 263,                 /* NEWLINE  */
+    AND = 264,                     /* AND  */
+    OR = 265,                      /* OR  */
+    IFF = 266,                     /* IFF  */
+    IMPLIES = 267,                 /* IMPLIES  */
+    NOT = 268,                     /* NOT  */
+    TRUE = 269,                    /* TRUE  */
+    FALSE = 270,                   /* FALSE  */
+    COMMENT = 271,                 /* COMMENT  */
+    NUMBER_DOUBLE = 272,           /* NUMBER_DOUBLE  */
+    COMMA = 273,                   /* COMMA  */
+    FORMULA_NAME = 274,            /* FORMULA_NAME  */
+    EXP = 275,                     /* EXP  */
+    ATLEAST = 276,                 /* ATLEAST  */
+    ATMOST = 277,                  /* ATMOST  */
+    LESS = 278,                    /* LESS  */
+    BIGGER = 279,                  /* BIGGER  */
+    BINARY_ARITHMETIC_OPERATOR = 280, /* BINARY_ARITHMETIC_OPERATOR  */
+    BINARY_FUNCTION = 281,         /* BINARY_FUNCTION  */
+    UNARY_FUNCTION = 282           /* UNARY_FUNCTION  */
   };
+  typedef enum input_tokentype input_token_kind_t;
 #endif
 
 /* Value type.  */
@@ -109,7 +115,7 @@ union INPUT_STYPE
      std::vector<int> * vec;
      PropertyAssignment *property;
 
-#line 113 "input_parser.hpp"
+#line 119 "input_parser.tab.h"
 
 };
 typedef union INPUT_STYPE INPUT_STYPE;
@@ -134,6 +140,8 @@ struct INPUT_LTYPE
 
 extern INPUT_STYPE input_lval;
 extern INPUT_LTYPE input_lloc;
-int input_parse (Conjecture &conj, int &result, map<string,map<string,string>> &coreList, map<string,string> &varToCoreName, map<string, PropertyAssignment*> &varToProperty);
 
-#endif /* !YY_INPUT_INPUT_PARSER_HPP_INCLUDED  */
+int input_parse (Conjecture &conj, int &result, std::map<std::string,std::map<std::string,std::string>> &coreList, std::map<std::string,std::string> &varToCoreName, std::map<std::string, PropertyAssignment*> &varToProperty);
+
+
+#endif /* !YY_INPUT_INPUT_PARSER_TAB_H_INCLUDED  */

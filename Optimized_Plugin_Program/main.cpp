@@ -1,28 +1,20 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 #include <fstream>
-#include "Controller/Parser/command_parser.hpp"
 #include <chrono>
-#include <sys/time.h>
 #include <ctime>
 #include <filesystem>
+
 #include <unistd.h>
+#include <sys/time.h>
+
+#include "Controller/Parser/command_parser.hpp"
 
 
-using namespace std;
-extern FILE *command_in;
-
-
-using namespace std;
+extern std::FILE *command_in;
 
 namespace fs = std::filesystem;
-
-using std::cout; using std::endl;
-using std::chrono::duration_cast;
-using std::chrono::milliseconds;
-using std::chrono::seconds;
-using std::chrono::system_clock;
 
 int main(int argc, char *arg[]) {
     // Reading the input and put it in string _all_arg
@@ -38,10 +30,10 @@ int main(int argc, char *arg[]) {
 
     // Generating the temp file pFile
     char buffer [256];
-    FILE * pFile;
+    std::FILE * pFile;
     pFile = tmpfile(); // c++ function for generating a temporary file
 
-    fputs (_all_arg.c_str(),pFile); // Write _all_arg in pFile
+    std::fputs(_all_arg.c_str(), pFile);  // Write _all_arg in pFile
     rewind(pFile); // Sets the position indicator associated with stream to the beginning of the file.
     command_in = pFile; // Set command_in equals to pFile
 
@@ -81,7 +73,7 @@ int main(int argc, char *arg[]) {
 
     // Calling the input parser
     int result_arg=10;
-    string width_type;
+    std::string width_type;
     int width_value;
     result_arg = command_parse(result_arg,width_type,width_value);
 

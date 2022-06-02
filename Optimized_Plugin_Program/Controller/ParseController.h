@@ -15,20 +15,20 @@
 #include "../TreeAutomaton/TreeAutomaton.h"
 #include "../TreeAutomaton/AbstractTreeDecomposition.h"
 
-using namespace std;
-extern FILE *gr_in;
-extern FILE *td_in;
-extern FILE *ctd_in;
-extern FILE *atd_in;
+extern std::FILE *gr_in;
+extern std::FILE *td_in;
+extern std::FILE *ctd_in;
+extern std::FILE *atd_in;
+
 class ParseController {
 private:
     Flags flag;
     InputController* inputController;
 public:
     // constructor
-    ParseController(const Flags &flag, const string &inputPath);
-    void parse_pace(string graphPath, string decompositionPath);
-    void parse_abstract(string abstractPath);
+    ParseController(const Flags &flag, const std::string &inputPath);
+    void parse_pace(std::string graphPath, std::string decompositionPath);
+    void parse_abstract(std::string abstractPath);
     void test_term();
 
 };

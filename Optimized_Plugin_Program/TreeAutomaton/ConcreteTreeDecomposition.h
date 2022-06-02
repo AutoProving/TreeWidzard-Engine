@@ -10,7 +10,7 @@
 #include "../Kernel/Flags.h"
 #include "RunTree.h"
 #include "DecompositionTree.h"
-using namespace std;
+
 namespace concrete_fs = std::experimental::filesystem;
 class AbstractTreeDecompositionNodeContent;
 class AbstractTreeDecomposition;
@@ -18,12 +18,12 @@ class ConcreteNode : public TermNodeContentType
 {
     private :
         Bag bag;
-        string symbol = "Leaf";
+        std::string symbol = "Leaf";
     public:
         const Bag &getBag() const;
         void setBag(const Bag &bag);
-        const string &getSymbol() const;
-        void setSymbol(const string &symbol);
+        const std::string &getSymbol() const;
+        void setSymbol(const std::string &symbol);
         bool operator==(const ConcreteNode &rhs) const;
         bool operator!=(const ConcreteNode &rhs) const;
         bool operator<(const ConcreteNode &rhs) const;
@@ -31,19 +31,19 @@ class ConcreteNode : public TermNodeContentType
         bool operator<=(const ConcreteNode &rhs) const;
         bool operator>=(const ConcreteNode &rhs) const;
         void print() override;
-        string nodeInformation() override;
+        std::string nodeInformation() override;
 };
 class ConcreteTreeDecomposition: public Term<ConcreteNode> {
     public:
-        void traverseNode(TermNode<ConcreteNode> &node, MultiGraph &G, map<unsigned, unsigned> &colorToVertexMap, unsigned &nVertices, unsigned &nEdges);
+        void traverseNode(TermNode<ConcreteNode> &node, MultiGraph &G, std::map<unsigned, unsigned> &colorToVertexMap, unsigned &nVertices, unsigned &nEdges);
         MultiGraph extractMultiGraph(); // extract the graph
-        void buildDecompositionBags(shared_ptr<DecompositionNode> node,TermNode<ConcreteNode> &cNode, map<unsigned, unsigned> &colorToVertexMap, unsigned &nVertices);
+        void buildDecompositionBags(std::shared_ptr<DecompositionNode> node,TermNode<ConcreteNode> &cNode, std::map<unsigned, unsigned> &colorToVertexMap, unsigned &nVertices);
         Decomposition extractDecomposition(); // extract decomposition tree
         // note: extractMultiGraph() and extractDecomposition() should have the same algorithm because of the labels.
-        shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> constructATDNode(TermNode<ConcreteNode> &node);
+        std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> constructATDNode(TermNode<ConcreteNode> &node);
         AbstractTreeDecomposition convertToAbstractTreeDecomposition();
-        void writeToFile(string fileName);
-        shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> constructWitnesses(Conjecture &conjecture, shared_ptr<TermNode<ConcreteNode>> node, Flags &flags, string &str);
-        bool conjectureCheck(Conjecture &conjecture, Flags &flags, string path);
+        void writeToFile(std::string fileName);
+        std::shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> constructWitnesses(Conjecture &conjecture, std::shared_ptr<TermNode<ConcreteNode>> node, Flags &flags, std::string &str);
+        bool conjectureCheck(Conjecture &conjecture, Flags &flags, std::string path);
 };
 #endif //TREEWIDZARD_CONCRETETREEDECOMPOSITION_H

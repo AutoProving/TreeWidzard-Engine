@@ -1,8 +1,9 @@
-/* A Bison parser, made by GNU Bison 3.0.4.  */
+/* A Bison parser, made by GNU Bison 3.8.2.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015 Free Software Foundation, Inc.
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2021 Free Software Foundation,
+   Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -15,7 +16,7 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+   along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -30,8 +31,12 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_TERM_TERM_PARSER_HPP_INCLUDED
-# define YY_TERM_TERM_PARSER_HPP_INCLUDED
+/* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
+   especially those whose name start with YY_ or yy_.  They are
+   private implementation details that can be changed or removed.  */
+
+#ifndef YY_TERM_TERM_PARSER_TAB_H_INCLUDED
+# define YY_TERM_TERM_PARSER_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef TERM_DEBUG
 # if defined YYDEBUG
@@ -48,41 +53,45 @@
 extern int term_debug;
 #endif
 /* "%code requires" blocks.  */
-#line 3 "term_parser.y" /* yacc.c:1909  */
+#line 3 "term_parser.y"
 
     #include "../../TreeAutomaton/TreeAutomaton.h"
     #include <iostream>
     #include <vector>
 
-#line 58 "term_parser.hpp" /* yacc.c:1909  */
+#line 63 "term_parser.tab.h"
 
-/* Token type.  */
+/* Token kinds.  */
 #ifndef TERM_TOKENTYPE
 # define TERM_TOKENTYPE
   enum term_tokentype
   {
-    TR_NODE_NUM = 258,
-    TR_COMMENT = 259,
-    TR_NEWLINE = 260,
-    TR_NODE_SYMBOL = 261,
-    TR_SEPARATOR = 262
+    TERM_EMPTY = -2,
+    TERM_EOF = 0,                  /* "end of file"  */
+    TERM_error = 256,              /* error  */
+    TERM_UNDEF = 257,              /* "invalid token"  */
+    TR_NODE_NUM = 258,             /* TR_NODE_NUM  */
+    TR_COMMENT = 259,              /* TR_COMMENT  */
+    TR_NEWLINE = 260,              /* TR_NEWLINE  */
+    TR_NODE_SYMBOL = 261,          /* TR_NODE_SYMBOL  */
+    TR_SEPARATOR = 262             /* TR_SEPARATOR  */
   };
+  typedef enum term_tokentype term_token_kind_t;
 #endif
 
 /* Value type.  */
 #if ! defined TERM_STYPE && ! defined TERM_STYPE_IS_DECLARED
-
 union TERM_STYPE
 {
-#line 24 "term_parser.y" /* yacc.c:1909  */
+#line 24 "term_parser.y"
 
      unsigned number;
      char* string;
 
 
-#line 84 "term_parser.hpp" /* yacc.c:1909  */
-};
+#line 93 "term_parser.tab.h"
 
+};
 typedef union TERM_STYPE TERM_STYPE;
 # define TERM_STYPE_IS_TRIVIAL 1
 # define TERM_STYPE_IS_DECLARED 1
@@ -105,6 +114,8 @@ struct TERM_LTYPE
 
 extern TERM_STYPE term_lval;
 extern TERM_LTYPE term_lloc;
-int term_parse (Term<string> &term, int &result);
 
-#endif /* !YY_TERM_TERM_PARSER_HPP_INCLUDED  */
+int term_parse (Term<std::string> &term, int &result);
+
+
+#endif /* !YY_TERM_TERM_PARSER_TAB_H_INCLUDED  */

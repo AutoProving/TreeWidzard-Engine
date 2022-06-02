@@ -9,14 +9,14 @@
 #include "Term.h"
 #include "../Multigraph/MultiGraph.h"
 #include "ConcreteTreeDecomposition.h"
-using namespace std;
+
 namespace abstract_fs = std::experimental::filesystem;
 class AbstractTreeDecompositionNodeContent : public TermNodeContentType {
     private:
-        string symbol="Leaf";
+        std::string symbol="Leaf";
     public:
         AbstractTreeDecompositionNodeContent();
-        AbstractTreeDecompositionNodeContent(const string &symbol);
+        AbstractTreeDecompositionNodeContent(const std::string &symbol);
         AbstractTreeDecompositionNodeContent(const AbstractTreeDecompositionNodeContent &abstractTreeDecompositionNodeContent);
         AbstractTreeDecompositionNodeContent& operator=(const AbstractTreeDecompositionNodeContent & other);
         bool operator<(const AbstractTreeDecompositionNodeContent &rhs) const;
@@ -25,21 +25,21 @@ class AbstractTreeDecompositionNodeContent : public TermNodeContentType {
         bool operator>=(const AbstractTreeDecompositionNodeContent &rhs) const;
         bool operator==(const AbstractTreeDecompositionNodeContent &rhs) const;
         bool operator!=(const AbstractTreeDecompositionNodeContent &rhs) const;
-        const string &getSymbol() const;
-        void setSymbol(const string &symbol);
-        string nodeInformation() override;
+        const std::string &getSymbol() const;
+        void setSymbol(const std::string &symbol);
+        std::string nodeInformation() override;
         void print() override;
-        int symbolType(string symbol) const; // returns "0 if Leaf, 1 if IntroVertex, 2 if  ForgetVertex, 3 if IntroEdge or 4 if Join"
+        int symbolType(std::string symbol) const; // returns "0 if Leaf, 1 if IntroVertex, 2 if  ForgetVertex, 3 if IntroEdge or 4 if Join"
         //ToDo: implement this
-        vector<int> symbolNumbers(string s) const; // returns vector "[i]" if symbol="IntroVertex_i or ForgetVertex_i", Returns vector "[i,j]" if symbol="IntroEdge_i_j", Returns empty vector if symbol = "Join"
-        vector<int> extractIntegerWords(string s) const;
+        std::vector<int> symbolNumbers(std::string s) const; // returns vector "[i]" if symbol="IntroVertex_i or ForgetVertex_i", Returns vector "[i,j]" if symbol="IntroEdge_i_j", Returns empty vector if symbol = "Join"
+        std::vector<int> extractIntegerWords(std::string s) const;
         //Define the lexicographically smallest content.
-        string smallestContent();
+        std::string smallestContent();
 };
 class AbstractTreeDecomposition: public Term<AbstractTreeDecompositionNodeContent>{
     public:
-        void writeToFile(string fileName);
-        shared_ptr<TermNode<ConcreteNode>> constructCTDNode(TermNode<AbstractTreeDecompositionNodeContent> &node);
+        void writeToFile(std::string fileName);
+        std::shared_ptr<TermNode<ConcreteNode>> constructCTDNode(TermNode<AbstractTreeDecompositionNodeContent> &node);
         ConcreteTreeDecomposition convertToConcreteTreeDecomposition();
 };
 #endif //TREEWIDZARD_ABSTRACTTREEDECOMPOSITION_H

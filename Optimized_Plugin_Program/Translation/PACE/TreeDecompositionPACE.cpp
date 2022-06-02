@@ -5,12 +5,12 @@ RawAbstractTreeDecomposition::RawAbstractTreeDecomposition(){
 }
 void RawAbstractTreeDecomposition::print(unsigned &k,unsigned parentno){
     k++;
-    cout<<k<<" "<<type<<"(" <<parentno <<") " ;
+    std::cout<<k<<" "<<type<<"(" <<parentno <<") " ;
     bag.print();
     for(auto it=color_to_vertex_map.begin(); it!=color_to_vertex_map.end();it++){
-            cout<<it->first<<"->"<<it->second<<" ";
+            std::cout<<it->first<<"->"<<it->second<<" ";
     }
-    cout<<endl;
+    std::cout<<std::endl;
     unsigned num = k;
     for(size_t i=0; i < children.size(); i++){
         children[i]->print(k,num);
@@ -20,7 +20,7 @@ void RawAbstractTreeDecomposition::print(unsigned &k,unsigned parentno){
 void RawAbstractTreeDecomposition::printNode(){
     bag.print();
     for(auto it=color_to_vertex_map.begin(); it!=color_to_vertex_map.end();it++){
-        cout<<it->first<<"->"<<it->second<<" ";
+        std::cout<<it->first<<"->"<<it->second<<" ";
     }
 }
 
@@ -69,10 +69,10 @@ bool TreeDecompositionPACE::setABag(vertex_t s, unsigned bagnumber){
 bool TreeDecompositionPACE::addEdge(unsigned e1, unsigned e2){
     if(e1<=bags.size() and e2 <= bags.size()){
         if(e1>e2){
-            edges.insert(make_pair(e2,e1));
+            edges.insert(std::make_pair(e2,e1));
             return true;
         }else if(e1<e2){
-            edges.insert(make_pair(e1,e2));
+            edges.insert(std::make_pair(e1,e2));
             return true;
         }else{
             return false;
@@ -85,25 +85,25 @@ bool TreeDecompositionPACE::addEdge(unsigned e1, unsigned e2){
 void TreeDecompositionPACE::printBags()
 {
     for(size_t i =0 ; i< bags.size(); i++){
-        cout<< "b " << i+1 <<  " ";
+        std::cout<< "b " << i+1 <<  " ";
         for(auto it = bags[i].begin(); it!=bags[i].end(); it++){
-            cout<<*it;
+            std::cout<<*it;
             if(next(it)!= bags[i].end()){
-                cout<<" ";
+                std::cout<<" ";
             }
         }
-        cout<<""<<endl;
+        std::cout<<""<<std::endl;
     }
 }
 
 void TreeDecompositionPACE::printEdges(){
     for(auto it=edges.begin(); it!=edges.end();it++){
-        cout<<it->first<<"  " << it->second<<endl;
+        std::cout<<it->first<<"  " << it->second<<std::endl;
     }
 }
 
 void TreeDecompositionPACE::print(){
-    cout<<"s td " << num_vertices<< "  "<<width+1<<"  "<<num_graph_vertices<<endl;
+    std::cout<<"s td " << num_vertices<< "  "<<width+1<<"  "<<num_graph_vertices<<std::endl;
     printBags();
     printEdges();
 }
@@ -113,18 +113,18 @@ void TreeDecompositionPACE::printTree(){
     root->print(k,0);
 }
 
-shared_ptr<RawAbstractTreeDecomposition> TreeDecompositionPACE::constructInnerNodes(set<unsigned> &visited_bags, unsigned neighbor){
-    shared_ptr<RawAbstractTreeDecomposition> node (new RawAbstractTreeDecomposition);
+std::shared_ptr<RawAbstractTreeDecomposition> TreeDecompositionPACE::constructInnerNodes(std::set<unsigned> &visited_bags, unsigned neighbor){
+    std::shared_ptr<RawAbstractTreeDecomposition> node (new RawAbstractTreeDecomposition);
     node->bag.set_elements(bags[neighbor-1]);
     visited_bags.insert(neighbor);
     for(auto it=edges.begin(); it!=edges.end(); it++){
         if(it->first==neighbor and visited_bags.count(it->second)==0 ){
-            shared_ptr<RawAbstractTreeDecomposition> new_node;
+            std::shared_ptr<RawAbstractTreeDecomposition> new_node;
             new_node = constructInnerNodes(visited_bags,it->second);
             new_node->parent = node;
             node->children.push_back(new_node);
         }else if(it->second==neighbor and visited_bags.count(it->first)==0){
-            shared_ptr<RawAbstractTreeDecomposition> new_node;
+            std::shared_ptr<RawAbstractTreeDecomposition> new_node;
             new_node = constructInnerNodes(visited_bags,it->first);
             new_node->parent = node;
             node->children.push_back(new_node);
@@ -134,21 +134,21 @@ shared_ptr<RawAbstractTreeDecomposition> TreeDecompositionPACE::constructInnerNo
 }
 
 bool TreeDecompositionPACE::constructRaw(){
-    shared_ptr<RawAbstractTreeDecomposition> root_node(new RawAbstractTreeDecomposition);
+    std::shared_ptr<RawAbstractTreeDecomposition> root_node(new RawAbstractTreeDecomposition);
     root = root_node;
     if(bags.size()>0){
         root->bag.set_elements(bags[0]);
-        set<unsigned> visited_bags;
+        std::set<unsigned> visited_bags;
         visited_bags.insert(1);
         //create nodes for neighbors
         for(auto it=edges.begin(); it!=edges.end(); it++){
             if(it->first==1){
-                shared_ptr<RawAbstractTreeDecomposition> node;
+                std::shared_ptr<RawAbstractTreeDecomposition> node;
                 node = constructInnerNodes(visited_bags,it->second);
                 node->parent = root;
                 root->children.push_back(node);
             }else if(it->second==1){
-                shared_ptr<RawAbstractTreeDecomposition> node;
+                std::shared_ptr<RawAbstractTreeDecomposition> node;
                 node = constructInnerNodes(visited_bags,it->first);
                 node->parent = root;
                 root->children.push_back(node);
@@ -156,17 +156,17 @@ bool TreeDecompositionPACE::constructRaw(){
         }
         return true;
     }else{
-        cout<<"ERROR in TreeDecompositionPACE::constructRaw bags size is zero"<<endl;
+        std::cout<<"ERROR in TreeDecompositionPACE::constructRaw bags size is zero"<<std::endl;
         return false;
     }
 
 }
 
-bool TreeDecompositionPACE::convertToBinary(shared_ptr<RawAbstractTreeDecomposition> node){
+bool TreeDecompositionPACE::convertToBinary(std::shared_ptr<RawAbstractTreeDecomposition> node){
     if(node->children.size()>2){
         // If "node" has n>2 children, then the algorithm creates "new_node"
         // and set  "new_node" as a second child of "node", and set n-1 children of "node" as children of "new_node".
-        shared_ptr<RawAbstractTreeDecomposition> new_node(new RawAbstractTreeDecomposition);
+        std::shared_ptr<RawAbstractTreeDecomposition> new_node(new RawAbstractTreeDecomposition);
         new_node->bag = node->bag;
         for(size_t i=1; i<node->children.size();i++){
             new_node->children.push_back(node->children[i]);
@@ -187,14 +187,14 @@ bool TreeDecompositionPACE::convertToBinary(shared_ptr<RawAbstractTreeDecomposit
     return true;
 }
 
-bool TreeDecompositionPACE::joinFormat(shared_ptr<RawAbstractTreeDecomposition> node){
+bool TreeDecompositionPACE::joinFormat(std::shared_ptr<RawAbstractTreeDecomposition> node){
     if(node->children.size()>2){
-        cout<<"ERROR in TreeDecompositionPACE::joinFormat, the Raw abstract tree decomposition is not in binary form"<<endl;
+        std::cout<<"ERROR in TreeDecompositionPACE::joinFormat, the Raw abstract tree decomposition is not in binary form"<<std::endl;
         exit(20);
     }else if(node->children.size()==2){
             node->type="Join";
             if(!(node->bag ==node->children[0]->bag)){
-                shared_ptr<RawAbstractTreeDecomposition> new_node(new RawAbstractTreeDecomposition);
+                std::shared_ptr<RawAbstractTreeDecomposition> new_node(new RawAbstractTreeDecomposition);
                 new_node->bag = node->bag;
                 new_node->children.push_back(node->children[0]);
                 node->children[0]->parent = new_node;
@@ -205,7 +205,7 @@ bool TreeDecompositionPACE::joinFormat(shared_ptr<RawAbstractTreeDecomposition> 
                 joinFormat(node->children[0]);
             }
             if(!(node->bag == node->children[1]->bag)){
-                shared_ptr<RawAbstractTreeDecomposition> new_node(new RawAbstractTreeDecomposition);
+                std::shared_ptr<RawAbstractTreeDecomposition> new_node(new RawAbstractTreeDecomposition);
                 new_node->bag = node->bag;
                 new_node->children.push_back(node->children[1]);
                 node->children[1]->parent = new_node;
@@ -223,10 +223,10 @@ bool TreeDecompositionPACE::joinFormat(shared_ptr<RawAbstractTreeDecomposition> 
     return true;
 }
 
-bool TreeDecompositionPACE::addEmptyNodes(shared_ptr<RawAbstractTreeDecomposition> node){
+bool TreeDecompositionPACE::addEmptyNodes(std::shared_ptr<RawAbstractTreeDecomposition> node){
     if(node->children.size()==0){
         if(node->bag.get_elements().size()>0){
-            shared_ptr<RawAbstractTreeDecomposition> empty_node(new RawAbstractTreeDecomposition);
+            std::shared_ptr<RawAbstractTreeDecomposition> empty_node(new RawAbstractTreeDecomposition);
             empty_node->type = "Leaf";
             node->children.push_back(empty_node);
             empty_node->parent = node;
@@ -241,25 +241,25 @@ bool TreeDecompositionPACE::addEmptyNodes(shared_ptr<RawAbstractTreeDecompositio
     return true;
 }
 
-bool TreeDecompositionPACE::addIntroVertex(shared_ptr<RawAbstractTreeDecomposition> node){
+bool TreeDecompositionPACE::addIntroVertex(std::shared_ptr<RawAbstractTreeDecomposition> node){
     if(node->children.size()==1){
-        set<unsigned> set_diff;
-        set<unsigned> elements_node = node->bag.get_elements();
-        set<unsigned> elements_node_child = node->children[0]->bag.get_elements();
+        std::set<unsigned> set_diff;
+        std::set<unsigned> elements_node = node->bag.get_elements();
+        std::set<unsigned> elements_node_child = node->children[0]->bag.get_elements();
         set_difference(elements_node.begin(),elements_node.end(), elements_node_child.begin(), elements_node_child.end(), inserter(set_diff, set_diff.begin()));
         if(set_diff.size()>1){
-            shared_ptr<RawAbstractTreeDecomposition> new_node(new RawAbstractTreeDecomposition);
+            std::shared_ptr<RawAbstractTreeDecomposition> new_node(new RawAbstractTreeDecomposition);
             new_node->children.push_back(node->children[0]);
             new_node->children[0]->parent = new_node;
             node->children[0] = new_node;
             new_node->parent = node;
-            set<unsigned> elements_node_new = node->bag.get_elements();
+            std::set<unsigned> elements_node_new = node->bag.get_elements();
             elements_node_new.erase(*set_diff.begin());
             new_node->bag.set_elements(elements_node_new);
-            node->type = "IntroVertex_"+to_string(*set_diff.begin());
+            node->type = "IntroVertex_"+std::to_string(*set_diff.begin());
             addIntroVertex(new_node);
         }else if(set_diff.size()==1){
-           node->type="IntroVertex_"+to_string(*set_diff.begin());
+           node->type="IntroVertex_"+std::to_string(*set_diff.begin());
            addIntroVertex(node->children[0]);
         }else{
             addIntroVertex(node->children[0]);
@@ -269,17 +269,17 @@ bool TreeDecompositionPACE::addIntroVertex(shared_ptr<RawAbstractTreeDecompositi
         addIntroVertex(node->children[1]);
     }else if(node->children.size() >2){
 
-        cout << "ERROR in TreeDecompositionPACE::addIntroVertex, node has more that two children. Number of Children = " << node->children.size()<<endl;
+        std::cout << "ERROR in TreeDecompositionPACE::addIntroVertex, node has more that two children. Number of Children = " << node->children.size()<<std::endl;
         exit(20);
     }
 //    for(auto it:node->children){
 //        if(node->type == it->type and node->type!="Join"){
-//            cout<<"ERROR in TreeDecompositionPACE::addIntroVertex, has same IntroVertex type"<<endl;
-//            cout<<node->type<<" "<<it->type<<endl;
+//            std::cout<<"ERROR in TreeDecompositionPACE::addIntroVertex, has same IntroVertex type"<<std::endl;
+//            std::cout<<node->type<<" "<<it->type<<std::endl;
 ////            node->bag.print();
-////            cout<<endl;
+////            std::cout<<std::endl;
 ////            it->bag.print();
-////            cout<<"\n"<<it->children.size()<<endl;
+////            std::cout<<"\n"<<it->children.size()<<std::endl;
 ////            printTree();
 //            exit(20);
 //        }
@@ -287,39 +287,39 @@ bool TreeDecompositionPACE::addIntroVertex(shared_ptr<RawAbstractTreeDecompositi
     return true;
 }
 
-bool TreeDecompositionPACE::addForgetVertex(shared_ptr<RawAbstractTreeDecomposition> node){
+bool TreeDecompositionPACE::addForgetVertex(std::shared_ptr<RawAbstractTreeDecomposition> node){
     if(node->children.size()==1){
-        set<unsigned> set_diff;
-        set<unsigned> elements_node = node->bag.get_elements();
-        set<unsigned> elements_node_child = node->children[0]->bag.get_elements();
+        std::set<unsigned> set_diff;
+        std::set<unsigned> elements_node = node->bag.get_elements();
+        std::set<unsigned> elements_node_child = node->children[0]->bag.get_elements();
         set_difference(elements_node_child.begin(), elements_node_child.end(), elements_node.begin(), elements_node.end(), inserter(set_diff, set_diff.begin()));
         if(set_diff.size()>1){
             if(node->type==""){
-                shared_ptr<RawAbstractTreeDecomposition> new_node(new RawAbstractTreeDecomposition);
+                std::shared_ptr<RawAbstractTreeDecomposition> new_node(new RawAbstractTreeDecomposition);
                 new_node->children.push_back(node->children[0]);
                 new_node->children[0]->parent = new_node;
                 node->children[0] = new_node;
                 new_node->parent = node;
-                set<unsigned> elements_node_new = node->bag.get_elements();
+                std::set<unsigned> elements_node_new = node->bag.get_elements();
                 elements_node_new.insert(*set_diff.rbegin());
                 //set<unsigned> elements_node_new = new_node->children[0]->bag.get_elements();
                 //elements_node_new.erase(*set_diff.rbegin());
                 new_node->bag.set_elements(elements_node_new);
-                node->type = "ForgetVertex_"+to_string(*set_diff.rbegin());
+                node->type = "ForgetVertex_"+std::to_string(*set_diff.rbegin());
                 addForgetVertex(new_node);
             }else{
                 set_diff.clear();
                 set_difference(elements_node.begin(),elements_node.end(), elements_node_child.begin(), elements_node_child.end(), inserter(set_diff, set_diff.begin()));
                 if(set_diff.size()!=1){
-                  cout<<"Error in TreeDecompositionPACE::addForgetVertex, set_diff size is not 1.";
+                  std::cout<<"Error in TreeDecompositionPACE::addForgetVertex, set_diff size is not 1.";
                   exit(20);
                 }else{
-                  shared_ptr<RawAbstractTreeDecomposition> new_node(new RawAbstractTreeDecomposition);
+                  std::shared_ptr<RawAbstractTreeDecomposition> new_node(new RawAbstractTreeDecomposition);
                   new_node->children.push_back(node->children[0]);
                   new_node->children[0]->parent = new_node;
                   node->children[0] = new_node;
                   new_node->parent = node;
-                  set<unsigned> elements_node_new = node->bag.get_elements();
+                  std::set<unsigned> elements_node_new = node->bag.get_elements();
                   elements_node_new.erase(*set_diff.begin());
                   new_node->bag.set_elements(elements_node_new);
                   addForgetVertex(new_node);
@@ -327,21 +327,21 @@ bool TreeDecompositionPACE::addForgetVertex(shared_ptr<RawAbstractTreeDecomposit
             }
         }else if(set_diff.size()==1){
            if(node->type==""){
-                node->type="ForgetVertex_"+to_string(*set_diff.begin());
+                node->type="ForgetVertex_"+std::to_string(*set_diff.begin());
                 addForgetVertex(node->children[0]);
            }else{
                set_diff.clear();
                set_difference(elements_node.begin(),elements_node.end(), elements_node_child.begin(), elements_node_child.end(), inserter(set_diff, set_diff.begin()));
                if(set_diff.size()!=1){
-                   cout<<"Error in TreeDecompositionPACE::addForgetVertex, set_diff size is not 1.";
+                   std::cout<<"Error in TreeDecompositionPACE::addForgetVertex, set_diff size is not 1.";
                    exit(20);
                }
-                shared_ptr<RawAbstractTreeDecomposition> new_node(new RawAbstractTreeDecomposition);
+                std::shared_ptr<RawAbstractTreeDecomposition> new_node(new RawAbstractTreeDecomposition);
                 new_node->children.push_back(node->children[0]);
                 new_node->children[0]->parent = new_node;
                 node->children[0] = new_node;
                 new_node->parent = node;
-                set<unsigned> elements_node_new = node->bag.get_elements();
+                std::set<unsigned> elements_node_new = node->bag.get_elements();
                 //set<unsigned> elements_node_new = new_node->children[0]->bag.get_elements();
                 //elements_node_new.erase(*set_diff.begin());
                 elements_node_new.erase(*set_diff.begin());
@@ -357,50 +357,50 @@ bool TreeDecompositionPACE::addForgetVertex(shared_ptr<RawAbstractTreeDecomposit
     }
     for(auto it:node->children){
         if(node->type == it->type and node->type!="Join"){
-            cout<<"ERROR in TreeDecompositionPACE::addIntroVertex, has same ForgetVertex type"<<endl;
+            std::cout<<"ERROR in TreeDecompositionPACE::addIntroVertex, has same ForgetVertex type"<<std::endl;
             exit(20);
         }
     }
     return true;
 }
 
-bool TreeDecompositionPACE::addIntroEdge(shared_ptr<RawAbstractTreeDecomposition> node, set<unsigned> &visited_edges) {
+bool TreeDecompositionPACE::addIntroEdge(std::shared_ptr<RawAbstractTreeDecomposition> node, std::set<unsigned> &visited_edges) {
     if (strstr(node->type.c_str(), "IntroVertex")) {
-        set<unsigned> set_diff;
-        set<unsigned> elements_node = node->bag.get_elements();
-        set<unsigned> elements_node_child = node->children[0]->bag.get_elements();
+        std::set<unsigned> set_diff;
+        std::set<unsigned> elements_node = node->bag.get_elements();
+        std::set<unsigned> elements_node_child = node->children[0]->bag.get_elements();
         set_difference(elements_node.begin(), elements_node.end(), elements_node_child.begin(),
                        elements_node_child.end(), inserter(set_diff, set_diff.begin()));
         if (set_diff.size() != 1) {
-            cout << "ERROR in TreeDecompositionPACE::addIntroEdgeRecursion, set_diff is not verified" << endl;
+            std::cout << "ERROR in TreeDecompositionPACE::addIntroEdgeRecursion, set_diff is not verified" << std::endl;
             node->bag.print();
-            cout << "\n" << node->type << endl;
+            std::cout << "\n" << node->type << std::endl;
             node->children[0]->bag.print();
-            cout << "\n" << node->children[0]->type << endl;
+            std::cout << "\n" << node->children[0]->type << std::endl;
             node->children[0]->children[0]->bag.print();
-            cout << "\n" << node->children[0]->children[0]->type << endl;
+            std::cout << "\n" << node->children[0]->children[0]->type << std::endl;
             node->children[0]->children[0]->children[0]->bag.print();
-            cout << "\n" << node->children[0]->children[0]->children[0]->type << endl;
+            std::cout << "\n" << node->children[0]->children[0]->children[0]->type << std::endl;
             exit(20);
         } else {
             unsigned introducedVertex = (unsigned) *set_diff.begin();
-            multimap<unsigned, unsigned> incidence = multigraph->getIncidenceMap();
-            vector<shared_ptr<RawAbstractTreeDecomposition> > generated_nodes;
+            std::multimap<unsigned, unsigned> incidence = multigraph->getIncidenceMap();
+            std::vector<std::shared_ptr<RawAbstractTreeDecomposition> > generated_nodes;
             for (auto it = incidence.begin(); it != incidence.end(); it++) {
                 if (it->second == introducedVertex) {
                     if (visited_edges.find(it->first) == visited_edges.end()) {
                         for (auto itr = incidence.begin(); itr != incidence.end(); itr++) {
                             if (itr->second != it->second and itr->first==it->first and (node->bag.get_elements().count(itr->second) > 0)) {
                                 visited_edges.insert(it->first);
-                                shared_ptr<RawAbstractTreeDecomposition> new_node(new RawAbstractTreeDecomposition);
+                                std::shared_ptr<RawAbstractTreeDecomposition> new_node(new RawAbstractTreeDecomposition);
                                 new_node->bag = node->bag;
                                 if (it->second < itr->second) {
                                     new_node->type =
-                                            "IntroEdge_" + to_string(it->second) + "_" + to_string(itr->second);
+                                            "IntroEdge_" + std::to_string(it->second) + "_" + std::to_string(itr->second);
                                     new_node->bag.set_edge(it->second, itr->second);
                                 } else {
                                     new_node->type =
-                                            "IntroEdge_" + to_string(itr->second) + "_" + to_string(it->second);
+                                            "IntroEdge_" + std::to_string(itr->second) + "_" + std::to_string(it->second);
                                     new_node->bag.set_edge(itr->second, it->second);
                                 }
                                 generated_nodes.push_back(new_node);
@@ -442,26 +442,26 @@ bool TreeDecompositionPACE::addIntroEdge(shared_ptr<RawAbstractTreeDecomposition
     } else if (strstr(node->type.c_str(), "Leaf")) {
         return true;
     } else {
-        cout << "ERROR in TreeDecompositionPACE::addIntroEdgeRecursion, node type is not satisfied" << endl;
+        std::cout << "ERROR in TreeDecompositionPACE::addIntroEdgeRecursion, node type is not satisfied" << std::endl;
         exit(20);
     }
 
 }
-bool TreeDecompositionPACE::colorNode(shared_ptr<RawAbstractTreeDecomposition> node, vector<unsigned> &color_vertex, vector<unsigned> &vertex_color){
+bool TreeDecompositionPACE::colorNode(std::shared_ptr<RawAbstractTreeDecomposition> node, std::vector<unsigned> &color_vertex, std::vector<unsigned> &vertex_color){
     if(!node->parent){
         // here is for root coloring
         unsigned color=1;
-        set<unsigned> elements = node->bag.get_elements();
+        std::set<unsigned> elements = node->bag.get_elements();
         for(auto it=elements.begin(); it!=elements.end(); it++){
                vertex_color[*it-1]=color;
                color_vertex[color-1]=*it;
-               node->color_to_vertex_map.insert(make_pair(color,*it));
+               node->color_to_vertex_map.insert(std::make_pair(color,*it));
                color++;
         }
     }else{
-        set<unsigned> set_diff;
-        set<unsigned> elements_node = node->bag.get_elements();
-        set<unsigned> elements_node_parent = node->parent->bag.get_elements();
+        std::set<unsigned> set_diff;
+        std::set<unsigned> elements_node = node->bag.get_elements();
+        std::set<unsigned> elements_node_parent = node->parent->bag.get_elements();
         set_difference(elements_node_parent.begin(), elements_node_parent.end(), elements_node.begin(), elements_node.end(),inserter(set_diff, set_diff.begin()));
         node->color_to_vertex_map = node->parent->color_to_vertex_map;
         for(auto it=set_diff.begin(); it!=set_diff.end(); it++){
@@ -475,19 +475,19 @@ bool TreeDecompositionPACE::colorNode(shared_ptr<RawAbstractTreeDecomposition> n
             if(itr!=color_vertex.end()){
                 color_vertex[itr-color_vertex.begin()]=*it;
                 vertex_color[*it-1]=itr-color_vertex.begin()+1;
-                node->color_to_vertex_map.insert(make_pair(itr-color_vertex.begin()+1,*it));
+                node->color_to_vertex_map.insert(std::make_pair(itr-color_vertex.begin()+1,*it));
             }else{
-                cout<<"ERROR in TreeDecompositionPACE::colorNode there is no an available color!"<<endl;
+                std::cout<<"ERROR in TreeDecompositionPACE::colorNode there is no an available color!"<<std::endl;
                 exit(20);
             }
         }
     }
     if(node->children.size()==2){
         // Because tree decomposition is divided to two subtrees, we have to pass color vectors
-        vector<unsigned > color_vertex1 = color_vertex;
-        vector<unsigned > color_vertex2 = color_vertex;
-        vector<unsigned > vertex_color1 = vertex_color;
-        vector<unsigned > vertex_color2 = vertex_color;
+        std::vector<unsigned> color_vertex1 = color_vertex;
+        std::vector<unsigned> color_vertex2 = color_vertex;
+        std::vector<unsigned> vertex_color1 = vertex_color;
+        std::vector<unsigned> vertex_color2 = vertex_color;
         colorNode(node->children[0], color_vertex1, vertex_color1);
         colorNode(node->children[1], color_vertex2, vertex_color2);
     }else if( node->children.size()==1){
@@ -497,20 +497,20 @@ bool TreeDecompositionPACE::colorNode(shared_ptr<RawAbstractTreeDecomposition> n
     return true;
 }
 bool TreeDecompositionPACE::colorTree(){
-    vector<unsigned> color_vertex;
-    vector<unsigned> vertex_color;
+    std::vector<unsigned> color_vertex;
+    std::vector<unsigned> vertex_color;
     color_vertex.resize(width+1,0);
     vertex_color.resize(multigraph->getVertices().size(),0);
     return  colorNode(root,color_vertex,vertex_color);
 }
-bool TreeDecompositionPACE::updateInnerNodeTD(shared_ptr<RawAbstractTreeDecomposition> node, unsigned &number, unsigned parentno){
+bool TreeDecompositionPACE::updateInnerNodeTD(std::shared_ptr<RawAbstractTreeDecomposition> node, unsigned &number, unsigned parentno){
     number++;
     parentno=number;
     bags.push_back(node->bag.get_elements());
     num_vertices++;
     num_edges = num_edges + node->children.size();
     for(size_t i=0; i < node->children.size();i++){
-        edges.insert(make_pair(parentno,number+1));
+        edges.insert(std::make_pair(parentno,number+1));
         updateInnerNodeTD(node->children[i],number,parentno);
     }
     return true;
@@ -535,22 +535,22 @@ void TreeDecompositionPACE::construct() {
 
     addForgetVertex(root);
 
-    set<unsigned> visited_edges;
+    std::set<unsigned> visited_edges;
     addIntroEdge(root,visited_edges);
-   // for(auto item:visited_edges){cout<<item<<",";}cout<<endl;
+   // for(auto item:visited_edges){std::cout<<item<<",";}std::cout<<std::endl;
     colorTree();
     updateTD();
     validateTree(root);
-    cout<<"Construction finished"<<endl;
+    std::cout<<"Construction finished"<<std::endl;
 }
 
-void TreeDecompositionPACE::createCTDNode(shared_ptr<TermNode<ConcreteNode>> cnode, shared_ptr<RawAbstractTreeDecomposition> rnode) {
+void TreeDecompositionPACE::createCTDNode(std::shared_ptr<TermNode<ConcreteNode>> cnode, std::shared_ptr<RawAbstractTreeDecomposition> rnode) {
     ConcreteNode concrete;
     concrete.setSymbol(rnode->type);
     Bag bag;
-    set<unsigned> bag_elements;
-    pair<unsigned,unsigned> e_new = make_pair(0,0);
-    pair<unsigned,unsigned> e = rnode->bag.get_edge();
+    std::set<unsigned> bag_elements;
+    std::pair<unsigned,unsigned> e_new = std::make_pair(0,0);
+    std::pair<unsigned,unsigned> e = rnode->bag.get_edge();
     for(auto it= rnode->color_to_vertex_map.begin(); it!= rnode->color_to_vertex_map.end();it++){
         bag_elements.insert(it->first);
         if(e.first == it->second){
@@ -560,14 +560,14 @@ void TreeDecompositionPACE::createCTDNode(shared_ptr<TermNode<ConcreteNode>> cno
         }
     }
     if(e_new.first > e_new.second){
-        swap(e_new.first,e_new.second);
+        std::swap(e_new.first,e_new.second);
     }
     bag.set_elements(bag_elements);
     bag.set_edge(e_new.first,e_new.second);
     concrete.setBag(bag);
-    vector<shared_ptr<TermNode<ConcreteNode>>> children;
+    std::vector<std::shared_ptr<TermNode<ConcreteNode>>> children;
     for(size_t i=0 ; i < rnode->children.size(); i++){
-        shared_ptr<TermNode<ConcreteNode> > ctdnode(new TermNode<ConcreteNode>);
+        std::shared_ptr<TermNode<ConcreteNode> > ctdnode(new TermNode<ConcreteNode>);
         createCTDNode(ctdnode, rnode->children[i]);
         children.push_back(ctdnode);
         ctdnode->setParent(cnode);
@@ -575,41 +575,41 @@ void TreeDecompositionPACE::createCTDNode(shared_ptr<TermNode<ConcreteNode>> cno
 
     cnode->setChildren(children);
     if(strstr(rnode->type.c_str(),"IntroEdge_")){
-        string type = "IntroEdge_"+to_string(e_new.first)+"_"+to_string(e_new.second);
+        std::string type = "IntroEdge_"+std::to_string(e_new.first)+"_"+std::to_string(e_new.second);
         concrete.setSymbol(type);
     }else if(strstr(rnode->type.c_str(),"IntroVertex_")){
-        set<unsigned> set_diff;
-        set<unsigned> elements_node = concrete.getBag().get_elements();
-        set<unsigned> elements_node_child = cnode->getChildren()[0]->getNodeContent().getBag().get_elements();
+        std::set<unsigned> set_diff;
+        std::set<unsigned> elements_node = concrete.getBag().get_elements();
+        std::set<unsigned> elements_node_child = cnode->getChildren()[0]->getNodeContent().getBag().get_elements();
         set_difference( elements_node.begin(), elements_node.end(),elements_node_child.begin(), elements_node_child.end(),inserter(set_diff, set_diff.begin()));
         if(set_diff.size()!=1){
-            cout<<"ERROR in TreeDecompositionPACE::createCTDNode(IntroVertex), set_diff is not valid"<<endl;
+            std::cout<<"ERROR in TreeDecompositionPACE::createCTDNode(IntroVertex), set_diff is not valid"<<std::endl;
             exit(20);
         }
-        concrete.setSymbol("IntroVertex_"+to_string(*set_diff.begin()));
+        concrete.setSymbol("IntroVertex_"+std::to_string(*set_diff.begin()));
     }else if(strstr(rnode->type.c_str(),"ForgetVertex_")){
-        set<unsigned> set_diff;
-        set<unsigned> elements_node = concrete.getBag().get_elements();
-        set<unsigned> elements_node_child = cnode->getChildren()[0]->getNodeContent().getBag().get_elements();
+        std::set<unsigned> set_diff;
+        std::set<unsigned> elements_node = concrete.getBag().get_elements();
+        std::set<unsigned> elements_node_child = cnode->getChildren()[0]->getNodeContent().getBag().get_elements();
         set_difference(elements_node_child.begin(),elements_node_child.end(),elements_node.begin(), elements_node.end(),inserter(set_diff, set_diff.begin()));
         if(set_diff.size()!=1){
-            cout<<"ERORR in TreeDecompositionPACE::createCTDNode(ForgetVertex), set_diff is not valid"<<endl;
+            std::cout<<"ERORR in TreeDecompositionPACE::createCTDNode(ForgetVertex), set_diff is not valid"<<std::endl;
             exit(20);
         }
-        concrete.setSymbol("ForgetVertex_"+to_string(*set_diff.begin()));
+        concrete.setSymbol("ForgetVertex_"+std::to_string(*set_diff.begin()));
     }
     cnode->setNodeContent(concrete);
 }
 
-shared_ptr<ConcreteTreeDecomposition> TreeDecompositionPACE::convertToConcreteTreeDecomposition() {
-    shared_ptr<ConcreteTreeDecomposition> concreteTreeDecomposition(new ConcreteTreeDecomposition);
-    shared_ptr<TermNode<ConcreteNode> > ctd_root(new TermNode<ConcreteNode>);
+std::shared_ptr<ConcreteTreeDecomposition> TreeDecompositionPACE::convertToConcreteTreeDecomposition() {
+    std::shared_ptr<ConcreteTreeDecomposition> concreteTreeDecomposition(new ConcreteTreeDecomposition);
+    std::shared_ptr<TermNode<ConcreteNode> > ctd_root(new TermNode<ConcreteNode>);
     concreteTreeDecomposition->setRoot(ctd_root);
     createCTDNode(ctd_root, root);
     return concreteTreeDecomposition;
 }
 
-void TreeDecompositionPACE::setWidthType(const string &widthType) {
+void TreeDecompositionPACE::setWidthType(const std::string &widthType) {
     width_type = widthType;
 }
 
@@ -617,67 +617,67 @@ unsigned int TreeDecompositionPACE::getWidth() const {
     return width;
 }
 
-const string &TreeDecompositionPACE::getWidthType() const {
+const std::string &TreeDecompositionPACE::getWidthType() const {
     return width_type;
 }
 
-bool TreeDecompositionPACE::validateTree(shared_ptr<RawAbstractTreeDecomposition> node) {
+bool TreeDecompositionPACE::validateTree(std::shared_ptr<RawAbstractTreeDecomposition> node) {
     if(node->children.size()==2){
         if(node->type!="Join"){
-            cout<<"Error in TreeDecompositionPACE::validateTree, join type"<<endl;
+            std::cout<<"Error in TreeDecompositionPACE::validateTree, join type"<<std::endl;
             exit(20);
         }
         if(node->children[0]->bag.get_elements() != node->children[1]->bag.get_elements()){
-            cout<< "  Error in TreeDecompositionPACE::validateTree, children of a join node do not have a same bagSet"<<endl;
+            std::cout<< "  Error in TreeDecompositionPACE::validateTree, children of a join node do not have a same bagSet"<<std::endl;
             exit(20);
         }
         return validateTree(node->children[0]) and validateTree(node->children[1]);
     }else if (node->children.size()==1){
         if(strstr(node->type.c_str(),"IntroVertex")){
-            set<unsigned > set_diff;
-            set<unsigned > elements = node->bag.get_elements();
-            set<unsigned > childElements = node->children[0]->bag.get_elements();
+            std::set<unsigned > set_diff;
+            std::set<unsigned > elements = node->bag.get_elements();
+            std::set<unsigned > childElements = node->children[0]->bag.get_elements();
             set_difference(elements.begin(),elements.end(),childElements.begin(),
                            childElements.end(), inserter(set_diff,set_diff.begin()));
             if(set_diff.size()!=1){
-                cout<<"Error in TreeDecompositionPACE::validateTree, IntroVertex, set_diff is invalid"<<endl;
+                std::cout<<"Error in TreeDecompositionPACE::validateTree, IntroVertex, set_diff is invalid"<<std::endl;
                 exit(20);
             }
         }else if (strstr(node->type.c_str(),"ForgetVertex")){
-            set<unsigned > set_diff;
-            set<unsigned > elements = node->bag.get_elements();
-            set<unsigned > childElements = node->children[0]->bag.get_elements();
+            std::set<unsigned > set_diff;
+            std::set<unsigned > elements = node->bag.get_elements();
+            std::set<unsigned > childElements = node->children[0]->bag.get_elements();
             set_difference(childElements.begin(),
                            childElements.end(), elements.begin(),elements.end(),inserter(set_diff,set_diff.begin()));
             if(set_diff.size()!=1){
-                cout<<"Error in TreeDecompositionPACE::validateTree, ForgetVertex, set_diff is invalid"<<endl;
+                std::cout<<"Error in TreeDecompositionPACE::validateTree, ForgetVertex, set_diff is invalid"<<std::endl;
                 exit(20);
             }
         }else if(strstr(node->type.c_str(),"IntroEdge")){
-            pair<unsigned ,unsigned > e = make_pair(0,0);
-            pair nodeEdge = node->bag.get_edge();
+            std::pair<unsigned ,unsigned > e = std::make_pair(0,0);
+            std::pair nodeEdge = node->bag.get_edge();
             if(nodeEdge == e){
-                cout<<"Error in TreeDecompositionPACE::validateTree, IntroEdge, nodeEdge is invalid"<<endl;
+                std::cout<<"Error in TreeDecompositionPACE::validateTree, IntroEdge, nodeEdge is invalid"<<std::endl;
                 exit(20);
             }
         }else{
-            cout<<"Error in TreeDecompositionPACE::validateTree, node type is invalid ("<<node->type<<")"<<endl;
+            std::cout<<"Error in TreeDecompositionPACE::validateTree, node type is invalid ("<<node->type<<")"<<std::endl;
             exit(20);
         }
         return validateTree(node->children[0]);
     }else if(node->children.size()==0){
         if(strstr(node->type.c_str(),"Leaf")){
             if(!node->bag.get_elements().empty()){
-                cout<<"Error in TreeDecompositionPACE::validateTree, Leaf is invalid"<<endl;
+                std::cout<<"Error in TreeDecompositionPACE::validateTree, Leaf is invalid"<<std::endl;
                 exit(20);
             }
         }else{
-            cout<<"Error in TreeDecompositionPACE::validateTree, node type is invalid ("<<node->type<<")"<<endl;
+            std::cout<<"Error in TreeDecompositionPACE::validateTree, node type is invalid ("<<node->type<<")"<<std::endl;
             exit(20);
         }
         return true;
     }else{
-        cout<<"Error in TreeDecompositionPACE::validateTree, node children is invalid"<<endl;
+        std::cout<<"Error in TreeDecompositionPACE::validateTree, node children is invalid"<<std::endl;
         exit(20);
     }
 }

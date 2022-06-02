@@ -60,18 +60,18 @@ bool DynamicCore::is_final_set_witness(Bag &b, WitnessSetPointer witnessSet) {
 WitnessSetPointer DynamicCore::clean(WitnessSetPointer witnessSet) {
 	// By default, if this function is not implemented by a derived class
 	// this function simply returns a pointer to the input witness set.
-	cout<< "generic clean is called"<<endl;
+	std::cout<< "generic clean is called"<<std::endl;
 	return witnessSet;
 }
 
 int DynamicCore::weight(WitnessSetPointer witnessSet) {
-	set<int> values;
+	std::set<int> values;
 	for(auto temp : *witnessSet){
         values.insert(weight(*temp) );
 	}
-    string coreType = getAttributeValue("CoreType");
+    std::string coreType = getAttributeValue("CoreType");
     if(coreType=="NULL" or  coreType==""){
-        cout<<"Error: DynamicCore::weight CoreType has not specified"<<endl;
+        std::cout<<"Error: DynamicCore::weight CoreType has not specified"<<std::endl;
         exit(20);
     }else if(coreType=="Min" or coreType=="Max"){
         if(values.size()==0){
@@ -87,47 +87,47 @@ int DynamicCore::weight(WitnessSetPointer witnessSet) {
 }
 
 WitnessSetPointer DynamicCore::intro_v(unsigned i, Bag &b, Witness &witness) {
-	cout << "ERROR: DynamicCore::intro_v";
+	std::cout << "ERROR: DynamicCore::intro_v";
 	exit(20);
 }
 
 WitnessSetPointer DynamicCore::intro_e(unsigned i, unsigned j, Bag &b,
 									   Witness &witness) {
-	cout << "ERROR: DynamicCore::intro_e";
+	std::cout << "ERROR: DynamicCore::intro_e";
 	exit(20);
 }
 
 WitnessSetPointer DynamicCore::forget_v(unsigned i, Bag &b, Witness &witness) {
-	cout << "ERROR: DynamicCore::forget_v";
+	std::cout << "ERROR: DynamicCore::forget_v";
 	exit(20);
 }
 
 WitnessSetPointer DynamicCore::join(Bag &b, Witness &witness1,
 									Witness &witness2) {
-	cout << "ERROR: DynamicCore::join";
+	std::cout << "ERROR: DynamicCore::join";
 	exit(20);
 }
 
 bool DynamicCore::is_final_witness(Witness &witness) {
-	cout << "ERROR: DynamicCore::is_final_witness";
+	std::cout << "ERROR: DynamicCore::is_final_witness";
 	exit(20);
 }
 
 int DynamicCore::weight(Witness &witness) {
-	cout << "ERROR: DynamicCore::weight";
+	std::cout << "ERROR: DynamicCore::weight";
 	exit(20);
 }
 
 void DynamicCore::createInitialWitnessSet() {
-	cout << "ERROR: DynamicCore::createInitialWitnessSet";
+	std::cout << "ERROR: DynamicCore::createInitialWitnessSet";
 	exit(20);
 }
 
-void DynamicCore::addAttribute(string x, string y) {
+void DynamicCore::addAttribute(std::string x, std::string y) {
     attributes.insert(make_pair(x,y));
 }
 
-bool DynamicCore::isAttribute(string x, string y) {
+bool DynamicCore::isAttribute(std::string x, std::string y) {
     auto it = attributes.find(x);
     if(it!=attributes.end()){
         if(it->second==y){
@@ -137,7 +137,7 @@ bool DynamicCore::isAttribute(string x, string y) {
     return false;
 }
 
-string DynamicCore::getAttributeValue(string x) {
+std::string DynamicCore::getAttributeValue(std::string x) {
     auto it = attributes.find(x);
     if(it!=attributes.end()){
         return it->second;
@@ -147,7 +147,7 @@ string DynamicCore::getAttributeValue(string x) {
 
 }
 
-map<string, string> DynamicCore::getAttributes() {
+std::map<std::string, std::string> DynamicCore::getAttributes() {
     return attributes;
 }
 

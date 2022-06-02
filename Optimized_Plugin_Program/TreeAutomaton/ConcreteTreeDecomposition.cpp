@@ -7,10 +7,10 @@ const Bag &ConcreteNode::getBag() const {
 void ConcreteNode::setBag(const Bag &bag) {
     ConcreteNode::bag = bag;
 }
-const string &ConcreteNode::getSymbol() const {
+const std::string &ConcreteNode::getSymbol() const {
     return symbol;
 }
-void ConcreteNode::setSymbol(const string &symbol) {
+void ConcreteNode::setSymbol(const std::string &symbol) {
     ConcreteNode::symbol = symbol;
 }
 bool ConcreteNode::operator==(const ConcreteNode &rhs) const {
@@ -37,20 +37,20 @@ bool ConcreteNode::operator>=(const ConcreteNode &rhs) const {
     return !(*this < rhs);
 }
 void ConcreteNode::print() {
-    cout<<symbol<<" ";
+    std::cout<<symbol<<" ";
     bag.print();
 }
-string ConcreteNode::nodeInformation() {
-    string info = symbol + bag.bagInformation();
+std::string ConcreteNode::nodeInformation() {
+    std::string info = symbol + bag.bagInformation();
     return info;
 }
 MultiGraph ConcreteTreeDecomposition::extractMultiGraph() {
     MultiGraph G;
-    map<unsigned, unsigned> colorToVertexMap;
+    std::map<unsigned, unsigned> colorToVertexMap;
     unsigned nVertices = 0;
     unsigned nEdges = 0;
-    set<unsigned> elements = this->getRoot()->getNodeContent().getBag().get_elements();
-    set<unsigned>::iterator it = elements.begin();
+    std::set<unsigned> elements = this->getRoot()->getNodeContent().getBag().get_elements();
+    std::set<unsigned>::iterator it = elements.begin();
     for (size_t i = 1; i <= this->getRoot()->getNodeContent().getBag().get_elements().size(); ++i) {
         colorToVertexMap[*it] = i; // creates one vertex for each color.
         nVertices = i;
@@ -61,25 +61,25 @@ MultiGraph ConcreteTreeDecomposition::extractMultiGraph() {
     return G;
 }
 void ConcreteTreeDecomposition::traverseNode(TermNode<ConcreteNode> &node, MultiGraph &G,
-        map<unsigned int, unsigned int> &colorToVertexMap, unsigned int &nVertices,
+        std::map<unsigned int, unsigned int> &colorToVertexMap, unsigned int &nVertices,
         unsigned int &nEdges) {
-    map<unsigned, unsigned> colorToVertexMapCopy = colorToVertexMap;
+    std::map<unsigned, unsigned> colorToVertexMapCopy = colorToVertexMap;
     if (node.getNodeContent().getSymbol() == "Leaf") {
         // do nothing
     } else if (strstr(node.getNodeContent().getSymbol().c_str(), "IntroVertex")) {
         /////////////// Finding the introduced vertex ///////////
-        set<unsigned> bagSet = node.getNodeContent().getBag().get_elements();
-        set<unsigned> childBagSet =
+        std::set<unsigned> bagSet = node.getNodeContent().getBag().get_elements();
+        std::set<unsigned> childBagSet =
             node.getChildren()[0]->getNodeContent().getBag().get_elements();
-        set<unsigned> bagSetDifference;
+        std::set<unsigned> bagSetDifference;
         set_difference(
                 bagSet.begin(), bagSet.end(), childBagSet.begin(),
                 childBagSet.end(),
                 std::inserter(bagSetDifference, bagSetDifference.begin()));
         if (bagSetDifference.size() != 1) {
-            cout << "ERROR: ConcreteTreeDecomposition::traverseNode in "
+            std::cout << "ERROR: ConcreteTreeDecomposition::traverseNode in "
                 "IntroVertex child's bag and node's bag are not valid"
-                << endl;
+                << std::endl;
             exit(20);
         }
         //////////// End of Finding the introduced vertex ///////////
@@ -89,18 +89,18 @@ void ConcreteTreeDecomposition::traverseNode(TermNode<ConcreteNode> &node, Multi
                 nEdges); // Nothing happens. Just process the next bag.
     } else if (strstr(node.getNodeContent().getSymbol().c_str(), "ForgetVertex")) {
         /////////////// Finding the Forgotten vertex ///////////
-        set<unsigned> bagSet = node.getNodeContent().getBag().get_elements();
-        set<unsigned> childBagSet =
+        std::set<unsigned> bagSet = node.getNodeContent().getBag().get_elements();
+        std::set<unsigned> childBagSet =
             node.getChildren()[0]->getNodeContent().getBag().get_elements();
-        set<unsigned> bagSetDifference;
+        std::set<unsigned> bagSetDifference;
         set_difference(
                 childBagSet.begin(), childBagSet.end(), bagSet.begin(),
                 bagSet.end(),
                 std::inserter(bagSetDifference, bagSetDifference.begin()));
         if (bagSetDifference.size() != 1) {
-            cout << "ERROR: ConcreteTreeDecomposition::traverseNode in "
+            std::cout << "ERROR: ConcreteTreeDecomposition::traverseNode in "
                 "ForgetVertex child's bag and node's bag are not valid"
-                << endl;
+                << std::endl;
             exit(20);
         }
         //////////// End of Finding the Forgotten vertex ///////////
@@ -112,7 +112,7 @@ void ConcreteTreeDecomposition::traverseNode(TermNode<ConcreteNode> &node, Multi
                 nEdges); // Nothing happens. Just process the next bag.
     } else if (strstr(node.getNodeContent().getSymbol().c_str(), "IntroEdge")) {
         nEdges = nEdges + 1;
-        pair<unsigned, unsigned> e = node.getNodeContent().getBag().get_edge();
+        std::pair<unsigned, unsigned> e = node.getNodeContent().getBag().get_edge();
         G.addEdgeLabel(nEdges);
         G.addIncidence(nEdges, colorToVertexMap.find(e.first)->second);
         G.addIncidence(nEdges, colorToVertexMap.find(e.second)->second);
@@ -129,12 +129,12 @@ void ConcreteTreeDecomposition::traverseNode(TermNode<ConcreteNode> &node, Multi
 
 Decomposition ConcreteTreeDecomposition::extractDecomposition(){
     Decomposition decomposition;
-    map<unsigned, unsigned> colorToVertexMap;
+    std::map<unsigned, unsigned> colorToVertexMap;
     unsigned nVertices = 0;
     unsigned nEdges = 0;
-    set<unsigned> elements = this->getRoot()->getNodeContent().getBag().get_elements();
-    set<unsigned>::iterator it = elements.begin();
-    shared_ptr<DecompositionNode> root( new DecompositionNode());
+    std::set<unsigned> elements = this->getRoot()->getNodeContent().getBag().get_elements();
+    std::set<unsigned>::iterator it = elements.begin();
+    std::shared_ptr<DecompositionNode> root( new DecompositionNode());
     
     for (size_t i = 1; i <= this->getRoot()->getNodeContent().getBag().get_elements().size(); ++i) {
         colorToVertexMap[*it] = i; // creates one vertex for each color.
@@ -147,30 +147,30 @@ Decomposition ConcreteTreeDecomposition::extractDecomposition(){
     return decomposition;
 }
 
-void ConcreteTreeDecomposition::buildDecompositionBags(shared_ptr<DecompositionNode> node, TermNode<ConcreteNode> &cNode, map<unsigned, unsigned> &colorToVertexMap,
+void ConcreteTreeDecomposition::buildDecompositionBags(std::shared_ptr<DecompositionNode> node, TermNode<ConcreteNode> &cNode, std::map<unsigned, unsigned> &colorToVertexMap,
         unsigned &nVertices){
-    map<unsigned, unsigned> colorToVertexMapCopy = colorToVertexMap;
+    std::map<unsigned, unsigned> colorToVertexMapCopy = colorToVertexMap;
     if (cNode.getNodeContent().getSymbol() == "Leaf") {
         // do nothing
     } else if (strstr(cNode.getNodeContent().getSymbol().c_str(), "IntroVertex")) {
         /////////////// Finding the introduced vertex ///////////
-        set<unsigned> bagSet = cNode.getNodeContent().getBag().get_elements();
-        set<unsigned> childBagSet =
+        std::set<unsigned> bagSet = cNode.getNodeContent().getBag().get_elements();
+        std::set<unsigned> childBagSet =
             cNode.getChildren()[0]->getNodeContent().getBag().get_elements();
-        set<unsigned> bagSetDifference;
+        std::set<unsigned> bagSetDifference;
         set_difference(
                 bagSet.begin(), bagSet.end(), childBagSet.begin(),
                 childBagSet.end(),
                 std::inserter(bagSetDifference, bagSetDifference.begin()));
         if (bagSetDifference.size() != 1) {
-            cout << "ERROR: ConcreteTreeDecomposition::buildDecompositionBags in "
+            std::cout << "ERROR: ConcreteTreeDecomposition::buildDecompositionBags in "
                 "IntroVertex child's bag and node's bag are not valid"
-                << endl;
+                << std::endl;
             exit(20);
         }
         //////////// End of Finding the introduced vertex ///////////
         
-        //shared_ptr<DecompositionNode> nNode (new DecompositionNode());
+        //std::shared_ptr<DecompositionNode> nNode (new DecompositionNode());
         //set<unsigned> vertices = node->getVertices();
         //vertices.erase(*(bagSetDifference.begin()));
         //nNode->setVertices(vertices);
@@ -183,24 +183,24 @@ void ConcreteTreeDecomposition::buildDecompositionBags(shared_ptr<DecompositionN
                 nVertices); // Nothing happens. Just process the next bag.
     } else if (strstr(cNode.getNodeContent().getSymbol().c_str(), "ForgetVertex")) {
         /////////////// Finding the Forgotten vertex ///////////
-        set<unsigned> bagSet = cNode.getNodeContent().getBag().get_elements();
-        set<unsigned> childBagSet =
+        std::set<unsigned> bagSet = cNode.getNodeContent().getBag().get_elements();
+        std::set<unsigned> childBagSet =
             cNode.getChildren()[0]->getNodeContent().getBag().get_elements();
-        set<unsigned> bagSetDifference;
+        std::set<unsigned> bagSetDifference;
         set_difference(
                 childBagSet.begin(), childBagSet.end(), bagSet.begin(),
                 bagSet.end(),
                 std::inserter(bagSetDifference, bagSetDifference.begin()));
         if (bagSetDifference.size() != 1) {
-            cout << "ERROR: ConcreteTreeDecomposition::buildDecompositionBags in "
+            std::cout << "ERROR: ConcreteTreeDecomposition::buildDecompositionBags in "
                 "ForgetVertex child's bag and node's bag are not valid"
-                << endl;
+                << std::endl;
             exit(20);
         }
         //////////// End of Finding the Forgotten vertex ///////////
         nVertices = nVertices + 1;
         colorToVertexMapCopy[*(bagSetDifference.begin())] = nVertices;
-        shared_ptr<DecompositionNode> nNode (new DecompositionNode());
+        std::shared_ptr<DecompositionNode> nNode (new DecompositionNode());
         for(auto item:colorToVertexMapCopy) nNode->addVertex(item.second);
        // nNode->setVertices(node->getVertices());
       //  nNode->addVertex(nVertices);
@@ -219,14 +219,14 @@ void ConcreteTreeDecomposition::buildDecompositionBags(shared_ptr<DecompositionN
     }       
 }
 
-shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> ConcreteTreeDecomposition::constructATDNode(TermNode<ConcreteNode> &node) {
-    shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> atdNode(new TermNode<AbstractTreeDecompositionNodeContent>);
-    vector<shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>>> children;
-    string symbol = node.getNodeContent().getSymbol();
+std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> ConcreteTreeDecomposition::constructATDNode(TermNode<ConcreteNode> &node) {
+    std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> atdNode(new TermNode<AbstractTreeDecompositionNodeContent>);
+    std::vector<std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>>> children;
+    std::string symbol = node.getNodeContent().getSymbol();
     AbstractTreeDecompositionNodeContent abstract;
     abstract.setSymbol(symbol);
     for(auto &child:node.getChildren()){
-        shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> atdChild = constructATDNode(*child);
+        std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> atdChild = constructATDNode(*child);
         atdChild->setParent(atdNode);
         children.push_back(atdChild);
     }
@@ -237,25 +237,25 @@ shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> ConcreteTreeDecomposi
 
 AbstractTreeDecomposition ConcreteTreeDecomposition::convertToAbstractTreeDecomposition() {
     AbstractTreeDecomposition abstractTreeDecomposition;
-    shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> root  = constructATDNode(*this->getRoot());
+    std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> root  = constructATDNode(*this->getRoot());
     abstractTreeDecomposition.setRoot(root);
     return abstractTreeDecomposition;
 }
-void ConcreteTreeDecomposition::writeToFile(string fileName) {
+void ConcreteTreeDecomposition::writeToFile(std::string fileName) {
     //fileName = "CounterExample_ConcreteTreeDecomposition_"+concrete_fs::path(fileName).filename().string();
-    ofstream atdFile (fileName);
+    std::ofstream atdFile (fileName);
     if (atdFile.is_open())
     {
         atdFile << termInformation();
         atdFile.close();
     }
     else {
-        cout << "Unable to open "<< fileName << endl;
+        std::cout << "Unable to open "<< fileName << std::endl;
         exit(20);
     }
 }
 
-shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> ConcreteTreeDecomposition::constructWitnesses(Conjecture &conjecture, shared_ptr<TermNode<ConcreteNode>> node, Flags &flags, string &str) {
+std::shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> ConcreteTreeDecomposition::constructWitnesses(Conjecture &conjecture, std::shared_ptr<TermNode<ConcreteNode>> node, Flags &flags, std::string &str) {
     // First, We check the type of the node
     if (node->getNodeContent().getSymbol() == "Leaf") {
         // if it is an empty, then it is a leaf
@@ -263,30 +263,30 @@ shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> ConcreteTreeDecomp
         if(flags.get("PrintStates")) {
             q->print();
         }
-        shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNode(new TermNode<RunNodeContent<State::ptr,ConcreteNode>>);
-        shared_ptr<RunNodeContent<State::ptr,ConcreteNode>> runNodeContent (new RunNodeContent<State::ptr,ConcreteNode>);
+        std::shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNode(new TermNode<RunNodeContent<State::ptr,ConcreteNode>>);
+        std::shared_ptr<RunNodeContent<State::ptr,ConcreteNode>> runNodeContent (new RunNodeContent<State::ptr,ConcreteNode>);
         runNodeContent->setState(q);
         runNodeContent->setRunNodeContent(node->getNodeContent());
         runNode->setNodeContent(*runNodeContent);
         return runNode;
     } else if (strstr(node->getNodeContent().getSymbol().c_str(), "IntroVertex")) {
-        shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNodeChild = constructWitnesses(conjecture, node->getChildren()[0],flags, str);
+        std::shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNodeChild = constructWitnesses(conjecture, node->getChildren()[0],flags, str);
         State::ptr childState =runNodeChild->getNodeContent().getState();
         // find the introduced vertex
-        set<unsigned> bagSet = node->getNodeContent().getBag().get_elements();
-        set<unsigned> childBagSet = childState->get_bag().get_elements();
-        set<unsigned> bagSetDifference;
+        std::set<unsigned> bagSet = node->getNodeContent().getBag().get_elements();
+        std::set<unsigned> childBagSet = childState->get_bag().get_elements();
+        std::set<unsigned> bagSetDifference;
         set_difference( bagSet.begin(), bagSet.end(), childBagSet.begin(),
                 childBagSet.end(),
                 std::inserter(bagSetDifference, bagSetDifference.begin()));
         if (bagSetDifference.size() != 1) {
-            cout
+            std::cout
                 << "ERROR: ConcreteTreeDecomposition::constructWitnesses "
                 "in "<<node->getNodeContent().getSymbol()<<":child's bag and node's bag are not valid"
-                << endl;
-            cout<<"node's bag: ";
+                << std::endl;
+            std::cout<<"node's bag: ";
             node->getNodeContent().getBag().print();
-            cout<<"\nchild's bag: ";
+            std::cout<<"\nchild's bag: ";
             node->getChildren()[0]->getNodeContent().getBag().print();
             exit(20);
         }
@@ -295,8 +295,8 @@ shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> ConcreteTreeDecomp
         if(flags.get("PrintStates")) {
             q->print();
         }
-        shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNode(new TermNode<RunNodeContent<State::ptr,ConcreteNode>>);
-        shared_ptr<RunNodeContent<State::ptr,ConcreteNode>> runNodeContent (new RunNodeContent<State::ptr,ConcreteNode>);
+        std::shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNode(new TermNode<RunNodeContent<State::ptr,ConcreteNode>>);
+        std::shared_ptr<RunNodeContent<State::ptr,ConcreteNode>> runNodeContent (new RunNodeContent<State::ptr,ConcreteNode>);
         runNodeContent->setState(q);
         runNodeContent->setRunNodeContent(node->getNodeContent());
         runNode->setNodeContent(*runNodeContent);
@@ -305,29 +305,29 @@ shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> ConcreteTreeDecomp
         runNodeChild->setParent(runNode);
         return runNode;
     } else if (strstr(node->getNodeContent().getSymbol().c_str(), "ForgetVertex")) {
-        shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNodeChild = constructWitnesses(conjecture, node->getChildren()[0],flags, str);
+        std::shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNodeChild = constructWitnesses(conjecture, node->getChildren()[0],flags, str);
         State::ptr childState =runNodeChild->getNodeContent().getState();
         // find the forgotten vertex
-        set<unsigned> bagSet = node->getNodeContent().getBag().get_elements();
-        set<unsigned> childBagSet = childState->get_bag().get_elements();
-        set<unsigned> bagSetDifference;
+        std::set<unsigned> bagSet = node->getNodeContent().getBag().get_elements();
+        std::set<unsigned> childBagSet = childState->get_bag().get_elements();
+        std::set<unsigned> bagSetDifference;
         set_difference(
                 childBagSet.begin(), childBagSet.end(), bagSet.begin(),
                 bagSet.end(),
                 std::inserter(bagSetDifference, bagSetDifference.begin()));
         if (bagSetDifference.size() != 1) {
-            cout << "ERROR: ConcreteTreeDecomposition::constructWitnesses "
+            std::cout << "ERROR: ConcreteTreeDecomposition::constructWitnesses "
                 "in ForgetVertex child's bag and node's bag are not "
                 "valid"
-                << endl;
+                << std::endl;
             exit(20);
         }
         State::ptr q = conjecture.getKernel()->forget_v(childState, *bagSetDifference.begin());
         if(flags.get("PrintStates")) {
             q->print();
         }
-        shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNode(new TermNode<RunNodeContent<State::ptr,ConcreteNode>>);
-        shared_ptr<RunNodeContent<State::ptr,ConcreteNode>> runNodeContent (new RunNodeContent<State::ptr,ConcreteNode>);
+        std::shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNode(new TermNode<RunNodeContent<State::ptr,ConcreteNode>>);
+        std::shared_ptr<RunNodeContent<State::ptr,ConcreteNode>> runNodeContent (new RunNodeContent<State::ptr,ConcreteNode>);
         runNodeContent->setState(q);
         runNodeContent->setRunNodeContent(node->getNodeContent());
         runNode->setNodeContent(*runNodeContent);
@@ -336,9 +336,9 @@ shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> ConcreteTreeDecomp
         runNodeChild->setParent(runNode);
         return runNode;
     } else if (strstr(node->getNodeContent().getSymbol().c_str(), "IntroEdge")) {
-        shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNodeChild = constructWitnesses(conjecture, node->getChildren()[0],flags, str);
+        std::shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNodeChild = constructWitnesses(conjecture, node->getChildren()[0],flags, str);
         State::ptr childState =runNodeChild->getNodeContent().getState();
-        pair<unsigned, unsigned> e =
+        std::pair<unsigned, unsigned> e =
             node->getNodeContent().getBag().get_edge();
         State::ptr q = conjecture.getKernel()->intro_e(childState,e.first, e.second);
         bool conjectureEvaluationResult =
@@ -346,8 +346,8 @@ shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> ConcreteTreeDecomp
         if(flags.get("PrintStates")) {
             q->print();
         }
-        shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNode(new TermNode<RunNodeContent<State::ptr,ConcreteNode>>);
-        shared_ptr<RunNodeContent<State::ptr,ConcreteNode>> runNodeContent (new RunNodeContent<State::ptr,ConcreteNode>);
+        std::shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNode(new TermNode<RunNodeContent<State::ptr,ConcreteNode>>);
+        std::shared_ptr<RunNodeContent<State::ptr,ConcreteNode>> runNodeContent (new RunNodeContent<State::ptr,ConcreteNode>);
         runNodeContent->setState(q);
         runNodeContent->setRunNodeContent(node->getNodeContent());
         runNode->setNodeContent(*runNodeContent);
@@ -356,16 +356,16 @@ shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> ConcreteTreeDecomp
         runNodeChild->setParent(runNode);
         return runNode;
     } else if (strstr(node->getNodeContent().getSymbol().c_str(), "Join")) {
-        shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNodeChild1 = constructWitnesses(conjecture, node->getChildren()[0],flags, str);
+        std::shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNodeChild1 = constructWitnesses(conjecture, node->getChildren()[0],flags, str);
         State::ptr childState1 =runNodeChild1->getNodeContent().getState();
-        shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNodeChild2 = constructWitnesses(conjecture, node->getChildren()[1],flags, str);
+        std::shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNodeChild2 = constructWitnesses(conjecture, node->getChildren()[1],flags, str);
         State::ptr childState2 =runNodeChild2->getNodeContent().getState();
         State::ptr q = conjecture.getKernel()->join(childState1,childState2);
         if(flags.get("PrintStates")) {
             q->print();
         }
-        shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNode(new TermNode<RunNodeContent<State::ptr,ConcreteNode>>);
-        shared_ptr<RunNodeContent<State::ptr,ConcreteNode>> runNodeContent (new RunNodeContent<State::ptr,ConcreteNode>);
+        std::shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNode(new TermNode<RunNodeContent<State::ptr,ConcreteNode>>);
+        std::shared_ptr<RunNodeContent<State::ptr,ConcreteNode>> runNodeContent (new RunNodeContent<State::ptr,ConcreteNode>);
         runNodeContent->setState(q);
         runNodeContent->setRunNodeContent(node->getNodeContent());
         runNode->setNodeContent(*runNodeContent);
@@ -376,28 +376,27 @@ shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> ConcreteTreeDecomp
         runNodeChild2->setParent(runNode);
         return runNode;
     } else {
-        cout << "ERROR in constructWitnesses: The function could not recognize "
+        std::cout << "ERROR in constructWitnesses: The function could not recognize "
             "the type of the node"
-            << endl;
-        cout << "The devastated node is: " << endl;
+            << std::endl;
+        std::cout << "The devastated node is: " << std::endl;
         node->getNodeContent().print();
         exit(20);
     }
 }
-bool ConcreteTreeDecomposition::conjectureCheck(Conjecture &conjecture,Flags &flags, string name) {
-    string str = "";
+bool ConcreteTreeDecomposition::conjectureCheck(Conjecture &conjecture,Flags &flags, std::string name) {
+    std::string str = "";
     RunTree<State::ptr,ConcreteNode> runTree;
-    shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNode = constructWitnesses(conjecture, getRoot(),flags,str);
+    std::shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNode = constructWitnesses(conjecture, getRoot(),flags,str);
     runTree.setRoot(runNode);
     name += "_RunTree.txt";
     if (!conjecture.evaluateConjectureOnState(*runNode->getNodeContent().getState())) {
         runTree.writeToFile(name);
-        cout << "CONJECTURE NOT SATISFIED" << endl;
+        std::cout << "CONJECTURE NOT SATISFIED" << std::endl;
         return false;
     } else {
-        cout << "CONJECTURE SATISFIED"<< endl;
+        std::cout << "CONJECTURE SATISFIED"<< std::endl;
         runTree.writeToFile(name);
         return true;
     }
 }
-

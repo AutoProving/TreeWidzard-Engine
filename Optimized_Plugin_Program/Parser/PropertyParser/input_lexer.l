@@ -11,7 +11,7 @@
     #include "input_parser.hpp"
     #define yylval input_lval
 
-    extern int yyparse(Conjecture &conj, int &result,map<string,map<string,string>> &coreList, map<string,string> &varToCoreName, map<string, PropertyAssignment*> varToProperty, char const* msg);
+    extern int yyparse(Conjecture &conj, int &result,std::map<std::string,std::map<std::string,std::string>> &coreList, std::map<std::string,std::string> &varToCoreName, std::map<std::string, PropertyAssignment*> varToProperty, char const* msg);
 
 %}
 
@@ -34,7 +34,7 @@ NOT                                                  yylval.string = strdup(yyte
 \+|\-|\*|\/                                          yylval.string = strdup(yytext); return BINARY_ARITHMETIC_OPERATOR;
 max|min|pow                                          yylval.string = strdup(yytext); return BINARY_FUNCTION;
 abs|acos|asin|atan|cos|exp|floor|ln|log|sin|sqrt|tan yylval.string = strdup(yytext); return UNARY_FUNCTION;
-[0-9]+                                               yylval.number = atoi(yytext);   return NUMBER_DOUBLE;
+[0-9]+                                               yylval.number = std::atoi(yytext); return NUMBER_DOUBLE;
 [a-zA-Z0-9]+                                         yylval.string = strdup(yytext); return NAME;
 \:\=                                                 yylval.string = strdup(yytext); return SEPERATOR;
 \(                                                   yylval.string = strdup(yytext); return LEFTP;
@@ -45,4 +45,3 @@ abs|acos|asin|atan|cos|exp|floor|ln|log|sin|sqrt|tan yylval.string = strdup(yyte
 ,                                                    yylval.string = strdup(yytext); return COMMA;
 [ \t]+                      ;
 %%
-

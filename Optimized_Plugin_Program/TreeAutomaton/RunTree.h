@@ -5,7 +5,7 @@
 #include <memory>
 #include <experimental/filesystem>
 #include "Term.h"
-using namespace std;
+
 namespace run_fs = std::experimental::filesystem;
 
 template<class StateType, class TermNodeContent>
@@ -68,14 +68,14 @@ public:
     }
 
     void print() {
-        cout<<"Term Node Content:"<<endl;
+        std::cout<<"Term Node Content:"<<std::endl;
         runNodeContent.print();
-        cout<<"State:"<<endl;
+        std::cout<<"State:"<<std::endl;
         state.print();
     }
 
-    string nodeInformation() override {
-        string info;
+    std::string nodeInformation() override {
+        std::string info;
         info = runNodeContent.nodeInformation() +" " + state.stateInformation();
         info+= "---------------------------------------------------------------\n";
         info+= "---------------------------------------------------------------\n";
@@ -102,24 +102,24 @@ RunNodeContent<StateType, TermNodeContent>::operator=(const RunNodeContent<State
 template<class StateType, class TermNodeContent>
 class RunTree : public Term<RunNodeContent<StateType,TermNodeContent> >{
 public:
-    void writeToFile(string fileName);
+    void writeToFile(std::string fileName);
     //TODO
-    void convertRunNodeToTermNode(shared_ptr<TermNode<RunNodeContent<StateType, TermNodeContent>>> runNode,
-                                  shared_ptr<TermNode<TermNodeContent>> termNode);
+    void convertRunNodeToTermNode(std::shared_ptr<TermNode<RunNodeContent<StateType, TermNodeContent>>> runNode,
+                                  std::shared_ptr<TermNode<TermNodeContent>> termNode);
     Term<TermNodeContent> convertRunToTerm(RunTree<StateType,TermNodeContent> runTree);
 };
 
 template<class StateType, class TermNodeContent>
-void RunTree<StateType, TermNodeContent>::writeToFile(string fileName) {
-    ofstream runFile;
-    runFile.open(fileName,ios::out);
+void RunTree<StateType, TermNodeContent>::writeToFile(std::string fileName) {
+    std::ofstream runFile;
+    runFile.open(fileName,std::ios::out);
     if (runFile.is_open())
     {
         runFile << this->termInformation();
         runFile.close();
     }
     else {
-        cout << "Unable to open "<< fileName << endl;
+        std::cout << "Unable to open "<< fileName << std::endl;
         exit(20);
     }
 }
@@ -128,19 +128,19 @@ template<class StateType, class TermNodeContent>
 Term<TermNodeContent>
 RunTree<StateType, TermNodeContent>::convertRunToTerm(RunTree<StateType, TermNodeContent> runTree) {
     Term<TermNodeContent> term;
-    shared_ptr<TermNode<TermNodeContent>> termRoot(new TermNode<TermNodeContent>);
+    std::shared_ptr<TermNode<TermNodeContent>> termRoot(new TermNode<TermNodeContent>);
     convertRunNodeToTermNode(this->getRoot(), termRoot);
     term.setRoot(termRoot);
     return term;
 }
 
 template<class StateType, class TermNodeContent>
-void RunTree<StateType, TermNodeContent>::convertRunNodeToTermNode(shared_ptr<TermNode<RunNodeContent<StateType, TermNodeContent>>> runNode,
-                                                                   shared_ptr<TermNode<TermNodeContent>> termNode) {
+void RunTree<StateType, TermNodeContent>::convertRunNodeToTermNode(std::shared_ptr<TermNode<RunNodeContent<StateType, TermNodeContent>>> runNode,
+                                                                   std::shared_ptr<TermNode<TermNodeContent>> termNode) {
     termNode->setNodeContent(runNode->getNodeContent().getRunNodeContent());
-    vector<shared_ptr<TermNode<TermNodeContent>>> children;
+    std::vector<std::shared_ptr<TermNode<TermNodeContent>>> children;
     for(auto item:runNode->getChildren()){
-        shared_ptr<TermNode<TermNodeContent> > termChild(new TermNode<TermNodeContent>);
+        std::shared_ptr<TermNode<TermNodeContent> > termChild(new TermNode<TermNodeContent>);
         convertRunNodeToTermNode(item,termChild);
         children.push_back(termChild);
         termChild->setParent(termNode);

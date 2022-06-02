@@ -20,7 +20,7 @@ StateTreeNode::StateTreeNode() {
 
 // Constructors that takes a node type and state as input. Used when retrieving
 // a state tree decomposition for a counter example.
-StateTreeNode::StateTreeNode(string nodeType, State::ptr s) {
+StateTreeNode::StateTreeNode(std::string nodeType, State::ptr s) {
 	this->set_nodeType(nodeType);
 	this->set_S(s);
 	// this->parent is NULL by default
@@ -29,8 +29,8 @@ StateTreeNode::StateTreeNode(string nodeType, State::ptr s) {
 
 // Constructors that takes a node type, a bag and a vector of children as input.
 // Used when constructing a state tree decomposition in a bottom-up fashion.
-StateTreeNode::StateTreeNode(string nodeType, State::ptr s,
-							 vector<shared_ptr<StateTreeNode> > children) {
+StateTreeNode::StateTreeNode(std::string nodeType, State::ptr s,
+							 std::vector<std::shared_ptr<StateTreeNode> > children) {
 	this->set_nodeType(nodeType);
 	this->set_S(s);
 	this->set_children(children);
@@ -39,9 +39,9 @@ StateTreeNode::StateTreeNode(string nodeType, State::ptr s,
 // Constructors that takes a node type, a bag, vector of children and kernel as
 // input. Used when constructing a state tree decomposition in a bottom-up
 // fashion.
-StateTreeNode::StateTreeNode(string nodeType, State::ptr s,
-							 vector<shared_ptr<StateTreeNode> > children,
-							 shared_ptr<DynamicKernel> kernel) {
+StateTreeNode::StateTreeNode(std::string nodeType, State::ptr s,
+							 std::vector<std::shared_ptr<StateTreeNode> > children,
+							 std::shared_ptr<DynamicKernel> kernel) {
 	this->set_nodeType(nodeType);
 	this->set_S(s);
 	this->set_children(children);
@@ -56,15 +56,15 @@ StateTreeNode::StateTreeNode(string nodeType, State::ptr s,
 
 State::ptr StateTreeNode::get_S() { return this->S; }
 
-string StateTreeNode::get_nodeType() { return this->nodeType; }
+std::string StateTreeNode::get_nodeType() { return this->nodeType; }
 
-shared_ptr<StateTreeNode> StateTreeNode::get_parent() { return this->parent; }
+std::shared_ptr<StateTreeNode> StateTreeNode::get_parent() { return this->parent; }
 
-vector<shared_ptr<StateTreeNode> > StateTreeNode::get_children() {
+std::vector<std::shared_ptr<StateTreeNode> > StateTreeNode::get_children() {
 	return this->children;
 }
 
-shared_ptr<DynamicKernel> StateTreeNode::get_kernel() { return kernel; }
+std::shared_ptr<DynamicKernel> StateTreeNode::get_kernel() { return kernel; }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////// Set Functions
@@ -73,17 +73,17 @@ shared_ptr<DynamicKernel> StateTreeNode::get_kernel() { return kernel; }
 
 void StateTreeNode::set_S(State::ptr s) { this->S = s; }
 
-void StateTreeNode::set_nodeType(string nodeType) { this->nodeType = nodeType; }
+void StateTreeNode::set_nodeType(std::string nodeType) { this->nodeType = nodeType; }
 
-void StateTreeNode::set_parent(shared_ptr<StateTreeNode> parent) {
+void StateTreeNode::set_parent(std::shared_ptr<StateTreeNode> parent) {
 	this->parent = parent;
 }
 
-void StateTreeNode::set_children(vector<shared_ptr<StateTreeNode> > children) {
+void StateTreeNode::set_children(std::vector<std::shared_ptr<StateTreeNode> > children) {
 	this->children = children;
 }
 
-void StateTreeNode::set_kernel(shared_ptr<DynamicKernel> kernel) {
+void StateTreeNode::set_kernel(std::shared_ptr<DynamicKernel> kernel) {
 	this->kernel = kernel;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -91,9 +91,9 @@ void StateTreeNode::set_kernel(shared_ptr<DynamicKernel> kernel) {
 ///////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-string StateTreeNode::printStateTreeNode() { return this->get_S()->stateInformation(); }
+std::string StateTreeNode::printStateTreeNode() { return this->get_S()->stateInformation(); }
 
-string StateTreeNode::printAbstract() { return this->get_nodeType(); }
+std::string StateTreeNode::printAbstract() { return this->get_nodeType(); }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////// Read Functions
@@ -116,12 +116,12 @@ StateTreeNode StateTreeNode::introVertex(unsigned i) {
 					i, b, (this->S->getWitnessSet(r))));
 		}
 		auxState->set_bag(b.intro_v(i));
-		StateTreeNode stateTreeNode("IntroVertex_" + to_string(i), auxState);
+		StateTreeNode stateTreeNode("IntroVertex_" + std::to_string(i), auxState);
 		stateTreeNode.set_kernel(this->kernel);
 		return stateTreeNode;
 	} else {
-		cout << "ERROR in function StateTreeNode::introVertex. Number " << i
-			 << " is not introducible at current bag." << endl;
+		std::cout << "ERROR in function StateTreeNode::introVertex. Number " << i
+							<< " is not introducible at current bag." << std::endl;
 		exit(20);
 	}
 }
@@ -136,12 +136,12 @@ StateTreeNode StateTreeNode::forgetVertex(unsigned i) {
 					i, b, (this->S->getWitnessSet(r))));
 		}
 		auxState->set_bag(b.forget_v(i));
-		StateTreeNode stateTreeNode("ForgetVertex_" + to_string(i), auxState);
+		StateTreeNode stateTreeNode("ForgetVertex_" + std::to_string(i), auxState);
 		stateTreeNode.set_kernel(this->kernel);
 		return stateTreeNode;
 	} else {
-		cout << "ERROR in function StateTreeNode::forgetVertex. Number " << i
-			 << " is not forgettable at current bag." << endl;
+		std::cout << "ERROR in function StateTreeNode::forgetVertex. Number " << i
+			 << " is not forgettable at current bag." << std::endl;
 		exit(20);
 	}
 }
@@ -157,12 +157,12 @@ StateTreeNode StateTreeNode::introEdge(unsigned i, unsigned j) {
 		}
 		auxState->set_bag(b.intro_e(i, j));
 		StateTreeNode stateTreeNode(
-			"IntroEdge_" + to_string(i) + "_" + to_string(j), auxState);
+			"IntroEdge_" + std::to_string(i) + "_" + std::to_string(j), auxState);
 		stateTreeNode.set_kernel(this->kernel);
 		return stateTreeNode;
 	} else {
-		cout << "ERROR in function StateTreeNode::introEdge. Number " << i
-			 << " and " << j << " is not introducible at current bag." << endl;
+		std::cout << "ERROR in function StateTreeNode::introEdge. Number " << i
+			 << " and " << j << " is not introducible at current bag." << std::endl;
 		exit(20);
 	}
 }
@@ -170,7 +170,7 @@ StateTreeNode StateTreeNode::introEdge(unsigned i, unsigned j) {
 StateTreeNode join(StateTreeNode &left, StateTreeNode &right) {
 	if (left.get_S()->get_bag().joinable(right.get_S()->get_bag())) {
 		State::ptr auxState;
-		set<unsigned> elements = left.get_S()->get_bag().get_elements();
+		std::set<unsigned> elements = left.get_S()->get_bag().get_elements();
 		Bag b;
 		b.set_elements(elements);
 		for (size_t r = 0; r < left.get_S()->numberOfComponents(); r++) {
@@ -183,9 +183,9 @@ StateTreeNode join(StateTreeNode &left, StateTreeNode &right) {
 		stateTreeNode.set_kernel(left.get_kernel());
 		return stateTreeNode;
 	} else {
-		cout << "ERROR in function friend StateTreeNode::Join. Two nodes are "
+		std::cout << "ERROR in function friend StateTreeNode::Join. Two nodes are "
 				"not joinable."
-			 << endl;
+			 << std::endl;
 		exit(20);
 	}
 }
@@ -196,7 +196,7 @@ StateTreeNode join(StateTreeNode &left, StateTreeNode &right) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void StateTree::traverseNode(StateTreeNode &node, MultiGraph &G,
-							 map<unsigned, unsigned> &colorToVertexMap,
+							 std::map<unsigned, unsigned> &colorToVertexMap,
 							 unsigned &nVertices, unsigned &nEdges) {
 
     //	map<unsigned, unsigned> colorToVertexMapCopy = colorToVertexMap;
@@ -268,14 +268,14 @@ void StateTree::traverseNode(StateTreeNode &node, MultiGraph &G,
 }
 
 MultiGraph StateTree::extractMultiGraph() {
-	cout<<"StateTree::extractMultiGraph is not implemented"<<endl;
+	std::cout<<"StateTree::extractMultiGraph is not implemented"<<std::endl;
 	exit(20);
     MultiGraph G;
-	map<unsigned, unsigned> colorToVertexMap;
+	std::map<unsigned, unsigned> colorToVertexMap;
 	unsigned nVertices = 0;
 	unsigned nEdges = 0;
-	set<unsigned> elements = root->get_S()->get_bag().get_elements();
-	set<unsigned>::iterator it = elements.begin();
+	std::set<unsigned> elements = root->get_S()->get_bag().get_elements();
+	std::set<unsigned>::iterator it = elements.begin();
 	for (size_t i = 0; i < root->get_S()->get_bag().get_elements().size();
 		 ++i) {
 		colorToVertexMap[*it] = i; // creates one vertex for each color.
@@ -287,26 +287,26 @@ MultiGraph StateTree::extractMultiGraph() {
 	return G;
 }
 
-string StateTree::printTreeRecursive(StateTreeNode &node, unsigned &label) {
-    string s;
+std::string StateTree::printTreeRecursive(StateTreeNode &node, unsigned &label) {
+    std::string s;
     if (node.get_nodeType() == "Join") {
 		s += printTreeRecursive(*node.get_children()[0], label);
 		unsigned label1 = label;
 		s += printTreeRecursive(*node.get_children()[1], label);
 		unsigned label2 = label;
 		label++;
-		s = s + to_string(label) + " " + node.get_nodeType() + "(" + to_string(label1) + "," +
-					to_string(label2) + ")\n";
+		s = s + std::to_string(label) + " " + node.get_nodeType() + "(" + std::to_string(label1) + "," +
+					std::to_string(label2) + ")\n";
         s = s + node.printStateTreeNode();
 	} else if (node.get_nodeType() == "Empty" or node.get_nodeType() == "Leaf") {
 		label++;
-        s = s + to_string(label) + " " + node.get_nodeType() + "\n";
+        s = s + std::to_string(label) + " " + node.get_nodeType() + "\n";
         s = s + node.printStateTreeNode();
 	} else {
         s = s + printTreeRecursive(*node.get_children()[0], label);
 		label++;
-        s = s + to_string(label) + " " + node.get_nodeType() + "(" +
-					to_string(label - 1) + ")\n";
+        s = s + std::to_string(label) + " " + node.get_nodeType() + "(" +
+					std::to_string(label - 1) + ")\n";
 
         s = s +node.printStateTreeNode();
 	}
@@ -315,27 +315,27 @@ string StateTree::printTreeRecursive(StateTreeNode &node, unsigned &label) {
 
 void StateTree::printStateTree() {
 	unsigned label = 0;
-	cout<<printTreeRecursive(*root, label);
+	std::cout<<printTreeRecursive(*root, label);
 }
 
 
-string StateTree::printAbstractRecursive(StateTreeNode &node, unsigned &label) {
+std::string StateTree::printAbstractRecursive(StateTreeNode &node, unsigned &label) {
 	if (node.get_nodeType() == "Join") {
-		string s1 = printAbstractRecursive(*node.get_children()[0], label);
+		std::string s1 = printAbstractRecursive(*node.get_children()[0], label);
 		unsigned label1 = label;
-		string s2 = printAbstractRecursive(*node.get_children()[1], label);
+		std::string s2 = printAbstractRecursive(*node.get_children()[1], label);
 		unsigned label2 = label;
 		label++;
-		return s1 + s2 + to_string(label) + " " + (node.printAbstract()) + "(" +
-			   to_string(label1) + "," + to_string(label2) + ")\n";
+		return s1 + s2 + std::to_string(label) + " " + (node.printAbstract()) + "(" +
+			   std::to_string(label1) + "," + std::to_string(label2) + ")\n";
 	} else if (node.get_nodeType() == "Empty" or node.get_nodeType()=="Leaf") {
 		label++;
-		return to_string(label) + " " + node.printAbstract() + "\n";
+		return std::to_string(label) + " " + node.printAbstract() + "\n";
 	} else {
-		string s = printAbstractRecursive(*node.get_children()[0], label);
+		std::string s = printAbstractRecursive(*node.get_children()[0], label);
 		label++;
-		return s + to_string(label) + " " + node.printAbstract() + "(" +
-			   to_string(label - 1) +
+		return s + std::to_string(label) + " " + node.printAbstract() + "(" +
+			   std::to_string(label - 1) +
 			   ")"
 			   "\n";
 	}
@@ -343,13 +343,13 @@ string StateTree::printAbstractRecursive(StateTreeNode &node, unsigned &label) {
 
 void StateTree::printAbstract() {
 	unsigned label = 0;
-	cout << printAbstractRecursive(*root, label);
+	std::cout << printAbstractRecursive(*root, label);
 }
 
-void StateTree::writeToFile(string fileName) {
+void StateTree::writeToFile(std::string fileName) {
 
     fileName = "Counterexample_StateTreeDec_"+state_fs::path(fileName).filename().string();
-    ofstream atdFile (fileName);
+    std::ofstream atdFile (fileName);
     if (atdFile.is_open())
     {
         unsigned label = 0;
@@ -357,7 +357,7 @@ void StateTree::writeToFile(string fileName) {
         atdFile.close();
     }
     else {
-        cout << "Unable to open "<< fileName << endl;
+        std::cout << "Unable to open "<< fileName << std::endl;
         exit(20);
     }
 }

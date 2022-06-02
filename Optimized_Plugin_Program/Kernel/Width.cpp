@@ -2,15 +2,15 @@
 
 #include "Width.h"
 
-string Width::get_name() { return name; }
+std::string Width::get_name() { return name; }
 
-void Width::set_name(string s) { name = s; }
+void Width::set_name(std::string s) { name = s; }
 
 unsigned int Width::get_value() const { return value; }
 
 void Width::set_value(unsigned int value) { Width::value = value; }
 
-void Width::print() { cout << name << " " << value << endl; }
+void Width::print() { std::cout << name << " " << value << std::endl; }
 
 Width &Width::operator=(Width &rhs) {
 	name = rhs.get_name();

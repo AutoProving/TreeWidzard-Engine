@@ -1,8 +1,8 @@
-/* A Bison parser, made by GNU Bison 3.5.1.  */
+/* A Bison parser, made by GNU Bison 3.8.2.  */
 
 /* Bison interface for Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2020 Free Software Foundation,
+   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2021 Free Software Foundation,
    Inc.
 
    This program is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.  */
+   along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -31,11 +31,12 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-/* Undocumented macros, especially those whose name start with YY_,
-   are private implementation details.  Do not rely on them.  */
+/* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
+   especially those whose name start with YY_ or yy_.  They are
+   private implementation details that can be changed or removed.  */
 
-#ifndef YY_ATD_ATD_PARSER_HPP_INCLUDED
-# define YY_ATD_ATD_PARSER_HPP_INCLUDED
+#ifndef YY_ATD_ATD_PARSER_TAB_H_INCLUDED
+# define YY_ATD_ATD_PARSER_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef ATD_DEBUG
 # if defined YYDEBUG
@@ -62,26 +63,31 @@ extern int atd_debug;
     #include <set>
     #include <tuple>
 
-#line 66 "atd_parser.hpp"
+#line 67 "atd_parser.tab.h"
 
-/* Token type.  */
+/* Token kinds.  */
 #ifndef ATD_TOKENTYPE
 # define ATD_TOKENTYPE
   enum atd_tokentype
   {
-    atd_NUM = 258,
-    atd_COMMENT = 259,
-    atd_NEWLINE = 260,
-    atd_LEAF = 261,
-    atd_INTROVERTEX = 262,
-    atd_INTROEDGE = 263,
-    atd_FORGETVERTEX = 264,
-    atd_JOIN = 265,
-    atd_LEFTP = 266,
-    atd_RIGHTP = 267,
-    atd_SEP1 = 268,
-    atd_SEP2 = 269
+    ATD_EMPTY = -2,
+    ATD_EOF = 0,                   /* "end of file"  */
+    ATD_error = 256,               /* error  */
+    ATD_UNDEF = 257,               /* "invalid token"  */
+    atd_NUM = 258,                 /* atd_NUM  */
+    atd_COMMENT = 259,             /* atd_COMMENT  */
+    atd_NEWLINE = 260,             /* atd_NEWLINE  */
+    atd_LEAF = 261,                /* atd_LEAF  */
+    atd_INTROVERTEX = 262,         /* atd_INTROVERTEX  */
+    atd_INTROEDGE = 263,           /* atd_INTROEDGE  */
+    atd_FORGETVERTEX = 264,        /* atd_FORGETVERTEX  */
+    atd_JOIN = 265,                /* atd_JOIN  */
+    atd_LEFTP = 266,               /* atd_LEFTP  */
+    atd_RIGHTP = 267,              /* atd_RIGHTP  */
+    atd_SEP1 = 268,                /* atd_SEP1  */
+    atd_SEP2 = 269                 /* atd_SEP2  */
   };
+  typedef enum atd_tokentype atd_token_kind_t;
 #endif
 
 /* Value type.  */
@@ -93,7 +99,7 @@ union ATD_STYPE
      unsigned number;
      char* string;
 
-#line 97 "atd_parser.hpp"
+#line 103 "atd_parser.tab.h"
 
 };
 typedef union ATD_STYPE ATD_STYPE;
@@ -118,6 +124,8 @@ struct ATD_LTYPE
 
 extern ATD_STYPE atd_lval;
 extern ATD_LTYPE atd_lloc;
+
 int atd_parse (AbstractTreeDecomposition  &atd, int &result);
 
-#endif /* !YY_ATD_ATD_PARSER_HPP_INCLUDED  */
+
+#endif /* !YY_ATD_ATD_PARSER_TAB_H_INCLUDED  */

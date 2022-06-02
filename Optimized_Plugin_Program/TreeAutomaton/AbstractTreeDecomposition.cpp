@@ -3,13 +3,13 @@
 AbstractTreeDecompositionNodeContent::AbstractTreeDecompositionNodeContent() {
 
 }
-AbstractTreeDecompositionNodeContent::AbstractTreeDecompositionNodeContent(const string &symbol) : symbol(symbol) {}
+AbstractTreeDecompositionNodeContent::AbstractTreeDecompositionNodeContent(const std::string &symbol) : symbol(symbol) {}
 
-const string &AbstractTreeDecompositionNodeContent::getSymbol() const {
+const std::string &AbstractTreeDecompositionNodeContent::getSymbol() const {
     return symbol;
 }
 
-void AbstractTreeDecompositionNodeContent::setSymbol(const string &symbol){
+void AbstractTreeDecompositionNodeContent::setSymbol(const std::string &symbol){
     this->symbol = symbol;
 }
 
@@ -32,8 +32,8 @@ bool AbstractTreeDecompositionNodeContent::operator<(const AbstractTreeDecomposi
         int typeSymbol2 = symbolType(rhs.symbol);
         if (typeSymbol1<typeSymbol2) return true;
         if (typeSymbol1>typeSymbol2) return false;
-        vector<int> numbersSymbol1 = symbolNumbers(this->symbol);
-        vector<int> numbersSymbol2 = symbolNumbers(rhs.symbol);
+        std::vector<int> numbersSymbol1 = symbolNumbers(this->symbol);
+        std::vector<int> numbersSymbol2 = symbolNumbers(rhs.symbol);
         return numbersSymbol1 < numbersSymbol2;
 }
 
@@ -49,58 +49,58 @@ bool AbstractTreeDecompositionNodeContent::operator>=(const AbstractTreeDecompos
     return !(*this < rhs);
 }
 
-int AbstractTreeDecompositionNodeContent::symbolType(string s) const {
-    if(s.find("Leaf") != string::npos){
+int AbstractTreeDecompositionNodeContent::symbolType(std::string s) const {
+    if(s.find("Leaf") != std::string::npos){
         return 0;
-    }else if(s.find("IntroVertex") != string::npos){
+    }else if(s.find("IntroVertex") != std::string::npos){
         return 1;
-    } else if(s.find("ForgetVertex") != string::npos) {
+    } else if(s.find("ForgetVertex") != std::string::npos) {
         return 2;
-    }else     if(s.find("IntroEdge") != string::npos) {
+    }else     if(s.find("IntroEdge") != std::string::npos) {
         return 3;
-    }else if(s.find("Join") != string::npos) {
+    }else if(s.find("Join") != std::string::npos) {
         return 4;
     }else{
-        cout<<"Error: AbstractTreeDecompositionNodeContent::symbolType, string is not in formal format."<<endl;
+        std::cout<<"Error: AbstractTreeDecompositionNodeContent::symbolType, std::string is not in formal format."<<std::endl;
         exit(20);
     }
 }
 
-vector<int> AbstractTreeDecompositionNodeContent::symbolNumbers(string s) const {
-    if(s.find("Leaf") != string::npos){
+std::vector<int> AbstractTreeDecompositionNodeContent::symbolNumbers(std::string s) const {
+    if(s.find("Leaf") != std::string::npos){
 
-    }else if(s.find("IntroVertex") != string::npos){
+    }else if(s.find("IntroVertex") != std::string::npos){
 
-    } else if(s.find("ForgetVertex") != string::npos) {
+    } else if(s.find("ForgetVertex") != std::string::npos) {
 
-    }else if(s.find("IntroEdge") != string::npos) {
+    }else if(s.find("IntroEdge") != std::string::npos) {
 
-    }else if(s.find("Join") != string::npos) {
+    }else if(s.find("Join") != std::string::npos) {
 
     }else{
-        cout<<"Error: AbstractTreeDecompositionNodeContent::symbolNumbers, string is not in formal format."<<endl;
+        std::cout<<"Error: AbstractTreeDecompositionNodeContent::symbolNumbers, std::string is not in formal format."<<std::endl;
         exit(20);
     }
     return extractIntegerWords(s);
 }
 
-string AbstractTreeDecompositionNodeContent::smallestContent(){
+std::string AbstractTreeDecompositionNodeContent::smallestContent(){
         return "Leaf";
 }
 
 void AbstractTreeDecompositionNodeContent::print() {
-    cout<< symbol;
+    std::cout<< symbol;
 }
 
-vector<int> AbstractTreeDecompositionNodeContent::extractIntegerWords(string s) const{
+std::vector<int> AbstractTreeDecompositionNodeContent::extractIntegerWords(std::string s) const{
 
     std::replace( s.begin(), s.end(), '_', '\t');
-    stringstream ss;
-    /* Storing the whole string into string stream */
+    std::stringstream ss;
+    /* Storing the whole std::string into std::string stream */
     ss << s;
-    vector<int> numberVec;
+    std::vector<int> numberVec;
     /* Running loop till the end of the stream */
-    string temp;
+    std::string temp;
     int found;
     while (!ss.eof()) {
 
@@ -108,11 +108,11 @@ vector<int> AbstractTreeDecompositionNodeContent::extractIntegerWords(string s) 
         ss >> temp;
 
         /* Checking the given word is integer or not */
-        if (stringstream(temp) >> found){
+        if (std::stringstream(temp) >> found){
             numberVec.push_back(found);
         }
 
-        /* To save from space at the end of string */
+        /* To save from space at the end of std::string */
         temp = "";
     }
     return numberVec;
@@ -123,20 +123,20 @@ AbstractTreeDecompositionNodeContent::AbstractTreeDecompositionNodeContent(
     this->symbol = abstractTreeDecompositionNodeContent.getSymbol();
 }
 
-string AbstractTreeDecompositionNodeContent::nodeInformation() {
+std::string AbstractTreeDecompositionNodeContent::nodeInformation() {
     return symbol;
 }
 
-shared_ptr<TermNode<ConcreteNode>> AbstractTreeDecomposition::constructCTDNode(TermNode<AbstractTreeDecompositionNodeContent> &node) {
+std::shared_ptr<TermNode<ConcreteNode>> AbstractTreeDecomposition::constructCTDNode(TermNode<AbstractTreeDecompositionNodeContent> &node) {
 
-    shared_ptr<TermNode<ConcreteNode>> ctdNode(new TermNode<ConcreteNode>);
-    vector<shared_ptr<TermNode<ConcreteNode>>> children;
-    string symbol = node.getNodeContent().getSymbol();
+    std::shared_ptr<TermNode<ConcreteNode>> ctdNode(new TermNode<ConcreteNode>);
+    std::vector<std::shared_ptr<TermNode<ConcreteNode>>> children;
+    std::string symbol = node.getNodeContent().getSymbol();
     ConcreteNode concrete;
     concrete.setSymbol(symbol);
     //ctdNode->setNodeContent(concrete);
     for(auto &child:node.getChildren()){
-        shared_ptr<TermNode<ConcreteNode>> ctdChild = constructCTDNode(*child);
+        std::shared_ptr<TermNode<ConcreteNode>> ctdChild = constructCTDNode(*child);
         ctdChild->setParent(ctdNode);
         children.push_back(ctdChild);
     }
@@ -145,10 +145,10 @@ shared_ptr<TermNode<ConcreteNode>> AbstractTreeDecomposition::constructCTDNode(T
         concrete.setBag(b);
         ctdNode->setNodeContent(concrete);
     }else {
-        vector<int> numbersInString = node.getNodeContent().extractIntegerWords(symbol);
+        std::vector<int> numbersInString = node.getNodeContent().extractIntegerWords(symbol);
         if(strstr(symbol.c_str(),"IntroVertex")){
             if(numbersInString.size()!=1){
-                cout<<"Error: ConcreteTreeDecomposition::constructCTDNode children numbers not valid"<<endl;
+                std::cout<<"Error: ConcreteTreeDecomposition::constructCTDNode children numbers not valid"<<std::endl;
                 exit(20);
             }else{
                 b = children[0]->getNodeContent().getBag();
@@ -158,7 +158,7 @@ shared_ptr<TermNode<ConcreteNode>> AbstractTreeDecomposition::constructCTDNode(T
             }
         }else if(strstr(symbol.c_str(),"ForgetVertex")){
             if(numbersInString.size()!=1){
-                cout<<"Error: ConcreteTreeDecomposition::constructCTDNode children numbers not valid"<<endl;
+                std::cout<<"Error: ConcreteTreeDecomposition::constructCTDNode children numbers not valid"<<std::endl;
                 exit(20);
             }else{
                 b = children[0]->getNodeContent().getBag();
@@ -168,7 +168,7 @@ shared_ptr<TermNode<ConcreteNode>> AbstractTreeDecomposition::constructCTDNode(T
             }
         }else if(strstr(symbol.c_str(),"IntroEdge")){
             if(numbersInString.size()!=2){
-                cout<<"Error: ConcreteTreeDecomposition::constructCTDNode children numbers not valid"<<endl;
+                std::cout<<"Error: ConcreteTreeDecomposition::constructCTDNode children numbers not valid"<<std::endl;
                 exit(20);
             }else{
                 b = children[0]->getNodeContent().getBag();
@@ -190,22 +190,22 @@ shared_ptr<TermNode<ConcreteNode>> AbstractTreeDecomposition::constructCTDNode(T
 
 ConcreteTreeDecomposition AbstractTreeDecomposition::convertToConcreteTreeDecomposition() {
     ConcreteTreeDecomposition concreteTreeDecomposition;
-    shared_ptr<TermNode<ConcreteNode>> root = constructCTDNode(*this->getRoot());
+    std::shared_ptr<TermNode<ConcreteNode>> root = constructCTDNode(*this->getRoot());
     concreteTreeDecomposition.setRoot(root);
     return concreteTreeDecomposition;
 }
 
 
-void AbstractTreeDecomposition::writeToFile(string fileName) {
-    //fileName = "CounterExample_AbstractTreeDecomposition_"+abstract_fs::path(fileName).filename().string();
-    ofstream atdFile (fileName);
+void AbstractTreeDecomposition::writeToFile(std::string fileName) {
+    //fileName = "CounterExample_AbstractTreeDecomposition_"+abstract_fs::path(fileName).filename().std::string();
+    std::ofstream atdFile (fileName);
     if (atdFile.is_open())
     {
         atdFile << termInformation();
         atdFile.close();
     }
     else {
-        cout << "Unable to open "<< fileName << endl;
+        std::cout << "Unable to open "<< fileName << std::endl;
         exit(20);
     }
 }

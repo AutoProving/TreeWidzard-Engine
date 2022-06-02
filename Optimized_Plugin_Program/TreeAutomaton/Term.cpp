@@ -2,10 +2,11 @@
 #include "Term.h"
 
 void TermNodeContentType::print() {
-    cout<<"TermNodeContentType print"<<endl;
+    std::cout<<"TermNodeContentType print"<<std::endl;
     exit(20);
 }
 
-string TermNodeContentType::nodeInformation() {
-    cout<<"TermNodeContentType nodeInformation"<<endl;
-    exit(20);}
+std::string TermNodeContentType::nodeInformation() {
+    std::cout<<"TermNodeContentType nodeInformation"<<std::endl;
+    exit(20);
+}

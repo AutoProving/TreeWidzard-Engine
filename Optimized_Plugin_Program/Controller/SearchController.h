@@ -7,24 +7,23 @@
 #include "../Kernel/SearchStrategyHandler.h"
 #include "InputController.h"
 
-using namespace std;
 namespace fs = std::experimental::filesystem;
-using std::experimental::filesystem::current_path;
+using fs::current_path;
 
-extern FILE *input_in;
+extern std::FILE *input_in;
 
 class SearchController {
 private:
-    string searchStrategy;
-    string searchPluginPath;
+    std::string searchStrategy;
+    std::string searchPluginPath;
     Flags flags;
-    map<string, map<string,string> > searchList; // Each entry is a pair of core name and core attributes.
-    map<string, string> searchNamesToFiles;
+    std::map<std::string, std::map<std::string, std::string>> searchList; // Each entry is a pair of core name and core attributes.
+    std::map<std::string, std::string> searchNamesToFiles;
     InputController* inputController;
     Width width;
 
 public:
-    SearchController(const string &searchStrategy, const string &searchPluginPath, const Flags &flags,
+    SearchController(const std::string &searchStrategy, const std::string &searchPluginPath, const Flags &flags,
                       Width &width);
     void check_search();
     void action();

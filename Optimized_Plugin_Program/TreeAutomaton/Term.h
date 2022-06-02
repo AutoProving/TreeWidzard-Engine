@@ -5,13 +5,12 @@
 #include <vector>
 #include <iostream>
 #include <set>
-using namespace std;
 
 class TermNodeContentType{
 public:
     virtual void print();
-    virtual string nodeInformation();
-    /*  virtual shared_ptr<TermNodeContentType> smallestContent();
+    virtual std::string nodeInformation();
+    /*  virtual std::shared_ptr<TermNodeContentType> smallestContent();
     virtual void print();
     virtual bool operator<(const TermNodeContentType &rhs) const;
     virtual bool operator==(const TermNodeContentType &rhs) const;*/
@@ -28,13 +27,13 @@ template<class TermNodeContent>
 class TermNode{
 private:
     TermNodeContent nodeContent;
-    vector<shared_ptr<TermNode<TermNodeContent> > > children;
-    shared_ptr<TermNode<TermNodeContent> > parent;
+    std::vector<std::shared_ptr<TermNode<TermNodeContent> > > children;
+    std::shared_ptr<TermNode<TermNodeContent> > parent;
 public:
     TermNode();
 
-    TermNode(TermNodeContent nodeContent, const vector<shared_ptr<TermNode<TermNodeContent>>> &children,
-             const shared_ptr<TermNode<TermNodeContent>> &parent);
+    TermNode(TermNodeContent nodeContent, const std::vector<std::shared_ptr<TermNode<TermNodeContent>>> &children,
+             const std::shared_ptr<TermNode<TermNodeContent>> &parent);
 
     void setNodeContent(TermNodeContent nodeContent) {
         this->nodeContent = nodeContent;
@@ -42,20 +41,20 @@ public:
 
     TermNodeContent getNodeContent() const;
 
-    vector<shared_ptr<TermNode<TermNodeContent>>> &getChildren() {
+    std::vector<std::shared_ptr<TermNode<TermNodeContent>>> &getChildren() {
         return children;
     }
-    void setChildren(const vector<shared_ptr<TermNode<TermNodeContent>>> &children) {
+    void setChildren(const std::vector<std::shared_ptr<TermNode<TermNodeContent>>> &children) {
         TermNode::children = children;
     }
-    const shared_ptr<TermNode<TermNodeContent>> &getParent() const {
+    const std::shared_ptr<TermNode<TermNodeContent>> &getParent() const {
         return parent;
     }
 
-    void setParent(const shared_ptr<TermNode<TermNodeContent>> &parent) {
+    void setParent(const std::shared_ptr<TermNode<TermNodeContent>> &parent) {
         TermNode::parent = parent;
     }
-    void addChild(shared_ptr<TermNode<TermNodeContent> > child){
+    void addChild(std::shared_ptr<TermNode<TermNodeContent> > child){
         children.push_back(child);
     }
     bool operator==(const TermNode &rhs) const {
@@ -96,32 +95,32 @@ public:
     bool operator>=(const TermNode &rhs) const {
         return !(*this < rhs);
     }
-    string nodeInformation(unsigned &label);
+    std::string nodeInformation(unsigned &label);
     void printTermNode(unsigned &label);
 };
 
 template<class TermNodeContent>
 void TermNode<TermNodeContent>::printTermNode(unsigned &label) {
 
-    set<unsigned > childrenLabel;
+    std::set<unsigned > childrenLabel;
     for(auto child : children){
         child->printTermNode(label);
         childrenLabel.insert(label);
     }
     label++;
-    cout<<label <<"  ";
+    std::cout<<label <<"  ";
     nodeContent.print() ;
     if(childrenLabel.size()){
-        cout<<"(";
+        std::cout<<"(";
         for(auto childNo:childrenLabel){
-            cout<<childNo;
+            std::cout<<childNo;
             if(childNo!=*(--childrenLabel.end())){
-                cout<<",";
+                std::cout<<",";
             }
         }
-        cout<<")";
+        std::cout<<")";
     }
-    cout<<endl;
+    std::cout<<std::endl;
 
 }
 
@@ -131,20 +130,20 @@ TermNodeContent TermNode<TermNodeContent>::getNodeContent() const {
 }
 
 template<class TermNodeContent>
-string TermNode<TermNodeContent>::nodeInformation(unsigned int &label) {
-    string s;
-    set<unsigned > childrenLabel;
+std::string TermNode<TermNodeContent>::nodeInformation(unsigned int &label) {
+    std::string s;
+    std::set<unsigned > childrenLabel;
     for(auto child : children){
         s+=child->nodeInformation(label);
         childrenLabel.insert(label);
     }
     label++;
 
-    string t = to_string(label) + " "+ nodeContent.nodeInformation();
+    std::string t = std::to_string(label) + " "+ nodeContent.nodeInformation();
     if(childrenLabel.size()){
         t+= "(";
         for(auto childNo:childrenLabel){
-            t+= to_string(childNo);
+            t+= std::to_string(childNo);
             if(childNo!=*(--childrenLabel.end())){
                 t+=",";
             }
@@ -161,8 +160,8 @@ TermNode<TermNodeContent>::TermNode() {}
 
 template<class TermNodeContent>
 TermNode<TermNodeContent>::TermNode(TermNodeContent nodeContent,
-                                    const vector<shared_ptr<TermNode<TermNodeContent>>> &children,
-                                    const shared_ptr<TermNode<TermNodeContent>> &parent):nodeContent(nodeContent),
+                                    const std::vector<std::shared_ptr<TermNode<TermNodeContent>>> &children,
+                                    const std::shared_ptr<TermNode<TermNodeContent>> &parent):nodeContent(nodeContent),
                                                                                          children(children),
                                                                                          parent(parent) {}
 
@@ -171,14 +170,14 @@ TermNode<TermNodeContent>::TermNode(TermNodeContent nodeContent,
 template<class TermNodeContent>
 class Term{
 private:
-    shared_ptr<TermNode<TermNodeContent> > root= nullptr;
+    std::shared_ptr<TermNode<TermNodeContent> > root= nullptr;
 public:
 
-    shared_ptr<TermNode<TermNodeContent>> &getRoot() {
+    std::shared_ptr<TermNode<TermNodeContent>> &getRoot() {
         return root;
     }
 
-    void setRoot(shared_ptr<TermNode<TermNodeContent>>& rootNode) {
+    void setRoot(std::shared_ptr<TermNode<TermNodeContent>>& rootNode) {
         root = rootNode;
     }
 
@@ -208,7 +207,7 @@ public:
 
     ///////TODO
     void printTermNodes();
-    string termInformation();
+    std::string termInformation();
     ////Format?////
 };
 
@@ -216,14 +215,14 @@ template<class TermNodeContent>
 void Term<TermNodeContent>::printTermNodes() {
     unsigned label=0;
     if(!root){
-        cout<< "Term is empty"<<endl;
+        std::cout<< "Term is empty"<<std::endl;
         return;
     }
     root->printTermNode(label);
 }
 
 template<class TermNodeContent>
-string Term<TermNodeContent>::termInformation() {
+std::string Term<TermNodeContent>::termInformation() {
     unsigned label = 0;
     if(!root){
         return "Term is empty";

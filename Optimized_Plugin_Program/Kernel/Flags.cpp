@@ -9,7 +9,7 @@ Flags::Flags() {
 	content.insert({"Premise", 0});
 }
 
-float Flags::get(string s)
+float Flags::get(std::string s)
 {
     if(content.find(s)!=content.end()){
         return content[s];
@@ -18,7 +18,7 @@ float Flags::get(string s)
     }
 }
 
-void Flags::add_flag(string s, float value) {
+void Flags::add_flag(std::string s, float value) {
 	auto it = content.find(s);
 	if(it==content.end()){
         content.insert({s,value});

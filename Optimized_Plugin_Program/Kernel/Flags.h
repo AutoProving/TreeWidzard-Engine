@@ -6,16 +6,15 @@
 #include <iostream>
 #include <map>
 #include <string>
-using namespace std;
 
 class Flags {
   public:
 	Flags();
-	float get(string);
-	void add_flag(string, float);
+	float get(std::string);
+	void add_flag(std::string, float);
 
   private:
-	map<string, float> content;
+	std::map<std::string, float> content;
 };
 
 #endif

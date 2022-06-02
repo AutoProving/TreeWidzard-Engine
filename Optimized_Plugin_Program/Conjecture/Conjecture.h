@@ -20,33 +20,33 @@ typedef double(*Function_Binary)(double,double);
 class ConjectureNode{
 private:
   TokenType type; // Type of the Node
-  string val; // Name of the Node
+  std::string val; // Name of the Node
   double x=0; // Value of the Node if it is NUMBER
-  vector<ConjectureNode*> children;
+  std::vector<ConjectureNode*> children;
   ConjectureNode* parent;
 public:
 
-  ConjectureNode(TokenType type, const string &val);
+  ConjectureNode(TokenType type, const std::string &val);
 
   ConjectureNode(TokenType type, double x);
 
-  ConjectureNode(TokenType type, const string &val, double x);
+  ConjectureNode(TokenType type, const std::string &val, double x);
 
   TokenType getType() const;
 
   void setType(TokenType type);
 
-  const string &getVal() const;
+  const std::string &getVal() const;
 
-  void setVal(const string &val);
+  void setVal(const std::string &val);
 
   double getX() const;
 
   void setX(double x);
 
-  const vector<ConjectureNode *> &getChildren() const;
+  const std::vector<ConjectureNode *> &getChildren() const;
 
-  void setChildren(const vector<ConjectureNode *> &children);
+  void setChildren(const std::vector<ConjectureNode *> &children);
 
   ConjectureNode *getParent() const;
 
@@ -62,9 +62,9 @@ public:
 
 class Conjecture {
 private:
-  map<string,string> variablesToCoreName; // Map from variables To CoreName
-  map<string,Function_Binary> functions_binary;
-  map<string,Function_Unary> functions_unary;
+  std::map<std::string, std::string> variablesToCoreName; // Map from variables To CoreName
+  std::map<std::string, Function_Binary> functions_binary;
+  std::map<std::string, Function_Unary> functions_unary;
   ConjectureNode* root;
   DynamicKernel* kernel;
 public:
@@ -91,9 +91,10 @@ public:
 
   void print();
 
-  const map<string, string> &getVariablesToCoreName() const;
+  const std::map<std::string, std::string> &getVariablesToCoreName() const;
 
-  void setVariablesToCoreName(const map<string, string> &variablesToCoreName);
+  void setVariablesToCoreName(
+      const std::map<std::string, std::string> &variablesToCoreName);
 };
 
 #endif

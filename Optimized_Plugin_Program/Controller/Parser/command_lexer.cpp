@@ -1151,7 +1151,7 @@ yylval.string = strdup(yytext); return command_end;
 case 17:
 YY_RULE_SETUP
 #line 31 "command_lexer.l"
-yylval.number = stof(yytext);   return command_number;
+yylval.number = std::stof(yytext);   return command_number;
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
@@ -2187,6 +2187,3 @@ void yyfree (void * ptr )
 #define YYTABLES_NAME "yytables"
 
 #line 34 "command_lexer.l"
-
-
-

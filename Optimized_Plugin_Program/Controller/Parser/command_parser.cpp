@@ -81,7 +81,7 @@
     // using flex
     extern int yylex();
     extern int command_lineno;
-    extern void yyerror(int &result, string &width_type, int &width_value,char const* msg);
+    extern void yyerror(int &result, std::string &width_type, int &width_value,char const* msg);
     Flags flags;
 
   
@@ -670,7 +670,7 @@ yy_location_print_ (FILE *yyo, YYLTYPE const * const yylocp)
 `-----------------------------------*/
 
 static void
-yy_symbol_value_print (FILE *yyo, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, int &result, string &width_type, int &width_value)
+yy_symbol_value_print (FILE *yyo, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, int &result, std::string &width_type, int &width_value)
 {
   FILE *yyoutput = yyo;
   YYUSE (yyoutput);
@@ -691,7 +691,7 @@ yy_symbol_value_print (FILE *yyo, int yytype, YYSTYPE const * const yyvaluep, YY
 `---------------------------*/
 
 static void
-yy_symbol_print (FILE *yyo, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, int &result, string &width_type, int &width_value)
+yy_symbol_print (FILE *yyo, int yytype, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, int &result, std::string &width_type, int &width_value)
 {
   YYFPRINTF (yyo, "%s %s (",
              yytype < YYNTOKENS ? "token" : "nterm", yytname[yytype]);
@@ -941,7 +941,7 @@ static void yyexpandGLRStack (yyGLRStack* yystackp);
 #endif
 
 _Noreturn static void
-yyFail (yyGLRStack* yystackp, int &result, string &width_type, int &width_value, const char* yymsg)
+yyFail (yyGLRStack* yystackp, int &result, std::string &width_type, int &width_value, const char* yymsg)
 {
   if (yymsg != YY_NULLPTR)
     yyerror (result, width_type, width_value, yymsg);
@@ -992,7 +992,7 @@ yyfillin (yyGLRStackItem *yyvsp, int yylow0, int yylow1)
 
 /** If yychar is empty, fetch the next token.  */
 static inline yySymbol
-yygetToken (int *yycharp, int &result, string &width_type, int &width_value)
+yygetToken (int *yycharp, int &result, std::string &width_type, int &width_value)
 {
   yySymbol yytoken;
   YYUSE (result);
@@ -1040,7 +1040,7 @@ yyfill (yyGLRStackItem *yyvsp, int *yylow, int yylow1, yybool yynormal)
 static YYRESULTTAG
 yyuserAction (yyRuleNum yyn, int yyrhslen, yyGLRStackItem* yyvsp,
               yyGLRStack* yystackp,
-              YYSTYPE* yyvalp, YYLTYPE *yylocp, int &result, string &width_type, int &width_value)
+              YYSTYPE* yyvalp, YYLTYPE *yylocp, int &result, std::string &width_type, int &width_value)
 {
   yybool yynormal YY_ATTRIBUTE_UNUSED = yystackp->yysplitPoint == YY_NULLPTR;
   int yylow;
@@ -1110,20 +1110,20 @@ yyuserAction (yyRuleNum yyn, int yyrhslen, yyGLRStackItem* yyvsp,
 
   case 8:
 #line 74 "command_parser.y"
-                                                               {width_type = "path_width"; if((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.number)<0){cout<< "width value should be not negative" << endl; YYERROR;} width_value=(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.number);}
+                                                               {width_type = "path_width"; if((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.number)<0){std::cout<< "width value should be not negative" << std::endl; YYERROR;} width_value=(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.number);}
 #line 1115 "command_parser.cpp"
     break;
 
   case 9:
 #line 75 "command_parser.y"
-                                                              {width_type = "tree_width"; if((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.number)<0){cout<< "width value should be not negative" << endl; YYERROR;} width_value=(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.number);}
+                                                              {width_type = "tree_width"; if((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.number)<0){std::cout<< "width value should be not negative" << std::endl; YYERROR;} width_value=(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yysval.number);}
 #line 1121 "command_parser.cpp"
     break;
 
   case 10:
 #line 76 "command_parser.y"
                                                                                                            {
-													    if((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yysval.number)+(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yysval.number)>1){cout<<"sum of the probalities is bigger than 1"<<endl;
+													    if((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yysval.number)+(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yysval.number)>1){std::cout<<"sum of the probalities is bigger than 1"<<std::endl;
 													    YYERROR;}
 													    flags.add_flag("seedValue", (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-3)].yystate.yysemantics.yysval.number));
 													    flags.add_flag("probAddVertex", (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yysval.number));
@@ -1236,7 +1236,7 @@ yyuserMerge (int yyn, YYSTYPE* yy0, YYSTYPE* yy1)
 `-----------------------------------------------*/
 
 static void
-yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, YYLTYPE *yylocationp, int &result, string &width_type, int &width_value)
+yydestruct (const char *yymsg, int yytype, YYSTYPE *yyvaluep, YYLTYPE *yylocationp, int &result, std::string &width_type, int &width_value)
 {
   YYUSE (yyvaluep);
   YYUSE (yylocationp);
@@ -1260,7 +1260,7 @@ yyrhsLength (yyRuleNum yyrule)
 }
 
 static void
-yydestroyGLRState (char const *yymsg, yyGLRState *yys, int &result, string &width_type, int &width_value)
+yydestroyGLRState (char const *yymsg, yyGLRState *yys, int &result, std::string &width_type, int &width_value)
 {
   if (yys->yyresolved)
     yydestruct (yymsg, yystos[yys->yylrState],
@@ -1676,7 +1676,7 @@ yyglrShiftDefer (yyGLRStack* yystackp, ptrdiff_t yyk, yyStateNum yylrState,
 
 static inline void
 yy_reduce_print (yybool yynormal, yyGLRStackItem* yyvsp, ptrdiff_t yyk,
-                 yyRuleNum yyrule, int &result, string &width_type, int &width_value)
+                 yyRuleNum yyrule, int &result, std::string &width_type, int &width_value)
 {
   int yynrhs = yyrhsLength (yyrule);
   int yylow = 1;
@@ -1708,7 +1708,7 @@ yy_reduce_print (yybool yynormal, yyGLRStackItem* yyvsp, ptrdiff_t yyk,
  *  for userAction.  */
 static inline YYRESULTTAG
 yydoAction (yyGLRStack* yystackp, ptrdiff_t yyk, yyRuleNum yyrule,
-            YYSTYPE* yyvalp, YYLTYPE *yylocp, int &result, string &width_type, int &width_value)
+            YYSTYPE* yyvalp, YYLTYPE *yylocp, int &result, std::string &width_type, int &width_value)
 {
   int yynrhs = yyrhsLength (yyrule);
 
@@ -1760,7 +1760,7 @@ yydoAction (yyGLRStack* yystackp, ptrdiff_t yyk, yyRuleNum yyrule,
  */
 static inline YYRESULTTAG
 yyglrReduce (yyGLRStack* yystackp, ptrdiff_t yyk, yyRuleNum yyrule,
-             yybool yyforceEval, int &result, string &width_type, int &width_value)
+             yybool yyforceEval, int &result, std::string &width_type, int &width_value)
 {
   ptrdiff_t yyposn = yystackp->yytops.yystates[yyk]->yyposn;
 
@@ -1971,7 +1971,7 @@ yypreference (yySemanticOption* y0, yySemanticOption* y1)
 }
 
 static YYRESULTTAG yyresolveValue (yyGLRState* yys,
-                                   yyGLRStack* yystackp, int &result, string &width_type, int &width_value);
+                                   yyGLRStack* yystackp, int &result, std::string &width_type, int &width_value);
 
 
 /** Resolve the previous YYN states starting at and including state YYS
@@ -1981,7 +1981,7 @@ static YYRESULTTAG yyresolveValue (yyGLRState* yys,
  *  data so that yydestroyGLRState can be invoked if necessary.  */
 static YYRESULTTAG
 yyresolveStates (yyGLRState* yys, int yyn,
-                 yyGLRStack* yystackp, int &result, string &width_type, int &width_value)
+                 yyGLRStack* yystackp, int &result, std::string &width_type, int &width_value)
 {
   if (0 < yyn)
     {
@@ -2000,7 +2000,7 @@ yyresolveStates (yyGLRState* yys, int yyn,
  *  semantic values if invoked).  */
 static YYRESULTTAG
 yyresolveAction (yySemanticOption* yyopt, yyGLRStack* yystackp,
-                 YYSTYPE* yyvalp, YYLTYPE *yylocp, int &result, string &width_type, int &width_value)
+                 YYSTYPE* yyvalp, YYLTYPE *yylocp, int &result, std::string &width_type, int &width_value)
 {
   yyGLRStackItem yyrhsVals[YYMAXRHS + YYMAXLEFT + 1];
   int yynrhs = yyrhsLength (yyopt->yyrule);
@@ -2085,7 +2085,7 @@ yyreportTree (yySemanticOption* yyx, int yyindent)
 
 static YYRESULTTAG
 yyreportAmbiguity (yySemanticOption* yyx0,
-                   yySemanticOption* yyx1, int &result, string &width_type, int &width_value)
+                   yySemanticOption* yyx1, int &result, std::string &width_type, int &width_value)
 {
   YYUSE (yyx0);
   YYUSE (yyx1);
@@ -2108,7 +2108,7 @@ yyreportAmbiguity (yySemanticOption* yyx0,
  *  The first semantic option of a state is always chosen.  */
 static void
 yyresolveLocations (yyGLRState *yys1, int yyn1,
-                    yyGLRStack *yystackp, int &result, string &width_type, int &width_value)
+                    yyGLRStack *yystackp, int &result, std::string &width_type, int &width_value)
 {
   if (0 < yyn1)
     {
@@ -2156,7 +2156,7 @@ yyresolveLocations (yyGLRState *yys1, int yyn1,
  *  result = yyok, YYS has been left with consistent data so that
  *  yydestroyGLRState can be invoked if necessary.  */
 static YYRESULTTAG
-yyresolveValue (yyGLRState* yys, yyGLRStack* yystackp, int &result, string &width_type, int &width_value)
+yyresolveValue (yyGLRState* yys, yyGLRStack* yystackp, int &result, std::string &width_type, int &width_value)
 {
   yySemanticOption* yyoptionList = yys->yysemantics.yyfirstVal;
   yySemanticOption* yybest = yyoptionList;
@@ -2240,7 +2240,7 @@ yyresolveValue (yyGLRState* yys, yyGLRStack* yystackp, int &result, string &widt
 }
 
 static YYRESULTTAG
-yyresolveStack (yyGLRStack* yystackp, int &result, string &width_type, int &width_value)
+yyresolveStack (yyGLRStack* yystackp, int &result, std::string &width_type, int &width_value)
 {
   if (yystackp->yysplitPoint != YY_NULLPTR)
     {
@@ -2289,7 +2289,7 @@ yycompressStack (yyGLRStack* yystackp)
 
 static YYRESULTTAG
 yyprocessOneStack (yyGLRStack* yystackp, ptrdiff_t yyk,
-                   ptrdiff_t yyposn, int &result, string &width_type, int &width_value)
+                   ptrdiff_t yyposn, int &result, std::string &width_type, int &width_value)
 {
   while (yystackp->yytops.yystates[yyk] != YY_NULLPTR)
     {
@@ -2381,7 +2381,7 @@ yyprocessOneStack (yyGLRStack* yystackp, ptrdiff_t yyk,
 }
 
 static void
-yyreportSyntaxError (yyGLRStack* yystackp, int &result, string &width_type, int &width_value)
+yyreportSyntaxError (yyGLRStack* yystackp, int &result, std::string &width_type, int &width_value)
 {
   if (yystackp->yyerrState != 0)
     return;
@@ -2527,7 +2527,7 @@ yyreportSyntaxError (yyGLRStack* yystackp, int &result, string &width_type, int 
    yylval, and yylloc are the syntactic category, semantic value, and location
    of the lookahead.  */
 static void
-yyrecoverSyntaxError (yyGLRStack* yystackp, int &result, string &width_type, int &width_value)
+yyrecoverSyntaxError (yyGLRStack* yystackp, int &result, std::string &width_type, int &width_value)
 {
   if (yystackp->yyerrState == 3)
     /* We just shifted the error token and (perhaps) took some
@@ -2638,7 +2638,7 @@ yyrecoverSyntaxError (yyGLRStack* yystackp, int &result, string &width_type, int
 `----------*/
 
 int
-yyparse (int &result, string &width_type, int &width_value)
+yyparse (int &result, std::string &width_type, int &width_value)
 {
   int yyresult;
   yyGLRStack yystack;
@@ -2943,9 +2943,8 @@ yypdumpstack (yyGLRStack* yystackp)
 #line 104 "command_parser.y"
 
 
-void yyerror(int &result, string &width_type, int &width_value, char const* msg){
+void yyerror(int &result, std::string &width_type, int &width_value, char const* msg){
   //std::cerr<<"Syntax Error: "<< msg << " on line " <<command_lineno << std::endl;
-  cout<<"Wrong number of inputs. Please execute treewidzard --help for more information."<<endl;
+  std::cout<<"Wrong number of inputs. Please execute treewidzard --help for more information."<<std::endl;
   // error printing  disabled, it is handeled in main.cpp
 }
-

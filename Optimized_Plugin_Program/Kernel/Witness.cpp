@@ -23,21 +23,21 @@ bool operator<(const Witness &lhs, const Witness &rhs) {
 Witness &Witness::operator=(Witness &rhs) { return this->set_equal(rhs); }
 
 void Witness::print() {
-    cout << "It you are seeing this, it is because the print function was not "
+    std::cout << "It you are seeing this, it is because the print function was not "
             "yet implemented in the derived class."
-         << endl;
+         << std::endl;
 }
 
-shared_ptr<Witness> Witness::relabel(map<unsigned int, unsigned int> relabelingMap) {
-    cout << "It you are seeing this, it is because the relabel function was not "
+std::shared_ptr<Witness> Witness::relabel(std::map<unsigned int, unsigned int> relabelingMap) {
+    std::cout << "It you are seeing this, it is because the relabel function was not "
             "yet implemented in the derived class."
-         << endl;
+         << std::endl;
     exit(20);
 }
 
-string Witness::witnessInformation() {
-    cout << "It you are seeing this, it is because the witnessInformation function was not "
+std::string Witness::witnessInformation() {
+    std::cout << "It you are seeing this, it is because the witnessInformation function was not "
             "yet implemented in the derived class."
-         << endl;
+         << std::endl;
     exit(20);
 }

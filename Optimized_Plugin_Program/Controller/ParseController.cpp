@@ -1,32 +1,32 @@
 #include "ParseController.h"
-ParseController::ParseController(const Flags &flag, const string &inputPath){
+ParseController::ParseController(const Flags &flag, const std::string &inputPath){
     this->flag = flag;
-    string file_path = __FILE__;
-    string path = file_path.substr(0, file_path.rfind("/"));
-    string dynamicPluginPath =path+"/../DynamicPlugins/";
+    std::string file_path = __FILE__;
+    std::string path = file_path.substr(0, file_path.rfind("/"));
+    std::string dynamicPluginPath =path+"/../DynamicPlugins/";
     inputController = new InputController(inputPath, dynamicPluginPath);
 }
 
-void ParseController::parse_pace(string graphPath, string decompositionPath) {
-    shared_ptr<MultiGraph> multigraph(new MultiGraph);
+void ParseController::parse_pace(std::string graphPath, std::string decompositionPath) {
+    std::shared_ptr<MultiGraph> multigraph(new MultiGraph);
     gr_in = fopen(graphPath.c_str(),"r");
     if(!gr_in) {
         std::perror("Reading Graph: File opening failed. ");
-        cout<<graphPath<< " could not open."<<endl;
+        std::cout<<graphPath<< " could not open."<<std::endl;
         exit(20);
     }
     int result = 1; // if parsing successful result will be 0 otherwise 1
     result = gr_parse(*multigraph,  result); // Parser function from Parser.hpp
     // check for successful parsing
     if(result != 0){
-        cout<<" Error: input file "<< graphPath<< " is not in valid format"<<endl;
+        std::cout<<" Error: input file "<< graphPath<< " is not in valid format"<<std::endl;
         exit(20);
     }
 
-    string output_file_path = fs::path(inputController->getInputPath()).parent_path().string();
-    string abstract_file_name = fs::path(decompositionPath).stem().string();
-    string property_file_name = fs::path(inputController->getInputPath()).stem().string();
-    string name;
+    std::string output_file_path = fs::path(inputController->getInputPath()).parent_path().string();
+    std::string abstract_file_name = fs::path(decompositionPath).stem().string();
+    std::string property_file_name = fs::path(inputController->getInputPath()).stem().string();
+    std::string name;
     if(output_file_path == ""){
         name = "PARSE_PACE_"+property_file_name+"_"+abstract_file_name;
     }else{
@@ -39,14 +39,14 @@ void ParseController::parse_pace(string graphPath, string decompositionPath) {
     td_in = fopen(decompositionPath.c_str(),"r");
     if(!td_in) {
         std::perror("Reading Tree Decomposition: File opening failed");
-        cout<<decompositionPath<< " could not open."<<endl;
+        std::cout<<decompositionPath<< " could not open."<<std::endl;
         exit(20);
     }
     result = 1; // if parsing successful result will be 0 otherwise 1
     result= td_parse(td,  result); // Parser function from Parser.hpp
     // check for successful parsing
     if(result != 0){
-        cout<<" Error: input file "<< decompositionPath<< " is not in valid format"<<endl;
+        std::cout<<" Error: input file "<< decompositionPath<< " is not in valid format"<<std::endl;
         exit(20);
     }
     //    cout<< " tree decomposition read from input"<<endl;
@@ -56,10 +56,10 @@ void ParseController::parse_pace(string graphPath, string decompositionPath) {
     //    td.print();
     //    td.printTree();
     //   cout<<"-----------Concrete decomposition"<<endl;
-    shared_ptr<ConcreteTreeDecomposition> concreteTreeDecomposition;
+    std::shared_ptr<ConcreteTreeDecomposition> concreteTreeDecomposition;
     concreteTreeDecomposition = td.convertToConcreteTreeDecomposition();
     //  concreteTreeDecomposition->printTermNodes();
-    cout<<"----Evaluating-----:"<<endl;
+    std::cout<<"----Evaluating-----:"<<std::endl;
     concreteTreeDecomposition->conjectureCheck(this->inputController->getConjecture(),flag, name);
     AbstractTreeDecomposition abstractTreeDecomposition = concreteTreeDecomposition->convertToAbstractTreeDecomposition();
 
@@ -82,11 +82,11 @@ void ParseController::parse_pace(string graphPath, string decompositionPath) {
     //witnessTreePace.print();
 }
 
-void ParseController::parse_abstract(string abstractPath) {
+void ParseController::parse_abstract(std::string abstractPath) {
     atd_in = fopen(abstractPath.c_str(), "r");
     if (!atd_in) {
         std::perror("File opening failed");
-        cerr<<"\n "<<abstractPath<<" could not open."<<endl;
+        std::cerr<<"\n "<<abstractPath<<" could not open."<<std::endl;
         exit(20);
     }
     AbstractTreeDecomposition abstractTreeDecomposition;
@@ -94,17 +94,17 @@ void ParseController::parse_abstract(string abstractPath) {
     resultATD = atd_parse(abstractTreeDecomposition, resultATD); // Parser function from Parser.hpp
     // check for successful parsing
     if (resultATD != 0) {
-        cout << " Error: input file " << abstractPath << " is not in valid format"
-            << endl;
+        std::cout << " Error: input file " << abstractPath << " is not in valid format"
+            << std::endl;
         exit(20);
     }
     ConcreteTreeDecomposition concreteTreeDecomposition = abstractTreeDecomposition.convertToConcreteTreeDecomposition();
     //concreteTreeDecomposition.printTermNodes();
-    cout<<"----Evaluating-----:"<<endl;
-    string output_file_path = fs::path(inputController->getInputPath()).parent_path().string();
-    string abstract_file_name = fs::path(abstractPath).stem().string();
-    string property_file_name = fs::path(inputController->getInputPath()).stem().string();
-    string name;
+    std::cout<<"----Evaluating-----:"<<std::endl;
+    std::string output_file_path = fs::path(inputController->getInputPath()).parent_path().string();
+    std::string abstract_file_name = fs::path(abstractPath).stem().string();
+    std::string property_file_name = fs::path(inputController->getInputPath()).stem().string();
+    std::string name;
     if(output_file_path == ""){
         name = "PARSE_ABSTRACT_"+property_file_name+"_"+abstract_file_name;
     }else{
@@ -143,4 +143,3 @@ void ParseController::test_term() {
     //    TreeAutomaton<FarhadState,AbstractTreeDecompositionNodeContent> treeAutomaton;
 
 }
-
