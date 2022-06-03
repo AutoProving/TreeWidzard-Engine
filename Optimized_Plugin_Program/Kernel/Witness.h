@@ -10,24 +10,25 @@ class Witness {
 protected:
     virtual bool is_equal(const Witness &rhs) const;
     virtual bool is_less(const Witness &rhs) const;
-    virtual Witness &set_equal(Witness &witness);
+    virtual Witness &set_equal(const Witness &witness);
 public:
-    virtual std::shared_ptr<Witness> relabel(std::map<unsigned,unsigned> relabelingMap);
-    virtual void print();
-    virtual std::string witnessInformation();
+    virtual std::shared_ptr<Witness> relabel(std::map<unsigned,unsigned> relabelingMap) const;
+    virtual void print() const;
+    virtual std::string witnessInformation() const;
     virtual ~Witness();
     friend bool operator==(const Witness &lhs, const Witness &rhs);
     friend bool operator<(const Witness &lhs, const Witness &rhs);
     virtual Witness &operator=(Witness &rhs);
-    bool operator!=(Witness &rhs);
+    bool operator!=(const Witness &rhs) const;
     struct IsLessSharedPtr{
-        bool operator()(const std::shared_ptr<Witness> lhs,
-                        const std::shared_ptr<Witness> rhs) const {
+        bool operator()(const std::shared_ptr<const Witness> &lhs,
+                        const std::shared_ptr<const Witness> &rhs) const {
             return *lhs < *rhs;
         }
     };
 };
 
 typedef std::shared_ptr<Witness> WitnessPointer;
+typedef std::shared_ptr<Witness const> WitnessPointerConst;
 
 #endif

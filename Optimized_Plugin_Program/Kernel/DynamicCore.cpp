@@ -12,16 +12,16 @@ void DynamicCore::insertIntoInitialWitnessSet(WitnessPointer w) {
 
 WitnessSetPointer DynamicCore::intro_v(unsigned i, Bag &b,WitnessSetPointer witnessSet) {
 	WitnessSetPointer aux = witnessSet->createEmptyWitnessSet(); // aux initializes with empty set
-	for (auto temp : *witnessSet) {
-        aux->union_set_witness(intro_v(i, b, *temp));
-    }
+	for (WitnessPointerConst temp : *witnessSet) {
+		aux->union_set_witness(intro_v(i, b, *temp));
+	}
 	return clean(aux);
 }
 
 WitnessSetPointer DynamicCore::intro_e(unsigned i, unsigned j, Bag &b,WitnessSetPointer witnessSet) {
 	WitnessSetPointer aux = witnessSet->createEmptyWitnessSet(); // aux initializes with empty set
 	WitnessSet t = *aux;
-	for (auto temp : *witnessSet) {
+	for (WitnessPointerConst temp : *witnessSet) {
 		aux->union_set_witness(intro_e(i, j, b, *temp));
 	}
 
@@ -30,7 +30,7 @@ WitnessSetPointer DynamicCore::intro_e(unsigned i, unsigned j, Bag &b,WitnessSet
 
 WitnessSetPointer DynamicCore::forget_v(unsigned i, Bag &b,WitnessSetPointer witnessSet) {
 	WitnessSetPointer aux = witnessSet->createEmptyWitnessSet(); // aux initializes with empty set
-	for (auto temp : *witnessSet) {
+	for (WitnessPointerConst temp : *witnessSet) {
 		aux->union_set_witness(forget_v(i, b, *temp));
 	}
     return clean(aux);
@@ -38,17 +38,17 @@ WitnessSetPointer DynamicCore::forget_v(unsigned i, Bag &b,WitnessSetPointer wit
 
 WitnessSetPointer DynamicCore::join(Bag &b, WitnessSetPointer witnessSet1,WitnessSetPointer witnessSet2) {
 	WitnessSetPointer aux = witnessSet1->createEmptyWitnessSet();
-	for (auto temp1 : *witnessSet1) {
-		for (auto temp2 : *witnessSet2) {
+	for (WitnessPointerConst temp1 : *witnessSet1) {
+		for (WitnessPointerConst temp2 : *witnessSet2) {
 			aux->union_set_witness(join(b, *temp1, *temp2));
 		}
 	}
-    return clean(aux);
+	return clean(aux);
 }
 
 bool DynamicCore::is_final_set_witness(Bag &b, WitnessSetPointer witnessSet) {
 	bool flag = false;
-	for (auto temp : *witnessSet) {
+	for (WitnessPointerConst temp : *witnessSet) {
 		if (is_final_witness(*temp)) {
 			return true;
 		}
@@ -86,34 +86,34 @@ int DynamicCore::weight(WitnessSetPointer witnessSet) {
     }
 }
 
-WitnessSetPointer DynamicCore::intro_v(unsigned i, Bag &b, Witness &witness) {
+WitnessSetPointer DynamicCore::intro_v(unsigned i, Bag &b, const Witness &witness) {
 	std::cout << "ERROR: DynamicCore::intro_v";
 	exit(20);
 }
 
 WitnessSetPointer DynamicCore::intro_e(unsigned i, unsigned j, Bag &b,
-									   Witness &witness) {
+									   const Witness &witness) {
 	std::cout << "ERROR: DynamicCore::intro_e";
 	exit(20);
 }
 
-WitnessSetPointer DynamicCore::forget_v(unsigned i, Bag &b, Witness &witness) {
+WitnessSetPointer DynamicCore::forget_v(unsigned i, Bag &b, const Witness &witness) {
 	std::cout << "ERROR: DynamicCore::forget_v";
 	exit(20);
 }
 
-WitnessSetPointer DynamicCore::join(Bag &b, Witness &witness1,
-									Witness &witness2) {
+WitnessSetPointer DynamicCore::join(Bag &b, const Witness &witness1,
+									const Witness &witness2) {
 	std::cout << "ERROR: DynamicCore::join";
 	exit(20);
 }
 
-bool DynamicCore::is_final_witness(Witness &witness) {
+bool DynamicCore::is_final_witness(const Witness &witness) {
 	std::cout << "ERROR: DynamicCore::is_final_witness";
 	exit(20);
 }
 
-int DynamicCore::weight(Witness &witness) {
+int DynamicCore::weight(const Witness &witness) {
 	std::cout << "ERROR: DynamicCore::weight";
 	exit(20);
 }

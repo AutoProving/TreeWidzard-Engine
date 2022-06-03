@@ -178,6 +178,7 @@ private:
         };
 
     };
+public:
     BaseIterator begin() {
         BaseIterator baseIterator(std::unique_ptr<AbstractIterator>(new WitnessSetTypeTwoIterator(container.begin())));
         return baseIterator;
@@ -330,14 +331,14 @@ bool WitnessSetTypeTwo<T>::isLess(WitnessSet &rhs) {
         } else if (rhs.size() < size()) {
             return false;
         } else {
-            WitnessSetTypeTwo<T>::WitnessSetTypeTwoIterator it = rhs.begin();
+            auto it = rhs.begin();
             for (auto element : *this) {
                 if (**it < *element) {
                     return false;
                 } else if (*element < **it) {
                     return true;
                 }
-                it++;
+                ++it;
             }
             return false;
         }
@@ -353,12 +354,12 @@ bool WitnessSetTypeTwo<T>::isEqual(WitnessSet &rhs) {
         if (size() != rhs.size()) {
             return false;
         } else {
-            WitnessSetTypeTwo<T>::WitnessSetTypeTwoIterator it = rhs.begin();
+            auto it = rhs.begin();
             for (auto element : *this) {
                 if (!(*element == **it)) {
                     return false;
                 }
-                it++;
+                ++it;
             }
         }
         return true;

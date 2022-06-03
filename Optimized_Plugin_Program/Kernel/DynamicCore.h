@@ -32,15 +32,15 @@ class DynamicCore {
 	int getWidth();
 	void setWidth(int width);
 	virtual void createInitialWitnessSet();
-	virtual WitnessSetPointer intro_v(unsigned i, Bag &b, Witness &witness);
+	virtual WitnessSetPointer intro_v(unsigned i, Bag &b, const Witness &witness);
 	virtual WitnessSetPointer intro_e(unsigned i, unsigned j, Bag &b,
-									  Witness &witness);
-	virtual WitnessSetPointer forget_v(unsigned i, Bag &b, Witness &witness);
-	virtual WitnessSetPointer join(Bag &b, Witness &witness1,
-								   Witness &witness2);
-	virtual bool is_final_witness(Witness &witness);
+									  const Witness &witness);
+	virtual WitnessSetPointer forget_v(unsigned i, Bag &b, const Witness &witness);
+	virtual WitnessSetPointer join(Bag &b, const Witness &witness1,
+								   const Witness &witness2);
+	virtual bool is_final_witness(const Witness &witness);
 	virtual WitnessSetPointer clean(WitnessSetPointer witnessSet);
-	virtual int weight(Witness &witness);
+	virtual int weight(const Witness &witness);
 	WitnessSetPointer intro_v(unsigned i, Bag &b, WitnessSetPointer witnessSet);
 	WitnessSetPointer intro_e(unsigned i, unsigned j, Bag &b,WitnessSetPointer witnessSet);
 	WitnessSetPointer forget_v(unsigned i, Bag &b, WitnessSetPointer witnessSet);

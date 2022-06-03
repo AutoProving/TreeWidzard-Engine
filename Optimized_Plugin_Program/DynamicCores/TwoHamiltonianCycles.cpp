@@ -47,7 +47,7 @@ bool TwoHamiltonianCycles_Witness::is_less_implementation(const TwoHamiltonianCy
   //*****************************
 }
 
-Witness & TwoHamiltonianCycles_Witness::set_equal_implementation(TwoHamiltonianCycles_WitnessPointer w) {
+Witness & TwoHamiltonianCycles_Witness::set_equal_implementation(TwoHamiltonianCycles_WitnessPointerConst w) {
   //*****************************
   //*****************************
   this->info[0] = w->info[0];
@@ -60,9 +60,9 @@ Witness & TwoHamiltonianCycles_Witness::set_equal_implementation(TwoHamiltonianC
   //*****************************
 }
 
-shared_ptr<Witness> TwoHamiltonianCycles_Witness::relabel(map<unsigned int, unsigned int> relabelingMap) {
+shared_ptr<Witness> TwoHamiltonianCycles_Witness::relabel(map<unsigned int, unsigned int> relabelingMap) const {
   if (this->info[0].empty() && this->info[1].empty()) {
-    return this->shared_from_this();
+    return make_shared<Witness>();
   }
 
   TwoHamiltonianCycles_WitnessPointer relabeledWitness(new TwoHamiltonianCycles_Witness);
@@ -108,14 +108,14 @@ shared_ptr<Witness> TwoHamiltonianCycles_Witness::relabel(map<unsigned int, unsi
   return relabeledWitness;
 }
 
-void TwoHamiltonianCycles_Witness::print() {
+void TwoHamiltonianCycles_Witness::print() const {
   //*****************************
   //*****************************
   cout << this->witnessInformation() << flush;
   //*****************************
   //*****************************
 }
-string TwoHamiltonianCycles_Witness::witnessInformation() {
+string TwoHamiltonianCycles_Witness::witnessInformation() const {
   //*****************************
   //*****************************
   stringstream out;
@@ -185,7 +185,7 @@ void TwoHamiltonianCycles_DynamicCore::createInitialWitnessSet_implementation() 
   //*****************************
 }
 void TwoHamiltonianCycles_DynamicCore::intro_v_implementation(unsigned int i, Bag &,
-    TwoHamiltonianCycles_WitnessPointer w, TwoHamiltonianCycles_WitnessSetPointer witnessSet) {
+    TwoHamiltonianCycles_WitnessPointerConst w, TwoHamiltonianCycles_WitnessSetPointer witnessSet) {
   //*****************************
   //*****************************
   if (w->closed[0] || w->closed[1])
@@ -209,7 +209,7 @@ void TwoHamiltonianCycles_DynamicCore::intro_v_implementation(unsigned int i, Ba
 }
 
 void TwoHamiltonianCycles_DynamicCore::intro_e_implementation(unsigned int i, unsigned int j, Bag &,
-    TwoHamiltonianCycles_WitnessPointer w,
+    TwoHamiltonianCycles_WitnessPointerConst w,
     TwoHamiltonianCycles_WitnessSetPointer witnessSet) {
   //*****************************
   //*****************************
@@ -325,7 +325,7 @@ void TwoHamiltonianCycles_DynamicCore::intro_e_implementation(unsigned int i, un
   //*****************************
 }
 void TwoHamiltonianCycles_DynamicCore::forget_v_implementation(unsigned int i, Bag &,
-    TwoHamiltonianCycles_WitnessPointer w, TwoHamiltonianCycles_WitnessSetPointer witnessSet) {
+    TwoHamiltonianCycles_WitnessPointerConst w, TwoHamiltonianCycles_WitnessSetPointer witnessSet) {
   //*****************************
   //*****************************
   //Only forget vertices with degree 2
@@ -347,8 +347,8 @@ void TwoHamiltonianCycles_DynamicCore::forget_v_implementation(unsigned int i, B
   //*****************************
   //*****************************
 }
-void TwoHamiltonianCycles_DynamicCore::join_implementation(Bag &, TwoHamiltonianCycles_WitnessPointer w1,
-    TwoHamiltonianCycles_WitnessPointer w2,
+void TwoHamiltonianCycles_DynamicCore::join_implementation(Bag &, TwoHamiltonianCycles_WitnessPointerConst w1,
+    TwoHamiltonianCycles_WitnessPointerConst w2,
     TwoHamiltonianCycles_WitnessSetPointer witnessSet) {
   //*****************************
   //*****************************
@@ -520,7 +520,7 @@ TwoHamiltonianCycles_WitnessSetPointer TwoHamiltonianCycles_DynamicCore::clean_i
   return witnessSet;
 }
 
-bool TwoHamiltonianCycles_DynamicCore::is_final_witness_implementation(TwoHamiltonianCycles_WitnessPointer w) {
+bool TwoHamiltonianCycles_DynamicCore::is_final_witness_implementation(TwoHamiltonianCycles_WitnessPointerConst w) {
   //*****************************
   //*****************************
   if (!w->was_different)
@@ -564,9 +564,9 @@ bool TwoHamiltonianCycles_Witness::is_less(const Witness &rhs)const {
   }
 }
 
-Witness &TwoHamiltonianCycles_Witness::set_equal(Witness &witness) {
-  if (TwoHamiltonianCycles_Witness *e = dynamic_cast<TwoHamiltonianCycles_Witness *>(&witness)) {
-    TwoHamiltonianCycles_WitnessPointer w = e->shared_from_this();
+Witness &TwoHamiltonianCycles_Witness::set_equal(const Witness &witness) {
+  if (const TwoHamiltonianCycles_Witness *e = dynamic_cast<const TwoHamiltonianCycles_Witness *>(&witness)) {
+    TwoHamiltonianCycles_WitnessPointerConst w = e->shared_from_this();
     return set_equal_implementation(w);
   }else{
     cerr<<"ERROR: in TwoHamiltonianCycles_Witness::operator= cast error"<<endl;
@@ -596,9 +596,9 @@ void TwoHamiltonianCycles_DynamicCore::createInitialWitnessSet() {
 }
 
 
-WitnessSetPointer TwoHamiltonianCycles_DynamicCore::intro_v(unsigned i, Bag &b, Witness &witness  ) {
-  if (TwoHamiltonianCycles_Witness *e = dynamic_cast<TwoHamiltonianCycles_Witness *>(&witness)){
-    TwoHamiltonianCycles_WitnessPointer w = e->shared_from_this();
+WitnessSetPointer TwoHamiltonianCycles_DynamicCore::intro_v(unsigned i, Bag &b, const Witness &witness  ) {
+  if (const TwoHamiltonianCycles_Witness *e = dynamic_cast<const TwoHamiltonianCycles_Witness *>(&witness)){
+    TwoHamiltonianCycles_WitnessPointerConst w = e->shared_from_this();
     TwoHamiltonianCycles_WitnessSetPointer witnessSet (new TwoHamiltonianCycles_WitnessSet);
     intro_v_implementation(i,b,w,witnessSet);
     return clean(witnessSet);
@@ -610,9 +610,9 @@ WitnessSetPointer TwoHamiltonianCycles_DynamicCore::intro_v(unsigned i, Bag &b, 
 
 
 
-WitnessSetPointer TwoHamiltonianCycles_DynamicCore::intro_e(unsigned i, unsigned j, Bag &b, Witness &witness) {
-  if (TwoHamiltonianCycles_Witness *e = dynamic_cast<TwoHamiltonianCycles_Witness *>(&witness)){
-    TwoHamiltonianCycles_WitnessPointer w = e->shared_from_this();
+WitnessSetPointer TwoHamiltonianCycles_DynamicCore::intro_e(unsigned i, unsigned j, Bag &b, const Witness &witness) {
+  if (const TwoHamiltonianCycles_Witness *e = dynamic_cast<const TwoHamiltonianCycles_Witness *>(&witness)){
+    TwoHamiltonianCycles_WitnessPointerConst w = e->shared_from_this();
     TwoHamiltonianCycles_WitnessSetPointer witnessSet (new TwoHamiltonianCycles_WitnessSet);
     intro_e_implementation(i,j,b,w,witnessSet);
     return clean(witnessSet);
@@ -623,9 +623,9 @@ WitnessSetPointer TwoHamiltonianCycles_DynamicCore::intro_e(unsigned i, unsigned
 }
 
 
-WitnessSetPointer TwoHamiltonianCycles_DynamicCore::forget_v(unsigned i, Bag &b, Witness &witness) {
-  if (TwoHamiltonianCycles_Witness *e = dynamic_cast<TwoHamiltonianCycles_Witness *>(&witness)){
-    TwoHamiltonianCycles_WitnessPointer w = e->shared_from_this();
+WitnessSetPointer TwoHamiltonianCycles_DynamicCore::forget_v(unsigned i, Bag &b, const Witness &witness) {
+  if (const TwoHamiltonianCycles_Witness *e = dynamic_cast<const TwoHamiltonianCycles_Witness *>(&witness)){
+    TwoHamiltonianCycles_WitnessPointerConst w = e->shared_from_this();
     TwoHamiltonianCycles_WitnessSetPointer witnessSet (new TwoHamiltonianCycles_WitnessSet);
     forget_v_implementation(i,b,w,witnessSet);
     return clean(witnessSet);
@@ -636,12 +636,12 @@ WitnessSetPointer TwoHamiltonianCycles_DynamicCore::forget_v(unsigned i, Bag &b,
 }
 
 
-WitnessSetPointer TwoHamiltonianCycles_DynamicCore::join(Bag &b, Witness &witness1, Witness &witness2) {
-  if(TwoHamiltonianCycles_Witness *e1 = dynamic_cast<TwoHamiltonianCycles_Witness *>(&witness1)){
-    if(TwoHamiltonianCycles_Witness *e2 = dynamic_cast<TwoHamiltonianCycles_Witness *>(&witness2)){
+WitnessSetPointer TwoHamiltonianCycles_DynamicCore::join(Bag &b, const Witness &witness1, const Witness &witness2) {
+  if(const TwoHamiltonianCycles_Witness *e1 = dynamic_cast<const TwoHamiltonianCycles_Witness *>(&witness1)){
+    if(const TwoHamiltonianCycles_Witness *e2 = dynamic_cast<const TwoHamiltonianCycles_Witness *>(&witness2)){
       // Note: Do not merge the two "if" instructions above into a single "if". Potential for errors
-      TwoHamiltonianCycles_WitnessPointer w1 = e1->shared_from_this();
-      TwoHamiltonianCycles_WitnessPointer w2 = e2->shared_from_this();
+      TwoHamiltonianCycles_WitnessPointerConst w1 = e1->shared_from_this();
+      TwoHamiltonianCycles_WitnessPointerConst w2 = e2->shared_from_this();
       TwoHamiltonianCycles_WitnessSetPointer witnessSet (new TwoHamiltonianCycles_WitnessSet);
       join_implementation(b,w1,w2,witnessSet);
       return clean(witnessSet);
@@ -664,9 +664,9 @@ WitnessSetPointer TwoHamiltonianCycles_DynamicCore::clean(WitnessSetPointer witn
   }
 }
 
-bool TwoHamiltonianCycles_DynamicCore::is_final_witness(Witness &witness) {
-  if (TwoHamiltonianCycles_Witness *e = dynamic_cast<TwoHamiltonianCycles_Witness *>(&witness)) {
-    TwoHamiltonianCycles_WitnessPointer w = e->shared_from_this();
+bool TwoHamiltonianCycles_DynamicCore::is_final_witness(const Witness &witness) {
+  if (const TwoHamiltonianCycles_Witness *e = dynamic_cast<const TwoHamiltonianCycles_Witness *>(&witness)) {
+    TwoHamiltonianCycles_WitnessPointerConst w = e->shared_from_this();
     return is_final_witness_implementation(w);
   }else{
     cerr<<"ERROR: in TwoHamiltonianCycles_DynamicCore::is_final_witness cast error"<<endl;

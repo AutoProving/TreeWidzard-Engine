@@ -37,7 +37,7 @@ bool HamiltonianPath_Witness::is_less_implementation(const HamiltonianPath_Witne
     //*****************************
     //*****************************
 }
-Witness & HamiltonianPath_Witness::set_equal_implementation(HamiltonianPath_WitnessPointer w) {
+Witness & HamiltonianPath_Witness::set_equal_implementation(HamiltonianPath_WitnessPointerConst w) {
     //*****************************
     //*****************************
     this->degree_0 = w->degree_0;
@@ -49,7 +49,7 @@ Witness & HamiltonianPath_Witness::set_equal_implementation(HamiltonianPath_Witn
     //*****************************
 }
 
-shared_ptr<Witness> HamiltonianPath_Witness::relabel(map<unsigned int, unsigned int> relabelingMap) {
+shared_ptr<Witness> HamiltonianPath_Witness::relabel(map<unsigned int, unsigned int> relabelingMap) const {
     HamiltonianPath_WitnessPointer relabeledWitness(new HamiltonianPath_Witness);
     // Relabeling degree_0
     for(auto d:this->degree_0){
@@ -90,7 +90,7 @@ shared_ptr<Witness> HamiltonianPath_Witness::relabel(map<unsigned int, unsigned 
     return relabeledWitness;
 }
 
-void HamiltonianPath_Witness::print() {
+void HamiltonianPath_Witness::print() const {
     //*****************************
     //*****************************
     cout << "Vertices of degree 0:" << endl << "\t";
@@ -112,7 +112,7 @@ void HamiltonianPath_Witness::print() {
     //*****************************
 }
 
-string HamiltonianPath_Witness::witnessInformation() {
+string HamiltonianPath_Witness::witnessInformation() const {
     //*****************************
     //*****************************
     string info = "";
@@ -162,7 +162,7 @@ void HamiltonianPath_DynamicCore::createInitialWitnessSet_implementation() {
     this->insertIntoInitialWitnessSet(witness);
 
 }
-void HamiltonianPath_DynamicCore::intro_v_implementation(unsigned int i, Bag &b, HamiltonianPath_WitnessPointer w,
+void HamiltonianPath_DynamicCore::intro_v_implementation(unsigned int i, Bag &b, HamiltonianPath_WitnessPointerConst w,
                                                          HamiltonianPath_WitnessSetPointer witnessSet) {
     //*****************************
     //*****************************
@@ -177,7 +177,7 @@ void HamiltonianPath_DynamicCore::intro_v_implementation(unsigned int i, Bag &b,
     //*****************************
 }
 void HamiltonianPath_DynamicCore::intro_e_implementation(unsigned int i, unsigned int j, Bag &b,
-                                                         HamiltonianPath_WitnessPointer w,
+                                                         HamiltonianPath_WitnessPointerConst w,
                                                          HamiltonianPath_WitnessSetPointer witnessSet) {
     //*****************************
     //*****************************
@@ -226,7 +226,7 @@ void HamiltonianPath_DynamicCore::intro_e_implementation(unsigned int i, unsigne
         witnessSet->insert(w1);
     }else if(w->degree_1.count(i) && w->degree_1.count(j)){
         //Vertices j an i with degree 1
-        if(w->matching[i] != j){
+        if(w->matching.at(i) != j){
             //Not in the match
             HamiltonianPath_WitnessPointer w1 = createWitness();
             w1->set_equal(*w);
@@ -247,7 +247,7 @@ void HamiltonianPath_DynamicCore::intro_e_implementation(unsigned int i, unsigne
     //*****************************
     //*****************************
 }
-void HamiltonianPath_DynamicCore::forget_v_implementation(unsigned int i, Bag &b, HamiltonianPath_WitnessPointer w,
+void HamiltonianPath_DynamicCore::forget_v_implementation(unsigned int i, Bag &b, HamiltonianPath_WitnessPointerConst w,
                                                           HamiltonianPath_WitnessSetPointer witnessSet) {
     //*****************************
     //*****************************
@@ -262,8 +262,8 @@ void HamiltonianPath_DynamicCore::forget_v_implementation(unsigned int i, Bag &b
     //*****************************
     //*****************************
 }
-void HamiltonianPath_DynamicCore::join_implementation(Bag &b, HamiltonianPath_WitnessPointer w1,
-                                                      HamiltonianPath_WitnessPointer w2,
+void HamiltonianPath_DynamicCore::join_implementation(Bag &b, HamiltonianPath_WitnessPointerConst w1,
+                                                      HamiltonianPath_WitnessPointerConst w2,
                                                       HamiltonianPath_WitnessSetPointer witnessSet) {
     //*****************************
     //*****************************
@@ -418,7 +418,7 @@ void HamiltonianPath_DynamicCore::join_implementation(Bag &b, HamiltonianPath_Wi
     //*****************************
     //*****************************
 }
-bool HamiltonianPath_DynamicCore::is_final_witness_implementation(HamiltonianPath_WitnessPointer w) {
+bool HamiltonianPath_DynamicCore::is_final_witness_implementation(HamiltonianPath_WitnessPointerConst w) {
     //*****************************
     //*****************************
     // Verifies if there is no node with degree 0 and that the only remaining degrees of 1 are the endpoints of the path
@@ -462,9 +462,9 @@ bool HamiltonianPath_Witness::is_less(const Witness &rhs)const {
         exit(20);
     }
 }
-Witness &HamiltonianPath_Witness::set_equal(Witness &witness) {
-    if (HamiltonianPath_Witness *e = dynamic_cast<HamiltonianPath_Witness *>(&witness)) {
-        HamiltonianPath_WitnessPointer w = e->shared_from_this();
+Witness &HamiltonianPath_Witness::set_equal(const Witness &witness) {
+    if (const HamiltonianPath_Witness *e = dynamic_cast<const HamiltonianPath_Witness *>(&witness)) {
+        HamiltonianPath_WitnessPointerConst w = e->shared_from_this();
         return set_equal_implementation(w);
     }else{
         cerr<<"ERROR: in Hamiltonian_Path_Witness::operator= cast error"<<endl;
@@ -476,9 +476,9 @@ void HamiltonianPath_DynamicCore::createInitialWitnessSet() {
     this->setInitialWitnessSet(witnessSet);
     createInitialWitnessSet_implementation();
 }
-WitnessSetPointer HamiltonianPath_DynamicCore::intro_v(unsigned i, Bag &b, Witness &witness  ) {
-    if (HamiltonianPath_Witness *e = dynamic_cast<HamiltonianPath_Witness *>(&witness)){
-        HamiltonianPath_WitnessPointer w = e->shared_from_this();
+WitnessSetPointer HamiltonianPath_DynamicCore::intro_v(unsigned i, Bag &b, const Witness &witness  ) {
+    if (const HamiltonianPath_Witness *e = dynamic_cast<const HamiltonianPath_Witness *>(&witness)){
+        HamiltonianPath_WitnessPointerConst w = e->shared_from_this();
         HamiltonianPath_WitnessSetPointer witnessSet (new HamiltonianPath_WitnessSet);
         intro_v_implementation(i,b, w, witnessSet);
         return clean(witnessSet);
@@ -487,9 +487,9 @@ WitnessSetPointer HamiltonianPath_DynamicCore::intro_v(unsigned i, Bag &b, Witne
         exit(20);
     }
 }
-WitnessSetPointer HamiltonianPath_DynamicCore::intro_e(unsigned i, unsigned j, Bag &b, Witness &witness) {
-    if (HamiltonianPath_Witness *e = dynamic_cast<HamiltonianPath_Witness *>(&witness)){
-        HamiltonianPath_WitnessPointer w = e->shared_from_this();
+WitnessSetPointer HamiltonianPath_DynamicCore::intro_e(unsigned i, unsigned j, Bag &b, const Witness &witness) {
+    if (const HamiltonianPath_Witness *e = dynamic_cast<const HamiltonianPath_Witness *>(&witness)){
+        HamiltonianPath_WitnessPointerConst w = e->shared_from_this();
         HamiltonianPath_WitnessSetPointer witnessSet (new HamiltonianPath_WitnessSet);
         intro_e_implementation(i,j,b,w,witnessSet);
         return clean(witnessSet);
@@ -498,9 +498,9 @@ WitnessSetPointer HamiltonianPath_DynamicCore::intro_e(unsigned i, unsigned j, B
         exit(20);
     }
 }
-WitnessSetPointer HamiltonianPath_DynamicCore::forget_v(unsigned i, Bag &b, Witness &witness) {
-    if (HamiltonianPath_Witness *e = dynamic_cast<HamiltonianPath_Witness *>(&witness)){
-        HamiltonianPath_WitnessPointer w = e->shared_from_this();
+WitnessSetPointer HamiltonianPath_DynamicCore::forget_v(unsigned i, Bag &b, const Witness &witness) {
+    if (const HamiltonianPath_Witness *e = dynamic_cast<const HamiltonianPath_Witness *>(&witness)){
+        HamiltonianPath_WitnessPointerConst w = e->shared_from_this();
         HamiltonianPath_WitnessSetPointer witnessSet (new HamiltonianPath_WitnessSet);
         forget_v_implementation(i,b,w,witnessSet);
         return clean(witnessSet);
@@ -509,12 +509,12 @@ WitnessSetPointer HamiltonianPath_DynamicCore::forget_v(unsigned i, Bag &b, Witn
         exit(20);
     }
 }
-WitnessSetPointer HamiltonianPath_DynamicCore::join(Bag &b, Witness &witness1, Witness &witness2) {
-    if(HamiltonianPath_Witness *e1 = dynamic_cast<HamiltonianPath_Witness *>(&witness1)){
-        if(HamiltonianPath_Witness *e2 = dynamic_cast<HamiltonianPath_Witness *>(&witness2)){
+WitnessSetPointer HamiltonianPath_DynamicCore::join(Bag &b, const Witness &witness1, const Witness &witness2) {
+    if(const HamiltonianPath_Witness *e1 = dynamic_cast<const HamiltonianPath_Witness *>(&witness1)){
+        if(const HamiltonianPath_Witness *e2 = dynamic_cast<const HamiltonianPath_Witness *>(&witness2)){
             // Note: Do not merge the two "if" instructions above into a single "if". Potential for errors
-            HamiltonianPath_WitnessPointer w1 = e1->shared_from_this();
-            HamiltonianPath_WitnessPointer w2 = e2->shared_from_this();
+            HamiltonianPath_WitnessPointerConst w1 = e1->shared_from_this();
+            HamiltonianPath_WitnessPointerConst w2 = e2->shared_from_this();
             HamiltonianPath_WitnessSetPointer witnessSet (new HamiltonianPath_WitnessSet);
             join_implementation(b,w1,w2,witnessSet);
             return clean(witnessSet);
@@ -527,9 +527,9 @@ WitnessSetPointer HamiltonianPath_DynamicCore::join(Bag &b, Witness &witness1, W
         exit(20);
     }
 }
-bool HamiltonianPath_DynamicCore::is_final_witness(Witness &witness) {
-    if (HamiltonianPath_Witness *e = dynamic_cast<HamiltonianPath_Witness *>(&witness)) {
-        HamiltonianPath_WitnessPointer w = e->shared_from_this();
+bool HamiltonianPath_DynamicCore::is_final_witness(const Witness &witness) {
+    if (const HamiltonianPath_Witness *e = dynamic_cast<const HamiltonianPath_Witness *>(&witness)) {
+        HamiltonianPath_WitnessPointerConst w = e->shared_from_this();
         return is_final_witness_implementation(w);
     }else{
         cerr<<"ERROR: in Hamiltonian_Path_DynamicCore::is_final_witness cast error"<<endl;
