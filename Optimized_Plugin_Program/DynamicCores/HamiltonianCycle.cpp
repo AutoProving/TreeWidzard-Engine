@@ -146,6 +146,22 @@ string HamiltonianCycle_Witness::witnessInformation() const {
     //*****************************
     //*****************************
 }
+
+void HamiltonianCycle_Witness::hash(Hasher &h) const {
+    h << closed;
+    for (unsigned i : degree_0)
+        h << i;
+    h << -1u;
+    for (unsigned i : degree_1)
+        h << i;
+    h << -1u;
+    for (unsigned i : degree_2)
+        h << i;
+    h << -1u;
+    for (auto [i, j] : matching)
+        h << i << j;
+}
+
 HamiltonianCycle_Witness::~HamiltonianCycle_Witness() {
     //*****************************
     //*****************************

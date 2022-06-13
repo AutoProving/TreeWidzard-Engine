@@ -19,6 +19,7 @@ public:
     Witness& set_equal_implementation(HamiltonianCycle_WitnessPointerConst w);
     virtual bool is_equal(const Witness &rhs) const;
     virtual bool is_less(const Witness &rhs) const;
+    virtual void hash(Hasher &h) const override;
     virtual Witness& set_equal(const Witness &witness);
     shared_ptr<Witness> relabel(map<unsigned int, unsigned int> relabelingMap) const override;
     virtual void print();
