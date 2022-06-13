@@ -5,6 +5,7 @@
 #include <iostream>
 #include <memory>
 #include <map>
+#include "Hasher.hpp"
 
 class Witness {
 protected:
@@ -20,6 +21,7 @@ public:
     friend bool operator<(const Witness &lhs, const Witness &rhs);
     virtual Witness &operator=(Witness &rhs);
     bool operator!=(const Witness &rhs) const;
+    virtual void hash(Hasher &h) const;
     struct IsLessSharedPtr{
         bool operator()(const std::shared_ptr<const Witness> &lhs,
                         const std::shared_ptr<const Witness> &rhs) const {

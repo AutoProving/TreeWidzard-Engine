@@ -1,5 +1,5 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
-#include "SlightlyParallelBreadthFirstSearch.h"
+#include "ParallelBreadthFirstSearch.h"
 
 #include <atomic>
 #include <iostream>
@@ -8,38 +8,40 @@
 #include <utility>
 
 /**
- * Does not work with WitnessTypeOne
- * Works with WitnessTypeTwo
+ * Does not work with WitnessTypeOne.
+ * Works with WitnessTypeTwo.
+ * 
+ * Witnesses must be hashable.
  */
 
 constexpr int NTHREADS = 8;  // TODO: put in flags
 
 extern "C" {
-SlightlyParallelBreadthFirstSearch* create() {
-  return new SlightlyParallelBreadthFirstSearch();
+ParallelBreadthFirstSearch* create() {
+  return new ParallelBreadthFirstSearch();
 }
-SlightlyParallelBreadthFirstSearch* create_parameter(
+ParallelBreadthFirstSearch* create_parameter(
     DynamicKernel* dynamicKernel, Conjecture* conjecture, Flags* flags) {
-  return new SlightlyParallelBreadthFirstSearch(dynamicKernel, conjecture,
+  return new ParallelBreadthFirstSearch(dynamicKernel, conjecture,
                                                 flags);
 }
 }
 
-SlightlyParallelBreadthFirstSearch::SlightlyParallelBreadthFirstSearch() {
-  addAttribute("SearchName", "SlightlyParallelBreadthFirstSearch");
+ParallelBreadthFirstSearch::ParallelBreadthFirstSearch() {
+  addAttribute("SearchName", "ParallelBreadthFirstSearch");
 }
 
-SlightlyParallelBreadthFirstSearch::SlightlyParallelBreadthFirstSearch(
+ParallelBreadthFirstSearch::ParallelBreadthFirstSearch(
     DynamicKernel* dynamicKernel, Conjecture* conjecture, Flags* flags)
     : SearchStrategy(dynamicKernel, conjecture, flags) {
   this->kernel = kernel;
   this->conjecture = conjecture;
   this->flags = flags;
-  addAttribute("SearchName", "SlightlyParallelBreadthFirstSearch");
+  addAttribute("SearchName", "ParallelBreadthFirstSearch");
 }
 
 AbstractTreeDecomposition
-SlightlyParallelBreadthFirstSearch::extractCounterExampleTerm(
+ParallelBreadthFirstSearch::extractCounterExampleTerm(
     State::ptr state) {
   AbstractTreeDecomposition atd;
   std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> rootNode;
@@ -48,7 +50,7 @@ SlightlyParallelBreadthFirstSearch::extractCounterExampleTerm(
   return atd;
 }
 
-StateTree SlightlyParallelBreadthFirstSearch::extractCounterExampleStateTree(
+StateTree ParallelBreadthFirstSearch::extractCounterExampleStateTree(
     State::ptr state) {
   StateTree stateTree;
   std::shared_ptr<StateTreeNode> root(new StateTreeNode());
@@ -60,7 +62,7 @@ StateTree SlightlyParallelBreadthFirstSearch::extractCounterExampleStateTree(
   return stateTree;
 }
 
-void SlightlyParallelBreadthFirstSearch::extractCounterExampleStateTreeNode(
+void ParallelBreadthFirstSearch::extractCounterExampleStateTreeNode(
     State::ptr state, std::shared_ptr<StateTreeNode> node) {
   // Assumes that the automaton is acyclic and that each state has a transition
   // in which the state is the consequent
@@ -119,7 +121,7 @@ void update_maximum(std::atomic<T> &maximum_value, const T &value) noexcept {
   }
 }
 
-void SlightlyParallelBreadthFirstSearch::search() {
+void ParallelBreadthFirstSearch::search() {
   if (flags->get("Premise")) {
     std::cout << " Premise is ACTIVATED" << std::endl;
   } else {
@@ -517,7 +519,7 @@ void SlightlyParallelBreadthFirstSearch::search() {
   std::cout << "Conjecture: Satisfied" << std::endl;
 }
 RunTree<State::ptr, AbstractTreeDecompositionNodeContent>
-SlightlyParallelBreadthFirstSearch::extractCounterExampleRun(State::ptr state) {
+ParallelBreadthFirstSearch::extractCounterExampleRun(State::ptr state) {
   RunTree<State::ptr, AbstractTreeDecompositionNodeContent> runTree =
       bfsDAG.retrieveRunAcyclicAutomaton(state);
   return runTree;

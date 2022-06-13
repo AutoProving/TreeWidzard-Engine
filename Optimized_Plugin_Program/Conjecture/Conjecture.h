@@ -75,11 +75,11 @@ public:
   void setRoot(ConjectureNode *root);
 
   // evaluate the conjectureNode for a given state
-  double evaluateConjectureNodeOnState(State &q, ConjectureNode* node);
+  double evaluateConjectureNodeOnState(const State &q, ConjectureNode* node);
   // evaluate the conjecture for a given state
-  double evaluateConjectureOnState(State &q);
+  double evaluateConjectureOnState(const State &q);
 
-  int evaluatePremiseOnState(State &q);
+  int evaluatePremiseOnState(const State &q);
 
   bool validateConjectureGrammar();
 

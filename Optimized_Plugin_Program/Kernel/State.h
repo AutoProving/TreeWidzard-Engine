@@ -14,12 +14,12 @@ class State : private std::enable_shared_from_this<State> {
   public:
 	class ptr {
 	  private:
-		std::shared_ptr<State> pointer;
+		std::shared_ptr<const State> pointer;
 	  public:
 		ptr() { pointer = std::make_shared<State>(); }
-		ptr(std::shared_ptr<State> pointer_) : pointer(pointer_) {}
-		State &operator*() const { return *pointer; }
-		State *operator->() const { return &*pointer; }
+		ptr(std::shared_ptr<const State> pointer_) : pointer(pointer_) {}
+		const State &operator*() const { return *pointer; }
+		const State *operator->() const { return &*pointer; }
 		bool operator<(const ptr &rhs) const { return **this < *rhs; }
         bool operator>(const ptr &rhs) const {
             return rhs < *this;
@@ -36,14 +36,14 @@ class State : private std::enable_shared_from_this<State> {
         bool operator!=(const ptr &rhs) const {
             return !(rhs == *this);
         }
-        void print(){
-		    pointer->print();
-		}
-		std::string stateInformation(){
+        void print() const {
+            pointer->print();
+        }
+        std::string stateInformation() const {
             return pointer->stateInformation();
-		}
+        }
     };
-	ptr get_ptr() { return ptr(this->shared_from_this()); }
+	ptr get_ptr() const { return ptr(this->shared_from_this()); }
 
 	Bag get_bag() const;
 
@@ -67,9 +67,9 @@ class State : private std::enable_shared_from_this<State> {
 
     size_t operator()(const State &b) const;
 
-    void print();
+    void print() const;
 
-    std::string stateInformation();
+    std::string stateInformation() const;
 
     std::shared_ptr<WitnessSet> getWitnessSet(int) const;
 
@@ -78,6 +78,7 @@ class State : private std::enable_shared_from_this<State> {
     std::shared_ptr<State> relabel(std::map<unsigned, unsigned> relabelingMap); // relabelingMap is a relabeling of the vertices in a bag. The relabel function propagates this relabeling to a State
 
 
+    void hash(Hasher &h) const;
 };
 
 #endif

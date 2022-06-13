@@ -1,7 +1,7 @@
 #include "Conjecture.h"
 
 // To Do: implement getCoreWitnessSetByVar
-double Conjecture::evaluateConjectureNodeOnState(State &q, ConjectureNode* node) {
+double Conjecture::evaluateConjectureNodeOnState(const State &q, ConjectureNode* node) {
      //evaluate a node based on its type
     switch(node->getType()) {
         case CORE_VARIABLE:
@@ -166,7 +166,7 @@ double Conjecture::evaluateConjectureNodeOnState(State &q, ConjectureNode* node)
     }
 }
 
-double Conjecture::evaluateConjectureOnState(State &q) {
+double Conjecture::evaluateConjectureOnState(const State &q) {
     double result = evaluateConjectureNodeOnState(q,root);
     //cout<<__FUNCTION__  << " " <<__PRETTY_FUNCTION__ << " " << result << endl;
     return result;
@@ -240,7 +240,7 @@ void Conjecture::setVariablesToCoreName(const std::map<std::string, std::string>
     Conjecture::variablesToCoreName = variablesToCoreName;
 }
 
-int Conjecture::evaluatePremiseOnState(State &q) {
+int Conjecture::evaluatePremiseOnState(const State &q) {
     if (root->getType() == OPERATOR and root->getVal()=="implies") {
         if (root->getChildren().size() != 2) {
             std::cerr << "ERROR: In ConjectureNode::evaluateState, IMPLIES operator "

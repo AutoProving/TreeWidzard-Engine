@@ -69,7 +69,7 @@ void Bag::print() const {
 	}
 	std::cout << "}";
 }
-std::string Bag::bagInformation() {
+std::string Bag::bagInformation() const {
 	std::string info;
 	info = "{";
 	for (auto element : elements) {
@@ -108,6 +108,10 @@ bool Bag::operator<(const Bag &rhs) const {
 
 bool Bag::operator==(const Bag &rhs) const {
 	return elements == rhs.get_elements();
+}
+
+void Bag::hash(Hasher &h) const {
+  for (unsigned i : elements) h << i;
 }
 
 bool Bag::vertex_introducible(unsigned i) const {

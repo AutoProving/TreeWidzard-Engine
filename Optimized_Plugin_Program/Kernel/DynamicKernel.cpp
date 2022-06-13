@@ -10,24 +10,24 @@ size_t DynamicKernel::coreSize() {
     return cores.size();
 }
 State::ptr DynamicKernel::initialState() {
-	State::ptr initialState;
+	State *initialState = new State;
 	Bag emptyBag; // Empty
 	for (size_t k = 0; k < cores.size(); ++k) {
 		initialState->addWitnessSet(cores[k]->getInitialSet());
 	}
 	initialState->set_bag(emptyBag);
-	return initialState;
+	return std::shared_ptr<const State>(initialState);
 }
 
 State::ptr DynamicKernel::intro_v(State::ptr q, unsigned i) {
 	if (q->get_bag().vertex_introducible(i)) {
-		State::ptr aux;
+		State *aux = new State;
 		Bag b = q->get_bag();
 		for (size_t r = 0; r < cores.size(); r++) {
 			aux->addWitnessSet(cores[r]->intro_v(i, b, (q->getWitnessSet(r))));
 		}
 		aux->set_bag(b.intro_v(i));
-		return aux;
+		return std::shared_ptr<const State>(aux);
 	} else {
 		std::cerr << "Error in function DynamicKernel::intro_v. The bag is not "<<i<<
 				" introducible"
@@ -39,14 +39,14 @@ State::ptr DynamicKernel::intro_v(State::ptr q, unsigned i) {
 State::ptr DynamicKernel::intro_e(const State::ptr q, const unsigned i,
 								  const unsigned j) {
 	if (q->get_bag().edge_introducible(i, j)) {
-		State::ptr aux;
+		State *aux = new State;
 		Bag b = q->get_bag();
 		for (size_t r = 0; r < cores.size(); r++) {
 			aux->addWitnessSet(
 				cores[r]->intro_e(i, j, b, (q->getWitnessSet(r))));
 		}
 		aux->set_bag(b.intro_e(i, j));
-		return aux;
+		return std::shared_ptr<const State>(aux);
 	} else {
 		std::cerr << "Error in function DynamicKernel::intro_e. The bag is not "<<i <<", "<<j<<
 				" introducible"
@@ -57,14 +57,14 @@ State::ptr DynamicKernel::intro_e(const State::ptr q, const unsigned i,
 
 State::ptr DynamicKernel::forget_v(State::ptr q, unsigned i) {
 	if (q->get_bag().vertex_forgettable(i)) {
-		State::ptr aux;
+		State *aux = new State;
 		Bag b = q->get_bag();
 		for (size_t r = 0; r < cores.size(); r++) {
 			aux->addWitnessSet(
 				cores[r]->forget_v(i, b, (q->getWitnessSet(r))));
 		}
 		aux->set_bag(b.forget_v(i));
-		return aux;
+		return std::shared_ptr<const State>(aux);
 	} else {
 		std::cerr << "Error in function DynamicKernel::forget_v. The bag is not "<<i<<
 				" forgettable"
@@ -75,7 +75,7 @@ State::ptr DynamicKernel::forget_v(State::ptr q, unsigned i) {
 
 State::ptr DynamicKernel::join(State::ptr q1, State::ptr q2) {
 	if (q1->get_bag().joinable(q2->get_bag())) {
-		State::ptr aux;
+		State *aux = new State;
 		std::set<unsigned> elements = q1->get_bag().get_elements();
 		Bag b;
 		b.set_elements(elements);
@@ -84,7 +84,7 @@ State::ptr DynamicKernel::join(State::ptr q1, State::ptr q2) {
 			aux->addWitnessSet(cores[r]->join(b, (q1->getWitnessSet(r)), (q2->getWitnessSet(r))));
 		}
 		aux->set_bag(b);
-		return aux;
+		return std::shared_ptr<const State>(aux);
 	} else {
 		std::cerr << "Error in function DynamicKernel::join. The bags are not "
 				"joinable"

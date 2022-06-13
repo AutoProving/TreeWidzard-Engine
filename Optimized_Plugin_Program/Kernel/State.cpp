@@ -32,6 +32,15 @@ bool State::operator==(const State &rhs) const {
     }
 }
 
+void State::hash(Hasher &h) const {
+    this->get_bag().hash(h);
+    for (unsigned j = 0; j < numberOfComponents(); j++) {
+        h << -3u;
+        getWitnessSet(j)->hash(h);
+    }
+}
+
+
 bool State::operator!=(const State &rhs) const {
     return !(rhs == *this);
 }
@@ -87,7 +96,7 @@ size_t State::operator()(const State& b) const {
 	return str_hash;
 }
 
-void State::print() {
+void State::print() const {
 	bag.print();
 	int i = 1;
 	for (auto element : witnessSetVector) {
@@ -99,7 +108,7 @@ void State::print() {
 }
 
 
-std::string State::stateInformation() {
+std::string State::stateInformation() const {
     std::string info;
     info = bag.bagInformation();
     int i = 1;

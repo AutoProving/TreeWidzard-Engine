@@ -7,6 +7,7 @@
 #include <set>
 #include <map>
 #include <utility>
+#include "Hasher.hpp"
 
 class Bag {
   private:
@@ -22,9 +23,10 @@ class Bag {
 	std::pair<unsigned, unsigned> get_edge() const;
 	void print();
 	void print() const;
-	std::string bagInformation();
+	std::string bagInformation() const;
 	bool operator<(const Bag& rhs) const;
 	bool operator==(const Bag& rhs) const;
+	void hash(Hasher &h) const;
 
 	// Types of Bags
 	bool vertex_introducible(unsigned i) const;
