@@ -23,6 +23,7 @@ public:
     virtual shared_ptr<Witness> relabel(map<unsigned,unsigned> relabelingMap) const override;
     virtual void print() const override;
     string witnessInformation() const override;
+    virtual void hash(Hasher &h) const override;
     //*****************************
     //*****************************
     set<set<unsigned>> partition;

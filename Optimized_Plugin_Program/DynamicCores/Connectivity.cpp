@@ -53,6 +53,15 @@ shared_ptr<Witness> Connectivity_Witness::relabel(
   return w;
 }
 
+void Connectivity_Witness::hash(Hasher &h) const {
+  h << tag << -1u;
+  for (const auto &component : partition) {
+    for (unsigned node : component)
+      h << node;
+    h << -1u;
+  }
+}
+
 void Connectivity_Witness::print() const {
   //*****************************
   //*****************************
