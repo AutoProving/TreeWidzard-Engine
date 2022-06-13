@@ -42,8 +42,25 @@ class State : private std::enable_shared_from_this<State> {
         std::string stateInformation() const {
             return pointer->stateInformation();
         }
+
+        struct Hash {
+            const uint64_t seed_ = 0;
+            uint64_t operator()(const State::ptr &ptr) const {
+            Hasher h(seed_);
+            ptr->hash(h);
+            return h.get();
+            }
+        };
+
+        struct Equal {
+            uint64_t operator()(const State::ptr &l, const State::ptr &r) const {
+            return *l == *r;
+            }
+        };
+
     };
-	ptr get_ptr() const { return ptr(this->shared_from_this()); }
+
+    ptr get_ptr() const { return ptr(this->shared_from_this()); }
 
 	Bag get_bag() const;
 

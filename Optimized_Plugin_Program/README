@@ -11,6 +11,7 @@
         -ps       print states
         -st       print state tree decomposition if a counterexample is found
         -pdbgn     print directed bipartite graph if a counterexample is found
+        -no-bfs-dag disable creation of the bfs dag, to speed up the search
 
     Random Search Parameters:
          seed: The seed that initializes the random generator. This is an unsigned int.

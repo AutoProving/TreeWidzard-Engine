@@ -15,24 +15,9 @@
 
 class ParallelBreadthFirstSearch : public SearchStrategy {
  private:
-  struct KeyHash {
-    const uint64_t seed_ = 0;
-    uint64_t operator()(const State::ptr &ptr) const {
-      Hasher h(seed_);
-      ptr->hash(h);
-      return h.get();
-    }
-  };
-
-  struct KeyEqual {
-    uint64_t operator()(const State::ptr &l, const State::ptr &r) const {
-      return *l == *r;
-    }
-  };
-
-  using pset = phmap::parallel_flat_hash_set<State::ptr, KeyHash, KeyEqual,
-                                             phmap::priv::Allocator<State::ptr>,
-                                             4UL, std::mutex>;
+  using pset = phmap::parallel_flat_hash_set<
+      State::ptr, State::ptr::Hash, State::ptr::Equal,
+      phmap::priv::Allocator<State::ptr>, 4UL, std::mutex>;
 
   TreeAutomaton<State::ptr, AbstractTreeDecompositionNodeContent>
       bfsDAG;  // Constructs a DAG corresponding to the BFS.
@@ -41,6 +26,7 @@ class ParallelBreadthFirstSearch : public SearchStrategy {
   pset newStatesSet;
   std::vector<State::ptr>
       newStatesVector;  // This will make it easier to do parallel search
+  bool noBFSDAG = false;
  public:
   ParallelBreadthFirstSearch();
   ParallelBreadthFirstSearch(DynamicKernel *dynamicKernel,

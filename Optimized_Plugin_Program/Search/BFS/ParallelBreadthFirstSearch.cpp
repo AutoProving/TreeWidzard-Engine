@@ -38,6 +38,7 @@ ParallelBreadthFirstSearch::ParallelBreadthFirstSearch(
   this->conjecture = conjecture;
   this->flags = flags;
   addAttribute("SearchName", "ParallelBreadthFirstSearch");
+  this->noBFSDAG = flags->get("NoBFSDAG");
 }
 
 AbstractTreeDecomposition
@@ -75,10 +76,9 @@ void ParallelBreadthFirstSearch::extractCounterExampleStateTreeNode(
     Transition<State::ptr, AbstractTreeDecompositionNodeContent> t(
         state, a, emptyAntecedents);  // This is the smallest transition with a
                                       // consequent equal to state
-    auto it = bfsDAG.getTransitions().upper_bound(t);
-    if (it != bfsDAG.getTransitions().cbegin()) {
-      it--;  // This is always defined, since the transition set is non-empty
-    }
+    auto it = bfsDAG.getTransitions().find(t);
+    if (it == bfsDAG.getTransitions().end())
+      it = bfsDAG.getTransitions().begin();
     auto itAux = it;
     if (itAux->getConsequentState() != state) {
       itAux++;
@@ -132,14 +132,18 @@ void ParallelBreadthFirstSearch::search() {
   allStatesSet.insert(initialState);
   newStatesSet.insert(initialState);
   // Initialize the DAG
-  bfsDAG.addState(initialState);
+  if (!noBFSDAG) {
+    bfsDAG.addState(initialState);
+  }
   AbstractTreeDecompositionNodeContent initialTransitionContent("Leaf");
   std::vector<State::ptr>
       initialAntecedents;  // Empty std::vector since there are no children.
   Transition<State::ptr, AbstractTreeDecompositionNodeContent>
       initialTransition(initialState, initialTransitionContent,
                         initialAntecedents);
-  bfsDAG.addTransition(initialTransition);
+  if (!noBFSDAG) {
+    bfsDAG.addTransition(initialTransition);
+  }
   ////////////////////////////////////
   unsigned int width = kernel->get_width().get_value();
   std::vector<std::atomic<unsigned>> numberOfWitnesses(
@@ -199,7 +203,7 @@ void ParallelBreadthFirstSearch::search() {
                   transition(consequentState, transitionContent,
                              antecedentStates);
 
-              {
+              if (!noBFSDAG) {
                 std::lock_guard lock(everything_lock);
                 bfsDAG.addState(consequentState);
                 bfsDAG.addTransition(transition);
@@ -259,7 +263,7 @@ void ParallelBreadthFirstSearch::search() {
             Transition<State::ptr, AbstractTreeDecompositionNodeContent>
                 transition(consequentState, transitionContent,
                            antecedentStates);
-            {
+            if (!noBFSDAG) {
               std::lock_guard lock(everything_lock);
               bfsDAG.addState(consequentState);
               bfsDAG.addTransition(transition);
@@ -321,7 +325,7 @@ void ParallelBreadthFirstSearch::search() {
                 Transition<State::ptr, AbstractTreeDecompositionNodeContent>
                     transition(consequentState, transitionContent,
                                antecedentStates);
-                {
+                if (!noBFSDAG) {
                   std::lock_guard lock(everything_lock);
                   bfsDAG.addState(consequentState);
                   bfsDAG.addTransition(transition);
@@ -385,7 +389,7 @@ void ParallelBreadthFirstSearch::search() {
                 Transition<State::ptr, AbstractTreeDecompositionNodeContent>
                     transition(consequentState, transitionContent,
                                antecedentStates);
-                {
+                if (!noBFSDAG) {
                   std::lock_guard lock(everything_lock);
                   bfsDAG.addState(consequentState);
                   bfsDAG.addTransition(transition);
@@ -471,6 +475,14 @@ void ParallelBreadthFirstSearch::search() {
     for (auto it = newStatesSet.cbegin(); it != newStatesSet.cend(); it++) {
       if (!conjecture->evaluateConjectureOnState(**it)) {
         std::cout << "Conjecture: Not Satisfied" << std::endl;
+        
+        if (noBFSDAG) {
+          std::cerr
+              << "Rerun without -no-bfs-dag to construct a counter example."
+              << std::endl;
+          return;
+        }
+
         State::ptr badState = *it;
         bfsDAG.addFinalState(badState);
         AbstractTreeDecomposition atd = extractCounterExampleTerm(badState);

@@ -22,14 +22,14 @@ pw                          yylval.string = strdup(yytext); return command_pw;
 -st                         yylval.string = strdup(yytext); return command_print_state_tree;
 -pdbgn                      yylval.string = strdup(yytext); return command_print_directed_bipartite_graph;
 -premise                    yylval.string = strdup(yytext); return command_premise;
+-no-bfs-dag                 yylval.string = strdup(yytext); return command_no_bfs_dag;
 --help                      yylval.string = strdup(yytext); return command_help;
 -term                       yylval.string = strdup(yytext); return command_term_signature;
 -random                     yylval.string = strdup(yytext); return command_random_signature;
 PACE                        yylval.string = strdup(yytext); return command_parse_pace;
 ABSTRACT                    yylval.string = strdup(yytext); return command_parse_abstract;
 ;                           yylval.string = strdup(yytext); return command_end;
-[0-9\.]+                    yylval.number = stof(yytext);   return command_number;
+[0-9\.]+                    yylval.number = std::stof(yytext);   return command_number;
 .+                          yylval.string = strdup(yytext); return command_string;
 [\n \t \r]                  ;
 %%
-

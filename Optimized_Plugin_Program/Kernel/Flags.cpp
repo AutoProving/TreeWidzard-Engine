@@ -7,6 +7,7 @@ Flags::Flags() {
 	content.insert({"CreateStateTime", 0}); // time to create a state
 	content.insert({"StateSize", 0});		// prints size of state
 	content.insert({"Premise", 0});
+	content.insert({"NoBFSDAG", 0});
 }
 
 float Flags::get(std::string s)
