@@ -7,11 +7,12 @@
                 example: tw = 2 (The program will search graphs with tree-width at most 2)
                 example: pw = 2 (The program will search graphs with path-width at most 2)
     Flag Options:
-        -pl       print loop
-        -ps       print states
-        -st       print state tree decomposition if a counterexample is found
-        -pdbgn     print directed bipartite graph if a counterexample is found
+        -pl         print loop
+        -ps         print states
+        -st         print state tree decomposition if a counterexample is found
+        -pdbgn      print directed bipartite graph if a counterexample is found
         -no-bfs-dag disable creation of the bfs dag, to speed up the search
+        -nthreads   number of threads to use in parallel
 
     Random Search Parameters:
          seed: The seed that initializes the random generator. This is an unsigned int.

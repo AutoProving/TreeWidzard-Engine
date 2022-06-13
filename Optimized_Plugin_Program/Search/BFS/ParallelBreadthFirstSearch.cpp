@@ -14,8 +14,6 @@
  * Witnesses must be hashable.
  */
 
-constexpr int NTHREADS = 8;  // TODO: put in flags
-
 extern "C" {
 ParallelBreadthFirstSearch* create() {
   return new ParallelBreadthFirstSearch();
@@ -39,6 +37,12 @@ ParallelBreadthFirstSearch::ParallelBreadthFirstSearch(
   this->flags = flags;
   addAttribute("SearchName", "ParallelBreadthFirstSearch");
   this->noBFSDAG = flags->get("NoBFSDAG");
+  this->nThreads = flags->get("NThreads");
+  if (this->nThreads == -1) {
+    this->nThreads = 4;
+    std::cerr << "Number of threads was not set. Using default of "
+              << this->nThreads << std::endl;
+  }
 }
 
 AbstractTreeDecomposition
@@ -462,9 +466,9 @@ void ParallelBreadthFirstSearch::search() {
     };
 
     std::vector<std::thread> threads;
-    threads.reserve(NTHREADS);
+    threads.reserve(nThreads);
 
-    size_t per_thread = (newStatesVector.size() + NTHREADS - 1) / NTHREADS;
+    size_t per_thread = (newStatesVector.size() + nThreads - 1) / nThreads;
 
     for (size_t l = 0; l < newStatesVector.size(); l += per_thread)
       threads.push_back(std::thread(

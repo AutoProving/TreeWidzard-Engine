@@ -83,10 +83,11 @@ extern int command_debug;
     command_number = 271,          /* command_number  */
     command_premise = 272,         /* command_premise  */
     command_no_bfs_dag = 273,      /* command_no_bfs_dag  */
-    command_pw = 274,              /* command_pw  */
-    command_tw = 275,              /* command_tw  */
-    command_equal = 276,           /* command_equal  */
-    command_print_directed_bipartite_graph = 277 /* command_print_directed_bipartite_graph  */
+    command_nthreads = 274,        /* command_nthreads  */
+    command_pw = 275,              /* command_pw  */
+    command_tw = 276,              /* command_tw  */
+    command_equal = 277,           /* command_equal  */
+    command_print_directed_bipartite_graph = 278 /* command_print_directed_bipartite_graph  */
   };
   typedef enum command_tokentype command_token_kind_t;
 #endif
@@ -100,7 +101,7 @@ union COMMAND_STYPE
      float number;
      char* string;
 
-#line 104 "command_parser.tab.h"
+#line 105 "command_parser.tab.h"
 
 };
 typedef union COMMAND_STYPE COMMAND_STYPE;

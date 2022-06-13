@@ -23,6 +23,7 @@ pw                          yylval.string = strdup(yytext); return command_pw;
 -pdbgn                      yylval.string = strdup(yytext); return command_print_directed_bipartite_graph;
 -premise                    yylval.string = strdup(yytext); return command_premise;
 -no-bfs-dag                 yylval.string = strdup(yytext); return command_no_bfs_dag;
+-nthreads                   yylval.string = strdup(yytext); return command_nthreads;
 --help                      yylval.string = strdup(yytext); return command_help;
 -term                       yylval.string = strdup(yytext); return command_term_signature;
 -random                     yylval.string = strdup(yytext); return command_random_signature;

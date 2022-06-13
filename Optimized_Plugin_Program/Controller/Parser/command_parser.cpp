@@ -135,20 +135,21 @@ enum yysymbol_kind_t
   YYSYMBOL_command_number = 16,            /* command_number  */
   YYSYMBOL_command_premise = 17,           /* command_premise  */
   YYSYMBOL_command_no_bfs_dag = 18,        /* command_no_bfs_dag  */
-  YYSYMBOL_command_pw = 19,                /* command_pw  */
-  YYSYMBOL_command_tw = 20,                /* command_tw  */
-  YYSYMBOL_command_equal = 21,             /* command_equal  */
-  YYSYMBOL_command_print_directed_bipartite_graph = 22, /* command_print_directed_bipartite_graph  */
-  YYSYMBOL_YYACCEPT = 23,                  /* $accept  */
-  YYSYMBOL_command_start = 24,             /* command_start  */
-  YYSYMBOL_command_search = 25,            /* command_search  */
-  YYSYMBOL_command_width = 26,             /* command_width  */
-  YYSYMBOL_command_random = 27,            /* command_random  */
-  YYSYMBOL_command_flags = 28,             /* command_flags  */
-  YYSYMBOL_command_input_file = 29,        /* command_input_file  */
-  YYSYMBOL_command_search_strategy = 30,   /* command_search_strategy  */
-  YYSYMBOL_command_parse = 31,             /* command_parse  */
-  YYSYMBOL_command_term = 32               /* command_term  */
+  YYSYMBOL_command_nthreads = 19,          /* command_nthreads  */
+  YYSYMBOL_command_pw = 20,                /* command_pw  */
+  YYSYMBOL_command_tw = 21,                /* command_tw  */
+  YYSYMBOL_command_equal = 22,             /* command_equal  */
+  YYSYMBOL_command_print_directed_bipartite_graph = 23, /* command_print_directed_bipartite_graph  */
+  YYSYMBOL_YYACCEPT = 24,                  /* $accept  */
+  YYSYMBOL_command_start = 25,             /* command_start  */
+  YYSYMBOL_command_search = 26,            /* command_search  */
+  YYSYMBOL_command_width = 27,             /* command_width  */
+  YYSYMBOL_command_random = 28,            /* command_random  */
+  YYSYMBOL_command_flags = 29,             /* command_flags  */
+  YYSYMBOL_command_input_file = 30,        /* command_input_file  */
+  YYSYMBOL_command_search_strategy = 31,   /* command_search_strategy  */
+  YYSYMBOL_command_parse = 32,             /* command_parse  */
+  YYSYMBOL_command_term = 33               /* command_term  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -416,16 +417,16 @@ typedef int yytype_uint16;
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  17
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   48
+#define YYLAST   52
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  23
+#define YYNTOKENS  24
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  10
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  22
+#define YYNRULES  23
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  58
+#define YYNSTATES  61
 /* YYMAXRHS -- Maximum number of symbols on right-hand side of rule.  */
 #define YYMAXRHS 7
 /* YYMAXLEFT -- Maximum number of symbols to the left of a handle
@@ -433,7 +434,7 @@ typedef int yytype_uint16;
 #define YYMAXLEFT 0
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   277
+#define YYMAXUTOK   278
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
    as returned by yylex, with out-of-bounds checking.  */
@@ -473,7 +474,7 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
-      15,    16,    17,    18,    19,    20,    21,    22
+      15,    16,    17,    18,    19,    20,    21,    22,    23
 };
 
 #if COMMAND_DEBUG
@@ -481,24 +482,25 @@ static const yytype_int8 yytranslate[] =
 static const yytype_int8 yyrline[] =
 {
        0,    52,    52,    53,    54,    55,    57,    64,    73,    74,
-      75,    84,    85,    86,    87,    88,    89,    90,    93,    95,
-      97,    99,   102
+      75,    84,    85,    86,    87,    88,    89,    90,    91,    94,
+      96,    98,   100,   103
 };
 #endif
 
-#define YYPACT_NINF (-28)
+#define YYPACT_NINF (-27)
 #define YYTABLE_NINF (-1)
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -1,     9,    -7,    26,    -3,     6,   -28,   -28,   -28,   -13,
-      -4,     5,   -28,     5,     5,   -28,    12,   -28,    10,    14,
-       5,     5,     5,     5,     5,     5,    -2,    -3,    -3,   -28,
-     -28,   -28,   -28,   -28,   -28,   -28,   -28,   -28,   -28,    23,
-      33,    -3,    -3,    -3,    25,    -3,    34,    -3,    35,    29,
-      37,   -28,    38,   -28,    32,   -28,   -28,   -28
+      25,   -15,     7,    19,    13,    21,   -27,   -27,   -27,    12,
+      14,     9,   -27,     9,     9,   -27,    28,   -27,    23,    24,
+       9,     9,     9,     9,     9,    26,     9,    -3,    13,    13,
+     -27,   -27,   -27,   -27,   -27,   -27,   -27,   -27,     9,   -27,
+     -27,    27,    34,    13,    13,    13,   -27,    29,    13,    35,
+      13,    37,    31,    39,   -27,    40,   -27,    36,   -27,   -27,
+     -27
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -507,23 +509,24 @@ static const yytype_int8 yypact[] =
 static const yytype_int8 yydefact[] =
 {
        0,     0,     0,     0,     0,     0,     2,     4,     5,     0,
-       0,    17,     3,    17,    17,    18,     0,     1,     0,     0,
-      17,    17,    17,    17,    17,    17,     0,     0,     0,    22,
-       8,     9,    11,    12,    13,    14,    15,    16,    19,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     6,     0,    21,     0,     7,    20,    10
+       0,    18,     3,    18,    18,    19,     0,     1,     0,     0,
+      18,    18,    18,    18,    18,     0,    18,     0,     0,     0,
+      23,     8,     9,    11,    12,    13,    14,    15,    18,    17,
+      20,     0,     0,     0,     0,     0,    16,     0,     0,     0,
+       0,     0,     0,     0,     6,     0,    22,     0,     7,    21,
+      10
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -28,   -28,   -28,   -28,   -28,    11,   -27,     2,   -28,   -28
+     -27,   -27,   -27,   -27,   -27,   -13,   -26,     8,   -27,   -27
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     5,     6,    11,    40,    26,    16,    41,     7,     8
+       0,     5,     6,    11,    42,    27,    16,    43,     7,     8
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -531,48 +534,51 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      42,    43,    12,     1,    15,    38,    17,     2,    18,     3,
-      20,    21,     4,    39,    46,    47,    48,    19,    50,    22,
-      52,    29,    23,    24,    27,    28,    30,    25,     9,    10,
-      31,    32,    33,    34,    35,    36,    37,    13,    14,    44,
-      38,    49,    45,    51,    53,    54,    55,    56,    57
+      28,    29,    44,    45,    40,     9,    10,    33,    34,    35,
+      36,    37,    41,    39,    20,    21,    12,    49,    50,    51,
+      15,    17,    53,    22,    55,    46,    23,    24,    25,     1,
+      13,    14,    26,     2,    18,     3,    19,    30,     4,    31,
+      32,    40,    38,    47,    54,    52,    56,    57,    58,    59,
+      48,     0,    60
 };
 
 static const yytype_int8 yycheck[] =
 {
-      27,    28,     9,     4,     7,     7,     0,     8,    21,    10,
-       5,     6,    13,    15,    41,    42,    43,    21,    45,    14,
-      47,     9,    17,    18,    13,    14,    16,    22,    19,    20,
-      16,    20,    21,    22,    23,    24,    25,    11,    12,    16,
-       7,    16,    40,     9,     9,    16,     9,     9,    16
+      13,    14,    28,    29,     7,    20,    21,    20,    21,    22,
+      23,    24,    15,    26,     5,     6,     9,    43,    44,    45,
+       7,     0,    48,    14,    50,    38,    17,    18,    19,     4,
+      11,    12,    23,     8,    22,    10,    22,     9,    13,    16,
+      16,     7,    16,    16,     9,    16,     9,    16,     9,     9,
+      42,    -1,    16
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     4,     8,    10,    13,    24,    25,    31,    32,    19,
-      20,    26,     9,    11,    12,     7,    29,     0,    21,    21,
-       5,     6,    14,    17,    18,    22,    28,    28,    28,     9,
-      16,    16,    28,    28,    28,    28,    28,    28,     7,    15,
-      27,    30,    29,    29,    16,    30,    29,    29,    29,    16,
-      29,     9,    29,     9,    16,     9,     9,    16
+       0,     4,     8,    10,    13,    25,    26,    32,    33,    20,
+      21,    27,     9,    11,    12,     7,    30,     0,    22,    22,
+       5,     6,    14,    17,    18,    19,    23,    29,    29,    29,
+       9,    16,    16,    29,    29,    29,    29,    29,    16,    29,
+       7,    15,    28,    31,    30,    30,    29,    16,    31,    30,
+      30,    30,    16,    30,     9,    30,     9,    16,     9,     9,
+      16
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    23,    24,    24,    24,    24,    25,    25,    26,    26,
-      27,    28,    28,    28,    28,    28,    28,    28,    29,    30,
-      31,    31,    32
+       0,    24,    25,    25,    25,    25,    26,    26,    27,    27,
+      28,    29,    29,    29,    29,    29,    29,    29,    29,    30,
+      31,    32,    32,    33
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
        0,     2,     1,     2,     1,     1,     6,     7,     3,     3,
-       5,     2,     2,     2,     2,     2,     2,     0,     1,     1,
-       7,     6,     3
+       5,     2,     2,     2,     2,     2,     3,     2,     0,     1,
+       1,     7,     6,     3
 };
 
 
@@ -581,7 +587,7 @@ static const yytype_int8 yydprec[] =
 {
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0
+       0,     0,     0,     0
 };
 
 /* YYMERGER[RULE-NUM] -- Index of merging function for rule #RULE-NUM.  */
@@ -589,7 +595,7 @@ static const yytype_int8 yymerger[] =
 {
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0
+       0,     0,     0,     0
 };
 
 /* YYIMMEDIATE[RULE-NUM] -- True iff rule #RULE-NUM is not to be deferred, as
@@ -598,7 +604,7 @@ static const yybool yyimmediate[] =
 {
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0
+       0,     0,     0,     0
 };
 
 /* YYCONFLP[YYPACT[STATE-NUM]] -- Pointer into YYCONFL of start of
@@ -611,7 +617,8 @@ static const yytype_int8 yyconflp[] =
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,     0
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0
 };
 
 /* YYCONFL[I] -- lists of conflicting rule numbers, each terminated by
@@ -837,11 +844,12 @@ static const char *const yytname[] =
   "command_end", "command_parse_signature", "command_parse_pace",
   "command_parse_abstract", "command_term_signature",
   "command_print_state_tree", "command_random_signature", "command_number",
-  "command_premise", "command_no_bfs_dag", "command_pw", "command_tw",
-  "command_equal", "command_print_directed_bipartite_graph", "$accept",
-  "command_start", "command_search", "command_width", "command_random",
-  "command_flags", "command_input_file", "command_search_strategy",
-  "command_parse", "command_term", YY_NULLPTR
+  "command_premise", "command_no_bfs_dag", "command_nthreads",
+  "command_pw", "command_tw", "command_equal",
+  "command_print_directed_bipartite_graph", "$accept", "command_start",
+  "command_search", "command_width", "command_random", "command_flags",
+  "command_input_file", "command_search_strategy", "command_parse",
+  "command_term", YY_NULLPTR
 };
 
 static const char *
@@ -1148,7 +1156,7 @@ yyuserAction (yyRuleNum yyrule, int yyrhslen, yyGLRStackItem* yyvsp,
   case 3: /* command_start: command_help command_end  */
 #line 53 "command_parser.y"
                                                {show_manual();}
-#line 1152 "command_parser.tab.c"
+#line 1160 "command_parser.tab.c"
     break;
 
   case 6: /* command_search: command_search_signature command_width command_flags command_search_strategy command_input_file command_end  */
@@ -1159,7 +1167,7 @@ yyuserAction (yyRuleNum yyrule, int yyrhslen, yyGLRStackItem* yyvsp,
                       								SearchController search((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yyval.string),(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yyval.string),flags,width);
                                                                                 search.action();
                                                                                 }
-#line 1163 "command_parser.tab.c"
+#line 1171 "command_parser.tab.c"
     break;
 
   case 7: /* command_search: command_search_signature command_width command_flags command_random command_search_strategy command_input_file command_end  */
@@ -1170,19 +1178,19 @@ yyuserAction (yyRuleNum yyrule, int yyrhslen, yyGLRStackItem* yyvsp,
                                             							      	SearchController search((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yyval.string),(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yyval.string),flags,width);
                                                                                                       	search.action();
                                                                                                      }
-#line 1174 "command_parser.tab.c"
+#line 1182 "command_parser.tab.c"
     break;
 
   case 8: /* command_width: command_pw command_equal command_number  */
 #line 73 "command_parser.y"
                                                                {width_type = "path_width"; if((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.number)<0){std::cout<< "width value should be not negative" << std::endl; YYERROR;} width_value=(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.number);}
-#line 1180 "command_parser.tab.c"
+#line 1188 "command_parser.tab.c"
     break;
 
   case 9: /* command_width: command_tw command_equal command_number  */
 #line 74 "command_parser.y"
                                                               {width_type = "tree_width"; if((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.number)<0){std::cout<< "width value should be not negative" << std::endl; YYERROR;} width_value=(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.number);}
-#line 1186 "command_parser.tab.c"
+#line 1194 "command_parser.tab.c"
     break;
 
   case 10: /* command_random: command_random_signature command_number command_number command_number command_number  */
@@ -1195,83 +1203,89 @@ yyuserAction (yyRuleNum yyrule, int yyrhslen, yyGLRStackItem* yyvsp,
 													    flags.add_flag("probForgetVertex", (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yyval.number));
 													    flags.add_flag("numberOfIterations", (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.number));
 												        	}
-#line 1199 "command_parser.tab.c"
+#line 1207 "command_parser.tab.c"
     break;
 
   case 11: /* command_flags: command_print_state_flag command_flags  */
 #line 84 "command_parser.y"
                                                              {flags.add_flag("PrintStates", 1);}
-#line 1205 "command_parser.tab.c"
+#line 1213 "command_parser.tab.c"
     break;
 
   case 12: /* command_flags: command_print_loop_flag command_flags  */
 #line 85 "command_parser.y"
                                                              {flags.add_flag("LoopTime", 1);}
-#line 1211 "command_parser.tab.c"
+#line 1219 "command_parser.tab.c"
     break;
 
   case 13: /* command_flags: command_print_state_tree command_flags  */
 #line 86 "command_parser.y"
                                                              {flags.add_flag("StateTree", 1);}
-#line 1217 "command_parser.tab.c"
+#line 1225 "command_parser.tab.c"
     break;
 
   case 14: /* command_flags: command_premise command_flags  */
 #line 87 "command_parser.y"
                                                     {flags.add_flag("Premise", 1);}
-#line 1223 "command_parser.tab.c"
+#line 1231 "command_parser.tab.c"
     break;
 
   case 15: /* command_flags: command_no_bfs_dag command_flags  */
 #line 88 "command_parser.y"
                                                        {flags.add_flag("NoBFSDAG", 1);}
-#line 1229 "command_parser.tab.c"
+#line 1237 "command_parser.tab.c"
     break;
 
-  case 16: /* command_flags: command_print_directed_bipartite_graph command_flags  */
+  case 16: /* command_flags: command_nthreads command_number command_flags  */
 #line 89 "command_parser.y"
-                                                                           {flags.add_flag("PrintDirectedBipartiteGraphNAUTY", 1);}
-#line 1235 "command_parser.tab.c"
+                                                                    { if ((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yyval.number)<1){std::cout<< "Number of threads to use should be at least 1." << std::endl; YYERROR; } flags.add_flag("NThreads", (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yyval.number));}
+#line 1243 "command_parser.tab.c"
     break;
 
-  case 17: /* command_flags: %empty  */
+  case 17: /* command_flags: command_print_directed_bipartite_graph command_flags  */
 #line 90 "command_parser.y"
+                                                                           {flags.add_flag("PrintDirectedBipartiteGraphNAUTY", 1);}
+#line 1249 "command_parser.tab.c"
+    break;
+
+  case 18: /* command_flags: %empty  */
+#line 91 "command_parser.y"
                                                              {}
-#line 1241 "command_parser.tab.c"
+#line 1255 "command_parser.tab.c"
     break;
 
-  case 18: /* command_input_file: command_string  */
-#line 93 "command_parser.y"
+  case 19: /* command_input_file: command_string  */
+#line 94 "command_parser.y"
                                      { ((*yyvalp).string)=(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.string);}
-#line 1247 "command_parser.tab.c"
+#line 1261 "command_parser.tab.c"
     break;
 
-  case 19: /* command_search_strategy: command_string  */
-#line 95 "command_parser.y"
+  case 20: /* command_search_strategy: command_string  */
+#line 96 "command_parser.y"
                                          { ((*yyvalp).string)=(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.string);}
-#line 1253 "command_parser.tab.c"
+#line 1267 "command_parser.tab.c"
     break;
 
-  case 20: /* command_parse: command_parse_signature command_parse_pace command_flags command_input_file command_input_file command_input_file command_end  */
-#line 98 "command_parser.y"
+  case 21: /* command_parse: command_parse_signature command_parse_pace command_flags command_input_file command_input_file command_input_file command_end  */
+#line 99 "command_parser.y"
                                   { ParseController parsePACE(flags, (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-3)].yystate.yysemantics.yyval.string)); parsePACE.parse_pace((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yyval.string), (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yyval.string)); }
-#line 1259 "command_parser.tab.c"
+#line 1273 "command_parser.tab.c"
     break;
 
-  case 21: /* command_parse: command_parse_signature command_parse_abstract command_flags command_input_file command_input_file command_end  */
-#line 100 "command_parser.y"
+  case 22: /* command_parse: command_parse_signature command_parse_abstract command_flags command_input_file command_input_file command_end  */
+#line 101 "command_parser.y"
                         { ParseController parsePACE(flags, (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yyval.string)); parsePACE.parse_abstract((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yyval.string));}
-#line 1265 "command_parser.tab.c"
+#line 1279 "command_parser.tab.c"
     break;
 
-  case 22: /* command_term: command_term_signature command_input_file command_end  */
-#line 102 "command_parser.y"
+  case 23: /* command_term: command_term_signature command_input_file command_end  */
+#line 103 "command_parser.y"
                                                                            {ParseController parseTest(flags,(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yyval.string)); parseTest.test_term();}
-#line 1271 "command_parser.tab.c"
+#line 1285 "command_parser.tab.c"
     break;
 
 
-#line 1275 "command_parser.tab.c"
+#line 1289 "command_parser.tab.c"
 
       default: break;
     }
@@ -2886,7 +2900,7 @@ yypdumpstack (yyGLRStack* yystackp)
 #define yylloc  command_lloc
 
 
-#line 104 "command_parser.y"
+#line 105 "command_parser.y"
 
 
 void yyerror(int &result, std::string &width_type, int &width_value, char const* msg){
