@@ -18,6 +18,7 @@ public:
     bool is_less_implementation(TwoHamiltonianCycles_WitnessPointerConst w) const;
     Witness& set_equal_implementation(TwoHamiltonianCycles_WitnessPointerConst w);
     virtual bool is_equal(const Witness &rhs) const override;
+    virtual void hash(Hasher &h) const override;
     virtual bool is_less(const Witness &rhs) const override;
     virtual Witness& set_equal(const Witness &witness);
     shared_ptr<Witness> relabel(map<unsigned int, unsigned int> relabelingMap) const override;

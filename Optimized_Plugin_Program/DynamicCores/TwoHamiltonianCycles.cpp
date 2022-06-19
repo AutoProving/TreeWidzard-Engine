@@ -153,6 +153,18 @@ string TwoHamiltonianCycles_Witness::witnessInformation() const {
   //*****************************
   //*****************************
 }
+void TwoHamiltonianCycles_Witness::hash(Hasher &h) const {
+  for (int version : {0, 1}) {
+    h << closed[version] << -1u;
+    for (int i = 0; i < info[version].size(); ++i) {
+      if (info[version][i].degree != -1u) {
+        h << i << info[version][i].degree << info[version][i].match;
+      }
+    }
+  }
+}
+
+
 TwoHamiltonianCycles_Witness::~TwoHamiltonianCycles_Witness() {
   //*****************************
   //*****************************
