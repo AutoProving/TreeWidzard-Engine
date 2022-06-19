@@ -6,6 +6,18 @@
 /**
  * @brief Set that automatically locks a mutex when used.
  * Allows multiple threads to read at once, but only one to write.
+ * 
+ * Mutating operations are done with a unique lock
+ * that can not exist at the same time as other
+ * unique or shared locks.
+ * 
+ * Non mutating operations are done with a shared lock
+ * that can exist at the same time as other shared locks,
+ * but not at the same time as a unique lock.
+ * 
+ * Iterators hold a unique lock for their entire lifetime,
+ * and const iterators hold a shared lock for their entire lifetime,
+ * which means one should avoid keeping iterators alive for long.
  */
 template <class Key, class Compare = std::less<Key>,
           class Allocator = std::allocator<Key>>
@@ -55,7 +67,7 @@ class locked_set : std::set<Key, Compare, Allocator> {
   // TODO return something sensible
   template <class K>
   void insert(K &&value) {
-    // don't lock if the value is already there
+    // don't unique lock if the value is already there
     if (count(value)) return;
 
     std::unique_lock lock(mutex);
