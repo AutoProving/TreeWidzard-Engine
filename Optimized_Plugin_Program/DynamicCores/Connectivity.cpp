@@ -36,6 +36,8 @@ Witness &Connectivity_Witness::set_equal_implementation(
 shared_ptr<Witness> Connectivity_Witness::relabel(
     map<unsigned int, unsigned int> relabelingMap) const {
   Connectivity_WitnessPointer w(new Connectivity_Witness);
+  w->tag = this->tag;
+
   auto &newPartition = w->partition;
   for (const auto &cell : this->partition) {
     set<unsigned> newCell;
