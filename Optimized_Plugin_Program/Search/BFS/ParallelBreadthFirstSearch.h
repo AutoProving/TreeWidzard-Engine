@@ -28,6 +28,7 @@ class ParallelBreadthFirstSearch : public SearchStrategy {
       newStatesVector;  // This will make it easier to do parallel search
   bool noBFSDAG = false;
   int nThreads = 4;
+
  public:
   ParallelBreadthFirstSearch();
   ParallelBreadthFirstSearch(DynamicKernel *dynamicKernel,

@@ -98,7 +98,7 @@ shared_ptr<Witness> HamiltonianCycle_Witness::relabel(map<unsigned int, unsigned
     }
 }
 
-void HamiltonianCycle_Witness::print() {
+void HamiltonianCycle_Witness::print() const {
     //*****************************
     //*****************************
     cout << "Vertices of degree 0:" << endl << "\t";

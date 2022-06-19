@@ -22,7 +22,7 @@ public:
     virtual void hash(Hasher &h) const override;
     virtual Witness& set_equal(const Witness &witness);
     shared_ptr<Witness> relabel(map<unsigned int, unsigned int> relabelingMap) const override;
-    virtual void print();
+    virtual void print() const override;
     string witnessInformation() const override;
     //*****************************
     //*****************************

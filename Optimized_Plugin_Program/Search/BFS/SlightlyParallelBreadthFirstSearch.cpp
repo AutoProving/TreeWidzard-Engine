@@ -12,8 +12,6 @@
  * Works with WitnessTypeTwo
  */
 
-constexpr int NTHREADS = 8;  // TODO: put in flags
-
 extern "C" {
 SlightlyParallelBreadthFirstSearch* create() {
   return new SlightlyParallelBreadthFirstSearch();
@@ -36,6 +34,13 @@ SlightlyParallelBreadthFirstSearch::SlightlyParallelBreadthFirstSearch(
   this->conjecture = conjecture;
   this->flags = flags;
   addAttribute("SearchName", "SlightlyParallelBreadthFirstSearch");
+  this->noBFSDAG = flags->get("NoBFSDAG");
+  this->nThreads = flags->get("NThreads");
+  if (this->nThreads == -1) {
+    this->nThreads = 4;
+    std::cerr << "Number of threads was not set. Using default of "
+              << this->nThreads << std::endl;
+  }
 }
 
 AbstractTreeDecomposition
@@ -112,7 +117,7 @@ void SlightlyParallelBreadthFirstSearch::extractCounterExampleStateTreeNode(
 
 //
 template <typename T>
-void update_maximum(std::atomic<T> &maximum_value, const T &value) noexcept {
+void update_maximum(std::atomic<T>& maximum_value, const T& value) noexcept {
   T prev_value = maximum_value;
   while (prev_value < value &&
          !maximum_value.compare_exchange_weak(prev_value, value)) {
@@ -129,16 +134,18 @@ void SlightlyParallelBreadthFirstSearch::search() {
   State::ptr initialState = kernel->initialState();
   allStatesSet.insert(initialState);
   newStatesSet.insert(initialState);
-  // Initialize the DAG
-  bfsDAG.addState(initialState);
-  AbstractTreeDecompositionNodeContent initialTransitionContent("Leaf");
-  std::vector<State::ptr>
-      initialAntecedents;  // Empty std::vector since there are no children.
-  Transition<State::ptr, AbstractTreeDecompositionNodeContent>
-      initialTransition(initialState, initialTransitionContent,
-                        initialAntecedents);
-  bfsDAG.addTransition(initialTransition);
-  ////////////////////////////////////
+  if (!noBFSDAG) {
+    // Initialize the DAG
+    bfsDAG.addState(initialState);
+    AbstractTreeDecompositionNodeContent initialTransitionContent("Leaf");
+    std::vector<State::ptr>
+        initialAntecedents;  // Empty std::vector since there are no children.
+    Transition<State::ptr, AbstractTreeDecompositionNodeContent>
+        initialTransition(initialState, initialTransitionContent,
+                          initialAntecedents);
+    bfsDAG.addTransition(initialTransition);
+    ////////////////////////////////////
+  }
   unsigned int width = kernel->get_width().get_value();
   std::vector<std::atomic<unsigned>> numberOfWitnesses(
       initialState->numberOfComponents());
@@ -189,15 +196,15 @@ void SlightlyParallelBreadthFirstSearch::search() {
 
               State::ptr consequentState = newStatePointer;
 
-              AbstractTreeDecompositionNodeContent transitionContent(
-                  "IntroVertex_" + std::to_string(i));
-              std::vector<State::ptr> antecedentStates;
-              antecedentStates.push_back(statePointer);
-              Transition<State::ptr, AbstractTreeDecompositionNodeContent>
-                  transition(consequentState, transitionContent,
-                             antecedentStates);
+              if (!noBFSDAG) {
+                AbstractTreeDecompositionNodeContent transitionContent(
+                    "IntroVertex_" + std::to_string(i));
+                std::vector<State::ptr> antecedentStates;
+                antecedentStates.push_back(statePointer);
+                Transition<State::ptr, AbstractTreeDecompositionNodeContent>
+                    transition(consequentState, transitionContent,
+                               antecedentStates);
 
-              {
                 std::lock_guard lock(everything_lock);
                 bfsDAG.addState(consequentState);
                 bfsDAG.addTransition(transition);
@@ -223,7 +230,8 @@ void SlightlyParallelBreadthFirstSearch::search() {
               }
 
               // size of witnessSets
-              for (int component = 0; component < numberOfWitnesses.size(); ++component) {
+              for (int component = 0; component < numberOfWitnesses.size();
+                   ++component) {
                 update_maximum(
                     numberOfWitnesses[component],
                     (unsigned)consequentState->getWitnessSet(component)
@@ -250,14 +258,14 @@ void SlightlyParallelBreadthFirstSearch::search() {
               !newStatesSet.count(newStatePointer)) {
             newStatesSet.insert(newStatePointer);
             State::ptr consequentState = newStatePointer;
-            AbstractTreeDecompositionNodeContent transitionContent(
-                "ForgetVertex_" + std::to_string(*it));
-            std::vector<State::ptr> antecedentStates;
-            antecedentStates.push_back(statePointer);
-            Transition<State::ptr, AbstractTreeDecompositionNodeContent>
-                transition(consequentState, transitionContent,
-                           antecedentStates);
-            {
+            if (!noBFSDAG) {
+              AbstractTreeDecompositionNodeContent transitionContent(
+                  "ForgetVertex_" + std::to_string(*it));
+              std::vector<State::ptr> antecedentStates;
+              antecedentStates.push_back(statePointer);
+              Transition<State::ptr, AbstractTreeDecompositionNodeContent>
+                  transition(consequentState, transitionContent,
+                             antecedentStates);
               std::lock_guard lock(everything_lock);
               bfsDAG.addState(consequentState);
               bfsDAG.addTransition(transition);
@@ -311,15 +319,15 @@ void SlightlyParallelBreadthFirstSearch::search() {
                   !newStatesSet.count(newStatePointer)) {
                 newStatesSet.insert(newStatePointer);
                 State::ptr consequentState = newStatePointer;
-                AbstractTreeDecompositionNodeContent transitionContent(
-                    "IntroEdge_" + std::to_string(*it) + "_" +
-                    std::to_string(*itPrime));
-                std::vector<State::ptr> antecedentStates;
-                antecedentStates.push_back(statePointer);
-                Transition<State::ptr, AbstractTreeDecompositionNodeContent>
-                    transition(consequentState, transitionContent,
-                               antecedentStates);
-                {
+                if (!noBFSDAG) {
+                  AbstractTreeDecompositionNodeContent transitionContent(
+                      "IntroEdge_" + std::to_string(*it) + "_" +
+                      std::to_string(*itPrime));
+                  std::vector<State::ptr> antecedentStates;
+                  antecedentStates.push_back(statePointer);
+                  Transition<State::ptr, AbstractTreeDecompositionNodeContent>
+                      transition(consequentState, transitionContent,
+                                 antecedentStates);
                   std::lock_guard lock(everything_lock);
                   bfsDAG.addState(consequentState);
                   bfsDAG.addTransition(transition);
@@ -356,7 +364,7 @@ void SlightlyParallelBreadthFirstSearch::search() {
           }
         }
       }
-      
+
       ///////////////////////////////////////////////////////
       //////////////////////// Join /////////////////////////
       ///////////////////////////////////////////////////////
@@ -376,14 +384,15 @@ void SlightlyParallelBreadthFirstSearch::search() {
                   !newStatesSet.count(newStatePointer)) {
                 newStatesSet.insert(newStatePointer);
                 State::ptr consequentState = newStatePointer;
-                AbstractTreeDecompositionNodeContent transitionContent("Join");
-                std::vector<State::ptr> antecedentStates;
-                antecedentStates.push_back(statePointer);
-                antecedentStates.push_back(*it);
-                Transition<State::ptr, AbstractTreeDecompositionNodeContent>
-                    transition(consequentState, transitionContent,
-                               antecedentStates);
-                {
+                if (!noBFSDAG) {
+                  AbstractTreeDecompositionNodeContent transitionContent(
+                      "Join");
+                  std::vector<State::ptr> antecedentStates;
+                  antecedentStates.push_back(statePointer);
+                  antecedentStates.push_back(*it);
+                  Transition<State::ptr, AbstractTreeDecompositionNodeContent>
+                      transition(consequentState, transitionContent,
+                                 antecedentStates);
                   std::lock_guard lock(everything_lock);
                   bfsDAG.addState(consequentState);
                   bfsDAG.addTransition(transition);
@@ -451,14 +460,13 @@ void SlightlyParallelBreadthFirstSearch::search() {
     };
 
     auto visit_range = [&](size_t begin, size_t end) {
-      for (size_t l = begin; l < end; ++l)
-        visit_state(newStatesVector[l]);
+      for (size_t l = begin; l < end; ++l) visit_state(newStatesVector[l]);
     };
 
     std::vector<std::thread> threads;
-    threads.reserve(NTHREADS);
+    threads.reserve(nThreads);
 
-    size_t per_thread = (newStatesVector.size() + NTHREADS - 1) / NTHREADS;
+    size_t per_thread = (newStatesVector.size() + nThreads - 1) / nThreads;
 
     for (size_t l = 0; l < newStatesVector.size(); l += per_thread)
       threads.push_back(std::thread(
@@ -469,6 +477,14 @@ void SlightlyParallelBreadthFirstSearch::search() {
     for (auto it = newStatesSet.cbegin(); it != newStatesSet.cend(); it++) {
       if (!conjecture->evaluateConjectureOnState(**it)) {
         std::cout << "Conjecture: Not Satisfied" << std::endl;
+
+        if (noBFSDAG) {
+          std::cerr
+              << "Rerun without -no-bfs-dag to construct a counter example."
+              << std::endl;
+          return;
+        }
+
         State::ptr badState = *it;
         bfsDAG.addFinalState(badState);
         AbstractTreeDecomposition atd = extractCounterExampleTerm(badState);

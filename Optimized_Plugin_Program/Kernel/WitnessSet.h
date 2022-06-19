@@ -60,10 +60,12 @@ class BaseIterator {
 class WitnessSet {  // data structure to store 'std::shared_ptr<Witness>'
  public:
   virtual ~WitnessSet(){};
-  virtual std::shared_ptr<WitnessSet> relabel(
-      std::map<unsigned, unsigned> map) {
-    std::cout << "Error: Base WitnessSet relabel function" << std::endl;
-    exit(20);
+  std::shared_ptr<WitnessSet> relabel(std::map<unsigned, unsigned> map) {
+    std::shared_ptr<WitnessSet> witnessSet = this->createEmptyWitnessSet();
+    for (auto witness : *this) {
+      witnessSet->insert(witness->relabel(map));
+    }
+    return witnessSet;
   }
   virtual BaseIterator begin() const {
     std::cout << "Error: WitnessSet begin()." << std::endl;
@@ -176,17 +178,8 @@ class WitnessSetTypeOne : public WitnessSet {
   virtual bool isLess(WitnessSet &rhs);
   virtual bool isEqual(WitnessSet &rhs);
   virtual int size();
-  virtual std::shared_ptr<WitnessSet> createEmptyWitnessSet() {
-    std::shared_ptr<WitnessSetTypeOne<T>> witnessSet(new WitnessSetTypeOne<T>);
-    return witnessSet;
-  }
-  virtual std::shared_ptr<WitnessSet> relabel(
-      std::map<unsigned, unsigned> map) {
-    std::shared_ptr<WitnessSet> witnessSet = this->createEmptyWitnessSet();
-    for (auto witness : *this) {
-      witnessSet->insert(witness->relabel(map));
-    }
-    return witnessSet;
+  virtual std::shared_ptr<WitnessSet> createEmptyWitnessSet() override {
+    return std::make_shared<WitnessSetTypeOne<T>>();
   }
   int witnessVectorSize() { return witnessVector.size(); }
 };
@@ -233,13 +226,13 @@ class WitnessSetTypeTwo : public WitnessSet {
   virtual void insert(std::shared_ptr<Witness> w);
   virtual void union_set_witness(std::shared_ptr<WitnessSet> witnessSet);
   virtual void print();
+  std::string witnessSetInformation() override;
   virtual bool isLess(WitnessSet &rhs);
   virtual bool isEqual(WitnessSet &rhs);
   virtual int size();
   void hash(Hasher &h) const override;
-  virtual std::shared_ptr<WitnessSet> createEmptyWitnessSet() {
-    std::shared_ptr<WitnessSetTypeTwo<T>> witnessSet(new WitnessSetTypeTwo<T>);
-    return witnessSet;
+  virtual std::shared_ptr<WitnessSet> createEmptyWitnessSet() override {
+    return std::make_shared<WitnessSetTypeTwo<T>>();
   }
 };
 
@@ -373,6 +366,12 @@ void WitnessSetTypeTwo<T>::union_set_witness(
 template <class T>
 void WitnessSetTypeTwo<T>::print() {
   for (auto element : *this) element->print();
+}
+template <class T>
+std::string WitnessSetTypeTwo<T>::witnessSetInformation() {
+  std::string info;
+  for (auto element : *this) info = info + element->witnessInformation();
+  return info;
 }
 template <class T>
 void WitnessSetTypeTwo<T>::hash(Hasher &h) const {

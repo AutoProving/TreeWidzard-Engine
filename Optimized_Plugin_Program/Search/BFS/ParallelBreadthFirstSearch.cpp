@@ -10,7 +10,7 @@
 /**
  * Does not work with WitnessTypeOne.
  * Works with WitnessTypeTwo.
- * 
+ *
  * Witnesses must be hashable.
  */
 
@@ -18,10 +18,10 @@ extern "C" {
 ParallelBreadthFirstSearch* create() {
   return new ParallelBreadthFirstSearch();
 }
-ParallelBreadthFirstSearch* create_parameter(
-    DynamicKernel* dynamicKernel, Conjecture* conjecture, Flags* flags) {
-  return new ParallelBreadthFirstSearch(dynamicKernel, conjecture,
-                                                flags);
+ParallelBreadthFirstSearch* create_parameter(DynamicKernel* dynamicKernel,
+                                             Conjecture* conjecture,
+                                             Flags* flags) {
+  return new ParallelBreadthFirstSearch(dynamicKernel, conjecture, flags);
 }
 }
 
@@ -45,8 +45,7 @@ ParallelBreadthFirstSearch::ParallelBreadthFirstSearch(
   }
 }
 
-AbstractTreeDecomposition
-ParallelBreadthFirstSearch::extractCounterExampleTerm(
+AbstractTreeDecomposition ParallelBreadthFirstSearch::extractCounterExampleTerm(
     State::ptr state) {
   AbstractTreeDecomposition atd;
   std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> rootNode;
@@ -118,7 +117,7 @@ void ParallelBreadthFirstSearch::extractCounterExampleStateTreeNode(
 
 //
 template <typename T>
-void update_maximum(std::atomic<T> &maximum_value, const T &value) noexcept {
+void update_maximum(std::atomic<T>& maximum_value, const T& value) noexcept {
   T prev_value = maximum_value;
   while (prev_value < value &&
          !maximum_value.compare_exchange_weak(prev_value, value)) {
@@ -135,20 +134,18 @@ void ParallelBreadthFirstSearch::search() {
   State::ptr initialState = kernel->initialState();
   allStatesSet.insert(initialState);
   newStatesSet.insert(initialState);
-  // Initialize the DAG
   if (!noBFSDAG) {
+    // Initialize the DAG
     bfsDAG.addState(initialState);
-  }
-  AbstractTreeDecompositionNodeContent initialTransitionContent("Leaf");
-  std::vector<State::ptr>
-      initialAntecedents;  // Empty std::vector since there are no children.
-  Transition<State::ptr, AbstractTreeDecompositionNodeContent>
-      initialTransition(initialState, initialTransitionContent,
-                        initialAntecedents);
-  if (!noBFSDAG) {
+    AbstractTreeDecompositionNodeContent initialTransitionContent("Leaf");
+    std::vector<State::ptr>
+        initialAntecedents;  // Empty std::vector since there are no children.
+    Transition<State::ptr, AbstractTreeDecompositionNodeContent>
+        initialTransition(initialState, initialTransitionContent,
+                          initialAntecedents);
     bfsDAG.addTransition(initialTransition);
+    ////////////////////////////////////
   }
-  ////////////////////////////////////
   unsigned int width = kernel->get_width().get_value();
   std::vector<std::atomic<unsigned>> numberOfWitnesses(
       initialState->numberOfComponents());
@@ -233,7 +230,8 @@ void ParallelBreadthFirstSearch::search() {
               }
 
               // size of witnessSets
-              for (int component = 0; component < numberOfWitnesses.size(); ++component) {
+              for (int component = 0; component < numberOfWitnesses.size();
+                   ++component) {
                 update_maximum(
                     numberOfWitnesses[component],
                     (unsigned)consequentState->getWitnessSet(component)
@@ -366,7 +364,7 @@ void ParallelBreadthFirstSearch::search() {
           }
         }
       }
-      
+
       ///////////////////////////////////////////////////////
       //////////////////////// Join /////////////////////////
       ///////////////////////////////////////////////////////
@@ -461,8 +459,7 @@ void ParallelBreadthFirstSearch::search() {
     };
 
     auto visit_range = [&](size_t begin, size_t end) {
-      for (size_t l = begin; l < end; ++l)
-        visit_state(newStatesVector[l]);
+      for (size_t l = begin; l < end; ++l) visit_state(newStatesVector[l]);
     };
 
     std::vector<std::thread> threads;
@@ -479,7 +476,7 @@ void ParallelBreadthFirstSearch::search() {
     for (auto it = newStatesSet.cbegin(); it != newStatesSet.cend(); it++) {
       if (!conjecture->evaluateConjectureOnState(**it)) {
         std::cout << "Conjecture: Not Satisfied" << std::endl;
-        
+
         if (noBFSDAG) {
           std::cerr
               << "Rerun without -no-bfs-dag to construct a counter example."
