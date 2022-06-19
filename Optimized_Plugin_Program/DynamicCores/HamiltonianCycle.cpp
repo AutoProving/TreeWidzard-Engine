@@ -54,7 +54,7 @@ Witness & HamiltonianCycle_Witness::set_equal_implementation(HamiltonianCycle_Wi
 shared_ptr<Witness> HamiltonianCycle_Witness::relabel(map<unsigned int, unsigned int> relabelingMap) const {
     if(this->degree_0.empty() and this->degree_1.empty() and this->degree_2.empty()
             and this->matching.empty() and this->closed){
-        return make_shared<Witness>();
+        return make_shared<HamiltonianCycle_Witness>();
     }else{
         HamiltonianCycle_WitnessPointer relabeledWitness(new HamiltonianCycle_Witness);
         relabeledWitness->closed = this->closed;
