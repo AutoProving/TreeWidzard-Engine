@@ -92,7 +92,7 @@ class State : private std::enable_shared_from_this<State> {
 
     int numberOfComponents() const;
 
-    std::shared_ptr<State> relabel(std::map<unsigned, unsigned> relabelingMap); // relabelingMap is a relabeling of the vertices in a bag. The relabel function propagates this relabeling to a State
+    std::shared_ptr<const State> relabel(std::map<unsigned, unsigned> relabelingMap) const; // relabelingMap is a relabeling of the vertices in a bag. The relabel function propagates this relabeling to a State
 
 
     void hash(Hasher &h) const;

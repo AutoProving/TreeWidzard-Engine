@@ -170,7 +170,7 @@ Bag Bag::forget_v(unsigned i) {
 	return *this;
 }
 
-Bag Bag::relabel(std::map<unsigned int, unsigned int> relabelingMap) {
+Bag Bag::relabel(std::map<unsigned int, unsigned int> relabelingMap) const {
     Bag b;
     std::set<unsigned > bagElements;
     for(auto v:this->elements){

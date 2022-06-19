@@ -128,7 +128,7 @@ std::shared_ptr<WitnessSet> State::getWitnessSet(int i) const {
 
 int State::numberOfComponents() const { return witnessSetVector.size(); }
 
-std::shared_ptr<State> State::relabel(std::map<unsigned int, unsigned int> relabelingMap) {
+std::shared_ptr<const State> State::relabel(std::map<unsigned int, unsigned int> relabelingMap) const {
     std::shared_ptr<State> state(new State);
     std::vector<std::shared_ptr<WitnessSet> > witnessSetVec;
     witnessSetVec.resize(witnessSetVector.size());
