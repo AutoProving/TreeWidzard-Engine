@@ -29,7 +29,8 @@ void SearchController::check_search() {
         }
     }
     catch(std::exception& e){
-        std::cerr << "There is an error during reading search plugins." << std::endl;
+        std::cerr << "There is an error during reading search plugins:" << std::endl;
+        std::cerr << e.what() << '\n';
         exit(20);
     }
 
