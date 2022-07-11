@@ -68,10 +68,12 @@ add_executable(
         #   DynamicCores/ChromaticNumber_Min.h
         #  DynamicCores/ChromaticNumber_Min.cpp
         # Kernel files
-        Kernel/Witness.cpp
-        Kernel/Witness.h
+        Kernel/CoreWrapper.h
+        Kernel/WitnessBase.cpp
+        Kernel/WitnessBase.h
         Kernel/WitnessSet.cpp
         Kernel/WitnessSet.h
+        Kernel/WitnessWrapper.h
         Kernel/PropertyAssignment.cpp
         Kernel/PropertyAssignment.h
         Kernel/Bag.cpp

@@ -2,7 +2,7 @@
 #ifndef DYNAMIC_HAMILTONIAN_PATH_H
 #define DYNAMIC_HAMILTONIAN_PATH_H
 #include "../Kernel/Bag.h"
-#include "../Kernel/Witness.h"
+#include "../Kernel/WitnessBase.h"
 #include "../Kernel/DynamicCore.h"
 #include "../Kernel/WitnessSet.h"
 
@@ -11,16 +11,16 @@ class HamiltonianPath_Witness;
 
 typedef shared_ptr<HamiltonianPath_Witness> HamiltonianPath_WitnessPointer;
 typedef shared_ptr<HamiltonianPath_Witness const> HamiltonianPath_WitnessPointerConst;
-class HamiltonianPath_Witness: public Witness, public enable_shared_from_this<HamiltonianPath_Witness>{
+class HamiltonianPath_Witness: public WitnessBase, public enable_shared_from_this<HamiltonianPath_Witness>{
 public:
     bool is_equal_implementation(HamiltonianPath_WitnessPointerConst w) const;
     bool is_less_implementation(HamiltonianPath_WitnessPointerConst w) const;
-    Witness& set_equal_implementation(HamiltonianPath_WitnessPointerConst w);
+    WitnessBase& set_equal_implementation(HamiltonianPath_WitnessPointerConst w);
     ~HamiltonianPath_Witness();
-    virtual bool is_equal(const Witness &rhs) const override;
-    virtual bool is_less(const Witness &rhs) const override;
-    virtual Witness& set_equal(const Witness &witness) override;
-    shared_ptr<Witness> relabel(map<unsigned int, unsigned int> relabelingMap) const override;
+    virtual bool is_equal(const WitnessBase &rhs) const override;
+    virtual bool is_less(const WitnessBase &rhs) const override;
+    virtual WitnessBase& set_equal(const WitnessBase &witness) override;
+    shared_ptr<WitnessBase> relabel(const map<unsigned int, unsigned int> &relabelingMap) const override;
     virtual void print() const override;
     string witnessInformation() const override;
     //*****************************
@@ -51,12 +51,12 @@ public:
     unsigned parameter;
     HamiltonianPath_DynamicCore();
     void createInitialWitnessSet();
-    virtual WitnessSetPointer intro_v(unsigned i, Bag &b, const Witness &witness) override;
-    virtual WitnessSetPointer intro_e(unsigned i, unsigned j, Bag &b, const Witness &witness) override;
-    virtual WitnessSetPointer forget_v(unsigned i, Bag &b, const Witness &witness) override;
-    virtual WitnessSetPointer join(Bag &b, const Witness &witness1, const Witness &witness2) override;
-    virtual WitnessSetPointer clean(WitnessSetPointer witnessSet) override;
-    virtual bool is_final_witness(const Witness &witness) override;
+    virtual WitnessSetBasePointer intro_v(unsigned i, Bag &b, const WitnessBase &witness) override;
+    virtual WitnessSetBasePointer intro_e(unsigned i, unsigned j, Bag &b, const WitnessBase &witness) override;
+    virtual WitnessSetBasePointer forget_v(unsigned i, Bag &b, const WitnessBase &witness) override;
+    virtual WitnessSetBasePointer join(Bag &b, const WitnessBase &witness1, const WitnessBase &witness2) override;
+    virtual WitnessSetBasePointer clean(WitnessSetBasePointer witnessSet) override;
+    virtual bool is_final_witness(const WitnessBase &witness) override;
     //*****************************
     //*****************************
     // Only change this part. Here you can define attributes and functions that are specific to your core.

@@ -12,7 +12,7 @@ void WitnessTreePACENode::print() {
 
 std::shared_ptr<WitnessTreePACENode> WitnessTreePACE::generateNode(std::shared_ptr<StateTreeNode> snode, std::shared_ptr<WitnessTreePACENode> parent, unsigned joinno, DynamicKernel &kernel) {
     State::ptr q = snode->get_S();
-    std::vector<std::shared_ptr<Witness> > witnesses;
+    std::vector<std::shared_ptr<WitnessBase> > witnesses;
     witnesses.resize(parent->witnesses.size());
     for(size_t i=0; i < parent->witnesses.size(); i++){
         if(parent->witnesses[i]){
@@ -31,7 +31,7 @@ std::shared_ptr<WitnessTreePACENode> WitnessTreePACE::generateNode(std::shared_p
                         break;
                     }else{
                         Bag b = q->get_bag();
-                        std::shared_ptr<WitnessSet> w = kernel.pointerToCoreNumber(i)->intro_v(*setDiff.begin(),b ,**itr);
+                        std::shared_ptr<WitnessSetBase> w = kernel.pointerToCoreNumber(i)->intro_v(*setDiff.begin(),b ,**itr);
                         for(auto t = w->begin(); t!=w->end();t++){
                             if( **t == *parent->witnesses[i]){
                                 witnesses[i]=*itr;
@@ -56,7 +56,7 @@ std::shared_ptr<WitnessTreePACENode> WitnessTreePACE::generateNode(std::shared_p
                         break;
                     }else{
                         Bag b = q->get_bag();
-                        std::shared_ptr<WitnessSet> w = kernel.pointerToCoreNumber(i)->forget_v(*setDiff.begin(),b ,**itr);
+                        std::shared_ptr<WitnessSetBase> w = kernel.pointerToCoreNumber(i)->forget_v(*setDiff.begin(),b ,**itr);
                         for(auto t = w->begin(); t!=w->end();t++){
                             if( **t == *parent->witnesses[i]){
                                 witnesses[i]=*itr;
@@ -79,7 +79,7 @@ std::shared_ptr<WitnessTreePACENode> WitnessTreePACE::generateNode(std::shared_p
                         break;
                     }else{
                         Bag b = q->get_bag();
-                        std::shared_ptr<WitnessSet> w = kernel.pointerToCoreNumber(i)->intro_e(e.first, e.second,b ,**itr);
+                        std::shared_ptr<WitnessSetBase> w = kernel.pointerToCoreNumber(i)->intro_e(e.first, e.second,b ,**itr);
                         for(auto t = w->begin(); t!=w->end();t++){
                             if( **t == *parent->witnesses[i]){
                                 witnesses[i]=*itr;
@@ -97,12 +97,12 @@ std::shared_ptr<WitnessTreePACENode> WitnessTreePACE::generateNode(std::shared_p
                         break;
                     }else{
                         Bag b = q->get_bag();
-                        std::shared_ptr<WitnessSet> nqw = nq->getWitnessSet(i);
+                        std::shared_ptr<WitnessSetBase> nqw = nq->getWitnessSet(i);
                         for(auto it=nqw->begin(); it!= nqw->end();it++){
                             if(flag){
                                 break;
                             }else{
-                                std::shared_ptr<WitnessSet> w = kernel.pointerToCoreNumber(i)->join(b ,**itr,**it);
+                                std::shared_ptr<WitnessSetBase> w = kernel.pointerToCoreNumber(i)->join(b ,**itr,**it);
                                 for(auto t = w->begin(); t!=w->end();t++){
                                     if( **t == *parent->witnesses[i]){
                                         witnesses[i]=*itr;
@@ -135,7 +135,7 @@ bool WitnessTreePACE::stateTreeToWitnessTreePACE(StateTree &stateTree, DynamicKe
     std::shared_ptr<WitnessTreePACENode> node (new WitnessTreePACENode);
     State::ptr q = stateTree.root->get_S();
     //std::vector<std::shared_ptr<WitnessSet> > witnessSet = q->get_witnessSetstd::vector();
-    std::vector<std::shared_ptr<Witness>> witnesses;
+    std::vector<std::shared_ptr<WitnessBase>> witnesses;
     witnesses.resize(q->numberOfComponents());
     for(size_t i = 0; i< q->numberOfComponents();i++){
         for(auto it=q->getWitnessSet(i)->begin(); it!= q->getWitnessSet(i)->end();it++){
