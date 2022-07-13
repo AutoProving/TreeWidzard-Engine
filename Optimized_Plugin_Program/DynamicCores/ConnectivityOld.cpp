@@ -22,7 +22,7 @@ bool Connectivity_Witness::is_less_implementation(
   //*****************************
 }
 
-WitnessBase &Connectivity_Witness::set_equal_implementation(
+Witness &Connectivity_Witness::set_equal_implementation(
     Connectivity_WitnessPointerConst w) {
   //*****************************
   //*****************************
@@ -33,7 +33,7 @@ WitnessBase &Connectivity_Witness::set_equal_implementation(
   //*****************************
 }
 
-shared_ptr<WitnessBase> Connectivity_Witness::relabel(
+shared_ptr<Witness> Connectivity_Witness::relabel(
     const map<unsigned int, unsigned int> &relabelingMap) const {
   Connectivity_WitnessPointer w(new Connectivity_Witness);
   w->tag = this->tag;
@@ -297,14 +297,14 @@ bool Connectivity_DynamicCore::is_final_witness_implementation(
     Connectivity_WitnessPointerConst w) {
   //*****************************
   //*****************************
-  return w->tag != 3;
+  return w->tag != 3 && w->partition.size() <= 1;
   //*****************************
   //*****************************
 }
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 
-bool Connectivity_Witness::is_equal(const WitnessBase &rhs) const {
+bool Connectivity_Witness::is_equal(const Witness &rhs) const {
   if (Connectivity_Witness const *e =
           dynamic_cast<Connectivity_Witness const *>(&rhs)) {
     Connectivity_WitnessPointerConst w = e->shared_from_this();
@@ -315,7 +315,7 @@ bool Connectivity_Witness::is_equal(const WitnessBase &rhs) const {
   }
 }
 
-bool Connectivity_Witness::is_less(const WitnessBase &rhs) const {
+bool Connectivity_Witness::is_less(const Witness &rhs) const {
   if (Connectivity_Witness const *e =
           dynamic_cast<Connectivity_Witness const *>(&rhs)) {
     Connectivity_WitnessPointerConst w = e->shared_from_this();
@@ -326,7 +326,7 @@ bool Connectivity_Witness::is_less(const WitnessBase &rhs) const {
   }
 }
 
-WitnessBase &Connectivity_Witness::set_equal(const WitnessBase &witness) {
+Witness &Connectivity_Witness::set_equal(const Witness &witness) {
   if (const Connectivity_Witness *e =
           dynamic_cast<const Connectivity_Witness *>(&witness)) {
     Connectivity_WitnessPointerConst w = e->shared_from_this();
@@ -344,7 +344,7 @@ void Connectivity_DynamicCore::createInitialWitnessSet() {
 }
 
 WitnessSetBasePointer Connectivity_DynamicCore::intro_v(
-    unsigned i, Bag &b, const WitnessBase &witness) {
+    unsigned i, Bag &b, const Witness &witness) {
   if (const Connectivity_Witness *e =
           dynamic_cast<const Connectivity_Witness *>(&witness)) {
     Connectivity_WitnessPointerConst w = e->shared_from_this();
@@ -358,7 +358,7 @@ WitnessSetBasePointer Connectivity_DynamicCore::intro_v(
 }
 
 WitnessSetBasePointer Connectivity_DynamicCore::intro_e(
-    unsigned i, unsigned j, Bag &b, const WitnessBase &witness) {
+    unsigned i, unsigned j, Bag &b, const Witness &witness) {
   if (const Connectivity_Witness *e =
           dynamic_cast<const Connectivity_Witness *>(&witness)) {
     Connectivity_WitnessPointerConst w = e->shared_from_this();
@@ -372,7 +372,7 @@ WitnessSetBasePointer Connectivity_DynamicCore::intro_e(
 }
 
 WitnessSetBasePointer Connectivity_DynamicCore::forget_v(
-    unsigned i, Bag &b, const WitnessBase &witness) {
+    unsigned i, Bag &b, const Witness &witness) {
   if (const Connectivity_Witness *e =
           dynamic_cast<const Connectivity_Witness *>(&witness)) {
     Connectivity_WitnessPointerConst w = e->shared_from_this();
@@ -386,7 +386,7 @@ WitnessSetBasePointer Connectivity_DynamicCore::forget_v(
 }
 
 WitnessSetBasePointer Connectivity_DynamicCore::join(
-    Bag &b, const WitnessBase &witness1, const WitnessBase &witness2) {
+    Bag &b, const Witness &witness1, const Witness &witness2) {
   if (const Connectivity_Witness *e1 =
           dynamic_cast<const Connectivity_Witness *>(&witness1)) {
     if (const Connectivity_Witness *e2 =
@@ -408,7 +408,7 @@ WitnessSetBasePointer Connectivity_DynamicCore::join(
   }
 }
 
-bool Connectivity_DynamicCore::is_final_witness(const WitnessBase &witness) {
+bool Connectivity_DynamicCore::is_final_witness(const Witness &witness) {
   if (const Connectivity_Witness *e =
           dynamic_cast<const Connectivity_Witness *>(&witness)) {
     Connectivity_WitnessPointerConst w = e->shared_from_this();

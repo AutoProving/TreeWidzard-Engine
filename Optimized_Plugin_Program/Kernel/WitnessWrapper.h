@@ -3,63 +3,66 @@
 
 #include <memory>
 
-#include "WitnessBase.h"
+#include "Witness.h"
 
-template <class Witness>
-class WitnessWrapper : public WitnessBase {
-  friend Witness;
-
+template <class WitnessType>
+class WitnessWrapper : public Witness {
  private:
+  using WitnessAlias = WitnessType;
+
+  friend WitnessAlias;
+
   WitnessWrapper() {}
 
-  Witness &as_witness() { return *(Witness *)this; }
+  WitnessAlias &as_witness() { return *(WitnessAlias *)this; }
 
-  const Witness &as_witness() const { return *(Witness *)this; }
+  const WitnessAlias &as_witness() const { return *(WitnessAlias *)this; }
 
  protected:
-  bool is_equal(const WitnessBase &rhs) const override {
+  bool is_equal(const Witness &rhs) const override {
     return is_equal_implementation(this->as_witness(), as_witness(rhs));
   }
 
-  bool is_less(const WitnessBase &rhs) const override {
+  bool is_less(const Witness &rhs) const override {
     return is_less_implementation(this->as_witness(), as_witness(rhs));
   }
 
  public:
-  static Witness &as_witness(WitnessBase &witnessBase) {
+  static WitnessAlias &as_witness(Witness &witnessBase) {
 #ifdef ENABLE_DEBUG_INFO
-    if (Witness *witness = dynamic_cast<Witness *>(&witnessBase)) {
+    if (WitnessAlias *witness = dynamic_cast<WitnessAlias *>(&witnessBase)) {
       return *witness;
     } else {
       std::cerr << "ERROR: in WitnessWrapper cast error\n";
       exit(20);
     }
 #else
-    return *(Witness *)&witnessBase;
+    return *(WitnessAlias *)&witnessBase;
 #endif
   }
 
-  static const Witness &as_witness(const WitnessBase &witnessBase) {
+  static const WitnessAlias &as_witness(const Witness &witnessBase) {
 #ifdef ENABLE_DEBUG_INFO
-    if (Witness const *witness = dynamic_cast<Witness const *>(&witnessBase)) {
+    if (WitnessAlias const *witness =
+            dynamic_cast<WitnessAlias const *>(&witnessBase)) {
       return *witness;
     } else {
       std::cerr << "ERROR: in WitnessWrapper cast error\n";
       exit(20);
     }
 #else
-    return *(Witness *)&witnessBase;
+    return *(WitnessAlias *)&witnessBase;
 #endif
   }
 
-  std::shared_ptr<Witness> clone() const {
-    return std::make_shared<Witness>(this->as_witness());
+  std::shared_ptr<WitnessAlias> clone() const {
+    return std::make_shared<WitnessAlias>(this->as_witness());
   }
 
-  std::shared_ptr<WitnessBase> relabel(
+  std::shared_ptr<Witness> relabel(
       const std::map<unsigned, unsigned> &relabelingMap) const override {
-    return std::make_shared<Witness>(
-        ((Witness *)this)->relabel_implementation(relabelingMap));
+    return std::make_shared<WitnessAlias>(
+        ((WitnessAlias *)this)->relabel_implementation(relabelingMap));
   }
 };
 

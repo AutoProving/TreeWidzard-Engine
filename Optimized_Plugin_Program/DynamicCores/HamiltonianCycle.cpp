@@ -40,7 +40,7 @@ bool HamiltonianCycle_Witness::is_less_implementation(
   //*****************************
 }
 
-WitnessBase &HamiltonianCycle_Witness::set_equal_implementation(
+Witness &HamiltonianCycle_Witness::set_equal_implementation(
     HamiltonianCycle_WitnessPointerConst w) {
   //*****************************
   //*****************************
@@ -54,7 +54,7 @@ WitnessBase &HamiltonianCycle_Witness::set_equal_implementation(
   //*****************************
 }
 
-shared_ptr<WitnessBase> HamiltonianCycle_Witness::relabel(
+shared_ptr<Witness> HamiltonianCycle_Witness::relabel(
     const map<unsigned int, unsigned int> &relabelingMap) const {
   if (this->degree_0.empty() and this->degree_1.empty() and
       this->degree_2.empty() and this->matching.empty() and this->closed) {
@@ -449,7 +449,7 @@ bool HamiltonianCycle_DynamicCore::is_final_witness_implementation(
 ////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 
-bool HamiltonianCycle_Witness::is_equal(const WitnessBase &rhs) const {
+bool HamiltonianCycle_Witness::is_equal(const Witness &rhs) const {
   if (HamiltonianCycle_Witness const *e =
           dynamic_cast<HamiltonianCycle_Witness const *>(&rhs)) {
     HamiltonianCycle_WitnessPointerConst w = e->shared_from_this();
@@ -460,7 +460,7 @@ bool HamiltonianCycle_Witness::is_equal(const WitnessBase &rhs) const {
   }
 }
 
-bool HamiltonianCycle_Witness::is_less(const WitnessBase &rhs) const {
+bool HamiltonianCycle_Witness::is_less(const Witness &rhs) const {
   if (HamiltonianCycle_Witness const *e =
           dynamic_cast<HamiltonianCycle_Witness const *>(&rhs)) {
     HamiltonianCycle_WitnessPointerConst w = e->shared_from_this();
@@ -471,7 +471,7 @@ bool HamiltonianCycle_Witness::is_less(const WitnessBase &rhs) const {
   }
 }
 
-WitnessBase &HamiltonianCycle_Witness::set_equal(const WitnessBase &witness) {
+Witness &HamiltonianCycle_Witness::set_equal(const Witness &witness) {
   if (const HamiltonianCycle_Witness *e =
           dynamic_cast<const HamiltonianCycle_Witness *>(&witness)) {
     HamiltonianCycle_WitnessPointerConst w = e->shared_from_this();
@@ -508,7 +508,7 @@ void HamiltonianCycle_DynamicCore::createInitialWitnessSet() {
 }
 
 WitnessSetBasePointer HamiltonianCycle_DynamicCore::intro_v(
-    unsigned i, Bag &b, const WitnessBase &witness) {
+    unsigned i, Bag &b, const Witness &witness) {
   if (const HamiltonianCycle_Witness *e =
           dynamic_cast<const HamiltonianCycle_Witness *>(&witness)) {
     HamiltonianCycle_WitnessPointerConst w = e->shared_from_this();
@@ -524,7 +524,7 @@ WitnessSetBasePointer HamiltonianCycle_DynamicCore::intro_v(
 }
 
 WitnessSetBasePointer HamiltonianCycle_DynamicCore::intro_e(
-    unsigned i, unsigned j, Bag &b, const WitnessBase &witness) {
+    unsigned i, unsigned j, Bag &b, const Witness &witness) {
   if (const HamiltonianCycle_Witness *e =
           dynamic_cast<const HamiltonianCycle_Witness *>(&witness)) {
     HamiltonianCycle_WitnessPointerConst w = e->shared_from_this();
@@ -540,7 +540,7 @@ WitnessSetBasePointer HamiltonianCycle_DynamicCore::intro_e(
 }
 
 WitnessSetBasePointer HamiltonianCycle_DynamicCore::forget_v(
-    unsigned i, Bag &b, const WitnessBase &witness) {
+    unsigned i, Bag &b, const Witness &witness) {
   if (const HamiltonianCycle_Witness *e =
           dynamic_cast<const HamiltonianCycle_Witness *>(&witness)) {
     HamiltonianCycle_WitnessPointerConst w = e->shared_from_this();
@@ -556,7 +556,7 @@ WitnessSetBasePointer HamiltonianCycle_DynamicCore::forget_v(
 }
 
 WitnessSetBasePointer HamiltonianCycle_DynamicCore::join(
-    Bag &b, const WitnessBase &witness1, const WitnessBase &witness2) {
+    Bag &b, const Witness &witness1, const Witness &witness2) {
   if (const HamiltonianCycle_Witness *e1 =
           dynamic_cast<const HamiltonianCycle_Witness *>(&witness1)) {
     if (const HamiltonianCycle_Witness *e2 =
@@ -591,7 +591,7 @@ WitnessSetBasePointer HamiltonianCycle_DynamicCore::clean(
 }
 
 bool HamiltonianCycle_DynamicCore::is_final_witness(
-    const WitnessBase &witness) {
+    const Witness &witness) {
   if (const HamiltonianCycle_Witness *e =
           dynamic_cast<const HamiltonianCycle_Witness *>(&witness)) {
     HamiltonianCycle_WitnessPointerConst w = e->shared_from_this();

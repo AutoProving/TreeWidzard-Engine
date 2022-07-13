@@ -4,13 +4,15 @@
 #include "DynamicCore.h"
 #include "WitnessWrapper.h"
 
-template <class Core, class Witness, template <class> class WitnessSetType>
+template <class Core, class WitnessType, template <class> class WitnessSetType>
 class CoreWrapper : public DynamicCore {
  private:
-  Core &as_core() { return *(Core *)this; }
+  using WitnessAlias = WitnessType;
+  using WitnessSet = WitnessSetType<WitnessAlias>;
 
- protected:
-  using WitnessSet = WitnessSetType<Witness>;
+  friend Core;
+
+  Core &as_core() { return *(Core *)this; }
 
  public:
   CoreWrapper() {
@@ -28,37 +30,38 @@ class CoreWrapper : public DynamicCore {
   }
 
   WitnessSetBasePointer intro_v(unsigned i, Bag &b,
-                                const WitnessBase &witness) override {
+                                const Witness &witness) override {
     auto witnessSet = std::make_shared<WitnessSet>();
-    this->as_core().intro_v_implementation(i, b, Witness::as_witness(witness),
-                                           *witnessSet);
+    this->as_core().intro_v_implementation(
+        i, b, WitnessAlias::as_witness(witness), *witnessSet);
     this->as_core().clean_implementation(*witnessSet);
     return witnessSet;
   }
 
   WitnessSetBasePointer intro_e(unsigned i, unsigned j, Bag &b,
-                                const WitnessBase &witness) override {
+                                const Witness &witness) override {
     auto witnessSet = std::make_shared<WitnessSet>();
     this->as_core().intro_e_implementation(
-        i, j, b, Witness::as_witness(witness), *witnessSet);
+        i, j, b, WitnessAlias::as_witness(witness), *witnessSet);
     this->as_core().clean_implementation(*witnessSet);
     return witnessSet;
   }
 
   WitnessSetBasePointer forget_v(unsigned i, Bag &b,
-                                 const WitnessBase &witness) override {
+                                 const Witness &witness) override {
     auto witnessSet = std::make_shared<WitnessSet>();
-    this->as_core().forget_v_implementation(i, b, Witness::as_witness(witness),
-                                            *witnessSet);
+    this->as_core().forget_v_implementation(
+        i, b, WitnessAlias::as_witness(witness), *witnessSet);
     this->as_core().clean_implementation(*witnessSet);
     return witnessSet;
   }
 
-  WitnessSetBasePointer join(Bag &b, const WitnessBase &w1,
-                             const WitnessBase &w2) override {
+  WitnessSetBasePointer join(Bag &b, const Witness &w1,
+                             const Witness &w2) override {
     auto witnessSet = std::make_shared<WitnessSet>();
-    this->as_core().join_implementation(b, Witness::as_witness(w1),
-                                        Witness::as_witness(w2), *witnessSet);
+    this->as_core().join_implementation(b, WitnessAlias::as_witness(w1),
+                                        WitnessAlias::as_witness(w2),
+                                        *witnessSet);
     this->as_core().clean_implementation(*witnessSet);
     return witnessSet;
   }
@@ -78,9 +81,9 @@ class CoreWrapper : public DynamicCore {
 #endif
   }
 
-  bool is_final_witness(const WitnessBase &witness) override {
+  bool is_final_witness(const Witness &witness) override {
     return this->as_core().is_final_witness_implementation(
-        Witness::as_witness(witness));
+        WitnessAlias::as_witness(witness));
   }
 };
 

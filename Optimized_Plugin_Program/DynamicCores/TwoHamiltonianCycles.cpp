@@ -6,7 +6,7 @@
 
 using namespace std;
 
-struct Witness : WitnessWrapper<Witness> {
+struct TwoHamiltonianCycles_Witness : WitnessWrapper<TwoHamiltonianCycles_Witness> {
   struct VertexInfo {
     unsigned degree = -1U;
     unsigned match = -1U;
@@ -24,7 +24,7 @@ struct Witness : WitnessWrapper<Witness> {
   /**
    * Check if the witnesses l and r are equal.
    */
-  friend bool is_equal_implementation(const Witness &l, const Witness &r) {
+  friend bool is_equal_implementation(const WitnessAlias &l, const WitnessAlias &r) {
     return l.was_different == r.was_different && l.closed[0] == r.closed[0] &&
            l.closed[1] == r.closed[1] && l.info[0] == r.info[0] &&
            l.info[1] == r.info[1];
@@ -35,7 +35,7 @@ struct Witness : WitnessWrapper<Witness> {
    * Less here can mean anything
    * as long as it's a strict total order.
    */
-  friend bool is_less_implementation(const Witness &l, const Witness &r) {
+  friend bool is_less_implementation(const WitnessAlias &l, const WitnessAlias &r) {
     auto l_tuple_ref = std::tie(l.info[0], l.info[1], l.closed[0], l.closed[1],
                                 l.was_different);
     auto r_tuple_ref = std::tie(r.info[0], r.info[1], r.closed[0], r.closed[1],
@@ -51,9 +51,9 @@ struct Witness : WitnessWrapper<Witness> {
    * Create a copy of the witness where the vertices
    * are renamed according to the relabeling map.
    */
-  Witness relabel_implementation(
+  WitnessAlias relabel_implementation(
       const map<unsigned, unsigned> &relabelingMap) const {
-    Witness relabeledWitness;
+    WitnessAlias relabeledWitness;
     relabeledWitness.closed[0] = this->closed[0];
     relabeledWitness.closed[1] = this->closed[1];
     relabeledWitness.was_different = this->was_different;
@@ -160,7 +160,7 @@ struct Witness : WitnessWrapper<Witness> {
   }
 };
 
-struct Core : CoreWrapper<Core, Witness, WitnessSetTypeTwo> {
+struct TwoHamiltonianCycles_Core : CoreWrapper<TwoHamiltonianCycles_Core, TwoHamiltonianCycles_Witness, WitnessSetTypeTwo> {
   static constexpr char CoreName[] = "TwoHamiltonianCycles";
   static constexpr char CoreType[] = "Bool";
   static constexpr char ParameterType[] = "ParameterLess";
@@ -171,7 +171,7 @@ struct Core : CoreWrapper<Core, Witness, WitnessSetTypeTwo> {
    * nodes in the decomposition.
    */
   void initialize_leaf(WitnessSet &witnessSet) {
-    witnessSet.insert(make_shared<Witness>());
+    witnessSet.insert(make_shared<WitnessAlias>());
   }
 
   /**
@@ -184,7 +184,7 @@ struct Core : CoreWrapper<Core, Witness, WitnessSetTypeTwo> {
    * is no way to get a valid witness after inserting the vertex,
    * insert no results.
    */
-  void intro_v_implementation(unsigned i, const Bag &b, const Witness &w,
+  void intro_v_implementation(unsigned i, const Bag &b, const WitnessAlias &w,
                               WitnessSet &witnessSet) {
     if (w.closed[0] || w.closed[1]) return;  // impossible
 
@@ -207,8 +207,8 @@ struct Core : CoreWrapper<Core, Witness, WitnessSetTypeTwo> {
    * into the witnessSet.
    */
   void intro_e_implementation(unsigned int i, unsigned int j, Bag &b,
-                              const Witness &w, WitnessSet &witnessSet) {
-    auto try_use_edge = [&](Witness *w1, int v) -> bool {
+                              const WitnessAlias &w, WitnessSet &witnessSet) {
+    auto try_use_edge = [&](WitnessAlias *w1, int v) -> bool {
       // attempt using the edge i,j in version v
       // returns true on success
 
@@ -319,7 +319,7 @@ struct Core : CoreWrapper<Core, Witness, WitnessSetTypeTwo> {
    * after forgetting the label of the vertex
    * currently labeled i into the witnessSet.
    */
-  void forget_v_implementation(unsigned int i, Bag &b, const Witness &w,
+  void forget_v_implementation(unsigned int i, Bag &b, const WitnessAlias &w,
                                WitnessSet &witnessSet) {
     // Only forget vertices with degree 2
     if (w.info[0][i].degree == 2 && w.info[1][i].degree == 2) {
@@ -345,11 +345,11 @@ struct Core : CoreWrapper<Core, Witness, WitnessSetTypeTwo> {
    * Insert what the witness results from joining
    * w1 and w2 into the witnessSet.
    */
-  void join_implementation(Bag &b, const Witness &w1, const Witness &w2,
+  void join_implementation(Bag &b, const WitnessAlias &w1, const WitnessAlias &w2,
                            WitnessSet &witnessSet) {
     // can only join closed if the other side didn't use any edges
 
-    auto wPrime = make_shared<Witness>();
+    auto wPrime = make_shared<WitnessAlias>();
     wPrime->was_different |= w1.was_different;
     wPrime->was_different |= w2.was_different;
 
@@ -508,7 +508,7 @@ struct Core : CoreWrapper<Core, Witness, WitnessSetTypeTwo> {
   /**
    * Return whether w is a final witness
    */
-  bool is_final_witness_implementation(const Witness &w) {
+  bool is_final_witness_implementation(const WitnessAlias &w) {
     if (!w.was_different) return false;
 
     for (int version : {0, 1}) {
@@ -523,3 +523,5 @@ struct Core : CoreWrapper<Core, Witness, WitnessSetTypeTwo> {
     return true;
   }
 };
+
+DynamicCore *create() { return new TwoHamiltonianCycles_Core; }

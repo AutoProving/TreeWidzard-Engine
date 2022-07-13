@@ -6,7 +6,7 @@
 
 class WitnessTreePACENode{
     public:
-        std::vector<std::shared_ptr<WitnessBase> > witnesses;
+        std::vector<std::shared_ptr<Witness> > witnesses;
         std::vector<std::shared_ptr<WitnessTreePACENode> > children;
         std::shared_ptr<WitnessTreePACENode> parent;
         std::string node_type;

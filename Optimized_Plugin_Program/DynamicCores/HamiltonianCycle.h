@@ -3,7 +3,7 @@
 #define DYNAMIC_HAMILTONIAN_CYCLE_H
 #include "../Kernel/Bag.h"
 #include "../Kernel/DynamicCore.h"
-#include "../Kernel/WitnessBase.h"
+#include "../Kernel/Witness.h"
 #include "../Kernel/WitnessSet.h"
 
 using namespace std;
@@ -13,18 +13,18 @@ typedef shared_ptr<HamiltonianCycle_Witness const>
     HamiltonianCycle_WitnessPointerConst;
 
 class HamiltonianCycle_Witness
-    : public WitnessBase,
+    : public Witness,
       public enable_shared_from_this<HamiltonianCycle_Witness> {
  public:
   ~HamiltonianCycle_Witness();
   bool is_equal_implementation(HamiltonianCycle_WitnessPointerConst w) const;
   bool is_less_implementation(HamiltonianCycle_WitnessPointerConst w) const;
-  WitnessBase &set_equal_implementation(HamiltonianCycle_WitnessPointerConst w);
-  virtual bool is_equal(const WitnessBase &rhs) const;
-  virtual bool is_less(const WitnessBase &rhs) const;
+  Witness &set_equal_implementation(HamiltonianCycle_WitnessPointerConst w);
+  virtual bool is_equal(const Witness &rhs) const;
+  virtual bool is_less(const Witness &rhs) const;
   virtual void hash(Hasher &h) const override;
-  virtual WitnessBase &set_equal(const WitnessBase &witness);
-  shared_ptr<WitnessBase> relabel(
+  virtual Witness &set_equal(const Witness &witness);
+  shared_ptr<Witness> relabel(
       const map<unsigned int, unsigned int> &relabelingMap) const override;
   virtual void print() const override;
   string witnessInformation() const override;
@@ -71,16 +71,16 @@ class HamiltonianCycle_DynamicCore : public DynamicCore {
   HamiltonianCycle_DynamicCore();
   void createInitialWitnessSet();
   virtual WitnessSetBasePointer intro_v(unsigned i, Bag &b,
-                                        const WitnessBase &witness) override;
+                                        const Witness &witness) override;
   virtual WitnessSetBasePointer intro_e(unsigned i, unsigned j, Bag &b,
-                                        const WitnessBase &witness) override;
+                                        const Witness &witness) override;
   virtual WitnessSetBasePointer forget_v(unsigned i, Bag &b,
-                                         const WitnessBase &witness) override;
-  virtual WitnessSetBasePointer join(Bag &b, const WitnessBase &witness1,
-                                     const WitnessBase &witness2) override;
+                                         const Witness &witness) override;
+  virtual WitnessSetBasePointer join(Bag &b, const Witness &witness1,
+                                     const Witness &witness2) override;
   virtual WitnessSetBasePointer clean(
       WitnessSetBasePointer witnessSet) override;
-  virtual bool is_final_witness(const WitnessBase &witness) override;
+  virtual bool is_final_witness(const Witness &witness) override;
   //*****************************
   //*****************************
   // Only change this part. Here you can define attributes and functions that

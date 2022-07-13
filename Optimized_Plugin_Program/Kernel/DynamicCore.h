@@ -12,7 +12,7 @@
 
 #include "../Multigraph/MultiGraph.h"
 #include "Bag.h"
-#include "WitnessBase.h"
+#include "Witness.h"
 #include "WitnessSet.h"
 
 class DynamicCore {
@@ -33,21 +33,21 @@ class DynamicCore {
   std::string getAttributeValue(
       std::string x);  // Returns "y" if (x,y) belongs to attributes.
   std::map<std::string, std::string> getAttributes();
-  void insertIntoInitialWitnessSet(WitnessBasePointer);
+  void insertIntoInitialWitnessSet(WitnessPointer);
   int getWidth();
   void setWidth(int width);
   virtual void createInitialWitnessSet();
   virtual WitnessSetBasePointer intro_v(unsigned i, Bag &b,
-                                        const WitnessBase &witness);
+                                        const Witness &witness);
   virtual WitnessSetBasePointer intro_e(unsigned i, unsigned j, Bag &b,
-                                        const WitnessBase &witness);
+                                        const Witness &witness);
   virtual WitnessSetBasePointer forget_v(unsigned i, Bag &b,
-                                         const WitnessBase &witness);
-  virtual WitnessSetBasePointer join(Bag &b, const WitnessBase &witness1,
-                                     const WitnessBase &witness2);
-  virtual bool is_final_witness(const WitnessBase &witness);
+                                         const Witness &witness);
+  virtual WitnessSetBasePointer join(Bag &b, const Witness &witness1,
+                                     const Witness &witness2);
+  virtual bool is_final_witness(const Witness &witness);
   virtual WitnessSetBasePointer clean(WitnessSetBasePointer witnessSet);
-  virtual int weight(const WitnessBase &witness);
+  virtual int weight(const Witness &witness);
   WitnessSetBasePointer intro_v(unsigned i, Bag &b,
                                 WitnessSetBasePointer witnessSet);
   WitnessSetBasePointer intro_e(unsigned i, unsigned j, Bag &b,

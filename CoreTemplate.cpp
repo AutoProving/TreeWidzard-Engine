@@ -6,7 +6,7 @@
 
 using namespace std;
 
-struct Witness : WitnessWrapper<Witness> {
+struct WitnessNameHere : WitnessWrapper<WitnessNameHere> {
   //////
   #error TODO: Specify variables held by every witness here
   //////
@@ -14,7 +14,7 @@ struct Witness : WitnessWrapper<Witness> {
   /**
    * Check if the witnesses l and r are equal.
    */
-  friend bool is_equal_implementation(const Witness &l, const Witness &r) {
+  friend bool is_equal_implementation(const WitnessAlias &l, const WitnessAlias &r) {
     #error TODO: implement is_equal here
   }
 
@@ -23,7 +23,7 @@ struct Witness : WitnessWrapper<Witness> {
    * Less here can mean anything
    * as long as it's a strict total order.
    */
-  friend bool is_less_implementation(const Witness &l, const Witness &r) {
+  friend bool is_less_implementation(const WitnessAlias &l, const WitnessAlias &r) {
     #error TODO: implement is_less here
   }
 
@@ -35,7 +35,7 @@ struct Witness : WitnessWrapper<Witness> {
    * Create a copy of the witness where the vertices
    * are renamed according to the relabeling map.
    */
-  Witness relabel_implementation(
+  WitnessAlias relabel_implementation(
       const map<unsigned, unsigned> &relabelingMap) const {
     #warning TODO: implement relabel here
     cerr << "relabel() is not implemented for this witness.\n";
@@ -71,7 +71,7 @@ struct Witness : WitnessWrapper<Witness> {
 
 };
 
-struct Core : CoreWrapper<Core, Witness, WitnessSetTypeTwo> {
+struct CoreNameHere : CoreWrapper<CoreNameHere, WitnessNameHere, WitnessSetTypeTwo> {
 
   #error TODO: Set the core properties here
   static constexpr char CoreName[] = "CoreNameHere";
@@ -88,7 +88,7 @@ struct Core : CoreWrapper<Core, Witness, WitnessSetTypeTwo> {
 
     // a usual implementation is to just insert
     // a default constructed witness, which looks like this:
-    //witnessSet.insert(make_shared<Witness>());
+    //witnessSet.insert(make_shared<WitnessAlias>());
   }
 
   /**
@@ -101,7 +101,7 @@ struct Core : CoreWrapper<Core, Witness, WitnessSetTypeTwo> {
    * is no way to get a valid witness after inserting the vertex,
    * insert no results.
    */
-  void intro_v_implementation(unsigned i, const Bag &b, const Witness &w,
+  void intro_v_implementation(unsigned i, const Bag &b, const WitnessAlias &w,
                               WitnessSet &witnessSet) {
     #error TODO: implement intro_v here
   }
@@ -112,7 +112,7 @@ struct Core : CoreWrapper<Core, Witness, WitnessSetTypeTwo> {
    * into the witnessSet.
    */
   void intro_e_implementation(unsigned int i, unsigned int j, Bag &b,
-                              const Witness &w, WitnessSet &witnessSet) {
+                              const WitnessAlias &w, WitnessSet &witnessSet) {
     #error TODO: implement intro_e here
   }
 
@@ -121,7 +121,7 @@ struct Core : CoreWrapper<Core, Witness, WitnessSetTypeTwo> {
    * after forgetting the label of the vertex
    * currently labeled i into the witnessSet.
    */
-  void forget_v_implementation(unsigned int i, Bag &b, const Witness &w,
+  void forget_v_implementation(unsigned int i, Bag &b, const WitnessAlias &w,
                                WitnessSet &witnessSet) {
     #error TODO: implement forget_v here
   }
@@ -133,7 +133,7 @@ struct Core : CoreWrapper<Core, Witness, WitnessSetTypeTwo> {
    * Insert what the witness results from joining
    * w1 and w2 into the witnessSet.
    */
-  void join_implementation(Bag &b, const Witness &w1, const Witness &w2,
+  void join_implementation(Bag &b, const WitnessAlias &w1, const WitnessAlias &w2,
                            WitnessSet &witnessSet) {
     #warning implement join here
     cerr << "join() is not implemented for this witness.\n";
@@ -150,7 +150,7 @@ struct Core : CoreWrapper<Core, Witness, WitnessSetTypeTwo> {
   /**
    * Return whether w is a final witness
    */
-  bool is_final_witness_implementation(const Witness &w) {
+  bool is_final_witness_implementation(const WitnessAlias &w) {
     #error TODO: imlpement is_finl_witness here
   }
 };

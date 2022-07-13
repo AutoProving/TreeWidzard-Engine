@@ -36,7 +36,7 @@ bool HamiltonianPath_Witness::is_less_implementation(
   //*****************************
   //*****************************
 }
-WitnessBase &HamiltonianPath_Witness::set_equal_implementation(
+Witness &HamiltonianPath_Witness::set_equal_implementation(
     HamiltonianPath_WitnessPointerConst w) {
   //*****************************
   //*****************************
@@ -49,7 +49,7 @@ WitnessBase &HamiltonianPath_Witness::set_equal_implementation(
   //*****************************
 }
 
-shared_ptr<WitnessBase> HamiltonianPath_Witness::relabel(
+shared_ptr<Witness> HamiltonianPath_Witness::relabel(
     const map<unsigned int, unsigned int> &relabelingMap) const {
   HamiltonianPath_WitnessPointer relabeledWitness(new HamiltonianPath_Witness);
   // Relabeling degree_0
@@ -447,7 +447,7 @@ WitnessSetBasePointer HamiltonianPath_DynamicCore::clean(
 //////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////
 
-bool HamiltonianPath_Witness::is_equal(const WitnessBase &rhs) const {
+bool HamiltonianPath_Witness::is_equal(const Witness &rhs) const {
   if (HamiltonianPath_Witness const *e =
           dynamic_cast<HamiltonianPath_Witness const *>(&rhs)) {
     HamiltonianPath_WitnessPointerConst w = e->shared_from_this();
@@ -457,7 +457,7 @@ bool HamiltonianPath_Witness::is_equal(const WitnessBase &rhs) const {
     exit(20);
   }
 }
-bool HamiltonianPath_Witness::is_less(const WitnessBase &rhs) const {
+bool HamiltonianPath_Witness::is_less(const Witness &rhs) const {
   if (HamiltonianPath_Witness const *e =
           dynamic_cast<HamiltonianPath_Witness const *>(&rhs)) {
     HamiltonianPath_WitnessPointerConst w = e->shared_from_this();
@@ -467,7 +467,7 @@ bool HamiltonianPath_Witness::is_less(const WitnessBase &rhs) const {
     exit(20);
   }
 }
-WitnessBase &HamiltonianPath_Witness::set_equal(const WitnessBase &witness) {
+Witness &HamiltonianPath_Witness::set_equal(const Witness &witness) {
   if (const HamiltonianPath_Witness *e =
           dynamic_cast<const HamiltonianPath_Witness *>(&witness)) {
     HamiltonianPath_WitnessPointerConst w = e->shared_from_this();
@@ -483,7 +483,7 @@ void HamiltonianPath_DynamicCore::createInitialWitnessSet() {
   createInitialWitnessSet_implementation();
 }
 WitnessSetBasePointer HamiltonianPath_DynamicCore::intro_v(
-    unsigned i, Bag &b, const WitnessBase &witness) {
+    unsigned i, Bag &b, const Witness &witness) {
   if (const HamiltonianPath_Witness *e =
           dynamic_cast<const HamiltonianPath_Witness *>(&witness)) {
     HamiltonianPath_WitnessPointerConst w = e->shared_from_this();
@@ -498,7 +498,7 @@ WitnessSetBasePointer HamiltonianPath_DynamicCore::intro_v(
   }
 }
 WitnessSetBasePointer HamiltonianPath_DynamicCore::intro_e(
-    unsigned i, unsigned j, Bag &b, const WitnessBase &witness) {
+    unsigned i, unsigned j, Bag &b, const Witness &witness) {
   if (const HamiltonianPath_Witness *e =
           dynamic_cast<const HamiltonianPath_Witness *>(&witness)) {
     HamiltonianPath_WitnessPointerConst w = e->shared_from_this();
@@ -513,7 +513,7 @@ WitnessSetBasePointer HamiltonianPath_DynamicCore::intro_e(
   }
 }
 WitnessSetBasePointer HamiltonianPath_DynamicCore::forget_v(
-    unsigned i, Bag &b, const WitnessBase &witness) {
+    unsigned i, Bag &b, const Witness &witness) {
   if (const HamiltonianPath_Witness *e =
           dynamic_cast<const HamiltonianPath_Witness *>(&witness)) {
     HamiltonianPath_WitnessPointerConst w = e->shared_from_this();
@@ -528,7 +528,7 @@ WitnessSetBasePointer HamiltonianPath_DynamicCore::forget_v(
   }
 }
 WitnessSetBasePointer HamiltonianPath_DynamicCore::join(
-    Bag &b, const WitnessBase &witness1, const WitnessBase &witness2) {
+    Bag &b, const Witness &witness1, const Witness &witness2) {
   if (const HamiltonianPath_Witness *e1 =
           dynamic_cast<const HamiltonianPath_Witness *>(&witness1)) {
     if (const HamiltonianPath_Witness *e2 =
@@ -550,7 +550,7 @@ WitnessSetBasePointer HamiltonianPath_DynamicCore::join(
     exit(20);
   }
 }
-bool HamiltonianPath_DynamicCore::is_final_witness(const WitnessBase &witness) {
+bool HamiltonianPath_DynamicCore::is_final_witness(const Witness &witness) {
   if (const HamiltonianPath_Witness *e =
           dynamic_cast<const HamiltonianPath_Witness *>(&witness)) {
     HamiltonianPath_WitnessPointerConst w = e->shared_from_this();

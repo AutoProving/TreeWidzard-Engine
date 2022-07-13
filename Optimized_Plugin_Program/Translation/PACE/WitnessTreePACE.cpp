@@ -12,7 +12,7 @@ void WitnessTreePACENode::print() {
 
 std::shared_ptr<WitnessTreePACENode> WitnessTreePACE::generateNode(std::shared_ptr<StateTreeNode> snode, std::shared_ptr<WitnessTreePACENode> parent, unsigned joinno, DynamicKernel &kernel) {
     State::ptr q = snode->get_S();
-    std::vector<std::shared_ptr<WitnessBase> > witnesses;
+    std::vector<std::shared_ptr<Witness> > witnesses;
     witnesses.resize(parent->witnesses.size());
     for(size_t i=0; i < parent->witnesses.size(); i++){
         if(parent->witnesses[i]){
@@ -135,7 +135,7 @@ bool WitnessTreePACE::stateTreeToWitnessTreePACE(StateTree &stateTree, DynamicKe
     std::shared_ptr<WitnessTreePACENode> node (new WitnessTreePACENode);
     State::ptr q = stateTree.root->get_S();
     //std::vector<std::shared_ptr<WitnessSet> > witnessSet = q->get_witnessSetstd::vector();
-    std::vector<std::shared_ptr<WitnessBase>> witnesses;
+    std::vector<std::shared_ptr<Witness>> witnesses;
     witnesses.resize(q->numberOfComponents());
     for(size_t i = 0; i< q->numberOfComponents();i++){
         for(auto it=q->getWitnessSet(i)->begin(); it!= q->getWitnessSet(i)->end();it++){

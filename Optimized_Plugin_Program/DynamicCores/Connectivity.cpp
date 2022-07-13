@@ -5,14 +5,14 @@
 #include "../CorePrelude.h"
 using namespace std;
 
-struct Witness : WitnessWrapper<Witness> {
+struct Connectivity_Witness : WitnessWrapper<Connectivity_Witness> {
   set<set<unsigned>> partition;
   uint8_t tag = 0;
 
   /**
    * Check if the witnesses l and r are equal.
    */
-  friend bool is_equal_implementation(const Witness &l, const Witness &r) {
+  friend bool is_equal_implementation(const WitnessAlias &l, const WitnessAlias &r) {
     return tie(l.tag, l.partition) == tie(r.tag, r.partition);
   }
 
@@ -21,7 +21,7 @@ struct Witness : WitnessWrapper<Witness> {
    * Less here can mean anything
    * as long as it's a strict total order.
    */
-  friend bool is_less_implementation(const Witness &l, const Witness &r) {
+  friend bool is_less_implementation(const WitnessAlias &l, const WitnessAlias &r) {
     return tie(l.tag, l.partition) < tie(r.tag, r.partition);
   }
 
@@ -31,9 +31,9 @@ struct Witness : WitnessWrapper<Witness> {
    * Create a copy of the witness where the vertices
    * are renamed according to the relabeling map.
    */
-  Witness relabel_implementation(
+  WitnessAlias relabel_implementation(
       const map<unsigned, unsigned> &relabelingMap) const {
-    Witness res;
+    WitnessAlias res;
     res.tag = tag;
     for (const auto &component : partition) {
       set<unsigned> new_component;
@@ -98,7 +98,7 @@ struct Witness : WitnessWrapper<Witness> {
   // */
 };
 
-struct Core : CoreWrapper<Core, Witness, WitnessSetTypeTwo> {
+struct Connectivity_Core : CoreWrapper<Connectivity_Core, Connectivity_Witness, WitnessSetTypeTwo> {
   static constexpr char CoreName[] = "Connectivity";
   static constexpr char CoreType[] = "Bool";
   static constexpr char ParameterType[] = "ParameterLess";
@@ -109,7 +109,7 @@ struct Core : CoreWrapper<Core, Witness, WitnessSetTypeTwo> {
    * nodes in the decomposition.
    */
   void initialize_leaf(WitnessSet &witnessSet) {
-    witnessSet.insert(make_shared<Witness>());
+    witnessSet.insert(make_shared<WitnessAlias>());
   }
 
   /**
@@ -122,7 +122,7 @@ struct Core : CoreWrapper<Core, Witness, WitnessSetTypeTwo> {
    * is no way to get a valid witness after inserting the vertex,
    * insert no results.
    */
-  void intro_v_implementation(unsigned i, const Bag &b, const Witness &w,
+  void intro_v_implementation(unsigned i, const Bag &b, const WitnessAlias &w,
                               WitnessSet &witnessSet) {
     auto wPrime = w.clone();
     wPrime->tag |= 1;
@@ -136,7 +136,7 @@ struct Core : CoreWrapper<Core, Witness, WitnessSetTypeTwo> {
    * into the witnessSet.
    */
   void intro_e_implementation(unsigned int i, unsigned int j, Bag &b,
-                              const Witness &w, WitnessSet &witnessSet) {
+                              const WitnessAlias &w, WitnessSet &witnessSet) {
     auto i_it = find_if(w.partition.begin(), w.partition.end(),
                         [i = i](const auto &cell) { return cell.count(i); });
     auto j_it = find_if(w.partition.begin(), w.partition.end(),
@@ -168,7 +168,7 @@ struct Core : CoreWrapper<Core, Witness, WitnessSetTypeTwo> {
    * after forgetting the label of the vertex
    * currently labeled i into the witnessSet.
    */
-  void forget_v_implementation(unsigned int i, Bag &b, const Witness &w,
+  void forget_v_implementation(unsigned int i, Bag &b, const WitnessAlias &w,
                                WitnessSet &witnessSet) {
     auto wPrime = w.clone();
 
@@ -207,13 +207,13 @@ struct Core : CoreWrapper<Core, Witness, WitnessSetTypeTwo> {
     witnessSet.insert(wPrime);
   }
 
-  void join_implementation(Bag &b, const Witness &w1, const Witness &w2,
+  void join_implementation(Bag &b, const WitnessAlias &w1, const WitnessAlias &w2,
                            WitnessSet &witnessSet) {
     int q1 = w1.tag;
     int q2 = w2.tag;
 
     if (q1 == 0 && q2 == 0) {
-      witnessSet.insert(make_shared<Witness>());
+      witnessSet.insert(make_shared<WitnessAlias>());
       return;
     }
 
@@ -269,7 +269,7 @@ struct Core : CoreWrapper<Core, Witness, WitnessSetTypeTwo> {
     map<unsigned, set<unsigned>> partition;
     for (auto [v, up] : mp) partition[find(v).first].insert(v);
 
-    auto wPrime = make_shared<Witness>();
+    auto wPrime = make_shared<WitnessAlias>();
     wPrime->tag = qPrime;
     for (auto &[root, cell] : partition) wPrime->partition.insert(move(cell));
     witnessSet.insert(wPrime);
@@ -279,5 +279,9 @@ struct Core : CoreWrapper<Core, Witness, WitnessSetTypeTwo> {
     // In most cases, you will not need to change this function.
   }
 
-  bool is_final_witness_implementation(const Witness &w) { return w.tag != 3; }
+  bool is_final_witness_implementation(const WitnessAlias &w) {
+    return w.tag != 3 && w.partition.size() <= 1;
+  }
 };
+
+DynamicCore *create() { return (DynamicCore*) new Connectivity_Core; }

@@ -11,17 +11,17 @@ typedef shared_ptr<Connectivity_Witness> Connectivity_WitnessPointer;
 typedef shared_ptr<Connectivity_Witness const> Connectivity_WitnessPointerConst;
 
 class Connectivity_Witness
-    : public WitnessBase,
+    : public Witness,
       public enable_shared_from_this<Connectivity_Witness> {
  public:
   bool is_equal_implementation(Connectivity_WitnessPointerConst w) const;
   bool is_less_implementation(Connectivity_WitnessPointerConst w) const;
-  WitnessBase &set_equal_implementation(Connectivity_WitnessPointerConst w);
+  Witness &set_equal_implementation(Connectivity_WitnessPointerConst w);
   ~Connectivity_Witness();
-  virtual bool is_equal(const WitnessBase &rhs) const override;
-  virtual bool is_less(const WitnessBase &rhs) const override;
-  virtual WitnessBase &set_equal(const WitnessBase &witness) override;
-  virtual shared_ptr<WitnessBase> relabel(
+  virtual bool is_equal(const Witness &rhs) const override;
+  virtual bool is_less(const Witness &rhs) const override;
+  virtual Witness &set_equal(const Witness &witness) override;
+  virtual shared_ptr<Witness> relabel(
       const map<unsigned, unsigned> &relabelingMap) const override;
   virtual void print() const override;
   string witnessInformation() const override;
@@ -65,15 +65,15 @@ class Connectivity_DynamicCore : public DynamicCore {
   Connectivity_DynamicCore();
   ~Connectivity_DynamicCore(){};
   void createInitialWitnessSet();
-  WitnessSetBasePointer intro_v(unsigned i, Bag &b, const WitnessBase &witness);
+  WitnessSetBasePointer intro_v(unsigned i, Bag &b, const Witness &witness);
   WitnessSetBasePointer intro_e(unsigned i, unsigned j, Bag &b,
-                                const WitnessBase &witness);
+                                const Witness &witness);
   WitnessSetBasePointer forget_v(unsigned i, Bag &b,
-                                 const WitnessBase &witness);
-  WitnessSetBasePointer join(Bag &b, const WitnessBase &witness1,
-                             const WitnessBase &witness2);
+                                 const Witness &witness);
+  WitnessSetBasePointer join(Bag &b, const Witness &witness1,
+                             const Witness &witness2);
   WitnessSetBasePointer clean(WitnessSetBasePointer witnessSet);
-  bool is_final_witness(const WitnessBase &witness);
+  bool is_final_witness(const Witness &witness);
   //*****************************
   //*****************************
   // Only change this part. Here you can define attributes and functions that

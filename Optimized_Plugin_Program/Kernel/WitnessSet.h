@@ -9,10 +9,10 @@
 #include <vector>
 
 #include "Hasher.hpp"
-#include "WitnessBase.h"
+#include "Witness.h"
 
 // TODO: Should be scoped / namespaced
-using valueType = std::shared_ptr<WitnessBase>;
+using valueType = std::shared_ptr<Witness>;
 
 class AbstractIterator {
  public:
@@ -76,7 +76,7 @@ class WitnessSetBase {  // data structure to store 'std::shared_ptr<Witness>'
     std::cout << "Error: WitnessSet end()" << std::endl;
     exit(20);
   };
-  virtual void insert(std::shared_ptr<WitnessBase> w) {
+  virtual void insert(std::shared_ptr<Witness> w) {
     std::cout << " \n Error: WitnessSet insert." << std::endl;
     exit(20);
   };
@@ -129,9 +129,9 @@ using WitnessSetBasePointer = std::shared_ptr<WitnessSetBase>;
 template <class T>
 class WitnessSetTypeOne : public WitnessSetBase {
  public:
-  static std::map<std::shared_ptr<WitnessBase>, int, WitnessBase::IsLessSharedPtr>
+  static std::map<std::shared_ptr<Witness>, int, Witness::IsLessSharedPtr>
       allWitnesses;
-  static std::vector<std::shared_ptr<WitnessBase>> witnessVector;
+  static std::vector<std::shared_ptr<Witness>> witnessVector;
   std::vector<uint8_t> mask;
   class WitnessSetTypeOneIterator : public AbstractIterator {
    private:
@@ -171,7 +171,7 @@ class WitnessSetTypeOne : public WitnessSetBase {
         new WitnessSetTypeOneIterator(this, 8 * mask.size())));
     return baseIterator;
   }
-  virtual void insert(std::shared_ptr<WitnessBase> w);
+  virtual void insert(std::shared_ptr<Witness> w);
   virtual void union_set_witness(std::shared_ptr<WitnessSetBase> witnessSet);
   virtual void print();
   std::string witnessSetInformation() override;
@@ -189,18 +189,18 @@ template <class T>
 class WitnessSetTypeTwo : public WitnessSetBase {
  private:
   struct compare {
-    bool operator()(const std::shared_ptr<WitnessBase> lhs,
-                    const std::shared_ptr<WitnessBase> rhs) const {
+    bool operator()(const std::shared_ptr<Witness> lhs,
+                    const std::shared_ptr<Witness> rhs) const {
       return *lhs < *rhs;
     }
   };
-  std::set<std::shared_ptr<WitnessBase>, compare> container;
+  std::set<std::shared_ptr<Witness>, compare> container;
   class WitnessSetTypeTwoIterator : public AbstractIterator {
    private:
-    std::set<std::shared_ptr<WitnessBase>>::iterator it;
+    std::set<std::shared_ptr<Witness>>::iterator it;
 
    public:
-    WitnessSetTypeTwoIterator(std::set<std::shared_ptr<WitnessBase>>::iterator it_)
+    WitnessSetTypeTwoIterator(std::set<std::shared_ptr<Witness>>::iterator it_)
         : it(it_) {}
     virtual const valueType dereference() { return *it; };
     virtual void increment() { it++; };
@@ -224,7 +224,7 @@ class WitnessSetTypeTwo : public WitnessSetBase {
         new WitnessSetTypeTwoIterator(container.end())));
     return baseIterator;
   }
-  virtual void insert(std::shared_ptr<WitnessBase> w);
+  virtual void insert(std::shared_ptr<Witness> w);
   virtual void union_set_witness(std::shared_ptr<WitnessSetBase> witnessSet);
   virtual void print();
   std::string witnessSetInformation() override;
@@ -241,13 +241,13 @@ class WitnessSetTypeTwo : public WitnessSetBase {
 /// Definition of the WitnessSet class
 //////////////////////////////////////////////////////////////////////////////
 template <class T>
-std::map<std::shared_ptr<WitnessBase>, int, WitnessBase::IsLessSharedPtr>
+std::map<std::shared_ptr<Witness>, int, Witness::IsLessSharedPtr>
     WitnessSetTypeOne<T>::allWitnesses;
 template <class T>
-std::vector<std::shared_ptr<WitnessBase>> WitnessSetTypeOne<T>::witnessVector;
+std::vector<std::shared_ptr<Witness>> WitnessSetTypeOne<T>::witnessVector;
 
 template <class T>
-void WitnessSetTypeOne<T>::insert(std::shared_ptr<WitnessBase> ws) {
+void WitnessSetTypeOne<T>::insert(std::shared_ptr<Witness> ws) {
   int idx = -1;
   auto it = allWitnesses.find(ws);
   if (it != allWitnesses.end()) {
@@ -356,7 +356,7 @@ int WitnessSetTypeOne<T>::size() {
 
 /////////////WitnessSet TYPE Two////////////////
 template <class T>
-void WitnessSetTypeTwo<T>::insert(std::shared_ptr<WitnessBase> ws) {
+void WitnessSetTypeTwo<T>::insert(std::shared_ptr<Witness> ws) {
   container.insert(ws);
 }
 template <class T>
