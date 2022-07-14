@@ -12,4 +12,5 @@
 */.idea/*
 */cmake-build-debug/*
 *.so
+/*/*.so
 .vscode/*
