@@ -176,6 +176,11 @@ add_executable(
         TreeAutomaton/DecompositionTree.cpp
 
 )
+
+# -pthread is a compiler flag for parallel.
+SET(CMAKE_PTHREAD_FLAG "-pthread")
+SET(CMAKE_CXX_FLAGS  "${CMAKE_PTHREAD_FLAG}")
+
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 target_link_libraries(treewidzard ${CMAKE_DL_LIBS})
