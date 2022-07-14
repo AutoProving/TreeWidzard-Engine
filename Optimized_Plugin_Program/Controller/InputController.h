@@ -26,9 +26,7 @@ private:
     std::map<std::string, PropertyAssignment*> varToProperty; // map from var to Property
 public:
     InputController(const std::string &inputPath, const std::string &dynamicPluginPath);
-
     InputController(const std::string &inputPath, const std::string &dynamicPluginPath, const Width &width);
-
     const std::string &getInputPath() const;
     DynamicKernel &getDynamicKernel();
     Conjecture &getConjecture();

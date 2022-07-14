@@ -3,16 +3,19 @@ void InputController::check_available_cores() {
   for (const auto & entry : fs::directory_iterator(dynamicPluginPath)){
     std::string s = entry.path();
     if (s.find(".so") != std::string::npos) {
-      char *MyClassLibraryName = const_cast<char *>(s.c_str());
-      DynamicCoreHandler factory(MyClassLibraryName);
-      std::unique_ptr<DynamicCore> core = factory.create();
-      std::map<std::string, std::string> attributes = core->getAttributes();
-      std::string fileName = entry.path().filename();
-
-      std::cerr << "File " << fileName << ' ' << core->getAttributeValue("CoreName") << '\n';
-
-      coreNamesToFiles.insert(std::make_pair(core->getAttributeValue("CoreName"),fileName));
-      coreList.insert(std::make_pair(core->getAttributeValue("CoreName"),attributes));
+        std::string fileName = entry.path().filename();
+        std::cerr << "File " << fileName;
+        try{
+            char *MyClassLibraryName = const_cast<char *>(s.c_str());
+            DynamicCoreHandler factory(MyClassLibraryName);
+            std::unique_ptr<DynamicCore> core = factory.create();
+            std::map<std::string, std::string> attributes = core->getAttributes();
+            coreNamesToFiles.insert(std::make_pair(core->getAttributeValue("CoreName"),fileName));
+            coreList.insert(std::make_pair(core->getAttributeValue("CoreName"),attributes));
+            std::cout << " Loaded. Core Name: "  << core->getAttributeValue("CoreName") << '\n';
+        }catch(std::exception& e) {
+            std::cerr << " failed to load." <<  e.what() << std::endl;
+        }
     }
   }
 }

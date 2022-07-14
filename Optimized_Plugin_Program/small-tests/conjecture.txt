@@ -1,0 +1,3 @@
+x := TwoHamiltonianCyclesOld
+Formula
+x IMPLIES TRUE
