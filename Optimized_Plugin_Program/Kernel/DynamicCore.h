@@ -17,17 +17,17 @@
 
 class DynamicCore {
  private:
-  WitnessSetBasePointer initialWitnessSet;
+  WitnessSetPointer initialWitnessSet;
   std::map<std::string, std::string>
       attributes;  // Characteristics of the core. This is initialized in the
                    // constructor of the derived class.
   int width;
 
  public:
-  DynamicCore() { initialWitnessSet = std::make_shared<WitnessSetBase>(); }
+  DynamicCore() { initialWitnessSet = std::make_shared<WitnessSet>(); }
   virtual ~DynamicCore() = default;
-  WitnessSetBasePointer getInitialSet();  // returns initialSet
-  void setInitialWitnessSet(WitnessSetBasePointer witnessSetPointer);
+  WitnessSetPointer getInitialSet();  // returns initialSet
+  void setInitialWitnessSet(WitnessSetPointer witnessSetPointer);
   void addAttribute(std::string x, std::string y);
   bool isAttribute(std::string x, std::string y);
   std::string getAttributeValue(
@@ -37,27 +37,27 @@ class DynamicCore {
   int getWidth();
   void setWidth(int width);
   virtual void createInitialWitnessSet();
-  virtual WitnessSetBasePointer intro_v(unsigned i, Bag &b,
+  virtual WitnessSetPointer intro_v(unsigned i, Bag &b,
                                         const Witness &witness);
-  virtual WitnessSetBasePointer intro_e(unsigned i, unsigned j, Bag &b,
+  virtual WitnessSetPointer intro_e(unsigned i, unsigned j, Bag &b,
                                         const Witness &witness);
-  virtual WitnessSetBasePointer forget_v(unsigned i, Bag &b,
+  virtual WitnessSetPointer forget_v(unsigned i, Bag &b,
                                          const Witness &witness);
-  virtual WitnessSetBasePointer join(Bag &b, const Witness &witness1,
+  virtual WitnessSetPointer join(Bag &b, const Witness &witness1,
                                      const Witness &witness2);
   virtual bool is_final_witness(const Witness &witness);
-  virtual WitnessSetBasePointer clean(WitnessSetBasePointer witnessSet);
+  virtual WitnessSetPointer clean(WitnessSetPointer witnessSet);
   virtual int weight(const Witness &witness);
-  WitnessSetBasePointer intro_v(unsigned i, Bag &b,
-                                WitnessSetBasePointer witnessSet);
-  WitnessSetBasePointer intro_e(unsigned i, unsigned j, Bag &b,
-                                WitnessSetBasePointer witnessSet);
-  WitnessSetBasePointer forget_v(unsigned i, Bag &b,
-                                 WitnessSetBasePointer witnessSet);
-  WitnessSetBasePointer join(Bag &b, WitnessSetBasePointer witnessSet1,
-                             WitnessSetBasePointer witnessSet2);
-  bool is_final_set_witness(Bag &b, WitnessSetBasePointer witnessSet);
-  int weight(WitnessSetBasePointer witnessSet);
+  WitnessSetPointer intro_v(unsigned i, Bag &b,
+                                WitnessSetPointer witnessSet);
+  WitnessSetPointer intro_e(unsigned i, unsigned j, Bag &b,
+                                WitnessSetPointer witnessSet);
+  WitnessSetPointer forget_v(unsigned i, Bag &b,
+                                 WitnessSetPointer witnessSet);
+  WitnessSetPointer join(Bag &b, WitnessSetPointer witnessSet1,
+                             WitnessSetPointer witnessSet2);
+  bool is_final_set_witness(Bag &b, WitnessSetPointer witnessSet);
+  int weight(WitnessSetPointer witnessSet);
 };
 using DynamicCore_creator_t = DynamicCore *(*)();
 using DynamicCore_creator_t_int = DynamicCore *(*)(unsigned param);

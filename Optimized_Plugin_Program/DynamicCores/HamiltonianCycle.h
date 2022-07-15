@@ -38,7 +38,7 @@ class HamiltonianCycle_Witness
 };
 class HamiltonianCycle_WitnessSet
     : public WitnessSetTypeTwo<HamiltonianCycle_WitnessSet> {
-  shared_ptr<WitnessSetBase> createEmptyWitnessSet() override;
+  shared_ptr<WitnessSet> createEmptyWitnessSet() override;
 };
 
 typedef shared_ptr<HamiltonianCycle_WitnessSet>
@@ -70,16 +70,16 @@ class HamiltonianCycle_DynamicCore : public DynamicCore {
   unsigned parameter;
   HamiltonianCycle_DynamicCore();
   void createInitialWitnessSet();
-  virtual WitnessSetBasePointer intro_v(unsigned i, Bag &b,
+  virtual WitnessSetPointer intro_v(unsigned i, Bag &b,
                                         const Witness &witness) override;
-  virtual WitnessSetBasePointer intro_e(unsigned i, unsigned j, Bag &b,
+  virtual WitnessSetPointer intro_e(unsigned i, unsigned j, Bag &b,
                                         const Witness &witness) override;
-  virtual WitnessSetBasePointer forget_v(unsigned i, Bag &b,
+  virtual WitnessSetPointer forget_v(unsigned i, Bag &b,
                                          const Witness &witness) override;
-  virtual WitnessSetBasePointer join(Bag &b, const Witness &witness1,
+  virtual WitnessSetPointer join(Bag &b, const Witness &witness1,
                                      const Witness &witness2) override;
-  virtual WitnessSetBasePointer clean(
-      WitnessSetBasePointer witnessSet) override;
+  virtual WitnessSetPointer clean(
+      WitnessSetPointer witnessSet) override;
   virtual bool is_final_witness(const Witness &witness) override;
   //*****************************
   //*****************************

@@ -9,8 +9,6 @@ void InputController::check_available_cores() {
       std::map<std::string, std::string> attributes = core->getAttributes();
       std::string fileName = entry.path().filename();
 
-      std::cerr << "File " << fileName << ' ' << core->getAttributeValue("CoreName") << '\n';
-
       coreNamesToFiles.insert(std::make_pair(core->getAttributeValue("CoreName"),fileName));
       coreList.insert(std::make_pair(core->getAttributeValue("CoreName"),attributes));
     }

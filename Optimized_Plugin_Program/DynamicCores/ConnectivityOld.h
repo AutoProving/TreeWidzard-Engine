@@ -5,19 +5,19 @@
 #include "../Kernel/WitnessSet.h"
 
 using namespace std;
-class Connectivity_Witness;
+class Connectivity_Witness_Old;
 
-typedef shared_ptr<Connectivity_Witness> Connectivity_WitnessPointer;
-typedef shared_ptr<Connectivity_Witness const> Connectivity_WitnessPointerConst;
+typedef shared_ptr<Connectivity_Witness_Old> Connectivity_Witness_OldPointer;
+typedef shared_ptr<Connectivity_Witness_Old const> Connectivity_Witness_OldPointerConst;
 
-class Connectivity_Witness
+class Connectivity_Witness_Old
     : public Witness,
-      public enable_shared_from_this<Connectivity_Witness> {
+      public enable_shared_from_this<Connectivity_Witness_Old> {
  public:
-  bool is_equal_implementation(Connectivity_WitnessPointerConst w) const;
-  bool is_less_implementation(Connectivity_WitnessPointerConst w) const;
-  Witness &set_equal_implementation(Connectivity_WitnessPointerConst w);
-  ~Connectivity_Witness();
+  bool is_equal_implementation(Connectivity_Witness_OldPointerConst w) const;
+  bool is_less_implementation(Connectivity_Witness_OldPointerConst w) const;
+  Witness &set_equal_implementation(Connectivity_Witness_OldPointerConst w);
+  ~Connectivity_Witness_Old();
   virtual bool is_equal(const Witness &rhs) const override;
   virtual bool is_less(const Witness &rhs) const override;
   virtual Witness &set_equal(const Witness &witness) override;
@@ -34,45 +34,45 @@ class Connectivity_Witness
   //*****************************
 };
 
-class Connectivity_WitnessSet
-    : public WitnessSetTypeTwo<Connectivity_WitnessSet> {
-  shared_ptr<WitnessSetBase> createEmptyWitnessSet() override;
+class Connectivity_Witness_OldSet
+    : public WitnessSetTypeTwo<Connectivity_Witness_OldSet> {
+  shared_ptr<WitnessSet> createEmptyWitnessSet() override;
 };
 
-typedef shared_ptr<Connectivity_WitnessSet> Connectivity_WitnessSetPointer;
+typedef shared_ptr<Connectivity_Witness_OldSet> Connectivity_Witness_OldSetPointer;
 
-class Connectivity_DynamicCore : public DynamicCore {
+class Connectivity_DynamicCore_Old : public DynamicCore {
  private:
   void createInitialWitnessSet_implementation();
-  void copyWitness(Connectivity_WitnessPointer w_input,
-                   Connectivity_WitnessPointer w_output);
-  Connectivity_WitnessPointer createWitness();
+  void copyWitness(Connectivity_Witness_OldPointer w_input,
+                   Connectivity_Witness_OldPointer w_output);
+  Connectivity_Witness_OldPointer createWitness();
   void intro_v_implementation(unsigned i, Bag &b,
-                              Connectivity_WitnessPointerConst w,
-                              Connectivity_WitnessSetPointer witnessSet);
+                              Connectivity_Witness_OldPointerConst w,
+                              Connectivity_Witness_OldSetPointer witnessSet);
   void forget_v_implementation(unsigned i, Bag &b,
-                               Connectivity_WitnessPointerConst w,
-                               Connectivity_WitnessSetPointer witnessSet);
+                               Connectivity_Witness_OldPointerConst w,
+                               Connectivity_Witness_OldSetPointer witnessSet);
   void intro_e_implementation(unsigned i, unsigned j, Bag &b,
-                              Connectivity_WitnessPointerConst w,
-                              Connectivity_WitnessSetPointer witnessSet);
-  void join_implementation(Bag &b, Connectivity_WitnessPointerConst w1,
-                           Connectivity_WitnessPointerConst w2,
-                           Connectivity_WitnessSetPointer witnessSet);
-  bool is_final_witness_implementation(Connectivity_WitnessPointerConst w);
+                              Connectivity_Witness_OldPointerConst w,
+                              Connectivity_Witness_OldSetPointer witnessSet);
+  void join_implementation(Bag &b, Connectivity_Witness_OldPointerConst w1,
+                           Connectivity_Witness_OldPointerConst w2,
+                           Connectivity_Witness_OldSetPointer witnessSet);
+  bool is_final_witness_implementation(Connectivity_Witness_OldPointerConst w);
 
  public:
-  Connectivity_DynamicCore();
-  ~Connectivity_DynamicCore(){};
+  Connectivity_DynamicCore_Old();
+  ~Connectivity_DynamicCore_Old(){};
   void createInitialWitnessSet();
-  WitnessSetBasePointer intro_v(unsigned i, Bag &b, const Witness &witness);
-  WitnessSetBasePointer intro_e(unsigned i, unsigned j, Bag &b,
+  WitnessSetPointer intro_v(unsigned i, Bag &b, const Witness &witness);
+  WitnessSetPointer intro_e(unsigned i, unsigned j, Bag &b,
                                 const Witness &witness);
-  WitnessSetBasePointer forget_v(unsigned i, Bag &b,
+  WitnessSetPointer forget_v(unsigned i, Bag &b,
                                  const Witness &witness);
-  WitnessSetBasePointer join(Bag &b, const Witness &witness1,
+  WitnessSetPointer join(Bag &b, const Witness &witness1,
                              const Witness &witness2);
-  WitnessSetBasePointer clean(WitnessSetBasePointer witnessSet);
+  WitnessSetPointer clean(WitnessSetPointer witnessSet);
   bool is_final_witness(const Witness &witness);
   //*****************************
   //*****************************

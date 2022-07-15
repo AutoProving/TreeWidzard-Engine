@@ -10,7 +10,7 @@
 class State : private std::enable_shared_from_this<State> {
   private:
 	Bag bag;
-	std::vector<std::shared_ptr<WitnessSetBase>> witnessSetVector;
+	std::vector<std::shared_ptr<WitnessSet>> witnessSetVector;
   public:
 	class ptr {
 	  private:
@@ -66,9 +66,9 @@ class State : private std::enable_shared_from_this<State> {
 
 	void set_bag(const Bag &bag);
 
-    void setWitnessSetVector(const std::vector<std::shared_ptr<WitnessSetBase>> &witnessSetVector);
+    void setWitnessSetVector(const std::vector<std::shared_ptr<WitnessSet>> &witnessSetVector);
 
-    void addWitnessSet(std::shared_ptr<WitnessSetBase>);
+    void addWitnessSet(std::shared_ptr<WitnessSet>);
 
     bool operator==(const State &rhs) const;
 
@@ -88,7 +88,7 @@ class State : private std::enable_shared_from_this<State> {
 
     std::string stateInformation() const;
 
-    std::shared_ptr<WitnessSetBase> getWitnessSet(int) const;
+    std::shared_ptr<WitnessSet> getWitnessSet(int) const;
 
     int numberOfComponents() const;
 

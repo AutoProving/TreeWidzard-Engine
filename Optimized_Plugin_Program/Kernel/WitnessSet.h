@@ -58,11 +58,11 @@ class BaseIterator {
   // }
 };
 
-class WitnessSetBase {  // data structure to store 'std::shared_ptr<Witness>'
+class WitnessSet {  // data structure to store 'std::shared_ptr<Witness>'
  public:
-  virtual ~WitnessSetBase(){};
-  std::shared_ptr<WitnessSetBase> relabel(std::map<unsigned, unsigned> map) {
-    std::shared_ptr<WitnessSetBase> witnessSet = this->createEmptyWitnessSet();
+  virtual ~WitnessSet(){};
+  std::shared_ptr<WitnessSet> relabel(std::map<unsigned, unsigned> map) {
+    std::shared_ptr<WitnessSet> witnessSet = this->createEmptyWitnessSet();
     for (auto witness : *this) {
       witnessSet->insert(witness->relabel(map));
     }
@@ -80,7 +80,7 @@ class WitnessSetBase {  // data structure to store 'std::shared_ptr<Witness>'
     std::cout << " \n Error: WitnessSet insert." << std::endl;
     exit(20);
   };
-  virtual void union_set_witness(std::shared_ptr<WitnessSetBase> witnessSet) {
+  virtual void union_set_witness(std::shared_ptr<WitnessSet> witnessSet) {
     std::cout << "Error: Set union of witnessSet class." << std::endl;
     exit(20);
   };
@@ -96,22 +96,22 @@ class WitnessSetBase {  // data structure to store 'std::shared_ptr<Witness>'
     std::cout << "Error: WitnessSet hash." << std::endl;
     exit(20);
   }
-  friend bool operator==(WitnessSetBase &lhs, WitnessSetBase &rhs) {
+  friend bool operator==(WitnessSet &lhs, WitnessSet &rhs) {
     return lhs.isEqual(rhs);
   };
-  virtual bool isEqual(WitnessSetBase &rhs) {
+  virtual bool isEqual(WitnessSet &rhs) {
     std::cout << "Error: WitnessSet isEqual." << std::endl;
     exit(20);
   };
   // virtual bool operator!=(WitnessSet &rhs);
-  friend bool operator!=(WitnessSetBase &lhs, WitnessSetBase &rhs) {
+  friend bool operator!=(WitnessSet &lhs, WitnessSet &rhs) {
     return !lhs.isEqual(rhs);
   };
-  friend bool operator<(WitnessSetBase &lhs, WitnessSetBase &rhs) {
+  friend bool operator<(WitnessSet &lhs, WitnessSet &rhs) {
     return lhs.isLess(rhs);
   };
 
-  virtual bool isLess(WitnessSetBase &rhs) {
+  virtual bool isLess(WitnessSet &rhs) {
     std::cout << "Error: WitnessSet isLess." << std::endl;
     exit(20);
   };
@@ -119,15 +119,15 @@ class WitnessSetBase {  // data structure to store 'std::shared_ptr<Witness>'
     std::cout << "Error: WitnessSet size function." << std::endl;
     exit(20);
   };
-  virtual std::shared_ptr<WitnessSetBase> createEmptyWitnessSet() {
+  virtual std::shared_ptr<WitnessSet> createEmptyWitnessSet() {
     std::cout << "Error: WitnessSet createEmptyWitnessSet" << std::endl;
     exit(20);
   };
 };
 
-using WitnessSetBasePointer = std::shared_ptr<WitnessSetBase>;
+using WitnessSetPointer = std::shared_ptr<WitnessSet>;
 template <class T>
-class WitnessSetTypeOne : public WitnessSetBase {
+class WitnessSetTypeOne : public WitnessSet {
  public:
   static std::map<std::shared_ptr<Witness>, int, Witness::IsLessSharedPtr>
       allWitnesses;
@@ -172,21 +172,21 @@ class WitnessSetTypeOne : public WitnessSetBase {
     return baseIterator;
   }
   virtual void insert(std::shared_ptr<Witness> w);
-  virtual void union_set_witness(std::shared_ptr<WitnessSetBase> witnessSet);
+  virtual void union_set_witness(std::shared_ptr<WitnessSet> witnessSet);
   virtual void print();
   std::string witnessSetInformation() override;
   void hash(Hasher &h) const override;
-  virtual bool isLess(WitnessSetBase &rhs);
-  virtual bool isEqual(WitnessSetBase &rhs);
+  virtual bool isLess(WitnessSet &rhs);
+  virtual bool isEqual(WitnessSet &rhs);
   virtual int size();
-  virtual std::shared_ptr<WitnessSetBase> createEmptyWitnessSet() override {
+  virtual std::shared_ptr<WitnessSet> createEmptyWitnessSet() override {
     return std::make_shared<WitnessSetTypeOne<T>>();
   }
   int witnessVectorSize() { return witnessVector.size(); }
 };
 
 template <class T>
-class WitnessSetTypeTwo : public WitnessSetBase {
+class WitnessSetTypeTwo : public WitnessSet {
  private:
   struct compare {
     bool operator()(const std::shared_ptr<Witness> lhs,
@@ -225,14 +225,14 @@ class WitnessSetTypeTwo : public WitnessSetBase {
     return baseIterator;
   }
   virtual void insert(std::shared_ptr<Witness> w);
-  virtual void union_set_witness(std::shared_ptr<WitnessSetBase> witnessSet);
+  virtual void union_set_witness(std::shared_ptr<WitnessSet> witnessSet);
   virtual void print();
   std::string witnessSetInformation() override;
-  virtual bool isLess(WitnessSetBase &rhs);
-  virtual bool isEqual(WitnessSetBase &rhs);
+  virtual bool isLess(WitnessSet &rhs);
+  virtual bool isEqual(WitnessSet &rhs);
   virtual int size();
   void hash(Hasher &h) const override;
-  virtual std::shared_ptr<WitnessSetBase> createEmptyWitnessSet() override {
+  virtual std::shared_ptr<WitnessSet> createEmptyWitnessSet() override {
     return std::make_shared<WitnessSetTypeTwo<T>>();
   }
 };
@@ -265,7 +265,7 @@ void WitnessSetTypeOne<T>::insert(std::shared_ptr<Witness> ws) {
 }
 template <class T>
 void WitnessSetTypeOne<T>::union_set_witness(
-    std::shared_ptr<WitnessSetBase> witnessSet) {
+    std::shared_ptr<WitnessSet> witnessSet) {
   if (WitnessSetTypeOne<T> *e =
           dynamic_cast<WitnessSetTypeOne<T> *>(&*witnessSet)) {
     for (int i = 0; i < e->mask.size(); i++) {
@@ -297,7 +297,7 @@ void WitnessSetTypeOne<T>::hash(Hasher &h) const {
 }
 
 template <class T>
-bool WitnessSetTypeOne<T>::isLess(WitnessSetBase &rhs) {
+bool WitnessSetTypeOne<T>::isLess(WitnessSet &rhs) {
   if (WitnessSetTypeOne<T> *e = dynamic_cast<WitnessSetTypeOne<T> *>(&rhs)) {
     if (size() < e->size()) {
       return true;
@@ -319,7 +319,7 @@ bool WitnessSetTypeOne<T>::isLess(WitnessSetBase &rhs) {
 }
 
 template <class T>
-bool WitnessSetTypeOne<T>::isEqual(WitnessSetBase &rhs) {
+bool WitnessSetTypeOne<T>::isEqual(WitnessSet &rhs) {
   if (WitnessSetTypeOne<T> *e = dynamic_cast<WitnessSetTypeOne<T> *>(&rhs)) {
     return !(*this < *e or *e < *this);
   }
@@ -361,7 +361,7 @@ void WitnessSetTypeTwo<T>::insert(std::shared_ptr<Witness> ws) {
 }
 template <class T>
 void WitnessSetTypeTwo<T>::union_set_witness(
-    std::shared_ptr<WitnessSetBase> witnessSet) {
+    std::shared_ptr<WitnessSet> witnessSet) {
   for (auto element : *witnessSet) container.insert(element);
 }
 template <class T>
@@ -383,7 +383,7 @@ void WitnessSetTypeTwo<T>::hash(Hasher &h) const {
 }
 
 template <class T>
-bool WitnessSetTypeTwo<T>::isLess(WitnessSetBase &rhs) {
+bool WitnessSetTypeTwo<T>::isLess(WitnessSet &rhs) {
   if (WitnessSetTypeTwo<T> *e = dynamic_cast<WitnessSetTypeTwo<T> *>(&rhs)) {
     if (size() < rhs.size()) {
       return true;
@@ -408,7 +408,7 @@ bool WitnessSetTypeTwo<T>::isLess(WitnessSetBase &rhs) {
 }
 
 template <class T>
-bool WitnessSetTypeTwo<T>::isEqual(WitnessSetBase &rhs) {
+bool WitnessSetTypeTwo<T>::isEqual(WitnessSet &rhs) {
   if (WitnessSetTypeTwo *e = dynamic_cast<WitnessSetTypeTwo *>(&rhs)) {
     if (size() != rhs.size()) {
       return false;

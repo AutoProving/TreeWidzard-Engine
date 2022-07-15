@@ -154,3 +154,10 @@ struct CoreNameHere : CoreWrapper<CoreNameHere, WitnessNameHere, WitnessSetTypeT
     #error TODO: imlpement is_finl_witness here
   }
 };
+
+extern "C" {
+  DynamicCore *create() { return new CoreNameHere(); }
+  //DynamicCore *create_int(unsigned param) { return new CoreNameHere(param); }
+  //DynamicCore *create_multiGraph(MultiGraph multigraph) { return new CoreNameHere(multigraph); }
+  //DynamicCore *create_parameters(vector<int> parameters) { return new CoreNameHere(parameters); }
+}

@@ -51,11 +51,11 @@ public:
     unsigned parameter;
     HamiltonianPath_DynamicCore();
     void createInitialWitnessSet();
-    virtual WitnessSetBasePointer intro_v(unsigned i, Bag &b, const Witness &witness) override;
-    virtual WitnessSetBasePointer intro_e(unsigned i, unsigned j, Bag &b, const Witness &witness) override;
-    virtual WitnessSetBasePointer forget_v(unsigned i, Bag &b, const Witness &witness) override;
-    virtual WitnessSetBasePointer join(Bag &b, const Witness &witness1, const Witness &witness2) override;
-    virtual WitnessSetBasePointer clean(WitnessSetBasePointer witnessSet) override;
+    virtual WitnessSetPointer intro_v(unsigned i, Bag &b, const Witness &witness) override;
+    virtual WitnessSetPointer intro_e(unsigned i, unsigned j, Bag &b, const Witness &witness) override;
+    virtual WitnessSetPointer forget_v(unsigned i, Bag &b, const Witness &witness) override;
+    virtual WitnessSetPointer join(Bag &b, const Witness &witness1, const Witness &witness2) override;
+    virtual WitnessSetPointer clean(WitnessSetPointer witnessSet) override;
     virtual bool is_final_witness(const Witness &witness) override;
     //*****************************
     //*****************************

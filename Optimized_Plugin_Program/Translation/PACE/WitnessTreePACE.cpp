@@ -31,7 +31,7 @@ std::shared_ptr<WitnessTreePACENode> WitnessTreePACE::generateNode(std::shared_p
                         break;
                     }else{
                         Bag b = q->get_bag();
-                        std::shared_ptr<WitnessSetBase> w = kernel.pointerToCoreNumber(i)->intro_v(*setDiff.begin(),b ,**itr);
+                        std::shared_ptr<WitnessSet> w = kernel.pointerToCoreNumber(i)->intro_v(*setDiff.begin(),b ,**itr);
                         for(auto t = w->begin(); t!=w->end();t++){
                             if( **t == *parent->witnesses[i]){
                                 witnesses[i]=*itr;
@@ -56,7 +56,7 @@ std::shared_ptr<WitnessTreePACENode> WitnessTreePACE::generateNode(std::shared_p
                         break;
                     }else{
                         Bag b = q->get_bag();
-                        std::shared_ptr<WitnessSetBase> w = kernel.pointerToCoreNumber(i)->forget_v(*setDiff.begin(),b ,**itr);
+                        std::shared_ptr<WitnessSet> w = kernel.pointerToCoreNumber(i)->forget_v(*setDiff.begin(),b ,**itr);
                         for(auto t = w->begin(); t!=w->end();t++){
                             if( **t == *parent->witnesses[i]){
                                 witnesses[i]=*itr;
@@ -79,7 +79,7 @@ std::shared_ptr<WitnessTreePACENode> WitnessTreePACE::generateNode(std::shared_p
                         break;
                     }else{
                         Bag b = q->get_bag();
-                        std::shared_ptr<WitnessSetBase> w = kernel.pointerToCoreNumber(i)->intro_e(e.first, e.second,b ,**itr);
+                        std::shared_ptr<WitnessSet> w = kernel.pointerToCoreNumber(i)->intro_e(e.first, e.second,b ,**itr);
                         for(auto t = w->begin(); t!=w->end();t++){
                             if( **t == *parent->witnesses[i]){
                                 witnesses[i]=*itr;
@@ -97,12 +97,12 @@ std::shared_ptr<WitnessTreePACENode> WitnessTreePACE::generateNode(std::shared_p
                         break;
                     }else{
                         Bag b = q->get_bag();
-                        std::shared_ptr<WitnessSetBase> nqw = nq->getWitnessSet(i);
+                        std::shared_ptr<WitnessSet> nqw = nq->getWitnessSet(i);
                         for(auto it=nqw->begin(); it!= nqw->end();it++){
                             if(flag){
                                 break;
                             }else{
-                                std::shared_ptr<WitnessSetBase> w = kernel.pointerToCoreNumber(i)->join(b ,**itr,**it);
+                                std::shared_ptr<WitnessSet> w = kernel.pointerToCoreNumber(i)->join(b ,**itr,**it);
                                 for(auto t = w->begin(); t!=w->end();t++){
                                     if( **t == *parent->witnesses[i]){
                                         witnesses[i]=*itr;

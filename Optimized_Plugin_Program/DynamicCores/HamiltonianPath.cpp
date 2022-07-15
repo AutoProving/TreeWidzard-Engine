@@ -435,8 +435,8 @@ bool HamiltonianPath_DynamicCore::is_final_witness_implementation(
   //*****************************
   //*****************************
 }
-WitnessSetBasePointer HamiltonianPath_DynamicCore::clean(
-    WitnessSetBasePointer witnessSet) {
+WitnessSetPointer HamiltonianPath_DynamicCore::clean(
+    WitnessSetPointer witnessSet) {
   //*****************************
   //*****************************
   // In most cases, you will not need to change this function.
@@ -482,7 +482,7 @@ void HamiltonianPath_DynamicCore::createInitialWitnessSet() {
   this->setInitialWitnessSet(witnessSet);
   createInitialWitnessSet_implementation();
 }
-WitnessSetBasePointer HamiltonianPath_DynamicCore::intro_v(
+WitnessSetPointer HamiltonianPath_DynamicCore::intro_v(
     unsigned i, Bag &b, const Witness &witness) {
   if (const HamiltonianPath_Witness *e =
           dynamic_cast<const HamiltonianPath_Witness *>(&witness)) {
@@ -497,7 +497,7 @@ WitnessSetBasePointer HamiltonianPath_DynamicCore::intro_v(
     exit(20);
   }
 }
-WitnessSetBasePointer HamiltonianPath_DynamicCore::intro_e(
+WitnessSetPointer HamiltonianPath_DynamicCore::intro_e(
     unsigned i, unsigned j, Bag &b, const Witness &witness) {
   if (const HamiltonianPath_Witness *e =
           dynamic_cast<const HamiltonianPath_Witness *>(&witness)) {
@@ -512,7 +512,7 @@ WitnessSetBasePointer HamiltonianPath_DynamicCore::intro_e(
     exit(20);
   }
 }
-WitnessSetBasePointer HamiltonianPath_DynamicCore::forget_v(
+WitnessSetPointer HamiltonianPath_DynamicCore::forget_v(
     unsigned i, Bag &b, const Witness &witness) {
   if (const HamiltonianPath_Witness *e =
           dynamic_cast<const HamiltonianPath_Witness *>(&witness)) {
@@ -527,7 +527,7 @@ WitnessSetBasePointer HamiltonianPath_DynamicCore::forget_v(
     exit(20);
   }
 }
-WitnessSetBasePointer HamiltonianPath_DynamicCore::join(
+WitnessSetPointer HamiltonianPath_DynamicCore::join(
     Bag &b, const Witness &witness1, const Witness &witness2) {
   if (const HamiltonianPath_Witness *e1 =
           dynamic_cast<const HamiltonianPath_Witness *>(&witness1)) {

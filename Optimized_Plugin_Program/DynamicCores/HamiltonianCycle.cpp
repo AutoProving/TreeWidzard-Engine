@@ -482,7 +482,7 @@ Witness &HamiltonianCycle_Witness::set_equal(const Witness &witness) {
   }
 }
 
-shared_ptr<WitnessSetBase>
+shared_ptr<WitnessSet>
 HamiltonianCycle_WitnessSet::createEmptyWitnessSet() {
   HamiltonianCycle_WitnessSetPointer witnessSet(
       new HamiltonianCycle_WitnessSet);
@@ -507,7 +507,7 @@ void HamiltonianCycle_DynamicCore::createInitialWitnessSet() {
   createInitialWitnessSet_implementation();
 }
 
-WitnessSetBasePointer HamiltonianCycle_DynamicCore::intro_v(
+WitnessSetPointer HamiltonianCycle_DynamicCore::intro_v(
     unsigned i, Bag &b, const Witness &witness) {
   if (const HamiltonianCycle_Witness *e =
           dynamic_cast<const HamiltonianCycle_Witness *>(&witness)) {
@@ -523,7 +523,7 @@ WitnessSetBasePointer HamiltonianCycle_DynamicCore::intro_v(
   }
 }
 
-WitnessSetBasePointer HamiltonianCycle_DynamicCore::intro_e(
+WitnessSetPointer HamiltonianCycle_DynamicCore::intro_e(
     unsigned i, unsigned j, Bag &b, const Witness &witness) {
   if (const HamiltonianCycle_Witness *e =
           dynamic_cast<const HamiltonianCycle_Witness *>(&witness)) {
@@ -539,7 +539,7 @@ WitnessSetBasePointer HamiltonianCycle_DynamicCore::intro_e(
   }
 }
 
-WitnessSetBasePointer HamiltonianCycle_DynamicCore::forget_v(
+WitnessSetPointer HamiltonianCycle_DynamicCore::forget_v(
     unsigned i, Bag &b, const Witness &witness) {
   if (const HamiltonianCycle_Witness *e =
           dynamic_cast<const HamiltonianCycle_Witness *>(&witness)) {
@@ -555,7 +555,7 @@ WitnessSetBasePointer HamiltonianCycle_DynamicCore::forget_v(
   }
 }
 
-WitnessSetBasePointer HamiltonianCycle_DynamicCore::join(
+WitnessSetPointer HamiltonianCycle_DynamicCore::join(
     Bag &b, const Witness &witness1, const Witness &witness2) {
   if (const HamiltonianCycle_Witness *e1 =
           dynamic_cast<const HamiltonianCycle_Witness *>(&witness1)) {
@@ -579,8 +579,8 @@ WitnessSetBasePointer HamiltonianCycle_DynamicCore::join(
   }
 }
 
-WitnessSetBasePointer HamiltonianCycle_DynamicCore::clean(
-    WitnessSetBasePointer witnessSet) {
+WitnessSetPointer HamiltonianCycle_DynamicCore::clean(
+    WitnessSetPointer witnessSet) {
   if (HamiltonianCycle_WitnessSetPointer e =
           dynamic_pointer_cast<HamiltonianCycle_WitnessSet>(witnessSet)) {
     return clean_implementation(e);

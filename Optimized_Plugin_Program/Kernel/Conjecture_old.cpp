@@ -4,7 +4,7 @@ bool ConjectureNode::evaluateState(State &q, DynamicKernel *kernel) {
 	if (children.empty() and logicalOperator != "TRUE" and
 		logicalOperator != "FALSE") {
 		Bag b = q.get_bag();
-		shared_ptr<WitnessSetBase> witnessSet = q.getWitnessSet(propertyIndex - 1);
+		shared_ptr<WitnessSet> witnessSet = q.getWitnessSet(propertyIndex - 1);
 		return kernel->pointerToCoreNumber(propertyIndex - 1)
 			->is_final_set_witness(b, witnessSet);
 	} else {

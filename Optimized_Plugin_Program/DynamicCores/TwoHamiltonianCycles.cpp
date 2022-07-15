@@ -524,4 +524,6 @@ struct TwoHamiltonianCycles_Core : CoreWrapper<TwoHamiltonianCycles_Core, TwoHam
   }
 };
 
-DynamicCore *create() { return new TwoHamiltonianCycles_Core; }
+extern "C" {
+  DynamicCore *create() { return new TwoHamiltonianCycles_Core; }
+}

@@ -29,8 +29,8 @@ class CoreWrapper : public DynamicCore {
     setInitialWitnessSet(witnessSet);
   }
 
-  WitnessSetBasePointer intro_v(unsigned i, Bag &b,
-                                const Witness &witness) override {
+  WitnessSetPointer intro_v(unsigned i, Bag &b,
+                            const Witness &witness) override {
     auto witnessSet = std::make_shared<WitnessSet>();
     this->as_core().intro_v_implementation(
         i, b, WitnessAlias::as_witness(witness), *witnessSet);
@@ -38,8 +38,8 @@ class CoreWrapper : public DynamicCore {
     return witnessSet;
   }
 
-  WitnessSetBasePointer intro_e(unsigned i, unsigned j, Bag &b,
-                                const Witness &witness) override {
+  WitnessSetPointer intro_e(unsigned i, unsigned j, Bag &b,
+                            const Witness &witness) override {
     auto witnessSet = std::make_shared<WitnessSet>();
     this->as_core().intro_e_implementation(
         i, j, b, WitnessAlias::as_witness(witness), *witnessSet);
@@ -47,8 +47,8 @@ class CoreWrapper : public DynamicCore {
     return witnessSet;
   }
 
-  WitnessSetBasePointer forget_v(unsigned i, Bag &b,
-                                 const Witness &witness) override {
+  WitnessSetPointer forget_v(unsigned i, Bag &b,
+                             const Witness &witness) override {
     auto witnessSet = std::make_shared<WitnessSet>();
     this->as_core().forget_v_implementation(
         i, b, WitnessAlias::as_witness(witness), *witnessSet);
@@ -56,8 +56,8 @@ class CoreWrapper : public DynamicCore {
     return witnessSet;
   }
 
-  WitnessSetBasePointer join(Bag &b, const Witness &w1,
-                             const Witness &w2) override {
+  WitnessSetPointer join(Bag &b, const Witness &w1,
+                         const Witness &w2) override {
     auto witnessSet = std::make_shared<WitnessSet>();
     this->as_core().join_implementation(b, WitnessAlias::as_witness(w1),
                                         WitnessAlias::as_witness(w2),
@@ -66,7 +66,7 @@ class CoreWrapper : public DynamicCore {
     return witnessSet;
   }
 
-  WitnessSetBasePointer clean(WitnessSetBasePointer witnessSetBase) override {
+  WitnessSetPointer clean(WitnessSetPointer witnessSetBase) override {
 #ifdef ENABLE_DEBUG_INFO
     if (WitnessSet *witnessSet = dynamic_cast<WitnessSet *>(&*witnessSetBase)) {
       this->as_core().clean_implementation(*witnessSet);

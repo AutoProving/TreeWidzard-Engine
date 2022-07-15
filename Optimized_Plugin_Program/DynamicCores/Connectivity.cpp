@@ -284,4 +284,6 @@ struct Connectivity_Core : CoreWrapper<Connectivity_Core, Connectivity_Witness, 
   }
 };
 
-DynamicCore *create() { return (DynamicCore*) new Connectivity_Core; }
+extern "C" {
+  DynamicCore *create() { return (DynamicCore*) new Connectivity_Core; }
+}

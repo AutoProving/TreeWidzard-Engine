@@ -4,8 +4,8 @@
 
 //////////////////////Implementation/////////////////////////////
 ////////////////////////////////////////////////////////////////
-bool Connectivity_Witness::is_equal_implementation(
-    const Connectivity_WitnessPointerConst w) const {
+bool Connectivity_Witness_Old::is_equal_implementation(
+    const Connectivity_Witness_OldPointerConst w) const {
   //*****************************
   //*****************************
   return tie(this->tag, this->partition) == tie(w->tag, w->partition);
@@ -13,8 +13,8 @@ bool Connectivity_Witness::is_equal_implementation(
   //*****************************
 }
 
-bool Connectivity_Witness::is_less_implementation(
-    const Connectivity_WitnessPointerConst w) const {
+bool Connectivity_Witness_Old::is_less_implementation(
+    const Connectivity_Witness_OldPointerConst w) const {
   //*****************************
   //*****************************
   return tie(this->tag, this->partition) < tie(w->tag, w->partition);
@@ -22,8 +22,8 @@ bool Connectivity_Witness::is_less_implementation(
   //*****************************
 }
 
-Witness &Connectivity_Witness::set_equal_implementation(
-    Connectivity_WitnessPointerConst w) {
+Witness &Connectivity_Witness_Old::set_equal_implementation(
+    Connectivity_Witness_OldPointerConst w) {
   //*****************************
   //*****************************
   this->partition = w->partition;
@@ -33,9 +33,9 @@ Witness &Connectivity_Witness::set_equal_implementation(
   //*****************************
 }
 
-shared_ptr<Witness> Connectivity_Witness::relabel(
+shared_ptr<Witness> Connectivity_Witness_Old::relabel(
     const map<unsigned int, unsigned int> &relabelingMap) const {
-  Connectivity_WitnessPointer w(new Connectivity_Witness);
+  Connectivity_Witness_OldPointer w(new Connectivity_Witness_Old);
   w->tag = this->tag;
 
   auto &newPartition = w->partition;
@@ -44,7 +44,7 @@ shared_ptr<Witness> Connectivity_Witness::relabel(
     for (auto v : cell) {
       auto it = relabelingMap.find(v);
       if (it == relabelingMap.end()) {
-        cerr << "Error: Connectivity_Witness::relabel " << v
+        cerr << "Error: Connectivity_Witness_Old::relabel " << v
              << " is not in the map\n";
         exit(20);
       }
@@ -55,7 +55,7 @@ shared_ptr<Witness> Connectivity_Witness::relabel(
   return w;
 }
 
-void Connectivity_Witness::hash(Hasher &h) const {
+void Connectivity_Witness_Old::hash(Hasher &h) const {
   h << tag << -1u;
   for (const auto &component : partition) {
     for (unsigned node : component) h << node;
@@ -63,7 +63,7 @@ void Connectivity_Witness::hash(Hasher &h) const {
   }
 }
 
-void Connectivity_Witness::print() const {
+void Connectivity_Witness_Old::print() const {
   //*****************************
   //*****************************
   cout << witnessInformation();
@@ -72,7 +72,7 @@ void Connectivity_Witness::print() const {
   //*****************************
 }
 
-string Connectivity_Witness::witnessInformation() const {
+string Connectivity_Witness_Old::witnessInformation() const {
   //*****************************
   //*****************************
   ostringstream info;
@@ -87,7 +87,7 @@ string Connectivity_Witness::witnessInformation() const {
   //*****************************
 }
 
-Connectivity_Witness::~Connectivity_Witness() {
+Connectivity_Witness_Old::~Connectivity_Witness_Old() {
   //*****************************
   //*****************************
   // Only edit this part
@@ -97,7 +97,7 @@ Connectivity_Witness::~Connectivity_Witness() {
   //*****************************
 }
 
-Connectivity_DynamicCore::Connectivity_DynamicCore() {
+Connectivity_DynamicCore_Old::Connectivity_DynamicCore_Old() {
   // Initializing attributes
   addAttribute("CoreName", "ConnectivityOld");
   addAttribute("CoreType", "Bool");
@@ -106,8 +106,8 @@ Connectivity_DynamicCore::Connectivity_DynamicCore() {
   createInitialWitnessSet();
 }
 
-void Connectivity_DynamicCore::createInitialWitnessSet_implementation() {
-  Connectivity_WitnessPointer witness = createWitness();
+void Connectivity_DynamicCore_Old::createInitialWitnessSet_implementation() {
+  Connectivity_Witness_OldPointer witness = createWitness();
   //*****************************
   //*****************************
   //*****************************
@@ -115,12 +115,12 @@ void Connectivity_DynamicCore::createInitialWitnessSet_implementation() {
   this->insertIntoInitialWitnessSet(witness);
 }
 
-void Connectivity_DynamicCore::intro_v_implementation(
-    unsigned int i, Bag &b, Connectivity_WitnessPointerConst w,
-    Connectivity_WitnessSetPointer witnessSet) {
+void Connectivity_DynamicCore_Old::intro_v_implementation(
+    unsigned int i, Bag &b, Connectivity_Witness_OldPointerConst w,
+    Connectivity_Witness_OldSetPointer witnessSet) {
   //*****************************
   //*****************************
-  Connectivity_WitnessPointer wPrime = createWitness();
+  Connectivity_Witness_OldPointer wPrime = createWitness();
   wPrime->set_equal(*w);
   wPrime->tag |= 1;
   wPrime->partition.insert({i});
@@ -129,9 +129,9 @@ void Connectivity_DynamicCore::intro_v_implementation(
   //*****************************
 }
 
-void Connectivity_DynamicCore::intro_e_implementation(
-    unsigned int i, unsigned int j, Bag &b, Connectivity_WitnessPointerConst w,
-    Connectivity_WitnessSetPointer witnessSet) {
+void Connectivity_DynamicCore_Old::intro_e_implementation(
+    unsigned int i, unsigned int j, Bag &b, Connectivity_Witness_OldPointerConst w,
+    Connectivity_Witness_OldSetPointer witnessSet) {
   //*****************************
   //*****************************
   auto i_it = find_if(w->partition.begin(), w->partition.end(),
@@ -139,7 +139,7 @@ void Connectivity_DynamicCore::intro_e_implementation(
   auto j_it = find_if(w->partition.begin(), w->partition.end(),
                       [j = j](const auto &cell) { return cell.count(j); });
   if (i_it == j_it) {
-    Connectivity_WitnessPointer wPrime = createWitness();
+    Connectivity_Witness_OldPointer wPrime = createWitness();
     wPrime->set_equal(*w);
     witnessSet->insert(wPrime);
   } else {
@@ -149,7 +149,7 @@ void Connectivity_DynamicCore::intro_e_implementation(
       exit(20);
     }
 
-    Connectivity_WitnessPointer wPrime = createWitness();
+    Connectivity_Witness_OldPointer wPrime = createWitness();
     wPrime->set_equal(*w);
 
     wPrime->partition.erase(*i_it);
@@ -164,12 +164,12 @@ void Connectivity_DynamicCore::intro_e_implementation(
   //*****************************
 }
 
-void Connectivity_DynamicCore::forget_v_implementation(
-    unsigned int i, Bag &b, Connectivity_WitnessPointerConst w,
-    Connectivity_WitnessSetPointer witnessSet) {
+void Connectivity_DynamicCore_Old::forget_v_implementation(
+    unsigned int i, Bag &b, Connectivity_Witness_OldPointerConst w,
+    Connectivity_Witness_OldSetPointer witnessSet) {
   //*****************************
   //*****************************
-  Connectivity_WitnessPointer wPrime = createWitness();
+  Connectivity_Witness_OldPointer wPrime = createWitness();
   wPrime->set_equal(*w);
 
   // 0 = empty graph
@@ -209,10 +209,10 @@ void Connectivity_DynamicCore::forget_v_implementation(
   //*****************************
 }
 
-void Connectivity_DynamicCore::join_implementation(
-    Bag &b, Connectivity_WitnessPointerConst w1,
-    Connectivity_WitnessPointerConst w2,
-    Connectivity_WitnessSetPointer witnessSet) {
+void Connectivity_DynamicCore_Old::join_implementation(
+    Bag &b, Connectivity_Witness_OldPointerConst w1,
+    Connectivity_Witness_OldPointerConst w2,
+    Connectivity_Witness_OldSetPointer witnessSet) {
   //*****************************
   //*****************************
   int q1 = w1->tag;
@@ -275,7 +275,7 @@ void Connectivity_DynamicCore::join_implementation(
   map<unsigned, set<unsigned>> partition;
   for (auto [v, up] : mp) partition[find(v).first].insert(v);
 
-  Connectivity_WitnessPointer wPrime = createWitness();
+  Connectivity_Witness_OldPointer wPrime = createWitness();
   wPrime->tag = qPrime;
   for (auto &[root, cell] : partition) wPrime->partition.insert(move(cell));
   witnessSet->insert(wPrime);
@@ -283,8 +283,8 @@ void Connectivity_DynamicCore::join_implementation(
   //*****************************
 }
 
-WitnessSetBasePointer Connectivity_DynamicCore::clean(
-    WitnessSetBasePointer witnessSet) {
+WitnessSetPointer Connectivity_DynamicCore_Old::clean(
+    WitnessSetPointer witnessSet) {
   //*****************************
   //*****************************
   // In most cases, you will not need to change this function.
@@ -293,8 +293,8 @@ WitnessSetBasePointer Connectivity_DynamicCore::clean(
   return witnessSet;
 }
 
-bool Connectivity_DynamicCore::is_final_witness_implementation(
-    Connectivity_WitnessPointerConst w) {
+bool Connectivity_DynamicCore_Old::is_final_witness_implementation(
+    Connectivity_Witness_OldPointerConst w) {
   //*****************************
   //*****************************
   return w->tag != 3 && w->partition.size() <= 1;
@@ -304,136 +304,136 @@ bool Connectivity_DynamicCore::is_final_witness_implementation(
 ////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////
 
-bool Connectivity_Witness::is_equal(const Witness &rhs) const {
-  if (Connectivity_Witness const *e =
-          dynamic_cast<Connectivity_Witness const *>(&rhs)) {
-    Connectivity_WitnessPointerConst w = e->shared_from_this();
+bool Connectivity_Witness_Old::is_equal(const Witness &rhs) const {
+  if (Connectivity_Witness_Old const *e =
+          dynamic_cast<Connectivity_Witness_Old const *>(&rhs)) {
+    Connectivity_Witness_OldPointerConst w = e->shared_from_this();
     return is_equal_implementation(w);
   } else {
-    cerr << "ERROR: in Connectivity_Witness::is_equal cast error" << endl;
+    cerr << "ERROR: in Connectivity_Witness_Old::is_equal cast error" << endl;
     exit(20);
   }
 }
 
-bool Connectivity_Witness::is_less(const Witness &rhs) const {
-  if (Connectivity_Witness const *e =
-          dynamic_cast<Connectivity_Witness const *>(&rhs)) {
-    Connectivity_WitnessPointerConst w = e->shared_from_this();
+bool Connectivity_Witness_Old::is_less(const Witness &rhs) const {
+  if (Connectivity_Witness_Old const *e =
+          dynamic_cast<Connectivity_Witness_Old const *>(&rhs)) {
+    Connectivity_Witness_OldPointerConst w = e->shared_from_this();
     return is_less_implementation(w);
   } else {
-    cerr << "ERROR: in Connectivity_Witness::is_less cast error" << endl;
+    cerr << "ERROR: in Connectivity_Witness_Old::is_less cast error" << endl;
     exit(20);
   }
 }
 
-Witness &Connectivity_Witness::set_equal(const Witness &witness) {
-  if (const Connectivity_Witness *e =
-          dynamic_cast<const Connectivity_Witness *>(&witness)) {
-    Connectivity_WitnessPointerConst w = e->shared_from_this();
+Witness &Connectivity_Witness_Old::set_equal(const Witness &witness) {
+  if (const Connectivity_Witness_Old *e =
+          dynamic_cast<const Connectivity_Witness_Old *>(&witness)) {
+    Connectivity_Witness_OldPointerConst w = e->shared_from_this();
     return set_equal_implementation(w);
   } else {
-    cerr << "ERROR: in Connectivity_Witness::operator= cast error" << endl;
+    cerr << "ERROR: in Connectivity_Witness_Old::operator= cast error" << endl;
     exit(20);
   }
 }
 
-void Connectivity_DynamicCore::createInitialWitnessSet() {
-  Connectivity_WitnessSetPointer witnessSet(new Connectivity_WitnessSet);
+void Connectivity_DynamicCore_Old::createInitialWitnessSet() {
+  Connectivity_Witness_OldSetPointer witnessSet(new Connectivity_Witness_OldSet);
   this->setInitialWitnessSet(witnessSet);
   createInitialWitnessSet_implementation();
 }
 
-WitnessSetBasePointer Connectivity_DynamicCore::intro_v(
+WitnessSetPointer Connectivity_DynamicCore_Old::intro_v(
     unsigned i, Bag &b, const Witness &witness) {
-  if (const Connectivity_Witness *e =
-          dynamic_cast<const Connectivity_Witness *>(&witness)) {
-    Connectivity_WitnessPointerConst w = e->shared_from_this();
-    Connectivity_WitnessSetPointer witnessSet(new Connectivity_WitnessSet);
+  if (const Connectivity_Witness_Old *e =
+          dynamic_cast<const Connectivity_Witness_Old *>(&witness)) {
+    Connectivity_Witness_OldPointerConst w = e->shared_from_this();
+    Connectivity_Witness_OldSetPointer witnessSet(new Connectivity_Witness_OldSet);
     intro_v_implementation(i, b, w, witnessSet);
     return clean(witnessSet);
   } else {
-    cerr << "ERROR: in Connectivity_DynamicCore::intro_v cast error" << endl;
+    cerr << "ERROR: in Connectivity_DynamicCore_Old::intro_v cast error" << endl;
     exit(20);
   }
 }
 
-WitnessSetBasePointer Connectivity_DynamicCore::intro_e(
+WitnessSetPointer Connectivity_DynamicCore_Old::intro_e(
     unsigned i, unsigned j, Bag &b, const Witness &witness) {
-  if (const Connectivity_Witness *e =
-          dynamic_cast<const Connectivity_Witness *>(&witness)) {
-    Connectivity_WitnessPointerConst w = e->shared_from_this();
-    Connectivity_WitnessSetPointer witnessSet(new Connectivity_WitnessSet);
+  if (const Connectivity_Witness_Old *e =
+          dynamic_cast<const Connectivity_Witness_Old *>(&witness)) {
+    Connectivity_Witness_OldPointerConst w = e->shared_from_this();
+    Connectivity_Witness_OldSetPointer witnessSet(new Connectivity_Witness_OldSet);
     intro_e_implementation(i, j, b, w, witnessSet);
     return clean(witnessSet);
   } else {
-    cerr << "ERROR: in Connectivity_DynamicCore::intro_e cast error" << endl;
+    cerr << "ERROR: in Connectivity_DynamicCore_Old::intro_e cast error" << endl;
     exit(20);
   }
 }
 
-WitnessSetBasePointer Connectivity_DynamicCore::forget_v(
+WitnessSetPointer Connectivity_DynamicCore_Old::forget_v(
     unsigned i, Bag &b, const Witness &witness) {
-  if (const Connectivity_Witness *e =
-          dynamic_cast<const Connectivity_Witness *>(&witness)) {
-    Connectivity_WitnessPointerConst w = e->shared_from_this();
-    Connectivity_WitnessSetPointer witnessSet(new Connectivity_WitnessSet);
+  if (const Connectivity_Witness_Old *e =
+          dynamic_cast<const Connectivity_Witness_Old *>(&witness)) {
+    Connectivity_Witness_OldPointerConst w = e->shared_from_this();
+    Connectivity_Witness_OldSetPointer witnessSet(new Connectivity_Witness_OldSet);
     forget_v_implementation(i, b, w, witnessSet);
     return clean(witnessSet);
   } else {
-    cerr << "ERROR: in Connectivity_DynamicCore::forget_v cast error" << endl;
+    cerr << "ERROR: in Connectivity_DynamicCore_Old::forget_v cast error" << endl;
     exit(20);
   }
 }
 
-WitnessSetBasePointer Connectivity_DynamicCore::join(
+WitnessSetPointer Connectivity_DynamicCore_Old::join(
     Bag &b, const Witness &witness1, const Witness &witness2) {
-  if (const Connectivity_Witness *e1 =
-          dynamic_cast<const Connectivity_Witness *>(&witness1)) {
-    if (const Connectivity_Witness *e2 =
-            dynamic_cast<const Connectivity_Witness *>(&witness2)) {
+  if (const Connectivity_Witness_Old *e1 =
+          dynamic_cast<const Connectivity_Witness_Old *>(&witness1)) {
+    if (const Connectivity_Witness_Old *e2 =
+            dynamic_cast<const Connectivity_Witness_Old *>(&witness2)) {
       // Note: Do not merge the two "if" instructions above into a single "if".
       // Potential for errors
-      Connectivity_WitnessPointerConst w1 = e1->shared_from_this();
-      Connectivity_WitnessPointerConst w2 = e2->shared_from_this();
-      Connectivity_WitnessSetPointer witnessSet(new Connectivity_WitnessSet);
+      Connectivity_Witness_OldPointerConst w1 = e1->shared_from_this();
+      Connectivity_Witness_OldPointerConst w2 = e2->shared_from_this();
+      Connectivity_Witness_OldSetPointer witnessSet(new Connectivity_Witness_OldSet);
       join_implementation(b, w1, w2, witnessSet);
       return clean(witnessSet);
     } else {
-      cerr << "ERROR: in Connectivity_DynamicCore::join cast error" << endl;
+      cerr << "ERROR: in Connectivity_DynamicCore_Old::join cast error" << endl;
       exit(20);
     }
   } else {
-    cerr << "ERROR: in Connectivity_DynamicCore::join cast error" << endl;
+    cerr << "ERROR: in Connectivity_DynamicCore_Old::join cast error" << endl;
     exit(20);
   }
 }
 
-bool Connectivity_DynamicCore::is_final_witness(const Witness &witness) {
-  if (const Connectivity_Witness *e =
-          dynamic_cast<const Connectivity_Witness *>(&witness)) {
-    Connectivity_WitnessPointerConst w = e->shared_from_this();
+bool Connectivity_DynamicCore_Old::is_final_witness(const Witness &witness) {
+  if (const Connectivity_Witness_Old *e =
+          dynamic_cast<const Connectivity_Witness_Old *>(&witness)) {
+    Connectivity_Witness_OldPointerConst w = e->shared_from_this();
     return is_final_witness_implementation(w);
   } else {
-    cerr << "ERROR: in Connectivity_DynamicCore::is_final_witness cast error"
+    cerr << "ERROR: in Connectivity_DynamicCore_Old::is_final_witness cast error"
          << endl;
     exit(20);
   }
 }
 
-Connectivity_WitnessPointer Connectivity_DynamicCore::createWitness() {
-  Connectivity_WitnessPointer w(new Connectivity_Witness);
+Connectivity_Witness_OldPointer Connectivity_DynamicCore_Old::createWitness() {
+  Connectivity_Witness_OldPointer w(new Connectivity_Witness_Old);
   return w;
 }
-shared_ptr<WitnessSetBase> Connectivity_WitnessSet::createEmptyWitnessSet() {
-  Connectivity_WitnessSetPointer witnessSet(new Connectivity_WitnessSet);
+shared_ptr<WitnessSet> Connectivity_Witness_OldSet::createEmptyWitnessSet() {
+  Connectivity_Witness_OldSetPointer witnessSet(new Connectivity_Witness_OldSet);
   return witnessSet;
 }
 
-void Connectivity_DynamicCore::copyWitness(
-    Connectivity_WitnessPointer w_input, Connectivity_WitnessPointer w_output) {
+void Connectivity_DynamicCore_Old::copyWitness(
+    Connectivity_Witness_OldPointer w_input, Connectivity_Witness_OldPointer w_output) {
   w_output->set_equal_implementation(w_input);
 }
 
 extern "C" {
-DynamicCore *create() { return new Connectivity_DynamicCore; }
+DynamicCore *create() { return new Connectivity_DynamicCore_Old; }
 }
