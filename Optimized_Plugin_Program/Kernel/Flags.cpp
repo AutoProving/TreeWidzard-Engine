@@ -8,6 +8,7 @@ Flags::Flags() {
 	content.insert({"StateSize", 0});		// prints size of state
 	content.insert({"Premise", 0});
 	content.insert({"NoBFSDAG", 0});
+	content.insert({"WriteToFiles", 0});
 }
 
 float Flags::get(std::string s)

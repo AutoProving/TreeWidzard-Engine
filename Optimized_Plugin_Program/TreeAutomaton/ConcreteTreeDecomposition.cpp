@@ -391,12 +391,14 @@ bool ConcreteTreeDecomposition::conjectureCheck(Conjecture &conjecture,Flags &fl
     runTree.setRoot(runNode);
     name += "_RunTree.txt";
     if (!conjecture.evaluateConjectureOnState(*runNode->getNodeContent().getState())) {
-        runTree.writeToFile(name);
+        if(flags.get("WriteToFiles"))
+            runTree.writeToFile(name);
         std::cout << "CONJECTURE NOT SATISFIED" << std::endl;
         return false;
     } else {
         std::cout << "CONJECTURE SATISFIED"<< std::endl;
-        runTree.writeToFile(name);
+        if(flags.get("WriteToFiles"))
+            runTree.writeToFile(name);
         return true;
     }
 }

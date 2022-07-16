@@ -61,25 +61,29 @@ void ParseController::parse_pace(std::string graphPath, std::string decompositio
     //  concreteTreeDecomposition->printTermNodes();
     std::cout<<"----Evaluating-----:"<<std::endl;
     concreteTreeDecomposition->conjectureCheck(this->inputController->getConjecture(),flag, name);
-    AbstractTreeDecomposition abstractTreeDecomposition = concreteTreeDecomposition->convertToAbstractTreeDecomposition();
+    if(flag.get("WriteToFiles")){
+        AbstractTreeDecomposition abstractTreeDecomposition = concreteTreeDecomposition->convertToAbstractTreeDecomposition();
 
-    abstractTreeDecomposition.writeToFile(name+"_AbstractDecomposition.txt");
-    concreteTreeDecomposition->writeToFile(name+"_ConcreteDecomposition.txt");
-    MultiGraph multiGraph = concreteTreeDecomposition->extractMultiGraph();
-    multiGraph.printToFile(name+"_Graph.txt");
-    multiGraph.convertToGML(name+"_GMLGraph.gml");
-    multiGraph.printToFilePACEFormat(name+"_GraphPaceFormat.gr");
-    if(flag.get("PrintDirectedBipartiteGraphNAUTY")){
-        multiGraph.printToFileDirectedBipartiteGraphNAUTY(name+"_DirectedBipartiteGraphNAUTY.txt");
+        abstractTreeDecomposition.writeToFile(name+"_AbstractDecomposition.txt");
+        concreteTreeDecomposition->writeToFile(name+"_ConcreteDecomposition.txt");
+        MultiGraph multiGraph = concreteTreeDecomposition->extractMultiGraph();
+        multiGraph.printToFile(name+"_Graph.txt");
+        multiGraph.convertToGML(name+"_GMLGraph.gml");
+        multiGraph.printToFilePACEFormat(name+"_GraphPaceFormat.gr");
+        if(flag.get("PrintDirectedBipartiteGraphNAUTY")){
+            multiGraph.printToFileDirectedBipartiteGraphNAUTY(name+"_DirectedBipartiteGraphNAUTY.txt");
+        }
+        Decomposition decomposition = concreteTreeDecomposition->extractDecomposition();
+        //    decomposition.print();
+        decomposition.writeToFile(name+"_Decomposition.td");
+        //cout<<"---------------------------------------------State Tree"<<endl;
+        //concreteTreeDecomposition->conjectureCheck(inputController->getConjecture());
+        //WitnessTreePACE witnessTreePace;
+        //witnessTreePace.stateTreeToWitnessTreePACE(stateTree, inputController->getDynamicKernel());
+        //witnessTreePace.print();
     }
-    Decomposition decomposition = concreteTreeDecomposition->extractDecomposition(); 
-//    decomposition.print();
-    decomposition.writeToFile(name+"_Decomposition.td");
-    //cout<<"---------------------------------------------State Tree"<<endl;
-    //concreteTreeDecomposition->conjectureCheck(inputController->getConjecture());
-    //WitnessTreePACE witnessTreePace;
-    //witnessTreePace.stateTreeToWitnessTreePACE(stateTree, inputController->getDynamicKernel());
-    //witnessTreePace.print();
+
+
 }
 
 void ParseController::parse_abstract(std::string abstractPath) {
@@ -111,17 +115,19 @@ void ParseController::parse_abstract(std::string abstractPath) {
         name = output_file_path+"/PARSE_ABSTRACT_"+property_file_name+"_"+abstract_file_name;
     }
     concreteTreeDecomposition.conjectureCheck(this->inputController->getConjecture(), flag, name);
-    concreteTreeDecomposition.writeToFile(name+"_ConcreteDecomposition.txt");
-    MultiGraph multiGraph = concreteTreeDecomposition.extractMultiGraph();
-    multiGraph.printToFile(name+"_Graph.txt");
-    multiGraph.convertToGML(name+"_GMLGraph.gml");
-    multiGraph.printToFilePACEFormat(name+"_GraphPaceFormat.gr");
-    if(flag.get("PrintDirectedBipartiteGraphNAUTY")){
-        multiGraph.printToFileDirectedBipartiteGraphNAUTY(name+"_DirectedBipartiteGraphNAUTY.txt");
+    if(flag.get("WriteToFiles")) {
+        concreteTreeDecomposition.writeToFile(name + "_ConcreteDecomposition.txt");
+        MultiGraph multiGraph = concreteTreeDecomposition.extractMultiGraph();
+        multiGraph.printToFile(name + "_Graph.txt");
+        multiGraph.convertToGML(name + "_GMLGraph.gml");
+        multiGraph.printToFilePACEFormat(name + "_GraphPaceFormat.gr");
+        if (flag.get("PrintDirectedBipartiteGraphNAUTY")) {
+            multiGraph.printToFileDirectedBipartiteGraphNAUTY(name + "_DirectedBipartiteGraphNAUTY.txt");
+        }
+        Decomposition decomposition = concreteTreeDecomposition.extractDecomposition();
+        //    decomposition.print();
+        decomposition.writeToFile(name + "_Decomposition.td");
     }
-    Decomposition decomposition = concreteTreeDecomposition.extractDecomposition(); 
-//    decomposition.print();
-    decomposition.writeToFile(name+"_Decomposition.td"); 
 
 }
 

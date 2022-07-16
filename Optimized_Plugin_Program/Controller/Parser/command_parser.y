@@ -39,10 +39,11 @@
 %token command_newline command_search_signature command_print_state_flag command_print_loop_flag command_string command_help command_end
         command_parse_signature command_parse_pace command_parse_abstract command_term_signature command_print_state_tree command_random_signature
         command_number command_premise command_no_bfs_dag command_nthreads command_pw command_tw command_equal command_print_directed_bipartite_graph
+        command_write_files
 %type<string> command_newline command_search_signature command_print_state_flag command_print_loop_flag
               command_string command_input_file command_search_strategy command_help command_end command_random_signature
               command_parse_signature command_parse_pace command_parse_abstract command_term_signature command_print_state_tree command_premise command_no_bfs_dag command_nthreads
-              command_pw command_tw command_equal command_print_directed_bipartite_graph
+              command_pw command_tw command_equal command_print_directed_bipartite_graph command_write_files
 %type<number> command_number
 %start command_start
 %glr-parser
@@ -88,6 +89,7 @@ command_flags       : command_print_state_flag command_flags {flags.add_flag("Pr
                     | command_no_bfs_dag command_flags {flags.add_flag("NoBFSDAG", 1);}
                     | command_nthreads command_number command_flags { if ($2<1){std::cout<< "Number of threads to use should be at least 1." << std::endl; YYERROR; } flags.add_flag("NThreads", $2);}
                     | command_print_directed_bipartite_graph command_flags {flags.add_flag("PrintDirectedBipartiteGraphNAUTY", 1);}
+                    | command_write_files command_flags {flags.add_flag("WriteToFiles", 1);}
                     |                                        {}
                     ;
 

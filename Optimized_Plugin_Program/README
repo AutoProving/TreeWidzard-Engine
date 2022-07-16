@@ -7,13 +7,13 @@
                 example: tw = 2 (The program will search graphs with tree-width at most 2)
                 example: pw = 2 (The program will search graphs with path-width at most 2)
     Flag Options:
-        -pl         print loop
-        -ps         print states
-        -st         print state tree decomposition if a counterexample is found
-        -pdbgn      print directed bipartite graph if a counterexample is found
-        -no-bfs-dag disable creation of the bfs dag, to speed up the search
-        -nthreads   number of threads to use in parallel
-
+        -pl          print loop
+        -ps          print states
+        -st          print state tree decomposition if a counterexample is found
+        -pdbgn       print directed bipartite graph in NAUTY format
+        -no-bfs-dag  disable creation of the bfs dag, to speed up the search (NOT WORKING IN THIS VERSION)
+        -nthreads    number of threads to use in parallel
+        -files       write the counter example into files. Files: Abstract and Concrete Decomposition,
     Random Search Parameters:
          seed: The seed that initializes the random generator. This is an unsigned int.
          intro vertex probability: The probability of introducing a new vertex. This is a float between 0 and 1.
@@ -26,4 +26,5 @@
         2- For ABSTRACT Decomposition Verify
             ./treewidzard -modelcheck ABSTRACT [Flag Options] <property file> <abstract tree decomposition file>
      Flag Options:
-            -pdbgn     print directed bipartite graph in NAUTY format
+            -files     write the counter example into files. Files: Abstract and Concrete Decomposition, RunTree, Graph File, Graph in GML Format, Graph in PACE Format, Tree Decomposition
+
