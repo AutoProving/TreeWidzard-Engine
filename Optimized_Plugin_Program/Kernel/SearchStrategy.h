@@ -8,6 +8,7 @@
 #include "../TreeAutomaton/ConcreteTreeDecomposition.h"
 #include "../Conjecture/Conjecture.h"
 #include "DynamicKernel.h"
+#include "StateTree.h"
 #include "Flags.h"
 #include "State.h"
 #include <iomanip>

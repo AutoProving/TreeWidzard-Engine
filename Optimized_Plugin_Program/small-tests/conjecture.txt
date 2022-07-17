@@ -1,3 +1,3 @@
-x := EdgeColoring <= 2
+x := ChromaticNumber <= 2
 Formula
 x IMPLIES TRUE
