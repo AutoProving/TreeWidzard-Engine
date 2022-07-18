@@ -4,7 +4,7 @@ void InputController::check_available_cores() {
     std::string s = entry.path();
     if (s.find(".so") != std::string::npos) {
       std::string fileName = entry.path().filename();
-      std::cerr << "File " << fileName;
+      std::cout << "File " << fileName;
       try {
         char *MyClassLibraryName = const_cast<char *>(s.c_str());
         DynamicCoreHandler factory(MyClassLibraryName);
