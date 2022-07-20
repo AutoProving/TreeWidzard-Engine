@@ -1,7 +1,0 @@
-1 Leaf
-2 IntroVertex_6(1)
-3 IntroVertex_8(2)
-4 IntroEdge_6_8(3)
-5 IntroVertex_7(4)
-6 IntroEdge_6_7(5)
-7 IntroEdge_7_8(6)
