@@ -1,4 +1,4 @@
-Step to run treewidzard
+Steps to run treewidzard
 
 Command for see all  available modules in the cluster:
 
