@@ -1,3 +1,4 @@
 x := ChromaticNumber <= 2
+y := MaxDegree >= 3
 Formula
-x IMPLIES TRUE
+NOT x IMPLIES y
