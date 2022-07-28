@@ -18,6 +18,9 @@ link_libraries(stdc++fs)
 set(CMAKE_EXE_LINKER_FLAGS "-static")
 set(CMAKE_EXE_LINKER_FLAGS "-rdynamic")
 
+# parsing big graphs with bison will fail unless stack size is big enough
+add_definitions(-DYYMAXDEPTH=500000 -DYYINITDEPTH=500000)
+
 include_directories(DynamicCores)
 
 project("treewidzard")
