@@ -53,7 +53,7 @@ class State : private std::enable_shared_from_this<State> {
         };
 
         struct Equal {
-            uint64_t operator()(const State::ptr &l, const State::ptr &r) const {
+            bool operator()(const State::ptr &l, const State::ptr &r) const {
             return *l == *r;
             }
         };
