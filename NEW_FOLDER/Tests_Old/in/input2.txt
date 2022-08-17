@@ -1,0 +1,3 @@
+path_width 2
+c := CliqueNumber > 4
+c OR NOT c

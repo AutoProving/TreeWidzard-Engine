@@ -1,0 +1,4 @@
+y := CliqueNumberSimpleGraphs > 2
+w := ChromaticNumber <= 2
+Formula
+y IMPLIES w

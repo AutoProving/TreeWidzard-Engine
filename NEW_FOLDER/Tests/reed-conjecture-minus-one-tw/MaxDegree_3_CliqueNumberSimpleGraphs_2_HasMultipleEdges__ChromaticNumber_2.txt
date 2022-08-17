@@ -1,0 +1,6 @@
+x := MaxDegree > 3
+y := CliqueNumberSimpleGraphs > 2
+z := HasMultipleEdges   
+w := ChromaticNumber <= 2
+Formula
+NOT x AND NOT y AND NOT z IMPLIES w

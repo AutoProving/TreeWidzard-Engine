@@ -1,0 +1,7 @@
+path_width 3
+x := MaxDegree > 5
+y := CliqueNumberSimpleGraphs > 2
+z := HasMultipleEdges
+w := ChromaticNumber < 5
+q := IndependentSet > 3
+NOT q IMPLIES NOT x AND NOT y AND NOT z IMPLIES w
