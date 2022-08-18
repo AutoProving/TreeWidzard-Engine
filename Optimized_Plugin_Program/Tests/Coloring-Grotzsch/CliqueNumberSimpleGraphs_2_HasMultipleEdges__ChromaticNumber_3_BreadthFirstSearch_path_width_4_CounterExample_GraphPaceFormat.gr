@@ -1,0 +1,30 @@
+c This is the counter example for ../../inputs/CliqueNumberSimpleGraphs_2_HasMultipleEdges__ChromaticNumber_3_BreadthFirstSearch_path_width_4_CounterExample_GraphPaceFormat.gr
+p tw 14 27
+1 5
+2 4
+2 5
+3 4
+3 5
+3 6
+1 7
+7 4
+7 6
+1 8
+2 8
+8 6
+1 9
+9 4
+2 10
+9 10
+10 6
+1 11
+2 11
+12 9
+12 11
+12 6
+13 11
+13 6
+13 14
+2 14
+9 14
+c done

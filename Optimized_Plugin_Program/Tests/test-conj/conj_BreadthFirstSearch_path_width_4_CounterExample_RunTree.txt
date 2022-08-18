@@ -1,0 +1,106 @@
+1 Leaf {}
+Core 1 WitnessSet 
+partialColoring:
+
+Core 2 WitnessSet 
+found = 0 size: 0partialClique={}
+
+------------
+---------------------------------------------------------------
+---------------------------------------------------------------
+
+2 IntroVertex_1 {1}
+Core 1 WitnessSet 
+partialColoring:{ 1}
+
+Core 2 WitnessSet 
+found = 0 size: 0partialClique={}
+found = 0 size: 1partialClique={1->0}
+
+------------
+---------------------------------------------------------------
+---------------------------------------------------------------
+(1)
+3 IntroVertex_2 {1,2}
+Core 1 WitnessSet 
+partialColoring:{ 1,2}
+partialColoring:{ 1}{ 2}
+
+Core 2 WitnessSet 
+found = 0 size: 0partialClique={}
+found = 0 size: 1partialClique={1->0}
+found = 0 size: 1partialClique={2->0}
+found = 0 size: 2partialClique={1->0,2->0}
+
+------------
+---------------------------------------------------------------
+---------------------------------------------------------------
+(2)
+4 IntroVertex_3 {1,2,3}
+Core 1 WitnessSet 
+partialColoring:{ 1,2,3}
+partialColoring:{ 1,2}{ 3}
+partialColoring:{ 1,3}{ 2}
+partialColoring:{ 1}{ 2,3}
+
+Core 2 WitnessSet 
+found = 0 size: 0partialClique={}
+found = 0 size: 1partialClique={1->0}
+found = 0 size: 1partialClique={2->0}
+found = 0 size: 1partialClique={3->0}
+found = 0 size: 2partialClique={1->0,2->0}
+found = 0 size: 2partialClique={1->0,3->0}
+found = 0 size: 2partialClique={2->0,3->0}
+found = 0 size: 3partialClique={1->0,2->0,3->0}
+
+------------
+---------------------------------------------------------------
+---------------------------------------------------------------
+(3)
+5 IntroEdge_1_3 {1,2,3}
+Core 1 WitnessSet 
+partialColoring:{ 1,2}{ 3}
+partialColoring:{ 1}{ 2,3}
+
+Core 2 WitnessSet 
+found = 0 size: 0partialClique={}
+found = 0 size: 1partialClique={1->0}
+found = 0 size: 1partialClique={2->0}
+found = 0 size: 1partialClique={3->0}
+found = 0 size: 2partialClique={1->0,2->0}
+found = 0 size: 2partialClique={2->0,3->0}
+found = 0 size: 2partialClique={1->1,3->1}
+found = 0 size: 3partialClique={1->1,2->0,3->1}
+
+------------
+---------------------------------------------------------------
+---------------------------------------------------------------
+(4)
+6 IntroEdge_1_2 {1,2,3}
+Core 1 WitnessSet 
+partialColoring:{ 1}{ 2,3}
+
+Core 2 WitnessSet 
+found = 0 size: 0partialClique={}
+found = 0 size: 1partialClique={1->0}
+found = 0 size: 1partialClique={2->0}
+found = 0 size: 1partialClique={3->0}
+found = 0 size: 2partialClique={2->0,3->0}
+found = 0 size: 2partialClique={1->1,2->1}
+found = 0 size: 2partialClique={1->1,3->1}
+found = 0 size: 3partialClique={1->2,2->1,3->1}
+
+------------
+---------------------------------------------------------------
+---------------------------------------------------------------
+(5)
+7 IntroEdge_2_3 {1,2,3}
+Core 1 WitnessSet 
+
+Core 2 WitnessSet 
+found = 1 size: 3partialClique={}
+
+------------
+---------------------------------------------------------------
+---------------------------------------------------------------
+(6)
