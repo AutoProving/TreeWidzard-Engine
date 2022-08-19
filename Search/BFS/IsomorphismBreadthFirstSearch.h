@@ -1,4 +1,3 @@
-// Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 #ifndef TREEWIDZARD_IsomorphismBreadthFirstSearch_H
 #define TREEWIDZARD_IsomorphismBreadthFirstSearch_H
 #include <algorithm>

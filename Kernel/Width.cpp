@@ -1,5 +1,3 @@
-// Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
-
 #include "Width.h"
 
 std::string Width::get_name() { return name; }

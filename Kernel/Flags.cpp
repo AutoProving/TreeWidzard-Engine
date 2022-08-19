@@ -1,5 +1,3 @@
-// Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
-
 #include "Flags.h"
 Flags::Flags() {
 	content.insert({"PrintStates", 0});		// print all states

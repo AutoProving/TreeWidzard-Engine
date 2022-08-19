@@ -1,4 +1,3 @@
-//Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 %defines
 %define api.prefix {input_}
 
@@ -22,14 +21,14 @@
     #include "../../Conjecture/Conjecture.h"
     #include "../../Kernel/Width.h"
     #include <algorithm>
-   
+
     // this function will be generated
     // using flex
     extern int yylex();
     extern int input_lineno;
     extern void yyerror(Conjecture &conj, int &result,std::map<std::string,std::map<std::string,std::string>> &coreList, std::map<std::string,std::string> &varToCoreName, std::map<std::string, PropertyAssignment*> varToProperty, char const* msg);
     std::map<char*,ConjectureNode*> sub_formula_variables;
-    
+
     bool check_varToProperty(std::string v,std::map<std::string, PropertyAssignment*> &varToProperty);
     bool check_sub_formula_variables(char* v);
 %}
@@ -60,7 +59,7 @@
 %type<vec> NUMBER_DOUBLES
 
 %start START
-%left IFF 
+%left IFF
 %left IMPLIES
 %left OR
 %left AND
@@ -96,9 +95,9 @@ VARIABLE_CORE_ASSIGNMENT    : VARIABLE SEPERATOR ATOMIC_PREDICATE COMPARATOR NUM
                                 $$ = new PropertyAssignment(); $$->setParameterType("UnsignedInt");
                                 $$->setName($3); $$->setOp($4);
                                 $$->setParameter($5);  varToProperty[$1] = $$; varToCoreName[$1] = $3;}
-                                                                                                                    
+
                         | VARIABLE SEPERATOR ATOMIC_PREDICATE LEFTP  FILEPATH  RIGHTP{}
-                        | VARIABLE SEPERATOR ATOMIC_PREDICATE                        
+                        | VARIABLE SEPERATOR ATOMIC_PREDICATE
                         {if(check_varToProperty($1,varToProperty)){ std::cout<<" variable " << $1 << " is written at least two times" <<std::endl; YYERROR; exit(20);}
                                 if(!coreList.count($3)){std::cout<<"core name \" "<<$3<<"\"is not exist"<<std::endl; YYERROR;}
                                 if(!coreList[$3].count("CoreType")){std::cout<<"CoreType of "<<$3<<" couldn't find, chech the core properities"<<std::endl; YYERROR;}
@@ -115,7 +114,7 @@ NUMBER_DOUBLES		: NUMBER_DOUBLES COMMA NUMBER_DOUBLE {$$ = new std::vector<int>;
                     | NUMBER_DOUBLE { $$ = new std::vector<int>;  $$->push_back($1);}
 ATOMIC_PREDICATE    : NAME
                     ;
-COMPARATOR  : BIGGER{$$=$1;} 
+COMPARATOR  : BIGGER{$$=$1;}
             | ATLEAST{$$=$1;}
             | ATMOST{$$=$1;}
             | LESS {$$=$1;}
@@ -241,7 +240,7 @@ FORMULA_TERMINAL : TRUE         {$$ = new ConjectureNode(NUMBER,1); }
 //FORMULA_OP_UNARY      : NOT {$$ = new ConjectureNode(OPERATOR,"not");}
 //                      ;
 
-VARIABLE                : NAME                                  
+VARIABLE                : NAME
                         ;
 COMMENTS                :COMMENT COMMENTS                          {}
                         |%empty
@@ -253,7 +252,7 @@ FORMULACOMMENTS         :NEWLINE COMMENTS FORMULACOMMENTS
 
 void yyerror(Conjecture &conj, int &result,std::map<std::string,std::map<std::string,std::string>> &coreList, std::map<std::string,std::string> &varToCoreName, std::map<std::string, PropertyAssignment*> varToProperty, char const* msg){
   std::cout<<"Syntax Error: "<< msg << " line " <<input_lineno << std::endl;
-  // error printing  disabled, it is handeled in main.cpp 
+  // error printing  disabled, it is handeled in main.cpp
 }
 
 bool check_varToProperty(std::string v,std::map<std::string, PropertyAssignment*> &varToProperty ){

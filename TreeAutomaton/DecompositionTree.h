@@ -1,4 +1,3 @@
-// Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 #ifndef TREEWIDZARD_DECOMPOSITIONTREE_H
 #define TREEWIDZARD_DECOMPOSITIONTREE_H
 #include <algorithm>
@@ -30,7 +29,7 @@ class DecompositionNode {
 };
 
 class Decomposition{
-    private: 
+    private:
         std::shared_ptr<DecompositionNode> root;
         int maxBagSize = 0;
         std::set<unsigned> vertices; // vertices of the orginal graphs

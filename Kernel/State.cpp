@@ -1,5 +1,3 @@
-// Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
-
 #include "State.h"
 
 Bag State::get_bag() const { return State::bag; }

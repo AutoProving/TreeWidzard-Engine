@@ -1,4 +1,3 @@
-// Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 #include "ConcreteTreeDecomposition.h"
 #include "AbstractTreeDecomposition.h"
 const Bag &ConcreteNode::getBag() const {
@@ -135,7 +134,7 @@ Decomposition ConcreteTreeDecomposition::extractDecomposition(){
     std::set<unsigned> elements = this->getRoot()->getNodeContent().getBag().get_elements();
     std::set<unsigned>::iterator it = elements.begin();
     std::shared_ptr<DecompositionNode> root( new DecompositionNode());
-    
+
     for (size_t i = 1; i <= this->getRoot()->getNodeContent().getBag().get_elements().size(); ++i) {
         colorToVertexMap[*it] = i; // creates one vertex for each color.
         nVertices = i;
@@ -169,7 +168,7 @@ void ConcreteTreeDecomposition::buildDecompositionBags(std::shared_ptr<Decomposi
             exit(20);
         }
         //////////// End of Finding the introduced vertex ///////////
-        
+
         //std::shared_ptr<DecompositionNode> nNode (new DecompositionNode());
         //set<unsigned> vertices = node->getVertices();
         //vertices.erase(*(bagSetDifference.begin()));
@@ -178,7 +177,7 @@ void ConcreteTreeDecomposition::buildDecompositionBags(std::shared_ptr<Decomposi
         //node->addChild(nNode);
 
         colorToVertexMapCopy.erase(*(bagSetDifference.begin()));
-        
+
         buildDecompositionBags(node,*(cNode.getChildren()[0]), colorToVertexMapCopy,
                 nVertices); // Nothing happens. Just process the next bag.
     } else if (strstr(cNode.getNodeContent().getSymbol().c_str(), "ForgetVertex")) {
@@ -216,7 +215,7 @@ void ConcreteTreeDecomposition::buildDecompositionBags(std::shared_ptr<Decomposi
                 nVertices);
         buildDecompositionBags(node,*(cNode.getChildren()[1]), colorToVertexMapCopy,
                 nVertices);
-    }       
+    }
 }
 
 std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> ConcreteTreeDecomposition::constructATDNode(TermNode<ConcreteNode> &node) {

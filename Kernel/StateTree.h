@@ -1,5 +1,3 @@
-// Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
-
 #ifndef STATETREE_H
 #define STATETREE_H
 

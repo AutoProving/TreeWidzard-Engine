@@ -1,4 +1,3 @@
-// Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 #ifndef CURRENT_BREADTHFIRSTSEARCH_H
 #define CURRENT_BREADTHFIRSTSEARCH_H
 #include <cmath>

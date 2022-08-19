@@ -1,4 +1,3 @@
-// Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 #include "ParallelIsomorphismBreadthFirstSearch.h"
 
 #include <thread>

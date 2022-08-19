@@ -1,5 +1,3 @@
-// Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
-
 #include "ConcreteTreeDecomposition.h"
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -909,4 +907,3 @@ void ConcreteTreeDecomposition::writeToFileConcreteTD(string fileName) {
         exit(20);
     }
 }
-
