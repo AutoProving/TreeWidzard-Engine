@@ -1,0 +1,16 @@
+/.DS_Store
+.DS_Store
+.idea
+/build/*
+*/build/*
+*/Build/*
+/Build/*
+*swp
+*swo
+*un~
+*~
+*/.idea/*
+*/cmake-build-debug/*
+*.so
+/*/*.so
+.vscode/*
