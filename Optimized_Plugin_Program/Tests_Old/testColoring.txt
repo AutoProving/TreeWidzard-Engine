@@ -1,4 +1,0 @@
-x := ChromaticNumber < 3
-
-Formula
-x

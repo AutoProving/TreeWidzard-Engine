@@ -1,3 +1,0 @@
-vertices
-1
-edges
