@@ -1,0 +1,3 @@
+[submodule "Optimized_Plugin_Program/treewidzard-TestCases"]
+	path = Optimized_Plugin_Program/treewidzard-TestCases
+	url = https://github.com/AutoProving/treewidzard-TestCases
