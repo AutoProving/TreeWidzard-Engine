@@ -1,0 +1,9 @@
+0 Empty
+1 IntroVertex_1(0)
+2 IntroVertex_2(1)
+3 IntroEdge_1_2(2)
+4 Empty
+5 IntroVertex_3(4)
+6 IntroVertex_5(5)
+7 IntroEdge_3_5(6)
+8 Join (3,7)

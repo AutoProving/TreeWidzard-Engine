@@ -1,0 +1,81 @@
+Configuration: input path: in/input3.txt printState: 0 printVector: 0 loopTime: 1 search method: leveledSetSearch
+path_width 3
+Core 0 CliqueNumber > 4
+OR (1 , NOT (1 ) )
+Iteration: 1  
+   AllStates: 5   NewStates: 4   IntermediateStates s: 4   WitnessSize: 1,
+max states bag: 0:0 1:1 2:1 3:0 4:1 5:0 6:0 7:0 8:1 9:0 10:0 11:0 12:0 13:0 14:0 15:0 sum:4
+
+----------------- End Iteration: 1 ----------------------------
+
+
+Iteration: 2  
+   AllStates: 11   NewStates: 6   IntermediateStates s: 7   WitnessSize: 1,
+max states bag: 0:0 1:1 2:1 3:1 4:1 5:1 6:1 7:0 8:1 9:1 10:1 11:0 12:1 13:0 14:0 15:0 sum:6
+
+----------------- End Iteration: 2 ----------------------------
+
+
+Iteration: 3  
+   AllStates: 21   NewStates: 10   IntermediateStates s: 14   WitnessSize: 2,
+max states bag: 0:0 1:1 2:1 3:1 4:1 5:1 6:1 7:1 8:1 9:1 10:1 11:1 12:1 13:1 14:1 15:0 sum:10
+
+----------------- End Iteration: 3 ----------------------------
+
+
+Iteration: 4  
+   AllStates: 34   NewStates: 13   IntermediateStates s: 29   WitnessSize: 2,
+max states bag: 0:0 1:1 2:1 3:1 4:1 5:1 6:1 7:3 8:1 9:1 10:1 11:3 12:1 13:3 14:3 15:1 sum:13
+
+----------------- End Iteration: 4 ----------------------------
+
+
+Iteration: 5  
+   AllStates: 64   NewStates: 30   IntermediateStates s: 58   WitnessSize: 4,
+max states bag: 0:0 1:1 2:1 3:1 4:1 5:1 6:1 7:6 8:1 9:1 10:1 11:6 12:1 13:6 14:6 15:6 sum:30
+
+----------------- End Iteration: 5 ----------------------------
+
+
+Iteration: 6  
+   AllStates: 112   NewStates: 48   IntermediateStates s: 106   WitnessSize: 7,
+max states bag: 0:0 1:1 2:1 3:1 4:1 5:1 6:1 7:6 8:1 9:1 10:1 11:6 12:1 13:6 14:6 15:30 sum:48
+
+----------------- End Iteration: 6 ----------------------------
+
+
+Iteration: 7  
+   AllStates: 184   NewStates: 72   IntermediateStates s: 170   WitnessSize: 8,
+max states bag: 0:0 1:1 2:1 3:1 4:1 5:1 6:1 7:6 8:1 9:1 10:1 11:6 12:1 13:6 14:6 15:60 sum:72
+
+----------------- End Iteration: 7 ----------------------------
+
+
+Iteration: 8  
+   AllStates: 322   NewStates: 138   IntermediateStates s: 274   WitnessSize: 14,
+max states bag: 0:0 1:1 2:1 3:1 4:1 5:1 6:1 7:6 8:1 9:1 10:1 11:6 12:1 13:6 14:6 15:126 sum:138
+
+----------------- End Iteration: 8 ----------------------------
+
+
+Iteration: 9  
+   AllStates: 550   NewStates: 228   IntermediateStates s: 472   WitnessSize: 23,
+max states bag: 0:0 1:1 2:1 3:1 4:1 5:1 6:1 7:6 8:1 9:1 10:1 11:6 12:1 13:6 14:6 15:216 sum:228
+
+----------------- End Iteration: 9 ----------------------------
+
+
+Iteration: 10  
+   AllStates: 742   NewStates: 192   IntermediateStates s: 550   WitnessSize: 35,
+max states bag: 0:0 1:1 2:1 3:1 4:1 5:1 6:1 7:6 8:1 9:1 10:1 11:6 12:1 13:6 14:6 15:216 sum:192
+
+----------------- End Iteration: 10 ----------------------------
+
+
+Iteration: 11  
+   AllStates: 742   NewStates: 0   IntermediateStates s: 264   WitnessSize: 35,
+max states bag: 0:0 1:1 2:1 3:1 4:1 5:1 6:1 7:6 8:1 9:1 10:1 11:6 12:1 13:6 14:6 15:216 sum:0
+
+----------------- End Iteration: 11 ----------------------------
+
+!!!FINISH!!!

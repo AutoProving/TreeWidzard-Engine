@@ -1,0 +1,178 @@
+Available Cores:
+/home/farhad/Documents/gitprojects/dynamictheoremproving-program/Optimized_Plugin_Program/Controller/../DynamicPlugins/VertexCover_AtMost.so
+CoreName VertexCover
+ParameterType UnsignedInt
+PrimaryOperator AtMost
+----------------------------------------------------------------
+/home/farhad/Documents/gitprojects/dynamictheoremproving-program/Optimized_Plugin_Program/Controller/../DynamicPlugins/ChromaticNumber_AtMost.so
+CoreName ChromaticNumber
+ParameterType UnsignedInt
+PrimaryOperator AtMost
+----------------------------------------------------------------
+/home/farhad/Documents/gitprojects/dynamictheoremproving-program/Optimized_Plugin_Program/Controller/../DynamicPlugins/IndependentSet_AtLeast.so
+CoreName IndependentSet
+ParameterType UnsignedInt
+PrimaryOperator AtLeast
+----------------------------------------------------------------
+/home/farhad/Documents/gitprojects/dynamictheoremproving-program/Optimized_Plugin_Program/Controller/../DynamicPlugins/MaxDegree_AtLeast.so
+CoreName MaxDegree
+ParameterType UnsignedInt
+PrimaryOperator AtLeast
+----------------------------------------------------------------
+/home/farhad/Documents/gitprojects/dynamictheoremproving-program/Optimized_Plugin_Program/Controller/../DynamicPlugins/CliqueNumber_AtLeast.so
+CoreName CliqueNumber
+ParameterType UnsignedInt
+PrimaryOperator AtLeast
+----------------------------------------------------------------
+/home/farhad/Documents/gitprojects/dynamictheoremproving-program/Optimized_Plugin_Program/Controller/../DynamicPlugins/MinDegree_AtMost.so
+CoreName MinDegree
+ParameterType UnsignedInt
+PrimaryOperator AtMost
+----------------------------------------------------------------
+/home/farhad/Documents/gitprojects/dynamictheoremproving-program/Optimized_Plugin_Program/Controller/../DynamicPlugins/TriangleFreeWidthFour.so
+CoreName TriangleFreeWidthFour
+ParameterType UnsignedInt
+PrimaryOperator AtLeast
+----------------------------------------------------------------
+/home/farhad/Documents/gitprojects/dynamictheoremproving-program/Optimized_Plugin_Program/Controller/../DynamicPlugins/NoWhereZeroFlow_AtMost.so
+CoreName NoWhereZeroFlow
+ParameterType UnsignedInt
+PrimaryOperator AtMost
+----------------------------------------------------------------
+/home/farhad/Documents/gitprojects/dynamictheoremproving-program/Optimized_Plugin_Program/Controller/../DynamicPlugins/HasMultipleEdges.so
+CoreName HasMultipleEdges
+ParameterType NoParameter
+PrimaryOperator ---
+----------------------------------------------------------------
+/home/farhad/Documents/gitprojects/dynamictheoremproving-program/Optimized_Plugin_Program/Controller/../DynamicPlugins/Connectivity.so
+CoreName Connectivity
+ParameterType NoParameter
+PrimaryOperator ---
+----------------------------------------------------------------
+/home/farhad/Documents/gitprojects/dynamictheoremproving-program/Optimized_Plugin_Program/Controller/../DynamicPlugins/EdgeColoring_AtMost.so
+CoreName EdgeColoring
+ParameterType UnsignedInt
+PrimaryOperator AtMost
+----------------------------------------------------------------
+/home/farhad/Documents/gitprojects/dynamictheoremproving-program/Optimized_Plugin_Program/Controller/../DynamicPlugins/HamiltonianPath.so
+CoreName HamiltonianPath
+ParameterType NoParameter
+PrimaryOperator ---
+----------------------------------------------------------------
+/home/farhad/Documents/gitprojects/dynamictheoremproving-program/Optimized_Plugin_Program/Controller/../DynamicPlugins/Minor.so
+CoreName Minor
+ParameterType InputFile
+----------------------------------------------------------------
+/home/farhad/Documents/gitprojects/dynamictheoremproving-program/Optimized_Plugin_Program/Controller/../DynamicPlugins/CycleGirth_AtMost.so
+CoreName CycleGirth
+ParameterType UnsignedInt
+PrimaryOperator AtMost
+----------------------------------------------------------------
+/home/farhad/Documents/gitprojects/dynamictheoremproving-program/Optimized_Plugin_Program/Controller/../DynamicPlugins/HamiltonianCycle.so
+CoreName HamiltonianCycle
+ParameterType NoParameter
+PrimaryOperator ---
+----------------------------------------------------------------
+/home/farhad/Documents/gitprojects/dynamictheoremproving-program/Optimized_Plugin_Program/Controller/../DynamicPlugins/EdgeConnected_AtMost.so
+CoreName EdgeConnected
+ParameterType UnsignedInt
+PrimaryOperator AtMost
+----------------------------------------------------------------
+width type: path_width 3
+(1) a:= HasMultipleEdges 
+(2) b:= MaxDegree >3
+(3) c:= MinDegree <3
+(4) d:= CycleGirth <5
+(5) e:= Connectivity 
+Conjecture: 
+IMPLIES (AND (AND (AND (NOT (1 ) , 5 ) , NOT (2 ) ) , NOT (3 ) ) , 4 )
+Search Method: BreadthFirstSearch
+file name: LeveledSetSearchPremise.so
+SearchName LeveledSetSearchPremise
+-----
+file name: LeveledSetSearch.so
+SearchName LeveledSetSearch
+-----
+file name: RandomLeveledSetSearchPremise.so
+SearchName RandomLeveledSetSearchPremise
+-----
+file name: RandomLeveledSetSearch.so
+SearchName RandomLeveledSetSearch
+-----
+file name: BreadthFirstSearch.so
+SearchName BreadthFirstSearch
+-----
+file name: RelabeledLeveledSetSearch.so
+SearchName RelabeledLeveledSetSearch
+-----
+file name: RelabeledBreadthFirstSearch.so
+SearchName RelabeledBreadthFirstSearch
+-----
+AllState:5 new State: 4
+
+----------------- End Iteration: 1 ----------------------------
+
+AllState:12 new State: 7
+
+----------------- End Iteration: 2 ----------------------------
+
+AllState:30 new State: 18
+
+----------------- End Iteration: 3 ----------------------------
+
+AllState:66 new State: 36
+
+----------------- End Iteration: 4 ----------------------------
+
+AllState:150 new State: 84
+
+----------------- End Iteration: 5 ----------------------------
+
+AllState:371 new State: 221
+
+----------------- End Iteration: 6 ----------------------------
+
+AllState:988 new State: 617
+
+----------------- End Iteration: 7 ----------------------------
+
+AllState:2855 new State: 1867
+
+----------------- End Iteration: 8 ----------------------------
+
+AllState:8642 new State: 5787
+
+----------------- End Iteration: 9 ----------------------------
+
+AllState:27184 new State: 18542
+
+----------------- End Iteration: 10 ----------------------------
+
+AllState:83547 new State: 56363
+
+----------------- End Iteration: 11 ----------------------------
+
+AllState:222458 new State: 138911
+
+----------------- End Iteration: 12 ----------------------------
+
+AllState:515265 new State: 292807
+
+----------------- End Iteration: 13 ----------------------------
+
+AllState:1100789 new State: 585524
+
+----------------- End Iteration: 14 ----------------------------
+
+AllState:2138564 new State: 1037775
+
+----------------- End Iteration: 15 ----------------------------
+
+AllState:3653642 new State: 1515078
+
+----------------- End Iteration: 16 ----------------------------
+
+AllState:5623799 new State: 1970157
+
+----------------- End Iteration: 17 ----------------------------
+

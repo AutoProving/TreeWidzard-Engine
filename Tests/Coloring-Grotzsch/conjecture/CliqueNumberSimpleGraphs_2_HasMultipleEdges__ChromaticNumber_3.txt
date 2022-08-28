@@ -1,0 +1,5 @@
+x := CliqueNumberSimpleGraphs > 2
+y := HasMultipleEdges
+z := ChromaticNumber <= 3
+Formula
+NOT x AND NOT y IMPLIES z
