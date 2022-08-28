@@ -1,4 +1,0 @@
-y := MaxDegree > 3
-z := ChromaticNumber <= 2
-Formula
-NOT y IMPLIES z

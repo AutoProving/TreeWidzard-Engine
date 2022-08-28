@@ -1,6 +1,0 @@
-tree_width 0
-x := MaxDegree > 1
-y := CliqueNumberSimpleGraphs > 2
-z := HasMultipleEdges
-w := ChromaticNumber < 3
-NOT x AND NOT y AND NOT z IMPLIES w

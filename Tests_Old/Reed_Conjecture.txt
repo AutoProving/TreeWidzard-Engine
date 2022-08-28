@@ -1,3 +1,0 @@
-x := Connectivity
-Formula
-TRUE
