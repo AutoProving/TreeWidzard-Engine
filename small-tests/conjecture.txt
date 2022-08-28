@@ -1,3 +1,0 @@
-r := ChromaticNumber <= 4
-Formula
-r IMPLIES TRUE

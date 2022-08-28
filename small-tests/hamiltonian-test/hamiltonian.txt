@@ -1,3 +1,0 @@
-x := HamiltonianCycle
-Formula
-x IMPLIES TRUE
