@@ -14,3 +14,5 @@
 *.so
 /*/*.so
 .vscode/*
+/small-test/*
+/small-test/

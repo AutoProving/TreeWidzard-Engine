@@ -12,7 +12,7 @@ for eachfile in $(find $PWD/../Search -type f -name "*.cpp"); do
   #g++ -pthread -fsanitize=thread -g3 -fPIC -shared $p/../Kernel/DynamicKernel.cpp $p/../Kernel/DynamicCore.cpp $p/../Conjecture/Conjecture.cpp $p/../Kernel/SearchStrategy.cpp $eachfile -o $p/../SearchPlugins/$name.so &
 done
 
-for eachfile in $(find $PWD/../../../ExternalSearches -type f -name "*.cpp"); do
+for eachfile in $(find $PWD/../../ExternalSearches -type f -name "*.cpp"); do
 #for eachfile in $(find $PWD/../Search/BFS/ParallelBreadthFirstSearch.cpp -type f -name "*.cpp"); do
   name=$(basename "$eachfile" .cpp)
   echo $name

@@ -11,7 +11,7 @@ for eachfile in $(find $PWD/../DynamicCores -type f -name "*.cpp"); do
 done
 
 
-for eachfile in $(find $PWD/../../../ExternalDynamicCores -type f -name "*.cpp"); do
+for eachfile in $(find $PWD/../../ExternalDynamicCores -type f -name "*.cpp"); do
   name=$(basename "$eachfile" .cpp)
   echo $name
   echo $eachfile

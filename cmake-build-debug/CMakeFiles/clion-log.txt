@@ -1,0 +1,860 @@
+/snap/clion/209/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/snap/clion/209/bin/ninja/linux/ninja -G Ninja -S /home/farhad/Documents/github/TreeWidzard-Improvements -B /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug
+/home/farhad/Documents/github/TreeWidzard-Improvements/Scripts
+HasMultipleEdges
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../DynamicCores/HasMultipleEdges.cpp
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp: In member function ‘int DynamicCore::weight(WitnessSetPointer)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:95:1: warning: control reaches end of non-void function [-Wreturn-type]
+   95 | }
+      | ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../DynamicCores/HasMultipleEdges.h:4,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../DynamicCores/HasMultipleEdges.cpp:2:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘bool WitnessSetTypeTwo<T>::WitnessSetTypeTwoIterator::isDifferent(AbstractIterator&) [with T = HasMultipleEdges_WitnessSet]’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:211:5: warning: control reaches end of non-void function [-Wreturn-type]
+  211 |     };
+      |     ^
+ChromaticNumber_AtMost
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../DynamicCores/ChromaticNumber_AtMost.cpp
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp: In member function ‘int DynamicCore::weight(WitnessSetPointer)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:95:1: warning: control reaches end of non-void function [-Wreturn-type]
+   95 | }
+      | ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../DynamicCores/ChromaticNumber_AtMost.h:3,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../DynamicCores/ChromaticNumber_AtMost.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘bool WitnessSetTypeTwo<T>::WitnessSetTypeTwoIterator::isDifferent(AbstractIterator&) [with T = ChromaticNumber_AtMost_WitnessSet]’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:211:5: warning: control reaches end of non-void function [-Wreturn-type]
+  211 |     };
+      |     ^
+CliqueNumberSimpleGraphs_AtLeast
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../DynamicCores/CliqueNumberSimpleGraphs_AtLeast.cpp
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp: In member function ‘int DynamicCore::weight(WitnessSetPointer)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:95:1: warning: control reaches end of non-void function [-Wreturn-type]
+   95 | }
+      | ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../DynamicCores/CliqueNumberSimpleGraphs_AtLeast.h:3,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../DynamicCores/CliqueNumberSimpleGraphs_AtLeast.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘bool WitnessSetTypeTwo<T>::WitnessSetTypeTwoIterator::isDifferent(AbstractIterator&) [with T = CliqueNumberSimpleGraphs_AtLeast_WitnessSet]’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:211:5: warning: control reaches end of non-void function [-Wreturn-type]
+  211 |     };
+      |     ^
+MaxDegree_AtLeast
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../DynamicCores/MaxDegree_AtLeast.cpp
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp: In member function ‘int DynamicCore::weight(WitnessSetPointer)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:95:1: warning: control reaches end of non-void function [-Wreturn-type]
+   95 | }
+      | ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../DynamicCores/MaxDegree_AtLeast.h:3,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../DynamicCores/MaxDegree_AtLeast.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘bool WitnessSetTypeTwo<T>::WitnessSetTypeTwoIterator::isDifferent(AbstractIterator&) [with T = MaxDegree_AtLeast_WitnessSet]’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:211:5: warning: control reaches end of non-void function [-Wreturn-type]
+  211 |     };
+      |     ^
+EdgeConnectivity_AtMost
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalDynamicCores/treewidzard-CoresTemp/EdgeConnectivity_AtMost.cpp
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp: In member function ‘int DynamicCore::weight(WitnessSetPointer)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:95:1: warning: control reaches end of non-void function [-Wreturn-type]
+   95 | }
+      | ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalDynamicCores/treewidzard-CoresTemp/EdgeConnectivity_AtMost.h:5,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalDynamicCores/treewidzard-CoresTemp/EdgeConnectivity_AtMost.cpp:3:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘bool WitnessSetTypeTwo<T>::WitnessSetTypeTwoIterator::isDifferent(AbstractIterator&) [with T = EdgeConnectivity_AtMost_WitnessSet]’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:211:5: warning: control reaches end of non-void function [-Wreturn-type]
+  211 |     };
+      |     ^
+HasMultipleEdges
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalDynamicCores/treewidzard-CoresTemp/HasMultipleEdges.cpp
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp: In member function ‘int DynamicCore::weight(WitnessSetPointer)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:95:1: warning: control reaches end of non-void function [-Wreturn-type]
+   95 | }
+      | ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalDynamicCores/treewidzard-CoresTemp/HasMultipleEdges.h:4,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalDynamicCores/treewidzard-CoresTemp/HasMultipleEdges.cpp:2:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘bool WitnessSetTypeTwo<T>::WitnessSetTypeTwoIterator::isDifferent(AbstractIterator&) [with T = HasMultipleEdges_WitnessSet]’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:211:5: warning: control reaches end of non-void function [-Wreturn-type]
+  211 |     };
+      |     ^
+ChromaticNumber_AtMost
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalDynamicCores/treewidzard-CoresTemp/ChromaticNumber_AtMost.cpp
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp: In member function ‘int DynamicCore::weight(WitnessSetPointer)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:95:1: warning: control reaches end of non-void function [-Wreturn-type]
+   95 | }
+      | ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalDynamicCores/treewidzard-CoresTemp/ChromaticNumber_AtMost.h:5,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalDynamicCores/treewidzard-CoresTemp/ChromaticNumber_AtMost.cpp:3:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘bool WitnessSetTypeTwo<T>::WitnessSetTypeTwoIterator::isDifferent(AbstractIterator&) [with T = ChromaticNumber_AtMost_WitnessSet]’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:211:5: warning: control reaches end of non-void function [-Wreturn-type]
+  211 |     };
+      |     ^
+VertexConnectivity_AtMost
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalDynamicCores/treewidzard-CoresTemp/VertexConnectivity_AtMost.cpp
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp: In member function ‘int DynamicCore::weight(WitnessSetPointer)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:95:1: warning: control reaches end of non-void function [-Wreturn-type]
+   95 | }
+      | ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalDynamicCores/treewidzard-CoresTemp/VertexConnectivity_AtMost.h:5,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalDynamicCores/treewidzard-CoresTemp/VertexConnectivity_AtMost.cpp:3:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘bool WitnessSetTypeTwo<T>::WitnessSetTypeTwoIterator::isDifferent(AbstractIterator&) [with T = VertexConnectivity_AtMost_WitnessSet]’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:211:5: warning: control reaches end of non-void function [-Wreturn-type]
+  211 |     };
+      |     ^
+EdgeColoring_AtMost
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalDynamicCores/treewidzard-CoresTemp/EdgeColoring_AtMost.cpp
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp: In member function ‘int DynamicCore::weight(WitnessSetPointer)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:95:1: warning: control reaches end of non-void function [-Wreturn-type]
+   95 | }
+      | ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalDynamicCores/treewidzard-CoresTemp/EdgeColoring_AtMost.h:5,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalDynamicCores/treewidzard-CoresTemp/EdgeColoring_AtMost.cpp:2:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘bool WitnessSetTypeTwo<T>::WitnessSetTypeTwoIterator::isDifferent(AbstractIterator&) [with T = EdgeColoring_AtMost_WitnessSet]’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:211:5: warning: control reaches end of non-void function [-Wreturn-type]
+  211 |     };
+      |     ^
+CliqueNumberSimpleGraphs_AtLeast
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalDynamicCores/treewidzard-CoresTemp/CliqueNumberSimpleGraphs_AtLeast.cpp
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp: In member function ‘int DynamicCore::weight(WitnessSetPointer)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:95:1: warning: control reaches end of non-void function [-Wreturn-type]
+   95 | }
+      | ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalDynamicCores/treewidzard-CoresTemp/CliqueNumberSimpleGraphs_AtLeast.h:3,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalDynamicCores/treewidzard-CoresTemp/CliqueNumberSimpleGraphs_AtLeast.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘bool WitnessSetTypeTwo<T>::WitnessSetTypeTwoIterator::isDifferent(AbstractIterator&) [with T = CliqueNumberSimpleGraphs_AtLeast_WitnessSet]’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:211:5: warning: control reaches end of non-void function [-Wreturn-type]
+  211 |     };
+      |     ^
+MaxDegree_AtLeast
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalDynamicCores/treewidzard-CoresTemp/MaxDegree_AtLeast.cpp
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp: In member function ‘int DynamicCore::weight(WitnessSetPointer)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:95:1: warning: control reaches end of non-void function [-Wreturn-type]
+   95 | }
+      | ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalDynamicCores/treewidzard-CoresTemp/MaxDegree_AtLeast.h:5,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalDynamicCores/treewidzard-CoresTemp/MaxDegree_AtLeast.cpp:17:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘bool WitnessSetTypeTwo<T>::WitnessSetTypeTwoIterator::isDifferent(AbstractIterator&) [with T = MaxDegree_AtLeast_WitnessSet]’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:211:5: warning: control reaches end of non-void function [-Wreturn-type]
+  211 |     };
+      |     ^
+IsomorphismBreadthFirstSearch
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/IsomorphismBreadthFirstSearch.cpp
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicKernel.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicKernel.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp: In member function ‘int DynamicCore::weight(WitnessSetPointer)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:95:1: warning: control reaches end of non-void function [-Wreturn-type]
+   95 | }
+      | ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/DynamicKernel.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/Conjecture.h:3,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/Conjecture.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/DynamicKernel.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/Conjecture.h:3,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/ConcreteTreeDecomposition.h:8,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/SearchStrategy.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/SearchStrategy.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/../Kernel/DynamicKernel.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/Conjecture.h:3,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/ConcreteTreeDecomposition.h:8,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/SearchStrategy.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/IsomorphismBreadthFirstSearch.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/IsomorphismBreadthFirstSearch.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+BreadthFirstSearch
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/BreadthFirstSearch.cpp
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicKernel.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicKernel.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp: In member function ‘int DynamicCore::weight(WitnessSetPointer)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:95:1: warning: control reaches end of non-void function [-Wreturn-type]
+   95 | }
+      | ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/DynamicKernel.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/Conjecture.h:3,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/Conjecture.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/DynamicKernel.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/Conjecture.h:3,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/ConcreteTreeDecomposition.h:8,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/SearchStrategy.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/SearchStrategy.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/../Kernel/DynamicKernel.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/Conjecture.h:3,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/ConcreteTreeDecomposition.h:8,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/SearchStrategy.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/BreadthFirstSearch.h:5,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/BreadthFirstSearch.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+ParallelIsomorphismBreadthFirstSearch
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/ParallelIsomorphismBreadthFirstSearch.cpp
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicKernel.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicKernel.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp: In member function ‘int DynamicCore::weight(WitnessSetPointer)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:95:1: warning: control reaches end of non-void function [-Wreturn-type]
+   95 | }
+      | ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/DynamicKernel.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/Conjecture.h:3,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/Conjecture.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/DynamicKernel.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/Conjecture.h:3,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/ConcreteTreeDecomposition.h:8,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/SearchStrategy.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/SearchStrategy.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/../Kernel/DynamicKernel.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/Conjecture.h:3,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/ConcreteTreeDecomposition.h:8,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/SearchStrategy.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/ParallelIsomorphismBreadthFirstSearch.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/ParallelIsomorphismBreadthFirstSearch.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+ParallelBreadthFirstSearch
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/ParallelBreadthFirstSearch.cpp
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicKernel.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicKernel.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp: In member function ‘int DynamicCore::weight(WitnessSetPointer)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:95:1: warning: control reaches end of non-void function [-Wreturn-type]
+   95 | }
+      | ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/DynamicKernel.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/Conjecture.h:3,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/Conjecture.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/DynamicKernel.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/Conjecture.h:3,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/ConcreteTreeDecomposition.h:8,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/SearchStrategy.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/SearchStrategy.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/../Kernel/DynamicKernel.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/Conjecture.h:3,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/ConcreteTreeDecomposition.h:8,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/SearchStrategy.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/ParallelBreadthFirstSearch.h:7,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/ParallelBreadthFirstSearch.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Search/BFS/../../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+ParallelBreadthFirstSearchPlanar
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalSearches/treewidzard-Searches-Temp/ParallelBreadthFirstSearchPlanar.cpp
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicKernel.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicKernel.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp: In member function ‘int DynamicCore::weight(WitnessSetPointer)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:95:1: warning: control reaches end of non-void function [-Wreturn-type]
+   95 | }
+      | ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/DynamicKernel.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/Conjecture.h:3,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/Conjecture.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/DynamicKernel.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/Conjecture.h:3,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/ConcreteTreeDecomposition.h:8,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/SearchStrategy.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/SearchStrategy.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/DynamicKernel.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/Conjecture.h:3,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/ConcreteTreeDecomposition.h:8,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/SearchStrategy.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalSearches/treewidzard-Searches-Temp/ParallelBreadthFirstSearchPlanar.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalSearches/treewidzard-Searches-Temp/ParallelBreadthFirstSearchPlanar.cpp:2:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+SlightlyParallelBreadthFirstSearchPlanar
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalSearches/treewidzard-Searches-Temp/SlightlyParallelBreadthFirstSearchPlanar.cpp
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicKernel.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicKernel.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp: In member function ‘int DynamicCore::weight(WitnessSetPointer)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/DynamicCore.cpp:95:1: warning: control reaches end of non-void function [-Wreturn-type]
+   95 | }
+      | ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/DynamicKernel.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/Conjecture.h:3,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/Conjecture.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Conjecture/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/DynamicKernel.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/Conjecture.h:3,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/ConcreteTreeDecomposition.h:8,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/SearchStrategy.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/SearchStrategy.cpp:1:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+In file included from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/DynamicCore.h:14,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/DynamicKernel.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/Conjecture.h:3,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/ConcreteTreeDecomposition.h:8,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/SearchStrategy.h:6,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalSearches/treewidzard-Searches-Temp/SlightlyParallelBreadthFirstSearchPlanar.h:8,
+                 from /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../../ExternalSearches/treewidzard-Searches-Temp/SlightlyParallelBreadthFirstSearchPlanar.cpp:2:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual const valueType AbstractIterator::dereference()’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h:17:41: warning: no return statement in function returning non-void [-Wreturn-type]
+   17 |   virtual const valueType dereference(){};
+      |                                         ^
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h: In member function ‘virtual bool AbstractIterator::isDifferent(AbstractIterator&)’:
+/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/../Kernel/../TreeAutomaton/../Conjecture/../Kernel/WitnessSet.h:21:51: warning: no return statement in function returning non-void [-Wreturn-type]
+   21 |   virtual bool isDifferent(AbstractIterator &rhs){};
+      |                                                   ^
+mkdir: cannot create directory ‘/home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug/auxfiles’: File exists
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/farhad/Documents/github/TreeWidzard-Improvements/cmake-build-debug

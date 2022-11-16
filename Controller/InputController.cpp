@@ -31,9 +31,9 @@ void InputController::parse_input() {
     exit(20);
   }
   int result = 1;  // if parsing successful result will be 0 otherwise 1
-  result = input_parse(conjecture, result, coreList, varToCoreName,
-                       varToProperty);  // Parser function from Parser.hpp
-  // check for successful parsing
+  result = input_parse(conjecture, result, coreList, varToCoreName,varToProperty);  // Parser function from Parser.hpp
+
+    // check for successful parsing
   if (result != 0) {
     std::cout << " Error: input file " << inputPath << " is not in valid format"
               << std::endl;
@@ -321,6 +321,7 @@ InputController::InputController(const std::string &inputPath,
                                  const Width &width)
     : inputPath(inputPath), dynamicPluginPath(dynamicPluginPath), width(width) {
   check_available_cores();
+
   parse_input();
   construct_dynamicKernel();
 }

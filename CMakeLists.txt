@@ -1,4 +1,3 @@
-
 cmake_minimum_required(VERSION 3.0.0)
 set(CMAKE_CXX_STANDARD 20)
 link_libraries(-lstdc++fs)
@@ -18,7 +17,7 @@ set(CMAKE_EXE_LINKER_FLAGS "-static")
 set(CMAKE_EXE_LINKER_FLAGS "-rdynamic")
 
 # parsing big graphs with bison will fail unless stack size is big enough
-add_definitions(-DYYMAXDEPTH=500000 -DYYINITDEPTH=500000)
+add_definitions(-DYYMAXDEPTH=50000000 -DYYINITDEPTH=50000000)
 
 include_directories(DynamicCores)
 
@@ -190,3 +189,6 @@ target_link_libraries(treewidzard ${CMAKE_DL_LIBS})
 
 execute_process (
         COMMAND bash -c "${CMAKE_CURRENT_SOURCE_DIR}/Scripts/./buildAllPlugins.sh")
+# Remove limit for stack
+# ulimit -s unlimited
+execute_process(COMMAND bash -c "ulimit -s unlimited")

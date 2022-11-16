@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_INPUT_INPUT_PARSER_TAB_H_INCLUDED
-# define YY_INPUT_INPUT_PARSER_TAB_H_INCLUDED
+#ifndef YY_INPUT_INPUT_PARSER_HPP_INCLUDED
+# define YY_INPUT_INPUT_PARSER_HPP_INCLUDED
 /* Debug traces.  */
 #ifndef INPUT_DEBUG
 # if defined YYDEBUG
@@ -63,7 +63,7 @@ extern int input_debug;
     #include <utility>
 
 
-#line 67 "input_parser.tab.h"
+#line 67 "input_parser.hpp"
 
 /* Token kinds.  */
 #ifndef INPUT_TOKENTYPE
@@ -98,7 +98,8 @@ extern int input_debug;
     BIGGER = 279,                  /* BIGGER  */
     BINARY_ARITHMETIC_OPERATOR = 280, /* BINARY_ARITHMETIC_OPERATOR  */
     BINARY_FUNCTION = 281,         /* BINARY_FUNCTION  */
-    UNARY_FUNCTION = 282           /* UNARY_FUNCTION  */
+    UNARY_FUNCTION = 282,          /* UNARY_FUNCTION  */
+    PARAMETER = 283                /* PARAMETER  */
   };
   typedef enum input_tokentype input_token_kind_t;
 #endif
@@ -115,7 +116,7 @@ union INPUT_STYPE
      std::vector<int> * vec;
      PropertyAssignment *property;
 
-#line 119 "input_parser.tab.h"
+#line 120 "input_parser.hpp"
 
 };
 typedef union INPUT_STYPE INPUT_STYPE;
@@ -144,4 +145,4 @@ extern INPUT_LTYPE input_lloc;
 int input_parse (Conjecture &conj, int &result, std::map<std::string,std::map<std::string,std::string>> &coreList, std::map<std::string,std::string> &varToCoreName, std::map<std::string, PropertyAssignment*> &varToProperty);
 
 
-#endif /* !YY_INPUT_INPUT_PARSER_TAB_H_INCLUDED  */
+#endif /* !YY_INPUT_INPUT_PARSER_HPP_INCLUDED  */
