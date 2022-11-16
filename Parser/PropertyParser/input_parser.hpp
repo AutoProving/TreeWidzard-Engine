@@ -53,7 +53,7 @@
 extern int input_debug;
 #endif
 /* "%code requires" blocks.  */
-#line 5 "input_parser.y"
+#line 4 "input_parser.y"
 
     #include "../../Conjecture/Conjecture.h"
     #include "../../Kernel/Width.h"
@@ -64,8 +64,7 @@ extern int input_debug;
     #include <stdlib.h>
     #include <utility>
 
-
-#line 69 "input_parser.hpp"
+#line 68 "input_parser.hpp"
 
 /* Token kinds.  */
 #ifndef INPUT_TOKENTYPE
@@ -109,7 +108,7 @@ extern int input_debug;
 #if ! defined INPUT_STYPE && ! defined INPUT_STYPE_IS_DECLARED
 union INPUT_STYPE
 {
-#line 39 "input_parser.y"
+#line 35 "input_parser.y"
 
      ConjectureNode *conjectureNode;
      double number;
@@ -117,7 +116,7 @@ union INPUT_STYPE
      std::vector<int> * vec;
      PropertyAssignment *property;
 
-#line 121 "input_parser.hpp"
+#line 120 "input_parser.hpp"
 
 };
 typedef union INPUT_STYPE INPUT_STYPE;

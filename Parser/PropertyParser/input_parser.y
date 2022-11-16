@@ -1,7 +1,6 @@
 //Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 %defines
 %define api.prefix {input_}
-
 %code requires {
     #include "../../Conjecture/Conjecture.h"
     #include "../../Kernel/Width.h"
@@ -11,7 +10,6 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include <utility>
-
 }
 %{
     #include <iostream>
@@ -24,14 +22,12 @@
     #include "../../Conjecture/Conjecture.h"
     #include "../../Kernel/Width.h"
     #include <algorithm>
-   
     // this function will be generated
     // using flex
     extern int yylex();
     extern int input_lineno;
     extern void yyerror(Conjecture &conj, int &result,std::map<std::string,std::map<std::string,std::string>> &coreList, std::map<std::string,std::string> &varToCoreName, std::map<std::string, PropertyAssignment*> varToProperty, char const* msg);
     std::map<char*,ConjectureNode*> sub_formula_variables;
-    
     bool check_varToProperty(std::string v,std::map<std::string, PropertyAssignment*> &varToProperty);
     bool check_sub_formula_variables(char* v);
 %}
@@ -54,11 +50,11 @@
 
 %token SEPERATOR  FILEPATH LEFTP RIGHTP NAME NEWLINE AND OR IFF IMPLIES NOT TRUE FALSE COMMENT NUMBER_DOUBLE COMMA
         FORMULA_NAME EXP ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION
-%type<string> COMPARATOR SEPERATOR FILEPATH LEFTP RIGHTP NAME NEWLINE AND OR IFF IMPLIES NOT TRUE FALSE COMMENT VARIABLE ATOMIC_PREDICATE COMMA FORMULA_NAME EXP
+%type<string>  SEPERATOR FILEPATH LEFTP RIGHTP NAME NEWLINE AND OR IFF IMPLIES NOT TRUE FALSE COMMENT VARIABLE ATOMIC_PREDICATE COMMA FORMULA_NAME EXP
             ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION PARAMETER NUMBER_DOUBLE
 %type<property> VARIABLE_CORE_ASSIGNMENT
 %type<conjectureNode> FORMULA SUB_FORMULA FORMULA_TERMINAL
-%type<vec> NUMBER_DOUBLES
+//%type<vec> NUMBER_DOUBLES
 
 %start START
 %left IFF 
@@ -79,37 +75,37 @@
 START            :COMMENTS VARIABLES_CORES_ASSIGNMENT FORMULA_NAME NEWLINE VARIABLES_SUBFORMULA_ASSIGNMENTS  FORMULA FORMULACOMMENTS
                     {conj.setRoot($6); result = 0; std::cout << "done!!!!!!!" <<std::endl;}
                  ;
-VARIABLES_CORES_ASSIGNMENT  : VARIABLES_CORES_ASSIGNMENT VARIABLE_CORE_ASSIGNMENT NEWLINE COMMENTS {}
-                            | %empty
-                            ;
-VARIABLE_CORE_ASSIGNMENT    : VARIABLE SEPERATOR ATOMIC_PREDICATE LEFTP PARAMETERS RIGHTP
-                                {if(check_varToProperty($1,varToProperty)){ std::cout<<" variable " << $1 << " is written at least two times" <<std::endl; YYERROR; exit(20);}
-                                if(!coreList.count($3)){std::cout<<"core name \" "<<$3<<"\"is not exist"<<std::endl; YYERROR;}
-                                // if(!coreList[$3].count("CoreType")){std::cout<<"CoreType of "<<$3<<" couldn't find, chech the core properities"<<std::endl; YYERROR;}
-                                // if(coreList[$3]["CoreType"]!="Bool"){std::cout<<"CoreType of "<<$3<< " isn't Bool, check the core properties"<<std::endl; YYERROR;}
-                                // if(!coreList[$3].count("ParameterType")){std::cout<<"Parameter of "<<$3<<" couldn't find, chech the core properities"<<std::endl; YYERROR;}
-                                // if(coreList[$3]["ParameterType"]!="UnsignedInt"){std::cout<<"Parameter of "<<$3<< " isn't UnsignedInt, check the core properties"<<std::endl; YYERROR;}
-                                // if(!coreList[$3].count("PrimaryOperator")){std::cout<<"PrimaryOperator for "<<$3<<" isn't set, check the core properties"<<std::endl;YYERROR;}
-                                // if(coreList[$3]["PrimaryOperator"]=="AtLeast" and (strcmp($4,"<")==0 or strcmp($4,"<=")==0)   ){
-                                //   std::cout<<"PrimaryOperator for "<<$3<<" is " <<coreList[$3]["PrimaryOperator"]<<" and the written operator is " <<$4<<" , check the core properties"<<std::endl;YYERROR;}
-                                // if( coreList[$3]["PrimaryOperator"]=="AtMost" and (strcmp($4,">")==0 or strcmp($4,">=")==0)  )
-                                // {std::cout<<"PrimaryOperator for "<<$3<<" is " <<coreList[$3]["PrimaryOperator"]<<" and the written operator is " <<$4<<" , check the core properties"<<std::endl;YYERROR;}
-                                $$ = new PropertyAssignment(); //$$->setParameterType("UnsignedInt");
-                                // $$->setName($3); $$->setOp($4);
-                                // $$->setParameter($5);  varToProperty[$1] = $$; varToCoreName[$1] = $3;
-                                }
-                        ;
-NUMBER_DOUBLES		: NUMBER_DOUBLES COMMA NUMBER_DOUBLE {$$ = new std::vector<int>; $$ = $1; $$->push_back(strtod($3,NULL));}
-                    | NUMBER_DOUBLE { $$ = new std::vector<int>;  $$->push_back(strtod($1,NULL));}
-ATOMIC_PREDICATE    : NAME
-                    ;
-PARAMETERS  : PARAMETER {std::cout << $1 << std::endl;}
-	    | PARAMETERS COMMA PARAMETER {std::cout << $3 << std::endl;};
-PARAMETER : NAME | NUMBER_DOUBLE | FILEPATH | %empty ;
-COMPARATOR  : BIGGER{$$=$1;} 
-            | ATLEAST{$$=$1;}
-            | ATMOST{$$=$1;}
-            | LESS {$$=$1;}
+VARIABLES_CORES_ASSIGNMENT	: VARIABLES_CORES_ASSIGNMENT VARIABLE_CORE_ASSIGNMENT NEWLINE COMMENTS {}
+				| %empty
+				;
+VARIABLE_CORE_ASSIGNMENT	: VARIABLE SEPERATOR ATOMIC_PREDICATE LEFTP PARAMETERS RIGHTP
+				{if(check_varToProperty($1,varToProperty)){ std::cout<<" variable " << $1 << " is written at least two times" <<std::endl; YYERROR; exit(20);}
+				if(!coreList.count($3)){std::cout<<"core name \" "<<$3<<"\"is not exist"<<std::endl; YYERROR;}
+				// if(!coreList[$3].count("CoreType")){std::cout<<"CoreType of "<<$3<<" couldn't find, chech the core properities"<<std::endl; YYERROR;}
+				// if(coreList[$3]["CoreType"]!="Bool"){std::cout<<"CoreType of "<<$3<< " isn't Bool, check the core properties"<<std::endl; YYERROR;}
+				// if(!coreList[$3].count("ParameterType")){std::cout<<"Parameter of "<<$3<<" couldn't find, chech the core properities"<<std::endl; YYERROR;}
+				// if(coreList[$3]["ParameterType"]!="UnsignedInt"){std::cout<<"Parameter of "<<$3<< " isn't UnsignedInt, check the core properties"<<std::endl; YYERROR;}
+				// if(!coreList[$3].count("PrimaryOperator")){std::cout<<"PrimaryOperator for "<<$3<<" isn't set, check the core properties"<<std::endl;YYERROR;}
+				// if(coreList[$3]["PrimaryOperator"]=="AtLeast" and (strcmp($4,"<")==0 or strcmp($4,"<=")==0)   ){
+				//   std::cout<<"PrimaryOperator for "<<$3<<" is " <<coreList[$3]["PrimaryOperator"]<<" and the written operator is " <<$4<<" , check the core properties"<<std::endl;YYERROR;}
+				// if( coreList[$3]["PrimaryOperator"]=="AtMost" and (strcmp($4,">")==0 or strcmp($4,">=")==0)  )
+				// {std::cout<<"PrimaryOperator for "<<$3<<" is " <<coreList[$3]["PrimaryOperator"]<<" and the written operator is " <<$4<<" , check the core properties"<<std::endl;YYERROR;}
+				$$ = new PropertyAssignment(); //$$->setParameterType("UnsignedInt");
+				// $$->setName($3); $$->setOp($4);
+				// $$->setParameter($5);  varToProperty[$1] = $$; varToCoreName[$1] = $3;
+				}
+				;
+//NUMBER_DOUBLES	: NUMBER_DOUBLES COMMA NUMBER_DOUBLE {$$ = new std::vector<int>; $$ = $1; $$->push_back(strtod($3,NULL));}
+//		| NUMBER_DOUBLE { $$ = new std::vector<int>;  $$->push_back(strtod($1,NULL));}
+//		;
+ATOMIC_PREDICATE	: NAME;
+PARAMETERS	: %empty | PARAMETER {std::cout << $1 << std::endl;}
+		| PARAMETERS COMMA PARAMETER {std::cout << $3 << std::endl;};
+PARAMETER	: NAME | NUMBER_DOUBLE | FILEPATH ;
+//COMPARATOR	: BIGGER{$$=$1;}
+//		| ATLEAST{$$=$1;}
+//		| ATMOST{$$=$1;}
+//		| LESS {$$=$1;}
 VARIABLES_SUBFORMULA_ASSIGNMENTS : EXP VARIABLE SEPERATOR SUB_FORMULA NEWLINE  VARIABLES_SUBFORMULA_ASSIGNMENTS
 								{if(check_varToProperty($2,varToProperty)){
                                                                     std::cout<< "variable " << $2 << " declared at least two times" <<std::endl; YYERROR;}
