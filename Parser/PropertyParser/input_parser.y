@@ -8,6 +8,8 @@
     #include <iostream>
     #include <vector>
     #include <map>
+    #include <stdio.h>
+    #include <stdlib.h>
     #include <utility>
 
 }
@@ -51,10 +53,9 @@
 
 
 %token SEPERATOR  FILEPATH LEFTP RIGHTP NAME NEWLINE AND OR IFF IMPLIES NOT TRUE FALSE COMMENT NUMBER_DOUBLE COMMA
-        FORMULA_NAME EXP ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION PARAMETER
+        FORMULA_NAME EXP ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION
 %type<string> COMPARATOR SEPERATOR FILEPATH LEFTP RIGHTP NAME NEWLINE AND OR IFF IMPLIES NOT TRUE FALSE COMMENT VARIABLE ATOMIC_PREDICATE COMMA FORMULA_NAME EXP
-            ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION PARAMETER
-%type<number> NUMBER_DOUBLE
+            ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION PARAMETER NUMBER_DOUBLE
 %type<property> VARIABLE_CORE_ASSIGNMENT
 %type<conjectureNode> FORMULA SUB_FORMULA FORMULA_TERMINAL
 %type<vec> NUMBER_DOUBLES
@@ -98,11 +99,13 @@ VARIABLE_CORE_ASSIGNMENT    : VARIABLE SEPERATOR ATOMIC_PREDICATE LEFTP PARAMETE
                                 // $$->setParameter($5);  varToProperty[$1] = $$; varToCoreName[$1] = $3;
                                 }
                         ;
-NUMBER_DOUBLES		: NUMBER_DOUBLES COMMA NUMBER_DOUBLE {$$ = new std::vector<int>; $$ = $1; $$->push_back($3);}
-                    | NUMBER_DOUBLE { $$ = new std::vector<int>;  $$->push_back($1);}
+NUMBER_DOUBLES		: NUMBER_DOUBLES COMMA NUMBER_DOUBLE {$$ = new std::vector<int>; $$ = $1; $$->push_back(strtod($3,NULL));}
+                    | NUMBER_DOUBLE { $$ = new std::vector<int>;  $$->push_back(strtod($1,NULL));}
 ATOMIC_PREDICATE    : NAME
                     ;
-PARAMETERS	: NAME | %empty
+PARAMETERS  : PARAMETER {std::cout << $1 << std::endl;}
+	    | PARAMETERS COMMA PARAMETER {std::cout << $3 << std::endl;};
+PARAMETER : NAME | NUMBER_DOUBLE | FILEPATH | %empty ;
 COMPARATOR  : BIGGER{$$=$1;} 
             | ATLEAST{$$=$1;}
             | ATMOST{$$=$1;}
@@ -146,7 +149,7 @@ SUB_FORMULA : SUB_FORMULA AND SUB_FORMULA {$$= new ConjectureNode(OPERATOR,"and"
 
             | FALSE {$$ = new ConjectureNode(NUMBER,0);}
 
-            | NUMBER_DOUBLE {$$= new ConjectureNode(NUMBER,$1);}
+            | NUMBER_DOUBLE {$$= new ConjectureNode(NUMBER,strtod($1,NULL));}
             ;
 FORMULA     : FORMULA AND FORMULA {$$ = new ConjectureNode(OPERATOR,"and");
             std::vector<ConjectureNode*> children;
@@ -221,7 +224,7 @@ FORMULA_TERMINAL : TRUE         {$$ = new ConjectureNode(NUMBER,1); }
                                     std::cout<<" variable "<< $1 << " is not valid"<< std::endl; YYERROR;
                                   }
                                 }
-                 | NUMBER_DOUBLE {$$= new ConjectureNode(NUMBER,$1);}
+                 | NUMBER_DOUBLE {$$= new ConjectureNode(NUMBER,strtod($1,NULL));}
                  ;
 //FORMULA_OP_BINARY     : AND {$$ = new ConjectureNode(OPERATOR,"and");}
 //                      | OR {$$ = new ConjectureNode(OPERATOR,"or");}

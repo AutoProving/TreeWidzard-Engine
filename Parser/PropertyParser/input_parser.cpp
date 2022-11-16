@@ -77,7 +77,7 @@
 #define yylloc          input_lloc
 
 /* First part of user prologue.  */
-#line 14 "input_parser.y"
+#line 16 "input_parser.y"
 
     #include <iostream>
     #include <string.h>
@@ -156,13 +156,13 @@ enum yysymbol_kind_t
   YYSYMBOL_BINARY_ARITHMETIC_OPERATOR = 25, /* BINARY_ARITHMETIC_OPERATOR  */
   YYSYMBOL_BINARY_FUNCTION = 26,           /* BINARY_FUNCTION  */
   YYSYMBOL_UNARY_FUNCTION = 27,            /* UNARY_FUNCTION  */
-  YYSYMBOL_PARAMETER = 28,                 /* PARAMETER  */
-  YYSYMBOL_YYACCEPT = 29,                  /* $accept  */
-  YYSYMBOL_START = 30,                     /* START  */
-  YYSYMBOL_VARIABLES_CORES_ASSIGNMENT = 31, /* VARIABLES_CORES_ASSIGNMENT  */
-  YYSYMBOL_VARIABLE_CORE_ASSIGNMENT = 32,  /* VARIABLE_CORE_ASSIGNMENT  */
-  YYSYMBOL_ATOMIC_PREDICATE = 33,          /* ATOMIC_PREDICATE  */
-  YYSYMBOL_PARAMETERS = 34,                /* PARAMETERS  */
+  YYSYMBOL_YYACCEPT = 28,                  /* $accept  */
+  YYSYMBOL_START = 29,                     /* START  */
+  YYSYMBOL_VARIABLES_CORES_ASSIGNMENT = 30, /* VARIABLES_CORES_ASSIGNMENT  */
+  YYSYMBOL_VARIABLE_CORE_ASSIGNMENT = 31,  /* VARIABLE_CORE_ASSIGNMENT  */
+  YYSYMBOL_ATOMIC_PREDICATE = 32,          /* ATOMIC_PREDICATE  */
+  YYSYMBOL_PARAMETERS = 33,                /* PARAMETERS  */
+  YYSYMBOL_PARAMETER = 34,                 /* PARAMETER  */
   YYSYMBOL_VARIABLES_SUBFORMULA_ASSIGNMENTS = 35, /* VARIABLES_SUBFORMULA_ASSIGNMENTS  */
   YYSYMBOL_SUB_FORMULA = 36,               /* SUB_FORMULA  */
   YYSYMBOL_FORMULA = 37,                   /* FORMULA  */
@@ -500,19 +500,19 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  5
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   160
+#define YYLAST   156
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  29
+#define YYNTOKENS  28
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  13
+#define YYNNTS  14
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  40
+#define YYNRULES  44
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  82
+#define YYNSTATES  87
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   283
+#define YYMAXUTOK   282
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -554,18 +554,18 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
-      25,    26,    27,    28
+      25,    26,    27
 };
 
 #if INPUT_DEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    78,    78,    81,    82,    84,   103,   105,   105,   110,
-     118,   121,   127,   133,   136,   145,   147,   149,   151,   156,
-     161,   166,   171,   176,   181,   186,   192,   196,   201,   206,
-     211,   212,   214,   215,   216,   224,   232,   234,   235,   237,
-     238
+       0,    79,    79,    82,    83,    85,   104,   106,   107,   108,
+     108,   108,   108,   113,   121,   124,   130,   136,   139,   148,
+     150,   152,   154,   159,   164,   169,   174,   179,   184,   189,
+     195,   199,   204,   209,   214,   215,   217,   218,   219,   227,
+     235,   237,   238,   240,   241
 };
 #endif
 
@@ -586,10 +586,10 @@ static const char *const yytname[] =
   "IMPLIES", "NOT", "TRUE", "FALSE", "COMMENT", "NUMBER_DOUBLE", "COMMA",
   "FORMULA_NAME", "EXP", "ATLEAST", "ATMOST", "LESS", "BIGGER",
   "BINARY_ARITHMETIC_OPERATOR", "BINARY_FUNCTION", "UNARY_FUNCTION",
-  "PARAMETER", "$accept", "START", "VARIABLES_CORES_ASSIGNMENT",
+  "$accept", "START", "VARIABLES_CORES_ASSIGNMENT",
   "VARIABLE_CORE_ASSIGNMENT", "ATOMIC_PREDICATE", "PARAMETERS",
-  "VARIABLES_SUBFORMULA_ASSIGNMENTS", "SUB_FORMULA", "FORMULA",
-  "FORMULA_TERMINAL", "VARIABLE", "COMMENTS", "FORMULACOMMENTS", YY_NULLPTR
+  "PARAMETER", "VARIABLES_SUBFORMULA_ASSIGNMENTS", "SUB_FORMULA",
+  "FORMULA", "FORMULA_TERMINAL", "VARIABLE", "COMMENTS", "FORMULACOMMENTS", YY_NULLPTR
 };
 
 static const char *
@@ -599,7 +599,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-37)
+#define YYPACT_NINF (-40)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -613,15 +613,15 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
-     -14,   -14,    11,   -37,   -37,   -37,    42,   -37,     7,    27,
-      36,    25,   -14,    44,    45,    33,   -37,   -37,    53,    61,
-      33,    33,   -37,   -37,   -37,    57,    68,    -5,   -37,   -37,
-      67,   132,    59,   -37,    33,    33,   -14,    33,    33,    33,
-      33,    33,    33,    33,    33,    33,   -37,   -37,    60,   132,
-     132,   -37,   -37,   -37,    13,   -37,   -37,    94,    66,    71,
-     119,   104,   111,    32,    77,    69,   129,   134,   -37,   -37,
-     151,   -37,    25,   132,    33,   -37,   -37,   -37,   -37,   -37,
-      86,   -37
+     -14,   -14,    11,   -40,   -40,   -40,    32,   -40,     7,    27,
+      38,    17,   -14,    46,    47,    35,   -40,   -40,    40,    71,
+      35,    35,   -40,   -40,   -40,    63,    76,    -5,   -40,   -40,
+      65,   129,    54,   -40,    35,    35,   -14,    35,    35,    35,
+      35,    35,    35,    35,    35,    35,   -40,   -40,   -40,   -40,
+      82,   -40,   129,   129,   -40,   -40,   -40,    13,   -40,   -40,
+      98,    74,    86,   116,   108,   103,    34,    48,    64,   126,
+     131,   -40,   -40,    65,   105,   -40,    17,   129,    35,   -40,
+     -40,   -40,   -40,   -40,   -40,    81,   -40
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -629,29 +629,29 @@ static const yytype_int16 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-      38,    38,     0,     4,    37,     1,     0,    36,     0,     0,
-       0,    10,    38,     0,     0,     0,     3,     6,     0,     0,
-       0,     0,    32,    33,    35,     0,     0,    40,    31,    34,
-       8,     0,     0,    26,     0,     0,    38,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     2,     7,     0,     0,
-       0,    15,    16,    17,     0,    14,    30,     0,     0,    40,
-      18,    19,    21,    20,    22,    23,    24,    25,    27,     5,
-       0,    12,    10,     0,     0,    29,    39,    13,     9,    11,
-       0,    28
+      42,    42,     0,     4,    41,     1,     0,    40,     0,     0,
+       0,    14,    42,     0,     0,     0,     3,     6,     0,     0,
+       0,     0,    36,    37,    39,     0,     0,    44,    35,    38,
+      12,     0,     0,    30,     0,     0,    42,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,     2,    11,     9,    10,
+       0,     7,     0,     0,    19,    20,    21,     0,    18,    34,
+       0,     0,    44,    22,    23,    25,    24,    26,    27,    28,
+      29,    31,     5,    12,     0,    16,    14,     0,     0,    33,
+      43,     8,    17,    13,    15,     0,    32
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -37,   -37,   -37,   -37,   -37,   -37,    14,   -36,   -11,   -37,
-      -6,     0,    26
+     -40,   -40,   -40,   -40,   -40,   -40,    28,    42,   -39,   -11,
+     -40,    -6,     0,    73
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     2,     6,     9,    18,    48,    15,    54,    27,    28,
-      29,     3,    46
+       0,     2,     6,     9,    18,    50,    51,    15,    57,    27,
+      28,    29,     3,    46
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -660,78 +660,76 @@ static const yytype_int8 yydefgoto[] =
 static const yytype_int8 yytable[] =
 {
       10,     4,     1,    36,    37,    38,    39,    40,    19,    32,
-      33,     5,    16,    70,    71,    11,    41,    42,    43,    44,
-      45,    72,    73,    57,    58,    55,    60,    61,    62,    63,
-      64,    65,    66,    67,    68,    12,    59,    79,    20,    13,
-       7,    37,    38,    55,    55,    14,    21,    22,    23,     7,
-      24,    17,     7,    41,    42,    43,    44,    45,    30,    25,
-      26,     8,    34,    80,    31,    56,    69,    55,    37,    38,
-      39,    40,    75,    35,    47,    37,    38,    39,    40,    36,
-      41,    42,    43,    44,    45,    76,    78,    41,    42,    43,
-      44,    45,    81,     0,    45,    37,    38,    39,    40,    42,
-       0,     0,    45,    37,    38,    39,    40,    41,    42,    43,
-      44,    45,    74,    37,     0,    41,    42,    43,    44,    45,
-      37,    38,     0,    40,     0,    41,    42,    43,    44,    45,
-       0,     0,    41,    42,    43,    44,    45,    49,     0,     7,
-      41,    42,    43,    44,    45,    50,    51,    52,     0,    53,
-      41,    42,     0,    44,    45,    41,    42,    77,     0,    45,
-      73
+      33,     5,    16,    74,    75,    11,    41,    42,    43,    44,
+      45,    76,    77,    60,    61,    58,    63,    64,    65,    66,
+      67,    68,    69,    70,    71,    12,    62,    14,    84,     7,
+      20,    13,     7,    37,    38,    30,    58,    58,    21,    22,
+      23,     8,    24,    17,     7,    41,    42,    43,    44,    45,
+      59,    25,    26,    37,    38,    39,    40,    85,    34,    47,
+      42,    58,    48,    45,    31,    41,    42,    43,    44,    45,
+      79,    35,    49,    37,    38,    39,    40,    86,    72,    45,
+      37,    38,    39,    40,    36,    41,    42,    43,    44,    45,
+      73,    81,    41,    42,    43,    44,    45,    37,    38,    39,
+      40,    82,    37,    38,    77,    40,    78,    37,    83,    41,
+      42,    43,    44,    45,    41,    42,    43,    44,    45,    41,
+      42,    43,    44,    45,    52,    80,     7,    41,    42,    43,
+      44,    45,    53,    54,    55,     0,    56,    41,    42,     0,
+      44,    45,    41,    42,     0,     0,    45
 };
 
 static const yytype_int8 yycheck[] =
 {
        6,     1,    16,     8,     9,    10,    11,    12,    14,    20,
-      21,     0,    12,    49,    50,     8,    21,    22,    23,    24,
+      21,     0,    12,    52,    53,     8,    21,    22,    23,    24,
       25,     8,     9,    34,    35,    31,    37,    38,    39,    40,
-      41,    42,    43,    44,    45,     8,    36,    73,     5,     3,
-       7,     9,    10,    49,    50,    20,    13,    14,    15,     7,
-      17,     7,     7,    21,    22,    23,    24,    25,     5,    26,
-      27,    19,     5,    74,     3,     6,     6,    73,     9,    10,
-      11,    12,     6,     5,     7,     9,    10,    11,    12,     8,
-      21,    22,    23,    24,    25,    59,    72,    21,    22,    23,
-      24,    25,     6,    -1,    25,     9,    10,    11,    12,    22,
-      -1,    -1,    25,     9,    10,    11,    12,    21,    22,    23,
-      24,    25,    18,     9,    -1,    21,    22,    23,    24,    25,
-       9,    10,    -1,    12,    -1,    21,    22,    23,    24,    25,
-      -1,    -1,    21,    22,    23,    24,    25,     5,    -1,     7,
-      21,    22,    23,    24,    25,    13,    14,    15,    -1,    17,
-      21,    22,    -1,    24,    25,    21,    22,     6,    -1,    25,
-       9
+      41,    42,    43,    44,    45,     8,    36,    20,    77,     7,
+       5,     3,     7,     9,    10,     5,    52,    53,    13,    14,
+      15,    19,    17,     7,     7,    21,    22,    23,    24,    25,
+       6,    26,    27,     9,    10,    11,    12,    78,     5,     4,
+      22,    77,     7,    25,     3,    21,    22,    23,    24,    25,
+       6,     5,    17,     9,    10,    11,    12,     6,     6,    25,
+       9,    10,    11,    12,     8,    21,    22,    23,    24,    25,
+      18,    73,    21,    22,    23,    24,    25,     9,    10,    11,
+      12,     6,     9,    10,     9,    12,    18,     9,    76,    21,
+      22,    23,    24,    25,    21,    22,    23,    24,    25,    21,
+      22,    23,    24,    25,     5,    62,     7,    21,    22,    23,
+      24,    25,    13,    14,    15,    -1,    17,    21,    22,    -1,
+      24,    25,    21,    22,    -1,    -1,    25
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,    16,    30,    40,    40,     0,    31,     7,    19,    32,
-      39,     8,     8,     3,    20,    35,    40,     7,    33,    39,
+       0,    16,    29,    40,    40,     0,    30,     7,    19,    31,
+      39,     8,     8,     3,    20,    35,    40,     7,    32,    39,
        5,    13,    14,    15,    17,    26,    27,    37,    38,    39,
        5,     3,    37,    37,     5,     5,     8,     9,    10,    11,
-      12,    21,    22,    23,    24,    25,    41,     7,    34,     5,
-      13,    14,    15,    17,    36,    39,     6,    37,    37,    40,
-      37,    37,    37,    37,    37,    37,    37,    37,    37,     6,
-      36,    36,     8,     9,    18,     6,    41,     6,    35,    36,
-      37,     6
+      12,    21,    22,    23,    24,    25,    41,     4,     7,    17,
+      33,    34,     5,    13,    14,    15,    17,    36,    39,     6,
+      37,    37,    40,    37,    37,    37,    37,    37,    37,    37,
+      37,    37,     6,    18,    36,    36,     8,     9,    18,     6,
+      41,    34,     6,    35,    36,    37,     6
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    29,    30,    31,    31,    32,    33,    34,    34,    35,
-      35,    36,    36,    36,    36,    36,    36,    36,    37,    37,
-      37,    37,    37,    37,    37,    37,    37,    37,    37,    37,
-      37,    37,    38,    38,    38,    38,    39,    40,    40,    41,
-      41
+       0,    28,    29,    30,    30,    31,    32,    33,    33,    34,
+      34,    34,    34,    35,    35,    36,    36,    36,    36,    36,
+      36,    36,    37,    37,    37,    37,    37,    37,    37,    37,
+      37,    37,    37,    37,    37,    37,    38,    38,    38,    38,
+      39,    40,    40,    41,    41
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     7,     4,     0,     6,     1,     1,     0,     6,
-       0,     3,     2,     3,     1,     1,     1,     1,     3,     3,
-       3,     3,     3,     3,     3,     3,     2,     3,     6,     4,
-       3,     1,     1,     1,     1,     1,     1,     2,     0,     3,
-       0
+       0,     2,     7,     4,     0,     6,     1,     1,     3,     1,
+       1,     1,     0,     6,     0,     3,     2,     3,     1,     1,
+       1,     1,     3,     3,     3,     3,     3,     3,     3,     3,
+       2,     3,     6,     4,     3,     1,     1,     1,     1,     1,
+       1,     2,     0,     3,     0
 };
 
 
@@ -1318,19 +1316,19 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* START: COMMENTS VARIABLES_CORES_ASSIGNMENT FORMULA_NAME NEWLINE VARIABLES_SUBFORMULA_ASSIGNMENTS FORMULA FORMULACOMMENTS  */
-#line 79 "input_parser.y"
+#line 80 "input_parser.y"
                     {conj.setRoot((yyvsp[-1].conjectureNode)); result = 0; std::cout << "done!!!!!!!" <<std::endl;}
-#line 1324 "input_parser.cpp"
+#line 1322 "input_parser.cpp"
     break;
 
   case 3: /* VARIABLES_CORES_ASSIGNMENT: VARIABLES_CORES_ASSIGNMENT VARIABLE_CORE_ASSIGNMENT NEWLINE COMMENTS  */
-#line 81 "input_parser.y"
+#line 82 "input_parser.y"
                                                                                                    {}
-#line 1330 "input_parser.cpp"
+#line 1328 "input_parser.cpp"
     break;
 
   case 5: /* VARIABLE_CORE_ASSIGNMENT: VARIABLE SEPERATOR ATOMIC_PREDICATE LEFTP PARAMETERS RIGHTP  */
-#line 85 "input_parser.y"
+#line 86 "input_parser.y"
                                 {if(check_varToProperty((yyvsp[-5].string),varToProperty)){ std::cout<<" variable " << (yyvsp[-5].string) << " is written at least two times" <<std::endl; YYERROR; exit(20);}
                                 if(!coreList.count((yyvsp[-3].string))){std::cout<<"core name \" "<<(yyvsp[-3].string)<<"\"is not exist"<<std::endl; YYERROR;}
                                 // if(!coreList[$3].count("CoreType")){std::cout<<"CoreType of "<<$3<<" couldn't find, chech the core properities"<<std::endl; YYERROR;}
@@ -1346,11 +1344,23 @@ yyreduce:
                                 // $$->setName($3); $$->setOp($4);
                                 // $$->setParameter($5);  varToProperty[$1] = $$; varToCoreName[$1] = $3;
                                 }
-#line 1350 "input_parser.cpp"
+#line 1348 "input_parser.cpp"
     break;
 
-  case 9: /* VARIABLES_SUBFORMULA_ASSIGNMENTS: EXP VARIABLE SEPERATOR SUB_FORMULA NEWLINE VARIABLES_SUBFORMULA_ASSIGNMENTS  */
-#line 111 "input_parser.y"
+  case 7: /* PARAMETERS: PARAMETER  */
+#line 106 "input_parser.y"
+                        {std::cout << (yyvsp[0].string) << std::endl;}
+#line 1354 "input_parser.cpp"
+    break;
+
+  case 8: /* PARAMETERS: PARAMETERS COMMA PARAMETER  */
+#line 107 "input_parser.y"
+                                         {std::cout << (yyvsp[0].string) << std::endl;}
+#line 1360 "input_parser.cpp"
+    break;
+
+  case 13: /* VARIABLES_SUBFORMULA_ASSIGNMENTS: EXP VARIABLE SEPERATOR SUB_FORMULA NEWLINE VARIABLES_SUBFORMULA_ASSIGNMENTS  */
+#line 114 "input_parser.y"
                                                                 {if(check_varToProperty((yyvsp[-4].string),varToProperty)){
                                                                     std::cout<< "variable " << (yyvsp[-4].string) << " declared at least two times" <<std::endl; YYERROR;}
                                                                   if(check_sub_formula_variables((yyvsp[-4].string))){
@@ -1358,37 +1368,37 @@ yyreduce:
                                                                   }
                                                                   sub_formula_variables.insert(std::make_pair((yyvsp[-4].string), (yyvsp[-2].conjectureNode)));
                                                                   }
-#line 1362 "input_parser.cpp"
+#line 1372 "input_parser.cpp"
     break;
 
-  case 11: /* SUB_FORMULA: SUB_FORMULA AND SUB_FORMULA  */
-#line 121 "input_parser.y"
+  case 15: /* SUB_FORMULA: SUB_FORMULA AND SUB_FORMULA  */
+#line 124 "input_parser.y"
                                           {(yyval.conjectureNode)= new ConjectureNode(OPERATOR,"and");
                 std::vector<ConjectureNode*> children; children.push_back((yyvsp[-2].conjectureNode)); children.push_back((yyvsp[0].conjectureNode));
                 (yyval.conjectureNode)->setChildren(children);
                 (yyvsp[-2].conjectureNode)->setParent((yyval.conjectureNode)); (yyvsp[0].conjectureNode)->setParent((yyval.conjectureNode));
                 }
-#line 1372 "input_parser.cpp"
+#line 1382 "input_parser.cpp"
     break;
 
-  case 12: /* SUB_FORMULA: NOT SUB_FORMULA  */
-#line 127 "input_parser.y"
+  case 16: /* SUB_FORMULA: NOT SUB_FORMULA  */
+#line 130 "input_parser.y"
                                {(yyval.conjectureNode)= new ConjectureNode(OPERATOR,"not");
                 std::vector<ConjectureNode*> children; children.push_back((yyvsp[0].conjectureNode));
                 (yyval.conjectureNode)->setChildren(children);
                 (yyvsp[0].conjectureNode)->setParent((yyval.conjectureNode));
                 }
-#line 1382 "input_parser.cpp"
+#line 1392 "input_parser.cpp"
     break;
 
-  case 13: /* SUB_FORMULA: LEFTP SUB_FORMULA RIGHTP  */
-#line 133 "input_parser.y"
-                                       {(yyval.conjectureNode) = (yyvsp[-1].conjectureNode);}
-#line 1388 "input_parser.cpp"
-    break;
-
-  case 14: /* SUB_FORMULA: VARIABLE  */
+  case 17: /* SUB_FORMULA: LEFTP SUB_FORMULA RIGHTP  */
 #line 136 "input_parser.y"
+                                       {(yyval.conjectureNode) = (yyvsp[-1].conjectureNode);}
+#line 1398 "input_parser.cpp"
+    break;
+
+  case 18: /* SUB_FORMULA: VARIABLE  */
+#line 139 "input_parser.y"
                        {if(check_varToProperty((yyvsp[0].string),varToProperty) and !check_sub_formula_variables((yyvsp[0].string)) ){
                     (yyval.conjectureNode) = new ConjectureNode(CORE_VARIABLE, (yyvsp[0].string));
                 }else if(check_sub_formula_variables((yyvsp[0].string)) and !check_varToProperty((yyvsp[0].string),varToProperty) ) {
@@ -1397,60 +1407,50 @@ yyreduce:
                     std::cout<<" variable "<< (yyvsp[0].string) << " is not valid"<< std::endl; YYERROR;
                 }
             }
-#line 1401 "input_parser.cpp"
+#line 1411 "input_parser.cpp"
     break;
 
-  case 15: /* SUB_FORMULA: TRUE  */
-#line 145 "input_parser.y"
+  case 19: /* SUB_FORMULA: TRUE  */
+#line 148 "input_parser.y"
                    {(yyval.conjectureNode) = new ConjectureNode(NUMBER,1);}
-#line 1407 "input_parser.cpp"
+#line 1417 "input_parser.cpp"
     break;
 
-  case 16: /* SUB_FORMULA: FALSE  */
-#line 147 "input_parser.y"
+  case 20: /* SUB_FORMULA: FALSE  */
+#line 150 "input_parser.y"
                     {(yyval.conjectureNode) = new ConjectureNode(NUMBER,0);}
-#line 1413 "input_parser.cpp"
+#line 1423 "input_parser.cpp"
     break;
 
-  case 17: /* SUB_FORMULA: NUMBER_DOUBLE  */
-#line 149 "input_parser.y"
-                            {(yyval.conjectureNode)= new ConjectureNode(NUMBER,(yyvsp[0].number));}
-#line 1419 "input_parser.cpp"
+  case 21: /* SUB_FORMULA: NUMBER_DOUBLE  */
+#line 152 "input_parser.y"
+                            {(yyval.conjectureNode)= new ConjectureNode(NUMBER,strtod((yyvsp[0].string),NULL));}
+#line 1429 "input_parser.cpp"
     break;
 
-  case 18: /* FORMULA: FORMULA AND FORMULA  */
-#line 151 "input_parser.y"
+  case 22: /* FORMULA: FORMULA AND FORMULA  */
+#line 154 "input_parser.y"
                                   {(yyval.conjectureNode) = new ConjectureNode(OPERATOR,"and");
             std::vector<ConjectureNode*> children;
             children.push_back((yyvsp[-2].conjectureNode)); children.push_back((yyvsp[0].conjectureNode));	(yyval.conjectureNode)->setChildren(children);
             (yyvsp[-2].conjectureNode)->setParent((yyval.conjectureNode)); (yyvsp[0].conjectureNode)->setParent((yyval.conjectureNode));
             }
-#line 1429 "input_parser.cpp"
+#line 1439 "input_parser.cpp"
     break;
 
-  case 19: /* FORMULA: FORMULA OR FORMULA  */
-#line 156 "input_parser.y"
+  case 23: /* FORMULA: FORMULA OR FORMULA  */
+#line 159 "input_parser.y"
                                  {(yyval.conjectureNode) = new ConjectureNode(OPERATOR,"or");
                     std::vector<ConjectureNode*> children;
                     children.push_back((yyvsp[-2].conjectureNode)); children.push_back((yyvsp[0].conjectureNode));	(yyval.conjectureNode)->setChildren(children);
                     (yyvsp[-2].conjectureNode)->setParent((yyval.conjectureNode)); (yyvsp[0].conjectureNode)->setParent((yyval.conjectureNode));
             }
-#line 1439 "input_parser.cpp"
-    break;
-
-  case 20: /* FORMULA: FORMULA IMPLIES FORMULA  */
-#line 161 "input_parser.y"
-                                      {(yyval.conjectureNode) = new ConjectureNode(OPERATOR,"implies");
-            std::vector<ConjectureNode*> children;
-            children.push_back((yyvsp[-2].conjectureNode)); children.push_back((yyvsp[0].conjectureNode));	(yyval.conjectureNode)->setChildren(children);
-            (yyvsp[-2].conjectureNode)->setParent((yyval.conjectureNode)); (yyvsp[0].conjectureNode)->setParent((yyval.conjectureNode));
-            }
 #line 1449 "input_parser.cpp"
     break;
 
-  case 21: /* FORMULA: FORMULA IFF FORMULA  */
-#line 166 "input_parser.y"
-                                  {(yyval.conjectureNode) = new ConjectureNode(OPERATOR,"iff");
+  case 24: /* FORMULA: FORMULA IMPLIES FORMULA  */
+#line 164 "input_parser.y"
+                                      {(yyval.conjectureNode) = new ConjectureNode(OPERATOR,"implies");
             std::vector<ConjectureNode*> children;
             children.push_back((yyvsp[-2].conjectureNode)); children.push_back((yyvsp[0].conjectureNode));	(yyval.conjectureNode)->setChildren(children);
             (yyvsp[-2].conjectureNode)->setParent((yyval.conjectureNode)); (yyvsp[0].conjectureNode)->setParent((yyval.conjectureNode));
@@ -1458,9 +1458,9 @@ yyreduce:
 #line 1459 "input_parser.cpp"
     break;
 
-  case 22: /* FORMULA: FORMULA ATLEAST FORMULA  */
-#line 171 "input_parser.y"
-                                      {(yyval.conjectureNode) = new ConjectureNode(OPERATOR,">=");
+  case 25: /* FORMULA: FORMULA IFF FORMULA  */
+#line 169 "input_parser.y"
+                                  {(yyval.conjectureNode) = new ConjectureNode(OPERATOR,"iff");
             std::vector<ConjectureNode*> children;
             children.push_back((yyvsp[-2].conjectureNode)); children.push_back((yyvsp[0].conjectureNode));	(yyval.conjectureNode)->setChildren(children);
             (yyvsp[-2].conjectureNode)->setParent((yyval.conjectureNode)); (yyvsp[0].conjectureNode)->setParent((yyval.conjectureNode));
@@ -1468,9 +1468,9 @@ yyreduce:
 #line 1469 "input_parser.cpp"
     break;
 
-  case 23: /* FORMULA: FORMULA ATMOST FORMULA  */
-#line 176 "input_parser.y"
-                                     {(yyval.conjectureNode) = new ConjectureNode(OPERATOR,"<=");
+  case 26: /* FORMULA: FORMULA ATLEAST FORMULA  */
+#line 174 "input_parser.y"
+                                      {(yyval.conjectureNode) = new ConjectureNode(OPERATOR,">=");
             std::vector<ConjectureNode*> children;
             children.push_back((yyvsp[-2].conjectureNode)); children.push_back((yyvsp[0].conjectureNode));	(yyval.conjectureNode)->setChildren(children);
             (yyvsp[-2].conjectureNode)->setParent((yyval.conjectureNode)); (yyvsp[0].conjectureNode)->setParent((yyval.conjectureNode));
@@ -1478,9 +1478,9 @@ yyreduce:
 #line 1479 "input_parser.cpp"
     break;
 
-  case 24: /* FORMULA: FORMULA LESS FORMULA  */
-#line 181 "input_parser.y"
-                                   {(yyval.conjectureNode) = new ConjectureNode(OPERATOR,"<");
+  case 27: /* FORMULA: FORMULA ATMOST FORMULA  */
+#line 179 "input_parser.y"
+                                     {(yyval.conjectureNode) = new ConjectureNode(OPERATOR,"<=");
             std::vector<ConjectureNode*> children;
             children.push_back((yyvsp[-2].conjectureNode)); children.push_back((yyvsp[0].conjectureNode));	(yyval.conjectureNode)->setChildren(children);
             (yyvsp[-2].conjectureNode)->setParent((yyval.conjectureNode)); (yyvsp[0].conjectureNode)->setParent((yyval.conjectureNode));
@@ -1488,9 +1488,9 @@ yyreduce:
 #line 1489 "input_parser.cpp"
     break;
 
-  case 25: /* FORMULA: FORMULA BIGGER FORMULA  */
-#line 186 "input_parser.y"
-                                      {(yyval.conjectureNode) = new ConjectureNode(OPERATOR,">");
+  case 28: /* FORMULA: FORMULA LESS FORMULA  */
+#line 184 "input_parser.y"
+                                   {(yyval.conjectureNode) = new ConjectureNode(OPERATOR,"<");
             std::vector<ConjectureNode*> children;
             children.push_back((yyvsp[-2].conjectureNode)); children.push_back((yyvsp[0].conjectureNode));	(yyval.conjectureNode)->setChildren(children);
             (yyvsp[-2].conjectureNode)->setParent((yyval.conjectureNode)); (yyvsp[0].conjectureNode)->setParent((yyval.conjectureNode));
@@ -1498,65 +1498,75 @@ yyreduce:
 #line 1499 "input_parser.cpp"
     break;
 
-  case 26: /* FORMULA: NOT FORMULA  */
-#line 192 "input_parser.y"
+  case 29: /* FORMULA: FORMULA BIGGER FORMULA  */
+#line 189 "input_parser.y"
+                                      {(yyval.conjectureNode) = new ConjectureNode(OPERATOR,">");
+            std::vector<ConjectureNode*> children;
+            children.push_back((yyvsp[-2].conjectureNode)); children.push_back((yyvsp[0].conjectureNode));	(yyval.conjectureNode)->setChildren(children);
+            (yyvsp[-2].conjectureNode)->setParent((yyval.conjectureNode)); (yyvsp[0].conjectureNode)->setParent((yyval.conjectureNode));
+            }
+#line 1509 "input_parser.cpp"
+    break;
+
+  case 30: /* FORMULA: NOT FORMULA  */
+#line 195 "input_parser.y"
                            {(yyval.conjectureNode) = new ConjectureNode(OPERATOR,"not");
             std::vector<ConjectureNode*> children;
             children.push_back((yyvsp[0].conjectureNode));	(yyval.conjectureNode)->setChildren(children); (yyvsp[0].conjectureNode)->setParent((yyval.conjectureNode));
             }
-#line 1508 "input_parser.cpp"
+#line 1518 "input_parser.cpp"
     break;
 
-  case 27: /* FORMULA: FORMULA BINARY_ARITHMETIC_OPERATOR FORMULA  */
-#line 196 "input_parser.y"
+  case 31: /* FORMULA: FORMULA BINARY_ARITHMETIC_OPERATOR FORMULA  */
+#line 199 "input_parser.y"
                                                           {(yyval.conjectureNode) = new ConjectureNode(OPERATOR,(yyvsp[-1].string));
             std::vector<ConjectureNode*> children;
             children.push_back((yyvsp[-2].conjectureNode)); children.push_back((yyvsp[0].conjectureNode));	(yyval.conjectureNode)->setChildren(children);
             (yyvsp[-2].conjectureNode)->setParent((yyval.conjectureNode)); (yyvsp[0].conjectureNode)->setParent((yyval.conjectureNode));
             }
-#line 1518 "input_parser.cpp"
+#line 1528 "input_parser.cpp"
     break;
 
-  case 28: /* FORMULA: BINARY_FUNCTION LEFTP FORMULA COMMA FORMULA RIGHTP  */
-#line 201 "input_parser.y"
+  case 32: /* FORMULA: BINARY_FUNCTION LEFTP FORMULA COMMA FORMULA RIGHTP  */
+#line 204 "input_parser.y"
                                                                  {(yyval.conjectureNode) = new ConjectureNode(FUNCTION_BINARY,(yyvsp[-5].string));
             std::vector<ConjectureNode*> children;
             children.push_back((yyvsp[-3].conjectureNode)); children.push_back((yyvsp[-1].conjectureNode));	(yyval.conjectureNode)->setChildren(children);
             (yyvsp[-3].conjectureNode)->setParent((yyval.conjectureNode)); (yyvsp[-1].conjectureNode)->setParent((yyval.conjectureNode));
             }
-#line 1528 "input_parser.cpp"
+#line 1538 "input_parser.cpp"
     break;
 
-  case 29: /* FORMULA: UNARY_FUNCTION LEFTP FORMULA RIGHTP  */
-#line 206 "input_parser.y"
+  case 33: /* FORMULA: UNARY_FUNCTION LEFTP FORMULA RIGHTP  */
+#line 209 "input_parser.y"
                                                   {(yyval.conjectureNode) = new ConjectureNode(FUNCTION_UNARY,(yyvsp[-3].string));
             std::vector<ConjectureNode*> children;
             children.push_back((yyvsp[-1].conjectureNode));	(yyval.conjectureNode)->setChildren(children);
             (yyvsp[-1].conjectureNode)->setParent((yyval.conjectureNode));
             }
-#line 1538 "input_parser.cpp"
+#line 1548 "input_parser.cpp"
     break;
 
-  case 30: /* FORMULA: LEFTP FORMULA RIGHTP  */
-#line 211 "input_parser.y"
-                                        {(yyval.conjectureNode) = (yyvsp[-1].conjectureNode);}
-#line 1544 "input_parser.cpp"
-    break;
-
-  case 32: /* FORMULA_TERMINAL: TRUE  */
+  case 34: /* FORMULA: LEFTP FORMULA RIGHTP  */
 #line 214 "input_parser.y"
+                                        {(yyval.conjectureNode) = (yyvsp[-1].conjectureNode);}
+#line 1554 "input_parser.cpp"
+    break;
+
+  case 36: /* FORMULA_TERMINAL: TRUE  */
+#line 217 "input_parser.y"
                                 {(yyval.conjectureNode) = new ConjectureNode(NUMBER,1); }
-#line 1550 "input_parser.cpp"
+#line 1560 "input_parser.cpp"
     break;
 
-  case 33: /* FORMULA_TERMINAL: FALSE  */
-#line 215 "input_parser.y"
+  case 37: /* FORMULA_TERMINAL: FALSE  */
+#line 218 "input_parser.y"
                                 {(yyval.conjectureNode) = new ConjectureNode(NUMBER,0); }
-#line 1556 "input_parser.cpp"
+#line 1566 "input_parser.cpp"
     break;
 
-  case 34: /* FORMULA_TERMINAL: VARIABLE  */
-#line 216 "input_parser.y"
+  case 38: /* FORMULA_TERMINAL: VARIABLE  */
+#line 219 "input_parser.y"
                                 { if(check_varToProperty((yyvsp[0].string),varToProperty) and !check_sub_formula_variables((yyvsp[0].string)) ){
                                    (yyval.conjectureNode) = new ConjectureNode(CORE_VARIABLE, (yyvsp[0].string));
                                   }else if(check_sub_formula_variables((yyvsp[0].string)) and !check_varToProperty((yyvsp[0].string),varToProperty) ) {
@@ -1565,23 +1575,23 @@ yyreduce:
                                     std::cout<<" variable "<< (yyvsp[0].string) << " is not valid"<< std::endl; YYERROR;
                                   }
                                 }
-#line 1569 "input_parser.cpp"
+#line 1579 "input_parser.cpp"
     break;
 
-  case 35: /* FORMULA_TERMINAL: NUMBER_DOUBLE  */
-#line 224 "input_parser.y"
-                                 {(yyval.conjectureNode)= new ConjectureNode(NUMBER,(yyvsp[0].number));}
-#line 1575 "input_parser.cpp"
-    break;
-
-  case 37: /* COMMENTS: COMMENT COMMENTS  */
-#line 234 "input_parser.y"
-                                                                   {}
-#line 1581 "input_parser.cpp"
-    break;
-
-
+  case 39: /* FORMULA_TERMINAL: NUMBER_DOUBLE  */
+#line 227 "input_parser.y"
+                                 {(yyval.conjectureNode)= new ConjectureNode(NUMBER,strtod((yyvsp[0].string),NULL));}
 #line 1585 "input_parser.cpp"
+    break;
+
+  case 41: /* COMMENTS: COMMENT COMMENTS  */
+#line 237 "input_parser.y"
+                                                                   {}
+#line 1591 "input_parser.cpp"
+    break;
+
+
+#line 1595 "input_parser.cpp"
 
       default: break;
     }
@@ -1779,7 +1789,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 240 "input_parser.y"
+#line 243 "input_parser.y"
 
 
 void yyerror(Conjecture &conj, int &result,std::map<std::string,std::map<std::string,std::string>> &coreList, std::map<std::string,std::string> &varToCoreName, std::map<std::string, PropertyAssignment*> varToProperty, char const* msg){
