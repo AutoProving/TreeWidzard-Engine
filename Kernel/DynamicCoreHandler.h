@@ -40,6 +40,7 @@ public:
     std::unique_ptr<DynamicCore> create() const {
         return std::unique_ptr<DynamicCore>(creator());
     }
+
     std::unique_ptr<DynamicCore> create_int(unsigned param) const {
         return std::unique_ptr<DynamicCore>(creator_int(param));
     }
@@ -47,9 +48,11 @@ public:
     std::unique_ptr<DynamicCore> create_multiGraph(MultiGraph multiGraph) const {
         return std::unique_ptr<DynamicCore>(creator_multiGraph(multiGraph));
     }
-    std::unique_ptr<DynamicCore> create_parameters(std::vector<int> parameters) const {
+
+    std::unique_ptr<DynamicCore> create_parameters(const std::vector<char*> &parameters) const {
         return std::unique_ptr<DynamicCore>(creator_parameters(parameters));
     }
+
     ~DynamicCoreHandler() {
         if (handler) {
             dlclose(handler);

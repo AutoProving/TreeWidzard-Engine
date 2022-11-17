@@ -53,85 +53,101 @@ void InputController::construct_dynamicKernel() {
   DynamicCoreHandler *factory;
   int coreIndex = 1;
   for (auto core : varToProperty) {
-    if (coreList.count(core.second->getName())){
-      std::cout << std::left << std::setw(2) << coreIndex << std::setw(5)
-                << "- Variable: " << std::setw(5) << core.first << std::setw(5)
-                << "NAME: " << std::setw(30) << core.second->getName();
-      coreIndex++;
-      if (coreList[core.second->getName()].count("ParameterType")) {
-        std::cout << std::setw(10) << "ParameterType: " << std::setw(10)
-                  << coreList[core.second->getName()]["ParameterType"];
-        if (coreList[core.second->getName()]["ParameterType"] ==
-                "UnsignedInt" and
-            core.second->getParameterType() == "UnsignedInt") {
-          std::cout << " " << core.second->getParameter();
-        }
-        std::cout << std::endl;
-        if (coreList[core.second->getName()]["ParameterType"] ==
-                "ParameterLess" and
-            core.second->getParameterType() == "ParameterLess") {
-          std::string corePath =
-              dynamicPluginPath + coreNamesToFiles[core.second->getName()];
+      if (coreList.count(core.second->getName())) {
+          std::cout << std::left << std::setw(2) << coreIndex << std::setw(5)
+                    << "- Variable: " << std::setw(5) << core.first << std::setw(5)
+                    << "NAME: " << std::setw(30) << core.second->getName();
+          coreIndex++;
+          // set coreType in core.second which is a PropertyAssignment.
+          core.second->setType(coreList[core.second->getName()]["CoreType"]);
+          // set parameterType in core.second which is a PropertyAssignment.
+          core.second->setParameterType(coreList[core.second->getName()]["ParameterType"]);
+          std::cout << std::setw(10) << "ParameterType: " << std::setw(10) << coreList[core.second->getName()]["ParameterType"];
+          for(auto p: core.second->getParametersVec()){
+              std::cout << " " << p;
+          }
+          std::cout << std::endl;
+          std::string corePath = dynamicPluginPath + coreNamesToFiles[core.second->getName()];
           factory = new DynamicCoreHandler(corePath.c_str());
-          std::unique_ptr<DynamicCore> handlerCore = factory->create();
+          std::unique_ptr<DynamicCore> handlerCore = factory->create_parameters(core.second->getParametersVec());
           DynamicCore *corePointer = handlerCore.release();
           corePointer->setWidth(dynamicKernel.get_width().get_value());
           if (dynamicKernel.isVarExists(core.first)) {
-            std::cout << "ERROR: " << core.first << " exists in DynamicKernel"
-                      << std::endl;
-            exit(20);
+              std::cout << "ERROR: " << core.first << " exists in DynamicKernel"
+                        << std::endl;
+              exit(20);
           }
           dynamicKernel.addCore(*corePointer);
           auto varToNameAndIndex = dynamicKernel.getVarToNameAndIndex();
           varToNameAndIndex.insert(make_pair(
-              core.first,
-              make_pair(core.second->getName(), dynamicKernel.coreSize() - 1)));
+                  core.first,
+                  make_pair(core.second->getName(), dynamicKernel.coreSize() - 1)));
           dynamicKernel.setVarToNameAndIndex(varToNameAndIndex);
-        } else if (coreList[core.second->getName()]["ParameterType"] ==
-                       "UnsignedInt" and
-                   core.second->getParameterType() == "UnsignedInt") {
-          unsigned parameter = core.second->getParameter();
-          if (core.second->getOp() == ">") parameter++;
-          if (core.second->getOp() == "<") parameter--;
-          if (parameter < 0) {
-            std::cout << " The given parameter for the core "
-                      << core.second->getName() << " is " << parameter
-                      << ". Parameter could not be negative." << std::endl;
-            exit(20);
-          }
-          std::string corePath =
-              dynamicPluginPath + coreNamesToFiles[core.second->getName()];
-          factory = new DynamicCoreHandler(corePath.c_str());
-          std::unique_ptr<DynamicCore> handlerCore =
-              factory->create_int(parameter);
-          DynamicCore *corePointer = handlerCore.release();
-          corePointer->setWidth(dynamicKernel.get_width().get_value());
-          dynamicKernel.addCore(*corePointer);
-          auto varToNameAndIndex = dynamicKernel.getVarToNameAndIndex();
-          varToNameAndIndex.insert(make_pair(
-              core.first,
-              make_pair(core.second->getName(), dynamicKernel.coreSize() - 1)));
-          dynamicKernel.setVarToNameAndIndex(varToNameAndIndex);
-        } else {
-          std::cout << "ERROR: ParameterType of the core "
-                    << core.second->getName()
-                    << "  is not valid. The Given ParameterType is "
-                    << core.second->getParameterType() << std::endl;
-          exit(20);
-        }
+//        if (coreList[core.second->getName()]["ParameterType"] ==
+//                "ParameterLess" and
+//            core.second->getParameterType() == "ParameterLess") {
+//          std::string corePath =
+//              dynamicPluginPath + coreNamesToFiles[core.second->getName()];
+//          factory = new DynamicCoreHandler(corePath.c_str());
+//          std::unique_ptr<DynamicCore> handlerCore = factory->create();
+//          DynamicCore *corePointer = handlerCore.release();
+//          corePointer->setWidth(dynamicKernel.get_width().get_value());
+//          if (dynamicKernel.isVarExists(core.first)) {
+//            std::cout << "ERROR: " << core.first << " exists in DynamicKernel"
+//                      << std::endl;
+//            exit(20);
+//          }
+//          dynamicKernel.addCore(*corePointer);
+//          auto varToNameAndIndex = dynamicKernel.getVarToNameAndIndex();
+//          varToNameAndIndex.insert(make_pair(
+//              core.first,
+//              make_pair(core.second->getName(), dynamicKernel.coreSize() - 1)));
+//          dynamicKernel.setVarToNameAndIndex(varToNameAndIndex);
+//        } else if (coreList[core.second->getName()]["ParameterType"] ==
+//                       "UnsignedInt" and
+//                   core.second->getParameterType() == "UnsignedInt") {
+//          unsigned parameter = core.second->getParameter();
+//          if (core.second->getOp() == ">") parameter++;
+//          if (core.second->getOp() == "<") parameter--;
+//          if (parameter < 0) {
+//            std::cout << " The given parameter for the core "
+//                      << core.second->getName() << " is " << parameter
+//                      << ". Parameter could not be negative." << std::endl;
+//            exit(20);
+//          }
+//          std::string corePath =
+//              dynamicPluginPath + coreNamesToFiles[core.second->getName()];
+//          factory = new DynamicCoreHandler(corePath.c_str());
+//          std::unique_ptr<DynamicCore> handlerCore =
+//              factory->create_int(parameter);
+//          DynamicCore *corePointer = handlerCore.release();
+//          corePointer->setWidth(dynamicKernel.get_width().get_value());
+//          dynamicKernel.addCore(*corePointer);
+//          auto varToNameAndIndex = dynamicKernel.getVarToNameAndIndex();
+//          varToNameAndIndex.insert(make_pair(
+//              core.first,
+//              make_pair(core.second->getName(), dynamicKernel.coreSize() - 1)));
+//          dynamicKernel.setVarToNameAndIndex(varToNameAndIndex);
+//        } else {
+//          std::cout << "ERROR: ParameterType of the core "
+//                    << core.second->getName()
+//                    << "  is not valid. The Given ParameterType is "
+//                    << core.second->getParameterType() << std::endl;
+//          exit(20);
+//        }
+//      } else {
+//        std::cout << "ERROR: " << core.first
+//                  << " hasn't ParameterType, check the properties of the core. "
+//                  << std::endl;
+//        exit(20);
+//      }
       } else {
-        std::cout << "ERROR: " << core.first
-                  << " hasn't ParameterType, check the properties of the core. "
-                  << std::endl;
-        exit(20);
+          std::cout << "Core " << core.first << " := " << core.second->getName() << " is not exist" << std::endl;
+          exit(20);
       }
-    } else {
-      std::cout << "Core " << core.first << " is not exist" << std::endl;
-      exit(20);
-    }
   }
-  conjecture.setKernel(&dynamicKernel);
-  std::cout << "core size: " << dynamicKernel.coreSize() << std::endl;
+    conjecture.setKernel(&dynamicKernel);
+    std::cout << "core size: " << dynamicKernel.coreSize() << std::endl;
 }
 
 DynamicKernel &InputController::getDynamicKernel() { return dynamicKernel; }

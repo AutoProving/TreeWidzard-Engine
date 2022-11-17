@@ -3,6 +3,7 @@
 #include "DynamicCore.h"
 #include <iostream>
 #include <map>
+#include <vector>
 
 using namespace std;
 class MaxDegree_AtLeast_Witness;
@@ -54,6 +55,7 @@ public:
   unsigned maxDegree;
   MaxDegree_AtLeast_DynamicCore();
   MaxDegree_AtLeast_DynamicCore(unsigned parameter);
+  MaxDegree_AtLeast_DynamicCore(const vector<char*> &parameter);
   void createInitialWitnessSet();
   virtual WitnessSetPointer intro_v(unsigned i, Bag &b, const Witness &witness) override;
   virtual WitnessSetPointer intro_e(unsigned i, unsigned j, Bag &b, const Witness &witness) override;

@@ -94,7 +94,8 @@ VARIABLE_CORE_ASSIGNMENT	: VARIABLE SEPERATOR ATOMIC_PREDICATE LEFTP PARAMETERS 
 				// if( coreList[$3]["PrimaryOperator"]=="AtMost" and (strcmp($4,">")==0 or strcmp($4,">=")==0)  )
 				// {std::cout<<"PrimaryOperator for "<<$3<<" is " <<coreList[$3]["PrimaryOperator"]<<" and the written operator is " <<$4<<" , check the core properties"<<std::endl;YYERROR;}
 				$$ = new PropertyAssignment(); //$$->setParameterType("UnsignedInt");
-				// $$->setName($3); $$->setOp($4);
+				$$->setName($3);
+				// $$->setOp($4);
 				// $$->setParameter($5);
 				varToProperty[$1] = $$; varToCoreName[$1] = $3;
 				$$->setParametersVec(*$5);

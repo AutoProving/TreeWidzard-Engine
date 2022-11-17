@@ -62,6 +62,6 @@ using DynamicCore_creator_t_int = DynamicCore *(*)(unsigned param);
 using DynamicCore_creator_t_multiGraph =
     DynamicCore *(*)(MultiGraph multiGraph);
 using DynamicCore_creator_t_parameters =
-    DynamicCore *(*)(std::vector<int> parameters);
+    DynamicCore *(*)(std::vector<char*> parameters);
 
 #endif
