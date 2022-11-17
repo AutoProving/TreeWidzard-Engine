@@ -113,10 +113,11 @@ union INPUT_STYPE
      ConjectureNode *conjectureNode;
      double number;
      char* string;
-     std::vector<int> * vec;
+     std::vector<char*> *vec;
      PropertyAssignment *property;
 
-#line 120 "input_parser.hpp"
+
+#line 121 "input_parser.hpp"
 
 };
 typedef union INPUT_STYPE INPUT_STYPE;

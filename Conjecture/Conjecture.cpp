@@ -19,7 +19,6 @@ double Conjecture::evaluateConjectureNodeOnState(const State &q, ConjectureNode*
                     std::cout<<"Error in Conjecture::evaluateConjectureNodeOnState: coreType " << coreType << " is not defined.";
                     exit(20);
                 }
-
             } else {
                 // error
                 std::cout<<"Error in Conjecture::evaluateConjectureNodeOnState.";

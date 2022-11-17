@@ -36,8 +36,9 @@
      ConjectureNode *conjectureNode;
      double number;
      char* string;
-     std::vector<int> * vec;
+     std::vector<char*> *vec;
      PropertyAssignment *property;
+
 }
 
 %parse-param {Conjecture &conj}
@@ -51,10 +52,11 @@
 %token SEPERATOR  FILEPATH LEFTP RIGHTP NAME NEWLINE AND OR IFF IMPLIES NOT TRUE FALSE COMMENT NUMBER_DOUBLE COMMA
         FORMULA_NAME EXP ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION
 %type<string>  SEPERATOR FILEPATH LEFTP RIGHTP NAME NEWLINE AND OR IFF IMPLIES NOT TRUE FALSE COMMENT VARIABLE ATOMIC_PREDICATE COMMA FORMULA_NAME EXP
-            ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION PARAMETER NUMBER_DOUBLE
+	ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION PARAMETER NUMBER_DOUBLE
 %type<property> VARIABLE_CORE_ASSIGNMENT
 %type<conjectureNode> FORMULA SUB_FORMULA FORMULA_TERMINAL
-//%type<vec> NUMBER_DOUBLES
+
+%type<vec>  PARAMETERS;
 
 %start START
 %left IFF 
@@ -79,7 +81,8 @@ VARIABLES_CORES_ASSIGNMENT	: VARIABLES_CORES_ASSIGNMENT VARIABLE_CORE_ASSIGNMENT
 				| %empty
 				;
 VARIABLE_CORE_ASSIGNMENT	: VARIABLE SEPERATOR ATOMIC_PREDICATE LEFTP PARAMETERS RIGHTP
-				{if(check_varToProperty($1,varToProperty)){ std::cout<<" variable " << $1 << " is written at least two times" <<std::endl; YYERROR; exit(20);}
+				{
+				if(check_varToProperty($1,varToProperty)){ std::cout<<" variable " << $1 << " is written at least two times" <<std::endl; YYERROR; exit(20);}
 				if(!coreList.count($3)){std::cout<<"core name \" "<<$3<<"\"is not exist"<<std::endl; YYERROR;}
 				// if(!coreList[$3].count("CoreType")){std::cout<<"CoreType of "<<$3<<" couldn't find, chech the core properities"<<std::endl; YYERROR;}
 				// if(coreList[$3]["CoreType"]!="Bool"){std::cout<<"CoreType of "<<$3<< " isn't Bool, check the core properties"<<std::endl; YYERROR;}
@@ -87,20 +90,28 @@ VARIABLE_CORE_ASSIGNMENT	: VARIABLE SEPERATOR ATOMIC_PREDICATE LEFTP PARAMETERS 
 				// if(coreList[$3]["ParameterType"]!="UnsignedInt"){std::cout<<"Parameter of "<<$3<< " isn't UnsignedInt, check the core properties"<<std::endl; YYERROR;}
 				// if(!coreList[$3].count("PrimaryOperator")){std::cout<<"PrimaryOperator for "<<$3<<" isn't set, check the core properties"<<std::endl;YYERROR;}
 				// if(coreList[$3]["PrimaryOperator"]=="AtLeast" and (strcmp($4,"<")==0 or strcmp($4,"<=")==0)   ){
-				//   std::cout<<"PrimaryOperator for "<<$3<<" is " <<coreList[$3]["PrimaryOperator"]<<" and the written operator is " <<$4<<" , check the core properties"<<std::endl;YYERROR;}
+				// std::cout<<"PrimaryOperator for "<<$3<<" is " <<coreList[$3]["PrimaryOperator"]<<" and the written operator is " <<$4<<" , check the core properties"<<std::endl;YYERROR;}
 				// if( coreList[$3]["PrimaryOperator"]=="AtMost" and (strcmp($4,">")==0 or strcmp($4,">=")==0)  )
 				// {std::cout<<"PrimaryOperator for "<<$3<<" is " <<coreList[$3]["PrimaryOperator"]<<" and the written operator is " <<$4<<" , check the core properties"<<std::endl;YYERROR;}
 				$$ = new PropertyAssignment(); //$$->setParameterType("UnsignedInt");
 				// $$->setName($3); $$->setOp($4);
-				// $$->setParameter($5);  varToProperty[$1] = $$; varToCoreName[$1] = $3;
+				// $$->setParameter($5);
+				varToProperty[$1] = $$; varToCoreName[$1] = $3;
+				$$->setParametersVec(*$5);
 				}
 				;
 //NUMBER_DOUBLES	: NUMBER_DOUBLES COMMA NUMBER_DOUBLE {$$ = new std::vector<int>; $$ = $1; $$->push_back(strtod($3,NULL));}
 //		| NUMBER_DOUBLE { $$ = new std::vector<int>;  $$->push_back(strtod($1,NULL));}
 //		;
 ATOMIC_PREDICATE	: NAME;
-PARAMETERS	: %empty | PARAMETER {std::cout << $1 << std::endl;}
-		| PARAMETERS COMMA PARAMETER {std::cout << $3 << std::endl;};
+PARAMETERS	: %empty | PARAMETER {
+		$$ = new std::vector<char*>();
+		$$->push_back($1);
+		}
+		| PARAMETERS COMMA PARAMETER {std::cout << $3 << std::endl;
+		$$ = $1;
+                $$->push_back($3);
+		};
 PARAMETER	: NAME | NUMBER_DOUBLE | FILEPATH ;
 //COMPARATOR	: BIGGER{$$=$1;}
 //		| ATLEAST{$$=$1;}
@@ -130,7 +141,6 @@ SUB_FORMULA : SUB_FORMULA AND SUB_FORMULA {$$= new ConjectureNode(OPERATOR,"and"
                 }
 
             | LEFTP SUB_FORMULA RIGHTP {$$ = $2;}
-
 
             | VARIABLE {if(check_varToProperty($1,varToProperty) and !check_sub_formula_variables($1) ){
                     $$ = new ConjectureNode(CORE_VARIABLE, $1);

@@ -49,3 +49,12 @@ int PropertyAssignment::getParameter() const {
 void PropertyAssignment::setParameter(int parameter) {
     PropertyAssignment::parameter = parameter;
 }
+
+const std::vector<char *> &PropertyAssignment::getParametersVec() const {
+    return parametersVec;
+}
+
+void PropertyAssignment::setParametersVec(const std::vector<char *> &parametersVec) {
+    PropertyAssignment::parametersVec = parametersVec;
+}
+
