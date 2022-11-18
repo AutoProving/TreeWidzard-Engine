@@ -131,10 +131,7 @@ MaxDegree_AtLeast_DynamicCore::MaxDegree_AtLeast_DynamicCore(const vector<char*>
         cerr<< "MaxDegree Core received an invalid parameter list" << endl;
         exit(20);
     }
-    cout << "constructor of MAXDEGREE " << endl;
-    for (auto item : parameters) {
-        cout << item <<endl;
-    }
+
     this->maxDegree = atoi(parameters[0]);
     createInitialWitnessSet();
     // Initializing attributes

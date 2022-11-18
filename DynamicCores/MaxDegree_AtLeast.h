@@ -3,7 +3,6 @@
 #include "DynamicCore.h"
 #include <iostream>
 #include <map>
-#include <vector>
 
 using namespace std;
 class MaxDegree_AtLeast_Witness;
