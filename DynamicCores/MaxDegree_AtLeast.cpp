@@ -126,13 +126,23 @@ MaxDegree_AtLeast_DynamicCore::MaxDegree_AtLeast_DynamicCore(unsigned maxDegree)
   addAttribute("PrimaryOperator","AtLeast");
 }
 
-MaxDegree_AtLeast_DynamicCore::MaxDegree_AtLeast_DynamicCore(const vector<char*> &parameters){
+MaxDegree_AtLeast_DynamicCore::MaxDegree_AtLeast_DynamicCore(const parameterType &parameters){
     if(parameters.size()!=1){
         cerr<< "MaxDegree Core received an invalid parameter list" << endl;
         exit(20);
     }
+    for (const auto &prop : parameters) {
+          std::visit(overloaded{
+              [&](char *p) {
+                  cerr<< "MaxDegree Core received an invalid parameter list" << endl;
+                  exit(20);
+              },
+              [&](auto p) {
+                  this->maxDegree = p;
+              }
+              }, prop);
+    }
 
-    this->maxDegree = atoi(parameters[0]);
     createInitialWitnessSet();
     // Initializing attributes
     addAttribute("CoreName","MaxDegree");
@@ -408,7 +418,7 @@ void MaxDegree_AtLeast_DynamicCore::copyWitness(MaxDegree_AtLeast_WitnessPointer
     DynamicCore * create_int(unsigned param) {
       return new MaxDegree_AtLeast_DynamicCore(param);
     }
-  DynamicCore * create_parameters(const vector<char*> &parameters) {
+  DynamicCore * create_parameters(const parameterType &parameters) {
       return new MaxDegree_AtLeast_DynamicCore(parameters);
   }
   }

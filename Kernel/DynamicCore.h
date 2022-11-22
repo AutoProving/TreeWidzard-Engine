@@ -7,11 +7,20 @@
 #include <string>
 #include <tuple>
 #include <vector>
+#include <variant>
 
 #include "../Multigraph/MultiGraph.h"
 #include "Bag.h"
 #include "Witness.h"
 #include "WitnessSet.h"
+
+template<class...Ts>
+struct overloaded : Ts... { using Ts::operator()...; };
+template<class... Ts>
+overloaded(Ts...) -> overloaded<Ts...>;
+using parameterType = std::vector<std::variant<char*, int, bool>>;
+
+
 
 class DynamicCore {
  private:
@@ -59,9 +68,7 @@ class DynamicCore {
 };
 using DynamicCore_creator_t = DynamicCore *(*)();
 using DynamicCore_creator_t_int = DynamicCore *(*)(unsigned param);
-using DynamicCore_creator_t_multiGraph =
-    DynamicCore *(*)(MultiGraph multiGraph);
-using DynamicCore_creator_t_parameters =
-    DynamicCore *(*)(std::vector<char*> parameters);
+using DynamicCore_creator_t_multiGraph = DynamicCore *(*)(MultiGraph multiGraph);
+using DynamicCore_creator_t_parameters = DynamicCore *(*)(parameterType parameters);
 
 #endif

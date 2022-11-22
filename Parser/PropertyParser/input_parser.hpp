@@ -63,8 +63,9 @@ extern int input_debug;
     #include <stdio.h>
     #include <stdlib.h>
     #include <utility>
+    #include <variant>
 
-#line 68 "input_parser.hpp"
+#line 69 "input_parser.hpp"
 
 /* Token kinds.  */
 #ifndef INPUT_TOKENTYPE
@@ -108,14 +109,13 @@ extern int input_debug;
 #if ! defined INPUT_STYPE && ! defined INPUT_STYPE_IS_DECLARED
 union INPUT_STYPE
 {
-#line 35 "input_parser.y"
+#line 37 "input_parser.y"
 
      ConjectureNode *conjectureNode;
-     double number;
+     int number;
      char* string;
-     std::vector<char*> *vec;
+     std::vector<std::variant<char*,int, bool>> *vec;
      PropertyAssignment *property;
-
 
 #line 121 "input_parser.hpp"
 

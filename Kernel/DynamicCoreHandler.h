@@ -49,7 +49,7 @@ public:
         return std::unique_ptr<DynamicCore>(creator_multiGraph(multiGraph));
     }
 
-    std::unique_ptr<DynamicCore> create_parameters(const std::vector<char*> &parameters) const {
+    std::unique_ptr<DynamicCore> create_parameters(const parameterType &parameters) const {
         return std::unique_ptr<DynamicCore>(creator_parameters(parameters));
     }
 

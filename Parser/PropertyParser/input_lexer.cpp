@@ -1187,7 +1187,7 @@ yylval.string = strdup(yytext); return UNARY_FUNCTION;
 case 17:
 YY_RULE_SETUP
 #line 37 "input_lexer.l"
-yylval.string = strdup(yytext); return NUMBER_DOUBLE;
+yylval.number = std::atoi(yytext); return NUMBER_DOUBLE;
 	YY_BREAK
 case 18:
 YY_RULE_SETUP

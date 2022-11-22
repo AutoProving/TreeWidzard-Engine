@@ -34,7 +34,7 @@ NOT                                                  yylval.string = strdup(yyte
 \+|\-|\*|\/                                          yylval.string = strdup(yytext); return BINARY_ARITHMETIC_OPERATOR;
 max|min|pow                                          yylval.string = strdup(yytext); return BINARY_FUNCTION;
 abs|acos|asin|atan|cos|exp|floor|ln|log|sin|sqrt|tan yylval.string = strdup(yytext); return UNARY_FUNCTION;
-[0-9]+                                               yylval.string = strdup(yytext); return NUMBER_DOUBLE;
+[0-9]+                                               yylval.number = std::atoi(yytext); return NUMBER_DOUBLE;
 [a-zA-Z0-9]+                                         yylval.string = strdup(yytext); return NAME;
 \:\=                                                 yylval.string = strdup(yytext); return SEPERATOR;
 \(                                                   yylval.string = strdup(yytext); return LEFTP;

@@ -50,11 +50,12 @@ void PropertyAssignment::setParameter(int parameter) {
     PropertyAssignment::parameter = parameter;
 }
 
-const std::vector<char *> &PropertyAssignment::getParametersVec() const {
+const std::vector<std::variant<char *, int, bool>> &PropertyAssignment::getParametersVec() const {
     return parametersVec;
 }
 
-void PropertyAssignment::setParametersVec(const std::vector<char *> &parametersVec) {
+void PropertyAssignment::setParametersVec(const std::vector<std::variant<char *, int, bool>> &parametersVec) {
     PropertyAssignment::parametersVec = parametersVec;
 }
+
 

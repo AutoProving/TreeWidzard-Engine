@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
+#include <variant>
 class PropertyAssignment {
   private:
 	std::string name;
@@ -13,7 +13,7 @@ class PropertyAssignment {
 	std::vector<int> parameters; // Designated for multi parameters cores.
 	std::string parameterType;	 // NoParameter, UnSignedInt, InputFile, and MultiParameter
 	std::string type; // Bool, Min, Max
-    std::vector<char*> parametersVec;
+    std::vector<std::variant<char*,int, bool>> parametersVec;
   public:
     const std::string &getName() const;
     void setName(const std::string &name);
@@ -27,8 +27,10 @@ class PropertyAssignment {
     void setType(const std::string &type);
     int getParameter() const;
     void setParameter(int parameter);
-    const std::vector<char *> &getParametersVec() const;
-    void setParametersVec(const std::vector<char *> &parametersVec);
+
+    const std::vector<std::variant<char *, int, bool>> &getParametersVec() const;
+
+    void setParametersVec(const std::vector<std::variant<char *, int, bool>> &parametersVec);
 };
 
 
