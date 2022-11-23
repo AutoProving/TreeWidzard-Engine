@@ -94,7 +94,7 @@
     extern void yyerror(TreeDecompositionPACE &td, int &result, char const* msg);
   
 
-#line 98 "td_parser.tab.c"
+#line 98 "td_parser.cpp"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -1223,54 +1223,54 @@ yyreduce:
   case 2: /* TD_START: TD_COMMENTS TD_TDINFO TD_COMMENTS TD_BAGS TD_EDGES  */
 #line 46 "td_parser.y"
                                                                                     {}
-#line 1227 "td_parser.tab.c"
+#line 1227 "td_parser.cpp"
     break;
 
   case 3: /* TD_TDINFO: TD_S TD_TD TD_NUM TD_NUM TD_NUM TD_NEWLINE  */
 #line 48 "td_parser.y"
                                                                           {td.setWidthType("tree_width"); td.setNum_vertices((yyvsp[-3].number)); td.setWidth((yyvsp[-2].number)-1);
                                                                            td.setNum_graph_vertices((yyvsp[-1].number)); }
-#line 1234 "td_parser.tab.c"
+#line 1234 "td_parser.cpp"
     break;
 
   case 6: /* TD_BAG: TD_B TD_NUM TD_NUMS  */
 #line 54 "td_parser.y"
-                                                                           {if(!td.setABag(*(yyvsp[0].set_unsigned),(yyvsp[-1].number))) {std::cout<<"number of bags is incorrect!"<<std::endl; YYERROR;}}
-#line 1240 "td_parser.tab.c"
+                                                                           {if(!td.setABag(*(yyvsp[0].set_unsigned),(yyvsp[-1].number))) {yyerror(td,result, "Number of bags is incorrect! The number of bags should be started from 1, and the bag with number 1 is the root.");YYERROR;}}
+#line 1240 "td_parser.cpp"
     break;
 
   case 7: /* TD_NUMS: TD_NUM TD_NUMS  */
 #line 56 "td_parser.y"
                                                                            {(yyval.set_unsigned)= new std::set<unsigned>(*(yyvsp[0].set_unsigned));  (yyval.set_unsigned)->insert((yyvsp[-1].number));}
-#line 1246 "td_parser.tab.c"
+#line 1246 "td_parser.cpp"
     break;
 
   case 8: /* TD_NUMS: %empty  */
 #line 57 "td_parser.y"
                                                                            {(yyval.set_unsigned)=new std::set<unsigned>;}
-#line 1252 "td_parser.tab.c"
+#line 1252 "td_parser.cpp"
     break;
 
   case 9: /* TD_EDGES: TD_EDGE TD_NEWLINE TD_COMMENTS TD_EDGES  */
 #line 59 "td_parser.y"
                                                                                                         {}
-#line 1258 "td_parser.tab.c"
+#line 1258 "td_parser.cpp"
     break;
 
   case 11: /* TD_EDGE: TD_NUM TD_NUM  */
 #line 62 "td_parser.y"
-                                                {if(!td.addEdge((yyvsp[-1].number),(yyvsp[0].number))) {std::cout<<"Edges" <<(yyvsp[-1].number)<< "and"<< (yyvsp[0].number) <<" are not correct"; YYERROR;}}
-#line 1264 "td_parser.tab.c"
+                                                {if(!td.addEdge((yyvsp[-1].number),(yyvsp[0].number))) {yyerror(td, result, "Number of bags is incorrect! The number of bags should be started from 1, and the bag with number 1 is the root."); YYERROR;}}
+#line 1264 "td_parser.cpp"
     break;
 
   case 12: /* TD_COMMENTS: TD_COMMENT TD_COMMENTS  */
 #line 65 "td_parser.y"
                                                                                            {}
-#line 1270 "td_parser.tab.c"
+#line 1270 "td_parser.cpp"
     break;
 
 
-#line 1274 "td_parser.tab.c"
+#line 1274 "td_parser.cpp"
 
       default: break;
     }
@@ -1472,6 +1472,9 @@ yyreturnlab:
 
 
 void yyerror(TreeDecompositionPACE &td, int &result, char const* msg){
-  std::cout<<"\n Syntax Error in Tree Decomposition's File: "<< msg << " " <<td_lineno << std::endl;
+ std::cerr<< "\033[1;31mERORR:\033[0m" << std::endl;
+ std::cerr<<"\033[1;31mError in Tree Decomposition's File line " <<td_lineno << "\033[0m" << std::endl;
+ std::cerr << "\033[1;31m"<<msg <<"\033[0m"<< std::endl;
+
   // error printing  disabled, it is handeled in main.cpp 
 }

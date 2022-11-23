@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_TD_TD_PARSER_TAB_H_INCLUDED
-# define YY_TD_TD_PARSER_TAB_H_INCLUDED
+#ifndef YY_TD_TD_PARSER_HPP_INCLUDED
+# define YY_TD_TD_PARSER_HPP_INCLUDED
 /* Debug traces.  */
 #ifndef TD_DEBUG
 # if defined YYDEBUG
@@ -61,7 +61,7 @@ extern int td_debug;
     #include <set>
 
 
-#line 65 "td_parser.tab.h"
+#line 65 "td_parser.hpp"
 
 /* Token kinds.  */
 #ifndef TD_TOKENTYPE
@@ -92,7 +92,7 @@ union TD_STYPE
      char* string;
      std::set<unsigned>* set_unsigned;
 
-#line 96 "td_parser.tab.h"
+#line 96 "td_parser.hpp"
 
 };
 typedef union TD_STYPE TD_STYPE;
@@ -121,4 +121,4 @@ extern TD_LTYPE td_lloc;
 int td_parse (TreeDecompositionPACE &td, int &result);
 
 
-#endif /* !YY_TD_TD_PARSER_TAB_H_INCLUDED  */
+#endif /* !YY_TD_TD_PARSER_HPP_INCLUDED  */
