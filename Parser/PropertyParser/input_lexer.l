@@ -27,7 +27,7 @@ IMPLIES                                              yylval.string = strdup(yyte
 AND                                                  yylval.string = strdup(yytext); return AND;
 OR                                                   yylval.string = strdup(yytext); return OR;
 NOT                                                  yylval.string = strdup(yytext); return NOT;
-INV                                                  yylval.string = strdup(yytext); return INV;
+INV                                                  yylval.string = strdup(yytext); return INV_;
 \>                                                   yylval.string = strdup(yytext); return LESS;
 \<                                                   yylval.string = strdup(yytext); return BIGGER;
 \>=                                                  yylval.string = strdup(yytext); return ATLEAST;

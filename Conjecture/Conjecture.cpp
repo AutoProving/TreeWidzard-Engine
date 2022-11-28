@@ -420,6 +420,7 @@ void ConjectureNode::printInfix() {
             }
             std::cout << val ;
             return;
+                    
         case OPERATOR:
 
             if(val == "not"){
@@ -443,7 +444,7 @@ void ConjectureNode::printInfix() {
             return;
         default:
 
-            std::cout<<"ERROR:  " << __PRETTY_FUNCTION__  << "node " << val << " not defined " << std::endl;
+            std::cout<<"ERROR:  " << __PRETTY_FUNCTION__  << " node " << val << " not defined " << std::endl;
             exit(20);
 
     }

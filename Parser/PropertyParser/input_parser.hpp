@@ -100,7 +100,8 @@ extern int input_debug;
     BIGGER = 279,                  /* BIGGER  */
     BINARY_ARITHMETIC_OPERATOR = 280, /* BINARY_ARITHMETIC_OPERATOR  */
     BINARY_FUNCTION = 281,         /* BINARY_FUNCTION  */
-    UNARY_FUNCTION = 282           /* UNARY_FUNCTION  */
+    UNARY_FUNCTION = 282,          /* UNARY_FUNCTION  */
+    INV_ = 283                     /* INV_  */
   };
   typedef enum input_tokentype input_token_kind_t;
 #endif
@@ -117,7 +118,7 @@ union INPUT_STYPE
      std::vector<std::variant<char*,int, bool>> *vec;
      PropertyAssignment *property;
 
-#line 121 "input_parser.hpp"
+#line 122 "input_parser.hpp"
 
 };
 typedef union INPUT_STYPE INPUT_STYPE;

@@ -51,9 +51,9 @@
 
 
 %token SEPERATOR  FILEPATH LEFTP RIGHTP NAME NEWLINE AND OR IFF IMPLIES NOT TRUE FALSE COMMENT NUMBER_DOUBLE COMMA
-        FORMULA_NAME EXP ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION
+        FORMULA_NAME EXP ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION INV_
 %type<string>  SEPERATOR FILEPATH LEFTP RIGHTP NAME NEWLINE AND OR IFF IMPLIES NOT TRUE FALSE COMMENT VARIABLE ATOMIC_PREDICATE COMMA FORMULA_NAME EXP
-	ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION PARAMETER
+	ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION PARAMETER INV_
 %type<property> VARIABLE_CORE_ASSIGNMENT
 %type<conjectureNode> FORMULA SUB_FORMULA FORMULA_TERMINAL
 
@@ -79,7 +79,7 @@
 %%
 
 START            :COMMENTS VARIABLES_CORES_ASSIGNMENT FORMULA_NAME NEWLINE VARIABLES_SUBFORMULA_ASSIGNMENTS  FORMULA FORMULACOMMENTS
-                    {conj.setRoot($6); result = 0; std::cout << "done!!!!!!!" <<std::endl;}
+                    {conj.setRoot($6); result = 0;}
                  ;
 VARIABLES_CORES_ASSIGNMENT	: VARIABLES_CORES_ASSIGNMENT VARIABLE_CORE_ASSIGNMENT NEWLINE COMMENTS {}
 				| %empty
@@ -231,11 +231,11 @@ FORMULA     : FORMULA AND FORMULA {$$ = new ConjectureNode(OPERATOR,"and");
             children.push_back($3);	$$->setChildren(children);
             $3->setParent($$);
             }
-            | INV LEFTP FORMULA RIGHTP {$$ = new ConjectureNode(INV,$1);
+            | INV_ LEFTP FORMULA RIGHTP {$$ = new ConjectureNode(INV,$1);
             std::vector<ConjectureNode*> children;
-            if($3->getType != CORE_VARIABLE){yyerror(conj, result, coreList, varToCoreName, varToProperty, "INV should be in a form INV(variable)" ); YYERROR;}
-             children.push_back($3);	$$->setChildren(children);
-             $3->setParent($$);
+            if($3->getType() != CORE_VARIABLE){yyerror(conj, result, coreList, varToCoreName, varToProperty, "INV should be in a form INV(variable)" ); YYERROR;}
+            children.push_back($3);	$$->setChildren(children);
+            $3->setParent($$);
             }
             | LEFTP FORMULA RIGHTP      {$$ = $2;}
             | FORMULA_TERMINAL
@@ -269,8 +269,9 @@ FORMULACOMMENTS         :NEWLINE COMMENTS FORMULACOMMENTS
 %%
 
 void yyerror(Conjecture &conj, int &result,std::map<std::string,std::map<std::string,std::string>> &coreList, std::map<std::string,std::string> &varToCoreName, std::map<std::string, PropertyAssignment*> varToProperty, char const* msg){
-  std::cout<<"Syntax Error: "<< msg << " line " <<input_lineno << std::endl;
-  // error printing  disabled, it is handeled in main.cpp 
+  std::cerr<< "\033[1;31mERORR:\033[0m" << std::endl;
+  std::cerr<<"\033[1;31mError in the input file line " <<input_lineno << "\033[0m" << std::endl;
+  std::cerr << "\033[1;31m"<<msg <<"\033[0m"<< std::endl;
 }
 
 bool check_varToProperty(std::string v,std::map<std::string, PropertyAssignment*> &varToProperty ){
