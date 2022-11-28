@@ -263,7 +263,11 @@ FORMULACOMMENTS         :NEWLINE COMMENTS FORMULACOMMENTS
 %%
 
 void yyerror(Conjecture &conj, int &result,std::map<std::string,std::map<std::string,std::string>> &coreList, std::map<std::string,std::string> &varToCoreName, std::map<std::string, PropertyAssignment*> varToProperty, char const* msg){
-  std::cout<<"Syntax Error: "<< msg << " line " <<input_lineno << std::endl;
+
+  std::cerr<< "\033[1;31mERORR:\033[0m" << std::endl;
+  std::cerr<<"\033[1;31mError in Tree Decomposition's File line " <<input_lineno << "\033[0m" << std::endl;
+  std::cerr << "\033[1;31m"<<msg <<"\033[0m"<< std::endl;
+
   // error printing  disabled, it is handeled in main.cpp 
 }
 
@@ -277,7 +281,6 @@ bool check_varToProperty(std::string v,std::map<std::string, PropertyAssignment*
 
 bool check_sub_formula_variables(char* v){
     if(sub_formula_variables.count(v)){
-
         return true;
     }else{
         return false;
