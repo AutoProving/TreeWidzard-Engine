@@ -231,6 +231,12 @@ FORMULA     : FORMULA AND FORMULA {$$ = new ConjectureNode(OPERATOR,"and");
             children.push_back($3);	$$->setChildren(children);
             $3->setParent($$);
             }
+            | INV LEFTP FORMULA RIGHTP {$$ = new ConjectureNode(INV,$1);
+            std::vector<ConjectureNode*> children;
+            if($3->getType != CORE_VARIABLE){yyerror(conj, result, coreList, varToCoreName, varToProperty, "INV should be in a form INV(variable)" ); YYERROR;}
+             children.push_back($3);	$$->setChildren(children);
+             $3->setParent($$);
+            }
             | LEFTP FORMULA RIGHTP      {$$ = $2;}
             | FORMULA_TERMINAL
             ;
@@ -277,7 +283,6 @@ bool check_varToProperty(std::string v,std::map<std::string, PropertyAssignment*
 
 bool check_sub_formula_variables(char* v){
     if(sub_formula_variables.count(v)){
-
         return true;
     }else{
         return false;

@@ -24,6 +24,19 @@ double Conjecture::evaluateConjectureNodeOnState(const State &q, ConjectureNode*
                 std::cout<<"Error in Conjecture::evaluateConjectureNodeOnState.";
                 exit(20);
             }
+        case INV:
+            if(node->getChildren().size() == 1){
+                if(node->getChildren()[0]->getType() == CORE_VARIABLE){
+                    Bag bag = q.get_bag();
+                    return kernel->getCoreByVar(node->getChildren()[0]->getVal())->inv(bag, q.getWitnessSet(kernel->getIndexByVar(node->getChildren()[0]->getVal())));
+                }else{
+                    std::cout << "Error in Conjecture::evaluateConjectureNodeOnState: INV is not in a valid form. A core variable should be given to inv.";
+                    exit(20);
+                }
+            }else{
+                std::cout << "Error in Conjecture::evaluateConjectureNodeOnState: INV is not in a valid form.";
+                exit(20);
+            }
         case EXP_VARIABLE:
             std::cout << "case EXP_VARIABLE no implemented"<< std::endl;
             exit(20);
