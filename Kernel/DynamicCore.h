@@ -46,6 +46,7 @@ class DynamicCore {
   virtual WitnessSetPointer intro_v(unsigned i, Bag &b, const Witness &witness);
   virtual WitnessSetPointer intro_e(unsigned i, unsigned j, Bag &b, const Witness &witness);
   virtual WitnessSetPointer forget_v(unsigned i, Bag &b, const Witness &witness);
+  virtual WitnessSetPointer join(Bag &b, const Witness &witness1, const Witness &witness2);
   virtual bool is_final_witness(const Witness &witness);
   virtual WitnessSetPointer clean(WitnessSetPointer witnessSet);
   virtual int inv(Bag &b, WitnessSetPointer witnessSet);
