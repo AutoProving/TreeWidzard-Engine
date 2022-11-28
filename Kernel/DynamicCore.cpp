@@ -41,9 +41,7 @@ WitnessSetPointer DynamicCore::forget_v(unsigned i, Bag &b,
   return clean(aux);
 }
 
-WitnessSetPointer DynamicCore::join(Bag &b,
-                                        WitnessSetPointer witnessSet1,
-                                        WitnessSetPointer witnessSet2) {
+WitnessSetPointer DynamicCore::join(Bag &b, WitnessSetPointer witnessSet1, WitnessSetPointer witnessSet2) {
   WitnessSetPointer aux = witnessSet1->createEmptyWitnessSet();
   for (WitnessPointerConst temp1 : *witnessSet1) {
     for (WitnessPointerConst temp2 : *witnessSet2) {
@@ -53,8 +51,7 @@ WitnessSetPointer DynamicCore::join(Bag &b,
   return clean(aux);
 }
 
-bool DynamicCore::is_final_set_witness(Bag &b,
-                                       WitnessSetPointer witnessSet) {
+bool DynamicCore::is_final_set_witness(Bag &b, WitnessSetPointer witnessSet) {
   bool flag = false;
   for (WitnessPointerConst temp : *witnessSet) {
     if (is_final_witness(*temp)) {
@@ -63,6 +60,7 @@ bool DynamicCore::is_final_set_witness(Bag &b,
   }
   return flag;
 }
+
 
 WitnessSetPointer DynamicCore::clean(WitnessSetPointer witnessSet) {
   // By default, if this function is not implemented by a derived class
@@ -78,8 +76,7 @@ int DynamicCore::weight(WitnessSetPointer witnessSet) {
   }
   std::string coreType = getAttributeValue("CoreType");
   if (coreType == "NULL" or coreType == "") {
-    std::cout << "Error: DynamicCore::weight CoreType has not specified"
-              << std::endl;
+    std::cout << "Error: DynamicCore::weight CoreType has not specified"<< std::endl;
     exit(20);
   } else if (coreType == "Min" or coreType == "Max") {
     if (values.size() == 0) {
@@ -106,14 +103,12 @@ WitnessSetPointer DynamicCore::intro_e(unsigned i, unsigned j, Bag &b,
   exit(20);
 }
 
-WitnessSetPointer DynamicCore::forget_v(unsigned i, Bag &b,
-                                            const Witness &witness) {
+WitnessSetPointer DynamicCore::forget_v(unsigned i, Bag &b, const Witness &witness) {
   std::cout << "ERROR: DynamicCore::forget_v";
   exit(20);
 }
 
-WitnessSetPointer DynamicCore::join(Bag &b, const Witness &witness1,
-                                        const Witness &witness2) {
+WitnessSetPointer DynamicCore::join(Bag &b, const Witness &witness1, const Witness &witness2) {
   std::cout << "ERROR: DynamicCore::join";
   exit(20);
 }
@@ -121,6 +116,11 @@ WitnessSetPointer DynamicCore::join(Bag &b, const Witness &witness1,
 bool DynamicCore::is_final_witness(const Witness &witness) {
   std::cout << "ERROR: DynamicCore::is_final_witness";
   exit(20);
+}
+
+int DynamicCore::inv(Bag &b, WitnessSetPointer witnessSet){
+    std::cout << "ERROR: DynamicCore::inv";
+    exit(20);
 }
 
 int DynamicCore::weight(const Witness &witness) {

@@ -36,6 +36,7 @@ public:
   State::ptr intro_e(State::ptr q, const unsigned i, const unsigned j);
   State::ptr forget_v(State::ptr q, unsigned i);
   State::ptr join(State::ptr q1, State::ptr q2);
+
   DynamicCore *pointerToCoreNumber(unsigned i);
 };
 
