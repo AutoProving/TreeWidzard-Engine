@@ -9,30 +9,24 @@ void DynamicCore::insertIntoInitialWitnessSet(WitnessPointer w) {
 // TODO: Is it better to pass the set down
 // instead of taking union of many small?
 
-WitnessSetPointer DynamicCore::intro_v(unsigned i, Bag &b,
-                                           WitnessSetPointer witnessSet) {
-  WitnessSetPointer aux =
-      witnessSet->createEmptyWitnessSet();  // aux initializes with empty set
+WitnessSetPointer DynamicCore::intro_v(unsigned i, Bag &b, WitnessSetPointer witnessSet) {
+  WitnessSetPointer aux = witnessSet->createEmptyWitnessSet();  // aux initializes with empty set
   for (WitnessPointerConst temp : *witnessSet) {
     aux->union_set_witness(intro_v(i, b, *temp));
   }
   return clean(aux);
 }
 
-WitnessSetPointer DynamicCore::intro_e(unsigned i, unsigned j, Bag &b,
-                                           WitnessSetPointer witnessSet) {
-  WitnessSetPointer aux =
-      witnessSet->createEmptyWitnessSet();  // aux initializes with empty set
+WitnessSetPointer DynamicCore::intro_e(unsigned i, unsigned j, Bag &b, WitnessSetPointer witnessSet) {
+  WitnessSetPointer aux = witnessSet->createEmptyWitnessSet();  // aux initializes with empty set
   WitnessSet t = *aux;
   for (WitnessPointerConst temp : *witnessSet) {
     aux->union_set_witness(intro_e(i, j, b, *temp));
   }
-
   return clean(aux);
 }
 
-WitnessSetPointer DynamicCore::forget_v(unsigned i, Bag &b,
-                                            WitnessSetPointer witnessSet) {
+WitnessSetPointer DynamicCore::forget_v(unsigned i, Bag &b, WitnessSetPointer witnessSet) {
   WitnessSetPointer aux =
       witnessSet->createEmptyWitnessSet();  // aux initializes with empty set
   for (WitnessPointerConst temp : *witnessSet) {
@@ -61,14 +55,6 @@ bool DynamicCore::is_final_set_witness(Bag &b, WitnessSetPointer witnessSet) {
   return flag;
 }
 
-
-WitnessSetPointer DynamicCore::clean(WitnessSetPointer witnessSet) {
-  // By default, if this function is not implemented by a derived class
-  // this function simply returns a pointer to the input witness set.
-  std::cout << "generic clean is called" << std::endl;
-  return witnessSet;
-}
-
 int DynamicCore::weight(WitnessSetPointer witnessSet) {
   std::set<int> values;
   for (auto temp : *witnessSet) {
@@ -91,14 +77,12 @@ int DynamicCore::weight(WitnessSetPointer witnessSet) {
   }
 }
 
-WitnessSetPointer DynamicCore::intro_v(unsigned i, Bag &b,
-                                           const Witness &witness) {
+WitnessSetPointer DynamicCore::intro_v(unsigned i, Bag &b, const Witness &witness) {
   std::cout << "ERROR: DynamicCore::intro_v";
   exit(20);
 }
 
-WitnessSetPointer DynamicCore::intro_e(unsigned i, unsigned j, Bag &b,
-                                           const Witness &witness) {
+WitnessSetPointer DynamicCore::intro_e(unsigned i, unsigned j, Bag &b, const Witness &witness) {
   std::cout << "ERROR: DynamicCore::intro_e";
   exit(20);
 }
@@ -116,6 +100,13 @@ WitnessSetPointer DynamicCore::join(Bag &b, const Witness &witness1, const Witne
 bool DynamicCore::is_final_witness(const Witness &witness) {
   std::cout << "ERROR: DynamicCore::is_final_witness";
   exit(20);
+}
+
+WitnessSetPointer DynamicCore::clean(WitnessSetPointer witnessSet) {
+    // By default, if this function is not implemented by a derived class
+    // this function simply returns a pointer to the input witness set.
+    std::cout << "generic clean is called" << std::endl;
+    return witnessSet;
 }
 
 int DynamicCore::inv(Bag &b, WitnessSetPointer witnessSet){
@@ -160,8 +151,7 @@ std::map<std::string, std::string> DynamicCore::getAttributes() {
   return attributes;
 }
 
-void DynamicCore::setInitialWitnessSet(
-    WitnessSetPointer witnessSetPointer) {
+void DynamicCore::setInitialWitnessSet(WitnessSetPointer witnessSetPointer) {
   this->initialWitnessSet = witnessSetPointer;
 }
 

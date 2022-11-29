@@ -376,7 +376,6 @@ void ConjectureNode::print() {
         default:
             std::cout << val;
     }
-//        cout<< "(" << type << "," << val << "," << x<< ") " ;
 }
 
 void ConjectureNode::printInfix() {
@@ -441,6 +440,15 @@ void ConjectureNode::printInfix() {
                 children[1]->printInfix();
                 std::cout<< ")";
             }
+            return;
+        case INV:
+            if(this->getChildren().size()!=1){
+                std::cout<<"ERROR:  " << __PRETTY_FUNCTION__  << " type: INV, node: " << val << std::endl;
+                exit(20);
+            }
+            std::cout <<" "<< val << "(";
+            children[0]->printInfix();
+            std::cout << ")";
             return;
         default:
 
