@@ -19,7 +19,7 @@ set(CMAKE_EXE_LINKER_FLAGS "-rdynamic")
 # link_libraries(-fsanitize=undefined -fsanitize=address)
 
 # parsing big graphs with bison will fail unless stack size is big enough
-add_definitions(-DYYMAXDEPTH=50000000 -DYYINITDEPTH=50000000)
+# add_definitions(-DYYMAXDEPTH=50000000 -DYYINITDEPTH=50000000)
 
 include_directories(DynamicCores)
 

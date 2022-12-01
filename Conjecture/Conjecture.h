@@ -52,7 +52,7 @@ public:
     ConjectureNode *getRoot() const;
     void setRoot(ConjectureNode *root);
     // evaluate the conjectureNode for a given state
-    double evaluateConjectureNodeOnState(const State &q, ConjectureNode *node);
+    double evaluateConjectureNodeOnState(const State &q, const ConjectureNode *node);
     // evaluate the conjecture for a given state
     double evaluateConjectureOnState(const State &q);
     int evaluatePremiseOnState(const State &q);
@@ -61,8 +61,9 @@ public:
     void setKernel(DynamicKernel *kernel);
     bool checkConjectureStructure(ConjectureNode *node); // check conjecture tree is valid
     void print();
+    void printValues(const State &q, const ConjectureNode *node);
+
     const std::map<std::string, std::string> &getVariablesToCoreName() const;
-    void setVariablesToCoreName(
-            const std::map<std::string, std::string> &variablesToCoreName);
+    void setVariablesToCoreName(const std::map<std::string, std::string> &variablesToCoreName);
 };
 #endif

@@ -51,9 +51,9 @@
 
 
 %token SEPERATOR  FILEPATH LEFTP RIGHTP NAME NEWLINE AND OR IFF IMPLIES NOT TRUE FALSE COMMENT NUMBER_DOUBLE COMMA
-        FORMULA_NAME EXP ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION INV_
+        FORMULA_NAME EXP ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION INV_ EQUAL
 %type<string>  SEPERATOR FILEPATH LEFTP RIGHTP NAME NEWLINE AND OR IFF IMPLIES NOT TRUE FALSE COMMENT VARIABLE ATOMIC_PREDICATE COMMA FORMULA_NAME EXP
-	ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION PARAMETER INV_
+	ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION PARAMETER INV_ EQUAL
 %type<property> VARIABLE_CORE_ASSIGNMENT
 %type<conjectureNode> FORMULA SUB_FORMULA FORMULA_TERMINAL
 
@@ -71,6 +71,7 @@
 %left BIGGER
 %left ATLEAST
 %left ATMOST
+%left EQUAL
 %left BINARY_ARITHMETIC_OPERATOR
 %right NOT
 %left NEWLINE
@@ -211,7 +212,11 @@ FORMULA     : FORMULA AND FORMULA {$$ = new ConjectureNode(OPERATOR,"and");
             children.push_back($1); children.push_back($3);	$$->setChildren(children);
             $1->setParent($$); $3->setParent($$);
             }
-
+	| FORMULA EQUAL  FORMULA {$$ = new ConjectureNode(OPERATOR,"==");
+                    std::vector<ConjectureNode*> children;
+                    children.push_back($1); children.push_back($3);	$$->setChildren(children);
+                    $1->setParent($$); $3->setParent($$);
+                    }
             | NOT FORMULA  {$$ = new ConjectureNode(OPERATOR,"not");
             std::vector<ConjectureNode*> children;
             children.push_back($2);	$$->setChildren(children); $2->setParent($$);

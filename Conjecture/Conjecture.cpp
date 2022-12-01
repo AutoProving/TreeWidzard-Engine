@@ -1,19 +1,33 @@
 #include "Conjecture.h"
 
 // To Do: implement getCoreWitnessSetByVar
-double Conjecture::evaluateConjectureNodeOnState(const State &q, ConjectureNode* node) {
-     //evaluate a node based on its type
+double Conjecture::evaluateConjectureNodeOnState(const State &q, const ConjectureNode* node) {
+
+
+//    switch (node->getType()) {
+//        case CORE_VARIABLE:
+//            break;
+//        case INV:
+//            break;
+//        case NUMBER:
+//            break;
+//        default:
+//            std::cout << node->getVal() << "[";
+//    }
+
+    double result;
+    //evaluate a node based on its type
     switch(node->getType()) {
         case CORE_VARIABLE:
             if (variablesToCoreName.count(node->getVal())) {
                 std::string coreType = kernel->getCoreByVar(node->getVal())->getAttributeValue("CoreType");
                 if (coreType == "Min" or coreType == "Max") {
-                    return kernel->getCoreByVar(node->getVal())
-                            ->weight(q.getWitnessSet(kernel->getIndexByVar(node->getVal())));
+                    result =  kernel->getCoreByVar(node->getVal())->weight(q.getWitnessSet(kernel->getIndexByVar(node->getVal())));
+                    break;
                 } else if (coreType == "Bool") {
                     Bag bag = q.get_bag();
-                    return kernel->getCoreByVar(node->getVal())
-                            ->is_final_set_witness(bag,q.getWitnessSet(kernel->getIndexByVar(node->getVal())));
+                    result = kernel->getCoreByVar(node->getVal())->is_final_set_witness(bag,q.getWitnessSet(kernel->getIndexByVar(node->getVal())));
+                    break;
                 } else {
                     //error
                     std::cout<<"Error in Conjecture::evaluateConjectureNodeOnState: coreType " << coreType << " is not defined.";
@@ -28,7 +42,8 @@ double Conjecture::evaluateConjectureNodeOnState(const State &q, ConjectureNode*
             if(node->getChildren().size() == 1){
                 if(node->getChildren()[0]->getType() == CORE_VARIABLE){
                     Bag bag = q.get_bag();
-                    return kernel->getCoreByVar(node->getChildren()[0]->getVal())->inv(bag, q.getWitnessSet(kernel->getIndexByVar(node->getChildren()[0]->getVal())));
+                    result = kernel->getCoreByVar(node->getChildren()[0]->getVal())->inv(bag, q.getWitnessSet(kernel->getIndexByVar(node->getChildren()[0]->getVal())));
+                    break;
                 }else{
                     std::cout << "Error in Conjecture::evaluateConjectureNodeOnState: INV is not in a valid form. A core variable should be given to inv.";
                     exit(20);
@@ -41,103 +56,118 @@ double Conjecture::evaluateConjectureNodeOnState(const State &q, ConjectureNode*
             std::cout << "case EXP_VARIABLE no implemented"<< std::endl;
             exit(20);
         case NUMBER:
-            return node->getX();
+            result = node->getX();
+            break;
         case OPERATOR: {
             std::string op = node->getVal();
             if (op == "+") {
                 if (node->getChildren().size() == 2) {
-                    return evaluateConjectureNodeOnState(q, node->getChildren()[0])
+                    result = evaluateConjectureNodeOnState(q, node->getChildren()[0])
                            + evaluateConjectureNodeOnState(q, node->getChildren()[1]);
+                    break;
                 } else {
                     exit(20);
                 }
             } else if (op == "-") {
                 if (node->getChildren().size() == 2) {
-                    return evaluateConjectureNodeOnState(q, node->getChildren()[0])
+                    result = evaluateConjectureNodeOnState(q, node->getChildren()[0])
                            - evaluateConjectureNodeOnState(q, node->getChildren()[1]);
+                    break;
                 } else {
                     exit(20);
                 }
             } else if (op == "/") {
                 if (node->getChildren().size() == 2) {
-                    return evaluateConjectureNodeOnState(q, node->getChildren()[0])
+                    result = evaluateConjectureNodeOnState(q, node->getChildren()[0])
                            / evaluateConjectureNodeOnState(q, node->getChildren()[1]);
+                    break;
                 } else {
                     exit(20);
                 }
             } else if (op == "*") {
                 if (node->getChildren().size() == 2) {
-                    return evaluateConjectureNodeOnState(q, node->getChildren()[0])
+                    result = evaluateConjectureNodeOnState(q, node->getChildren()[0])
                            * evaluateConjectureNodeOnState(q, node->getChildren()[1]);
+                    break;
                 } else {
                     exit(20);
                 }
             } else if (op == ">") {
                 if (node->getChildren().size() == 2) {
-                    return evaluateConjectureNodeOnState(q, node->getChildren()[0])
+                    result = evaluateConjectureNodeOnState(q, node->getChildren()[0])
                            > evaluateConjectureNodeOnState(q, node->getChildren()[1]);
+                    break;
                 } else {
                     exit(20);
                 }
             } else if (op == ">=") {
                 if (node->getChildren().size() == 2) {
-                    return evaluateConjectureNodeOnState(q, node->getChildren()[0])
+                    result = evaluateConjectureNodeOnState(q, node->getChildren()[0])
                            >= evaluateConjectureNodeOnState(q, node->getChildren()[1]);
+                    break;
                 } else {
                     exit(20);
                 }
             } else if (op == "<") {
                 if (node->getChildren().size() == 2) {
-                    return evaluateConjectureNodeOnState(q, node->getChildren()[0])
+                    result = evaluateConjectureNodeOnState(q, node->getChildren()[0])
                            < evaluateConjectureNodeOnState(q, node->getChildren()[1]);
+                    break;
                 } else {
                     exit(20);
                 }
             } else if (op == "<=") {
                 if (node->getChildren().size() == 2) {
-                    return evaluateConjectureNodeOnState(q, node->getChildren()[0])
+                    result = evaluateConjectureNodeOnState(q, node->getChildren()[0])
                            <= evaluateConjectureNodeOnState(q, node->getChildren()[1]);
+                    break;
                 } else {
                     exit(20);
                 }
             } else if (op == "==") {
                 if (node->getChildren().size() == 2) {
-                    return evaluateConjectureNodeOnState(q, node->getChildren()[0])
+                    result = evaluateConjectureNodeOnState(q, node->getChildren()[0])
                            == evaluateConjectureNodeOnState(q, node->getChildren()[1]);
+                    break;
                 } else {
                     exit(20);
                 }
             } else if (op == "and") {
                 if (node->getChildren().size() == 2) {
-                    return evaluateConjectureNodeOnState(q, node->getChildren()[0])
+                    result = evaluateConjectureNodeOnState(q, node->getChildren()[0])
                            and evaluateConjectureNodeOnState(q, node->getChildren()[1]);
+                    break;
                 } else {
                     exit(20);
                 }
             } else if (op == "or") {
                 if (node->getChildren().size() == 2) {
-                    return evaluateConjectureNodeOnState(q, node->getChildren()[0])
+                    result = evaluateConjectureNodeOnState(q, node->getChildren()[0])
                            or evaluateConjectureNodeOnState(q, node->getChildren()[1]);
+                    break;
                 } else {
                     exit(20);
                 }
             } else if (op == "not") {
                 if (node->getChildren().size() == 1) {
-                    return !evaluateConjectureNodeOnState(q, node->getChildren()[0]);
+                    result = !evaluateConjectureNodeOnState(q, node->getChildren()[0]);
+                    break;
                 } else {
                     exit(20);
                 }
             } else if (op == "implies") {
                 if (node->getChildren().size() == 2) {
-                    return (!evaluateConjectureNodeOnState(q, node->getChildren()[0]))
+                    result = (!evaluateConjectureNodeOnState(q, node->getChildren()[0]))
                            or evaluateConjectureNodeOnState(q, node->getChildren()[1]);
+                    break;
                 } else {
                     exit(20);
                 }
             } else if (op == "iff") {
                 if (node->getChildren().size() == 2) {
-                    return evaluateConjectureNodeOnState(q, node->getChildren()[0])
+                    result = evaluateConjectureNodeOnState(q, node->getChildren()[0])
                            == evaluateConjectureNodeOnState(q, node->getChildren()[1]);
+                    break;
                 } else {
                     exit(20);
                 }
@@ -152,7 +182,8 @@ double Conjecture::evaluateConjectureNodeOnState(const State &q, ConjectureNode*
             }else{
                 if(functions_binary.count(node->getVal())){
                     Function_Binary f = functions_binary[node->getVal()];
-                    return f(evaluateConjectureNodeOnState(q,node->getChildren()[0]), evaluateConjectureNodeOnState(q,node->getChildren()[1]));
+                    result = f(evaluateConjectureNodeOnState(q,node->getChildren()[0]), evaluateConjectureNodeOnState(q,node->getChildren()[1]));
+                    break;
                 }else{
                     std::cout<< " ERROR "<< __PRETTY_FUNCTION__  << " :  " << node->getVal() << " hasn't defined"<<std::endl;
                 }
@@ -164,7 +195,8 @@ double Conjecture::evaluateConjectureNodeOnState(const State &q, ConjectureNode*
             }else{
                 if(functions_unary  .count(node->getVal())){
                     Function_Unary f = functions_unary[node->getVal()];
-                    return f(evaluateConjectureNodeOnState(q,node->getChildren()[0]));
+                    result = f(evaluateConjectureNodeOnState(q,node->getChildren()[0]));
+                    break;
                 }else{
                     std::cout<< " ERROR "<< __PRETTY_FUNCTION__  << " :  " << node->getVal() << " hasn't defined"<<std::endl;
                 }
@@ -176,11 +208,27 @@ double Conjecture::evaluateConjectureNodeOnState(const State &q, ConjectureNode*
             exit(20);
         }
     }
+
+//    switch (node->getType()) {
+//        case CORE_VARIABLE:
+//            std::cout << "("<<node->getVal() << " = " << result << ")";
+//            break;
+//        case INV:
+//            std::cout << "("<<node->getVal() << "(" << node->getChildren()[0]->getVal()<< ") = " << result << ")";
+//            break;
+//        case NUMBER:
+//            std::cout << "("<<result<<")";
+//            break;
+//        default:
+//            std::cout << "]";
+//    }
+
+    return result;
 }
 
 double Conjecture::evaluateConjectureOnState(const State &q) {
+
     double result = evaluateConjectureNodeOnState(q,root);
-    //cout<<__FUNCTION__  << " " <<__PRETTY_FUNCTION__ << " " << result << endl;
     return result;
 }
 
@@ -206,6 +254,7 @@ void Conjecture::print() {
     root->printInfix();
 
 }
+
 
 bool Conjecture::checkConjectureStructure(ConjectureNode *node) {
     switch (node->getType()) {
@@ -451,8 +500,89 @@ void ConjectureNode::printInfix() {
             std::cout << ")";
             return;
         default:
-
             std::cout<<"ERROR:  " << __PRETTY_FUNCTION__  << " node " << val << " not defined " << std::endl;
+            exit(20);
+
+    }
+}
+
+void Conjecture::printValues(const State &q, const ConjectureNode *node) {
+
+    switch (node->getType()) {
+        case NUMBER:
+            if(node->getChildren().size()!=0){
+                std::cout<<"ERROR:  " << __PRETTY_FUNCTION__  << " type: NUMBER, node: " << node->getX() << std::endl;
+                exit(20);
+            }
+            std::cout<<  node->getX();
+            return;
+
+        case FUNCTION_BINARY:
+
+            if(node->getChildren().size()!=2){
+                std::cout<<"ERROR:  " << __PRETTY_FUNCTION__  << " type: FUNCTION_BINARY, node: " << node->getVal() <<" , " << node->getX()<< std::endl;
+                exit(20);
+            }
+            std::cout <<" " << node->getVal() << "(";
+            printValues(q,node->getChildren()[0]);
+            std::cout << ",";
+            printValues(q,node->getChildren()[0]);
+            std::cout<< ")";
+            return;
+
+        case FUNCTION_UNARY:
+
+            if(node->getChildren().size()!=1){
+                std::cout<<"ERROR:  " << __PRETTY_FUNCTION__  << " type: FUNCTION_UNARY, node: " << node->getVal() << std::endl;
+                exit(20);
+            }
+            std::cout <<" "<<node->getVal() << "(";
+            printValues(q,node->getChildren()[0]);
+            std::cout << ")";
+            return;
+        case CORE_VARIABLE:
+
+            if(node->getChildren().size()!=0){
+                std::cout<<"ERROR:  " << __PRETTY_FUNCTION__  << " type: CORE_VARIABLE, node: " << node->getVal() << std::endl;
+                exit(20);
+            }
+            std::cout << evaluateConjectureNodeOnState(q, node) ;
+            return;
+
+        case OPERATOR:
+
+            if(node->getVal() == "not"){
+                if(node->getChildren().size()!=1){
+                    std::cout<<"ERROR:  " << __PRETTY_FUNCTION__  << " type: OPERATOR, node: " << node->getVal() << std::endl;
+                    exit(20);
+                }
+                std::cout<< " " << node->getVal() << " ";
+                printValues(q,node->getChildren()[0]);
+            }else{
+                if(node->getChildren().size()!=2){
+                    std::cout<<"ERROR:  " << __PRETTY_FUNCTION__  << " type: OPERATOR, node: " << node->getVal() << std::endl;
+                    exit(20);
+                }
+                std::cout<< "(";
+                printValues(q,node->getChildren()[0]);
+
+                std::cout<< " " << node->getVal() << " ";
+                printValues(q,node->getChildren()[1]);
+
+                std::cout<< ")";
+            }
+            return;
+        case INV:
+            if(node->getChildren().size()!=1){
+                std::cout<<"ERROR:  " << __PRETTY_FUNCTION__  << " type: INV, node: " << node->getVal() << std::endl;
+                exit(20);
+            }
+            std::cout << node->getVal() << "(" << node->getChildren()[0]->getVal();
+            std::cout << ")=";
+            std::cout << evaluateConjectureNodeOnState(q,node);
+            return;
+        default:
+            std::cout<<"ERROR:  " << __PRETTY_FUNCTION__  << " node " << node->getVal() << " not defined " << std::endl;
             exit(20);
 
     }

@@ -346,9 +346,9 @@ int MaxDegree_AtLeast_DynamicCore::inv_implementation(Bag &b, MaxDegree_AtLeast_
   {
     if (MaxDegree_AtLeast_WitnessPointer w = dynamic_pointer_cast<MaxDegree_AtLeast_Witness>(witness))
     {
-      if (is_final_witness_implementation(w)){
-        return 1;
-      }
+        if (is_final_witness_implementation(w)){
+            return 1;
+        }
     }
     else
     {
