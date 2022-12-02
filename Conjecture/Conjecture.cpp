@@ -2,19 +2,6 @@
 
 // To Do: implement getCoreWitnessSetByVar
 double Conjecture::evaluateConjectureNodeOnState(const State &q, const ConjectureNode* node) {
-
-
-//    switch (node->getType()) {
-//        case CORE_VARIABLE:
-//            break;
-//        case INV:
-//            break;
-//        case NUMBER:
-//            break;
-//        default:
-//            std::cout << node->getVal() << "[";
-//    }
-
     double result;
     //evaluate a node based on its type
     switch(node->getType()) {
@@ -208,21 +195,6 @@ double Conjecture::evaluateConjectureNodeOnState(const State &q, const Conjectur
             exit(20);
         }
     }
-
-//    switch (node->getType()) {
-//        case CORE_VARIABLE:
-//            std::cout << "("<<node->getVal() << " = " << result << ")";
-//            break;
-//        case INV:
-//            std::cout << "("<<node->getVal() << "(" << node->getChildren()[0]->getVal()<< ") = " << result << ")";
-//            break;
-//        case NUMBER:
-//            std::cout << "("<<result<<")";
-//            break;
-//        default:
-//            std::cout << "]";
-//    }
-
     return result;
 }
 
@@ -531,7 +503,6 @@ void Conjecture::printValues(const State &q, const ConjectureNode *node) {
             return;
 
         case FUNCTION_UNARY:
-
             if(node->getChildren().size()!=1){
                 std::cout<<"ERROR:  " << __PRETTY_FUNCTION__  << " type: FUNCTION_UNARY, node: " << node->getVal() << std::endl;
                 exit(20);
@@ -541,23 +512,22 @@ void Conjecture::printValues(const State &q, const ConjectureNode *node) {
             std::cout << ")";
             return;
         case CORE_VARIABLE:
-
             if(node->getChildren().size()!=0){
                 std::cout<<"ERROR:  " << __PRETTY_FUNCTION__  << " type: CORE_VARIABLE, node: " << node->getVal() << std::endl;
                 exit(20);
             }
-            std::cout << evaluateConjectureNodeOnState(q, node) ;
+            std::cout << node->getVal() << "=" << evaluateConjectureNodeOnState(q, node) ;
             return;
 
         case OPERATOR:
-
             if(node->getVal() == "not"){
                 if(node->getChildren().size()!=1){
                     std::cout<<"ERROR:  " << __PRETTY_FUNCTION__  << " type: OPERATOR, node: " << node->getVal() << std::endl;
                     exit(20);
                 }
-                std::cout<< " " << node->getVal() << " ";
+                std::cout<< node->getVal() << "(";
                 printValues(q,node->getChildren()[0]);
+                std::cout<<")";
             }else{
                 if(node->getChildren().size()!=2){
                     std::cout<<"ERROR:  " << __PRETTY_FUNCTION__  << " type: OPERATOR, node: " << node->getVal() << std::endl;
