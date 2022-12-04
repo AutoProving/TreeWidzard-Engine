@@ -176,6 +176,7 @@ MaxDegree_AtLeast_DynamicCore::MaxDegree_AtLeast_DynamicCore(const parameterType
   addAttribute("CoreType", "Bool");
   addAttribute("ParameterType", "UnsignedInt");
   addAttribute("PrimaryOperator", "AtLeast");
+  std::cout<<"initial witness of maxdegree" << std::endl;
 }
 
 void MaxDegree_AtLeast_DynamicCore::createInitialWitnessSet_implementation()

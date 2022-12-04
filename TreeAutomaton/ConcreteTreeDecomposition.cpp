@@ -258,7 +258,9 @@ std::shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> ConcreteTreeD
     // First, We check the type of the node
     if (node->getNodeContent().getSymbol() == "Leaf") {
         // if it is an empty, then it is a leaf
+        std::cout << "before initial" << std::endl;
         State::ptr q = conjecture.getKernel()->initialState();
+        std::cout << "after initial" << std::endl;
         if(flags.get("PrintStates")) {
             q->print();
         }
@@ -386,7 +388,12 @@ std::shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> ConcreteTreeD
 bool ConcreteTreeDecomposition::conjectureCheck(Conjecture &conjecture,Flags &flags, std::string name) {
     std::string str = "";
     RunTree<State::ptr,ConcreteNode> runTree;
-    std::shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNode = constructWitnesses(conjecture, getRoot(),flags,str);
+    std::cout<<"Printing Term" << std::endl;
+    std::cout << termInformation() << std::endl;
+    std::shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNode = 
+    
+    constructWitnesses(conjecture, getRoot(),flags,str);
+    std::cout<<"after construct witnesses" << std::endl; 
     runTree.setRoot(runNode);
     name += "_RunTree.txt";
     if (!conjecture.evaluateConjectureOnState(*runNode->getNodeContent().getState())) {

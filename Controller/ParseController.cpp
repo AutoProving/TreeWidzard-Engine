@@ -5,7 +5,7 @@ ParseController::ParseController(const Flags &flag, const std::string &inputPath
     std::string path = file_path.substr(0, file_path.rfind("/"));
     std::string dynamicPluginPath =path+"/../DynamicPlugins/";
     inputController = new InputController(inputPath, dynamicPluginPath);
-}
+    }
 
 void ParseController::parse_pace(std::string graphPath, std::string decompositionPath) {
     std::shared_ptr<MultiGraph> multigraph(new MultiGraph);
@@ -60,6 +60,7 @@ void ParseController::parse_pace(std::string graphPath, std::string decompositio
     concreteTreeDecomposition = td.convertToConcreteTreeDecomposition();
     //  concreteTreeDecomposition->printTermNodes();
     std::cout<<"----Evaluating-----:"<<std::endl;
+
     concreteTreeDecomposition->conjectureCheck(this->inputController->getConjecture(),flag, name);
     if(flag.get("WriteToFiles")){
         AbstractTreeDecomposition abstractTreeDecomposition = concreteTreeDecomposition->convertToAbstractTreeDecomposition();

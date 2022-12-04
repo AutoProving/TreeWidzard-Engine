@@ -65,10 +65,10 @@ void InputController::parse_input() {
   if (!conjecture.checkConjectureStructure(conjecture.getRoot())) {
     exit(20);
   }
+  
   width.print();
   dynamicKernel.set_width(width);
 }
-
 
 void InputController::construct_dynamicKernel() {
   DynamicCoreHandler *factory;
