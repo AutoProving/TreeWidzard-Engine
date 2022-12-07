@@ -274,9 +274,11 @@ FORMULACOMMENTS         :NEWLINE COMMENTS FORMULACOMMENTS
 %%
 
 void yyerror(Conjecture &conj, int &result,std::map<std::string,std::map<std::string,std::string>> &coreList, std::map<std::string,std::string> &varToCoreName, std::map<std::string, PropertyAssignment*> varToProperty, char const* msg){
+
   std::cerr<< "\033[1;31mERORR:\033[0m" << std::endl;
   std::cerr<<"\033[1;31mError in the input file line " <<input_lineno << "\033[0m" << std::endl;
   std::cerr << "\033[1;31m"<<msg <<"\033[0m"<< std::endl;
+
 }
 
 bool check_varToProperty(std::string v,std::map<std::string, PropertyAssignment*> &varToProperty ){
