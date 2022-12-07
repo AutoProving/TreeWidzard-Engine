@@ -258,9 +258,7 @@ std::shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> ConcreteTreeD
     // First, We check the type of the node
     if (node->getNodeContent().getSymbol() == "Leaf") {
         // if it is an empty, then it is a leaf
-        std::cout << "before initial" << std::endl;
         State::ptr q = conjecture.getKernel()->initialState();
-        std::cout << "after initial" << std::endl;
         if(flags.get("PrintStates")) {
             q->print();
         }
@@ -388,23 +386,23 @@ std::shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> ConcreteTreeD
 bool ConcreteTreeDecomposition::conjectureCheck(Conjecture &conjecture,Flags &flags, std::string name) {
     std::string str = "";
     RunTree<State::ptr,ConcreteNode> runTree;
-    std::cout<<"Printing Term" << std::endl;
-    std::cout << termInformation() << std::endl;
-    std::shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNode = 
-    
-    constructWitnesses(conjecture, getRoot(),flags,str);
-    std::cout<<"after construct witnesses" << std::endl; 
+    std::shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNode = constructWitnesses(conjecture, getRoot(),flags,str);
     runTree.setRoot(runNode);
     name += "_RunTree.txt";
-    if (!conjecture.evaluateConjectureOnState(*runNode->getNodeContent().getState())) {
-        if(flags.get("WriteToFiles"))
-            runTree.writeToFile(name);
-        std::cout << "CONJECTURE NOT SATISFIED" << std::endl;
-        return false;
-    } else {
-        std::cout << "CONJECTURE SATISFIED"<< std::endl;
-        if(flags.get("WriteToFiles"))
-            runTree.writeToFile(name);
-        return true;
-    }
+    std::cout << "Conjecture Value: " ;
+    std::cout << conjecture.evaluateConjectureOnState(*runNode->getNodeContent().getState()) << std::endl;
+    std::cout << "Assignment: ";
+    conjecture.printValues(*runNode->getNodeContent().getState(),conjecture.getRoot());
+    return true;
+//    if (!conjecture.evaluateConjectureOnState(*runNode->getNodeContent().getState())) {
+//        if(flags.get("WriteToFiles"))
+//            runTree.writeToFile(name);
+//        std::cout << "CONJECTURE NOT SATISFIED" << std::endl;
+//        return false;
+//    } else {
+//        std::cout << "CONJECTURE SATISFIED"<< std::endl;
+//        if(flags.get("WriteToFiles"))
+//            runTree.writeToFile(name);
+//        return true;
+//    }
 }

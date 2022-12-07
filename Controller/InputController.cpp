@@ -121,7 +121,7 @@ InputController::InputController(const std::string &inputPath,
     : inputPath(inputPath), dynamicPluginPath(dynamicPluginPath) {
   check_available_cores();
   parse_input();
-  //construct_dynamicKernel();
+  construct_dynamicKernel();
 }
 
 const std::string &InputController::getInputPath() const { return inputPath; }
