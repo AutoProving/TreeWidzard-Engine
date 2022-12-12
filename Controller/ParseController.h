@@ -1,6 +1,7 @@
 #ifndef TREEWIDZARD_PARSECONTROLLER_H
 #define TREEWIDZARD_PARSECONTROLLER_H
 #include <iostream>
+#include <fstream>
 #include <memory>
 #include <experimental/filesystem>
 #include "../Kernel/Flags.h"
@@ -15,8 +16,6 @@
 #include "../TreeAutomaton/TreeAutomaton.h"
 #include "../TreeAutomaton/AbstractTreeDecomposition.h"
 
-extern std::FILE *gr_in;
-extern std::FILE *td_in;
 extern std::FILE *ctd_in;
 extern std::FILE *atd_in;
 

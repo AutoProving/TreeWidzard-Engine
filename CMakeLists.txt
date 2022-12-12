@@ -17,9 +17,6 @@ link_libraries(stdc++fs)
 set(CMAKE_EXE_LINKER_FLAGS "-static")
 set(CMAKE_EXE_LINKER_FLAGS "-rdynamic")
 
-# parsing big graphs with bison will fail unless stack size is big enough
-add_definitions(-DYYMAXDEPTH=500000 -DYYINITDEPTH=500000)
-
 include_directories(DynamicCores)
 
 project("treewidzard")
@@ -154,8 +151,6 @@ add_executable(
         Translation/PACE/WitnessTreePACE.h
         Translation/PACE/Parser/gr_parser.cpp
         Translation/PACE/Parser/gr_parser.hpp
-        Translation/PACE/Parser/gr_lexer.cpp
-        Translation/PACE/Parser/td_lexer.cpp
         Translation/PACE/Parser/td_parser.cpp
         Translation/PACE/Parser/td_parser.hpp
         Translation/PACE/Parser/atd_lexer.cpp
@@ -181,7 +176,7 @@ add_executable(
 
 # -pthread is a compiler flag for parallel.
 SET(CMAKE_PTHREAD_FLAG "-pthread")
-SET(CMAKE_CXX_FLAGS  "${CMAKE_PTHREAD_FLAG}")
+SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${CMAKE_PTHREAD_FLAG}")
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
