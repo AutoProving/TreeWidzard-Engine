@@ -3,8 +3,6 @@
 #include <vector>
 
 int td_parse(std::istream &is, TreeDecompositionPACE &td, int &result) {
-  std::cerr << "Hello, from tr_parse!\n";
-
   std::string line_str;
   std::istringstream line;
 

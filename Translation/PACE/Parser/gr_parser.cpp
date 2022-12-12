@@ -3,8 +3,6 @@
 #include <sstream>
 
 int gr_parse(std::istream &is, MultiGraph &graph, int &result) {
-  std::cerr << "Hello, from gr_parse!\n";
-
   std::string line_str;
   std::istringstream line;
 
