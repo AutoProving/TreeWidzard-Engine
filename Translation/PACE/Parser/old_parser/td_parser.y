@@ -51,7 +51,7 @@ TD_TDINFO                  : TD_S TD_TD TD_NUM TD_NUM TD_NUM TD_NEWLINE   {td.se
 TD_BAGS                    : TD_BAG TD_NEWLINE TD_COMMENTS TD_BAGS
                            |
                            ;
-TD_BAG                     : TD_B TD_NUM TD_NUMS                           {if(!td.setABag(*$3,$2)) {std::cout<<"number of bags is incorrect!"<<std::endl; YYERROR;}}
+TD_BAG                     : TD_B TD_NUM TD_NUMS                           {if(!td.setABag(*$3,$2)) {yyerror(td,result, "Number of bags is incorrect! The number of bags should be started from 1, and the bag with number 1 is the root.");YYERROR;}}
                            ;
 TD_NUMS                    : TD_NUM TD_NUMS                                {$$= new std::set<unsigned>(*$2);  $$->insert($1);}
                            |                                               {$$=new std::set<unsigned>;}
@@ -59,7 +59,7 @@ TD_NUMS                    : TD_NUM TD_NUMS                                {$$= 
 TD_EDGES                   : TD_EDGE TD_NEWLINE TD_COMMENTS TD_EDGES                                    {}                
                            |
                            ;
-TD_EDGE                    : TD_NUM TD_NUM      {if(!td.addEdge($1,$2)) {std::cout<<"Edges" <<$1<< "and"<< $2 <<" are not correct"; YYERROR;}}
+TD_EDGE                    : TD_NUM TD_NUM      {if(!td.addEdge($1,$2)) {yyerror(td, result, "Number of bags is incorrect! The number of bags should be started from 1, and the bag with number 1 is the root."); YYERROR;}}
                            ;
 
 TD_COMMENTS                : TD_COMMENT  TD_COMMENTS                                       {}
@@ -71,6 +71,9 @@ TD_COMMENTS                : TD_COMMENT  TD_COMMENTS                            
 %%
 
 void yyerror(TreeDecompositionPACE &td, int &result, char const* msg){
-  std::cout<<"\n Syntax Error in Tree Decomposition's File: "<< msg << " " <<td_lineno << std::endl;
+ std::cerr<< "\033[1;31mERORR:\033[0m" << std::endl;
+ std::cerr<<"\033[1;31mError in Tree Decomposition's File line " <<td_lineno << "\033[0m" << std::endl;
+ std::cerr << "\033[1;31m"<<msg <<"\033[0m"<< std::endl;
+
   // error printing  disabled, it is handeled in main.cpp 
 }

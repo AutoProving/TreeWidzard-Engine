@@ -1,0 +1,3 @@
+/home/farhad/Documents/github/Treewidzard-TreeDecompositionPaceFormat/cmake-build-debug/CMakeFiles/treewidzard.dir
+/home/farhad/Documents/github/Treewidzard-TreeDecompositionPaceFormat/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/farhad/Documents/github/Treewidzard-TreeDecompositionPaceFormat/cmake-build-debug/CMakeFiles/rebuild_cache.dir
