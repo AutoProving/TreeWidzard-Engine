@@ -110,7 +110,12 @@ void TreeDecompositionPACE::print(){
 
 void TreeDecompositionPACE::printTree(){
     unsigned k=0;
-    root->print(k,0);
+    if(root == nullptr){
+        std::cout << "\033[1;31mError in TreeDecompositionPACE::printTree : the root is not set!\033[0m"<<std::endl;
+    }else{
+        root->print(k,0);
+    }
+
 }
 
 std::shared_ptr<RawAbstractTreeDecomposition> TreeDecompositionPACE::constructInnerNodes(std::set<unsigned> &visited_bags, unsigned neighbor){
@@ -121,13 +126,38 @@ std::shared_ptr<RawAbstractTreeDecomposition> TreeDecompositionPACE::constructIn
         if(it->first==neighbor and visited_bags.count(it->second)==0 ){
             std::shared_ptr<RawAbstractTreeDecomposition> new_node;
             new_node = constructInnerNodes(visited_bags,it->second);
-            new_node->parent = node;
-            node->children.push_back(new_node);
+            if(bags[neighbor-1] != bags[it->second-1]){
+                new_node->parent = node;
+                node->children.push_back(new_node);
+            }else{
+                // parent and child has the same bags.
+                if(new_node->children.size() != 0){
+                    for (int i = 0; i < new_node->children.size(); ++i) {
+                        node->children.push_back(new_node->children[i]);
+                        new_node->children[i]->parent = node;
+                    }
+                }else{
+                    // nothing happens
+                }
+            }
         }else if(it->second==neighbor and visited_bags.count(it->first)==0){
             std::shared_ptr<RawAbstractTreeDecomposition> new_node;
             new_node = constructInnerNodes(visited_bags,it->first);
-            new_node->parent = node;
-            node->children.push_back(new_node);
+
+            if(bags[neighbor-1] != bags[it->first-1]){
+                new_node->parent = node;
+                node->children.push_back(new_node);
+            }else{
+                // parent and child has the same bags.
+                if(new_node->children.size() != 0){
+                    for (int i = 0; i < new_node->children.size(); ++i) {
+                        node->children.push_back(new_node->children[i]);
+                        new_node->children[i]->parent = node;
+                    }
+                }else{
+                    // nothing happens
+                }
+            }
         }
     }
     return node;
@@ -142,6 +172,7 @@ bool TreeDecompositionPACE::constructRaw(){
         visited_bags.insert(1);
         //create nodes for neighbors
         for(auto it=edges.begin(); it!=edges.end(); it++){
+            // The reason that always the first pair should have edge with number 1 is that the edge set is an ordered set.
             if(it->first==1){
                 std::shared_ptr<RawAbstractTreeDecomposition> node;
                 node = constructInnerNodes(visited_bags,it->second);
@@ -159,7 +190,6 @@ bool TreeDecompositionPACE::constructRaw(){
         std::cout<<"ERROR in TreeDecompositionPACE::constructRaw bags size is zero"<<std::endl;
         return false;
     }
-
 }
 
 bool TreeDecompositionPACE::convertToBinary(std::shared_ptr<RawAbstractTreeDecomposition> node){
@@ -261,14 +291,17 @@ bool TreeDecompositionPACE::addIntroVertex(std::shared_ptr<RawAbstractTreeDecomp
         }else if(set_diff.size()==1){
            node->type="IntroVertex_"+std::to_string(*set_diff.begin());
            addIntroVertex(node->children[0]);
-        }else{
+        }else if (elements_node == elements_node_child){
+            std::cerr<< "duplicated bags" <<std::endl;
+            exit(20);
+        }
+        else{
             addIntroVertex(node->children[0]);
         }
     }else if(node->children.size()==2){
         addIntroVertex(node->children[0]);
         addIntroVertex(node->children[1]);
     }else if(node->children.size() >2){
-
         std::cout << "ERROR in TreeDecompositionPACE::addIntroVertex, node has more that two children. Number of Children = " << node->children.size()<<std::endl;
         exit(20);
     }
@@ -532,9 +565,7 @@ void TreeDecompositionPACE::construct() {
     joinFormat(root);
     addEmptyNodes(root);
     addIntroVertex(root);
-
     addForgetVertex(root);
-
     std::set<unsigned> visited_edges;
     addIntroEdge(root,visited_edges);
    // for(auto item:visited_edges){std::cout<<item<<",";}std::cout<<std::endl;
