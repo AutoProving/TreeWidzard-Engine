@@ -184,6 +184,7 @@ target_link_libraries(treewidzard ${CMAKE_DL_LIBS})
 
 execute_process (
         COMMAND bash -c "${CMAKE_CURRENT_SOURCE_DIR}/Scripts/./buildAllPlugins.sh")
-# Remove limit for stack
+
+# Remove limit for stack (no longer needed for gr or td, but might be needed for big .atd files)
 # ulimit -s unlimited
-execute_process(COMMAND bash -c "ulimit -s unlimited")
+# execute_process(COMMAND bash -c "ulimit -s unlimited")
