@@ -70,6 +70,8 @@ cmake ..
 make
 ```
 
+5*- Run ``cmake --build . -- -j 8  `` to compile in parallel and fast.
+
 #### Executing TreeWidzard
 
 Execute ``./treewidzard --help`` to obtain a list of instructions on how to use TreeWidzard to model check properties or to test conjectures.

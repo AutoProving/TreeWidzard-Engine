@@ -1,4 +1,3 @@
-
 cmake_minimum_required(VERSION 3.0.0)
 set(CMAKE_CXX_STANDARD 20)
 link_libraries(-lstdc++fs)
@@ -17,8 +16,10 @@ link_libraries(stdc++fs)
 set(CMAKE_EXE_LINKER_FLAGS "-static")
 set(CMAKE_EXE_LINKER_FLAGS "-rdynamic")
 
-# parsing big graphs with bison will fail unless stack size is big enough
-add_definitions(-DYYMAXDEPTH=500000 -DYYINITDEPTH=500000)
+# add_compile_options(-fsanitize=address)
+# add_compile_options(-fsanitize=undefined)
+# add_link_options(-fsanitize=address)
+# add_link_options(-fsanitize=undefined)
 
 include_directories(DynamicCores)
 
@@ -154,8 +155,6 @@ add_executable(
         Translation/PACE/WitnessTreePACE.h
         Translation/PACE/Parser/gr_parser.cpp
         Translation/PACE/Parser/gr_parser.hpp
-        Translation/PACE/Parser/gr_lexer.cpp
-        Translation/PACE/Parser/td_lexer.cpp
         Translation/PACE/Parser/td_parser.cpp
         Translation/PACE/Parser/td_parser.hpp
         Translation/PACE/Parser/atd_lexer.cpp
@@ -181,7 +180,7 @@ add_executable(
 
 # -pthread is a compiler flag for parallel.
 SET(CMAKE_PTHREAD_FLAG "-pthread")
-SET(CMAKE_CXX_FLAGS  "${CMAKE_PTHREAD_FLAG}")
+SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${CMAKE_PTHREAD_FLAG}")
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
@@ -190,3 +189,7 @@ target_link_libraries(treewidzard ${CMAKE_DL_LIBS})
 
 execute_process (
         COMMAND bash -c "${CMAKE_CURRENT_SOURCE_DIR}/Scripts/./buildAllPlugins.sh")
+
+# Remove limit for stack (no longer needed for gr or td, but might be needed for big .atd files)
+# ulimit -s unlimited
+# execute_process(COMMAND bash -c "ulimit -s unlimited")

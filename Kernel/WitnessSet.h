@@ -21,6 +21,7 @@ class AbstractIterator {
   virtual bool isDifferent(AbstractIterator &rhs){};
   // virtual bool isEqual(AbstractIterator &rhs);
   // virtual bool isLess(AbstractIterator &rhs);
+  virtual ~AbstractIterator() {}
 };
 
 class BaseIterator {

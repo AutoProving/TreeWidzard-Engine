@@ -9,14 +9,16 @@ ParseController::ParseController(const Flags &flag, const std::string &inputPath
 
 void ParseController::parse_pace(std::string graphPath, std::string decompositionPath) {
     std::shared_ptr<MultiGraph> multigraph(new MultiGraph);
-    gr_in = fopen(graphPath.c_str(),"r");
+
+    std::ifstream gr_in(graphPath);
+    
     if(!gr_in) {
         std::perror("Reading Graph: File opening failed. ");
         std::cout<<graphPath<< " could not open."<<std::endl;
         exit(20);
     }
     int result = 1; // if parsing successful result will be 0 otherwise 1
-    result = gr_parse(*multigraph,  result); // Parser function from Parser.hpp
+    result = gr_parse(gr_in, *multigraph, result); // Parser function from Parser.hpp
     // check for successful parsing
     if(result != 0){
         std::cout<<" Error: input file "<< graphPath<< " is not in valid format"<<std::endl;
@@ -36,14 +38,14 @@ void ParseController::parse_pace(std::string graphPath, std::string decompositio
 
     td.multigraph= multigraph;
     // multigraph->printToFile(name+"_GraphMAIN.txt");
-    td_in = fopen(decompositionPath.c_str(),"r");
+    std::ifstream td_in(decompositionPath);
     if(!td_in) {
         std::perror("Reading Tree Decomposition: File opening failed");
         std::cout<<decompositionPath<< " could not open."<<std::endl;
         exit(20);
     }
     result = 1; // if parsing successful result will be 0 otherwise 1
-    result= td_parse(td,  result); // Parser function from Parser.hpp
+    result= td_parse(td_in, td, result); // Parser function from Parser.hpp
     // check for successful parsing
     if(result != 0){
         std::cout<<" Error: input file "<< decompositionPath<< " is not in valid format"<<std::endl;

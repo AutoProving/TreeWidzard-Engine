@@ -33,7 +33,6 @@ void SearchController::check_search() {
         std::cerr << e.what() << '\n';
         exit(20);
     }
-
 }
 
 void SearchController::action() {

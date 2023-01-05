@@ -7,7 +7,7 @@
 class Width {
   private:
 	std::string name; // Typical width names are "treewidth", "pathwidth", etc
-	unsigned int value;
+	unsigned int value=0;
   public:
 	std::string get_name();
 	void set_name(std::string s);

@@ -1,3 +1,4 @@
+/*Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.*/
 %option noyywrap
 %option prefix="input_"
 %{
@@ -26,10 +27,12 @@ IMPLIES                                              yylval.string = strdup(yyte
 AND                                                  yylval.string = strdup(yytext); return AND;
 OR                                                   yylval.string = strdup(yytext); return OR;
 NOT                                                  yylval.string = strdup(yytext); return NOT;
-\>                                                   yylval.string = strdup(yytext); return LESS;
-\<                                                   yylval.string = strdup(yytext); return BIGGER;
+INV                                                  yylval.string = strdup(yytext); return INV_;
+\<                                                   yylval.string = strdup(yytext); return LESS;
+\>                                                   yylval.string = strdup(yytext); return BIGGER;
 \>=                                                  yylval.string = strdup(yytext); return ATLEAST;
 \<=                                                  yylval.string = strdup(yytext); return ATMOST;
+\==                                                  yylval.string = strdup(yytext); return EQUAL;
 \+|\-|\*|\/                                          yylval.string = strdup(yytext); return BINARY_ARITHMETIC_OPERATOR;
 max|min|pow                                          yylval.string = strdup(yytext); return BINARY_FUNCTION;
 abs|acos|asin|atan|cos|exp|floor|ln|log|sin|sqrt|tan yylval.string = strdup(yytext); return UNARY_FUNCTION;

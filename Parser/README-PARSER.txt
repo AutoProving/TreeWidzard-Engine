@@ -9,8 +9,8 @@ CREATING THE PARSER EXECUTABLES
 
 The commands to create these files are the following.
 
-flex lexer.cpp lexer.l  // this creates the file lexer.cpp from lexer.l
-bison parser.cpp parser.y // this creates the file parser.cpp and parser.hpp from parser.y
+flex -o lexer.cpp lexer.l  // this creates the file lexer.cpp from lexer.l
+bison -o parser.cpp parser.y // this creates the file parser.cpp and parser.hpp from parser.y
 
 INSTALLING flex AND bison
 

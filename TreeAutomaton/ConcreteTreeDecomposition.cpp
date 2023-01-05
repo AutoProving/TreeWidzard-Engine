@@ -389,6 +389,11 @@ bool ConcreteTreeDecomposition::conjectureCheck(Conjecture &conjecture,Flags &fl
     std::shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> runNode = constructWitnesses(conjecture, getRoot(),flags,str);
     runTree.setRoot(runNode);
     name += "_RunTree.txt";
+//    std::cout << "Conjecture Value: " ;
+//    std::cout << conjecture.evaluateConjectureOnState(*runNode->getNodeContent().getState()) << std::endl;
+//    std::cout << "Assignment: ";
+//    conjecture.printValues(*runNode->getNodeContent().getState(),conjecture.getRoot());
+//    return true;
     if (!conjecture.evaluateConjectureOnState(*runNode->getNodeContent().getState())) {
         if(flags.get("WriteToFiles"))
             runTree.writeToFile(name);
