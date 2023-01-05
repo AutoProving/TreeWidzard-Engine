@@ -112,6 +112,32 @@ CliqueNumberSimpleGraphs_AtLeast_DynamicCore::CliqueNumberSimpleGraphs_AtLeast_D
   addAttribute("PrimaryOperator","AtLeast");
 }
 
+CliqueNumberSimpleGraphs_AtLeast_DynamicCore::CliqueNumberSimpleGraphs_AtLeast_DynamicCore(
+	const parameterType &parameters) {
+	if (parameters.size() != 1) {
+		cerr << "ChromaticNumber Core received an invalid parameter list"
+			 << endl;
+		exit(20);
+	}
+	for (const auto &prop : parameters) {
+		std::visit(overloaded{[&](char *p) {
+								  cerr << "ChromaticNumber Core received an "
+										  "invalid parameter list"
+									   << endl;
+								  exit(20);
+							  },
+							  [&](auto p) { this->cliqueSize = p; }},
+				   prop);
+	}
+  createInitialWitnessSet();
+  // Initializing attributes
+  addAttribute("CoreName","CliqueNumberSimpleGraphs");
+  addAttribute("CoreType","Bool");
+  addAttribute("Restriction","SimpleGraphs");
+  addAttribute("ParameterType","UnsignedInt");
+  addAttribute("PrimaryOperator","AtLeast");
+}
+
 void CliqueNumberSimpleGraphs_AtLeast_DynamicCore::createInitialWitnessSet_implementation() {
   CliqueNumberSimpleGraphs_AtLeast_WitnessPointer w = createWitness();
   w->found = false;
@@ -416,5 +442,8 @@ void CliqueNumberSimpleGraphs_AtLeast_DynamicCore::copyWitness(CliqueNumberSimpl
     }
     DynamicCore * create_int(unsigned param) {
       return new CliqueNumberSimpleGraphs_AtLeast_DynamicCore(param);
+    }
+    DynamicCore *create_parameters(const parameterType &parameters) {
+      return new CliqueNumberSimpleGraphs_AtLeast_DynamicCore(parameters);
     }
   }

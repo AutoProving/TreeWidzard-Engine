@@ -1,7 +1,7 @@
 #ifndef HASMULTIPLEEDGES_H
 #define HASMULTIPLEEDGES_H
 
-#include "DynamicCore.h"
+#include "../Kernel/DynamicCore.h"
 #include <algorithm>
 
 using namespace std;

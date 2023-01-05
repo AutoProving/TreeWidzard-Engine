@@ -1,6 +1,6 @@
 #ifndef DYNAMIC_CLIQUE_H
 #define DYNAMIC_CLIQUE_H
-#include "DynamicCore.h"
+#include "../Kernel/DynamicCore.h"
 #include <utility>
 #include <algorithm>
 using namespace std;
@@ -54,6 +54,7 @@ public:
 	unsigned cliqueSize;
 	CliqueNumberSimpleGraphs_AtLeast_DynamicCore();
 	CliqueNumberSimpleGraphs_AtLeast_DynamicCore(unsigned parameter);
+	CliqueNumberSimpleGraphs_AtLeast_DynamicCore(const parameterType &parameter);
 	void createInitialWitnessSet();
 	virtual WitnessSetPointer intro_v(unsigned i, Bag &b, const Witness &witness) override;
 	virtual WitnessSetPointer intro_e(unsigned i, unsigned j, Bag &b, const Witness &witness) override;

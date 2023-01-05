@@ -1,6 +1,6 @@
 #ifndef CHROMATICNUMBER_LESSTHAN_H
 #define CHROMATICNUMBER_LESSTHAN_H
-#include "DynamicCore.h"
+#include "../Kernel/DynamicCore.h"
 #include <map>
 using namespace std;
 
@@ -48,6 +48,7 @@ public:
   unsigned k;
   ChromaticNumber_AtMost_DynamicCore();
   ChromaticNumber_AtMost_DynamicCore(unsigned parameter);
+  ChromaticNumber_AtMost_DynamicCore(const parameterType &parameters);
   void createInitialWitnessSet();
   virtual WitnessSetPointer intro_v(unsigned i, Bag &b, const Witness &witness) override;
   virtual WitnessSetPointer intro_e(unsigned i, unsigned j, Bag &b, const Witness &witness) override;
