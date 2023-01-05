@@ -65,10 +65,10 @@ void InputController::parse_input() {
   if (!conjecture.checkConjectureStructure(conjecture.getRoot())) {
     exit(20);
   }
+  
   width.print();
   dynamicKernel.set_width(width);
 }
-
 
 void InputController::construct_dynamicKernel() {
   DynamicCoreHandler *factory;
@@ -121,7 +121,7 @@ InputController::InputController(const std::string &inputPath,
     : inputPath(inputPath), dynamicPluginPath(dynamicPluginPath) {
   check_available_cores();
   parse_input();
-  //construct_dynamicKernel();
+  construct_dynamicKernel();
 }
 
 const std::string &InputController::getInputPath() const { return inputPath; }

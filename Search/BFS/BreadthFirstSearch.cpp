@@ -337,15 +337,12 @@ void BreadthFirstSearch::search() {
                 newStatesSet.insert(newStatePointer);
                 State::ptr consequentState = newStatePointer;
                 if (!noBFSDAG) {
-                  AbstractTreeDecompositionNodeContent transitionContent(
-                      "Join");
+                  AbstractTreeDecompositionNodeContent transitionContent("Join");
                   bfsDAG.addState(consequentState);
                   vector<State::ptr> antecedentStates;
                   antecedentStates.push_back(statePointer);
                   antecedentStates.push_back(*it);
-                  Transition<State::ptr, AbstractTreeDecompositionNodeContent>
-                      transition(consequentState, transitionContent,
-                                 antecedentStates);
+                  Transition<State::ptr, AbstractTreeDecompositionNodeContent> transition(consequentState, transitionContent,antecedentStates);
                   bfsDAG.addTransition(transition);
                 }
                 if (printStateFlag) {
@@ -412,15 +409,18 @@ void BreadthFirstSearch::search() {
     for (auto it = newStatesSet.begin(); it != newStatesSet.end(); it++) {
       if (!conjecture->evaluateConjectureOnState(**it)) {
         std::cout << "Conjecture: Not Satisfied" << std::endl;
-
+        
         if (noBFSDAG) {
-          std::cerr
-              << "Rerun without -no-bfs-dag to construct a counter example."
-              << std::endl;
+          std::cerr<< "Rerun without -no-bfs-dag to construct a counter example."<< std::endl;
           return;
         }
-
+        
         State::ptr badState = *it;
+        /* printing the conjectures and values of the variables */
+        std::cout<<"The assignment that makes the formula false:" <<std::endl;
+        conjecture->printValues(*badState,conjecture->getRoot());
+        std::cout<<std::endl;
+
         bfsDAG.addFinalState(badState);
         AbstractTreeDecomposition atd = extractCounterExampleTerm(badState);
         string file = this->getOutputsPath();
@@ -428,13 +428,10 @@ void BreadthFirstSearch::search() {
           file += "_Premise";
         }
         file += "_CounterExample";
-        ConcreteTreeDecomposition ctd =
-            atd.convertToConcreteTreeDecomposition();
-        RunTree<State::ptr, AbstractTreeDecompositionNodeContent> runTree =
-            extractCounterExampleRun(badState);
+        ConcreteTreeDecomposition ctd = atd.convertToConcreteTreeDecomposition();
+        RunTree<State::ptr, AbstractTreeDecompositionNodeContent> runTree = extractCounterExampleRun(badState);
         MultiGraph multiGraph = ctd.extractMultiGraph();
         multiGraph.printGraph();
-
         atd.writeToFile(file + "_AbstractDecomposition.txt");
         ctd.writeToFile(file + "_ConcreteDecomposition.txt");
         runTree.writeToFile(file + "_RunTree.txt");
@@ -443,8 +440,7 @@ void BreadthFirstSearch::search() {
         multiGraph.printToFilePACEFormat(file + "_GraphPaceFormat.gr");
 
         if (flags->get("PrintDirectedBipartiteGraphNAUTY")) {
-          multiGraph.printToFileDirectedBipartiteGraphNAUTY(
-              file + "_DirectedBipartiteGraphNAUTY.txt");
+          multiGraph.printToFileDirectedBipartiteGraphNAUTY(file + "_DirectedBipartiteGraphNAUTY.txt");
         }
 
         return;

@@ -51,9 +51,9 @@
 
 
 %token SEPERATOR  FILEPATH LEFTP RIGHTP NAME NEWLINE AND OR IFF IMPLIES NOT TRUE FALSE COMMENT NUMBER_DOUBLE COMMA
-        FORMULA_NAME EXP ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION
+        FORMULA_NAME EXP ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION INV_ EQUAL
 %type<string>  SEPERATOR FILEPATH LEFTP RIGHTP NAME NEWLINE AND OR IFF IMPLIES NOT TRUE FALSE COMMENT VARIABLE ATOMIC_PREDICATE COMMA FORMULA_NAME EXP
-	ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION PARAMETER
+	ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION PARAMETER INV_ EQUAL
 %type<property> VARIABLE_CORE_ASSIGNMENT
 %type<conjectureNode> FORMULA SUB_FORMULA FORMULA_TERMINAL
 
@@ -71,6 +71,7 @@
 %left BIGGER
 %left ATLEAST
 %left ATMOST
+%left EQUAL
 %left BINARY_ARITHMETIC_OPERATOR
 %right NOT
 %left NEWLINE
@@ -79,7 +80,7 @@
 %%
 
 START            :COMMENTS VARIABLES_CORES_ASSIGNMENT FORMULA_NAME NEWLINE VARIABLES_SUBFORMULA_ASSIGNMENTS  FORMULA FORMULACOMMENTS
-                    {conj.setRoot($6); result = 0; std::cout << "done!!!!!!!" <<std::endl;}
+                    {conj.setRoot($6); result = 0;}
                  ;
 VARIABLES_CORES_ASSIGNMENT	: VARIABLES_CORES_ASSIGNMENT VARIABLE_CORE_ASSIGNMENT NEWLINE COMMENTS {}
 				| %empty
@@ -109,7 +110,10 @@ VARIABLE_CORE_ASSIGNMENT	: VARIABLE SEPERATOR ATOMIC_PREDICATE LEFTP PARAMETERS 
 //		| NUMBER_DOUBLE { $$ = new std::vector<int>;  $$->push_back(strtod($1,NULL));}
 //		;
 ATOMIC_PREDICATE	: NAME;
-PARAMETERS	: %empty | PARAMETER {
+PARAMETERS	: %empty {
+		$$ = new std::vector<std::variant<char*,int, bool>>();
+        }
+        | PARAMETER {
 		$$ = new std::vector<std::variant<char*,int, bool>>();
 		$$->emplace_back($1);
 		}
@@ -211,7 +215,11 @@ FORMULA     : FORMULA AND FORMULA {$$ = new ConjectureNode(OPERATOR,"and");
             children.push_back($1); children.push_back($3);	$$->setChildren(children);
             $1->setParent($$); $3->setParent($$);
             }
-
+	| FORMULA EQUAL  FORMULA {$$ = new ConjectureNode(OPERATOR,"==");
+                    std::vector<ConjectureNode*> children;
+                    children.push_back($1); children.push_back($3);	$$->setChildren(children);
+                    $1->setParent($$); $3->setParent($$);
+                    }
             | NOT FORMULA  {$$ = new ConjectureNode(OPERATOR,"not");
             std::vector<ConjectureNode*> children;
             children.push_back($2);	$$->setChildren(children); $2->setParent($$);
@@ -228,6 +236,12 @@ FORMULA     : FORMULA AND FORMULA {$$ = new ConjectureNode(OPERATOR,"and");
             }
             |UNARY_FUNCTION LEFTP  FORMULA RIGHTP {$$ = new ConjectureNode(FUNCTION_UNARY,$1);
             std::vector<ConjectureNode*> children;
+            children.push_back($3);	$$->setChildren(children);
+            $3->setParent($$);
+            }
+            | INV_ LEFTP FORMULA RIGHTP {$$ = new ConjectureNode(INV,$1);
+            std::vector<ConjectureNode*> children;
+            if($3->getType() != CORE_VARIABLE){yyerror(conj, result, coreList, varToCoreName, varToProperty, "INV should be in a form INV(variable)" ); YYERROR;}
             children.push_back($3);	$$->setChildren(children);
             $3->setParent($$);
             }
@@ -265,10 +279,9 @@ FORMULACOMMENTS         :NEWLINE COMMENTS FORMULACOMMENTS
 void yyerror(Conjecture &conj, int &result,std::map<std::string,std::map<std::string,std::string>> &coreList, std::map<std::string,std::string> &varToCoreName, std::map<std::string, PropertyAssignment*> varToProperty, char const* msg){
 
   std::cerr<< "\033[1;31mERORR:\033[0m" << std::endl;
-  std::cerr<<"\033[1;31mError in Tree Decomposition's File line " <<input_lineno << "\033[0m" << std::endl;
+  std::cerr<<"\033[1;31mError in the input file line " <<input_lineno << "\033[0m" << std::endl;
   std::cerr << "\033[1;31m"<<msg <<"\033[0m"<< std::endl;
 
-  // error printing  disabled, it is handeled in main.cpp 
 }
 
 bool check_varToProperty(std::string v,std::map<std::string, PropertyAssignment*> &varToProperty ){

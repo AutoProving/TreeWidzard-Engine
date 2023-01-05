@@ -62,6 +62,7 @@ void ParseController::parse_pace(std::string graphPath, std::string decompositio
     concreteTreeDecomposition = td.convertToConcreteTreeDecomposition();
     //  concreteTreeDecomposition->printTermNodes();
     std::cout<<"----Evaluating-----:"<<std::endl;
+
     concreteTreeDecomposition->conjectureCheck(this->inputController->getConjecture(),flag, name);
     if(flag.get("WriteToFiles")){
         AbstractTreeDecomposition abstractTreeDecomposition = concreteTreeDecomposition->convertToAbstractTreeDecomposition();

@@ -98,7 +98,7 @@ command_input_file  : command_string { $$=$1;}
 command_search_strategy : command_string { $$=$1;}
                     ;
 command_parse       : command_parse_signature command_parse_pace command_flags command_input_file command_input_file command_input_file
-                       command_end{ ParseController parsePACE(flags, $4); parsePACE.parse_pace($5, $6); }
+                      command_end{ ParseController parsePACE(flags, $4); parsePACE.parse_pace($5, $6); }
                     | command_parse_signature command_parse_abstract command_flags command_input_file command_input_file command_end
                         { ParseController parsePACE(flags, $4); parsePACE.parse_abstract($5);}
                     ;
