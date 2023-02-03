@@ -85,6 +85,10 @@ class CoreWrapper : public DynamicCore {
     return this->as_core().is_final_witness_implementation(
         WitnessAlias::as_witness(witness));
   }
+
+  int weight(const Witness &witness) override {
+    return this->as_core().weight_implementation(WitnessAlias::as_witness(witness));
+  }
 };
 
 #endif

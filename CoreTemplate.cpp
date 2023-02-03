@@ -151,7 +151,12 @@ struct CoreNameHere : CoreWrapper<CoreNameHere, WitnessNameHere, WitnessSetTypeT
    * Return whether w is a final witness
    */
   bool is_final_witness_implementation(const WitnessAlias &w) {
-    #error TODO: imlpement is_finl_witness here
+    #error TODO: implement is_final_witness here
+  }
+
+  int weight_implementation(const WitnessAlias &w) {
+    #warning implement weight here
+    return 0;
   }
 };
 

@@ -6,8 +6,8 @@ for eachfile in $(find $PWD/../DynamicCores -type f -name "*.cpp"); do
   name=$(basename "$eachfile" .cpp)
   echo $name
   echo $eachfile
-  g++ -fPIC -shared $p/../Kernel/WitnessSet.cpp $p/../Kernel/Witness.cpp $p/../Kernel/DynamicCore.cpp $eachfile -I $p/../Kernel/ -o $p/../DynamicPlugins/$name.so
-  #g++ -fsanitize=address -fsanitize=address -g3 -fPIC -shared $p/../Kernel/WitnessSet.cpp $p/../Kernel/Witness.cpp $p/../Kernel/DynamicCore.cpp $eachfile -o $p/../DynamicPlugins/$name.so &
+  g++ -fdiagnostics-color=always -fPIC -shared $p/../Kernel/WitnessSet.cpp $p/../Kernel/Witness.cpp $p/../Kernel/DynamicCore.cpp $eachfile -I $p/../Kernel/ -o $p/../DynamicPlugins/$name.so
+  #g++ -fdiagnostics-color=always -fsanitize=address -fsanitize=address -g3 -fPIC -shared $p/../Kernel/WitnessSet.cpp $p/../Kernel/Witness.cpp $p/../Kernel/DynamicCore.cpp $eachfile -o $p/../DynamicPlugins/$name.so &
 done
 
 #

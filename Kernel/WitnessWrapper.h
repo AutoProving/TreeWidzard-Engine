@@ -2,6 +2,7 @@
 #define WITNESS_WRAPPER_H
 
 #include <memory>
+#include <sstream>
 
 #include "Witness.h"
 
@@ -62,7 +63,17 @@ class WitnessWrapper : public Witness {
   std::shared_ptr<Witness> relabel(
       const std::map<unsigned, unsigned> &relabelingMap) const override {
     return std::make_shared<WitnessAlias>(
-        ((WitnessAlias *)this)->relabel_implementation(relabelingMap));
+        ((const WitnessAlias *)this)->relabel_implementation(relabelingMap));
+  }
+
+  void print() const override {
+    this->as_witness().witness_info(std::cout);
+  }
+
+  std::string witnessInformation() const override {
+    std::ostringstream s;
+    this->as_witness().witness_info(s);
+    return s.str();
   }
 };
 
