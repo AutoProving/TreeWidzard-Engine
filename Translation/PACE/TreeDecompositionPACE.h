@@ -53,7 +53,7 @@ class TreeDecompositionPACE {
         void print();
         void printTree();
         // Constructs the Raw abstract tree decomposition
-        std::shared_ptr<RawAbstractTreeDecomposition> constructInnerNodes(std::set<unsigned> &visited_bags, unsigned neighbor);
+        void constructInnerNodes(std::set<unsigned> &visited_bags, unsigned current, std::shared_ptr<RawAbstractTreeDecomposition> parent);
         bool constructRaw();
         bool convertToBinary(std::shared_ptr<RawAbstractTreeDecomposition> node);// Converts a tree decomposition to a binary tree decomposition
         bool eliminateDuplicate(std::shared_ptr<RawAbstractTreeDecomposition> node); // If a node has one child and the bag is identical, we merge these two nodes

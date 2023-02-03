@@ -118,54 +118,52 @@ void TreeDecompositionPACE::printTree(){
 
 }
 
-std::shared_ptr<RawAbstractTreeDecomposition> TreeDecompositionPACE::constructInnerNodes(std::set<unsigned> &visited_bags, unsigned neighbor){
-    std::shared_ptr<RawAbstractTreeDecomposition> node (new RawAbstractTreeDecomposition);
-    node->bag.set_elements(bags[neighbor-1]);
-    visited_bags.insert(neighbor);
-    for(auto it=edges.begin(); it!=edges.end(); it++){
-        if(it->first==neighbor and visited_bags.count(it->second)==0 ){
-            std::shared_ptr<RawAbstractTreeDecomposition> new_node;
-            new_node = constructInnerNodes(visited_bags,it->second);
-            if(bags[neighbor-1] != bags[it->second-1]){
-                new_node->parent = node;
-                node->children.push_back(new_node);
-            }else{
-                // parent and child has the same bags.
-                if(new_node->children.size() != 0){
-                    for (int i = 0; i < new_node->children.size(); ++i) {
-                        node->children.push_back(new_node->children[i]);
-                        new_node->children[i]->parent = node;
-                    }
-                }else{
-                    // nothing happens
-                }
-            }
-        }else if(it->second==neighbor and visited_bags.count(it->first)==0){
-            std::shared_ptr<RawAbstractTreeDecomposition> new_node;
-            new_node = constructInnerNodes(visited_bags,it->first);
+void TreeDecompositionPACE::constructInnerNodes(
+    std::set<unsigned> &visited_bags,
+    unsigned current,
+    std::shared_ptr<RawAbstractTreeDecomposition> parent) {
+  visited_bags.insert(current);
 
-            if(bags[neighbor-1] != bags[it->first-1]){
-                new_node->parent = node;
-                node->children.push_back(new_node);
-            }else{
-                // parent and child has the same bags.
-                if(new_node->children.size() != 0){
-                    for (int i = 0; i < new_node->children.size(); ++i) {
-                        node->children.push_back(new_node->children[i]);
-                        new_node->children[i]->parent = node;
-                    }
-                }else{
-                    // nothing happens
-                }
-            }
+  if (bags[current - 1] == parent->bag.get_elements()) {
+    // this node serves no purpose, and its children can be connected to this node's parent. 
+
+    for (auto [u_, v_] : edges) {
+      for (auto [u, v] : {std::make_pair(u_, v_), std::make_pair(v_, u_)}) {
+        if (u == current && !visited_bags.count(v)) {
+          constructInnerNodes(visited_bags, v, parent);
         }
+      }
     }
-    return node;
+
+  } else {
+
+    std::shared_ptr<RawAbstractTreeDecomposition> node (new RawAbstractTreeDecomposition);
+    node->bag.set_elements(bags[current-1]);
+    node->parent = parent;
+    parent->children.push_back(node);
+    visited_bags.insert(current);
+
+    for (auto [u_, v_] : edges) {
+      for (auto [u, v] : {std::make_pair(u_, v_), std::make_pair(v_, u_)}) {
+        if (u == current && !visited_bags.count(v)) {
+          constructInnerNodes(visited_bags, v, node);
+        }
+      }
+    }
+  }
 }
 
 bool TreeDecompositionPACE::constructRaw(){
     std::shared_ptr<RawAbstractTreeDecomposition> root_node(new RawAbstractTreeDecomposition);
     root = root_node;
+
+    std::cerr << "edges: ";
+    for (auto [u, v] : edges)
+      std::cerr << '(' << u << ',' << v << ") ";
+    std::cerr << '\n';
+
+    std::cerr << "root:\n";
+    root->printNode();
     if(bags.size()>0){
         root->bag.set_elements(bags[0]);
         std::set<unsigned> visited_bags;
@@ -174,15 +172,9 @@ bool TreeDecompositionPACE::constructRaw(){
         for(auto it=edges.begin(); it!=edges.end(); it++){
             // The reason that always the first pair should have edge with number 1 is that the edge set is an ordered set.
             if(it->first==1){
-                std::shared_ptr<RawAbstractTreeDecomposition> node;
-                node = constructInnerNodes(visited_bags,it->second);
-                node->parent = root;
-                root->children.push_back(node);
+                constructInnerNodes(visited_bags, it->second, root);
             }else if(it->second==1){
-                std::shared_ptr<RawAbstractTreeDecomposition> node;
-                node = constructInnerNodes(visited_bags,it->first);
-                node->parent = root;
-                root->children.push_back(node);
+                constructInnerNodes(visited_bags, it->first, root);
             }
         }
         return true;
@@ -192,7 +184,7 @@ bool TreeDecompositionPACE::constructRaw(){
     }
 }
 
-bool TreeDecompositionPACE::convertToBinary(std::shared_ptr<RawAbstractTreeDecomposition> node){
+bool TreeDecompositionPACE::convertToBinary(std::shared_ptr<RawAbstractTreeDecomposition> node) {
     if(node->children.size()>2){
         // If "node" has n>2 children, then the algorithm creates "new_node"
         // and set  "new_node" as a second child of "node", and set n-1 children of "node" as children of "new_node".
@@ -217,7 +209,7 @@ bool TreeDecompositionPACE::convertToBinary(std::shared_ptr<RawAbstractTreeDecom
     return true;
 }
 
-bool TreeDecompositionPACE::joinFormat(std::shared_ptr<RawAbstractTreeDecomposition> node){
+bool TreeDecompositionPACE::joinFormat(std::shared_ptr<RawAbstractTreeDecomposition> node) {
     if(node->children.size()>2){
         std::cout<<"ERROR in TreeDecompositionPACE::joinFormat, the Raw abstract tree decomposition is not in binary form"<<std::endl;
         exit(20);
