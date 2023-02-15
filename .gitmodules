@@ -1,0 +1,6 @@
+[submodule "SearchStrategies"]
+	path = SearchStrategies
+	url = https://github.com/AutoProving/TreeWidZard-SearchStrategies
+[submodule "DPCores"]
+	path = DPCores
+	url = https://github.com/AutoProving/Treewidzard-DPCores
