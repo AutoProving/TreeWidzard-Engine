@@ -11,6 +11,7 @@ else()
     add_compile_options(-Wall -Wextra -pedantic)
 endif()
 add_compile_options(-O2)
+add_compile_options(-ggdb3)
 link_libraries(stdc++fs)
 set(CMAKE_EXE_LINKER_FLAGS "-static")
 set(CMAKE_EXE_LINKER_FLAGS "-rdynamic")
@@ -23,6 +24,9 @@ set(CMAKE_EXE_LINKER_FLAGS "-rdynamic")
 # stops lexer from creating some unused methods
 add_compile_definitions(YY_NO_INPUT=1)
 add_compile_definitions(YY_NO_UNPUT=1)
+
+# tell where to find binaries
+add_compile_definitions(BINARY_DIR="${CMAKE_CURRENT_BINARY_DIR}")
 
 project("treewidzard")
 add_executable(
@@ -37,40 +41,6 @@ add_executable(
         Controller/InputController.h
         Controller/AuxiliaryController.hpp
         main.cpp
-        # DynamicCore files
-        # DynamicCores/CliqueNumber_AtLeast.cpp
-        # DynamicCores/CliqueNumber_AtLeast.h
-        # DynamicCores/CliqueNumberSimpleGraphs_AtLeast.h
-        # DynamicCores/CliqueNumberSimpleGraphs_AtLeast.cpp
-        # DynamicCores/ChromaticNumber_AtMost.cpp
-        # DynamicCores/ChromaticNumber_AtMost.h
-        #	DynamicCores/MaxDegree_AtLeast.cpp
-        # DynamicCores/MaxDegree_AtLeast.h
-        # DynamicCores/HasMultipleEdges.cpp
-        # DynamicCores/HasMultipleEdges.h
-        #	DynamicCores/TriangleFreeWidthFour.cpp
-        #	DynamicCores/EdgeConnected_AtMost.cpp
-        #	DynamicCores/EdgeColoring_AtMost.cpp
-        #	DynamicCores/Minor.cpp
-        # DynamicCores/NoWhereZeroFlow_AtMost.cpp
-        #	DynamicCores/AuxiliaryFunctions.h
-        #	DynamicCores/HamiltonianCycle.cpp
-        #	DynamicCores/MaxDegree_AtLeast.h
-        #	DynamicCores/MaxDegree_AtLeast.cpp
-        #	DynamicCores/MinDegree_AtMost.h
-        #	DynamicCores/MinDegree_AtMost.cpp
-        #	DynamicCores/CycleGirth_AtMost.h
-        #	DynamicCores/CycleGirth_AtMost.cpp
-        # DynamicCores/Mod.h
-        # DynamicCores/Mod.cpp
-        # DynamicCores/PathEdgeCover.h
-        # DynamicCores/PathEdgeCover.cpp
-        #	DynamicCores/VertexConnected_AtMost.cpp
-        #	DynamicCores/VertexConnected_AtMost.h
-        #	DynamicCores/HasCycle.h
-        #	DynamicCores/HasCycle.cpp
-        #   DynamicCores/ChromaticNumber_Min.h
-        #  DynamicCores/ChromaticNumber_Min.cpp
         # Kernel files
         Kernel/CoreWrapper.h
         Kernel/Witness.cpp
@@ -105,27 +75,6 @@ add_executable(
         # Multigraph files
         Multigraph/MultiGraph.cpp
         Multigraph/MultiGraph.h
-        # SearchStrategy files
-        #Search/Leveled/LeveledSetSearch.cpp
-        #Search/Leveled/LeveledSetSearch.h
-        #Search/Leveled/LeveledSetSearchPremise.cpp
-        #Search/Leveled/LeveledSetSearchPremise.h
-        #Search/BFS/BreadthFirstSearch.h
-        #Search/BFS/BreadthFirstSearch.cpp
-        #Search/BFS/BreadthFirstSearchStatistic.h
-        #Search/BFS/BreadthFirstSearchStatistic.cpp
-        #Search/RelabeledLeveledSetSearch.h
-        #Search/RelabeledLeveledSetSearch.cpp
-        #Search/BFS/RelabeledBreadthFirstSearch.h
-        #Search/BFS/RelabeledBreadthFirstSearch.cpp
-        #Search/BFS/RelabeledBreadthFirstSearch-Old.h
-        #Search/BFS/RelabeledBreadthFirstSearch-Old.cpp
-        #Search/BFS/IsomorphismBreadthFirstSearch.h
-        #Search/BFS/IsomorphismBreadthFirstSearch.cpp
-        #Search/Randomized/RandomLeveledSetSearch.h
-        #Search/Randomized/RandomLeveledSetSearch.cpp
-        #Search/Randomized/RandomLeveledSetSearchPremise.h
-        #Search/Randomized/RandomLeveledSetSearchPremise.cpp
         # Conjecture
         Conjecture/Conjecture.cpp
         Conjecture/Conjecture.h
@@ -187,6 +136,11 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 target_link_libraries(treewidzard ${CMAKE_DL_LIBS})
 
+set(ENV{TREEWIDZARD} ${PROJECT_SOURCE_DIR})
+add_subdirectory("DPCores")
+add_subdirectory("SearchStrategies")
+
 # Remove limit for stack (no longer needed for gr or td, but might be needed for big .atd files)
 # ulimit -s unlimited
 # execute_process(COMMAND bash -c "ulimit -s unlimited")
+
