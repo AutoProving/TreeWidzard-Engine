@@ -50,7 +50,7 @@ WitnessSetPointer DynamicCore::join(Bag &b, WitnessSetPointer witnessSet1,
 	return clean(aux);
 }
 
-bool DynamicCore::is_final_set_witness(Bag &b, WitnessSetPointer witnessSet) {
+bool DynamicCore::is_final_set_witness(Bag &, WitnessSetPointer witnessSet) {
 	bool flag = false;
 	for (WitnessPointerConst temp : *witnessSet) {
 		if (is_final_witness(*temp)) {
@@ -85,31 +85,28 @@ int DynamicCore::weight(WitnessSetPointer witnessSet) {
 	exit(20);
 }
 
-WitnessSetPointer DynamicCore::intro_v(unsigned i, Bag &b,
-									   const Witness &witness) {
+WitnessSetPointer DynamicCore::intro_v(unsigned, Bag &, const Witness &) {
 	std::cout << "ERROR: DynamicCore::intro_v";
 	exit(20);
 }
 
-WitnessSetPointer DynamicCore::intro_e(unsigned i, unsigned j, Bag &b,
-									   const Witness &witness) {
+WitnessSetPointer DynamicCore::intro_e(unsigned, unsigned, Bag &,
+									   const Witness &) {
 	std::cout << "ERROR: DynamicCore::intro_e";
 	exit(20);
 }
 
-WitnessSetPointer DynamicCore::forget_v(unsigned i, Bag &b,
-										const Witness &witness) {
+WitnessSetPointer DynamicCore::forget_v(unsigned, Bag &, const Witness &) {
 	std::cout << "ERROR: DynamicCore::forget_v";
 	exit(20);
 }
 
-WitnessSetPointer DynamicCore::join(Bag &b, const Witness &witness1,
-									const Witness &witness2) {
+WitnessSetPointer DynamicCore::join(Bag &, const Witness &, const Witness &) {
 	std::cout << "ERROR: DynamicCore::join";
 	exit(20);
 }
 
-bool DynamicCore::is_final_witness(const Witness &witness) {
+bool DynamicCore::is_final_witness(const Witness &) {
 	std::cout << "ERROR: DynamicCore::is_final_witness";
 	exit(20);
 }
@@ -121,12 +118,12 @@ WitnessSetPointer DynamicCore::clean(WitnessSetPointer witnessSet) {
 	return witnessSet;
 }
 
-int DynamicCore::inv(Bag &b, WitnessSetPointer witnessSet) {
+int DynamicCore::inv(Bag &, WitnessSetPointer) {
 	std::cout << "ERROR: DynamicCore::inv";
 	exit(20);
 }
 
-int DynamicCore::weight(const Witness &witness) {
+int DynamicCore::weight(const Witness &) {
 	std::cout << "ERROR: DynamicCore::weight";
 	exit(20);
 }
@@ -169,4 +166,4 @@ void DynamicCore::setInitialWitnessSet(WitnessSetPointer witnessSetPointer) {
 
 int DynamicCore::getWidth() { return this->width; }
 
-void DynamicCore::setWidth(int width) { this->width = width; }
+void DynamicCore::setWidth(int new_width) { this->width = new_width; }

@@ -37,7 +37,8 @@ void MultiGraph::addIncidence(unsigned edge, unsigned vertex) {
 	this->incidenceMap.insert(std::make_pair(edge, vertex));
 }
 
-void MultiGraph::deleteVertex(unsigned vertex) {
+// TODO
+void MultiGraph::deleteVertex(unsigned) {
 	std::cout << "deleteVertex have not been implemented" << std::endl;
 	exit(20);
 }
@@ -110,9 +111,10 @@ void MultiGraph::readFromFile(std::ifstream &file) {
 		} else if (isEdge) {
 			if (edgeC == 0) {
 				if (incidenceMap.count(stoi(str)) != 0) {
-					std::cout << "ERROR: in MultiGraph::readFromFile there are two "
-							"edges with same name"
-						 << std::endl;
+					std::cout
+						<< "ERROR: in MultiGraph::readFromFile there are two "
+						   "edges with same name"
+						<< std::endl;
 					exit(20);
 				}
 				this->addEdgeLabel(stoi(str));
@@ -125,14 +127,16 @@ void MultiGraph::readFromFile(std::ifstream &file) {
 				addIncidence(edgeNo, stoi(str));
 				edgeC = 0;
 			} else {
-				std::cout << "ERROR: in MultiGraph::readFromFile format did not "
-						"matched"
-					 << std::endl;
+				std::cout
+					<< "ERROR: in MultiGraph::readFromFile format did not "
+					   "matched"
+					<< std::endl;
 				exit(20);
 			}
 		} else {
-			std::cout << "ERROR: in MultiGraph::readFromFile format did not matched"
-				 << std::endl;
+			std::cout
+				<< "ERROR: in MultiGraph::readFromFile format did not matched"
+				<< std::endl;
 			exit(20);
 		}
 	}
@@ -143,73 +147,75 @@ void MultiGraph::readFromFile(std::ifstream &file) {
 }
 
 void MultiGraph::printToFile(std::string fileName) {
-   // fileName = "Counterexample_Graph_"+multigraph_fs::path(fileName).filename().string();
-    std::ofstream multiGraphFile (fileName);
-    if (multiGraphFile.is_open())
-    {
-        multiGraphFile << "vertices:" << std::endl;
-        for (std::set<unsigned>::iterator it = this->vertices.begin();
-             it != this->vertices.end(); ++it) {
-            multiGraphFile << *it << std::endl;
-        }
-        multiGraphFile << "Edges" << std::endl;
-        for (std::set<unsigned>::iterator itr = this->edges.begin();
-             itr != this->edges.end(); ++itr) {
-            multiGraphFile << *itr << "\t";
-            auto equalIt = incidenceMap.equal_range(*itr);
-            for (auto it = equalIt.first; it != equalIt.second; ++it) {
-                multiGraphFile << it->second << "\t";
-            }
-            multiGraphFile << std::endl;
-        }
-        multiGraphFile.close();
-    }else {
-        std::cout << "Unable to open "<< fileName << std::endl;
-        exit(20);
-    }
+	// fileName =
+	// "Counterexample_Graph_"+multigraph_fs::path(fileName).filename().string();
+	std::ofstream multiGraphFile(fileName);
+	if (multiGraphFile.is_open()) {
+		multiGraphFile << "vertices:" << std::endl;
+		for (std::set<unsigned>::iterator it = this->vertices.begin();
+			 it != this->vertices.end(); ++it) {
+			multiGraphFile << *it << std::endl;
+		}
+		multiGraphFile << "Edges" << std::endl;
+		for (std::set<unsigned>::iterator itr = this->edges.begin();
+			 itr != this->edges.end(); ++itr) {
+			multiGraphFile << *itr << "\t";
+			auto equalIt = incidenceMap.equal_range(*itr);
+			for (auto it = equalIt.first; it != equalIt.second; ++it) {
+				multiGraphFile << it->second << "\t";
+			}
+			multiGraphFile << std::endl;
+		}
+		multiGraphFile.close();
+	} else {
+		std::cout << "Unable to open " << fileName << std::endl;
+		exit(20);
+	}
 }
 
 void MultiGraph::printToFilePACEFormat(std::string fileName) {
-    std::ofstream multiGraphFile (fileName);
-    if (multiGraphFile.is_open())
-    {
-        multiGraphFile << "c This is the counter example for "<<fileName << std::endl;
-        multiGraphFile<< "p tw " << this->vertices.size() << " " << edges.size() << std::endl;
-        for (std::set<unsigned>::iterator itr = this->edges.begin(); itr != this->edges.end(); ++itr) {
-            auto equalIt = incidenceMap.equal_range(*itr);
-            bool spaceFlag = false; // This is used to put spaces between endpoints of an edge.
-            for (auto it = equalIt.first; it != equalIt.second; ++it) {
-                if(spaceFlag){
-                    multiGraphFile << " " ;
-                }
-                multiGraphFile << it->second;
-                spaceFlag = true;
-            }
+	std::ofstream multiGraphFile(fileName);
+	if (multiGraphFile.is_open()) {
+		multiGraphFile << "c This is the counter example for " << fileName
+					   << std::endl;
+		multiGraphFile << "p tw " << this->vertices.size() << " "
+					   << edges.size() << std::endl;
+		for (std::set<unsigned>::iterator itr = this->edges.begin();
+			 itr != this->edges.end(); ++itr) {
+			auto equalIt = incidenceMap.equal_range(*itr);
+			bool spaceFlag = false; // This is used to put spaces between
+									// endpoints of an edge.
+			for (auto it = equalIt.first; it != equalIt.second; ++it) {
+				if (spaceFlag) {
+					multiGraphFile << " ";
+				}
+				multiGraphFile << it->second;
+				spaceFlag = true;
+			}
 
-            multiGraphFile << std::endl;
-        }
-        multiGraphFile.close();
-    }else {
-        std::cout << "Unable to open "<< fileName << std::endl;
-        exit(20);
-    }
-
+			multiGraphFile << std::endl;
+		}
+		multiGraphFile.close();
+	} else {
+		std::cout << "Unable to open " << fileName << std::endl;
+		exit(20);
+	}
 }
 
 void MultiGraph::printToFileDirectedBipartiteGraphNAUTY(std::string fileName) {
-    std::ofstream multiGraphFile (fileName);
-    if (multiGraphFile.is_open())
-    {
-        multiGraphFile << "n="<<this->vertices.size()+this->edgesSize()<< " g" << std::endl;
-        for(auto edge: this->incidenceMap){
-            multiGraphFile<< edge.first << ":" << edge.second+edgesSize() << std::endl;
-        }
-        multiGraphFile.close();
-    }else {
-        std::cout << "Unable to open "<< fileName << std::endl;
-        exit(20);
-    }
-
+	std::ofstream multiGraphFile(fileName);
+	if (multiGraphFile.is_open()) {
+		multiGraphFile << "n=" << this->vertices.size() + this->edgesSize()
+					   << " g" << std::endl;
+		for (auto edge : this->incidenceMap) {
+			multiGraphFile << edge.first << ":" << edge.second + edgesSize()
+						   << std::endl;
+		}
+		multiGraphFile.close();
+	} else {
+		std::cout << "Unable to open " << fileName << std::endl;
+		exit(20);
+	}
 }
 
 bool MultiGraph::isMultiGraph() {
@@ -223,7 +229,7 @@ bool MultiGraph::isMultiGraph() {
 }
 
 bool MultiGraph::convertToGML(std::string fileName) {
-    std::ofstream gmlFile(fileName);
+	std::ofstream gmlFile(fileName);
 	gmlFile << "graph [\n";
 	for (auto it = vertices.begin(); it != vertices.end(); it++) {
 		gmlFile << "node \n [\n id " + std::to_string(*it) + "\n ]\n";
@@ -237,8 +243,9 @@ bool MultiGraph::convertToGML(std::string fileName) {
 			tempIt++;
 			gmlFile << "target " + std::to_string(tempIt->second) + "\n ]\n";
 		} else {
-			std::cout << "ERROR: MultiGraph::convertToGML multigraph is not valid"
-				 << std::endl;
+			std::cout
+				<< "ERROR: MultiGraph::convertToGML multigraph is not valid"
+				<< std::endl;
 			return false;
 		}
 	}
@@ -247,16 +254,12 @@ bool MultiGraph::convertToGML(std::string fileName) {
 	return true;
 }
 
-unsigned MultiGraph::verticesSize() {
-    return vertices.size();
-}
+unsigned MultiGraph::verticesSize() { return vertices.size(); }
 
-unsigned MultiGraph::edgesSize() {
-    return edges.size();
-}
+unsigned MultiGraph::edgesSize() { return edges.size(); }
 
 unsigned MultiGraph::nthVertex(unsigned n) {
-   auto it = vertices.begin();
-   advance(it,n);
-   return *it;
+	auto it = vertices.begin();
+	advance(it, n);
+	return *it;
 }

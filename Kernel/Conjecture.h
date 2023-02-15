@@ -2,25 +2,27 @@
 
 #ifndef CONJECTURE_H
 #define CONJECTURE_H
+#include <string>
+#include <vector>
 #include "DynamicKernel.h"
 
 class ConjectureNode {
   private:
-	string logicalOperator;
+	std::string logicalOperator;
 	int propertyIndex;
-	vector<ConjectureNode *> children;
+	std::vector<ConjectureNode *> children;
 
   public:
 	virtual bool evaluateState(State &q, DynamicKernel *kernel);
 	void print();
 
-	string getLogicalOperator();
+	std::string getLogicalOperator();
 	int getPropertyIndex();
-	vector<ConjectureNode *> getChildren();
+	std::vector<ConjectureNode *> getChildren();
 
-	void setLogicalOperator(string);
+	void setLogicalOperator(std::string);
 	void setPropertyIndex(int);
-	void setChildren(vector<ConjectureNode *> &);
+	void setChildren(std::vector<ConjectureNode *> &);
 
 	bool evaluateChildState(int, State &, DynamicKernel *);
 	int getChildrenSize();

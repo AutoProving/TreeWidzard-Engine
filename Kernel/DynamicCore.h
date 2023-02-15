@@ -43,6 +43,11 @@ class DynamicCore {
 	void insertIntoInitialWitnessSet(WitnessPointer);
 	int getWidth();
 	void setWidth(int width);
+
+	// Making the methods pure virtual,
+	// meaning one can not construct a DynamicCore
+	// or a descendant of DynamicCore without overriding
+	// these methods
 	virtual void createInitialWitnessSet() = 0;
 	virtual WitnessSetPointer intro_v(unsigned i, Bag &b,
 									  const Witness &witness) = 0;

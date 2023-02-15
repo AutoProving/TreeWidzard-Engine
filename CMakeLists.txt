@@ -7,11 +7,10 @@ if (MSVC)
     add_compile_options(/W4 /WX)
 else()
     # lots of warnings and all warnings as errors
-    # add_compile_options(-Wall -Wextra -pedantic -Werror)
-    #add_compile_options(-Wall)
+    # add_compile_options(-Werror)
+    add_compile_options(-Wall -Wextra -pedantic)
 endif()
 add_compile_options(-O2)
-include_directories(Scripts)
 link_libraries(stdc++fs)
 set(CMAKE_EXE_LINKER_FLAGS "-static")
 set(CMAKE_EXE_LINKER_FLAGS "-rdynamic")
@@ -21,7 +20,8 @@ set(CMAKE_EXE_LINKER_FLAGS "-rdynamic")
 # add_link_options(-fsanitize=address)
 # add_link_options(-fsanitize=undefined)
 
-include_directories(DynamicCores)
+# stops lexer from creating some unused methods
+add_compile_definitions(YY_NO_INPUT=1)
 
 project("treewidzard")
 add_executable(
@@ -185,10 +185,6 @@ SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${CMAKE_PTHREAD_FLAG}")
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 target_link_libraries(treewidzard ${CMAKE_DL_LIBS})
-
-
-execute_process (
-        COMMAND bash -c "${CMAKE_CURRENT_SOURCE_DIR}/Scripts/./buildAllPlugins.sh")
 
 # Remove limit for stack (no longer needed for gr or td, but might be needed for big .atd files)
 # ulimit -s unlimited

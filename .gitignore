@@ -22,3 +22,4 @@ cmake-build-debug/*
 .vscode/*
 /small-test/*
 /small-test/
+tags

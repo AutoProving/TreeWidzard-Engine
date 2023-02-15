@@ -106,7 +106,7 @@ command_term        : command_term_signature command_input_file command_end{Pars
 
 %%
 
-void yyerror(int &result, std::string &width_type, int &width_value, char const* msg){
+void yyerror(int &, std::string &, int &, char const*){
   //std::cerr<<"Syntax Error: "<< msg << " on line " <<command_lineno << std::endl;
   std::cout<<"Wrong number of inputs. Please execute treewidzard --help for more information."<<std::endl;
   // error printing  disabled, it is handeled in main.cpp
