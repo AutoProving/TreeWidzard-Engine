@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_TERM_TERM_PARSER_TAB_H_INCLUDED
-# define YY_TERM_TERM_PARSER_TAB_H_INCLUDED
+#ifndef YY_TERM_TERM_PARSER_HPP_INCLUDED
+# define YY_TERM_TERM_PARSER_HPP_INCLUDED
 /* Debug traces.  */
 #ifndef TERM_DEBUG
 # if defined YYDEBUG
@@ -59,7 +59,7 @@ extern int term_debug;
     #include <iostream>
     #include <vector>
 
-#line 63 "term_parser.tab.h"
+#line 63 "term_parser.hpp"
 
 /* Token kinds.  */
 #ifndef TERM_TOKENTYPE
@@ -89,7 +89,7 @@ union TERM_STYPE
      char* string;
 
 
-#line 93 "term_parser.tab.h"
+#line 93 "term_parser.hpp"
 
 };
 typedef union TERM_STYPE TERM_STYPE;
@@ -118,4 +118,4 @@ extern TERM_LTYPE term_lloc;
 int term_parse (Term<std::string> &term, int &result);
 
 
-#endif /* !YY_TERM_TERM_PARSER_TAB_H_INCLUDED  */
+#endif /* !YY_TERM_TERM_PARSER_HPP_INCLUDED  */

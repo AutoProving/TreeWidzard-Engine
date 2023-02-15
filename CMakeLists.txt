@@ -22,6 +22,7 @@ set(CMAKE_EXE_LINKER_FLAGS "-rdynamic")
 
 # stops lexer from creating some unused methods
 add_compile_definitions(YY_NO_INPUT=1)
+add_compile_definitions(YY_NO_UNPUT=1)
 
 project("treewidzard")
 add_executable(

@@ -120,7 +120,7 @@ atd_COMMENTS               : atd_COMMENT atd_NEWLINE atd_COMMENTS               
 
 %%
 
-void yyerror(AbstractTreeDecomposition &atd, int &result, char const* msg){
+void yyerror(AbstractTreeDecomposition &/*atd*/, int &/*result*/, char const* msg){
   std::cerr<<"Syntax Error: "<< msg << " on line " <<atd_lineno << std::endl;
   // error printing  disabled, it is handeled in main.cpp
 }

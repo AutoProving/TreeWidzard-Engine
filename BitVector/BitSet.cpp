@@ -36,8 +36,6 @@ void BitSet::push_back(bool value) {
 		if (this->array.size() != this->array.capacity())
 			this->array.shrink_to_fit();
 	}
-	unsigned int blk = this->getBlock(this->bitSetSize);
-	unsigned int pos = this->getRem(this->bitSetSize);
 	this->set(value, this->bitSetSize);
 	this->bitSetSize++;
 }
@@ -47,6 +45,7 @@ void BitSet::pop_back() { this->bitSetSize--; }
 unsigned int BitSet::size() const { return this->bitSetSize; }
 
 void BitSet::print() const {
-	for (int i = 0; i < this->size(); i++) std::cout << this->at(i) << ' ';
+	for (unsigned int i = 0; i < this->size(); i++)
+		std::cout << this->at(i) << ' ';
 	std::cout << std::endl;
 }

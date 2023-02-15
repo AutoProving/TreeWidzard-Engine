@@ -104,7 +104,7 @@
     int atd_construct(AbstractTreeDecomposition &atd, std::map<int,std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>>> &labelToNode, std::map<int,int> &labelToParentLabel);
   
 
-#line 108 "atd_parser.hpp"
+#line 108 "atd_parser.cpp"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -1243,7 +1243,7 @@ yyreduce:
   case 2: /* atd_START: atd_NODE  */
 #line 56 "atd_parser.y"
                                                                  {if(!atd_construct(atd,labelToNode,labelToParentLabel)){YYERROR;}; std::cout<<"DONE!"<<std::endl;}
-#line 1247 "atd_parser.tab.c"
+#line 1247 "atd_parser.cpp"
     break;
 
   case 3: /* atd_NODE: atd_COMMENTS atd_NUM atd_LEAF atd_NODES  */
@@ -1256,7 +1256,7 @@ yyreduce:
  									labelToNode[(yyvsp[-2].number)]=node;
 
                                     }
-#line 1260 "atd_parser.tab.c"
+#line 1260 "atd_parser.cpp"
     break;
 
   case 4: /* atd_NODE: atd_COMMENTS atd_NUM atd_INTROVERTEX atd_SEP1 atd_NUM atd_LEFTP atd_NUM atd_RIGHTP atd_NODES  */
@@ -1272,7 +1272,7 @@ yyreduce:
 									labelToParentLabel[(yyvsp[-2].number)]=(yyvsp[-7].number);
 
 									}
-#line 1276 "atd_parser.tab.c"
+#line 1276 "atd_parser.cpp"
     break;
 
   case 5: /* atd_NODE: atd_COMMENTS atd_NUM atd_INTROEDGE atd_SEP1 atd_NUM atd_SEP1 atd_NUM atd_LEFTP atd_NUM atd_RIGHTP atd_NODES  */
@@ -1288,7 +1288,7 @@ yyreduce:
 									labelToParentLabel[(yyvsp[-2].number)]=(yyvsp[-9].number);
                                     
 									}
-#line 1292 "atd_parser.tab.c"
+#line 1292 "atd_parser.cpp"
     break;
 
   case 6: /* atd_NODE: atd_COMMENTS atd_NUM atd_FORGETVERTEX atd_SEP1 atd_NUM atd_LEFTP atd_NUM atd_RIGHTP atd_NODES  */
@@ -1303,7 +1303,7 @@ yyreduce:
  									if(labelToParentLabel.count((yyvsp[-2].number))){std::cout<< "node "<<(yyvsp[-2].number)<<" has two parents" << labelToParentLabel[(yyvsp[-2].number)] << " and "<<(yyvsp[-7].number)<<std::endl; YYERROR;}
 									labelToParentLabel[(yyvsp[-2].number)]=(yyvsp[-7].number);
 								    }
-#line 1307 "atd_parser.tab.c"
+#line 1307 "atd_parser.cpp"
     break;
 
   case 7: /* atd_NODE: atd_COMMENTS atd_NUM atd_JOIN atd_LEFTP atd_NUM atd_SEP2 atd_NUM atd_RIGHTP atd_NODES  */
@@ -1321,17 +1321,17 @@ yyreduce:
 									labelToParentLabel[(yyvsp[-2].number)]=(yyvsp[-7].number);
 
                                     }
-#line 1325 "atd_parser.tab.c"
+#line 1325 "atd_parser.cpp"
     break;
 
   case 11: /* atd_COMMENTS: atd_COMMENT atd_NEWLINE atd_COMMENTS  */
 #line 116 "atd_parser.y"
                                                                                                                {}
-#line 1331 "atd_parser.tab.c"
+#line 1331 "atd_parser.cpp"
     break;
 
 
-#line 1335 "atd_parser.tab.c"
+#line 1335 "atd_parser.cpp"
 
       default: break;
     }
@@ -1532,7 +1532,7 @@ yyreturnlab:
 #line 121 "atd_parser.y"
 
 
-void yyerror(AbstractTreeDecomposition &atd, int &result, char const* msg){
+void yyerror(AbstractTreeDecomposition &/*atd*/, int &/*result*/, char const* msg){
   std::cerr<<"Syntax Error: "<< msg << " on line " <<atd_lineno << std::endl;
   // error printing  disabled, it is handeled in main.cpp
 }

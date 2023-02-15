@@ -109,20 +109,20 @@ CTD_COMMENTS               : CTD_COMMENT CTD_NEWLINE CTD_COMMENTS               
 
 %%
 
-void yyerror(ConcreteTreeDecomposition &ctd, int &result, char const* msg){
+void yyerror(ConcreteTreeDecomposition &/*ctd*/, int &/*result*/, char const* msg){
   std::cerr<<"Syntax Error: "<< msg << " on line " <<ctd_lineno << std::endl;
   // error printing  disabled, it is handeled in main.cpp
 }
 
 int ctd_construct(ConcreteTreeDecomposition &ctd, std::vector<std::tuple<std::shared_ptr<TermNode<ConcreteNode>>,std::set<int>,int,std::set<int>>> &ctdVec,std::vector<std::set<int>> &ctdChildPos){
-    for(int k = 0 ; k < ctdVec.size(); k++){
+    for(size_t k = 0 ; k < ctdVec.size(); k++){
         /*cout<<std::get<2>(ctdVec[k])<< " " << std::get<0>(ctdVec[k])->get_nodeType()<< " ";
         for(auto e:std::get<1>(ctdVec[k])){
             cout<<e<<" ";
         }
         cout<<std::endl;*/
         std::vector<std::shared_ptr<TermNode<ConcreteNode>>> children;
-        for(int i = 0 ; i < ctdVec.size();i++){
+        for(size_t i = 0 ; i < ctdVec.size();i++){
             if( std::get<1>(ctdVec[k]).count(std::get<2>(ctdVec[i]))){
                 std::get<0>(ctdVec[i])->setParent(std::get<0>(ctdVec[k]));
                 children.push_back(std::get<0>(ctdVec[i]));
@@ -154,7 +154,7 @@ int ctd_construct(ConcreteTreeDecomposition &ctd, std::vector<std::tuple<std::sh
     }
     // Find root
     std::set<int> rootIndex;
-    for(int i=0; i< ctdVec.size();i++){
+    for(size_t i=0; i< ctdVec.size();i++){
         if(std::get<0>(ctdVec[i])->getParent()==nullptr){
             rootIndex.insert(i);
         }
