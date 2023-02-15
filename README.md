@@ -17,7 +17,7 @@ There are two main ways of downloading TreeWidzard.
 
 1- Cloning from GitHub:
 ```commandline
-git clone https://github.com/AutoProving/treewidzard.git --recursive
+git clone https://github.com/AutoProving/Treewidzard-Release --recursive
 ```
 
 The recursive flag makes sure the submodules DPCores and SearchStrategies are also cloned.
@@ -26,7 +26,7 @@ The recursive flag makes sure the submodules DPCores and SearchStrategies are al
 
 Download the zip file:
 ```commandline
-wget https://github.com/AutoProving/treewidzard/archive/refs/heads/main.zip TreeWizard
+wget https://github.com/AutoProving/treewidzard/archive/refs/heads/main.zip TreeWizard-main.zip
 ```
 
 Extract the files from the zip file:
@@ -37,7 +37,7 @@ unzip TreeWidzard-main.zip
 Rename the directory to TreeWidzard
 
 ```commandline
-mv TreeWidzard-main TreeWidzard
+mv TreeWidzard-main TreeWidzard-Release
 ```
 
 #### Compiling TreeWidzard
@@ -45,7 +45,7 @@ mv TreeWidzard-main TreeWidzard
 1- Enter the directory of TreeWidzard
 
 ```commandline
-cd TreeWidzard
+cd TreeWidzard-Release
 ```
 
 2- Create a folder called ``Build``. This is the folder where the files will be compiled and where TreeWidzard's executable file will be created.
