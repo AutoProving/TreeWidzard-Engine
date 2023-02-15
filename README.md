@@ -17,8 +17,10 @@ There are two main ways of downloading TreeWidzard.
 
 1- Cloning from GitHub:
 ```commandline
-git clone https://github.com/AutoProving/treewidzard.git
+git clone https://github.com/AutoProving/treewidzard.git --recursive
 ```
+
+The recursive flag makes sure the submodules DPCores and SearchStrategies are also cloned.
 
 2- You can also download the zip file of TreeWidzard's repository.
 
@@ -76,4 +78,17 @@ make
 
 Execute ``./treewidzard --help`` to obtain a list of instructions on how to use TreeWidzard to model check properties or to test conjectures.
 
+
+#### Updating
+
+Changes to TreeWidzard itself can be pulled by the usual
+
+```commandline
+git pull
+```
+
+but to update the submodules, use this instead:
+
+```commandline
+git submodule update --recursive --remote                                                                                                                 Build -> m```
 
