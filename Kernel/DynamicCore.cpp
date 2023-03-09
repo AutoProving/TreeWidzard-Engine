@@ -50,39 +50,14 @@ WitnessSetPointer DynamicCore::join(Bag &b, WitnessSetPointer witnessSet1,
 	return clean(aux);
 }
 
-bool DynamicCore::is_final_set_witness(Bag &, WitnessSetPointer witnessSet) {
+bool DynamicCore::is_final_set_witness(Bag &bag, WitnessSetPointer witnessSet) {
 	bool flag = false;
 	for (WitnessPointerConst temp : *witnessSet) {
-		if (is_final_witness(*temp)) {
+		if (is_final_witness(bag, *temp)) {
 			return true;
 		}
 	}
 	return flag;
-}
-
-int DynamicCore::weight(WitnessSetPointer witnessSet) {
-	std::set<int> values;
-	for (auto temp : *witnessSet) {
-		values.insert(weight(*temp));
-	}
-	std::string coreType = getAttributeValue("CoreType");
-	if (coreType == "NULL" or coreType == "") {
-		std::cout << "Error: DynamicCore::weight CoreType has not specified"
-				  << std::endl;
-		exit(20);
-	} else if (coreType == "Min" or coreType == "Max") {
-		if (values.size() == 0) {
-			return 0;
-		} else {
-			if (coreType == "Min") {
-				return *values.begin();
-			} else {
-				return *values.rbegin();
-			}
-		}
-	}
-	std::cout << "Error: Unknown CoreType" << std::endl;
-	exit(20);
 }
 
 WitnessSetPointer DynamicCore::intro_v(unsigned, Bag &, const Witness &) {
@@ -118,14 +93,8 @@ WitnessSetPointer DynamicCore::clean(WitnessSetPointer witnessSet) {
 	return witnessSet;
 }
 
-int DynamicCore::inv(Bag &, WitnessSetPointer) {
-	std::cout << "ERROR: DynamicCore::inv";
-	exit(20);
-}
-
-int DynamicCore::weight(const Witness &) {
-	std::cout << "ERROR: DynamicCore::weight";
-	exit(20);
+int DynamicCore::inv(Bag &bag, const WitnessSetPointer witnessSet) {
+	return is_final_set_witness(bag, witnessSet);
 }
 
 void DynamicCore::createInitialWitnessSet() {

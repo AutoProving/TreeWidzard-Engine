@@ -5,31 +5,30 @@ double Conjecture::evaluateConjectureNodeOnState(const State &q,
 												 const ConjectureNode *node) {
 	double result;
 	// evaluate a node based on its type
+
+	// TODO:
+	// should only compute invariant and is_final_set at most once
+	// double -> int (because double - bool conversions are scary)
+
+	// if you give ownership -> shared_ptr or unique_ptr
+	// if you let someone borrow -> reference
+
+	// f(const Witness &w)
+	//
+	// f(const shared_ptr<const Witness> w)
+	//
+
 	switch (node->getType()) {
 		case CORE_VARIABLE:
 			if (variablesToCoreName.count(node->getVal())) {
 				std::string coreType = kernel->getCoreByVar(node->getVal())
 										   ->getAttributeValue("CoreType");
-				if (coreType == "Min" or coreType == "Max") {
-					result = kernel->getCoreByVar(node->getVal())
-								 ->weight(q.getWitnessSet(
-									 kernel->getIndexByVar(node->getVal())));
-					break;
-				} else if (coreType == "Bool") {
-					Bag bag = q.get_bag();
-					result = kernel->getCoreByVar(node->getVal())
-								 ->is_final_set_witness(
-									 bag, q.getWitnessSet(kernel->getIndexByVar(
-											  node->getVal())));
-					break;
-				} else {
-					// error
-					std::cout << "Error in "
-								 "Conjecture::evaluateConjectureNodeOnState: "
-								 "coreType "
-							  << coreType << " is not defined.";
-					exit(20);
-				}
+				Bag bag = q.get_bag();
+				result = kernel->getCoreByVar(node->getVal())
+							 ->is_final_set_witness(
+								 bag, q.getWitnessSet(kernel->getIndexByVar(
+										  node->getVal())));
+				break;
 			} else {
 				// error
 				std::cout
@@ -42,8 +41,8 @@ double Conjecture::evaluateConjectureNodeOnState(const State &q,
 					Bag bag = q.get_bag();
 					result =
 						kernel->getCoreByVar(node->getChildren()[0]->getVal())
-							->inv(bag, q.getWitnessSet(kernel->getIndexByVar(
-										   node->getChildren()[0]->getVal())));
+							->inv(q.getWitnessSet(kernel->getIndexByVar(
+								node->getChildren()[0]->getVal())));
 					break;
 				} else {
 					std::cout << "Error in "
@@ -265,13 +264,11 @@ double Conjecture::evaluateConjectureOnState(const State &q) {
 
 ConjectureNode *Conjecture::getRoot() const { return root; }
 
-void Conjecture::setRoot(ConjectureNode *root) { Conjecture::root = root; }
+void Conjecture::setRoot(ConjectureNode *root_) { root = root_; }
 
 DynamicKernel *Conjecture::getKernel() const { return kernel; }
 
-void Conjecture::setKernel(DynamicKernel *kernel) {
-	Conjecture::kernel = kernel;
-}
+void Conjecture::setKernel(DynamicKernel *kernel_) { kernel = kernel_; }
 
 void Conjecture::print() {
 	//    unsigned label = 0;
@@ -329,8 +326,8 @@ const std::map<std::string, std::string> &Conjecture::getVariablesToCoreName()
 }
 
 void Conjecture::setVariablesToCoreName(
-	const std::map<std::string, std::string> &variablesToCoreName) {
-	Conjecture::variablesToCoreName = variablesToCoreName;
+	const std::map<std::string, std::string> &variablesToCoreName_) {
+	variablesToCoreName = variablesToCoreName_;
 }
 
 int Conjecture::evaluatePremiseOnState(const State &q) {
@@ -385,32 +382,28 @@ ConjectureNode::ConjectureNode(TokenType type, const std::string &val, double x)
 
 TokenType ConjectureNode::getType() const { return type; }
 
-void ConjectureNode::setType(TokenType type) { ConjectureNode::type = type; }
+void ConjectureNode::setType(TokenType type_) { type = type_; }
 
 const std::string &ConjectureNode::getVal() const { return val; }
 
-void ConjectureNode::setVal(const std::string &val) {
-	ConjectureNode::val = val;
-}
+void ConjectureNode::setVal(const std::string &val_) { val = val_; }
 
 double ConjectureNode::getX() const { return x; }
 
-void ConjectureNode::setX(double x) { ConjectureNode::x = x; }
+void ConjectureNode::setX(double x_) { x = x_; }
 
 const std::vector<ConjectureNode *> &ConjectureNode::getChildren() const {
 	return children;
 }
 
 void ConjectureNode::setChildren(
-	const std::vector<ConjectureNode *> &children) {
-	ConjectureNode::children = children;
+	const std::vector<ConjectureNode *> &children_) {
+	children = children_;
 }
 
 ConjectureNode *ConjectureNode::getParent() const { return parent; }
 
-void ConjectureNode::setParent(ConjectureNode *parent) {
-	ConjectureNode::parent = parent;
-}
+void ConjectureNode::setParent(ConjectureNode *parent_) { parent = parent_; }
 
 ConjectureNode::ConjectureNode(TokenType type, const std::string &val)
 	: type(type), val(val) {}

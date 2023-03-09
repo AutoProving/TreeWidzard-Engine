@@ -12,8 +12,6 @@ bool operator<(const Witness &lhs, const Witness &rhs) {
 	return lhs.is_less(rhs);
 }
 
-Witness &Witness::operator=(Witness &rhs) { return this->set_equal(rhs); }
-
 void Witness::print() const {
 	std::cout
 		<< "It you are seeing this, it is because the print function was not "

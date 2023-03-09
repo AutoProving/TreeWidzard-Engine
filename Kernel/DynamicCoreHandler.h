@@ -10,8 +10,8 @@ class DynamicCoreHandler {
   private:
 	void* handler = nullptr;
 	DynamicCore_creator_t creator = nullptr;
-	DynamicCore_creator_t_int creator_int = nullptr;
-	DynamicCore_creator_t_multiGraph creator_multiGraph = nullptr;
+	// DynamicCore_creator_t_int creator_int = nullptr;
+	// DynamicCore_creator_t_multiGraph creator_multiGraph = nullptr;
 	DynamicCore_creator_t_parameters creator_parameters = nullptr;
 	static void Reset_dlerror() { dlerror(); }
 
@@ -31,19 +31,23 @@ class DynamicCoreHandler {
 		Reset_dlerror();
 		creator =
 			reinterpret_cast<DynamicCore_creator_t>(dlsym(handler, "create"));
+		/*
 		creator_int = reinterpret_cast<DynamicCore_creator_t_int>(
 			dlsym(handler, "create_int"));
 		creator_multiGraph = reinterpret_cast<DynamicCore_creator_t_multiGraph>(
 			dlsym(handler, "create_multiGraph"));
+		*/
 		creator_parameters = reinterpret_cast<DynamicCore_creator_t_parameters>(
 			dlsym(handler, "create_parameters"));
-		// Check_dlerror();
+		Check_dlerror();
 	}
 
-	std::unique_ptr<DynamicCore> create() const {
+	std::unique_ptr<std::map<std::string, std::string>> get_metadata() const {
 		if (!creator) throw std::runtime_error("Core is missing create.");
-		return std::unique_ptr<DynamicCore>(creator());
+		return std::unique_ptr<std::map<std::string, std::string>>(
+			metadata_getter());
 	}
+	/*
 	std::unique_ptr<DynamicCore> create_int(unsigned param) const {
 		if (!creator_int)
 			throw std::runtime_error("Core is missing create_int.");
@@ -56,12 +60,15 @@ class DynamicCoreHandler {
 			throw std::runtime_error("Core is missing create_multiGraph.");
 		return std::unique_ptr<DynamicCore>(creator_multiGraph(multiGraph));
 	}
+	*/
 
 	std::unique_ptr<DynamicCore> create_parameters(
 		const parameterType& parameters) const {
 		if (!creator_parameters)
 			throw std::runtime_error("Core is missing create_parameters.");
-		return std::unique_ptr<DynamicCore>(creator_parameters(parameters));
+		auto ptr = std::unique_ptr<DynamicCore>(creator_parameters(parameters));
+		ptr->attributes = the_meta_function();
+		return ptr;
 	}
 
 	~DynamicCoreHandler() {

@@ -24,7 +24,6 @@ class Witness {
 	virtual ~Witness();
 	friend bool operator==(const Witness &lhs, const Witness &rhs);
 	friend bool operator<(const Witness &lhs, const Witness &rhs);
-	virtual Witness &operator=(Witness &rhs);
 	bool operator!=(const Witness &rhs) const;
 	virtual void hash(Hasher &h) const;
 	struct IsLessSharedPtr {
