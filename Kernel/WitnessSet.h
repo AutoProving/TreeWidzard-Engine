@@ -168,11 +168,11 @@ class WitnessSetTypeTwo : public WitnessSet {
 	std::set<std::shared_ptr<Witness>, compare> container;
 	class WitnessSetTypeTwoIterator : public AbstractIterator {
 	  private:
-		std::set<std::shared_ptr<Witness>>::iterator it;
+		typename std::set<std::shared_ptr<Witness>, compare>::iterator it;
 
 	  public:
 		WitnessSetTypeTwoIterator(
-			std::set<std::shared_ptr<Witness>>::iterator it_)
+			typename std::set<std::shared_ptr<Witness>, compare>::iterator it_)
 			: it(it_) {}
 		virtual const valueType dereference() { return *it; };
 		virtual void increment() { it++; };

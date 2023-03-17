@@ -12,8 +12,6 @@
 
 extern std::FILE *command_in;
 
-namespace fs = std::filesystem;
-
 int main(int argc, char *arg[]) {
 	// Reading the input and put it in string _all_arg
 	std::string _all_arg;

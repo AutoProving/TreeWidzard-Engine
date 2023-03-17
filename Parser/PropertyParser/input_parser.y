@@ -4,6 +4,7 @@
 %code requires {
     #include "../../Conjecture/Conjecture.h"
     #include "../../Kernel/Width.h"
+    #include "../../Kernel/DynamicCoreHandler.h"
     #include <iostream>
     #include <vector>
     #include <map>
@@ -23,12 +24,13 @@
     #include <variant>
     #include "../../Conjecture/Conjecture.h"
     #include "../../Kernel/Width.h"
+    #include "../../Kernel/DynamicCoreHandler.h"
     #include <algorithm>
     // this function will be generated
     // using flex
     extern int yylex();
     extern int input_lineno;
-    extern void yyerror(Conjecture &conj, int &result,std::map<std::string,std::map<std::string,std::string>> &coreList, std::map<std::string,std::string> &varToCoreName, std::map<std::string, PropertyAssignment*> varToProperty, char const* msg);
+    extern void yyerror(Conjecture &conj, int &result,std::map<std::string,DynamicCoreHandler> &coreList, std::map<std::string,std::string> &varToCoreName, std::map<std::string, PropertyAssignment*> varToProperty, char const* msg);
     std::map<char*,ConjectureNode*> sub_formula_variables;
     bool check_varToProperty(std::string v,std::map<std::string, PropertyAssignment*> &varToProperty);
     bool check_sub_formula_variables(char* v);
@@ -44,7 +46,7 @@
 
 %parse-param {Conjecture &conj}
 %parse-param {int &result}
-%parse-param {std::map<std::string,std::map<std::string,std::string>> &coreList}
+%parse-param {std::map<std::string,DynamicCoreHandler> &coreList}
 %parse-param {std::map<std::string,std::string> &varToCoreName}
 %parse-param {std::map<std::string, PropertyAssignment*> &varToProperty}
 
@@ -89,15 +91,6 @@ VARIABLE_CORE_ASSIGNMENT	: VARIABLE SEPERATOR ATOMIC_PREDICATE LEFTP PARAMETERS 
 				{
 				if(check_varToProperty($1,varToProperty)){ std::cout<<" variable " << $1 << " is written at least two times" <<std::endl; YYERROR; exit(20);}
 				if(!coreList.count($3)){std::cout<<"core name \""<<$3<<"\" is not exist"<<std::endl; YYERROR;}
-				// if(!coreList[$3].count("CoreType")){std::cout<<"CoreType of "<<$3<<" couldn't find, chech the core properities"<<std::endl; YYERROR;}
-				// if(coreList[$3]["CoreType"]!="Bool"){std::cout<<"CoreType of "<<$3<< " isn't Bool, check the core properties"<<std::endl; YYERROR;}
-				// if(!coreList[$3].count("ParameterType")){std::cout<<"Parameter of "<<$3<<" couldn't find, chech the core properities"<<std::endl; YYERROR;}
-				// if(coreList[$3]["ParameterType"]!="UnsignedInt"){std::cout<<"Parameter of "<<$3<< " isn't UnsignedInt, check the core properties"<<std::endl; YYERROR;}
-				// if(!coreList[$3].count("PrimaryOperator")){std::cout<<"PrimaryOperator for "<<$3<<" isn't set, check the core properties"<<std::endl;YYERROR;}
-				// if(coreList[$3]["PrimaryOperator"]=="AtLeast" and (strcmp($4,"<")==0 or strcmp($4,"<=")==0)   ){
-				// std::cout<<"PrimaryOperator for "<<$3<<" is " <<coreList[$3]["PrimaryOperator"]<<" and the written operator is " <<$4<<" , check the core properties"<<std::endl;YYERROR;}
-				// if( coreList[$3]["PrimaryOperator"]=="AtMost" and (strcmp($4,">")==0 or strcmp($4,">=")==0)  )
-				// {std::cout<<"PrimaryOperator for "<<$3<<" is " <<coreList[$3]["PrimaryOperator"]<<" and the written operator is " <<$4<<" , check the core properties"<<std::endl;YYERROR;}
 				$$ = new PropertyAssignment(); //$$->setParameterType("UnsignedInt");
 				$$->setName($3);
 				// $$->setOp($4);
@@ -276,7 +269,7 @@ FORMULACOMMENTS         :NEWLINE COMMENTS FORMULACOMMENTS
                         ;
 %%
 
-void yyerror(Conjecture &/*conj*/, int &/*result*/,std::map<std::string,std::map<std::string,std::string>> &/*coreList*/, std::map<std::string,std::string> &/*varToCoreName*/, std::map<std::string, PropertyAssignment*> /*varToProperty*/, char const* msg){
+void yyerror(Conjecture &/*conj*/, int &/*result*/,std::map<std::string,DynamicCoreHandler> &/*coreList*/, std::map<std::string,std::string> &/*varToCoreName*/, std::map<std::string, PropertyAssignment*> /*varToProperty*/, char const* msg){
 
   std::cerr<< "\033[1;31mERORR:\033[0m" << std::endl;
   std::cerr<<"\033[1;31mError in the input file line " <<input_lineno << "\033[0m" << std::endl;

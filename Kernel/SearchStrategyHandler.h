@@ -2,50 +2,38 @@
 #define SEARCHSTRATEGYHANDLER_H
 
 #include <dlfcn.h>
+#include <algorithm>
 #include <iostream>
+#include <memory>
+#include "../DynamicLibraryLoader/dynamic_library_loader.hpp"
 #include "SearchStrategy.h"
 
 class SearchStrategyHandler {
-private:
-    void * handler = nullptr;
-    SearchStrategy_creator_t creator = nullptr;
-    SearchStrategy_creator_t_parameter creator_parameter = nullptr;
+  public:
+	using Creator = SearchStrategy *(DynamicKernel *, Conjecture *, Flags *);
 
-    static void Reset_dlerror() {
-        dlerror();
-    }
+  private:
+	DynamicLibraryLoader<
+		NamedFunctionSignature<"create", Creator>,
+		NamedFunctionSignature<"metadata",
+							   std::map<std::string, std::string> *()>>
+		lib;
+	std::unique_ptr<std::map<std::string, std::string>> metadata;
 
-    static void Check_dlerror() {
-        const char * dlsym_error = dlerror();
-        if (dlsym_error) {
-            throw std::runtime_error(dlsym_error);
-        }
-    }
-public:
-    SearchStrategyHandler(const char* MyClassLibraryName) {
-        handler = dlopen(MyClassLibraryName, RTLD_NOW);
-        if (!handler) {
-            throw std::runtime_error(dlerror());
-        }
-        Reset_dlerror();
-        creator = reinterpret_cast<SearchStrategy_creator_t>(dlsym(handler, "create"));
-        creator_parameter = reinterpret_cast<SearchStrategy_creator_t_parameter>(dlsym(handler, "create_parameter"));
-        //Check_dlerror();
-    }
+  public:
+	SearchStrategyHandler(const std::string &so_path)
+		: lib(so_path), metadata(lib.call<"metadata">()) {}
 
-    std::unique_ptr<SearchStrategy> create() const {
-        return std::unique_ptr<SearchStrategy>(creator());
-    }
-    std::unique_ptr<SearchStrategy> create_parameter(DynamicKernel* dynamicKernel, Conjecture* conjecture,Flags* flags) const {
-        return std::unique_ptr<SearchStrategy>(creator_parameter(dynamicKernel,conjecture,flags));
-    }
+	const std::map<std::string, std::string> &get_metadata() const {
+		return *metadata;
+	}
 
-    ~SearchStrategyHandler() {
-        if (handler) {
-            dlclose(handler);
-        }
-    }
+	std::unique_ptr<SearchStrategy> create(DynamicKernel *dynamicKernel,
+										   Conjecture *conjecture,
+										   Flags *flags) const {
+		return std::unique_ptr<SearchStrategy>(
+			lib.call<"create">(dynamicKernel, conjecture, flags));
+	}
 };
-
 
 #endif

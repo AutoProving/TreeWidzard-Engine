@@ -41,8 +41,8 @@ double Conjecture::evaluateConjectureNodeOnState(const State &q,
 					Bag bag = q.get_bag();
 					result =
 						kernel->getCoreByVar(node->getChildren()[0]->getVal())
-							->inv(q.getWitnessSet(kernel->getIndexByVar(
-								node->getChildren()[0]->getVal())));
+							->inv(bag, q.getWitnessSet(kernel->getIndexByVar(
+										   node->getChildren()[0]->getVal())));
 					break;
 				} else {
 					std::cout << "Error in "

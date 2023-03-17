@@ -24,10 +24,10 @@ class CoreWrapper : public DynamicCore {
 	void createInitialWitnessSet() override {
 		auto witnessSet = std::make_shared<WitnessSet>();
 		this->as_core().initialize_leaf(*witnessSet);
-		setInitialWitnessSet(witnessSet);
+		setInitialWitnessSet(std::move(witnessSet));
 	}
 
-	WitnessSetPointer intro_v(unsigned i, Bag &b,
+	WitnessSetPointer intro_v(unsigned i, const Bag &b,
 							  const Witness &witness) override {
 		auto witnessSet = std::make_shared<WitnessSet>();
 		this->as_core().intro_v_implementation(
@@ -36,7 +36,7 @@ class CoreWrapper : public DynamicCore {
 		return witnessSet;
 	}
 
-	WitnessSetPointer intro_e(unsigned i, unsigned j, Bag &b,
+	WitnessSetPointer intro_e(unsigned i, unsigned j, const Bag &b,
 							  const Witness &witness) override {
 		auto witnessSet = std::make_shared<WitnessSet>();
 		this->as_core().intro_e_implementation(
@@ -45,7 +45,7 @@ class CoreWrapper : public DynamicCore {
 		return witnessSet;
 	}
 
-	WitnessSetPointer forget_v(unsigned i, Bag &b,
+	WitnessSetPointer forget_v(unsigned i, const Bag &b,
 							   const Witness &witness) override {
 		auto witnessSet = std::make_shared<WitnessSet>();
 		this->as_core().forget_v_implementation(
@@ -54,7 +54,7 @@ class CoreWrapper : public DynamicCore {
 		return witnessSet;
 	}
 
-	WitnessSetPointer join(Bag &b, const Witness &w1,
+	WitnessSetPointer join(const Bag &b, const Witness &w1,
 						   const Witness &w2) override {
 		auto witnessSet = std::make_shared<WitnessSet>();
 		this->as_core().join_implementation(b, WitnessAlias::as_witness(w1),
@@ -81,9 +81,22 @@ class CoreWrapper : public DynamicCore {
 #endif
 	}
 
-	bool is_final_witness(const Witness &witness) override {
+	bool is_final_witness(const Bag &bag, const Witness &witness) override {
 		return this->as_core().is_final_witness_implementation(
-			WitnessAlias::as_witness(witness));
+			bag, WitnessAlias::as_witness(witness));
+	}
+
+	int weight(const Bag &bag, const Witness &witness) override {
+		return this->as_core().weight_implementation(
+			bag, WitnessAlias::as_witness(witness));
+	}
+
+	// This method will never be called through a reference to this base class.
+	// It is only here to allow the derived class to use "override" to make
+	// sure they got the signature right.
+	virtual int weight_implementation(const Bag &bag,
+									  const WitnessAlias &witness) {
+		return this->as_core().is_final_witness_implementation(bag, witness);
 	}
 };
 

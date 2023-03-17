@@ -7,7 +7,7 @@
     #include <map>
     #include "../../Conjecture/PropertyAssignment.h"
     #include "../../Conjecture/Conjecture.h"
-    #include "../Kernel/Width.h"
+    #include "../../Kernel/Width.h"
     #include "input_parser.hpp"
     #define yylval input_lval
 

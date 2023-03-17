@@ -1,15 +1,14 @@
 #include "DynamicCore.h"
+#include <cassert>
+#include <limits>
+#include <stdexcept>
 
 WitnessSetPointer DynamicCore::getInitialSet() { return initialWitnessSet; }
-
-void DynamicCore::insertIntoInitialWitnessSet(WitnessPointer w) {
-	initialWitnessSet->insert(w);
-}
 
 // TODO: Is it better to pass the set down
 // instead of taking union of many small?
 
-WitnessSetPointer DynamicCore::intro_v(unsigned i, Bag &b,
+WitnessSetPointer DynamicCore::intro_v(unsigned i, const Bag &b,
 									   WitnessSetPointer witnessSet) {
 	WitnessSetPointer aux =
 		witnessSet->createEmptyWitnessSet(); // aux initializes with empty set
@@ -19,8 +18,9 @@ WitnessSetPointer DynamicCore::intro_v(unsigned i, Bag &b,
 	return clean(aux);
 }
 
-WitnessSetPointer DynamicCore::intro_e(unsigned i, unsigned j, Bag &b,
+WitnessSetPointer DynamicCore::intro_e(unsigned i, unsigned j, const Bag &b,
 									   WitnessSetPointer witnessSet) {
+	assert(witnessSet);
 	WitnessSetPointer aux =
 		witnessSet->createEmptyWitnessSet(); // aux initializes with empty set
 	for (WitnessPointerConst temp : *witnessSet) {
@@ -29,8 +29,9 @@ WitnessSetPointer DynamicCore::intro_e(unsigned i, unsigned j, Bag &b,
 	return clean(aux);
 }
 
-WitnessSetPointer DynamicCore::forget_v(unsigned i, Bag &b,
+WitnessSetPointer DynamicCore::forget_v(unsigned i, const Bag &b,
 										WitnessSetPointer witnessSet) {
+	assert(witnessSet);
 	WitnessSetPointer aux =
 		witnessSet->createEmptyWitnessSet(); // aux initializes with empty set
 	for (WitnessPointerConst temp : *witnessSet) {
@@ -39,8 +40,10 @@ WitnessSetPointer DynamicCore::forget_v(unsigned i, Bag &b,
 	return clean(aux);
 }
 
-WitnessSetPointer DynamicCore::join(Bag &b, WitnessSetPointer witnessSet1,
+WitnessSetPointer DynamicCore::join(const Bag &b, WitnessSetPointer witnessSet1,
 									WitnessSetPointer witnessSet2) {
+	assert(witnessSet1);
+	assert(witnessSet2);
 	WitnessSetPointer aux = witnessSet1->createEmptyWitnessSet();
 	for (WitnessPointerConst temp1 : *witnessSet1) {
 		for (WitnessPointerConst temp2 : *witnessSet2) {
@@ -50,56 +53,49 @@ WitnessSetPointer DynamicCore::join(Bag &b, WitnessSetPointer witnessSet1,
 	return clean(aux);
 }
 
-bool DynamicCore::is_final_set_witness(Bag &bag, WitnessSetPointer witnessSet) {
-	bool flag = false;
-	for (WitnessPointerConst temp : *witnessSet) {
-		if (is_final_witness(bag, *temp)) {
-			return true;
-		}
-	}
-	return flag;
-}
-
-WitnessSetPointer DynamicCore::intro_v(unsigned, Bag &, const Witness &) {
-	std::cout << "ERROR: DynamicCore::intro_v";
-	exit(20);
-}
-
-WitnessSetPointer DynamicCore::intro_e(unsigned, unsigned, Bag &,
-									   const Witness &) {
-	std::cout << "ERROR: DynamicCore::intro_e";
-	exit(20);
-}
-
-WitnessSetPointer DynamicCore::forget_v(unsigned, Bag &, const Witness &) {
-	std::cout << "ERROR: DynamicCore::forget_v";
-	exit(20);
-}
-
-WitnessSetPointer DynamicCore::join(Bag &, const Witness &, const Witness &) {
-	std::cout << "ERROR: DynamicCore::join";
-	exit(20);
-}
-
-bool DynamicCore::is_final_witness(const Witness &) {
-	std::cout << "ERROR: DynamicCore::is_final_witness";
-	exit(20);
+bool DynamicCore::is_final_set_witness(const Bag &bag,
+									   WitnessSetPointer witnessSet) {
+	assert(witnessSet);
+	for (WitnessPointerConst temp : *witnessSet)
+		if (is_final_witness(bag, *temp)) return true;
+	return false;
 }
 
 WitnessSetPointer DynamicCore::clean(WitnessSetPointer witnessSet) {
 	// By default, if this function is not implemented by a derived class
 	// this function simply returns a pointer to the input witness set.
-	std::cout << "generic clean is called" << std::endl;
+	// std::cout << "generic clean is called" << std::endl;
 	return witnessSet;
 }
 
-int DynamicCore::inv(Bag &bag, const WitnessSetPointer witnessSet) {
-	return is_final_set_witness(bag, witnessSet);
+int DynamicCore::inv(const Bag &bag, const WitnessSetPointer witnessSet) {
+	// If CoreType is set to Max (or missing), return maximum weight in the set.
+	// If CoreType is set to Min, return minimum weight in the set.
+	//
+	// Since the default behavior of weight is the same as is_final_set_witness,
+	// omitting CoreType and keeping the default weight and inv implementations
+	// results in inv behaving the same as is_final_set_witness.
+	// (max of 0/1 is the same as or).
+
+	auto it = attributes.find("CoreType");
+	if (it == attributes.end() || it->second == "Max") {
+		int max = 0;
+		for (WitnessPointerConst temp : *witnessSet)
+			max = std::max(max, weight(bag, *temp));
+		return max;
+	}
+	if (it->second == "Min") {
+		int min = std::numeric_limits<int>::max();
+		for (WitnessPointerConst temp : *witnessSet)
+			min = std::min(min, weight(bag, *temp));
+		return min;
+	}
+
+	throw std::runtime_error("Unknown CoreType: " + it->second);
 }
 
-void DynamicCore::createInitialWitnessSet() {
-	std::cout << "ERROR: DynamicCore::createInitialWitnessSet";
-	exit(20);
+int DynamicCore::weight(const Bag &bag, const Witness &w) {
+	return is_final_witness(bag, w);
 }
 
 void DynamicCore::addAttribute(std::string x, std::string y) {
@@ -130,7 +126,7 @@ std::map<std::string, std::string> DynamicCore::getAttributes() {
 }
 
 void DynamicCore::setInitialWitnessSet(WitnessSetPointer witnessSetPointer) {
-	this->initialWitnessSet = witnessSetPointer;
+	this->initialWitnessSet = std::move(witnessSetPointer);
 }
 
 int DynamicCore::getWidth() { return this->width; }

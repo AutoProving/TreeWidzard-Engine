@@ -6,10 +6,9 @@ void SearchStrategy::search() {
 }
 
 SearchStrategy::SearchStrategy() {
-    kernel = new DynamicKernel();
-    conjecture = new Conjecture;
-    flags = new Flags();
-
+	kernel = nullptr;
+	conjecture = nullptr;
+	flags = nullptr;
 }
 
 SearchStrategy::SearchStrategy(DynamicKernel *dynamicKernel,
@@ -19,46 +18,44 @@ SearchStrategy::SearchStrategy(DynamicKernel *dynamicKernel,
 	this->flags = flags;
 }
 
-
 void SearchStrategy::addAttribute(std::string x, std::string y) {
-    attributes.insert(make_pair(x,y));
+	attributes.insert(make_pair(x, y));
 }
 
 bool SearchStrategy::isAttribute(std::string x, std::string y) {
-    auto it = attributes.find(x);
-    if(it!=attributes.end()){
-        if(it->second==y){
-            return true;
-        }
-    }
-    return false;
+	auto it = attributes.find(x);
+	if (it != attributes.end()) {
+		if (it->second == y) {
+			return true;
+		}
+	}
+	return false;
 }
 
 std::string SearchStrategy::getAttributeValue(std::string x) {
-    auto it = attributes.find(x);
-    if(it!=attributes.end()){
-        return it->second;
-    }else{
-        return "NULL";
-    }
-
+	auto it = attributes.find(x);
+	if (it != attributes.end()) {
+		return it->second;
+	} else {
+		return "NULL";
+	}
 }
 std::map<std::string, std::string> SearchStrategy::getAttributes() {
-    return attributes;
+	return attributes;
 }
 
 const std::string &SearchStrategy::getPropertyFilePath() const {
-    return propertyFilePath;
+	return propertyFilePath;
 }
 
 void SearchStrategy::setPropertyFilePath(const std::string &propertyFilePath) {
-    SearchStrategy::propertyFilePath = propertyFilePath;
+	SearchStrategy::propertyFilePath = propertyFilePath;
 }
 
 const std::string &SearchStrategy::getOutputsPath() const {
-    return outputsPath;
+	return outputsPath;
 }
 
 void SearchStrategy::setOutputsPath(const std::string &outputsPath) {
-    SearchStrategy::outputsPath = outputsPath;
+	SearchStrategy::outputsPath = outputsPath;
 }

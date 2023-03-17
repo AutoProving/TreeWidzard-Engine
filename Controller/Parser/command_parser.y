@@ -59,14 +59,14 @@ command_search      : command_search_signature command_width command_flags
                       command_search_strategy  command_input_file command_end { Width width;
 										width.set_name(width_type);
 										width.set_value(width_value);
-                      								SearchController search($5,$4,flags,width);
+                      								SearchController search($5, $4, flags, width);
                                                                                 search.action();
                                                                                 }
 		    | command_search_signature command_width command_flags command_random
                                             command_search_strategy  command_input_file command_end { Width width;
 													width.set_name(width_type);
 													width.set_value(width_value);
-                                            							      	SearchController search($6,$5,flags,width);
+                                            							      	SearchController search($6, $5,flags,width);
                                                                                                       	search.action();
                                                                                                      }
 

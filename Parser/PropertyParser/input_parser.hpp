@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_INPUT_INPUT_PARSER_HPP_INCLUDED
-# define YY_INPUT_INPUT_PARSER_HPP_INCLUDED
+#ifndef YY_INPUT_PARSER_PROPERTYPARSER_INPUT_PARSER_HPP_INCLUDED
+# define YY_INPUT_PARSER_PROPERTYPARSER_INPUT_PARSER_HPP_INCLUDED
 /* Debug traces.  */
 #ifndef INPUT_DEBUG
 # if defined YYDEBUG
@@ -53,10 +53,11 @@
 extern int input_debug;
 #endif
 /* "%code requires" blocks.  */
-#line 4 "input_parser.y"
+#line 4 "Parser/PropertyParser/input_parser.y"
 
     #include "../../Conjecture/Conjecture.h"
     #include "../../Kernel/Width.h"
+    #include "../../Kernel/DynamicCoreHandler.h"
     #include <iostream>
     #include <vector>
     #include <map>
@@ -65,7 +66,7 @@ extern int input_debug;
     #include <utility>
     #include <variant>
 
-#line 69 "input_parser.hpp"
+#line 70 "Parser/PropertyParser/input_parser.hpp"
 
 /* Token kinds.  */
 #ifndef INPUT_TOKENTYPE
@@ -111,7 +112,7 @@ extern int input_debug;
 #if ! defined INPUT_STYPE && ! defined INPUT_STYPE_IS_DECLARED
 union INPUT_STYPE
 {
-#line 37 "input_parser.y"
+#line 39 "Parser/PropertyParser/input_parser.y"
 
      ConjectureNode *conjectureNode;
      int number;
@@ -119,7 +120,7 @@ union INPUT_STYPE
      std::vector<std::variant<char*,int, bool>> *vec;
      PropertyAssignment *property;
 
-#line 123 "input_parser.hpp"
+#line 124 "Parser/PropertyParser/input_parser.hpp"
 
 };
 typedef union INPUT_STYPE INPUT_STYPE;
@@ -145,7 +146,7 @@ struct INPUT_LTYPE
 extern INPUT_STYPE input_lval;
 extern INPUT_LTYPE input_lloc;
 
-int input_parse (Conjecture &conj, int &result, std::map<std::string,std::map<std::string,std::string>> &coreList, std::map<std::string,std::string> &varToCoreName, std::map<std::string, PropertyAssignment*> &varToProperty);
+int input_parse (Conjecture &conj, int &result, std::map<std::string,DynamicCoreHandler> &coreList, std::map<std::string,std::string> &varToCoreName, std::map<std::string, PropertyAssignment*> &varToProperty);
 
 
-#endif /* !YY_INPUT_INPUT_PARSER_HPP_INCLUDED  */
+#endif /* !YY_INPUT_PARSER_PROPERTYPARSER_INPUT_PARSER_HPP_INCLUDED  */

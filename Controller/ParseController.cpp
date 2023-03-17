@@ -1,15 +1,16 @@
 #include "ParseController.h"
+#include <cstdlib>
+#include <filesystem>
+
 ParseController::ParseController(const Flags &flag,
 								 const std::string &inputPath) {
 	this->flag = flag;
-	std::string path = BINARY_DIR;
-	std::string dynamicPluginPath = path + "/DPCores/";
-	inputController = new InputController(inputPath, dynamicPluginPath);
+	inputController = std::make_unique<InputController>(inputPath);
 }
 
 void ParseController::parse_pace(std::string graphPath,
 								 std::string decompositionPath) {
-	std::shared_ptr<MultiGraph> multigraph(new MultiGraph);
+	auto multigraph = std::make_shared<MultiGraph>();
 
 	std::ifstream gr_in(graphPath);
 
@@ -19,8 +20,8 @@ void ParseController::parse_pace(std::string graphPath,
 		exit(20);
 	}
 	int result = 1; // if parsing successful result will be 0 otherwise 1
-	result =
-		gr_parse(gr_in, *multigraph, result); // Parser function from Parser.hpp
+	result = gr_parse(gr_in, *multigraph,
+					  result); // Parser function from Parser.hpp
 	// check for successful parsing
 	if (result != 0) {
 		std::cout << " Error: input file " << graphPath
@@ -29,11 +30,13 @@ void ParseController::parse_pace(std::string graphPath,
 	}
 
 	std::string output_file_path =
-		fs::path(inputController->getInputPath()).parent_path().string();
+		std::filesystem::path(inputController->getInputPath())
+			.parent_path()
+			.string();
 	std::string abstract_file_name =
-		fs::path(decompositionPath).stem().string();
+		std::filesystem::path(decompositionPath).stem().string();
 	std::string property_file_name =
-		fs::path(inputController->getInputPath()).stem().string();
+		std::filesystem::path(inputController->getInputPath()).stem().string();
 	std::string name;
 	if (output_file_path == "") {
 		name = "PARSE_PACE_" + property_file_name + "_" + abstract_file_name;
@@ -123,10 +126,13 @@ void ParseController::parse_abstract(std::string abstractPath) {
 	// concreteTreeDecomposition.printTermNodes();
 	std::cout << "----Evaluating-----:" << std::endl;
 	std::string output_file_path =
-		fs::path(inputController->getInputPath()).parent_path().string();
-	std::string abstract_file_name = fs::path(abstractPath).stem().string();
+		std::filesystem::path(inputController->getInputPath())
+			.parent_path()
+			.string();
+	std::string abstract_file_name =
+		std::filesystem::path(abstractPath).stem().string();
 	std::string property_file_name =
-		fs::path(inputController->getInputPath()).stem().string();
+		std::filesystem::path(inputController->getInputPath()).stem().string();
 	std::string name;
 	if (output_file_path == "") {
 		name =
@@ -167,8 +173,8 @@ void ParseController::test_term() {
 	//    TermNode<AbstractTreeDecompositionNodeContent>);
 	//    a1->setNodeContent(abstractTreeDecompositionNodeContent1);
 	//    a2->setNodeContent(abstractTreeDecompositionNodeContent2);
-	//    vector<shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> >
-	//    children; children.push_back(a2); a2->setParent(a1);
+	//    vector<shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>>
+	//    > children; children.push_back(a2); a2->setParent(a1);
 	//    a1->setChildren(children);
 	//    abstractTreeDecomposition.setRoot(a1);
 	//    abstractTreeDecomposition.printTermNodes();

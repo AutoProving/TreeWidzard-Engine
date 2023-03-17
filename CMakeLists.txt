@@ -10,28 +10,27 @@ else()
     # add_compile_options(-Werror)
     add_compile_options(-Wall -Wextra -pedantic)
 endif()
-add_compile_options(-O2)
-add_compile_options(-ggdb3)
+add_compile_options(-O3)
+add_compile_options(-g0)
 link_libraries(stdc++fs)
 set(CMAKE_EXE_LINKER_FLAGS "-static")
 set(CMAKE_EXE_LINKER_FLAGS "-rdynamic")
 
 #add_compile_options(-fsanitize=address)
-#add_link_options(-fsanitize=address)
 #add_compile_options(-fsanitize=undefined)
+#add_link_options(-fsanitize=address)
 #add_link_options(-fsanitize=undefined)
-
-# add_compile_options(-fsanitize=address)
-# add_compile_options(-fsanitize=undefined)
-# add_link_options(-fsanitize=address)
-# add_link_options(-fsanitize=undefined)
+#add_compile_options(-D_GLIBCXX_DEBUG)
+#add_compile_options(-D_GLIBCXX_DEBUG_PEDANTIC)
 
 # stops lexer from creating some unused methods
 add_compile_definitions(YY_NO_INPUT=1)
 add_compile_definitions(YY_NO_UNPUT=1)
 
-# tell where to find binaries
-add_compile_definitions(BINARY_DIR="${CMAKE_CURRENT_BINARY_DIR}")
+set(TREEWIDZARD_DPCORES_DEFAULT ${CMAKE_CURRENT_BINARY_DIR}/DPCores:${TREEWIDZARD_DPCORES_DEFAULT})
+set(TREEWIDZARD_SEARCHSTRATEGIES_DEFAULT ${CMAKE_CURRENT_BINARY_DIR}/SearchStrategies:${TREEWIDZARD_SEARCHSTRATEGIES_DEFAULT})
+add_compile_definitions(TREEWIDZARD_DPCORES_DEFAULT="${TREEWIDZARD_DPCORES_DEFAULT}")
+add_compile_definitions(TREEWIDZARD_SEARCHSTRATEGIES_DEFAULT="${TREEWIDZARD_SEARCHSTRATEGIES_DEFAULT}")
 
 project("treewidzard")
 add_executable(
@@ -144,4 +143,8 @@ target_link_libraries(treewidzard ${CMAKE_DL_LIBS})
 # Remove limit for stack (no longer needed for gr or td, but might be needed for big .atd files)
 # ulimit -s unlimited
 # execute_process(COMMAND bash -c "ulimit -s unlimited")
+
+set(ENV{TREEWIDZARD} ${PROJECT_SOURCE_DIR})
+add_subdirectory("DPCores")
+add_subdirectory("SearchStrategies")
 
