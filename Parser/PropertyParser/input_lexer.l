@@ -20,19 +20,19 @@
 %%
 EXP                                                  yylval.string = strdup(yytext); return EXP;
 Formula|FORMULA                                      yylval.string = strdup(yytext); return FORMULA_NAME;
-FALSE                                                yylval.string = strdup(yytext); return FALSE;
-TRUE                                                 yylval.string = strdup(yytext); return TRUE;
+FALSE|False|false                                    yylval.string = strdup(yytext); return FALSE;
+TRUE|True|true                                       yylval.string = strdup(yytext); return TRUE;
 IFF                                                  yylval.string = strdup(yytext); return IFF;
 IMPLIES                                              yylval.string = strdup(yytext); return IMPLIES;
-AND                                                  yylval.string = strdup(yytext); return AND;
-OR                                                   yylval.string = strdup(yytext); return OR;
-NOT                                                  yylval.string = strdup(yytext); return NOT;
+AND|\&\&                                             yylval.string = strdup(yytext); return AND;
+OR\|\|                                               yylval.string = strdup(yytext); return OR;
+NOT|\!                                               yylval.string = strdup(yytext); return NOT;
 INV                                                  yylval.string = strdup(yytext); return INV_;
 \<                                                   yylval.string = strdup(yytext); return LESS;
 \>                                                   yylval.string = strdup(yytext); return BIGGER;
-\>=                                                  yylval.string = strdup(yytext); return ATLEAST;
-\<=                                                  yylval.string = strdup(yytext); return ATMOST;
-\==                                                  yylval.string = strdup(yytext); return EQUAL;
+\>\=                                                  yylval.string = strdup(yytext); return ATLEAST;
+\<\=                                                  yylval.string = strdup(yytext); return ATMOST;
+\=\=                                                 yylval.string = strdup(yytext); return EQUAL;
 \+|\-|\*|\/                                          yylval.string = strdup(yytext); return BINARY_ARITHMETIC_OPERATOR;
 max|min|pow                                          yylval.string = strdup(yytext); return BINARY_FUNCTION;
 abs|acos|asin|atan|cos|exp|floor|ln|log|sin|sqrt|tan yylval.string = strdup(yytext); return UNARY_FUNCTION;

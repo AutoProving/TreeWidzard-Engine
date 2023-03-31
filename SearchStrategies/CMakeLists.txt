@@ -9,7 +9,6 @@ else()
   add_compile_options(-Werror)
   add_compile_options(-Wall -Wextra -pedantic)
 endif()
-add_compile_options(-O2)
 include_directories(Scripts)
 link_libraries(stdc++fs)
 

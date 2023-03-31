@@ -53,7 +53,7 @@ WitnessSetPointer DynamicCore::join(const Bag &b, WitnessSetPointer witnessSet1,
 	return clean(aux);
 }
 
-bool DynamicCore::is_final_set_witness(const Bag &bag,
+bool DynamicCore::is_final_witness_set(const Bag &bag,
 									   WitnessSetPointer witnessSet) {
 	assert(witnessSet);
 	for (WitnessPointerConst temp : *witnessSet)
@@ -72,9 +72,9 @@ int DynamicCore::inv(const Bag &bag, const WitnessSetPointer witnessSet) {
 	// If CoreType is set to Max (or missing), return maximum weight in the set.
 	// If CoreType is set to Min, return minimum weight in the set.
 	//
-	// Since the default behavior of weight is the same as is_final_set_witness,
+	// Since the default behavior of weight is the same as is_final_witness_set,
 	// omitting CoreType and keeping the default weight and inv implementations
-	// results in inv behaving the same as is_final_set_witness.
+	// results in inv behaving the same as is_final_witness_set.
 	// (max of 0/1 is the same as or).
 
 	auto it = attributes.find("CoreType");

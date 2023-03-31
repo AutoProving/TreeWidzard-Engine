@@ -6,7 +6,7 @@ bool ConjectureNode::evaluateState(State &q, DynamicKernel *kernel) {
 		Bag b = q.get_bag();
 		shared_ptr<WitnessSet> witnessSet = q.getWitnessSet(propertyIndex - 1);
 		return kernel->pointerToCoreNumber(propertyIndex - 1)
-			->is_final_set_witness(b, witnessSet);
+			->is_final_witness_set(b, witnessSet);
 	} else {
 		if (logicalOperator == "AND") {
 			if (children.size() != 2) {
@@ -34,7 +34,7 @@ bool ConjectureNode::evaluateState(State &q, DynamicKernel *kernel) {
 						"operator does not have 2 children";
 				exit(20);
 			} else {
-                return (!(children[0]->evaluateState(q, kernel)) or
+				return (!(children[0]->evaluateState(q, kernel)) or
 						children[1]->evaluateState(q, kernel));
 			}
 		} else if (logicalOperator == "IMPLIEDBY") {
@@ -77,11 +77,11 @@ bool ConjectureNode::evaluateState(State &q, DynamicKernel *kernel) {
 }
 void ConjectureNode::print() {
 	if (children.size() == 0) {
-	    if(logicalOperator == "TRUE" or logicalOperator == "FALSE"){
-	        cout << logicalOperator;
-	    }else{
-            cout << propertyIndex;
-        }
+		if (logicalOperator == "TRUE" or logicalOperator == "FALSE") {
+			cout << logicalOperator;
+		} else {
+			cout << propertyIndex;
+		}
 	} else {
 		cout << logicalOperator << " (";
 		if (children.size() == 2) {

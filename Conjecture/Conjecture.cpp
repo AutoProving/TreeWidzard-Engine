@@ -25,7 +25,7 @@ double Conjecture::evaluateConjectureNodeOnState(const State &q,
 										   ->getAttributeValue("CoreType");
 				Bag bag = q.get_bag();
 				result = kernel->getCoreByVar(node->getVal())
-							 ->is_final_set_witness(
+							 ->is_final_witness_set(
 								 bag, q.getWitnessSet(kernel->getIndexByVar(
 										  node->getVal())));
 				break;

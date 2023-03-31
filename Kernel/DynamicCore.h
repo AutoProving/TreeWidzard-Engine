@@ -69,7 +69,7 @@ class DynamicCore {
 							   WitnessSetPointer witnessSet);
 	WitnessSetPointer join(const Bag &b, WitnessSetPointer witnessSet1,
 						   WitnessSetPointer witnessSet2);
-	bool is_final_set_witness(const Bag &b, WitnessSetPointer witnessSet);
+	bool is_final_witness_set(const Bag &b, WitnessSetPointer witnessSet);
 };
 
 #endif
