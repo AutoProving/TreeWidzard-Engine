@@ -1,94 +1,46 @@
-# TreeWidzard Installation
+# TreeWidzard
 
-## Installing TreeWidzard in a machine running Linux
+## Installation
 
 All commands below should be executed in a Linux terminal. For instance, in Ubuntu to open a terminal click in ``activities`` and then type ``terminal``.
 
-#### Requirements
+### Requirements
 The following software are assumed to be installed on your machine:
 
-1- GCC/11.2.0 or a later version
+1- A C++20 compiler (tested with GCC/11.2.0, should also work with any later version)
 
-2- CMake/3.12.1 or a later version
+2- CMake/3.0.0 or a later version
 
-#### Downloading TreeWidzard
+### First Installation
 
-There are two main ways of downloading TreeWidzard.
-
-1- Cloning from GitHub:
+Clone from GitHub:
 ```commandline
-git clone https://github.com/AutoProving/Treewidzard-Release --recursive
+git clone https://github.com/AutoProving/TreeWidzard-Release
 ```
 
-The recursive flag makes sure the submodules DPCores and SearchStrategies are also cloned.
-
-2- You can also download the zip file of TreeWidzard's repository.
-
-Download the zip file:
+Configure build directory using CMake (here with the build directory named `Build`):
 ```commandline
-wget https://github.com/AutoProving/treewidzard/archive/refs/heads/main.zip TreeWizard-main.zip
+cmake -BBuild
 ```
 
-Extract the files from the zip file:
+Compile the program:
 ```commandline
-unzip TreeWidzard-main.zip 
+cmake --build Build
 ```
 
-Rename the directory to TreeWidzard
-
-```commandline
-mv TreeWidzard-main TreeWidzard-Release
-```
-
-#### Compiling TreeWidzard
-
-1- Enter the directory of TreeWidzard
-
-```commandline
-cd TreeWidzard-Release
-```
-
-2- Create a folder called ``Build``. This is the folder where the files will be compiled and where TreeWidzard's executable file will be created.
-
-```commandline
-mkdir Build
-```
-
-3- Enter the ``Build`` folder
-
-```commandline
-cd Build
-```
-
-4- Run ``cmake``
-
-```commandline
-cmake ..
-```
-
-5- Run ``make``. This command creates TreeWidzard's executable file.
-
-```commandline
-make
-```
-
-5*- Run ``cmake --build . -- -j 8  `` to compile in parallel and fast.
-
-#### Executing TreeWidzard
-
-Execute ``./treewidzard --help`` to obtain a list of instructions on how to use TreeWidzard to model check properties or to test conjectures.
-
-
-#### Updating
-
-Changes to TreeWidzard itself can be pulled by the usual
-
+### Updating
+Download any changes to the bundling code itself:
 ```commandline
 git pull
 ```
 
-but to update the submodules, use this instead:
-
+For recompiling, run this again:
 ```commandline
-git submodule update --recursive --remote                                                                                                                 Build -> m```
+cmake --build Build
+```
 
+## Running TreeWidzard
+To print usage:
+```
+./Build/TreeWidzard/treewidzard --help
+```
