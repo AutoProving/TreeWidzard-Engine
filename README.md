@@ -18,6 +18,11 @@ Clone from GitHub:
 git clone https://github.com/AutoProving/TreeWidzard-Release
 ```
 
+Move into the TreeWidzard directory:
+```commandline
+cd TreeWidzard-Release
+```
+
 Configure build directory using CMake (here with the build directory named `Build`):
 ```commandline
 cmake -BBuild
@@ -42,5 +47,5 @@ cmake --build Build
 ## Running TreeWidzard
 To print usage:
 ```
-./Build/TreeWidzard/treewidzard --help
+./Build/treewidzard --help
 ```
