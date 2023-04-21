@@ -3,10 +3,10 @@
 %{
     #include <cstdlib>
     #include <vector>
-    #include "../../../TreeAutomaton/AbstractTreeDecomposition.h"
+    #include "../../../TreeAutomaton/InstructiveTreeDecomposition.h"
     #include "atd_parser.hpp"
     #define yylval atd_lval
-    extern int yyparse(AbstractTreeDecomposition &atd, int &result);
+    extern int yyparse(InstructiveTreeDecomposition &atd, int &result);
 
 %}
 

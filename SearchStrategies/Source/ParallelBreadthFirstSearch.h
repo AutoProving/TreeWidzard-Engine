@@ -7,7 +7,7 @@
 #include "Kernel/SearchStrategy.h"
 #include "Kernel/StateTree.h"
 #include "LockedSet/locked_set.hpp"
-#include "TreeAutomaton/AbstractTreeDecomposition.h"
+#include "TreeAutomaton/InstructiveTreeDecomposition.h"
 #include "TreeAutomaton/ConcreteTreeDecomposition.h"
 #include "TreeAutomaton/TreeAutomaton.h"
 #include "parallel_hashmap/phmap.h"
@@ -18,7 +18,7 @@ class ParallelBreadthFirstSearch : public SearchStrategy {
 		State::ptr, State::ptr::Hash, State::ptr::Equal,
 		phmap::priv::Allocator<State::ptr>, 4UL, std::mutex>;
 
-	TreeAutomaton<State::ptr, AbstractTreeDecompositionNodeContent>
+	TreeAutomaton<State::ptr, InstructiveTreeDecompositionNodeContent>
 		bfsDAG; // Constructs a DAG corresponding to the BFS.
 	pset allStatesSet;
 	pset intermediateStatesSet;
@@ -33,7 +33,7 @@ class ParallelBreadthFirstSearch : public SearchStrategy {
 	ParallelBreadthFirstSearch(DynamicKernel *dynamicKernel,
 							   Conjecture *conjecture, Flags *flags);
 	~ParallelBreadthFirstSearch(){};
-	AbstractTreeDecomposition extractCounterExampleTerm(State::ptr state);
+	InstructiveTreeDecomposition extractCounterExampleTerm(State::ptr state);
 	////Extract State Tree//////////
 	void extractCounterExampleStateTreeNode(State::ptr state,
 											std::shared_ptr<StateTreeNode>);
@@ -43,9 +43,9 @@ class ParallelBreadthFirstSearch : public SearchStrategy {
 	void extractCounterExampleRunNode(
 		State::ptr state,
 		std::shared_ptr<TermNode<
-			RunNodeContent<State::ptr, AbstractTreeDecompositionNodeContent>>>
+			RunNodeContent<State::ptr, InstructiveTreeDecompositionNodeContent>>>
 			node);
-	RunTree<State::ptr, AbstractTreeDecompositionNodeContent>
+	RunTree<State::ptr, InstructiveTreeDecompositionNodeContent>
 	extractCounterExampleRun(State::ptr state);
 	void search();
 };

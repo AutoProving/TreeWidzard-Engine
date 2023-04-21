@@ -37,12 +37,12 @@
 %parse-param {std::string &width_type}
 %parse-param {int &width_value}
 %token command_newline command_search_signature command_print_state_flag command_print_loop_flag command_string command_help command_end
-        command_parse_signature command_parse_pace command_parse_abstract command_term_signature command_print_state_tree command_random_signature
+        command_parse_signature command_parse_pace command_parse_itd command_term_signature command_print_state_tree command_random_signature
         command_number command_premise command_no_bfs_dag command_nthreads command_pw command_tw command_equal command_print_directed_bipartite_graph
         command_write_files
 %type<string> command_newline command_search_signature command_print_state_flag command_print_loop_flag
               command_string command_input_file command_search_strategy command_help command_end command_random_signature
-              command_parse_signature command_parse_pace command_parse_abstract command_term_signature command_print_state_tree command_premise command_no_bfs_dag command_nthreads
+              command_parse_signature command_parse_pace command_parse_itd command_term_signature command_print_state_tree command_premise command_no_bfs_dag command_nthreads
               command_pw command_tw command_equal command_print_directed_bipartite_graph command_write_files
 %type<number> command_number
 %start command_start
@@ -99,8 +99,8 @@ command_search_strategy : command_string { $$=$1;}
                     ;
 command_parse       : command_parse_signature command_parse_pace command_flags command_input_file command_input_file command_input_file
                       command_end{ ParseController parsePACE(flags, $4); parsePACE.parse_pace($5, $6); }
-                    | command_parse_signature command_parse_abstract command_flags command_input_file command_input_file command_end
-                        { ParseController parsePACE(flags, $4); parsePACE.parse_abstract($5);}
+                    | command_parse_signature command_parse_itd command_flags command_input_file command_input_file command_end
+                        { ParseController parsePACE(flags, $4); parsePACE.parse_itd($5);}
                     ;
 command_term        : command_term_signature command_input_file command_end{ParseController parseTest(flags,$2); parseTest.test_term();}
 

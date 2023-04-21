@@ -122,8 +122,8 @@ add_executable(
         TreeAutomaton/TreeAutomaton.cpp
         TreeAutomaton/Term.h
         TreeAutomaton/Term.cpp
-        TreeAutomaton/AbstractTreeDecomposition.h
-        TreeAutomaton/AbstractTreeDecomposition.cpp
+        TreeAutomaton/InstructiveTreeDecomposition.h
+        TreeAutomaton/InstructiveTreeDecomposition.cpp
         TreeAutomaton/RunTree.cpp TreeAutomaton/RunTree.h
         TreeAutomaton/ConcreteTreeDecomposition.cpp
         TreeAutomaton/ConcreteTreeDecomposition.h

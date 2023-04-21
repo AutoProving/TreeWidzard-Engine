@@ -30,8 +30,8 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_COMMAND_CONTROLLER_PARSER_COMMAND_PARSER_HPP_INCLUDED
-# define YY_COMMAND_CONTROLLER_PARSER_COMMAND_PARSER_HPP_INCLUDED
+#ifndef YY_COMMAND_COMMAND_PARSER_HPP_INCLUDED
+# define YY_COMMAND_COMMAND_PARSER_HPP_INCLUDED
 /* Debug traces.  */
 #ifndef COMMAND_DEBUG
 # if defined YYDEBUG
@@ -48,7 +48,7 @@
 extern int command_debug;
 #endif
 /* "%code requires" blocks.  */
-#line 3 "Controller/Parser/command_parser.y"
+#line 3 "command_parser.y"
 
     #include <iostream>
     #include <vector>
@@ -56,7 +56,7 @@ extern int command_debug;
     #include <set>
     #include <tuple>
 
-#line 60 "Controller/Parser/command_parser.hpp"
+#line 60 "command_parser.hpp"
 
 /* Token kinds.  */
 #ifndef COMMAND_TOKENTYPE
@@ -76,7 +76,7 @@ extern int command_debug;
     command_end = 264,             /* command_end  */
     command_parse_signature = 265, /* command_parse_signature  */
     command_parse_pace = 266,      /* command_parse_pace  */
-    command_parse_abstract = 267,  /* command_parse_abstract  */
+    command_parse_itd = 267,       /* command_parse_itd  */
     command_term_signature = 268,  /* command_term_signature  */
     command_print_state_tree = 269, /* command_print_state_tree  */
     command_random_signature = 270, /* command_random_signature  */
@@ -97,12 +97,12 @@ extern int command_debug;
 #if ! defined COMMAND_STYPE && ! defined COMMAND_STYPE_IS_DECLARED
 union COMMAND_STYPE
 {
-#line 32 "Controller/Parser/command_parser.y"
+#line 32 "command_parser.y"
 
      float number;
      char* string;
 
-#line 106 "Controller/Parser/command_parser.hpp"
+#line 106 "command_parser.hpp"
 
 };
 typedef union COMMAND_STYPE COMMAND_STYPE;
@@ -129,4 +129,4 @@ extern COMMAND_STYPE command_lval;
 extern COMMAND_LTYPE command_lloc;
 int command_parse (int &result, std::string &width_type, int &width_value);
 
-#endif /* !YY_COMMAND_CONTROLLER_PARSER_COMMAND_PARSER_HPP_INCLUDED  */
+#endif /* !YY_COMMAND_COMMAND_PARSER_HPP_INCLUDED  */

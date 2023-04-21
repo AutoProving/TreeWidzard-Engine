@@ -12,7 +12,7 @@
 #include "../Translation/PACE/Parser/td_parser.hpp"
 #include "../Translation/PACE/TreeDecompositionPACE.h"
 #include "../Translation/PACE/WitnessTreePACE.h"
-#include "../TreeAutomaton/AbstractTreeDecomposition.h"
+#include "../TreeAutomaton/InstructiveTreeDecomposition.h"
 #include "../TreeAutomaton/TreeAutomaton.h"
 #include "InputController.h"
 
@@ -28,7 +28,7 @@ class ParseController {
 	// constructor
 	ParseController(const Flags &flag, const std::string &inputPath);
 	void parse_pace(std::string graphPath, std::string decompositionPath);
-	void parse_abstract(std::string abstractPath);
+	void parse_itd(std::string itdPath);
 	void test_term();
 };
 

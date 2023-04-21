@@ -1,5 +1,5 @@
 #include "ConcreteTreeDecomposition.h"
-#include "AbstractTreeDecomposition.h"
+#include "InstructiveTreeDecomposition.h"
 const Bag &ConcreteNode::getBag() const { return bag; }
 void ConcreteNode::setBag(const Bag &bag) { ConcreteNode::bag = bag; }
 const std::string &ConcreteNode::getSymbol() const { return symbol; }
@@ -230,33 +230,34 @@ void ConcreteTreeDecomposition::buildDecompositionBags(
 	}
 }
 
-std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>>
+std::shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>>
 ConcreteTreeDecomposition::constructATDNode(TermNode<ConcreteNode> &node) {
-	std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> atdNode(
-		new TermNode<AbstractTreeDecompositionNodeContent>);
-	std::vector<std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>>>
+	std::shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>> atdNode(
+		new TermNode<InstructiveTreeDecompositionNodeContent>);
+	std::vector<
+		std::shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>>>
 		children;
 	std::string symbol = node.getNodeContent().getSymbol();
-	AbstractTreeDecompositionNodeContent abstract;
-	abstract.setSymbol(symbol);
+	InstructiveTreeDecompositionNodeContent itd;
+	itd.setSymbol(symbol);
 	for (auto &child : node.getChildren()) {
-		std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>>
+		std::shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>>
 			atdChild = constructATDNode(*child);
 		atdChild->setParent(atdNode);
 		children.push_back(atdChild);
 	}
-	atdNode->setNodeContent(abstract);
+	atdNode->setNodeContent(itd);
 	atdNode->setChildren(children);
 	return atdNode;
 }
 
-AbstractTreeDecomposition
-ConcreteTreeDecomposition::convertToAbstractTreeDecomposition() {
-	AbstractTreeDecomposition abstractTreeDecomposition;
-	std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> root =
+InstructiveTreeDecomposition
+ConcreteTreeDecomposition::convertToInstructiveTreeDecomposition() {
+	InstructiveTreeDecomposition instructiveTreeDecomposition;
+	std::shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>> root =
 		constructATDNode(*this->getRoot());
-	abstractTreeDecomposition.setRoot(root);
-	return abstractTreeDecomposition;
+	instructiveTreeDecomposition.setRoot(root);
+	return instructiveTreeDecomposition;
 }
 void ConcreteTreeDecomposition::writeToFile(std::string fileName) {
 	// fileName =

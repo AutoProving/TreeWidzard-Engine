@@ -10,7 +10,9 @@ void Bag::set_edge(unsigned i, unsigned j) {
 	}
 }
 
-std::pair<unsigned, unsigned> Bag::get_edge() const { return std::make_pair(i, j); }
+std::pair<unsigned, unsigned> Bag::get_edge() const {
+	return std::make_pair(i, j);
+}
 
 std::set<unsigned> Bag::get_elements() const { return elements; }
 
@@ -18,43 +20,42 @@ void Bag::set_elements(const std::set<unsigned> &elements) {
 	this->elements = elements;
 }
 
-//void Bag::print() {
+// void Bag::print() {
 //	std::cout << "[{";
 //	for (auto element : elements) {
 //		std::cout << element;
-//        if(element!=*(--elements.end()))
-//            cout<<",";
-//    }
+//         if(element!=*(--elements.end()))
+//             cout<<",";
+//     }
 //	std::cout << "} , {" << i << ", " << j << "}]";
-//}
+// }
 
-//void Bag::print() const {
-//    std::cout << "[{";
-//    for (auto element : elements) {
-//        std::cout << element;
-//        if(element!=*(--elements.end()))
-//            cout<<",";
-//    }
-//    std::cout << "} , {" << i << ", " << j << "}]";
-//}
-//string Bag::bagInformation() {
-//    string info;
-//    info = "[{";
-//    for (auto element : elements) {
-//        info = info + to_string(element);
-//        if(element!=*(--elements.end()))
-//            info = info + ",";
-//    }
-//    info = info + "} , {" + to_string(i) +", " +to_string(j) + "}]";
-//    return info;
-//}
+// void Bag::print() const {
+//     std::cout << "[{";
+//     for (auto element : elements) {
+//         std::cout << element;
+//         if(element!=*(--elements.end()))
+//             cout<<",";
+//     }
+//     std::cout << "} , {" << i << ", " << j << "}]";
+// }
+// string Bag::bagInformation() {
+//     string info;
+//     info = "[{";
+//     for (auto element : elements) {
+//         info = info + to_string(element);
+//         if(element!=*(--elements.end()))
+//             info = info + ",";
+//     }
+//     info = info + "} , {" + to_string(i) +", " +to_string(j) + "}]";
+//     return info;
+// }
 
 void Bag::print() {
 	std::cout << "{";
 	for (auto element : elements) {
 		std::cout << element;
-		if(element!=*(--elements.end()))
-			std::cout<<",";
+		if (element != *(--elements.end())) std::cout << ",";
 	}
 	std::cout << "}";
 }
@@ -63,24 +64,21 @@ void Bag::print() const {
 	std::cout << "{";
 	for (auto element : elements) {
 		std::cout << element;
-		if(element!=*(--elements.end()))
-			std::cout<<",";
+		if (element != *(--elements.end())) std::cout << ",";
 	}
 	std::cout << "}";
 }
 std::string Bag::bagInformation() const {
-	std::string info;
-	info = "{";
+	std::string info("{");
 	for (auto element : elements) {
 		info = info + std::to_string(element);
-		if(element!=*(--elements.end()))
-			info = info + ",";
+		if (element != *(--elements.end())) info = info + ",";
 	}
 	info = info + "}";
 	return info;
 }
 
-//bool Bag::operator<(const Bag &rhs) const {
+// bool Bag::operator<(const Bag &rhs) const {
 //	if (elements < rhs.get_elements()) {
 //		return true;
 //	} else if (rhs.get_elements() < elements) {
@@ -90,27 +88,26 @@ std::string Bag::bagInformation() const {
 //	} else {
 //		return false;
 //	}
-//}
+// }
 
 bool Bag::operator<(const Bag &rhs) const {
 	return elements < rhs.get_elements();
-
 }
 
-//bool Bag::operator==(const Bag &rhs) const {
+// bool Bag::operator==(const Bag &rhs) const {
 //	if (elements == rhs.get_elements() and this->get_edge() == rhs.get_edge()) {
 //		return true;
 //	} else {
 //		return false;
 //	}
-//}
+// }
 
 bool Bag::operator==(const Bag &rhs) const {
 	return elements == rhs.get_elements();
 }
 
 void Bag::hash(Hasher &h) const {
-  for (unsigned i : elements) h << i;
+	for (unsigned i : elements) h << i;
 }
 
 bool Bag::vertex_introducible(unsigned i) const {
@@ -170,17 +167,18 @@ Bag Bag::forget_v(unsigned i) {
 }
 
 Bag Bag::relabel(std::map<unsigned int, unsigned int> relabelingMap) const {
-    Bag b;
-    std::set<unsigned > bagElements;
-    for(auto v:this->elements){
-        if(relabelingMap.count(v)) {
-            bagElements.insert(relabelingMap[v]);
-        }else{
-            std::cout<<"Error: Bag::relabel "<< v <<" is not in the relabeling map"<<std::endl;
-            exit(20);
-        }
-    }
-    b.set_elements(bagElements);
-    b.set_edge(relabelingMap[this->i],relabelingMap[this->j]);
-    return b;
+	Bag b;
+	std::set<unsigned> bagElements;
+	for (auto v : this->elements) {
+		if (relabelingMap.count(v)) {
+			bagElements.insert(relabelingMap[v]);
+		} else {
+			std::cout << "Error: Bag::relabel " << v
+					  << " is not in the relabeling map" << std::endl;
+			exit(20);
+		}
+	}
+	b.set_elements(bagElements);
+	b.set_edge(relabelingMap[this->i], relabelingMap[this->j]);
+	return b;
 }

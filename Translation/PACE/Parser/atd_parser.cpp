@@ -86,22 +86,22 @@
     #include <map>
     #include <set>
     #include <tuple>
-    #include "../../../TreeAutomaton/AbstractTreeDecomposition.h"
+    #include "../../../TreeAutomaton/InstructiveTreeDecomposition.h"
     #include <algorithm>
 
     // using flex
     extern int yylex();
     extern int atd_lineno;
-    extern void yyerror(AbstractTreeDecomposition &atd, int &result, char const* msg);
+    extern void yyerror(InstructiveTreeDecomposition &atd, int &result, char const* msg);
 
 	// First coordinate is for node, second coordinate is for labels of the children of the node, third coordinate is for label of the node
 	// forth coordinate is for integers inside the symbol.
 	//Example 4 IntroVertex_2 (3) => 4 is the third coordinate, 2 is the forth, {3} is the second.
-   // std::vector<std::tuple<std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>>,int,std::set<int>>> atdVec;
+   // std::vector<std::tuple<std::shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>>,int,std::set<int>>> atdVec;
    	// It is the positions of the children of a node in atdVec. It construts inside atd_construct.
-    std::map<int,std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>>> labelToNode;
+    std::map<int,std::shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>>> labelToNode;
     std::map<int,int> labelToParentLabel;
-    int atd_construct(AbstractTreeDecomposition &atd, std::map<int,std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>>> &labelToNode, std::map<int,int> &labelToParentLabel);
+    int atd_construct(InstructiveTreeDecomposition &atd, std::map<int,std::shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>>> &labelToNode, std::map<int,int> &labelToParentLabel);
   
 
 #line 108 "atd_parser.cpp"
@@ -817,7 +817,7 @@ do {                                                                      \
 
 static void
 yy_symbol_value_print (FILE *yyo,
-                       yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, AbstractTreeDecomposition  &atd, int &result)
+                       yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, InstructiveTreeDecomposition  &atd, int &result)
 {
   FILE *yyoutput = yyo;
   YY_USE (yyoutput);
@@ -838,7 +838,7 @@ yy_symbol_value_print (FILE *yyo,
 
 static void
 yy_symbol_print (FILE *yyo,
-                 yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, AbstractTreeDecomposition  &atd, int &result)
+                 yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, InstructiveTreeDecomposition  &atd, int &result)
 {
   YYFPRINTF (yyo, "%s %s (",
              yykind < YYNTOKENS ? "token" : "nterm", yysymbol_name (yykind));
@@ -879,7 +879,7 @@ do {                                                            \
 
 static void
 yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp, YYLTYPE *yylsp,
-                 int yyrule, AbstractTreeDecomposition  &atd, int &result)
+                 int yyrule, InstructiveTreeDecomposition  &atd, int &result)
 {
   int yylno = yyrline[yyrule];
   int yynrhs = yyr2[yyrule];
@@ -942,7 +942,7 @@ int yydebug;
 
 static void
 yydestruct (const char *yymsg,
-            yysymbol_kind_t yykind, YYSTYPE *yyvaluep, YYLTYPE *yylocationp, AbstractTreeDecomposition  &atd, int &result)
+            yysymbol_kind_t yykind, YYSTYPE *yyvaluep, YYLTYPE *yylocationp, InstructiveTreeDecomposition  &atd, int &result)
 {
   YY_USE (yyvaluep);
   YY_USE (yylocationp);
@@ -980,7 +980,7 @@ int yynerrs;
 `----------*/
 
 int
-yyparse (AbstractTreeDecomposition  &atd, int &result)
+yyparse (InstructiveTreeDecomposition  &atd, int &result)
 {
     yy_state_fast_t yystate = 0;
     /* Number of tokens to shift before error messages enabled.  */
@@ -1248,8 +1248,8 @@ yyreduce:
 
   case 3: /* atd_NODE: atd_COMMENTS atd_NUM atd_LEAF atd_NODES  */
 #line 58 "atd_parser.y"
-                                                                     {std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> node(new TermNode<AbstractTreeDecompositionNodeContent>);
- 									AbstractTreeDecompositionNodeContent atd_node;
+                                                                     {std::shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>> node(new TermNode<InstructiveTreeDecompositionNodeContent>);
+ 									InstructiveTreeDecompositionNodeContent atd_node;
  									atd_node.setSymbol("Leaf");
  									node->setNodeContent(atd_node);
  									if(labelToNode.count((yyvsp[-2].number))){std::cout<< "label "<<(yyvsp[-2].number)<< " is repeated"<<std::endl; YYERROR;}
@@ -1262,8 +1262,8 @@ yyreduce:
   case 4: /* atd_NODE: atd_COMMENTS atd_NUM atd_INTROVERTEX atd_SEP1 atd_NUM atd_LEFTP atd_NUM atd_RIGHTP atd_NODES  */
 #line 66 "atd_parser.y"
                                                                                                                           {
-                                    std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> node(new TermNode<AbstractTreeDecompositionNodeContent>);
- 									AbstractTreeDecompositionNodeContent atd_node;
+                                    std::shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>> node(new TermNode<InstructiveTreeDecompositionNodeContent>);
+ 									InstructiveTreeDecompositionNodeContent atd_node;
 									atd_node.setSymbol("IntroVertex_"+std::to_string((yyvsp[-4].number)));
 									node->setNodeContent(atd_node);
  									if(labelToNode.count((yyvsp[-7].number))){std::cout<< "label "<<(yyvsp[-7].number)<< " is repeated"<<std::endl; YYERROR;}
@@ -1278,8 +1278,8 @@ yyreduce:
   case 5: /* atd_NODE: atd_COMMENTS atd_NUM atd_INTROEDGE atd_SEP1 atd_NUM atd_SEP1 atd_NUM atd_LEFTP atd_NUM atd_RIGHTP atd_NODES  */
 #line 77 "atd_parser.y"
                                                                                                                                          {
-									std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> node(new TermNode<AbstractTreeDecompositionNodeContent>);
- 									AbstractTreeDecompositionNodeContent atd_node;
+									std::shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>> node(new TermNode<InstructiveTreeDecompositionNodeContent>);
+ 									InstructiveTreeDecompositionNodeContent atd_node;
 									atd_node.setSymbol("IntroEdge_"+std::to_string((yyvsp[-6].number))+"_"+std::to_string((yyvsp[-4].number)));
 									node->setNodeContent(atd_node);
                             		if(labelToNode.count((yyvsp[-9].number))){std::cout<< "label "<<(yyvsp[-9].number)<< " is repeated"<<std::endl; YYERROR;}
@@ -1294,8 +1294,8 @@ yyreduce:
   case 6: /* atd_NODE: atd_COMMENTS atd_NUM atd_FORGETVERTEX atd_SEP1 atd_NUM atd_LEFTP atd_NUM atd_RIGHTP atd_NODES  */
 #line 88 "atd_parser.y"
                                                                                                                            {
-                                    std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> node(new TermNode<AbstractTreeDecompositionNodeContent>);
- 									AbstractTreeDecompositionNodeContent atd_node;
+                                    std::shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>> node(new TermNode<InstructiveTreeDecompositionNodeContent>);
+ 									InstructiveTreeDecompositionNodeContent atd_node;
 									atd_node.setSymbol("ForgetVertex_"+std::to_string((yyvsp[-4].number)));
 									node->setNodeContent(atd_node);
 									if(labelToNode.count((yyvsp[-7].number))){std::cout<< "label "<<(yyvsp[-7].number)<< " is repeated"<<std::endl; YYERROR;}
@@ -1309,8 +1309,8 @@ yyreduce:
   case 7: /* atd_NODE: atd_COMMENTS atd_NUM atd_JOIN atd_LEFTP atd_NUM atd_SEP2 atd_NUM atd_RIGHTP atd_NODES  */
 #line 98 "atd_parser.y"
                                                                                                                    {
-                                    std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> node(new TermNode<AbstractTreeDecompositionNodeContent>);
- 									AbstractTreeDecompositionNodeContent atd_node;
+                                    std::shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>> node(new TermNode<InstructiveTreeDecompositionNodeContent>);
+ 									InstructiveTreeDecompositionNodeContent atd_node;
 									atd_node.setSymbol("Join");
 									node->setNodeContent(atd_node);
                             		if(labelToNode.count((yyvsp[-7].number))){std::cout<< "label "<<(yyvsp[-7].number)<< " is repeated"<<std::endl; YYERROR;}
@@ -1532,12 +1532,12 @@ yyreturnlab:
 #line 121 "atd_parser.y"
 
 
-void yyerror(AbstractTreeDecomposition &/*atd*/, int &/*result*/, char const* msg){
+void yyerror(InstructiveTreeDecomposition &/*atd*/, int &/*result*/, char const* msg){
   std::cerr<<"Syntax Error: "<< msg << " on line " <<atd_lineno << std::endl;
   // error printing  disabled, it is handeled in main.cpp
 }
 
-int atd_construct(AbstractTreeDecomposition &atd,  std::map<int,std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>>> &labelToNode, std::map<int,int> &labelToParentLabel){
+int atd_construct(InstructiveTreeDecomposition &atd,  std::map<int,std::shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>>> &labelToNode, std::map<int,int> &labelToParentLabel){
    std::set<int> rootCandidate;
    for(auto node:labelToNode){
         if(!labelToParentLabel.count(node.first)){
@@ -1554,8 +1554,8 @@ int atd_construct(AbstractTreeDecomposition &atd,  std::map<int,std::shared_ptr<
             }
         }else{
 
-            std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> parent_node = labelToNode[labelToParentLabel[node.first]];
-            std::vector<std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> > children = parent_node->getChildren();
+            std::shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>> parent_node = labelToNode[labelToParentLabel[node.first]];
+            std::vector<std::shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>> > children = parent_node->getChildren();
             children.push_back(node.second);
             node.second->setParent(parent_node);
             parent_node->setChildren(children);

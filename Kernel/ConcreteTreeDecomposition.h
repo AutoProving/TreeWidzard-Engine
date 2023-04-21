@@ -37,10 +37,10 @@ class CTDNodeNew : public std::enable_shared_from_this<CTDNodeNew> {
 	void set_children(std::vector<std::shared_ptr<CTDNodeNew>> children);
 	// Print Functions
 	std::string printCTDNode();
-	std::string printAbstract(); // Prints the Bagtype
-	void printConcrete();		 // Prints the Bag
+	std::string printITD(); // Prints the Bagtype
+	void printConcrete();	// Prints the Bag
 	// Read Functions
-	void readAbstract(); // Reads the BagType
+	void readITD();		 // Reads the BagType
 	void readConcrete(); // Reads the Bag
 	// Decomposition Functions
 	CTDNodeNew introVertex(unsigned i);
@@ -56,9 +56,9 @@ class ConcreteTreeDecomposition {
 	void traverseNode(CTDNodeNew &node, MultiGraph &G,
 					  std::map<unsigned, unsigned> &colorToVertexMap,
 					  unsigned &nVertices, unsigned &nEdges);
-	std::string printAbstractRecursive(
+	std::string printITDRecursive(
 		CTDNodeNew &node, unsigned &label); // This prints the tree recursively
-	void printAbstract();					// This prints the tree of Bag Types
+	void printITD();						// This prints the tree of Bag Types
 	std::string printTreeRecursive(CTDNodeNew &node, unsigned &label);
 	void printTree();
 	void printConcrete(); // This prints the tree of Bags
@@ -67,17 +67,17 @@ class ConcreteTreeDecomposition {
 		std::string::iterator
 			&it); // Reads a string, if the string starts with integers it
 				  // returns integers else returns -1. Ex "123abc" returns 123
-	bool readAbstractVertexNumber(std::string::iterator &it,
-								  unsigned &v); // This function will be deleted
-	bool readAbstractEdgeNumber(
+	bool readITDVertexNumber(std::string::iterator &it,
+							 unsigned &v); // This function will be deleted
+	bool readITDEdgeNumber(
 		std::string::iterator &it,
 		std::pair<unsigned, unsigned> &e); // This function will be deleted
-	std::shared_ptr<CTDNodeNew> readAbstractExpressionRecursive(
+	std::shared_ptr<CTDNodeNew> readITDExpressionRecursive(
 		std::string::iterator &it, std::string::iterator end,
 		std::vector<std::shared_ptr<CTDNodeNew>>
-			&v); // Reads Abstract Tree Decomposition recursively
-	void readAbstract(std::string s); // Reads Abstract Tree Decomposition
-	void readConcrete();			  // Reads Concrete Tree Decomposition
+			&v); // Reads Instructive Tree Decomposition recursively
+	void readITD(std::string s); // Reads Instructive Tree Decomposition
+	void readConcrete();		 // Reads Concrete Tree Decomposition
 	// take a conjecture as an input and check that the concrete tree
 	// decomposition satisfies the conjecture or not
 	std::pair<bool, State::ptr> constructWitnesses(

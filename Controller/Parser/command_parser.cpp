@@ -64,7 +64,7 @@
 #define yylloc  command_lloc
 
 /* First part of user prologue.  */
-#line 10 "Controller/Parser/command_parser.y"
+#line 10 "command_parser.y"
 
     #include <iostream>
     #include <cmath>
@@ -87,7 +87,7 @@
 
   
 
-#line 91 "Controller/Parser/command_parser.cpp"
+#line 91 "command_parser.cpp"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -128,7 +128,7 @@ enum yysymbol_kind_t
   YYSYMBOL_command_end = 9,                /* command_end  */
   YYSYMBOL_command_parse_signature = 10,   /* command_parse_signature  */
   YYSYMBOL_command_parse_pace = 11,        /* command_parse_pace  */
-  YYSYMBOL_command_parse_abstract = 12,    /* command_parse_abstract  */
+  YYSYMBOL_command_parse_itd = 12,         /* command_parse_itd  */
   YYSYMBOL_command_term_signature = 13,    /* command_term_signature  */
   YYSYMBOL_command_print_state_tree = 14,  /* command_print_state_tree  */
   YYSYMBOL_command_random_signature = 15,  /* command_random_signature  */
@@ -843,7 +843,7 @@ static const char *const yytname[] =
   "command_search_signature", "command_print_state_flag",
   "command_print_loop_flag", "command_string", "command_help",
   "command_end", "command_parse_signature", "command_parse_pace",
-  "command_parse_abstract", "command_term_signature",
+  "command_parse_itd", "command_term_signature",
   "command_print_state_tree", "command_random_signature", "command_number",
   "command_premise", "command_no_bfs_dag", "command_nthreads",
   "command_pw", "command_tw", "command_equal",
@@ -1155,47 +1155,47 @@ yyuserAction (yyRuleNum yyrule, int yyrhslen, yyGLRStackItem* yyvsp,
   switch (yyrule)
     {
   case 3: /* command_start: command_help command_end  */
-#line 54 "Controller/Parser/command_parser.y"
+#line 54 "command_parser.y"
                                                {show_manual();}
-#line 1161 "Controller/Parser/command_parser.cpp"
+#line 1161 "command_parser.cpp"
     break;
 
   case 6: /* command_search: command_search_signature command_width command_flags command_search_strategy command_input_file command_end  */
-#line 59 "Controller/Parser/command_parser.y"
+#line 59 "command_parser.y"
                                                                               { Width width;
 										width.set_name(width_type);
 										width.set_value(width_value);
                       								SearchController search((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yyval.string), (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yyval.string), flags, width);
                                                                                 search.action();
                                                                                 }
-#line 1172 "Controller/Parser/command_parser.cpp"
+#line 1172 "command_parser.cpp"
     break;
 
   case 7: /* command_search: command_search_signature command_width command_flags command_random command_search_strategy command_input_file command_end  */
-#line 66 "Controller/Parser/command_parser.y"
+#line 66 "command_parser.y"
                                                                                                     { Width width;
 													width.set_name(width_type);
 													width.set_value(width_value);
                                             							      	SearchController search((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yyval.string), (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yyval.string),flags,width);
                                                                                                       	search.action();
                                                                                                      }
-#line 1183 "Controller/Parser/command_parser.cpp"
+#line 1183 "command_parser.cpp"
     break;
 
   case 8: /* command_width: command_pw command_equal command_number  */
-#line 74 "Controller/Parser/command_parser.y"
+#line 74 "command_parser.y"
                                                                {width_type = "path_width"; if((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.number)<0){std::cout<< "width value should be not negative" << std::endl; YYERROR;} width_value=(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.number);}
-#line 1189 "Controller/Parser/command_parser.cpp"
+#line 1189 "command_parser.cpp"
     break;
 
   case 9: /* command_width: command_tw command_equal command_number  */
-#line 75 "Controller/Parser/command_parser.y"
+#line 75 "command_parser.y"
                                                               {width_type = "tree_width"; if((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.number)<0){std::cout<< "width value should be not negative" << std::endl; YYERROR;} width_value=(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.number);}
-#line 1195 "Controller/Parser/command_parser.cpp"
+#line 1195 "command_parser.cpp"
     break;
 
   case 10: /* command_random: command_random_signature command_number command_number command_number command_number  */
-#line 76 "Controller/Parser/command_parser.y"
+#line 76 "command_parser.y"
                                                                                                            {
 													    if((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yyval.number)+(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yyval.number)>1){std::cout<<"sum of the probalities is bigger than 1"<<std::endl;
 													    YYERROR;}
@@ -1204,95 +1204,95 @@ yyuserAction (yyRuleNum yyrule, int yyrhslen, yyGLRStackItem* yyvsp,
 													    flags.add_flag("probForgetVertex", (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yyval.number));
 													    flags.add_flag("numberOfIterations", (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.number));
 												        	}
-#line 1208 "Controller/Parser/command_parser.cpp"
+#line 1208 "command_parser.cpp"
     break;
 
   case 11: /* command_flags: command_print_state_flag command_flags  */
-#line 85 "Controller/Parser/command_parser.y"
+#line 85 "command_parser.y"
                                                              {flags.add_flag("PrintStates", 1);}
-#line 1214 "Controller/Parser/command_parser.cpp"
+#line 1214 "command_parser.cpp"
     break;
 
   case 12: /* command_flags: command_print_loop_flag command_flags  */
-#line 86 "Controller/Parser/command_parser.y"
+#line 86 "command_parser.y"
                                                              {flags.add_flag("LoopTime", 1);}
-#line 1220 "Controller/Parser/command_parser.cpp"
+#line 1220 "command_parser.cpp"
     break;
 
   case 13: /* command_flags: command_print_state_tree command_flags  */
-#line 87 "Controller/Parser/command_parser.y"
+#line 87 "command_parser.y"
                                                              {flags.add_flag("StateTree", 1);}
-#line 1226 "Controller/Parser/command_parser.cpp"
+#line 1226 "command_parser.cpp"
     break;
 
   case 14: /* command_flags: command_premise command_flags  */
-#line 88 "Controller/Parser/command_parser.y"
+#line 88 "command_parser.y"
                                                     {flags.add_flag("Premise", 1);}
-#line 1232 "Controller/Parser/command_parser.cpp"
+#line 1232 "command_parser.cpp"
     break;
 
   case 15: /* command_flags: command_no_bfs_dag command_flags  */
-#line 89 "Controller/Parser/command_parser.y"
+#line 89 "command_parser.y"
                                                        {flags.add_flag("NoBFSDAG", 1);}
-#line 1238 "Controller/Parser/command_parser.cpp"
+#line 1238 "command_parser.cpp"
     break;
 
   case 16: /* command_flags: command_nthreads command_number command_flags  */
-#line 90 "Controller/Parser/command_parser.y"
+#line 90 "command_parser.y"
                                                                     { if ((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yyval.number)<1){std::cout<< "Number of threads to use should be at least 1." << std::endl; YYERROR; } flags.add_flag("NThreads", (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yyval.number));}
-#line 1244 "Controller/Parser/command_parser.cpp"
+#line 1244 "command_parser.cpp"
     break;
 
   case 17: /* command_flags: command_print_directed_bipartite_graph command_flags  */
-#line 91 "Controller/Parser/command_parser.y"
+#line 91 "command_parser.y"
                                                                            {flags.add_flag("PrintDirectedBipartiteGraphNAUTY", 1);}
-#line 1250 "Controller/Parser/command_parser.cpp"
+#line 1250 "command_parser.cpp"
     break;
 
   case 18: /* command_flags: command_write_files command_flags  */
-#line 92 "Controller/Parser/command_parser.y"
+#line 92 "command_parser.y"
                                                         {flags.add_flag("WriteToFiles", 1);}
-#line 1256 "Controller/Parser/command_parser.cpp"
+#line 1256 "command_parser.cpp"
     break;
 
   case 19: /* command_flags: %empty  */
-#line 93 "Controller/Parser/command_parser.y"
+#line 93 "command_parser.y"
                                                              {}
-#line 1262 "Controller/Parser/command_parser.cpp"
+#line 1262 "command_parser.cpp"
     break;
 
   case 20: /* command_input_file: command_string  */
-#line 96 "Controller/Parser/command_parser.y"
+#line 96 "command_parser.y"
                                      { ((*yyvalp).string)=(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.string);}
-#line 1268 "Controller/Parser/command_parser.cpp"
+#line 1268 "command_parser.cpp"
     break;
 
   case 21: /* command_search_strategy: command_string  */
-#line 98 "Controller/Parser/command_parser.y"
+#line 98 "command_parser.y"
                                          { ((*yyvalp).string)=(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (0)].yystate.yysemantics.yyval.string);}
-#line 1274 "Controller/Parser/command_parser.cpp"
+#line 1274 "command_parser.cpp"
     break;
 
   case 22: /* command_parse: command_parse_signature command_parse_pace command_flags command_input_file command_input_file command_input_file command_end  */
-#line 101 "Controller/Parser/command_parser.y"
+#line 101 "command_parser.y"
                                  { ParseController parsePACE(flags, (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-3)].yystate.yysemantics.yyval.string)); parsePACE.parse_pace((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yyval.string), (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yyval.string)); }
-#line 1280 "Controller/Parser/command_parser.cpp"
+#line 1280 "command_parser.cpp"
     break;
 
-  case 23: /* command_parse: command_parse_signature command_parse_abstract command_flags command_input_file command_input_file command_end  */
-#line 103 "Controller/Parser/command_parser.y"
-                        { ParseController parsePACE(flags, (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yyval.string)); parsePACE.parse_abstract((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yyval.string));}
-#line 1286 "Controller/Parser/command_parser.cpp"
+  case 23: /* command_parse: command_parse_signature command_parse_itd command_flags command_input_file command_input_file command_end  */
+#line 103 "command_parser.y"
+                        { ParseController parsePACE(flags, (YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-2)].yystate.yysemantics.yyval.string)); parsePACE.parse_itd((YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yyval.string));}
+#line 1286 "command_parser.cpp"
     break;
 
   case 24: /* command_term: command_term_signature command_input_file command_end  */
-#line 105 "Controller/Parser/command_parser.y"
+#line 105 "command_parser.y"
                                                                            {ParseController parseTest(flags,(YY_CAST (yyGLRStackItem const *, yyvsp)[YYFILL (-1)].yystate.yysemantics.yyval.string)); parseTest.test_term();}
-#line 1292 "Controller/Parser/command_parser.cpp"
+#line 1292 "command_parser.cpp"
     break;
 
 
-#line 1296 "Controller/Parser/command_parser.cpp"
+#line 1296 "command_parser.cpp"
 
       default: break;
     }
@@ -2907,7 +2907,7 @@ yypdumpstack (yyGLRStack* yystackp)
 #define yylloc  command_lloc
 
 
-#line 107 "Controller/Parser/command_parser.y"
+#line 107 "command_parser.y"
 
 
 void yyerror(int &, std::string &, int &, char const*){

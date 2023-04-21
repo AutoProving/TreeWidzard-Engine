@@ -4,7 +4,7 @@
 
 #include "Kernel/SearchStrategy.h"
 #include "Kernel/StateTree.h"
-#include "TreeAutomaton/AbstractTreeDecomposition.h"
+#include "TreeAutomaton/InstructiveTreeDecomposition.h"
 #include "TreeAutomaton/ConcreteTreeDecomposition.h"
 #include "TreeAutomaton/TreeAutomaton.h"
 
@@ -13,7 +13,7 @@ using namespace std::chrono;
 
 class BreadthFirstSearch : public SearchStrategy {
   private:
-	TreeAutomaton<State::ptr, AbstractTreeDecompositionNodeContent>
+	TreeAutomaton<State::ptr, InstructiveTreeDecompositionNodeContent>
 		bfsDAG; // Constructs a DAG corresponding to the BFS.
 	set<State::ptr> allStatesSet;
 	set<State::ptr> intermediateStatesSet;
@@ -27,7 +27,7 @@ class BreadthFirstSearch : public SearchStrategy {
 	BreadthFirstSearch(DynamicKernel *dynamicKernel, Conjecture *conjecture,
 					   Flags *flags);
 	~BreadthFirstSearch(){};
-	AbstractTreeDecomposition extractCounterExampleTerm(State::ptr state);
+	InstructiveTreeDecomposition extractCounterExampleTerm(State::ptr state);
 	////Extract State Tree//////////
 	void extractCounterExampleStateTreeNode(State::ptr state,
 											shared_ptr<StateTreeNode>);
@@ -37,9 +37,9 @@ class BreadthFirstSearch : public SearchStrategy {
 	void extractCounterExampleRunNode(
 		State::ptr state,
 		shared_ptr<TermNode<
-			RunNodeContent<State::ptr, AbstractTreeDecompositionNodeContent>>>
+			RunNodeContent<State::ptr, InstructiveTreeDecompositionNodeContent>>>
 			node);
-	RunTree<State::ptr, AbstractTreeDecompositionNodeContent>
+	RunTree<State::ptr, InstructiveTreeDecompositionNodeContent>
 	extractCounterExampleRun(State::ptr state);
 	void search();
 };

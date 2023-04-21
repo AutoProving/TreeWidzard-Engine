@@ -33,16 +33,16 @@ void ParseController::parse_pace(std::string graphPath,
 		std::filesystem::path(inputController->getInputPath())
 			.parent_path()
 			.string();
-	std::string abstract_file_name =
+	std::string itd_file_name =
 		std::filesystem::path(decompositionPath).stem().string();
 	std::string property_file_name =
 		std::filesystem::path(inputController->getInputPath()).stem().string();
 	std::string name;
 	if (output_file_path == "") {
-		name = "PARSE_PACE_" + property_file_name + "_" + abstract_file_name;
+		name = "PARSE_PACE_" + property_file_name + "_" + itd_file_name;
 	} else {
 		name = output_file_path + "/PARSE_PACE_" + property_file_name + "_" +
-			   abstract_file_name;
+			   itd_file_name;
 	}
 	TreeDecompositionPACE td;
 
@@ -76,11 +76,10 @@ void ParseController::parse_pace(std::string graphPath,
 	concreteTreeDecomposition->conjectureCheck(
 		this->inputController->getConjecture(), flag, name);
 	if (flag.get("WriteToFiles")) {
-		AbstractTreeDecomposition abstractTreeDecomposition =
-			concreteTreeDecomposition->convertToAbstractTreeDecomposition();
+		InstructiveTreeDecomposition instructiveTreeDecomposition =
+			concreteTreeDecomposition->convertToInstructiveTreeDecomposition();
 
-		abstractTreeDecomposition.writeToFile(name +
-											  "_AbstractDecomposition.txt");
+		instructiveTreeDecomposition.writeToFile(name + "_ITD.txt");
 		concreteTreeDecomposition->writeToFile(name +
 											   "_ConcreteDecomposition.txt");
 		MultiGraph multiGraph = concreteTreeDecomposition->extractMultiGraph();
@@ -104,42 +103,40 @@ void ParseController::parse_pace(std::string graphPath,
 	}
 }
 
-void ParseController::parse_abstract(std::string abstractPath) {
-	atd_in = fopen(abstractPath.c_str(), "r");
+void ParseController::parse_itd(std::string itdPath) {
+	atd_in = fopen(itdPath.c_str(), "r");
 	if (!atd_in) {
 		std::perror("File opening failed");
-		std::cerr << "\n " << abstractPath << " could not open." << std::endl;
+		std::cerr << "\n " << itdPath << " could not open." << std::endl;
 		exit(20);
 	}
-	AbstractTreeDecomposition abstractTreeDecomposition;
+	InstructiveTreeDecomposition instructiveTreeDecomposition;
 	int resultATD = 0; // if parsing successful result will be 0 otherwise 1
-	resultATD = atd_parse(abstractTreeDecomposition,
+	resultATD = atd_parse(instructiveTreeDecomposition,
 						  resultATD); // Parser function from Parser.hpp
 	// check for successful parsing
 	if (resultATD != 0) {
-		std::cout << " Error: input file " << abstractPath
+		std::cout << " Error: input file " << itdPath
 				  << " is not in valid format" << std::endl;
 		exit(20);
 	}
 	ConcreteTreeDecomposition concreteTreeDecomposition =
-		abstractTreeDecomposition.convertToConcreteTreeDecomposition();
+		instructiveTreeDecomposition.convertToConcreteTreeDecomposition();
 	// concreteTreeDecomposition.printTermNodes();
 	std::cout << "----Evaluating-----:" << std::endl;
 	std::string output_file_path =
 		std::filesystem::path(inputController->getInputPath())
 			.parent_path()
 			.string();
-	std::string abstract_file_name =
-		std::filesystem::path(abstractPath).stem().string();
+	std::string itd_file_name = std::filesystem::path(itdPath).stem().string();
 	std::string property_file_name =
 		std::filesystem::path(inputController->getInputPath()).stem().string();
 	std::string name;
 	if (output_file_path == "") {
-		name =
-			"PARSE_ABSTRACT_" + property_file_name + "_" + abstract_file_name;
+		name = "PARSE_ITD_" + property_file_name + "_" + itd_file_name;
 	} else {
-		name = output_file_path + "/PARSE_ABSTRACT_" + property_file_name +
-			   "_" + abstract_file_name;
+		name = output_file_path + "/PARSE_ITD_" + property_file_name + "_" +
+			   itd_file_name;
 	}
 	concreteTreeDecomposition.conjectureCheck(
 		this->inputController->getConjecture(), flag, name);
@@ -162,22 +159,22 @@ void ParseController::parse_abstract(std::string abstractPath) {
 }
 
 void ParseController::test_term() {
-	//    AbstractTreeDecompositionNodeContent
-	//    abstractTreeDecompositionNodeContent1("IntroVertex_13456");
-	//    AbstractTreeDecompositionNodeContent
-	//    abstractTreeDecompositionNodeContent2("IntroVertex_7_9");
-	//    ConcreteTreeDecomposition abstractTreeDecomposition;
-	//    shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> a1(new
-	//    TermNode<AbstractTreeDecompositionNodeContent>);
-	//    shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> a2(new
-	//    TermNode<AbstractTreeDecompositionNodeContent>);
-	//    a1->setNodeContent(abstractTreeDecompositionNodeContent1);
-	//    a2->setNodeContent(abstractTreeDecompositionNodeContent2);
-	//    vector<shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>>
+	//    InstructiveTreeDecompositionNodeContent
+	//    instructiveTreeDecompositionNodeContent1("IntroVertex_13456");
+	//    InstructiveTreeDecompositionNodeContent
+	//    instructiveTreeDecompositionNodeContent2("IntroVertex_7_9");
+	//    ConcreteTreeDecomposition instructiveTreeDecomposition;
+	//    shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>> a1(new
+	//    TermNode<InstructiveTreeDecompositionNodeContent>);
+	//    shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>> a2(new
+	//    TermNode<InstructiveTreeDecompositionNodeContent>);
+	//    a1->setNodeContent(instructiveTreeDecompositionNodeContent1);
+	//    a2->setNodeContent(instructiveTreeDecompositionNodeContent2);
+	//    vector<shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>>
 	//    > children; children.push_back(a2); a2->setParent(a1);
 	//    a1->setChildren(children);
-	//    abstractTreeDecomposition.setRoot(a1);
-	//    abstractTreeDecomposition.printTermNodes();
-	//    TreeAutomaton<FarhadState,AbstractTreeDecompositionNodeContent>
+	//    instructiveTreeDecomposition.setRoot(a1);
+	//    instructiveTreeDecomposition.printTermNodes();
+	//    TreeAutomaton<FarhadState,InstructiveTreeDecompositionNodeContent>
 	//    treeAutomaton;
 }

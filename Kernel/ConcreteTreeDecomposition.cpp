@@ -84,7 +84,7 @@ string CTDNodeNew::printCTDNode() {
 	return s;
 }
 
-string CTDNodeNew::printAbstract() { return this->get_nodeType(); }
+string CTDNodeNew::printITD() { return this->get_nodeType(); }
 
 void CTDNodeNew::printConcrete() { this->get_B().print(); }
 
@@ -93,7 +93,7 @@ void CTDNodeNew::printConcrete() { this->get_B().print(); }
 ////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CTDNodeNew::readAbstract() {}
+void CTDNodeNew::readITD() {}
 
 void CTDNodeNew::readConcrete() {}
 
@@ -293,32 +293,32 @@ void ConcreteTreeDecomposition::printTree() {
 	cout << printTreeRecursive(*root, label);
 }
 
-string ConcreteTreeDecomposition::printAbstractRecursive(CTDNodeNew &node,
+string ConcreteTreeDecomposition::printITDRecursive(CTDNodeNew &node,
 														 unsigned &label) {
 	if (node.get_nodeType() == "Join") {
-		string s1 = printAbstractRecursive(*node.get_children()[0], label);
+		string s1 = printITDRecursive(*node.get_children()[0], label);
 		unsigned label1 = label;
-		string s2 = printAbstractRecursive(*node.get_children()[1], label);
+		string s2 = printITDRecursive(*node.get_children()[1], label);
 		unsigned label2 = label;
 		label++;
-		return s1 + s2 + to_string(label) + " " + node.printAbstract() + "(" +
+		return s1 + s2 + to_string(label) + " " + node.printITD() + "(" +
 			   to_string(label1) + "," + to_string(label2) + ")\n";
 	} else if (node.get_nodeType() == "Empty") {
 		label++;
-		return to_string(label) + " " + node.printAbstract() + "\n";
+		return to_string(label) + " " + node.printITD() + "\n";
 	} else {
-		string s = printAbstractRecursive(*node.get_children()[0], label);
+		string s = printITDRecursive(*node.get_children()[0], label);
 		label++;
-		return s + to_string(label) + " " + (node.printAbstract()) + "(" +
+		return s + to_string(label) + " " + (node.printITD()) + "(" +
 			   to_string(label - 1) +
 			   ")"
 			   "\n";
 	}
 }
-void ConcreteTreeDecomposition::printAbstract() {
+void ConcreteTreeDecomposition::printITD() {
 	unsigned label = 0;
 
-	cout << printAbstractRecursive(*root, label);
+	cout << printITDRecursive(*root, label);
 }
 
 bool ConcreteTreeDecomposition::readToken(string::iterator &it, string token) {
@@ -334,7 +334,7 @@ bool ConcreteTreeDecomposition::readToken(string::iterator &it, string token) {
 	return true;
 }
 
-bool ConcreteTreeDecomposition::readAbstractVertexNumber(string::iterator &it,
+bool ConcreteTreeDecomposition::readITDVertexNumber(string::iterator &it,
 														 unsigned &v) {
 	string num;
 	string::iterator tempIt = it;
@@ -359,7 +359,7 @@ bool ConcreteTreeDecomposition::readAbstractVertexNumber(string::iterator &it,
 	}
 }
 
-bool ConcreteTreeDecomposition::readAbstractEdgeNumber(
+bool ConcreteTreeDecomposition::readITDEdgeNumber(
 	string::iterator &it, pair<unsigned, unsigned> &e) {
 	string num;
 	unsigned v1 = -1;
@@ -408,7 +408,7 @@ unsigned ConcreteTreeDecomposition::readInteger(string::iterator &it) {
 }
 
 shared_ptr<CTDNodeNew>
-ConcreteTreeDecomposition::readAbstractExpressionRecursive(
+ConcreteTreeDecomposition::readITDExpressionRecursive(
 	string::iterator &it, string::iterator end,
 	vector<shared_ptr<CTDNodeNew>> &v) {
 	unsigned label = 0;
@@ -448,7 +448,7 @@ ConcreteTreeDecomposition::readAbstractExpressionRecursive(
 				}
 				v[label] = ctdNode;
 				if (it != end) {
-					readAbstractExpressionRecursive(it, end, v);
+					readITDExpressionRecursive(it, end, v);
 				}
 				return ctdNode;
 			}
@@ -490,7 +490,7 @@ ConcreteTreeDecomposition::readAbstractExpressionRecursive(
 				}
 				v[label] = ctdNode;
 				if (it != end) {
-					readAbstractExpressionRecursive(it, end, v);
+					readITDExpressionRecursive(it, end, v);
 				}
 				return ctdNode;
 			}
@@ -524,7 +524,7 @@ ConcreteTreeDecomposition::readAbstractExpressionRecursive(
 				}
 				v[label] = ctdNode;
 				if (it != end) {
-					readAbstractExpressionRecursive(it, end, v);
+					readITDExpressionRecursive(it, end, v);
 				}
 				return ctdNode;
 			}
@@ -569,7 +569,7 @@ ConcreteTreeDecomposition::readAbstractExpressionRecursive(
 				}
 				v[label] = ctdNode;
 				if (it != end) {
-					readAbstractExpressionRecursive(it, end, v);
+					readITDExpressionRecursive(it, end, v);
 				}
 				return ctdNode;
 			}
@@ -582,14 +582,14 @@ ConcreteTreeDecomposition::readAbstractExpressionRecursive(
 			}
 			v[label] = ctdNode;
 			if (it != end) {
-				readAbstractExpressionRecursive(it, end, v);
+				readITDExpressionRecursive(it, end, v);
 			}
 			return ctdNode;
 
 		} else {
 			cout
 				<< "ERROR: "
-				   "ConcreteTreeDecomposition::readAbstractExpressionRecursive "
+				   "ConcreteTreeDecomposition::readITDExpressionRecursive "
 				   "Token is not matched with defined tokens"
 				<< endl;
 			exit(20);
@@ -597,11 +597,11 @@ ConcreteTreeDecomposition::readAbstractExpressionRecursive(
 	}
 }
 
-void ConcreteTreeDecomposition::readAbstract(string s) {
+void ConcreteTreeDecomposition::readITD(string s) {
 	s.erase(std::remove_if(s.begin(), s.end(), ::isspace), s.end());
 	string::iterator it = s.begin();
 	vector<shared_ptr<CTDNodeNew>> v;
-	readAbstractExpressionRecursive(it, s.end(), v);
+	readITDExpressionRecursive(it, s.end(), v);
 	this->root = v[v.size() - 1];
 }
 

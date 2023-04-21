@@ -26,10 +26,10 @@ BreadthFirstSearch::BreadthFirstSearch(DynamicKernel *dynamicKernel,
 	this->noBFSDAG = flags->get("NoBFSDAG");
 }
 
-AbstractTreeDecomposition BreadthFirstSearch::extractCounterExampleTerm(
+InstructiveTreeDecomposition BreadthFirstSearch::extractCounterExampleTerm(
 	State::ptr state) {
-	AbstractTreeDecomposition atd;
-	shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> rootNode;
+	InstructiveTreeDecomposition atd;
+	shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>> rootNode;
 	rootNode = bfsDAG.retrieveTermAcyclicAutomaton(state);
 	atd.setRoot(rootNode);
 	return atd;
@@ -51,12 +51,12 @@ void BreadthFirstSearch::extractCounterExampleStateTreeNode(
 	// Assumes that the automaton is acyclic and that each state has a
 	// transition in which the state is the consequent
 	if (!bfsDAG.getTransitions().empty()) {
-		AbstractTreeDecompositionNodeContent a;
+		InstructiveTreeDecompositionNodeContent a;
 		a.setSymbol(
 			a.smallestContent()); // Creates a symbol of type TermNodeContent
 								  // and set it to the smallest symbol
 		vector<State::ptr> emptyAntecedents;
-		Transition<State::ptr, AbstractTreeDecompositionNodeContent> t(
+		Transition<State::ptr, InstructiveTreeDecompositionNodeContent> t(
 			state, a, emptyAntecedents); // This is the smallest transition with
 										 // a consequent equal to state
 		auto it = bfsDAG.getTransitions().upper_bound(t);
@@ -111,10 +111,10 @@ void BreadthFirstSearch::search() {
 	if (!noBFSDAG) {
 		// Initialize the DAG
 		bfsDAG.addState(initialState);
-		AbstractTreeDecompositionNodeContent initialTransitionContent("Leaf");
+		InstructiveTreeDecompositionNodeContent initialTransitionContent("Leaf");
 		vector<State::ptr>
 			initialAntecedents; // Empty vector since there are no children.
-		Transition<State::ptr, AbstractTreeDecompositionNodeContent>
+		Transition<State::ptr, InstructiveTreeDecompositionNodeContent>
 			initialTransition(initialState, initialTransitionContent,
 							  initialAntecedents);
 		bfsDAG.addTransition(initialTransition);
@@ -165,13 +165,13 @@ void BreadthFirstSearch::search() {
 							State::ptr consequentState = newStatePointer;
 							if (!noBFSDAG) {
 								bfsDAG.addState(consequentState);
-								AbstractTreeDecompositionNodeContent
+								InstructiveTreeDecompositionNodeContent
 									transitionContent("IntroVertex_" +
 													  to_string(i));
 								vector<State::ptr> antecedentStates;
 								antecedentStates.push_back(statePointer);
 								Transition<State::ptr,
-										   AbstractTreeDecompositionNodeContent>
+										   InstructiveTreeDecompositionNodeContent>
 									transition(consequentState,
 											   transitionContent,
 											   antecedentStates);
@@ -231,14 +231,14 @@ void BreadthFirstSearch::search() {
 						newStatesSet.insert(newStatePointer);
 						State::ptr consequentState = newStatePointer;
 						if (!noBFSDAG) {
-							AbstractTreeDecompositionNodeContent
+							InstructiveTreeDecompositionNodeContent
 								transitionContent("ForgetVertex_" +
 												  to_string(*it));
 							bfsDAG.addState(consequentState);
 							vector<State::ptr> antecedentStates;
 							antecedentStates.push_back(statePointer);
 							Transition<State::ptr,
-									   AbstractTreeDecompositionNodeContent>
+									   InstructiveTreeDecompositionNodeContent>
 								transition(consequentState, transitionContent,
 										   antecedentStates);
 							bfsDAG.addTransition(transition);
@@ -303,7 +303,7 @@ void BreadthFirstSearch::search() {
 									State::ptr consequentState =
 										newStatePointer;
 									if (!noBFSDAG) {
-										AbstractTreeDecompositionNodeContent
+										InstructiveTreeDecompositionNodeContent
 											transitionContent(
 												"IntroEdge_" + to_string(*it) +
 												"_" + to_string(*itPrime));
@@ -313,7 +313,7 @@ void BreadthFirstSearch::search() {
 											statePointer);
 										Transition<
 											State::ptr,
-											AbstractTreeDecompositionNodeContent>
+											InstructiveTreeDecompositionNodeContent>
 											transition(consequentState,
 													   transitionContent,
 													   antecedentStates);
@@ -385,7 +385,7 @@ void BreadthFirstSearch::search() {
 								newStatesSet.insert(newStatePointer);
 								State::ptr consequentState = newStatePointer;
 								if (!noBFSDAG) {
-									AbstractTreeDecompositionNodeContent
+									InstructiveTreeDecompositionNodeContent
 										transitionContent("Join");
 									bfsDAG.addState(consequentState);
 									vector<State::ptr> antecedentStates;
@@ -393,7 +393,7 @@ void BreadthFirstSearch::search() {
 									antecedentStates.push_back(*it);
 									Transition<
 										State::ptr,
-										AbstractTreeDecompositionNodeContent>
+										InstructiveTreeDecompositionNodeContent>
 										transition(consequentState,
 												   transitionContent,
 												   antecedentStates);
@@ -450,7 +450,7 @@ void BreadthFirstSearch::search() {
 				//                            newStatesSet.insert(newStatePointer);
 				//                            State::ptr consequentState =
 				//                            newStatePointer;
-				//                            AbstractTreeDecompositionNodeContent
+				//                            InstructiveTreeDecompositionNodeContent
 				//                            transitionContent("Join");
 				//                            bfsDAG.addState(consequentState);
 				//                            vector<State::ptr>
@@ -458,7 +458,7 @@ void BreadthFirstSearch::search() {
 				//                            antecedentStates.push_back(statePointer);
 				//                            antecedentStates.push_back(*it);
 				//                            Transition<State::ptr,
-				//                            AbstractTreeDecompositionNodeContent>
+				//                            InstructiveTreeDecompositionNodeContent>
 				//                            transition(consequentState,
 				//                                                                                                    transitionContent,
 				//                                                                                                    antecedentStates);
@@ -487,7 +487,7 @@ void BreadthFirstSearch::search() {
 				std::cout << std::endl;
 
 				bfsDAG.addFinalState(badState);
-				AbstractTreeDecomposition atd =
+				InstructiveTreeDecomposition atd =
 					extractCounterExampleTerm(badState);
 				string file = this->getOutputsPath();
 				if (flags->get("Premise")) {
@@ -496,11 +496,11 @@ void BreadthFirstSearch::search() {
 				file += "_CounterExample";
 				ConcreteTreeDecomposition ctd =
 					atd.convertToConcreteTreeDecomposition();
-				RunTree<State::ptr, AbstractTreeDecompositionNodeContent>
+				RunTree<State::ptr, InstructiveTreeDecompositionNodeContent>
 					runTree = extractCounterExampleRun(badState);
 				MultiGraph multiGraph = ctd.extractMultiGraph();
 				multiGraph.printGraph();
-				atd.writeToFile(file + "_AbstractDecomposition.txt");
+				atd.writeToFile(file + "_ITD.txt");
 				ctd.writeToFile(file + "_ConcreteDecomposition.txt");
 				runTree.writeToFile(file + "_RunTree.txt");
 				multiGraph.printToFile(file + "_Graph.txt");
@@ -534,9 +534,9 @@ void BreadthFirstSearch::search() {
 	}
 	std::cout << "Conjecture: Satisfied" << std::endl;
 }
-RunTree<State::ptr, AbstractTreeDecompositionNodeContent>
+RunTree<State::ptr, InstructiveTreeDecompositionNodeContent>
 BreadthFirstSearch::extractCounterExampleRun(State::ptr state) {
-	RunTree<State::ptr, AbstractTreeDecompositionNodeContent> runTree =
+	RunTree<State::ptr, InstructiveTreeDecompositionNodeContent> runTree =
 		bfsDAG.retrieveRunAcyclicAutomaton(state);
 	return runTree;
 }

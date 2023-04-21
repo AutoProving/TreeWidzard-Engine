@@ -100,7 +100,7 @@ std::string StateTreeNode::printStateTreeNode() {
 	return this->get_S()->stateInformation();
 }
 
-std::string StateTreeNode::printAbstract() { return this->get_nodeType(); }
+std::string StateTreeNode::printITD() { return this->get_nodeType(); }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////// Read Functions
@@ -343,34 +343,34 @@ void StateTree::printStateTree() {
 	std::cout << printTreeRecursive(*root, label);
 }
 
-std::string StateTree::printAbstractRecursive(StateTreeNode &node,
+std::string StateTree::printITDRecursive(StateTreeNode &node,
 											  unsigned &label) {
 	if (node.get_nodeType() == "Join") {
-		std::string s1 = printAbstractRecursive(*node.get_children()[0], label);
+		std::string s1 = printITDRecursive(*node.get_children()[0], label);
 		unsigned label1 = label;
-		std::string s2 = printAbstractRecursive(*node.get_children()[1], label);
+		std::string s2 = printITDRecursive(*node.get_children()[1], label);
 		unsigned label2 = label;
 		label++;
-		return s1 + s2 + std::to_string(label) + " " + (node.printAbstract()) +
+		return s1 + s2 + std::to_string(label) + " " + (node.printITD()) +
 			   "(" + std::to_string(label1) + "," + std::to_string(label2) +
 			   ")\n";
 	} else if (node.get_nodeType() == "Empty" or
 			   node.get_nodeType() == "Leaf") {
 		label++;
-		return std::to_string(label) + " " + node.printAbstract() + "\n";
+		return std::to_string(label) + " " + node.printITD() + "\n";
 	} else {
-		std::string s = printAbstractRecursive(*node.get_children()[0], label);
+		std::string s = printITDRecursive(*node.get_children()[0], label);
 		label++;
-		return s + std::to_string(label) + " " + node.printAbstract() + "(" +
+		return s + std::to_string(label) + " " + node.printITD() + "(" +
 			   std::to_string(label - 1) +
 			   ")"
 			   "\n";
 	}
 }
 
-void StateTree::printAbstract() {
+void StateTree::printITD() {
 	unsigned label = 0;
-	std::cout << printAbstractRecursive(*root, label);
+	std::cout << printITDRecursive(*root, label);
 }
 
 void StateTree::writeToFile(std::string fileName) {

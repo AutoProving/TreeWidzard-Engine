@@ -55,7 +55,7 @@ extern int atd_debug;
 /* "%code requires" blocks.  */
 #line 3 "atd_parser.y"
 
-    #include "../../../TreeAutomaton/AbstractTreeDecomposition.h"
+    #include "../../../TreeAutomaton/InstructiveTreeDecomposition.h"
     #include <iostream>
     #include <vector>
     #include <memory>
@@ -125,7 +125,7 @@ struct ATD_LTYPE
 extern ATD_STYPE atd_lval;
 extern ATD_LTYPE atd_lloc;
 
-int atd_parse (AbstractTreeDecomposition  &atd, int &result);
+int atd_parse (InstructiveTreeDecomposition  &atd, int &result);
 
 
 #endif /* !YY_ATD_ATD_PARSER_HPP_INCLUDED  */
