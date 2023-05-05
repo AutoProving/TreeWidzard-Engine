@@ -7,9 +7,7 @@
 #include <map>
 #include <set>
 #include <sstream>
-#include <experimental/filesystem>
-
-namespace multigraph_fs = std::experimental::filesystem;
+#include <filesystem>
 
 class MultiGraph {
   private:

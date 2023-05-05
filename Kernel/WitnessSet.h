@@ -118,7 +118,7 @@ class WitnessSetTypeOne : public WitnessSet {
 				if (self->mask[idx / 8] >> (idx % 8) & 1) break;
 			}
 		};
-		virtual void increment(int i) {
+		virtual void increment(int) {
 			while (++idx < 8 * self->mask.size()) {
 				if (self->mask[idx / 8] >> (idx % 8) & 1) break;
 			}
@@ -131,13 +131,13 @@ class WitnessSetTypeOne : public WitnessSet {
 			}
 		};
 	};
-	BaseIterator begin() const {
+	BaseIterator begin() const override {
 		BaseIterator baseIterator(std::unique_ptr<AbstractIterator>(
 			new WitnessSetTypeOneIterator(this, -1)));
 		baseIterator++;
 		return baseIterator;
 	}
-	BaseIterator end() const {
+	BaseIterator end() const override {
 		BaseIterator baseIterator(std::unique_ptr<AbstractIterator>(
 			new WitnessSetTypeOneIterator(this, 8 * mask.size())));
 		return baseIterator;
@@ -189,23 +189,23 @@ class WitnessSetTypeTwo : public WitnessSet {
 	};
 
   public:
-	BaseIterator begin() const {
+	BaseIterator begin() const override {
 		BaseIterator baseIterator(std::unique_ptr<AbstractIterator>(
 			new WitnessSetTypeTwoIterator(container.begin())));
 		return baseIterator;
 	}
-	BaseIterator end() const {
+	BaseIterator end() const override {
 		BaseIterator baseIterator(std::unique_ptr<AbstractIterator>(
 			new WitnessSetTypeTwoIterator(container.end())));
 		return baseIterator;
 	}
-	virtual void insert(std::shared_ptr<Witness> w);
-	virtual void union_set_witness(std::shared_ptr<WitnessSet> witnessSet);
-	virtual void print();
+	void insert(std::shared_ptr<Witness> w) override;
+	void union_set_witness(std::shared_ptr<WitnessSet> witnessSet) override;
+	void print() override;
 	std::string witnessSetInformation() override;
-	virtual bool isLess(WitnessSet &rhs);
-	virtual bool isEqual(WitnessSet &rhs);
-	virtual int size();
+	bool isLess(WitnessSet &rhs) override;
+	bool isEqual(WitnessSet &rhs) override;
+	int size() override;
 	void hash(Hasher &h) const override;
 	virtual std::shared_ptr<WitnessSet> createEmptyWitnessSet() override {
 		return std::make_shared<WitnessSetTypeTwo<T>>();
