@@ -94,6 +94,7 @@ class WitnessSet { // data structure to store 'std::shared_ptr<Witness>'
 	virtual bool isLess(WitnessSet &rhs) = 0;
 	virtual int size() = 0;
 	virtual std::shared_ptr<WitnessSet> createEmptyWitnessSet() = 0;
+  virtual void setEqual(const WitnessSet &other) = 0;
 };
 
 using WitnessSetPointer = std::shared_ptr<WitnessSet>;
@@ -154,6 +155,7 @@ class WitnessSetTypeOne : public WitnessSet {
 		return std::make_shared<WitnessSetTypeOne<T>>();
 	}
 	int witnessVectorSize() { return witnessVector.size(); }
+  void setEqual(const WitnessSet &other) override;
 };
 
 template <class T>
@@ -210,6 +212,7 @@ class WitnessSetTypeTwo : public WitnessSet {
 	virtual std::shared_ptr<WitnessSet> createEmptyWitnessSet() override {
 		return std::make_shared<WitnessSetTypeTwo<T>>();
 	}
+  void setEqual(const WitnessSet &other) override;
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -330,6 +333,17 @@ int WitnessSetTypeOne<T>::size() {
 	return ret;
 }
 
+template <class T>
+void WitnessSetTypeOne<T>::setEqual(const WitnessSet &other) {
+  if (const WitnessSetTypeOne<T> *e =
+      dynamic_cast<const WitnessSetTypeOne<T> *>(&other)) {
+    *this = *e;
+  } else {
+    std::cerr << "Error: WitnessSetTypeOne::setEqual called with wrong type\n";
+    exit(20);
+  }
+}
+
 /////////////WitnessSet TYPE Two////////////////
 template <class T>
 void WitnessSetTypeTwo<T>::insert(std::shared_ptr<Witness> ws) {
@@ -410,4 +424,16 @@ template <class T>
 int WitnessSetTypeTwo<T>::size() {
 	return container.size();
 }
+
+template <class T>
+void WitnessSetTypeTwo<T>::setEqual(const WitnessSet &other) {
+  if (const WitnessSetTypeTwo<T> *e =
+      dynamic_cast<const WitnessSetTypeTwo<T> *>(&other)) {
+    *this = *e;
+  } else {
+    std::cerr << "Error: WitnessSetTypeTwo::setEqual called with wrong type\n";
+    exit(20);
+  }
+}
+
 #endif

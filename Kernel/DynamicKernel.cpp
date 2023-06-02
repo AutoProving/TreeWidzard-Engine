@@ -1,6 +1,7 @@
 #include "DynamicKernel.h"
 
 void DynamicKernel::addCore(DynamicCore& core) {
+      core.createInitialWitnessSet();
       cores.push_back(&core);
 }
 
@@ -11,7 +12,9 @@ State::ptr DynamicKernel::initialState() {
 	State *initialState = new State;
 	Bag emptyBag; // Empty
 	for (size_t k = 0; k < cores.size(); ++k) {
-		initialState->addWitnessSet(cores[k]->getInitialSet());
+    auto initialSet = cores[k]->getInitialSet();
+    assert(initialSet);
+		initialState->addWitnessSet(std::move(initialSet));
 	}
 	initialState->set_bag(emptyBag);
 	return std::shared_ptr<const State>(initialState);

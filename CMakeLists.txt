@@ -16,6 +16,8 @@ link_libraries(stdc++fs)
 set(CMAKE_EXE_LINKER_FLAGS "-static")
 set(CMAKE_EXE_LINKER_FLAGS "-rdynamic")
 
+#add_compile_options(-O0)
+#add_compile_options(-g3)
 #add_compile_options(-fsanitize=address)
 #add_compile_options(-fsanitize=undefined)
 #add_link_options(-fsanitize=address)

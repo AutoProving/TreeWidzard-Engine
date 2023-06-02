@@ -48,6 +48,7 @@ class DynamicCore {
 	// or a descendant of DynamicCore without overriding
 	// these methods
 	virtual void createInitialWitnessSet() = 0;
+  /*
 	virtual WitnessSetPointer intro_v(unsigned i, const Bag &b,
 									  const Witness &witness) = 0;
 	virtual WitnessSetPointer intro_e(unsigned i, unsigned j, const Bag &b,
@@ -57,19 +58,19 @@ class DynamicCore {
 	virtual WitnessSetPointer join(const Bag &b, const Witness &witness1,
 								   const Witness &witness2) = 0;
 	virtual bool is_final_witness(const Bag &b, const Witness &witness) = 0;
-	virtual WitnessSetPointer clean(WitnessSetPointer witnessSet) = 0;
-	virtual int inv(const Bag &b, const WitnessSetPointer witnessSet);
-	virtual int weight(const Bag &b, const Witness &witness);
+  */
+	virtual WitnessSetPointer clean(WitnessSetPointer witnessSet);
+	virtual int inv(const Bag &b, const WitnessSetPointer witnessSet) = 0;
 
-	WitnessSetPointer intro_v(unsigned i, const Bag &b,
-							  WitnessSetPointer witnessSet);
-	WitnessSetPointer intro_e(unsigned i, unsigned j, const Bag &b,
-							  WitnessSetPointer witnessSet);
-	WitnessSetPointer forget_v(unsigned i, const Bag &b,
-							   WitnessSetPointer witnessSet);
-	WitnessSetPointer join(const Bag &b, WitnessSetPointer witnessSet1,
-						   WitnessSetPointer witnessSet2);
-	bool is_final_witness_set(const Bag &b, WitnessSetPointer witnessSet);
+	virtual WitnessSetPointer intro_v(unsigned i, const Bag &b,
+							  WitnessSetPointer witnessSet) = 0;
+	virtual WitnessSetPointer intro_e(unsigned i, unsigned j, const Bag &b,
+							  WitnessSetPointer witnessSet) = 0;
+	virtual WitnessSetPointer forget_v(unsigned i, const Bag &b,
+							   WitnessSetPointer witnessSet) = 0;
+	virtual WitnessSetPointer join(const Bag &b, WitnessSetPointer witnessSet1,
+						   WitnessSetPointer witnessSet2) = 0;
+	virtual bool is_final_witness_set(const Bag &b, WitnessSetPointer witnessSet) = 0;
 };
 
 #endif
