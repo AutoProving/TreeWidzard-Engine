@@ -182,16 +182,10 @@ struct ChromaticNumber_AtMost_Core
     }
 	}
 
-	/**
-	 * Optional
-	 * Is used for treewidth, but not for pathwidth.
-	 *
-	 * Insert what the witness results from joining
-	 * w1 and w2 into the witnessSet.
-	 */
-
-	WitnessSetPointer join(const Bag &, const WitnessSetPointer ws_ptr1,
+	WitnessSetPointer join(const Bag &bag, const WitnessSetPointer ws_ptr1,
 						   WitnessSetPointer ws_ptr2) override {
+    //auto check = CoreWrapper<ChromaticNumber_AtMost_Core, ChromaticNumber_AtMost_Witness, WitnessSetTypeTwo>::join(bag, ws_ptr1, ws_ptr2);
+
     const auto &ws1 = as_witness_set(*ws_ptr1);
     const auto &ws2 = as_witness_set(*ws_ptr2);
     auto newWitnessSet = std::make_shared<WitnessSet>();
@@ -207,8 +201,39 @@ struct ChromaticNumber_AtMost_Core
     }
 
     clean_implementation(*newWitnessSet);
+
+    /*
+    if (*check != *newWitnessSet) {
+      std::cout << "join error\n";
+      std::cout << "ws1:\n";
+      for (auto w : ws1) {
+        WitnessAlias::as_witness(*w).witness_info(std::cout);
+      }
+      std::cout << "ws2:\n";
+      for (auto w : ws2) {
+        WitnessAlias::as_witness(*w).witness_info(std::cout);
+      }
+      std::cout << "check:\n";
+      for (auto w : *check) {
+        WitnessAlias::as_witness(*w).witness_info(std::cout);
+      }
+      std::cout << "newWitnessSet:\n";
+      for (auto w : *newWitnessSet) {
+        WitnessAlias::as_witness(*w).witness_info(std::cout);
+      }
+      assert(false);
+    }
+    */
     return newWitnessSet;
 	}
+
+	/**
+	 * Optional
+	 * Is used for treewidth, but not for pathwidth.
+	 *
+	 * Insert what the witness results from joining
+	 * w1 and w2 into the witnessSet.
+	 */
 	void join_implementation(const Bag &, const WitnessAlias &w1,
 							 const WitnessAlias &w2, WitnessSet &witnessSet) {
     assert(false); // unused due to specialization above

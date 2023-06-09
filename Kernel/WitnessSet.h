@@ -16,18 +16,30 @@ class AbstractIterator {
   public:
 	virtual const valueType dereference() = 0;
 	virtual void increment() = 0;
-	virtual void increment(int) = 0;
 	// virtual void decrement() = 0;
 	virtual bool isDifferent(AbstractIterator &rhs) = 0;
-	// virtual bool isEqual(AbstractIterator &rhs) = 0;
-	// virtual bool isLess(AbstractIterator &rhs) = 0;
+	// virtual bool isEqual(const AbstractIterator &rhs) = 0;
+	// virtual bool isLess(const AbstractIterator &rhs) = 0;
+  virtual std::unique_ptr<AbstractIterator> clone() = 0;
 	virtual ~AbstractIterator() = default;
 };
 
 class BaseIterator {
-  public:
+ public:
+  
+  using iterator_category = std::bidirectional_iterator_tag;
+  using value_type = const ::valueType;
+  using difference_type = std::ptrdiff_t;
+  using pointer = const ::valueType *;
+  using reference = const ::valueType &;
+
 	std::unique_ptr<AbstractIterator> it;
-	BaseIterator(const BaseIterator &iterator) { *it = *(iterator.it); };
+	BaseIterator(const BaseIterator &iterator) {
+    if (iterator.it)
+      it = iterator.it->clone();
+    else
+      it = nullptr;
+  };
 	BaseIterator(std::unique_ptr<AbstractIterator> it) {
 		this->it = std::move(it);
 	}
@@ -37,18 +49,29 @@ class BaseIterator {
 		it->increment();
 		return *this;
 	}
-	BaseIterator operator++(int i) {
-		it->increment(i);
-		return *this;
-	}
 
 	/*BaseIterator operator++(){
 		it->increment();
 		return *this;
 	}*/
-	bool operator!=(const BaseIterator &rhs) {
-		return it->isDifferent(*(rhs.it));
+	friend bool operator!=(const BaseIterator &lhs, const BaseIterator &rhs) {
+    if (!lhs.it || !rhs.it)
+      return bool(lhs.it) != bool(rhs.it);
+		return lhs.it->isDifferent(*rhs.it);
 	}
+
+  friend bool operator==(const BaseIterator &lhs, const BaseIterator &rhs) {
+		return !(lhs != rhs);
+  }
+
+  BaseIterator &operator=(const BaseIterator &rhs) {
+    if (rhs.it) {
+      it = rhs.it->clone();
+    } else {
+      it = nullptr;
+    }
+    return *this;
+  }
 
 	// bool operator<(BaseIterator &rhs){
 	//	return it->isLess(rhs->it);
@@ -135,7 +158,7 @@ class WitnessSetTypeOne : public WitnessSet {
 	BaseIterator begin() const override {
 		BaseIterator baseIterator(std::unique_ptr<AbstractIterator>(
 			new WitnessSetTypeOneIterator(this, -1)));
-		baseIterator++;
+		++baseIterator;
 		return baseIterator;
 	}
 	BaseIterator end() const override {
@@ -176,18 +199,20 @@ class WitnessSetTypeTwo : public WitnessSet {
 		WitnessSetTypeTwoIterator(
 			typename std::set<std::shared_ptr<Witness>, compare>::iterator it_)
 			: it(it_) {}
-		virtual const valueType dereference() { return *it; };
-		virtual void increment() { it++; };
-		virtual void increment(int) { it++; };
-		virtual bool isDifferent(AbstractIterator &rhs) {
+		const valueType dereference() override { return *it; };
+		void increment() override { ++it; };
+		bool isDifferent(AbstractIterator &rhs) override {
 			if (WitnessSetTypeTwoIterator *e =
 					dynamic_cast<WitnessSetTypeTwoIterator *>(&rhs)) {
 				return it != e->it;
-			}
-			std::cout << "WitnessSetTypeTwoIterator::isDifferent: Casting error"
-					  << std::endl;
-			exit(20);
+			} else {
+        std::cerr << "WitnessSetTypeTwoIterator::isDifferent: Casting error\n";
+        exit(20);
+      }
 		};
+    std::unique_ptr<AbstractIterator> clone() override {
+      return std::make_unique<WitnessSetTypeTwoIterator>(*this);
+    };
 	};
 
   public:

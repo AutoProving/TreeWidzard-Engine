@@ -18,7 +18,7 @@ std::shared_ptr<WitnessTreePACENode> WitnessTreePACE::generateNode(
 	std::vector<std::shared_ptr<Witness>> witnesses;
 	witnesses.resize(parent->witnesses.size());
 
-	for (size_t i = 0; i < parent->witnesses.size(); i++) {
+	for (size_t i = 0; i < parent->witnesses.size(); ++i) {
 		if (parent->witnesses[i]) {
 			if (strstr(parent->node_type.c_str(), "IntroVertex_")) {
 				std::set<unsigned> setDiff;
@@ -34,7 +34,7 @@ std::shared_ptr<WitnessTreePACENode> WitnessTreePACE::generateNode(
 				}
 				bool flag = false;
 				for (auto itr = q->getWitnessSet(i)->begin();
-					 itr != q->getWitnessSet(i)->end(); itr++) {
+					 itr != q->getWitnessSet(i)->end(); ++itr) {
 					if (flag) {
 						break;
 					} else {
@@ -46,7 +46,7 @@ std::shared_ptr<WitnessTreePACENode> WitnessTreePACE::generateNode(
 						std::shared_ptr<WitnessSet> w =
 							kernel.pointerToCoreNumber(i)->intro_v(
 								*setDiff.begin(), b, singleton);
-						for (auto t = w->begin(); t != w->end(); t++) {
+						for (auto t = w->begin(); t != w->end(); ++t) {
 							if (**t == *parent->witnesses[i]) {
 								witnesses[i] = *itr;
 								flag = true;
@@ -69,7 +69,7 @@ std::shared_ptr<WitnessTreePACENode> WitnessTreePACE::generateNode(
 				}
 				bool flag = false;
 				for (auto itr = q->getWitnessSet(i)->begin();
-					 itr != q->getWitnessSet(i)->end(); itr++) {
+					 itr != q->getWitnessSet(i)->end(); ++itr) {
 					if (flag) {
 						break;
 					} else {
@@ -81,7 +81,7 @@ std::shared_ptr<WitnessTreePACENode> WitnessTreePACE::generateNode(
 						std::shared_ptr<WitnessSet> w =
 							kernel.pointerToCoreNumber(i)->forget_v(
 								*setDiff.begin(), b, singleton);
-						for (auto t = w->begin(); t != w->end(); t++) {
+						for (auto t = w->begin(); t != w->end(); ++t) {
 							if (**t == *parent->witnesses[i]) {
 								witnesses[i] = *itr;
 								flag = true;
@@ -101,7 +101,7 @@ std::shared_ptr<WitnessTreePACENode> WitnessTreePACE::generateNode(
 				}
 				bool flag = false;
 				for (auto itr = q->getWitnessSet(i)->begin();
-					 itr != q->getWitnessSet(i)->end(); itr++) {
+					 itr != q->getWitnessSet(i)->end(); ++itr) {
 					if (flag) {
 						break;
 					} else {
@@ -113,7 +113,7 @@ std::shared_ptr<WitnessTreePACENode> WitnessTreePACE::generateNode(
 						std::shared_ptr<WitnessSet> w =
 							kernel.pointerToCoreNumber(i)->intro_e(
 								e.first, e.second, b, singleton);
-						for (auto t = w->begin(); t != w->end(); t++) {
+						for (auto t = w->begin(); t != w->end(); ++t) {
 							if (**t == *parent->witnesses[i]) {
 								witnesses[i] = *itr;
 								flag = true;
@@ -127,13 +127,13 @@ std::shared_ptr<WitnessTreePACENode> WitnessTreePACE::generateNode(
 					snode->get_parent()->get_children()[1 - joinno]->get_S();
 				bool flag = false;
 				for (auto itr = q->getWitnessSet(i)->begin();
-					 itr != q->getWitnessSet(i)->end(); itr++) {
+					 itr != q->getWitnessSet(i)->end(); ++itr) {
 					if (flag) {
 						break;
 					} else {
 						Bag b = q->get_bag();
 						std::shared_ptr<WitnessSet> nqw = nq->getWitnessSet(i);
-						for (auto it = nqw->begin(); it != nqw->end(); it++) {
+						for (auto it = nqw->begin(); it != nqw->end(); ++it) {
 							if (flag) {
 								break;
 							} else {
@@ -147,7 +147,7 @@ std::shared_ptr<WitnessTreePACENode> WitnessTreePACE::generateNode(
 								std::shared_ptr<WitnessSet> w =
 									kernel.pointerToCoreNumber(i)->join(
 										b, singleton1, singleton2);
-								for (auto t = w->begin(); t != w->end(); t++) {
+								for (auto t = w->begin(); t != w->end(); ++t) {
 									if (**t == *parent->witnesses[i]) {
 										witnesses[i] = *itr;
 										flag = true;
@@ -170,7 +170,7 @@ std::shared_ptr<WitnessTreePACENode> WitnessTreePACE::generateNode(
 	node->node_type = snode->get_nodeType();
 	node->witnesses = witnesses;
 	node->parent = parent;
-	for (size_t c = 0; c < snode->get_children().size(); c++) {
+	for (size_t c = 0; c < snode->get_children().size(); ++c) {
 		node->children.push_back(
 			generateNode(snode->get_children()[c], node, c, kernel));
 	}
@@ -185,9 +185,9 @@ bool WitnessTreePACE::stateTreeToWitnessTreePACE(StateTree &stateTree,
 	// q->get_witnessSetstd::vector();
 	std::vector<std::shared_ptr<Witness>> witnesses;
 	witnesses.resize(q->numberOfComponents());
-	for (size_t i = 0; i < q->numberOfComponents(); i++) {
+	for (size_t i = 0; i < q->numberOfComponents(); ++i) {
 		for (auto it = q->getWitnessSet(i)->begin();
-			 it != q->getWitnessSet(i)->end(); it++) {
+			 it != q->getWitnessSet(i)->end(); ++it) {
 
       auto singleton = q->getWitnessSet(i)->createEmptyWitnessSet();
       singleton->insert(*it);
@@ -205,7 +205,7 @@ bool WitnessTreePACE::stateTreeToWitnessTreePACE(StateTree &stateTree,
 	}
 	node->node_type = stateTree.root->get_nodeType();
 	node->witnesses = witnesses;
-	for (size_t c = 0; c < stateTree.root->get_children().size(); c++) {
+	for (size_t c = 0; c < stateTree.root->get_children().size(); ++c) {
 		node->children.push_back(
 			generateNode(stateTree.root->get_children()[c], node, c, kernel));
 	}
