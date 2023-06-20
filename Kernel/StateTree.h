@@ -3,15 +3,13 @@
 
 #include <string.h>
 #include <algorithm>
-#include <experimental/filesystem>
+#include <filesystem>
 #include <iostream>
 #include <vector>
 #include "../Multigraph/MultiGraph.h"
 #include "Bag.h"
 #include "DynamicKernel.h"
 #include "State.h"
-
-namespace state_fs = std::experimental::filesystem;
 
 class StateTreeNode : public std::enable_shared_from_this<StateTreeNode> {
   protected:

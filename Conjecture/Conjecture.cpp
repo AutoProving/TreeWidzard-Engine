@@ -39,9 +39,8 @@ double Conjecture::evaluateConjectureNodeOnState(const State &q,
 			if (node->getChildren().size() == 1) {
 				if (node->getChildren()[0]->getType() == CORE_VARIABLE) {
 					Bag bag = q.get_bag();
-					result =
-						kernel->getCoreByVar(node->getChildren()[0]->getVal())
-							->inv(bag, q.getWitnessSet(kernel->getIndexByVar(
+          auto core = kernel->getCoreByVar(node->getChildren()[0]->getVal());
+					result = core->inv(bag, q.getWitnessSet(kernel->getIndexByVar(
 										   node->getChildren()[0]->getVal())));
 					break;
 				} else {

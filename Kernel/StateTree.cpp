@@ -375,7 +375,7 @@ void StateTree::printITD() {
 
 void StateTree::writeToFile(std::string fileName) {
 	fileName = "Counterexample_StateTreeDec_" +
-			   state_fs::path(fileName).filename().string();
+			   std::filesystem::path(fileName).filename().string();
 	std::ofstream atdFile(fileName);
 	if (atdFile.is_open()) {
 		unsigned label = 0;

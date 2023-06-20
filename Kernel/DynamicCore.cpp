@@ -5,62 +5,6 @@
 
 WitnessSetPointer DynamicCore::getInitialSet() { return initialWitnessSet; }
 
-// TODO: Is it better to pass the set down
-// instead of taking union of many small?
-
-WitnessSetPointer DynamicCore::intro_v(unsigned i, const Bag &b,
-									   WitnessSetPointer witnessSet) {
-	WitnessSetPointer aux =
-		witnessSet->createEmptyWitnessSet(); // aux initializes with empty set
-	for (WitnessPointerConst temp : *witnessSet) {
-		aux->union_set_witness(intro_v(i, b, *temp));
-	}
-	return clean(aux);
-}
-
-WitnessSetPointer DynamicCore::intro_e(unsigned i, unsigned j, const Bag &b,
-									   WitnessSetPointer witnessSet) {
-	assert(witnessSet);
-	WitnessSetPointer aux =
-		witnessSet->createEmptyWitnessSet(); // aux initializes with empty set
-	for (WitnessPointerConst temp : *witnessSet) {
-		aux->union_set_witness(intro_e(i, j, b, *temp));
-	}
-	return clean(aux);
-}
-
-WitnessSetPointer DynamicCore::forget_v(unsigned i, const Bag &b,
-										WitnessSetPointer witnessSet) {
-	assert(witnessSet);
-	WitnessSetPointer aux =
-		witnessSet->createEmptyWitnessSet(); // aux initializes with empty set
-	for (WitnessPointerConst temp : *witnessSet) {
-		aux->union_set_witness(forget_v(i, b, *temp));
-	}
-	return clean(aux);
-}
-
-WitnessSetPointer DynamicCore::join(const Bag &b, WitnessSetPointer witnessSet1,
-									WitnessSetPointer witnessSet2) {
-	assert(witnessSet1);
-	assert(witnessSet2);
-	WitnessSetPointer aux = witnessSet1->createEmptyWitnessSet();
-	for (WitnessPointerConst temp1 : *witnessSet1) {
-		for (WitnessPointerConst temp2 : *witnessSet2) {
-			aux->union_set_witness(join(b, *temp1, *temp2));
-		}
-	}
-	return clean(aux);
-}
-
-bool DynamicCore::is_final_witness_set(const Bag &bag,
-									   WitnessSetPointer witnessSet) {
-	assert(witnessSet);
-	for (WitnessPointerConst temp : *witnessSet)
-		if (is_final_witness(bag, *temp)) return true;
-	return false;
-}
-
 WitnessSetPointer DynamicCore::clean(WitnessSetPointer witnessSet) {
 	// By default, if this function is not implemented by a derived class
 	// this function simply returns a pointer to the input witness set.
@@ -68,6 +12,7 @@ WitnessSetPointer DynamicCore::clean(WitnessSetPointer witnessSet) {
 	return witnessSet;
 }
 
+/*
 int DynamicCore::inv(const Bag &bag, const WitnessSetPointer witnessSet) {
 	// If CoreType is set to Max (or missing), return maximum weight in the set.
 	// If CoreType is set to Min, return minimum weight in the set.
@@ -93,10 +38,7 @@ int DynamicCore::inv(const Bag &bag, const WitnessSetPointer witnessSet) {
 
 	throw std::runtime_error("Unknown CoreType: " + it->second);
 }
-
-int DynamicCore::weight(const Bag &bag, const Witness &w) {
-	return is_final_witness(bag, w);
-}
+*/
 
 void DynamicCore::addAttribute(std::string x, std::string y) {
 	attributes.insert(make_pair(x, y));
