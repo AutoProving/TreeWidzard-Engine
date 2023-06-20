@@ -1,5 +1,7 @@
 #include "Bag.h"
 
+size_t Bag::size() const { return elements.size(); }
+
 void Bag::set_edge(unsigned i, unsigned j) {
 	if (i < j) {
 		Bag::i = i;
