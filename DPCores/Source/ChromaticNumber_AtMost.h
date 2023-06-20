@@ -182,7 +182,7 @@ struct ChromaticNumber_AtMost_Core
     }
 	}
 
-	WitnessSetPointer join(const Bag &bag, const WitnessSetPointer ws_ptr1,
+	WitnessSetPointer join(const Bag &, const WitnessSetPointer ws_ptr1,
 						   WitnessSetPointer ws_ptr2) override {
     //auto check = CoreWrapper<ChromaticNumber_AtMost_Core, ChromaticNumber_AtMost_Witness, WitnessSetTypeTwo>::join(bag, ws_ptr1, ws_ptr2);
 

@@ -8,6 +8,7 @@
 
 class TermNodeContentType{
 public:
+    virtual ~TermNodeContentType() = default;
     virtual void print();
     virtual std::string nodeInformation();
     /*  virtual std::shared_ptr<TermNodeContentType> smallestContent();

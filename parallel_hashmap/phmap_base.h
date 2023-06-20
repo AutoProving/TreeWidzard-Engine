@@ -220,6 +220,10 @@ struct conjunction<> : std::true_type {};
 // This metafunction is designed to be a drop-in replacement for the C++17
 // `std::disjunction` metafunction.
 // ---------------------------------------------------------------------------
+// [[ CHANGED IN TREEWIDZARD ]]
+// TreeWidzard already uses C++20 features, so we care more about
+// portability than compatibility with older compilers,
+// so the custom implementation is removed.
 template <typename... Ts>
 struct disjunction;
 
@@ -237,27 +241,16 @@ template <typename T>
 struct negation : std::integral_constant<bool, !T::value> {};
 
 template <typename T>
-struct is_trivially_destructible
-    : std::integral_constant<bool, __has_trivial_destructor(T) &&
-      std::is_destructible<T>::value> {};
+struct is_trivially_destructible : std::is_trivially_destructible<T> {};
 
 template <typename T>
-struct is_trivially_default_constructible
-    : std::integral_constant<bool, __has_trivial_constructor(T) &&
-                                   std::is_default_constructible<T>::value &&
-      is_trivially_destructible<T>::value> {};
+struct is_trivially_default_constructible : std::is_trivially_default_constructible<T> {};
 
 template <typename T>
-struct is_trivially_copy_constructible
-    : std::integral_constant<bool, __has_trivial_copy(T) &&
-                                   std::is_copy_constructible<T>::value &&
-      is_trivially_destructible<T>::value> {};
+struct is_trivially_copy_constructible : std::is_trivially_copy_constructible<T> {};
 
 template <typename T>
-struct is_trivially_copy_assignable
-    : std::integral_constant<
-          bool, __has_trivial_assign(typename std::remove_reference<T>::type) &&
-      phmap::is_copy_assignable<T>::value> {};
+struct is_trivially_copy_assignable : std::is_trivially_copy_assignable<T> {};
 
 // -----------------------------------------------------------------------------
 // C++14 "_t" trait aliases

@@ -102,10 +102,10 @@ add_executable(
         ConcreteTreeDecomposition/ctd_parser.cpp
         ConcreteTreeDecomposition/ctd_lexer.cpp
         # BitVector files
-        BitVector/BitVector.cpp
-        BitVector/BitVector.h
-        BitVector/BitSet.cpp
-        BitVector/BitSet.h
+        #BitVector/BitVector.cpp
+        #BitVector/BitVector.h
+        #BitVector/BitSet.cpp
+        #BitVector/BitSet.h
         # Translation
         Translation/PACE/TreeDecompositionPACE.cpp
         Translation/PACE/TreeDecompositionPACE.h

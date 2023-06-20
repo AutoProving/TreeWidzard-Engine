@@ -1592,7 +1592,7 @@ int ctd_constructBags(ConcreteTreeDecomposition &ctd, std::vector<std::tuple<std
     }else{
         for(auto n:ctdChildPos[nodeNum])
             if(!ctd_constructBags(ctd,ctdVec,ctdChildPos,n)) return 0;
-	    if(strstr(std::get<0>(ctdVec[nodeNum])->getNodeContent().getSymbol().c_str(),"IntroVertex")){
+        if(strstr(std::get<0>(ctdVec[nodeNum])->getNodeContent().getSymbol().c_str(),"IntroVertex")){
             int i = *(std::get<3>(ctdVec[nodeNum]).begin());
             int n = *(ctdChildPos[nodeNum].begin());
             if(std::get<0>(ctdVec[n])->getNodeContent().getBag().vertex_introducible(i)){

@@ -1,12 +1,9 @@
 #ifndef TREEWIDZARD_RUNTREE_H
 #define TREEWIDZARD_RUNTREE_H
-#include <experimental/filesystem>
 #include <fstream>
 #include <iostream>
 #include <memory>
 #include "Term.h"
-
-namespace run_fs = std::experimental::filesystem;
 
 template <class StateType, class TermNodeContent>
 class RunNodeContent : public TermNodeContentType {
@@ -54,7 +51,7 @@ class RunNodeContent : public TermNodeContentType {
 
 	bool operator>=(const RunNodeContent &rhs) const { return !(*this < rhs); }
 
-	void print() {
+	void print() override {
 		std::cout << "Term Node Content:" << std::endl;
 		runNodeContent.print();
 		std::cout << "State:" << std::endl;

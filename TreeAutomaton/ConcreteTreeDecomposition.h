@@ -10,7 +10,6 @@
 #include "RunTree.h"
 #include "DecompositionTree.h"
 
-namespace concrete_fs = std::experimental::filesystem;
 class InstructiveTreeDecompositionNodeContent;
 class InstructiveTreeDecomposition;
 class ConcreteNode : public TermNodeContentType
