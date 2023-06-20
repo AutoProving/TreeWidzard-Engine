@@ -58,7 +58,7 @@ TR_COMMENTS                : TR_COMMENT TR_COMMENTS
                            ;
 %%
 template<class S>
-void yyerror(Term<S> &term, int &result, char const* msg){
+void yyerror(Term<S> &/*term*/, int &/*result*/, char const* msg){
   std::cout<<"Syntax Error: "<< msg << " " <<term_lineno << std::endl;
   // error printing  disabled, it is handeled in main.cpp 
 }

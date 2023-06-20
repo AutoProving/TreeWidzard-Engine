@@ -35,96 +35,90 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_CTD_CTD_PARSER_TAB_H_INCLUDED
-# define YY_CTD_CTD_PARSER_TAB_H_INCLUDED
+#ifndef YY_CTD_CTD_PARSER_HPP_INCLUDED
+#define YY_CTD_CTD_PARSER_HPP_INCLUDED
 /* Debug traces.  */
 #ifndef CTD_DEBUG
-# if defined YYDEBUG
+#if defined YYDEBUG
 #if YYDEBUG
-#   define CTD_DEBUG 1
-#  else
-#   define CTD_DEBUG 0
-#  endif
-# else /* ! defined YYDEBUG */
-#  define CTD_DEBUG 0
-# endif /* ! defined YYDEBUG */
-#endif  /* ! defined CTD_DEBUG */
+#define CTD_DEBUG 1
+#else
+#define CTD_DEBUG 0
+#endif
+#else /* ! defined YYDEBUG */
+#define CTD_DEBUG 0
+#endif /* ! defined YYDEBUG */
+#endif /* ! defined CTD_DEBUG */
 #if CTD_DEBUG
 extern int ctd_debug;
 #endif
 /* "%code requires" blocks.  */
 #line 3 "ctd_parser.y"
 
-    #include "../TreeAutomaton/ConcreteTreeDecomposition.h"
-    #include <iostream>
-    #include <vector>
-    #include <memory>
-    #include <set>
-    #include <tuple>
+#include <iostream>
+#include <memory>
+#include <set>
+#include <tuple>
+#include <vector>
+#include "../TreeAutomaton/ConcreteTreeDecomposition.h"
 
-#line 66 "ctd_parser.tab.h"
+#line 66 "ctd_parser.hpp"
 
 /* Token kinds.  */
 #ifndef CTD_TOKENTYPE
-# define CTD_TOKENTYPE
-  enum ctd_tokentype
-  {
-    //CTD_EMPTY = -2,
-    CTD_EOF = 0,                   /* "end of file"  */
-    CTD_error = 256,               /* error  */
-    CTD_UNDEF = 257,               /* "invalid token"  */
-    CTD_NUM = 258,                 /* CTD_NUM  */
-    CTD_COMMENT = 259,             /* CTD_COMMENT  */
-    CTD_NEWLINE = 260,             /* CTD_NEWLINE  */
-    CTD_EMPTY = 261,               /* CTD_EMPTY  */
-    CTD_INTROVERTEX = 262,         /* CTD_INTROVERTEX  */
-    CTD_INTROEDGE = 263,           /* CTD_INTROEDGE  */
-    CTD_FORGETVERTEX = 264,        /* CTD_FORGETVERTEX  */
-    CTD_JOIN = 265,                /* CTD_JOIN  */
-    CTD_LEFTP = 266,               /* CTD_LEFTP  */
-    CTD_RIGHTP = 267,              /* CTD_RIGHTP  */
-    CTD_SEP1 = 268,                /* CTD_SEP1  */
-    CTD_SEP2 = 269                 /* CTD_SEP2  */
-  };
-  typedef enum ctd_tokentype ctd_token_kind_t;
+#define CTD_TOKENTYPE
+enum ctd_tokentype {
+	// CTD_EMPTY = -2,
+	CTD_EOF = 0,			/* "end of file"  */
+	CTD_error = 256,		/* error  */
+	CTD_UNDEF = 257,		/* "invalid token"  */
+	CTD_NUM = 258,			/* CTD_NUM  */
+	CTD_COMMENT = 259,		/* CTD_COMMENT  */
+	CTD_NEWLINE = 260,		/* CTD_NEWLINE  */
+	CTD_EMPTY = 261,		/* CTD_EMPTY  */
+	CTD_INTROVERTEX = 262,	/* CTD_INTROVERTEX  */
+	CTD_INTROEDGE = 263,	/* CTD_INTROEDGE  */
+	CTD_FORGETVERTEX = 264, /* CTD_FORGETVERTEX  */
+	CTD_JOIN = 265,			/* CTD_JOIN  */
+	CTD_LEFTP = 266,		/* CTD_LEFTP  */
+	CTD_RIGHTP = 267,		/* CTD_RIGHTP  */
+	CTD_SEP1 = 268,			/* CTD_SEP1  */
+	CTD_SEP2 = 269			/* CTD_SEP2  */
+};
+typedef enum ctd_tokentype ctd_token_kind_t;
 #endif
 
 /* Value type.  */
-#if ! defined CTD_STYPE && ! defined CTD_STYPE_IS_DECLARED
-union CTD_STYPE
-{
+#if !defined CTD_STYPE && !defined CTD_STYPE_IS_DECLARED
+union CTD_STYPE {
 #line 36 "ctd_parser.y"
 
-     unsigned number;
-     char* string;
+	unsigned number;
+	char *string;
 
-#line 102 "ctd_parser.tab.h"
-
+#line 102 "ctd_parser.hpp"
 };
 typedef union CTD_STYPE CTD_STYPE;
-# define CTD_STYPE_IS_TRIVIAL 1
-# define CTD_STYPE_IS_DECLARED 1
+#define CTD_STYPE_IS_TRIVIAL 1
+#define CTD_STYPE_IS_DECLARED 1
 #endif
 
 /* Location type.  */
-#if ! defined CTD_LTYPE && ! defined CTD_LTYPE_IS_DECLARED
+#if !defined CTD_LTYPE && !defined CTD_LTYPE_IS_DECLARED
 typedef struct CTD_LTYPE CTD_LTYPE;
-struct CTD_LTYPE
-{
-  int first_line;
-  int first_column;
-  int last_line;
-  int last_column;
+struct CTD_LTYPE {
+	int first_line;
+	int first_column;
+	int last_line;
+	int last_column;
 };
-# define CTD_LTYPE_IS_DECLARED 1
-# define CTD_LTYPE_IS_TRIVIAL 1
+#define CTD_LTYPE_IS_DECLARED 1
+#define CTD_LTYPE_IS_TRIVIAL 1
 #endif
-
 
 extern CTD_STYPE ctd_lval;
 extern CTD_LTYPE ctd_lloc;
 
-int ctd_parse (ConcreteTreeDecomposition  &ctd, int &result);
+int ctd_parse(ConcreteTreeDecomposition &ctd, int &result);
 
-
-#endif /* !YY_CTD_CTD_PARSER_TAB_H_INCLUDED  */
+#endif /* !YY_CTD_CTD_PARSER_HPP_INCLUDED  */

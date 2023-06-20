@@ -3,20 +3,18 @@
 
 #include <string.h>
 #include <algorithm>
+#include <filesystem>
 #include <iostream>
 #include <vector>
-#include <experimental/filesystem>
 #include "../Multigraph/MultiGraph.h"
 #include "Bag.h"
 #include "DynamicKernel.h"
 #include "State.h"
 
-namespace state_fs = std::experimental::filesystem;
-
 class StateTreeNode : public std::enable_shared_from_this<StateTreeNode> {
   protected:
-	std::string nodeType;							// Default: "Empty"
-	State::ptr S;								// Default: Empty State
+	std::string nodeType;							 // Default: "Empty"
+	State::ptr S;									 // Default: Empty State
 	std::shared_ptr<StateTreeNode> parent = nullptr; // Default Value
 	std::vector<std::shared_ptr<StateTreeNode>> children; // Default: no child
 	std::shared_ptr<DynamicKernel> kernel;
@@ -25,8 +23,11 @@ class StateTreeNode : public std::enable_shared_from_this<StateTreeNode> {
 	// Constructors
 	StateTreeNode();
 	StateTreeNode(std::string nodeType, State::ptr s);
-	StateTreeNode(std::string nodeType, State::ptr s, std::vector<std::shared_ptr<StateTreeNode>> children);
-	StateTreeNode(std::string nodeType, State::ptr s, std::vector<std::shared_ptr<StateTreeNode>> children, std::shared_ptr<DynamicKernel>);
+	StateTreeNode(std::string nodeType, State::ptr s,
+				  std::vector<std::shared_ptr<StateTreeNode>> children);
+	StateTreeNode(std::string nodeType, State::ptr s,
+				  std::vector<std::shared_ptr<StateTreeNode>> children,
+				  std::shared_ptr<DynamicKernel>);
 
 	// Get Functions
 	std::string get_nodeType();
@@ -42,7 +43,7 @@ class StateTreeNode : public std::enable_shared_from_this<StateTreeNode> {
 	void set_kernel(std::shared_ptr<DynamicKernel> kernel);
 	// Print Functions
 	std::string printStateTreeNode(); // prints the State
-	std::string printAbstract();	// Prints the State type
+	std::string printITD();			  // Prints the State type
 	// Decomposition Functions
 	StateTreeNode introVertex(unsigned i);
 	StateTreeNode forgetVertex(unsigned i);
@@ -55,27 +56,30 @@ typedef std::shared_ptr<StateTreeNode> StateTreeNodePointer;
 class StateTree {
   public:
 	StateTreeNodePointer root;
-	void traverseNode(StateTreeNode &node, MultiGraph &G, std::map<unsigned, unsigned> &colorToVertexMap,
+	void traverseNode(StateTreeNode &node, MultiGraph &G,
+					  std::map<unsigned, unsigned> &colorToVertexMap,
 					  unsigned &nVertices, unsigned &nEdges);
 	MultiGraph extractMultiGraph();
 	///////
-	std::string printAbstractRecursive(StateTreeNode &node, unsigned &label); // This prints the tree recursively
-	void printAbstract(); // This prints the tree of State Types
+	std::string printITDRecursive(
+		StateTreeNode &node,
+		unsigned &label); // This prints the tree recursively
+	void printITD();	  // This prints the tree of State Types
 	std::string printTreeRecursive(StateTreeNode &node, unsigned &label);
 	void printStateTree();
 	void writeToFile(std::string fileName);
 
-//	bool readToken(string::iterator &it, string token);
-//	unsigned readInteger( string::iterator &it); // Reads a string, if the string starts with integers then it
-//				  // returns integers else return -1. Ex "123v" returns 123
-//	StateTreeNodePointer readStateTreeExpressionRecursive(
-//		string::iterator &it, string::iterator end,
-//		vector<StateTreeNodePointer> &v,
-//		DynamicKernel &kernel); // Reads Abstract Tree Decomposition recursively
-//	void readStateTree(
-//		string s,
-//		DynamicKernel &kernel); // Reads State Tree Decomposition from File
-//	void readConcrete();		// Reads Concrete Tree Decomposition
+	//	bool readToken(string::iterator &it, string token);
+	//	unsigned readInteger( string::iterator &it); // Reads a string, if the
+	//string starts with integers then it
+	//				  // returns integers else return -1. Ex "123v" returns 123
+	//	StateTreeNodePointer readStateTreeExpressionRecursive(
+	//		string::iterator &it, string::iterator end,
+	//		vector<StateTreeNodePointer> &v,
+	//		DynamicKernel &kernel); // Reads Instructive Tree Decomposition
+	//recursively 	void readStateTree( 		string s, 		DynamicKernel &kernel); // Reads
+	//State Tree Decomposition from File 	void readConcrete();		// Reads
+	//Concrete Tree Decomposition
 };
 
 #endif

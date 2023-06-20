@@ -103,7 +103,7 @@
     int ctd_constructBags(ConcreteTreeDecomposition &ctd, std::vector<std::tuple<std::shared_ptr<TermNode<ConcreteNode>>,std::set<int>,int,std::set<int>>> &ctdVec,std::vector<std::set<int>> &ctdChildPos, int nodeNum);
   
 
-#line 107 "ctd_parser.tab.c"
+#line 107 "ctd_parser.cpp"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -1242,7 +1242,7 @@ yyreduce:
   case 2: /* CTD_START: CTD_NODE  */
 #line 54 "ctd_parser.y"
                                                                  {int r = ctd_construct(ctd, ctdVec, ctdChildPos); if(r==-1){YYERROR;}; if(!ctd_constructBags(ctd,ctdVec,ctdChildPos,r)){YYERROR;}}
-#line 1246 "ctd_parser.tab.c"
+#line 1246 "ctd_parser.cpp"
     break;
 
   case 3: /* CTD_NODE: CTD_COMMENTS CTD_NUM CTD_EMPTY CTD_NODES  */
@@ -1255,7 +1255,7 @@ yyreduce:
                                                                         std::set<int> children; ctdVec.push_back(std::make_tuple(node,children,(yyvsp[-2].number),elements));
                                                                         std::set<int> childPos; ctdChildPos.push_back(childPos);
                                                                         }
-#line 1259 "ctd_parser.tab.c"
+#line 1259 "ctd_parser.cpp"
     break;
 
   case 4: /* CTD_NODE: CTD_COMMENTS CTD_NUM CTD_INTROVERTEX CTD_SEP1 CTD_NUM CTD_LEFTP CTD_NUM CTD_RIGHTP CTD_NODES  */
@@ -1269,7 +1269,7 @@ yyreduce:
 														        ctdVec.push_back(std::make_tuple(node,children,(yyvsp[-7].number),elements));
 														        std::set<int> childPos; ctdChildPos.push_back(childPos);
 														        }
-#line 1273 "ctd_parser.tab.c"
+#line 1273 "ctd_parser.cpp"
     break;
 
   case 5: /* CTD_NODE: CTD_COMMENTS CTD_NUM CTD_INTROEDGE CTD_SEP1 CTD_NUM CTD_SEP1 CTD_NUM CTD_LEFTP CTD_NUM CTD_RIGHTP CTD_NODES  */
@@ -1283,7 +1283,7 @@ yyreduce:
 																   	ctdVec.push_back(std::make_tuple(node,children,(yyvsp[-9].number),elements));
 																   	std::set<int> childPos; ctdChildPos.push_back(childPos);
 																   	}
-#line 1287 "ctd_parser.tab.c"
+#line 1287 "ctd_parser.cpp"
     break;
 
   case 6: /* CTD_NODE: CTD_COMMENTS CTD_NUM CTD_FORGETVERTEX CTD_SEP1 CTD_NUM CTD_LEFTP CTD_NUM CTD_RIGHTP CTD_NODES  */
@@ -1297,7 +1297,7 @@ yyreduce:
 														       	ctdVec.push_back(std::make_tuple(node,children,(yyvsp[-7].number),elements));
 														       	std::set<int> childPos; ctdChildPos.push_back(childPos);
 														       }
-#line 1301 "ctd_parser.tab.c"
+#line 1301 "ctd_parser.cpp"
     break;
 
   case 7: /* CTD_NODE: CTD_COMMENTS CTD_NUM CTD_JOIN CTD_LEFTP CTD_NUM CTD_SEP2 CTD_NUM CTD_RIGHTP CTD_NODES  */
@@ -1311,17 +1311,17 @@ yyreduce:
                                                                                                                	ctdVec.push_back(std::make_tuple(node,children,(yyvsp[-7].number),elements));
                                                                                                                	std::set<int> childPos; ctdChildPos.push_back(childPos);
                                                                                                                	}
-#line 1315 "ctd_parser.tab.c"
+#line 1315 "ctd_parser.cpp"
     break;
 
   case 11: /* CTD_COMMENTS: CTD_COMMENT CTD_NEWLINE CTD_COMMENTS  */
 #line 105 "ctd_parser.y"
                                                                                                                {}
-#line 1321 "ctd_parser.tab.c"
+#line 1321 "ctd_parser.cpp"
     break;
 
 
-#line 1325 "ctd_parser.tab.c"
+#line 1325 "ctd_parser.cpp"
 
       default: break;
     }
@@ -1522,20 +1522,20 @@ yyreturnlab:
 #line 110 "ctd_parser.y"
 
 
-void yyerror(ConcreteTreeDecomposition &ctd, int &result, char const* msg){
+void yyerror(ConcreteTreeDecomposition &/*ctd*/, int &/*result*/, char const* msg){
   std::cerr<<"Syntax Error: "<< msg << " on line " <<ctd_lineno << std::endl;
   // error printing  disabled, it is handeled in main.cpp
 }
 
 int ctd_construct(ConcreteTreeDecomposition &ctd, std::vector<std::tuple<std::shared_ptr<TermNode<ConcreteNode>>,std::set<int>,int,std::set<int>>> &ctdVec,std::vector<std::set<int>> &ctdChildPos){
-    for(int k = 0 ; k < ctdVec.size(); k++){
+    for(size_t k = 0 ; k < ctdVec.size(); k++){
         /*cout<<std::get<2>(ctdVec[k])<< " " << std::get<0>(ctdVec[k])->get_nodeType()<< " ";
         for(auto e:std::get<1>(ctdVec[k])){
             cout<<e<<" ";
         }
         cout<<std::endl;*/
         std::vector<std::shared_ptr<TermNode<ConcreteNode>>> children;
-        for(int i = 0 ; i < ctdVec.size();i++){
+        for(size_t i = 0 ; i < ctdVec.size();i++){
             if( std::get<1>(ctdVec[k]).count(std::get<2>(ctdVec[i]))){
                 std::get<0>(ctdVec[i])->setParent(std::get<0>(ctdVec[k]));
                 children.push_back(std::get<0>(ctdVec[i]));
@@ -1567,7 +1567,7 @@ int ctd_construct(ConcreteTreeDecomposition &ctd, std::vector<std::tuple<std::sh
     }
     // Find root
     std::set<int> rootIndex;
-    for(int i=0; i< ctdVec.size();i++){
+    for(size_t i=0; i< ctdVec.size();i++){
         if(std::get<0>(ctdVec[i])->getParent()==nullptr){
             rootIndex.insert(i);
         }

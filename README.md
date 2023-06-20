@@ -1,77 +1,51 @@
-# TreeWidzard Installation
+# TreeWidzard
 
-## Installing TreeWidzard in a machine running Linux
+## Installation
 
 All commands below should be executed in a Linux terminal. For instance, in Ubuntu to open a terminal click in ``activities`` and then type ``terminal``.
 
-#### Requirements
+### Requirements
 The following software are assumed to be installed on your machine:
 
-1- GCC/11.2.0 or a later version
+1- A C++20 compiler (tested with GCC/11.2.0, should also work with any later version)
 
-2- CMake/3.12.1 or a later version
+2- CMake/3.0.0 or a later version
 
-#### Downloading TreeWidzard
+### First Installation
 
-There are two main ways of downloading TreeWidzard.
-
-1- Cloning from GitHub:
+Clone from GitHub:
 ```commandline
-git clone https://github.com/AutoProving/treewidzard.git
+git clone https://github.com/AutoProving/TreeWidzard-Release
 ```
 
-2- You can also download the zip file of TreeWidzard's repository.
-
-Download the zip file:
+Move into the TreeWidzard directory:
 ```commandline
-wget https://github.com/AutoProving/treewidzard/archive/refs/heads/main.zip TreeWizard
+cd TreeWidzard-Release
 ```
 
-Extract the files from the zip file:
+Configure build directory using CMake (here with the build directory named `Build`):
 ```commandline
-unzip TreeWidzard-main.zip 
+cmake -BBuild
 ```
 
-Rename the directory to TreeWidzard
-
+Compile the program:
 ```commandline
-mv TreeWidzard-main TreeWidzard
+cmake --build Build
 ```
 
-#### Compiling TreeWidzard
-
-1- Enter the directory of TreeWidzard
-
+### Updating
+Download any changes to the bundling code itself:
 ```commandline
-cd TreeWidzard
+git pull
 ```
 
-2- Create a folder called ``Build``. This is the folder where the files will be compiled and where TreeWidzard's executable file will be created.
-
+For recompiling, run this again:
 ```commandline
-mkdir Build
+cmake --build Build
 ```
 
-3- Enter the ``Build`` folder
-
-```commandline
-cd Build
+## Running TreeWidzard
+To print usage:
 ```
-
-4- Run ``cmake``
-
-```commandline
-cmake ..
+./Build/treewidzard --help
 ```
-
-5- Run ``make``. This command creates TreeWidzard's executable file.
-
-```commandline
-make
-```
-
-#### Executing TreeWidzard
-
-Execute ``./treewidzard --help`` to obtain a list of instructions on how to use TreeWidzard to model check properties or to test conjectures.
-
-

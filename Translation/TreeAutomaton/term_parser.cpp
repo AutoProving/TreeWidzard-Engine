@@ -94,7 +94,7 @@
     extern void yyerror(Term<S> &term, int &result, char const* msg);
   
 
-#line 98 "term_parser.tab.c"
+#line 98 "term_parser.cpp"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -1214,11 +1214,11 @@ yyreduce:
   case 2: /* TR_START: TR_NODES_INFO1  */
 #line 41 "term_parser.y"
                                                                        {std::cout<<"hello"<<std::endl;}
-#line 1218 "term_parser.tab.c"
+#line 1218 "term_parser.cpp"
     break;
 
 
-#line 1222 "term_parser.tab.c"
+#line 1222 "term_parser.cpp"
 
       default: break;
     }
@@ -1419,7 +1419,7 @@ yyreturnlab:
 #line 59 "term_parser.y"
 
 template<class S>
-void yyerror(Term<S> &term, int &result, char const* msg){
+void yyerror(Term<S> &/*term*/, int &/*result*/, char const* msg){
   std::cout<<"Syntax Error: "<< msg << " " <<term_lineno << std::endl;
   // error printing  disabled, it is handeled in main.cpp 
 }

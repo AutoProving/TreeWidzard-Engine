@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_ATD_ATD_PARSER_TAB_H_INCLUDED
-# define YY_ATD_ATD_PARSER_TAB_H_INCLUDED
+#ifndef YY_ATD_ATD_PARSER_HPP_INCLUDED
+# define YY_ATD_ATD_PARSER_HPP_INCLUDED
 /* Debug traces.  */
 #ifndef ATD_DEBUG
 # if defined YYDEBUG
@@ -55,7 +55,7 @@ extern int atd_debug;
 /* "%code requires" blocks.  */
 #line 3 "atd_parser.y"
 
-    #include "../../../TreeAutomaton/AbstractTreeDecomposition.h"
+    #include "../../../TreeAutomaton/InstructiveTreeDecomposition.h"
     #include <iostream>
     #include <vector>
     #include <memory>
@@ -63,7 +63,7 @@ extern int atd_debug;
     #include <set>
     #include <tuple>
 
-#line 67 "atd_parser.tab.h"
+#line 67 "atd_parser.hpp"
 
 /* Token kinds.  */
 #ifndef ATD_TOKENTYPE
@@ -99,7 +99,7 @@ union ATD_STYPE
      unsigned number;
      char* string;
 
-#line 103 "atd_parser.tab.h"
+#line 103 "atd_parser.hpp"
 
 };
 typedef union ATD_STYPE ATD_STYPE;
@@ -125,7 +125,7 @@ struct ATD_LTYPE
 extern ATD_STYPE atd_lval;
 extern ATD_LTYPE atd_lloc;
 
-int atd_parse (AbstractTreeDecomposition  &atd, int &result);
+int atd_parse (InstructiveTreeDecomposition  &atd, int &result);
 
 
-#endif /* !YY_ATD_ATD_PARSER_TAB_H_INCLUDED  */
+#endif /* !YY_ATD_ATD_PARSER_HPP_INCLUDED  */

@@ -7,8 +7,8 @@ LargeBitVector<Type>::LargeBitVector(unsigned int wordSize,
 	unsigned int wsBits = this->countNumberOfBits(wordSize);
 	unsigned int mxBits = this->countNumberOfBits(maximumSize);
 
-	int sz = (wsBits << 1) + (mxBits << 2) + 6;
-	for (int i = 0; i < sz; i++) this->array.push_back(0);
+	unsigned int sz = (wsBits << 1) + (mxBits << 2) + 6;
+	for (unsigned int i = 0; i < sz; i++) this->array.push_back(0);
 
 	unsigned int pointer = 0;
 	pointer = writeOnHeader(pointer, wordSize, wsBits);
@@ -56,7 +56,7 @@ template <class Type>
 unsigned int LargeBitVector<Type>::writeOnHeader(unsigned int pointer,
 												 unsigned int value,
 												 unsigned int b) {
-	for (int i = 0; i < b; i++) {
+	for (unsigned int i = 0; i < b; i++) {
 		if (value & (1 << i)) {
 			this->array.set(1, pointer);
 			this->array.set(0, pointer + 1);
@@ -153,7 +153,7 @@ BitSet LargeBitVector<Type>::toBits(int value) {
 }
 
 template <class Type>
-int LargeBitVector<Type>::fromBits(BitSet &v, int dummy) const {
+int LargeBitVector<Type>::fromBits(BitSet &v, int /*dummy*/) const {
 	unsigned int sz = this->getWordSize();
 	int value = 0;
 	for (size_t i = 0; i < sz; i++)
@@ -183,9 +183,9 @@ BitSet LargeBitVector<Type>::toBits(std::pair<int, int> value) {
 
 template <class Type>
 std::pair<int, int> LargeBitVector<Type>::fromBits(
-	BitSet &v, std::pair<int, int> dummy) const {
+	BitSet &v, std::pair<int, int> /*dummy*/) const {
 	std::pair<int, int> value = std::make_pair(0, 0);
-	int sz = this->getWordSize() >> 1;
+	unsigned int sz = this->getWordSize() >> 1;
 	for (size_t i = 0; i < sz; i++)
 		if (v.at(i) == 1) value.first += (1 << i);
 	for (size_t i = 0; i < sz; i++)
@@ -202,10 +202,10 @@ void LargeBitVector<Type>::push_back(Type element) {
 
 template <class Type>
 Type LargeBitVector<Type>::at(int index) const {
-	int b = this->getFirstBit() + index * this->getWordSize();
+	unsigned int b = this->getFirstBit() + index * this->getWordSize();
 
 	BitSet v(this->getWordSize());
-	int sz = b + this->getWordSize();
+	unsigned int sz = b + this->getWordSize();
 	for (size_t i = b, j = 0; i < sz; i++, j++) v.set(this->array.at(i), j);
 	Type dummy;
 	return this->fromBits(v, dummy);
@@ -213,9 +213,9 @@ Type LargeBitVector<Type>::at(int index) const {
 
 template <class Type>
 void LargeBitVector<Type>::set(Type element, int index) {
-	int b = this->getFirstBit() + index * this->getWordSize();
+	unsigned int b = this->getFirstBit() + index * this->getWordSize();
 	BitSet v = toBits(element);
-	int sz = b + this->getWordSize();
+	unsigned int sz = b + this->getWordSize();
 	for (size_t i = b, j = 0; i < sz; i++, j++) this->array.set(v.at(j), i);
 }
 
@@ -267,7 +267,8 @@ void LargeBitVector<Type>::remove(unsigned int index) {
 	for (int i = b; i < e; i++)
 		this->array.set(this->array.at(i + this->getWordSize()), i);
 	this->decrementSize();
-	for (int i = 0; i < this->getWordSize(); i++) this->array.pop_back();
+	for (unsigned int i = 0; i < this->getWordSize(); i++)
+		this->array.pop_back();
 }
 
 template <class Type>
@@ -324,7 +325,7 @@ bool LargeBitVector<Type>::binarySearch(Type value) {
 
 template <class Type>
 bool LargeBitVector<Type>::find(Type value) {
-	for (int i = 0; i < this->size(); i++)
+	for (unsigned int i = 0; i < this->size(); i++)
 		if (this->at(i) == value) return true;
 	return false;
 }
@@ -349,13 +350,14 @@ LargeBitVector<Type> LargeBitVector<Type>::intersectionSets(
 
 template <class Type>
 void LargeBitVector<Type>::insertSorted(Type value) {
-	int k = this->size();
-	for (int i = 0; i < this->size(); i++)
+	unsigned int k = this->size();
+	for (unsigned int i = 0; i < this->size(); i++)
 		if (value <= this->at(i)) {
 			k = i;
 			break;
 		}
-	for (int i = 0; i < this->getWordSize(); i++) this->array.push_back(0);
+	for (unsigned int i = 0; i < this->getWordSize(); i++)
+		this->array.push_back(0);
 
 	this->incrementSize();
 
@@ -367,8 +369,9 @@ void LargeBitVector<Type>::insertSorted(Type value) {
 
 	BitSet v = this->toBits(value);
 
-	int sz = b + this->getWordSize();
-	for (int i = b, j = 0; i < sz; i++, j++) this->array.set(v.at(j), i);
+	unsigned int sz = b + this->getWordSize();
+	for (unsigned int i = b, j = 0; i < sz; i++, j++)
+		this->array.set(v.at(j), i);
 }
 
 template <class Type>
@@ -376,7 +379,7 @@ bool LargeBitVector<Type>::operator==(const LargeBitVector<Type> &aux) const {
 	if (this->size() != aux.size()) return false;
 	// this->sort(true);
 	// aux.sort(true);
-	for (int i = 0; i < this->size(); i++)
+	for (unsigned int i = 0; i < this->size(); i++)
 		if (this->at(i) != aux.at(i)) return false;
 	return true;
 }
@@ -399,7 +402,7 @@ template <class Type>
 void LargeBitVector<Type>::normalize() {
 	LargeBitVector<Type> aux(this->getWordSize(), 1);
 	this->sort(true);
-	for (int i = 0; i < this->size(); i++)
+	for (unsigned int i = 0; i < this->size(); i++)
 		if (aux.size() == 0 or aux.back() != this->at(i))
 			aux.push_back(this->at(i));
 	this->array = aux.array;
@@ -411,7 +414,7 @@ LargeBitVector<Type> LargeBitVector<Type>::differenceSets(
 	this->sort(true);
 	aux.sort(true);
 	LargeBitVector<Type> diffSets(this->getWordSize(), 1);
-	for (int i = 0; i < this->size(); i++)
+	for (unsigned int i = 0; i < this->size(); i++)
 		if (aux.binarySearch(this->at(i)) == false)
 			diffSets.push_back(this->at(i));
 	return diffSets;

@@ -11,8 +11,8 @@
 #include "DecompositionTree.h"
 
 namespace concrete_fs = std::experimental::filesystem;
-class AbstractTreeDecompositionNodeContent;
-class AbstractTreeDecomposition;
+class InstructiveTreeDecompositionNodeContent;
+class InstructiveTreeDecomposition;
 class ConcreteNode : public TermNodeContentType
 {
     private :
@@ -39,8 +39,8 @@ class ConcreteTreeDecomposition: public Term<ConcreteNode> {
         void buildDecompositionBags(std::shared_ptr<DecompositionNode> node,TermNode<ConcreteNode> &cNode, std::map<unsigned, unsigned> &colorToVertexMap, unsigned &nVertices);
         Decomposition extractDecomposition(); // extract decomposition tree
         // note: extractMultiGraph() and extractDecomposition() should have the same algorithm because of the labels.
-        std::shared_ptr<TermNode<AbstractTreeDecompositionNodeContent>> constructATDNode(TermNode<ConcreteNode> &node);
-        AbstractTreeDecomposition convertToAbstractTreeDecomposition();
+        std::shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>> constructATDNode(TermNode<ConcreteNode> &node);
+        InstructiveTreeDecomposition convertToInstructiveTreeDecomposition();
         void writeToFile(std::string fileName);
         std::shared_ptr<TermNode<RunNodeContent<State::ptr,ConcreteNode>>> constructWitnesses(Conjecture &conjecture, std::shared_ptr<TermNode<ConcreteNode>> node, Flags &flags, std::string &str);
         bool conjectureCheck(Conjecture &conjecture, Flags &flags, std::string path);

@@ -37,7 +37,7 @@ class LargeBitVector {
 
 	  public:
 		iterator(LargeBitVector *bitVector_, int it_)
-			: bitVector(bitVector_), it(it_) {}
+			: it(it_), bitVector(bitVector_) {}
 		iterator &operator++() {
 			it++;
 			return *this;
