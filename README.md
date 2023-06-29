@@ -15,12 +15,12 @@ The following software are assumed to be installed on your machine:
 
 Clone from GitHub:
 ```commandline
-git clone https://github.com/AutoProving/TreeWidzard-Release
+git clone https://github.com/AutoProving/TreeWidzard-Engine
 ```
 
 Move into the TreeWidzard directory:
 ```commandline
-cd TreeWidzard-Release
+cd TreeWidzard-Engine
 ```
 
 Configure build directory using CMake (here with the build directory named `Build`):
