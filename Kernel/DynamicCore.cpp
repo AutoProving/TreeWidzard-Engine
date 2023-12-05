@@ -1,7 +1,7 @@
-#include "DynamicCore.h"
 #include <cassert>
 #include <limits>
 #include <stdexcept>
+#include "DynamicCore.h"
 
 WitnessSetPointer DynamicCore::getInitialSet() { return initialWitnessSet; }
 
