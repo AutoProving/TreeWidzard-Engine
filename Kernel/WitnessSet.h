@@ -4,6 +4,7 @@
 #include <map>
 #include <memory>
 #include <set>
+#include <unordered_set>
 #include <vector>
 
 #include "Hasher.hpp"
@@ -20,26 +21,25 @@ class AbstractIterator {
 	virtual bool isDifferent(AbstractIterator &rhs) = 0;
 	// virtual bool isEqual(const AbstractIterator &rhs) = 0;
 	// virtual bool isLess(const AbstractIterator &rhs) = 0;
-  virtual std::unique_ptr<AbstractIterator> clone() = 0;
+	virtual std::unique_ptr<AbstractIterator> clone() = 0;
 	virtual ~AbstractIterator() = default;
 };
 
 class BaseIterator {
- public:
-  
-  using iterator_category = std::bidirectional_iterator_tag;
-  using value_type = const ::valueType;
-  using difference_type = std::ptrdiff_t;
-  using pointer = const ::valueType *;
-  using reference = const ::valueType &;
+  public:
+	using iterator_category = std::bidirectional_iterator_tag;
+	using value_type = const ::valueType;
+	using difference_type = std::ptrdiff_t;
+	using pointer = const ::valueType *;
+	using reference = const ::valueType &;
 
 	std::unique_ptr<AbstractIterator> it;
 	BaseIterator(const BaseIterator &iterator) {
-    if (iterator.it)
-      it = iterator.it->clone();
-    else
-      it = nullptr;
-  };
+		if (iterator.it)
+			it = iterator.it->clone();
+		else
+			it = nullptr;
+	};
 	BaseIterator(std::unique_ptr<AbstractIterator> it) {
 		this->it = std::move(it);
 	}
@@ -55,23 +55,22 @@ class BaseIterator {
 		return *this;
 	}*/
 	friend bool operator!=(const BaseIterator &lhs, const BaseIterator &rhs) {
-    if (!lhs.it || !rhs.it)
-      return bool(lhs.it) != bool(rhs.it);
+		if (!lhs.it || !rhs.it) return bool(lhs.it) != bool(rhs.it);
 		return lhs.it->isDifferent(*rhs.it);
 	}
 
-  friend bool operator==(const BaseIterator &lhs, const BaseIterator &rhs) {
+	friend bool operator==(const BaseIterator &lhs, const BaseIterator &rhs) {
 		return !(lhs != rhs);
-  }
+	}
 
-  BaseIterator &operator=(const BaseIterator &rhs) {
-    if (rhs.it) {
-      it = rhs.it->clone();
-    } else {
-      it = nullptr;
-    }
-    return *this;
-  }
+	BaseIterator &operator=(const BaseIterator &rhs) {
+		if (rhs.it) {
+			it = rhs.it->clone();
+		} else {
+			it = nullptr;
+		}
+		return *this;
+	}
 
 	// bool operator<(BaseIterator &rhs){
 	//	return it->isLess(rhs->it);
@@ -117,7 +116,7 @@ class WitnessSet { // data structure to store 'std::shared_ptr<Witness>'
 	virtual bool isLess(WitnessSet &rhs) = 0;
 	virtual int size() = 0;
 	virtual std::shared_ptr<WitnessSet> createEmptyWitnessSet() = 0;
-  virtual void setEqual(const WitnessSet &other) = 0;
+	virtual void setEqual(const WitnessSet &other) = 0;
 };
 
 using WitnessSetPointer = std::shared_ptr<WitnessSet>;
@@ -178,26 +177,38 @@ class WitnessSetTypeOne : public WitnessSet {
 		return std::make_shared<WitnessSetTypeOne<T>>();
 	}
 	int witnessVectorSize() { return witnessVector.size(); }
-  void setEqual(const WitnessSet &other) override;
+	void setEqual(const WitnessSet &other) override;
 };
 
 template <class T>
 class WitnessSetTypeTwo : public WitnessSet {
   private:
 	struct compare {
-		bool operator()(const std::shared_ptr<Witness> lhs,
-						const std::shared_ptr<Witness> rhs) const {
+		bool operator()(const std::shared_ptr<Witness> &lhs,
+						const std::shared_ptr<Witness> &rhs) const {
 			return *lhs < *rhs;
 		}
 	};
-	std::set<std::shared_ptr<Witness>, compare> container;
+	struct hash {
+		auto operator()(const std::shared_ptr<Witness> &ptr) const
+			-> std::uint64_t {
+			auto h = Hasher(0);
+			ptr->hash(h);
+			return h.get();
+		}
+	};
+
+	using InnerContainer = std::set<std::shared_ptr<Witness>, compare>;
+	// using InnerContainer =
+	//      std::unordered_set<std::shared_ptr<Witness>, hash>;
+	InnerContainer container;
+
 	class WitnessSetTypeTwoIterator : public AbstractIterator {
 	  private:
-		typename std::set<std::shared_ptr<Witness>, compare>::iterator it;
+		typename InnerContainer::const_iterator it;
 
 	  public:
-		WitnessSetTypeTwoIterator(
-			typename std::set<std::shared_ptr<Witness>, compare>::iterator it_)
+		WitnessSetTypeTwoIterator(typename InnerContainer::const_iterator it_)
 			: it(it_) {}
 		const valueType dereference() override { return *it; };
 		void increment() override { ++it; };
@@ -206,13 +217,14 @@ class WitnessSetTypeTwo : public WitnessSet {
 					dynamic_cast<WitnessSetTypeTwoIterator *>(&rhs)) {
 				return it != e->it;
 			} else {
-        std::cerr << "WitnessSetTypeTwoIterator::isDifferent: Casting error\n";
-        exit(20);
-      }
+				std::cerr << "WitnessSetTypeTwoIterator::isDifferent: Casting "
+							 "error\n";
+				exit(20);
+			}
 		};
-    std::unique_ptr<AbstractIterator> clone() override {
-      return std::make_unique<WitnessSetTypeTwoIterator>(*this);
-    };
+		std::unique_ptr<AbstractIterator> clone() override {
+			return std::make_unique<WitnessSetTypeTwoIterator>(*this);
+		};
 	};
 
   public:
@@ -237,7 +249,7 @@ class WitnessSetTypeTwo : public WitnessSet {
 	virtual std::shared_ptr<WitnessSet> createEmptyWitnessSet() override {
 		return std::make_shared<WitnessSetTypeTwo<T>>();
 	}
-  void setEqual(const WitnessSet &other) override;
+	void setEqual(const WitnessSet &other) override;
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -360,13 +372,14 @@ int WitnessSetTypeOne<T>::size() {
 
 template <class T>
 void WitnessSetTypeOne<T>::setEqual(const WitnessSet &other) {
-  if (const WitnessSetTypeOne<T> *e =
-      dynamic_cast<const WitnessSetTypeOne<T> *>(&other)) {
-    *this = *e;
-  } else {
-    std::cerr << "Error: WitnessSetTypeOne::setEqual called with wrong type\n";
-    exit(20);
-  }
+	if (const WitnessSetTypeOne<T> *e =
+			dynamic_cast<const WitnessSetTypeOne<T> *>(&other)) {
+		*this = *e;
+	} else {
+		std::cerr
+			<< "Error: WitnessSetTypeOne::setEqual called with wrong type\n";
+		exit(20);
+	}
 }
 
 /////////////WitnessSet TYPE Two////////////////
@@ -452,13 +465,14 @@ int WitnessSetTypeTwo<T>::size() {
 
 template <class T>
 void WitnessSetTypeTwo<T>::setEqual(const WitnessSet &other) {
-  if (const WitnessSetTypeTwo<T> *e =
-      dynamic_cast<const WitnessSetTypeTwo<T> *>(&other)) {
-    *this = *e;
-  } else {
-    std::cerr << "Error: WitnessSetTypeTwo::setEqual called with wrong type\n";
-    exit(20);
-  }
+	if (const WitnessSetTypeTwo<T> *e =
+			dynamic_cast<const WitnessSetTypeTwo<T> *>(&other)) {
+		*this = *e;
+	} else {
+		std::cerr
+			<< "Error: WitnessSetTypeTwo::setEqual called with wrong type\n";
+		exit(20);
+	}
 }
 
 #endif

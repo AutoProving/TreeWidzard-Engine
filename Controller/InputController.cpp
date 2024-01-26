@@ -1,7 +1,7 @@
-#include "InputController.h"
 #include <filesystem>
 #include <memory>
 #include <stdexcept>
+#include "InputController.h"
 
 void InputController::check_available_cores() {
 	for (std::string dynamicPluginPath : dynamicPluginPaths) {
@@ -38,8 +38,9 @@ void InputController::parse_input() {
 	}
 	int result = 1; // if parsing successful result will be 0 otherwise 1
 
-	result = input_parse(conjecture, result, coreList, varToCoreName,
-						 varToProperty); // Parser function from Parser.hpp
+	input_parse(conjecture, result, coreList, varToCoreName,
+				varToProperty); // Parser function from Parser.hpp
+
 	// check for successful parsing
 	if (result != 0) {
 		std::cout << " Error: input file " << inputPath

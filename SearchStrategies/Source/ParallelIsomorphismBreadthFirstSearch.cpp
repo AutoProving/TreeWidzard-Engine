@@ -1,5 +1,6 @@
 #include "ParallelIsomorphismBreadthFirstSearch.h"
 
+#include <mutex>
 #include <thread>
 
 extern "C" {
@@ -35,6 +36,14 @@ ParallelIsomorphismBreadthFirstSearch::ParallelIsomorphismBreadthFirstSearch(
 	}
 }
 
+template <typename T>
+void update_maximum(std::atomic<T> &maximum_value, const T &value) noexcept {
+	T prev_value = maximum_value;
+	while (prev_value < value &&
+		   !maximum_value.compare_exchange_weak(prev_value, value)) {
+	}
+}
+
 void ParallelIsomorphismBreadthFirstSearch::search() {
 	if (flags->get("Premise")) {
 		cout << " Premise is ACTIVATED" << endl;
@@ -60,12 +69,15 @@ void ParallelIsomorphismBreadthFirstSearch::search() {
 		////////////////////////////////////
 	}
 	unsigned int width = kernel->get_width().get_value();
-	vector<unsigned> numberOfWitnesses;
-	numberOfWitnesses.resize(initialState->numberOfComponents());
+	std::vector<std::atomic<unsigned>> numberOfWitnesses(
+		initialState->numberOfComponents());
 	int iterationNumber = 0;
 	cout << left << setw(25) << "Iteration" << setw(25) << "ALLSTATES"
 		 << setw(25) << "NEWSTATES"
 		 << "Max WITNESSSET SIZE" << endl;
+
+	std::mutex everything_lock;
+
 	while (!newStatesSet.empty()) {
 		iterationNumber++;
 		////////////////////////////////////////////////////////////////////////////////////
@@ -103,14 +115,16 @@ void ParallelIsomorphismBreadthFirstSearch::search() {
 						if (!allStatesSet.count(relabeledNewStatePointer) and
 							!newStatesSet.count(relabeledNewStatePointer)) {
 							newStatesSet.insert(relabeledNewStatePointer);
+
 							State::ptr consequentState =
 								relabeledNewStatePointer;
+
 							if (!noBFSDAG) {
-								bfsDAG.addState(consequentState);
 								InstructiveTreeDecompositionNodeContent
 									transitionContent("IntroVertex_" +
 													  to_string(i));
-								vector<State::ptr> antecedentStates;
+
+								std::vector<State::ptr> antecedentStates;
 								antecedentStates.push_back(statePointer);
 								Transition<
 									State::ptr,
@@ -118,8 +132,14 @@ void ParallelIsomorphismBreadthFirstSearch::search() {
 									transition(consequentState,
 											   transitionContent,
 											   antecedentStates);
-								bfsDAG.addTransition(transition);
+
+								{
+									std::lock_guard lock(everything_lock);
+									bfsDAG.addState(consequentState);
+									bfsDAG.addTransition(transition);
+								}
 							}
+
 							if (printStateFlag) {
 								cout << endl;
 								cout << "======================================"
@@ -151,11 +171,10 @@ void ParallelIsomorphismBreadthFirstSearch::search() {
 							for (size_t component = 0;
 								 component < numberOfWitnesses.size();
 								 ++component) {
-								numberOfWitnesses[component] =
-									max(numberOfWitnesses[component],
-										(unsigned)consequentState
-											->getWitnessSet(component)
-											->size());
+								update_maximum(numberOfWitnesses[component],
+											   (unsigned)consequentState
+												   ->getWitnessSet(component)
+												   ->size());
 							}
 						}
 					}
@@ -185,14 +204,17 @@ void ParallelIsomorphismBreadthFirstSearch::search() {
 							InstructiveTreeDecompositionNodeContent
 								transitionContent("ForgetVertex_" +
 												  to_string(*it));
-							bfsDAG.addState(consequentState);
 							vector<State::ptr> antecedentStates;
 							antecedentStates.push_back(statePointer);
 							Transition<State::ptr,
 									   InstructiveTreeDecompositionNodeContent>
 								transition(consequentState, transitionContent,
 										   antecedentStates);
-							bfsDAG.addTransition(transition);
+							{
+								std::lock_guard lock(everything_lock);
+								bfsDAG.addState(consequentState);
+								bfsDAG.addTransition(transition);
+							}
 						}
 						if (printStateFlag) {
 							cout << endl;
@@ -225,11 +247,10 @@ void ParallelIsomorphismBreadthFirstSearch::search() {
 						for (size_t component = 0;
 							 component < numberOfWitnesses.size();
 							 ++component) {
-							numberOfWitnesses[component] =
-								max(numberOfWitnesses[component],
-									(unsigned)consequentState
-										->getWitnessSet(component)
-										->size());
+							update_maximum(numberOfWitnesses[component],
+										   (unsigned)consequentState
+											   ->getWitnessSet(component)
+											   ->size());
 						}
 					}
 				}
@@ -272,7 +293,6 @@ void ParallelIsomorphismBreadthFirstSearch::search() {
 											transitionContent(
 												"IntroEdge_" + to_string(*it) +
 												"_" + to_string(*itPrime));
-										bfsDAG.addState(consequentState);
 										vector<State::ptr> antecedentStates;
 										antecedentStates.push_back(
 											statePointer);
@@ -282,7 +302,12 @@ void ParallelIsomorphismBreadthFirstSearch::search() {
 											transition(consequentState,
 													   transitionContent,
 													   antecedentStates);
-										bfsDAG.addTransition(transition);
+										{
+											std::lock_guard lock(
+												everything_lock);
+											bfsDAG.addState(consequentState);
+											bfsDAG.addTransition(transition);
+										}
 									}
 									if (printStateFlag) {
 										cout << endl;
@@ -318,11 +343,11 @@ void ParallelIsomorphismBreadthFirstSearch::search() {
 									for (size_t component = 0;
 										 component < numberOfWitnesses.size();
 										 ++component) {
-										numberOfWitnesses[component] =
-											max(numberOfWitnesses[component],
-												(unsigned)consequentState
-													->getWitnessSet(component)
-													->size());
+										update_maximum(
+											numberOfWitnesses[component],
+											(unsigned)consequentState
+												->getWitnessSet(component)
+												->size());
 									}
 								}
 							}
@@ -368,7 +393,6 @@ void ParallelIsomorphismBreadthFirstSearch::search() {
 									if (!noBFSDAG) {
 										InstructiveTreeDecompositionNodeContent
 											transitionContent("Join");
-										bfsDAG.addState(consequentState);
 										vector<State::ptr> antecedentStates;
 										antecedentStates.push_back(
 											statePointer);
@@ -379,7 +403,12 @@ void ParallelIsomorphismBreadthFirstSearch::search() {
 											transition(consequentState,
 													   transitionContent,
 													   antecedentStates);
-										bfsDAG.addTransition(transition);
+										{
+											std::lock_guard lock(
+												everything_lock);
+											bfsDAG.addState(consequentState);
+											bfsDAG.addTransition(transition);
+										}
 									}
 									if (printStateFlag) {
 										cout << endl;
@@ -420,11 +449,11 @@ void ParallelIsomorphismBreadthFirstSearch::search() {
 									for (size_t component = 0;
 										 component < numberOfWitnesses.size();
 										 ++component) {
-										numberOfWitnesses[component] =
-											max(numberOfWitnesses[component],
-												(unsigned)consequentState
-													->getWitnessSet(component)
-													->size());
+										update_maximum(
+											numberOfWitnesses[component],
+											(unsigned)consequentState
+												->getWitnessSet(component)
+												->size());
 									}
 								}
 							}

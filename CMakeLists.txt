@@ -27,6 +27,10 @@ set(CMAKE_EXE_LINKER_FLAGS "-rdynamic")
 # add_compile_options(-D_GLIBCXX_DEBUG)
 # add_compile_options(-D_GLIBCXX_DEBUG_PEDANTIC)
 
+# add_compile_options(-fsanitize=thread)
+# add_compile_options(-fno-sanitize-recover)
+# add_link_options(-fsanitize=thread)
+
 # stops lexer from creating some unused methods
 add_compile_definitions(YY_NO_INPUT=1)
 add_compile_definitions(YY_NO_UNPUT=1)
