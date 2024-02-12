@@ -43,8 +43,8 @@ ParallelBreadthFirstSearch::ParallelBreadthFirstSearch(
 	}
 }
 
-InstructiveTreeDecomposition ParallelBreadthFirstSearch::extractCounterExampleTerm(
-	State::ptr state) {
+InstructiveTreeDecomposition
+ParallelBreadthFirstSearch::extractCounterExampleTerm(State::ptr state) {
 	InstructiveTreeDecomposition atd;
 	std::shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>> rootNode;
 	rootNode = bfsDAG.retrieveTermAcyclicAutomaton(state);
@@ -114,7 +114,6 @@ void ParallelBreadthFirstSearch::extractCounterExampleStateTreeNode(
 	}
 }
 
-//
 template <typename T>
 void update_maximum(std::atomic<T> &maximum_value, const T &value) noexcept {
 	T prev_value = maximum_value;
@@ -136,7 +135,8 @@ void ParallelBreadthFirstSearch::search() {
 	if (!noBFSDAG) {
 		// Initialize the DAG
 		bfsDAG.addState(initialState);
-		InstructiveTreeDecompositionNodeContent initialTransitionContent("Leaf");
+		InstructiveTreeDecompositionNodeContent initialTransitionContent(
+			"Leaf");
 		std::vector<State::ptr> initialAntecedents; // Empty std::vector since
 													// there are no children.
 		Transition<State::ptr, InstructiveTreeDecompositionNodeContent>
@@ -196,20 +196,24 @@ void ParallelBreadthFirstSearch::search() {
 
 							State::ptr consequentState = newStatePointer;
 
-							InstructiveTreeDecompositionNodeContent
-								transitionContent("IntroVertex_" +
-												  std::to_string(i));
-							std::vector<State::ptr> antecedentStates;
-							antecedentStates.push_back(statePointer);
-							Transition<State::ptr,
-									   InstructiveTreeDecompositionNodeContent>
-								transition(consequentState, transitionContent,
-										   antecedentStates);
-
 							if (!noBFSDAG) {
-								std::lock_guard lock(everything_lock);
-								bfsDAG.addState(consequentState);
-								bfsDAG.addTransition(transition);
+								InstructiveTreeDecompositionNodeContent
+									transitionContent("IntroVertex_" +
+													  std::to_string(i));
+								std::vector<State::ptr> antecedentStates;
+								antecedentStates.push_back(statePointer);
+								Transition<
+									State::ptr,
+									InstructiveTreeDecompositionNodeContent>
+									transition(consequentState,
+											   transitionContent,
+											   antecedentStates);
+
+								{
+									std::lock_guard lock(everything_lock);
+									bfsDAG.addState(consequentState);
+									bfsDAG.addTransition(transition);
+								}
 							}
 
 							if (printStateFlag) {
@@ -266,18 +270,21 @@ void ParallelBreadthFirstSearch::search() {
 						!newStatesSet.count(newStatePointer)) {
 						newStatesSet.insert(newStatePointer);
 						State::ptr consequentState = newStatePointer;
-						InstructiveTreeDecompositionNodeContent transitionContent(
-							"ForgetVertex_" + std::to_string(*it));
-						std::vector<State::ptr> antecedentStates;
-						antecedentStates.push_back(statePointer);
-						Transition<State::ptr,
-								   InstructiveTreeDecompositionNodeContent>
-							transition(consequentState, transitionContent,
-									   antecedentStates);
 						if (!noBFSDAG) {
-							std::lock_guard lock(everything_lock);
-							bfsDAG.addState(consequentState);
-							bfsDAG.addTransition(transition);
+							InstructiveTreeDecompositionNodeContent
+								transitionContent("ForgetVertex_" +
+												  std::to_string(*it));
+							std::vector<State::ptr> antecedentStates;
+							antecedentStates.push_back(statePointer);
+							Transition<State::ptr,
+									   InstructiveTreeDecompositionNodeContent>
+								transition(consequentState, transitionContent,
+										   antecedentStates);
+							{
+								std::lock_guard lock(everything_lock);
+								bfsDAG.addState(consequentState);
+								bfsDAG.addTransition(transition);
+							}
 						}
 						if (printStateFlag) {
 							std::cout << std::endl;
@@ -336,21 +343,24 @@ void ParallelBreadthFirstSearch::search() {
 								!newStatesSet.count(newStatePointer)) {
 								newStatesSet.insert(newStatePointer);
 								State::ptr consequentState = newStatePointer;
-								InstructiveTreeDecompositionNodeContent
-									transitionContent(
-										"IntroEdge_" + std::to_string(*it) +
-										"_" + std::to_string(*itPrime));
-								std::vector<State::ptr> antecedentStates;
-								antecedentStates.push_back(statePointer);
-								Transition<State::ptr,
-										   InstructiveTreeDecompositionNodeContent>
-									transition(consequentState,
-											   transitionContent,
-											   antecedentStates);
 								if (!noBFSDAG) {
-									std::lock_guard lock(everything_lock);
-									bfsDAG.addState(consequentState);
-									bfsDAG.addTransition(transition);
+									InstructiveTreeDecompositionNodeContent
+										transitionContent(
+											"IntroEdge_" + std::to_string(*it) +
+											"_" + std::to_string(*itPrime));
+									std::vector<State::ptr> antecedentStates;
+									antecedentStates.push_back(statePointer);
+									Transition<
+										State::ptr,
+										InstructiveTreeDecompositionNodeContent>
+										transition(consequentState,
+												   transitionContent,
+												   antecedentStates);
+									{
+										std::lock_guard lock(everything_lock);
+										bfsDAG.addState(consequentState);
+										bfsDAG.addTransition(transition);
+									}
 								}
 								if (printStateFlag) {
 									std::cout << std::endl;
@@ -413,20 +423,23 @@ void ParallelBreadthFirstSearch::search() {
 								!newStatesSet.count(newStatePointer)) {
 								newStatesSet.insert(newStatePointer);
 								State::ptr consequentState = newStatePointer;
-								InstructiveTreeDecompositionNodeContent
-									transitionContent("Join");
-								std::vector<State::ptr> antecedentStates;
-								antecedentStates.push_back(statePointer);
-								antecedentStates.push_back(*it);
-								Transition<State::ptr,
-										   InstructiveTreeDecompositionNodeContent>
-									transition(consequentState,
-											   transitionContent,
-											   antecedentStates);
 								if (!noBFSDAG) {
-									std::lock_guard lock(everything_lock);
-									bfsDAG.addState(consequentState);
-									bfsDAG.addTransition(transition);
+									InstructiveTreeDecompositionNodeContent
+										transitionContent("Join");
+									std::vector<State::ptr> antecedentStates;
+									antecedentStates.push_back(statePointer);
+									antecedentStates.push_back(*it);
+									Transition<
+										State::ptr,
+										InstructiveTreeDecompositionNodeContent>
+										transition(consequentState,
+												   transitionContent,
+												   antecedentStates);
+									{
+										std::lock_guard lock(everything_lock);
+										bfsDAG.addState(consequentState);
+										bfsDAG.addTransition(transition);
+									}
 								}
 								if (printStateFlag) {
 									std::cout << std::endl;

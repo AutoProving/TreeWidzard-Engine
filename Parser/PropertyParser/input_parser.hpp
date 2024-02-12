@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_INPUT_PARSER_PROPERTYPARSER_INPUT_PARSER_HPP_INCLUDED
-# define YY_INPUT_PARSER_PROPERTYPARSER_INPUT_PARSER_HPP_INCLUDED
+#ifndef YY_INPUT_INPUT_PARSER_HPP_INCLUDED
+# define YY_INPUT_INPUT_PARSER_HPP_INCLUDED
 /* Debug traces.  */
 #ifndef INPUT_DEBUG
 # if defined YYDEBUG
@@ -53,7 +53,7 @@
 extern int input_debug;
 #endif
 /* "%code requires" blocks.  */
-#line 4 "Parser/PropertyParser/input_parser.y"
+#line 5 "input_parser.y"
 
     #include "../../Conjecture/Conjecture.h"
     #include "../../Kernel/Width.h"
@@ -66,7 +66,7 @@ extern int input_debug;
     #include <utility>
     #include <variant>
 
-#line 70 "Parser/PropertyParser/input_parser.hpp"
+#line 70 "input_parser.hpp"
 
 /* Token kinds.  */
 #ifndef INPUT_TOKENTYPE
@@ -78,7 +78,7 @@ extern int input_debug;
     INPUT_error = 256,             /* error  */
     INPUT_UNDEF = 257,             /* "invalid token"  */
     SEPERATOR = 258,               /* SEPERATOR  */
-    FILEPATH = 259,                /* FILEPATH  */
+    STRING = 259,                  /* STRING  */
     LEFTP = 260,                   /* LEFTP  */
     RIGHTP = 261,                  /* RIGHTP  */
     NAME = 262,                    /* NAME  */
@@ -112,7 +112,7 @@ extern int input_debug;
 #if ! defined INPUT_STYPE && ! defined INPUT_STYPE_IS_DECLARED
 union INPUT_STYPE
 {
-#line 39 "Parser/PropertyParser/input_parser.y"
+#line 40 "input_parser.y"
 
      ConjectureNode *conjectureNode;
      int number;
@@ -120,7 +120,7 @@ union INPUT_STYPE
      std::vector<std::variant<char*,int, bool>> *vec;
      PropertyAssignment *property;
 
-#line 124 "Parser/PropertyParser/input_parser.hpp"
+#line 124 "input_parser.hpp"
 
 };
 typedef union INPUT_STYPE INPUT_STYPE;
@@ -149,4 +149,4 @@ extern INPUT_LTYPE input_lloc;
 int input_parse (Conjecture &conj, int &result, std::map<std::string,DynamicCoreHandler> &coreList, std::map<std::string,std::string> &varToCoreName, std::map<std::string, PropertyAssignment*> &varToProperty);
 
 
-#endif /* !YY_INPUT_PARSER_PROPERTYPARSER_INPUT_PARSER_HPP_INCLUDED  */
+#endif /* !YY_INPUT_INPUT_PARSER_HPP_INCLUDED  */

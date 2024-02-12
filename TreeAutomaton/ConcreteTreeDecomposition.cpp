@@ -275,7 +275,7 @@ void ConcreteTreeDecomposition::writeToFile(std::string fileName) {
 std::shared_ptr<TermNode<RunNodeContent<State::ptr, ConcreteNode>>>
 ConcreteTreeDecomposition::constructWitnesses(
 	Conjecture &conjecture, std::shared_ptr<TermNode<ConcreteNode>> node,
-	Flags &flags, std::string &str) {
+	Flags &flags, std::string &_str) {
 	// First, We check the type of the node
 	if (node->getNodeContent().getSymbol() == "Leaf") {
 		// if it is an empty, then it is a leaf
@@ -295,7 +295,7 @@ ConcreteTreeDecomposition::constructWitnesses(
 					  "IntroVertex")) {
 		std::shared_ptr<TermNode<RunNodeContent<State::ptr, ConcreteNode>>>
 			runNodeChild = constructWitnesses(
-				conjecture, node->getChildren()[0], flags, str);
+				conjecture, node->getChildren()[0], flags, _str);
 		State::ptr childState = runNodeChild->getNodeContent().getState();
 		// find the introduced vertex
 		std::set<unsigned> bagSet =
@@ -330,8 +330,8 @@ ConcreteTreeDecomposition::constructWitnesses(
 		runNodeContent->setState(q);
 		runNodeContent->setRunNodeContent(node->getNodeContent());
 		runNode->setNodeContent(*runNodeContent);
-		str +=
-			node->getNodeContent().getSymbol() + "\n" + q->stateInformation();
+		// str +=
+		//	node->getNodeContent().getSymbol() + "\n" + q->stateInformation();
 		runNode->addChild(runNodeChild);
 		runNodeChild->setParent(runNode);
 		return runNode;
@@ -339,7 +339,7 @@ ConcreteTreeDecomposition::constructWitnesses(
 					  "ForgetVertex")) {
 		std::shared_ptr<TermNode<RunNodeContent<State::ptr, ConcreteNode>>>
 			runNodeChild = constructWitnesses(
-				conjecture, node->getChildren()[0], flags, str);
+				conjecture, node->getChildren()[0], flags, _str);
 		State::ptr childState = runNodeChild->getNodeContent().getState();
 		// find the forgotten vertex
 		std::set<unsigned> bagSet =
@@ -369,8 +369,8 @@ ConcreteTreeDecomposition::constructWitnesses(
 		runNodeContent->setState(q);
 		runNodeContent->setRunNodeContent(node->getNodeContent());
 		runNode->setNodeContent(*runNodeContent);
-		str +=
-			node->getNodeContent().getSymbol() + "\n" + q->stateInformation();
+		// str +=
+		//	node->getNodeContent().getSymbol() + "\n" + q->stateInformation();
 		runNode->addChild(runNodeChild);
 		runNodeChild->setParent(runNode);
 		return runNode;
@@ -378,7 +378,7 @@ ConcreteTreeDecomposition::constructWitnesses(
 					  "IntroEdge")) {
 		std::shared_ptr<TermNode<RunNodeContent<State::ptr, ConcreteNode>>>
 			runNodeChild = constructWitnesses(
-				conjecture, node->getChildren()[0], flags, str);
+				conjecture, node->getChildren()[0], flags, _str);
 		State::ptr childState = runNodeChild->getNodeContent().getState();
 		std::pair<unsigned, unsigned> e =
 			node->getNodeContent().getBag().get_edge();
@@ -396,19 +396,19 @@ ConcreteTreeDecomposition::constructWitnesses(
 		runNodeContent->setState(q);
 		runNodeContent->setRunNodeContent(node->getNodeContent());
 		runNode->setNodeContent(*runNodeContent);
-		str +=
-			node->getNodeContent().getSymbol() + "\n" + q->stateInformation();
+		// str +=
+		//	node->getNodeContent().getSymbol() + "\n" + q->stateInformation();
 		runNode->addChild(runNodeChild);
 		runNodeChild->setParent(runNode);
 		return runNode;
 	} else if (strstr(node->getNodeContent().getSymbol().c_str(), "Join")) {
 		std::shared_ptr<TermNode<RunNodeContent<State::ptr, ConcreteNode>>>
 			runNodeChild1 = constructWitnesses(
-				conjecture, node->getChildren()[0], flags, str);
+				conjecture, node->getChildren()[0], flags, _str);
 		State::ptr childState1 = runNodeChild1->getNodeContent().getState();
 		std::shared_ptr<TermNode<RunNodeContent<State::ptr, ConcreteNode>>>
 			runNodeChild2 = constructWitnesses(
-				conjecture, node->getChildren()[1], flags, str);
+				conjecture, node->getChildren()[1], flags, _str);
 		State::ptr childState2 = runNodeChild2->getNodeContent().getState();
 		State::ptr q = conjecture.getKernel()->join(childState1, childState2);
 		if (flags.get("PrintStates")) {
@@ -421,8 +421,8 @@ ConcreteTreeDecomposition::constructWitnesses(
 		runNodeContent->setState(q);
 		runNodeContent->setRunNodeContent(node->getNodeContent());
 		runNode->setNodeContent(*runNodeContent);
-		str +=
-			node->getNodeContent().getSymbol() + "\n" + q->stateInformation();
+		// str +=
+		//	node->getNodeContent().getSymbol() + "\n" + q->stateInformation();
 		runNode->addChild(runNodeChild1);
 		runNodeChild1->setParent(runNode);
 		runNode->addChild(runNodeChild2);
@@ -438,13 +438,33 @@ ConcreteTreeDecomposition::constructWitnesses(
 		exit(20);
 	}
 }
+
+auto findMaxWitnessSetSize(
+	TermNode<RunNodeContent<State::ptr, ConcreteNode>> &node) -> std::size_t {
+	std::size_t max_witness_set_size = 0;
+
+	auto &&state = node.getNodeContent().getState();
+	auto component_count = state->numberOfComponents();
+	for (std::size_t component = 0; component != component_count; ++component) {
+		max_witness_set_size +=
+			std::size_t(state->getWitnessSet(int(component))->size());
+	}
+
+	for (auto &child : node.getChildren()) {
+		max_witness_set_size =
+			std::max(max_witness_set_size, findMaxWitnessSetSize(*child));
+	}
+
+	return max_witness_set_size;
+}
+
 bool ConcreteTreeDecomposition::conjectureCheck(Conjecture &conjecture,
 												Flags &flags,
 												std::string name) {
-	std::string str = "";
+	std::string _str = "";
 	RunTree<State::ptr, ConcreteNode> runTree;
 	std::shared_ptr<TermNode<RunNodeContent<State::ptr, ConcreteNode>>>
-		runNode = constructWitnesses(conjecture, getRoot(), flags, str);
+		runNode = constructWitnesses(conjecture, getRoot(), flags, _str);
 	runTree.setRoot(runNode);
 	name += "_RunTree.txt";
 	//    std::cout << "Conjecture Value: " ;
@@ -453,6 +473,10 @@ bool ConcreteTreeDecomposition::conjectureCheck(Conjecture &conjecture,
 	//    << std::endl; std::cout << "Assignment: ";
 	//    conjecture.printValues(*runNode->getNodeContent().getState(),conjecture.getRoot());
 	//    return true;
+
+	std::cout << "Max WITNESSSET SIZE: "
+			  << findMaxWitnessSetSize(*runTree.getRoot()) << '\n';
+
 	if (!conjecture.evaluateConjectureOnState(
 			*runNode->getNodeContent().getState())) {
 		if (flags.get("WriteToFiles")) runTree.writeToFile(name);
