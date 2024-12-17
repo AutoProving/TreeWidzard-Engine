@@ -1,0 +1,4 @@
+// Extended Input File for Conjecture Parser
+a := CliqueNumberSimpleGraphs(3)
+Formula
+a IMPLIES True
