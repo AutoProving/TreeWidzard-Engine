@@ -1,4 +1,6 @@
 // Extended Input File for Conjecture Parser
 a := CliqueNumberSimpleGraphs(3)
+b := MaxDegree(5)
+c := HasMultipleEdges()
 Formula
-a IMPLIES True
+True IMPLIES True
