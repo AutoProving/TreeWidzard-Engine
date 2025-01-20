@@ -28,13 +28,13 @@ struct HasMultipleEdges_Witness : WitnessWrapper<HasMultipleEdges_Witness>
     friend bool is_less_implementation(const WitnessAlias &l,
                                        const WitnessAlias &r)
     {
-        if (r.found < l.found)
+        if (l.found < r.found)
         {
             return true;
         }
-        else if (r.found == l.found)
+        else if (l.found == r.found)
         {
-            if (r.edgeSet < l.edgeSet)
+            if (l.edgeSet < r.edgeSet)
             {
                 return true;
             }
@@ -209,6 +209,7 @@ struct HasMultipleEdges_DynamicCore
             {
                 auto witness = w.clone();
                 witness->found = true;
+                witness->edgeSet.clear();
                 witnessSet.insert(witness);
             }
             else
@@ -291,6 +292,7 @@ struct HasMultipleEdges_DynamicCore
             if (intersection_set.size() > 0)
             {
                 witness->found = true;
+                witness->edgeSet.clear();
                 witnessSet.insert(witness);
             }
             else
