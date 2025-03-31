@@ -1,6 +1,5 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 
-// #include <bits/stdc++.h>
 
 #include "../../CorePrelude.h"
 
@@ -252,6 +251,7 @@ struct ChromaticNumber_AtMost_Core
 	 * Return whether w is a final witness
 	 */
 	bool is_final_witness_implementation(const Bag &, const WitnessAlias &) {
-    return true;
-	}
+    	return true;
+	}	
+
 };

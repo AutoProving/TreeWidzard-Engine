@@ -1,0 +1,9 @@
+./treewidzard -atp tw = 4 -pl -nthreads 10 ParallelBreadthFirstSearch ../system-paper/ATP/five_colorable.txt
+
+./treewidzard -atp tw = 4 -pl -nthreads 10 ParallelIsomorphismBreadthFirstSearch ../system-paper/ATP/five_colorable.txt
+
+ ./treewidzard -atp tw = 4 -pl -nthreads 10 ParallelBreadthFirstSearch ../system-paper/ATP/four_colorable.txt
+
+./treewidzard -atp pw = 4 -premise -pl -nthreads 10 ParallelBreadthFirstSearch ../system-paper/ATP/degree_coloring_property.txt
+
+./treewidzard -atp pw = 4 -premise -pl -nthreads 10 ParallelIsomorphismBreadthFirstSearch ../system-paper/ATP/degree_coloring_property.txt

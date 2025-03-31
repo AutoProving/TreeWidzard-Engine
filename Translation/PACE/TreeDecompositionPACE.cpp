@@ -154,16 +154,15 @@ void TreeDecompositionPACE::constructInnerNodes(
 }
 
 bool TreeDecompositionPACE::constructRaw() {
-	std::shared_ptr<RawInstructiveTreeDecomposition> root_node(
-		new RawInstructiveTreeDecomposition);
+	std::shared_ptr<RawInstructiveTreeDecomposition> root_node(new RawInstructiveTreeDecomposition);
 	root = root_node;
 
-	std::cerr << "edges: ";
-	for (auto [u, v] : edges) std::cerr << '(' << u << ',' << v << ") ";
-	std::cerr << '\n';
-
-	std::cerr << "root:\n";
-	root->printNode();
+	// std::cerr << "edges: ";
+	// for (auto [u, v] : edges) std::cerr << '(' << u << ',' << v << ") ";
+	// std::cerr << '\n';
+	// std::cerr << "root:\n";
+	// root->printNode();
+	
 	if (bags.size() > 0) {
 		root->bag.set_elements(bags[0]);
 		std::set<unsigned> visited_bags;
@@ -193,8 +192,7 @@ bool TreeDecompositionPACE::convertToBinary(
 		// If "node" has n>2 children, then the algorithm creates "new_node"
 		// and set  "new_node" as a second child of "node", and set n-1 children
 		// of "node" as children of "new_node".
-		std::shared_ptr<RawInstructiveTreeDecomposition> new_node(
-			new RawInstructiveTreeDecomposition);
+		std::shared_ptr<RawInstructiveTreeDecomposition> new_node(new RawInstructiveTreeDecomposition);
 		new_node->bag = node->bag;
 		for (size_t i = 1; i < node->children.size(); i++) {
 			new_node->children.push_back(node->children[i]);
@@ -644,11 +642,10 @@ void TreeDecompositionPACE::construct() {
 	addForgetVertex(root);
 	std::set<unsigned> visited_edges;
 	addIntroEdge(root, visited_edges);
-	// for(auto item:visited_edges){std::cout<<item<<",";}std::cout<<std::endl;
 	colorTree();
 	updateTD();
 	validateTree(root);
-	std::cout << "Construction finished" << std::endl;
+	// std::cout << "Construction finished" << std::endl;
 }
 
 void TreeDecompositionPACE::createCTDNode(

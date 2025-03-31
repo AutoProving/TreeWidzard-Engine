@@ -29,13 +29,13 @@ struct MaxDegree_AtLeast_Witness : WitnessWrapper<MaxDegree_AtLeast_Witness>
     friend bool is_less_implementation(const WitnessAlias &l,
                                        const WitnessAlias &r)
     {
-        if (r.found < l.found)
+        if (l.found < r.found)
         {
             return true;
         }
-        else if (r.found == l.found)
+        else if (l.found == r.found)
         {
-            if (r.degreeCounter < l.degreeCounter)
+            if (l.degreeCounter < r.degreeCounter)
             {
                 return true;
             }

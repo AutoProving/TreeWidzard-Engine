@@ -9,12 +9,10 @@ class State : private std::enable_shared_from_this<State> {
   private:
 	Bag bag;
 	std::vector<std::shared_ptr<WitnessSet>> witnessSetVector;
-
   public:
 	class ptr {
 	  private:
 		std::shared_ptr<const State> pointer;
-
 	  public:
 		ptr() { pointer = std::make_shared<State>(); }
 		ptr(std::shared_ptr<const State> pointer_) : pointer(pointer_) {}
@@ -39,7 +37,7 @@ class State : private std::enable_shared_from_this<State> {
 				return h.get();
 			}
 		};
-
+		
 		struct Equal {
 			bool operator()(const State::ptr &l, const State::ptr &r) const {
 				return *l == *r;

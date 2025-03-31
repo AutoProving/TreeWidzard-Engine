@@ -6,21 +6,25 @@
 #include "WitnessWrapper.h"
 
 template <class Core, class WitnessType, template <class> class WitnessSetType>
-class CoreWrapper : public DynamicCore {
-  private:
+class CoreWrapper : public DynamicCore
+{
+private:
 	using WitnessAlias = WitnessType;
 	using WitnessSet = WitnessSetType<WitnessAlias>;
 
 	friend Core;
 
 	Core &as_core() { return *static_cast<Core *>(this); }
-	static WitnessSetType<WitnessAlias> &as_witness_set(
-		::WitnessSet &witnessSetBase) {
+	static WitnessSetType<WitnessAlias> &as_witness_set(::WitnessSet &witnessSetBase)
+	{
 #ifdef ENABLE_DEBUG_INFO
 		if (WitnessAlias *witness =
-				dynamic_cast<WitnessSetType<WitnessAlias> *>(&witnessSetBase)) {
+				dynamic_cast<WitnessSetType<WitnessAlias> *>(&witnessSetBase))
+		{
 			return *witness;
-		} else {
+		}
+		else
+		{
 			std::cerr << "ERROR: in CoreWrapper cast error\n";
 			exit(20);
 		}
@@ -29,19 +33,23 @@ class CoreWrapper : public DynamicCore {
 #endif
 	}
 
-  public:
-	CoreWrapper() {
-		for (const auto &[k, v] : Core::metadata()) addAttribute(k, v);
+public:
+	CoreWrapper()
+	{
+		for (const auto &[k, v] : Core::metadata())
+			addAttribute(k, v);
 	}
 
-	void createInitialWitnessSet() override {
+	void createInitialWitnessSet() override
+	{
 		auto witnessSet = std::make_shared<WitnessSet>();
 		this->as_core().initialize_leaf(*witnessSet);
 		setInitialWitnessSet(std::move(witnessSet));
 	}
 
 	WitnessSetPointer intro_v(unsigned i, const Bag &b,
-							  WitnessSetPointer ws_ptr) override {
+							  WitnessSetPointer ws_ptr) override
+	{
 		const auto &witnessSet = as_witness_set(*ws_ptr);
 		auto newWitnessSet = std::make_shared<WitnessSet>();
 
@@ -55,7 +63,8 @@ class CoreWrapper : public DynamicCore {
 	}
 
 	WitnessSetPointer intro_e(unsigned i, unsigned j, const Bag &b,
-							  WitnessSetPointer ws_ptr) override {
+							  WitnessSetPointer ws_ptr) override
+	{
 		const auto &witnessSet = as_witness_set(*ws_ptr);
 		auto newWitnessSet = std::make_shared<WitnessSet>();
 
@@ -68,7 +77,8 @@ class CoreWrapper : public DynamicCore {
 	}
 
 	WitnessSetPointer forget_v(unsigned i, const Bag &b,
-							   WitnessSetPointer ws_ptr) override {
+							   WitnessSetPointer ws_ptr) override
+	{
 		const auto &witnessSet = as_witness_set(*ws_ptr);
 		auto newWitnessSet = std::make_shared<WitnessSet>();
 
@@ -81,7 +91,8 @@ class CoreWrapper : public DynamicCore {
 	}
 
 	WitnessSetPointer join(const Bag &b, const WitnessSetPointer ws_ptr1,
-						   const WitnessSetPointer ws_ptr2) override {
+						   const WitnessSetPointer ws_ptr2) override
+	{
 		const auto &ws1 = as_witness_set(*ws_ptr1);
 		const auto &ws2 = as_witness_set(*ws_ptr2);
 		auto newWitnessSet = std::make_shared<WitnessSet>();
@@ -96,25 +107,29 @@ class CoreWrapper : public DynamicCore {
 		return newWitnessSet;
 	}
 
-	WitnessSetPointer clean(WitnessSetPointer witnessSetBase) override {
-#ifdef ENABLE_DEBUG_INFO
-		if (WitnessSet *witnessSet =
-				dynamic_cast<WitnessSet *>(&*witnessSetBase)) {
-			this->as_core().clean_implementation(*witnessSet);
-			return witnessSetBase;
-		} else {
-			std::cerr << "ERROR: in CoreWrapper::clean cast error\n";
-			exit(20);
-		}
-#else
-		this->as_core().clean_implementation(
-			static_cast<WitnessSet &>(*witnessSetBase));
-		return witnessSetBase;
-#endif
+	WitnessSetPointer clean(WitnessSetPointer witnessSetBase) override
+	{
+		#ifdef ENABLE_DEBUG_INFO
+				if (WitnessSet *witnessSet =
+						dynamic_cast<WitnessSet *>(&*witnessSetBase))
+				{
+					this->as_core().clean_implementation(*witnessSet);
+					return witnessSetBase;
+				}
+				else
+				{
+					std::cerr << "ERROR: in CoreWrapper::clean cast error\n";
+					exit(20);
+				}
+		#else
+				this->as_core().clean_implementation(static_cast<WitnessSet &>(*witnessSetBase));
+				return witnessSetBase;
+		#endif
 	}
 
 	bool is_final_witness_set(const Bag &bag,
-							  WitnessSetPointer ws_ptr) override {
+							  WitnessSetPointer ws_ptr) override
+	{
 		const auto &witnessSet = as_witness_set(*ws_ptr);
 
 		for (const auto &w_ptr : witnessSet)
@@ -125,59 +140,111 @@ class CoreWrapper : public DynamicCore {
 		return false;
 	}
 
-	int inv(const Bag &bag, WitnessSetPointer witnessSet) override {
-		auto coreType = getAttributeValue("CoreType");
+	int inv(const Bag &bag, WitnessSetPointer witnessSet) override
+	{
+		// auto coreType = getAttributeValue("CoreType");
 
-		if (coreType == "NULL" || coreType == "Max") {
-			int max = 0;
-			for (WitnessPointerConst temp : *witnessSet)
-				max = std::max(max, this->as_core().weight_implementation(
-										bag, WitnessAlias::as_witness(*temp)));
-			return max;
-		}
+		// if (coreType == "Bool" || coreType == "Max")
+		// {
+		// 	int max = 0;
+		// 	for (WitnessPointerConst temp : *witnessSet)
+		// 		max = std::max(max, this->as_core().weight_implementation(
+		// 								bag, WitnessAlias::as_witness(*temp)));
+		// 	return max;
+		// }
 
-		if (coreType == "Min") {
-			int min = std::numeric_limits<int>::max();
-			for (WitnessPointerConst temp : *witnessSet)
-				min = std::min(min, this->as_core().weight_implementation(
-										bag, WitnessAlias::as_witness(*temp)));
-			return min;
-		}
+		// if (coreType == "Min")
+		// {
+		// 	int min = std::numeric_limits<int>::max();
+		// 	for (WitnessPointerConst temp : *witnessSet)
+		// 		min = std::min(min, this->as_core().weight_implementation(
+		// 								bag, WitnessAlias::as_witness(*temp)));
+		// 	return min;
+		// }
 
-		throw std::runtime_error("Unknown CoreType: " + coreType);
+		// throw std::runtime_error("Unknown CoreType: " + coreType);
+
+		return this->as_core().inv_implementation(bag, as_witness_set(*witnessSet));
 	}
 
 	// This method will never be called through a reference to this base class.
 	// It is only here to allow the derived class to use "override" to make
 	// sure they got the signature right.
-	virtual int weight_implementation(const Bag &bag,
-									  const WitnessAlias &witness) {
+	virtual int inv_implementation(const Bag &bag, WitnessSet &witnessSet) const{
+        // auto coreType = getAttributeValue("CoreType");
+		// if (coreType == "Max")
+		// {
+		// 	int max = 0;
+		// 	for (WitnessPointerConst temp : *witnessSet)
+		// 		max = std::max(max, this->as_core().weight_implementation(bag, WitnessAlias::as_witness(*temp)));
+		// 	return max;
+		// }
+
+		// if (coreType == "Min")
+		// {
+		// 	int min = std::numeric_limits<int>::max();
+		// 	for (WitnessPointerConst temp : *witnessSet)
+		// 		min = std::min(min, this->as_core().weight_implementation(bag, WitnessAlias::as_witness(*temp)));
+		// 	return min;
+		// }
+
+		// return final witness set
+		
+		// Use const_cast to call getAttributeValue() from a const method.
+		auto coreType = const_cast<CoreWrapper*>(this)->getAttributeValue("CoreType");
+		std::cout << "CoreType: " << coreType << std::endl;
+		if (coreType== "Max") {
+			int maxVal = 0;
+			for (const auto &w_ptr : witnessSet)
+				maxVal = std::max(maxVal, const_cast<CoreWrapper*>(this)->as_core().weight_implementation(
+					bag, WitnessAlias::as_witness(*w_ptr)));
+			return maxVal;
+		}
+		if (coreType == "Min") {
+			int minVal = std::numeric_limits<int>::max();
+			for (const auto &w_ptr : witnessSet)
+				minVal = std::min(minVal, const_cast<CoreWrapper*>(this)->as_core().weight_implementation(
+					bag, WitnessAlias::as_witness(*w_ptr)));
+			return minVal;
+		}
+		
+		// Instead of iterating over each witness, directly call is_final_witness_set.
+		// Create a temporary WitnessSetPointer that wraps witnessSet without owning it.
+		auto temp = WitnessSetPointer(&witnessSet, [](WitnessSet*){});
+		return const_cast<CoreWrapper*>(this)->is_final_witness_set(bag, temp) ? 1 : 0;
+		
+    }
+
+	virtual int weight_implementation(const Bag &bag, const WitnessAlias &witness)
+	{
+		auto coreType = getAttributeValue("CoreType");
+		std::cout << "CoreType 222" << coreType << std::endl;
 		return this->as_core().is_final_witness_implementation(bag, witness);
 	}
 
-	WitnessSetPointer intro_v(unsigned i, const Bag &b,
-							  const Witness &witness) override {
+	WitnessSetPointer intro_v(unsigned i, const Bag &b, const Witness &witness) override
+	{
 		auto res = std::make_shared<WitnessSet>();
 		this->as_core().intro_v_implementation(
 			i, b, WitnessAlias::as_witness(witness), *res);
 		return res;
 	}
-	WitnessSetPointer intro_e(unsigned i, unsigned j, const Bag &b,
-							  const Witness &witness) override {
+	WitnessSetPointer intro_e(unsigned i, unsigned j, const Bag &b, const Witness &witness) override
+	{
 		auto res = std::make_shared<WitnessSet>();
 		this->as_core().intro_e_implementation(
 			i, j, b, WitnessAlias::as_witness(witness), *res);
 		return res;
 	}
-	WitnessSetPointer forget_v(unsigned i, const Bag &b,
-							   const Witness &witness) override {
+	WitnessSetPointer forget_v(unsigned i, const Bag &b, const Witness &witness) override
+	{
 		auto res = std::make_shared<WitnessSet>();
 		this->as_core().forget_v_implementation(
 			i, b, WitnessAlias::as_witness(witness), *res);
 		return res;
 	}
-	WitnessSetPointer join(const Bag &b, const Witness &witness1,
-						   const Witness &witness2) override {
+	WitnessSetPointer join(const Bag &b, const Witness &witness1, const Witness &witness2) override
+	{
 		auto res = std::make_shared<WitnessSet>();
 		this->as_core().join_implementation(
 			b, WitnessAlias::as_witness(witness1),
@@ -185,7 +252,8 @@ class CoreWrapper : public DynamicCore {
 		return res;
 	}
 
-	bool is_final_witness(const Bag &b, const Witness &witness) override {
+	bool is_final_witness(const Bag &b, const Witness &witness) override
+	{
 		return this->as_core().is_final_witness_implementation(
 			b, WitnessAlias::as_witness(witness));
 	}

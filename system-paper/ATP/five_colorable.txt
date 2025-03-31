@@ -1,0 +1,3 @@
+x := ChromaticNumber(5)
+Formula
+x

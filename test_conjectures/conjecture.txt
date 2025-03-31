@@ -1,6 +1,4 @@
-// Extended Input File for Conjecture Parser
-a := CliqueNumberSimpleGraphs(3)
-b := MaxDegree(5)
-c := HasMultipleEdges()
+x := MaxDegree(4)
+y := ChromaticNumber(4)
 Formula
-True IMPLIES True
+NOT x IMPLIES y

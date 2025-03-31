@@ -1,0 +1,1 @@
+./treewidzard -modelcheck ITD ../system-paper/model-checking-option-2/three_colorable.txt ../system-paper/model-checking-option-2/diamondITD.txt

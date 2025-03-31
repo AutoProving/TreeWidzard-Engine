@@ -5,13 +5,23 @@
 int gr_parse(std::istream &is, MultiGraph &graph, int &result) {
 	std::string line_str;
 	std::istringstream line;
-
 	auto next_non_comment = [&]() {
-		while (std::getline(is, line_str) && line_str.starts_with("c"))
-			;
-		if (!line_str.size()) return false;
-		line.str(line_str);
-		line.clear();
+		// while (std::getline(is, line_str) && line_str.starts_with("c"))
+		// 	;
+		// if (!line_str.size()) return false;
+		// line.str(line_str);
+		// line.clear();
+		// return true;
+		while (true) {
+			if (!std::getline(is, line_str)) {
+				return false;  // Stop if getline fails (EOF or error)
+			}
+			if (!line_str.starts_with("c")) {
+				break;
+			}
+		}
+		line.clear();          // Clear any previous state
+		line.str(line_str);    // Load the new line into the stringstream
 		return true;
 	};
 
@@ -26,11 +36,13 @@ int gr_parse(std::istream &is, MultiGraph &graph, int &result) {
 		std::cerr << "first token in header line is not p\n";
 		return result = 21;
 	}
+
 	line >> token;
 	if (token != "tw") {
 		std::cerr << "second token in header line is not tw\n";
 		return result = 21;
 	}
+
 
 	int V, E;
 	line >> V >> E;
@@ -43,6 +55,8 @@ int gr_parse(std::istream &is, MultiGraph &graph, int &result) {
 
 	int edge_cnt = 0;
 
+
+
 	while (next_non_comment()) {
 		++edge_cnt;
 		int u, v;
@@ -54,6 +68,8 @@ int gr_parse(std::istream &is, MultiGraph &graph, int &result) {
 		}
 		graph.addEdgeEndPoints(u, v);
 	}
+
+
 
 	if (edge_cnt != E) {
 		std::cerr << "incorrect number of edges (expected " << E << ", found "

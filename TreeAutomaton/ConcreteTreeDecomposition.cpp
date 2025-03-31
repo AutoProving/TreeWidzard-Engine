@@ -278,6 +278,9 @@ ConcreteTreeDecomposition::constructWitnesses(
 	Flags &flags, std::string &_str) {
 	// First, We check the type of the node
 	if (node->getNodeContent().getSymbol() == "Leaf") {
+		// // Test
+		// std::cout << "Leaf " << std::endl;
+		// //
 		// if it is an empty, then it is a leaf
 		State::ptr q = conjecture.getKernel()->initialState();
 		if (flags.get("PrintStates")) {
@@ -287,12 +290,18 @@ ConcreteTreeDecomposition::constructWitnesses(
 			runNode(new TermNode<RunNodeContent<State::ptr, ConcreteNode>>);
 		std::shared_ptr<RunNodeContent<State::ptr, ConcreteNode>>
 			runNodeContent(new RunNodeContent<State::ptr, ConcreteNode>);
+		// // Test
+		// std::cout << "Leaf "<< q->getWitnessSet(0)->size() << std::endl;
+		// //
 		runNodeContent->setState(q);
 		runNodeContent->setRunNodeContent(node->getNodeContent());
 		runNode->setNodeContent(*runNodeContent);
 		return runNode;
 	} else if (strstr(node->getNodeContent().getSymbol().c_str(),
 					  "IntroVertex")) {
+		// // Test
+		// std::cout << "intro v " << std::endl;
+		// //
 		std::shared_ptr<TermNode<RunNodeContent<State::ptr, ConcreteNode>>>
 			runNodeChild = constructWitnesses(
 				conjecture, node->getChildren()[0], flags, _str);
@@ -327,6 +336,9 @@ ConcreteTreeDecomposition::constructWitnesses(
 			runNode(new TermNode<RunNodeContent<State::ptr, ConcreteNode>>);
 		std::shared_ptr<RunNodeContent<State::ptr, ConcreteNode>>
 			runNodeContent(new RunNodeContent<State::ptr, ConcreteNode>);
+		// // Test
+		// std::cout << "intro v "<< q->getWitnessSet(0)->size() << std::endl;
+		// //	
 		runNodeContent->setState(q);
 		runNodeContent->setRunNodeContent(node->getNodeContent());
 		runNode->setNodeContent(*runNodeContent);
@@ -337,6 +349,9 @@ ConcreteTreeDecomposition::constructWitnesses(
 		return runNode;
 	} else if (strstr(node->getNodeContent().getSymbol().c_str(),
 					  "ForgetVertex")) {
+		// // Test
+		// std::cout << "forget v " << std::endl;
+		// //
 		std::shared_ptr<TermNode<RunNodeContent<State::ptr, ConcreteNode>>>
 			runNodeChild = constructWitnesses(
 				conjecture, node->getChildren()[0], flags, _str);
@@ -366,6 +381,9 @@ ConcreteTreeDecomposition::constructWitnesses(
 			runNode(new TermNode<RunNodeContent<State::ptr, ConcreteNode>>);
 		std::shared_ptr<RunNodeContent<State::ptr, ConcreteNode>>
 			runNodeContent(new RunNodeContent<State::ptr, ConcreteNode>);
+		// // Test
+		// std::cout << "forget v "<< q->getWitnessSet(0)->size() << std::endl;
+		// //
 		runNodeContent->setState(q);
 		runNodeContent->setRunNodeContent(node->getNodeContent());
 		runNode->setNodeContent(*runNodeContent);
@@ -376,6 +394,9 @@ ConcreteTreeDecomposition::constructWitnesses(
 		return runNode;
 	} else if (strstr(node->getNodeContent().getSymbol().c_str(),
 					  "IntroEdge")) {
+		// // Test
+		// std::cout << "intro e " << std::endl;
+		// //
 		std::shared_ptr<TermNode<RunNodeContent<State::ptr, ConcreteNode>>>
 			runNodeChild = constructWitnesses(
 				conjecture, node->getChildren()[0], flags, _str);
@@ -389,10 +410,14 @@ ConcreteTreeDecomposition::constructWitnesses(
 		if (bool(flags.get("PrintStates"))) {
 			q->print();
 		}
+
 		std::shared_ptr<TermNode<RunNodeContent<State::ptr, ConcreteNode>>>
 			runNode(new TermNode<RunNodeContent<State::ptr, ConcreteNode>>);
 		std::shared_ptr<RunNodeContent<State::ptr, ConcreteNode>>
 			runNodeContent(new RunNodeContent<State::ptr, ConcreteNode>);
+		// // Test
+		// std::cout << "intro e "<< q->getWitnessSet(0)->size() << std::endl;
+		// //
 		runNodeContent->setState(q);
 		runNodeContent->setRunNodeContent(node->getNodeContent());
 		runNode->setNodeContent(*runNodeContent);
@@ -402,6 +427,9 @@ ConcreteTreeDecomposition::constructWitnesses(
 		runNodeChild->setParent(runNode);
 		return runNode;
 	} else if (strstr(node->getNodeContent().getSymbol().c_str(), "Join")) {
+		// // Test
+		// std::cout << "join " << std::endl;
+		// //
 		std::shared_ptr<TermNode<RunNodeContent<State::ptr, ConcreteNode>>>
 			runNodeChild1 = constructWitnesses(
 				conjecture, node->getChildren()[0], flags, _str);
@@ -418,6 +446,9 @@ ConcreteTreeDecomposition::constructWitnesses(
 			runNode(new TermNode<RunNodeContent<State::ptr, ConcreteNode>>);
 		std::shared_ptr<RunNodeContent<State::ptr, ConcreteNode>>
 			runNodeContent(new RunNodeContent<State::ptr, ConcreteNode>);
+		// // Test
+		// std::cout << "join "<< q->getWitnessSet(0)->size() << std::endl;
+		// //
 		runNodeContent->setState(q);
 		runNodeContent->setRunNodeContent(node->getNodeContent());
 		runNode->setNodeContent(*runNodeContent);
@@ -442,31 +473,26 @@ ConcreteTreeDecomposition::constructWitnesses(
 auto findMaxWitnessSetSize(
 	TermNode<RunNodeContent<State::ptr, ConcreteNode>> &node) -> std::size_t {
 	std::size_t max_witness_set_size = 0;
-
 	auto &&state = node.getNodeContent().getState();
 	auto component_count = state->numberOfComponents();
 	for (std::size_t component = 0; component != component_count; ++component) {
-		max_witness_set_size +=
-			std::size_t(state->getWitnessSet(int(component))->size());
+		max_witness_set_size += std::size_t(state->getWitnessSet(int(component))->size());
 	}
 
 	for (auto &child : node.getChildren()) {
-		max_witness_set_size =
-			std::max(max_witness_set_size, findMaxWitnessSetSize(*child));
+		max_witness_set_size = std::max(max_witness_set_size, findMaxWitnessSetSize(*child));
 	}
 
 	return max_witness_set_size;
 }
 
-bool ConcreteTreeDecomposition::conjectureCheck(Conjecture &conjecture,
-												Flags &flags,
-												std::string name) {
+bool ConcreteTreeDecomposition::conjectureCheck(Conjecture &conjecture, Flags &flags, std::string name) {
 	std::string _str = "";
 	RunTree<State::ptr, ConcreteNode> runTree;
-	std::shared_ptr<TermNode<RunNodeContent<State::ptr, ConcreteNode>>>
-		runNode = constructWitnesses(conjecture, getRoot(), flags, _str);
+	std::shared_ptr<TermNode<RunNodeContent<State::ptr, ConcreteNode>>> runNode = constructWitnesses(conjecture, getRoot(), flags, _str);
 	runTree.setRoot(runNode);
 	name += "_RunTree.txt";
+
 	//    std::cout << "Conjecture Value: " ;
 	//    std::cout <<
 	//    conjecture.evaluateConjectureOnState(*runNode->getNodeContent().getState())
@@ -474,17 +500,34 @@ bool ConcreteTreeDecomposition::conjectureCheck(Conjecture &conjecture,
 	//    conjecture.printValues(*runNode->getNodeContent().getState(),conjecture.getRoot());
 	//    return true;
 
-	std::cout << "Max WITNESSSET SIZE: "
-			  << findMaxWitnessSetSize(*runTree.getRoot()) << '\n';
-
-	if (!conjecture.evaluateConjectureOnState(
-			*runNode->getNodeContent().getState())) {
+	auto q = *runNode->getNodeContent().getState();
+	bool result = false;
+	if (!conjecture.evaluateConjectureOnState(q) ) {
 		if (flags.get("WriteToFiles")) runTree.writeToFile(name);
-		std::cout << "CONJECTURE NOT SATISFIED" << std::endl;
-		return false;
+		std::cout << "PROPERTY NOT SATISFIED" << std::endl;
+		result = false;
 	} else {
-		std::cout << "CONJECTURE SATISFIED" << std::endl;
+		std::cout << "PROPERTY SATISFIED" << std::endl;
 		if (flags.get("WriteToFiles")) runTree.writeToFile(name);
-		return true;
+		result = true;
 	}
+
+	auto kernel = conjecture.getKernel();
+	std::cout << "Variable evaluation:" << std::endl;
+	for(auto m : conjecture.getVariablesToCoreName()){
+		auto var_core = m.first;
+		std::string coreType = kernel->getCoreByVar(var_core)->getAttributeValue("CoreType");
+		Bag bag = q.get_bag();
+		auto result_var = kernel->getCoreByVar(var_core)->is_final_witness_set(bag, q.getWitnessSet(kernel->getIndexByVar(var_core)));
+
+		auto result_var_inv = kernel->getCoreByVar(var_core)->inv(bag, q.getWitnessSet(kernel->getIndexByVar(var_core)));
+		
+        std::cout << var_core << ":" << result_var << "  inv("<<var_core<<"):" << result_var_inv << std::endl;
+	}
+
+	std::cout << "Max WITNESSSET SIZE: " << findMaxWitnessSetSize(*runTree.getRoot()) << '\n';
+
+	return result;
+	
+
 }

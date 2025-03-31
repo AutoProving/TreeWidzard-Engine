@@ -1,15 +1,12 @@
 #include "Conjecture.h"
 
 // To Do: implement getCoreWitnessSetByVar
-double Conjecture::evaluateConjectureNodeOnState(const State &q,
-												 const ConjectureNode *node) {
+double Conjecture::evaluateConjectureNodeOnState(const State &q, const ConjectureNode *node) {
 	double result;
 	// evaluate a node based on its type
-
 	// TODO:
 	// should only compute invariant and is_final_set at most once
 	// double -> int (because double - bool conversions are scary)
-
 	// if you give ownership -> shared_ptr or unique_ptr
 	// if you let someone borrow -> reference
 

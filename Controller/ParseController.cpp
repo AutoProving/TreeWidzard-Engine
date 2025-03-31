@@ -20,6 +20,8 @@ void ParseController::parse_pace(std::string graphPath,
 	int result = 1; // if parsing successful result will be 0 otherwise 1
 	result = gr_parse(gr_in, *multigraph,
 					  result); // Parser function from Parser.hpp
+	std::cout<< " The graph read from input successfully. "<<std::endl;
+
 	// check for successful parsing
 	if (result != 0) {
 		std::cout << " Error: input file " << graphPath
@@ -60,12 +62,12 @@ void ParseController::parse_pace(std::string graphPath,
 				  << " is not in valid format" << std::endl;
 		exit(20);
 	}
-	//    cout<< " tree decomposition read from input"<<endl;
+	std::cout<< " tree decomposition read from input successfully."<<std::endl;
 	//    td.print();
 	/////////////////////////////////////////////////////////////////////////////////
 	td.construct();
-	//    td.print();
-	//    td.printTree();
+	// td.print();
+	// td.printTree();
 	//   cout<<"-----------Concrete decomposition"<<endl;
 	std::shared_ptr<ConcreteTreeDecomposition> concreteTreeDecomposition;
 	concreteTreeDecomposition = td.convertToConcreteTreeDecomposition();

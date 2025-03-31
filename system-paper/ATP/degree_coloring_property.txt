@@ -1,0 +1,4 @@
+x := MaxDegree(4)
+y := ChromaticNumber(4)
+Formula
+NOT x IMPLIES y
