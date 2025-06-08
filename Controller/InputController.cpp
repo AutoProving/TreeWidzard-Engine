@@ -15,6 +15,7 @@
 #endif
 
 void InputController::check_available_cores() {
+	std::cout<<"--------------- TreeWidzard Dynamic Cores LOADING INFORAMATION --------------- "<<std::endl;
 	for (std::string dynamicPluginPath : dynamicPluginPaths) {
 		for (const auto &entry :
 			 std::filesystem::directory_iterator(dynamicPluginPath)) {
@@ -22,7 +23,7 @@ void InputController::check_available_cores() {
 			// for linux .so, and windows .dll
 			if (s.find(DYNAMIC_LIB_EXTENSION) != std::string::npos) {
 				std::string fileName = entry.path().filename();
-				std::cout << "File " << fileName;
+				// std::cout << "File " << fileName;
 				try {
 					auto factory = DynamicCoreHandler(s);
 					const std::string &name =
@@ -31,8 +32,9 @@ void InputController::check_available_cores() {
 					auto [it, placed] =
 						coreList.emplace(name, std::move(factory));
 					if (!placed)
-						throw std::runtime_error("Duplicate core name.");
-					std::cout << " Loaded. Core Name: " << name << '\n';
+						throw std::runtime_error(" Duplicate core name: " +
+												 name + "\n File:"+	s);
+					// std::cout << " Loaded. Core Name: " << name << '\n';
 				} catch (std::exception &e) {
 					std::cerr << " failed to load." << e.what() << std::endl;
 				}
@@ -49,10 +51,12 @@ void InputController::parse_input() {
 		exit(20);
 	}
 	int result = 1; // if parsing successful result will be 0 otherwise 1
-	std::cout << "CoreList" << std::endl;
+	std::cout << "Loaded DP-Cores to TreeWidzard:";
 	for (const auto &pair : coreList) {
-		std::cout << pair.first << std::endl; // pair.first is the key
+		std::cout << pair.first << " - "; // pair.first is the key
 	}
+	std::endl(std::cout);
+	
 	input_parse(conjecture, result, coreList, varToCoreName,
 				varToProperty); // Parser function from Parser.hpp
 
@@ -78,27 +82,29 @@ void InputController::parse_input() {
 	//      std::cout << '\n';
 	//  }
 
-	std::cout << "CONJECTURE: ";
-	conjecture.print();
-	std::cout << std::endl;
+	// std::cout << "------------- Property File Information ------------- " << std::endl;
+	// std::cout << "\nFormula: ";
+	// conjecture.print();
+	// std::cout << std::endl;
+	conjecture.setvarToProperty(varToProperty);
 	conjecture.setVariablesToCoreName(varToCoreName);
 	if (!conjecture.checkConjectureStructure(conjecture.getRoot())) {
 		exit(20);
 	}
 
-	width.print();
 	dynamicKernel.set_width(width);
+	std::cout << "----------------------------------------------------------" << std::endl;
 }
 
 void InputController::construct_dynamicKernel() {
 	int coreIndex = 1;
 	for (auto core : varToProperty) {
 		if (coreList.count(core.second->getName())) {
-			std::cout << std::left << std::setw(2) << coreIndex << std::setw(5)
-					  << "- Variable: " << std::setw(5) << core.first
-					  << std::setw(5) << "NAME: " << std::setw(30)
-					  << core.second->getName();
-			coreIndex++;
+			// std::cout << std::left << std::setw(2) << coreIndex << std::setw(5)
+			// 		  << "- Variable: " << std::setw(5) << core.first
+			// 		  << std::setw(5) << "NAME: " << std::setw(30)
+			// 		  << core.second->getName();
+			
 			// set coreType in core.second which is a PropertyAssignment.
 			core.second->setType(coreList.at(core.second->getName())
 									 .get_metadata()
@@ -107,11 +113,11 @@ void InputController::construct_dynamicKernel() {
 			core.second->setParameterType(coreList.at(core.second->getName())
 											  .get_metadata()
 											  .at("ParameterType"));
-			std::cout << std::setw(10) << "ParameterType: " << std::setw(10)
-					  << coreList.at(core.second->getName())
-							 .get_metadata()
-							 .at("ParameterType");
-			std::cout << std::endl;
+			// std::cout << std::setw(10) << "ParameterType: " << std::setw(10)
+			// 		  << coreList.at(core.second->getName())
+			// 				 .get_metadata()
+			// 				 .at("ParameterType");
+			// std::cout << std::endl;
 			std::unique_ptr<DynamicCore> handlerCore =
 				coreList.at(core.second->getName())
 					.create(core.second->getParametersVec());
@@ -128,6 +134,13 @@ void InputController::construct_dynamicKernel() {
 				make_pair(core.first, make_pair(core.second->getName(),
 												dynamicKernel.coreSize() - 1)));
 			dynamicKernel.setVarToNameAndIndex(varToNameAndIndex);
+
+			// std::cout << coreIndex << "-  " << core.first << " := "
+			// 		  << core.second->getName() << "( ";
+			// core.second->printParameters();
+			// std::cout<< ")"<< std::setw(5)<<" CoreType: '" << core.second->getType()<< "'" <<std::setw(5)<< " ParameterType: " << core.second->getParameterType() << std::endl;
+
+			coreIndex++;
 		} else {
 			std::cout << "Core " << core.first
 					  << " := " << core.second->getName() << " is not exist"
@@ -136,7 +149,7 @@ void InputController::construct_dynamicKernel() {
 		}
 	}
 	conjecture.setKernel(&dynamicKernel);
-	std::cout << "core size: " << dynamicKernel.coreSize() << std::endl;
+	// std::cout << "core size: " << dynamicKernel.coreSize() << std::endl;
 }
 
 DynamicKernel &InputController::getDynamicKernel() { return dynamicKernel; }

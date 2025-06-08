@@ -1242,7 +1242,7 @@ yyreduce:
     {
   case 2: /* atd_START: atd_NODE  */
 #line 56 "atd_parser.y"
-                                                                 {if(!atd_construct(atd,labelToNode,labelToParentLabel)){YYERROR;}; std::cout<<"DONE!"<<std::endl;}
+                                                                 {if(!atd_construct(atd,labelToNode,labelToParentLabel)){YYERROR;};}
 #line 1247 "atd_parser.cpp"
     break;
 

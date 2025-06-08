@@ -65,7 +65,22 @@ void SearchController::check_search() {
 }
 
 void SearchController::action() {
-	std::cout << "Search Method: " << searchStrategyName << std::endl;
+	std::cout << "Property information:\n" << std::endl;
+	std::cout << "Formula: ";
+	inputController->getConjecture().print();
+	std::cout << "\n" <<std::endl;
+	for (auto core:inputController->getvarToProperty()) {
+		std::cout <<core.first << " := " ;
+		std::cout << core.second->getName() << "(";
+		core.second->printParameters();
+		std::cout << ")" << std::endl;
+		std::cout << "Core type: "<< core.second->getType() << std::endl;
+	}
+
+	std::cout << "\nSearch information:\n" << std::endl;
+	std::cout << "Width parameter: " << width.get_name() << " = " << width.get_value() << std::endl;
+	std::cout << "Search method: " << searchStrategyName << std::endl;
+	std::cout << "Premise flag: " << (flags.get("Premise") ? "ACTIVATED" : "NOT ACTIVATED") << std::endl;
 	check_search();
 	auto it = searchList.find(searchStrategyName);
 	SearchStrategyHandler *searchStrategyHandler;
@@ -73,8 +88,8 @@ void SearchController::action() {
 		std::string libPath = searchNamesToFiles[searchStrategyName];
 		searchStrategyHandler = new SearchStrategyHandler(libPath.c_str());
 
-		std::cerr << "found matching search strategy at path: " << libPath
-				  << '\n';
+		// std::cerr << "found matching search strategy at path: " << libPath
+		// 		  << '\n';
 
 		std::unique_ptr<SearchStrategy> search = searchStrategyHandler->create(
 			&inputController->getDynamicKernel(),
@@ -103,10 +118,13 @@ void SearchController::action() {
 				std::to_string(width.get_value());
 		}
 		searchStrategy->setOutputsPath(output_file_path);
+		std::cout << "\nSearch process:" << std::endl;
 		searchStrategy->search();
+		std::cout << "-----------------------------------------" << std::endl;
 	} else {
 		std::cout << "Error: Search method " << searchStrategyName
 				  << " was not found." << std::endl;
 		exit(20);
 	}
+
 }

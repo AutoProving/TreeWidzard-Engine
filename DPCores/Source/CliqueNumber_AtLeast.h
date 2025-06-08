@@ -112,10 +112,10 @@ struct CliqueNumberSimpleGraphs_AtLeast_Core
 
 	static std::map<std::string, std::string> metadata() {
 		return {
-			{"CoreName", "CliqueNumberSimpleGraphs"},
+			{"CoreName", "CliqueNumber"},
 			{"CoreType", "Bool"},
 			{"ParameterType", "UnsignedInt"},
-			{"PrimaryOperator", "AtLeast"},
+			// {"PrimaryOperator", "AtLeast"},
 		};
 	}
 

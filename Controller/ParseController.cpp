@@ -20,7 +20,7 @@ void ParseController::parse_pace(std::string graphPath,
 	int result = 1; // if parsing successful result will be 0 otherwise 1
 	result = gr_parse(gr_in, *multigraph,
 					  result); // Parser function from Parser.hpp
-	std::cout<< " The graph read from input successfully. "<<std::endl;
+	// std::cout<< " The graph read from input successfully. "<<std::endl;
 
 	// check for successful parsing
 	if (result != 0) {
@@ -62,7 +62,7 @@ void ParseController::parse_pace(std::string graphPath,
 				  << " is not in valid format" << std::endl;
 		exit(20);
 	}
-	std::cout<< " tree decomposition read from input successfully."<<std::endl;
+	// std::cout<< " tree decomposition read from input successfully."<<std::endl;
 	//    td.print();
 	/////////////////////////////////////////////////////////////////////////////////
 	td.construct();
@@ -72,7 +72,7 @@ void ParseController::parse_pace(std::string graphPath,
 	std::shared_ptr<ConcreteTreeDecomposition> concreteTreeDecomposition;
 	concreteTreeDecomposition = td.convertToConcreteTreeDecomposition();
 	//  concreteTreeDecomposition->printTermNodes();
-	std::cout << "----Evaluating-----:" << std::endl;
+	// std::cout << "----------Result----------" << std::endl;
 	concreteTreeDecomposition->conjectureCheck(
 		this->inputController->getConjecture(), flag, name);
 	if (flag.get("WriteToFiles")) {
@@ -123,7 +123,9 @@ void ParseController::parse_itd(std::string itdPath) {
 	ConcreteTreeDecomposition concreteTreeDecomposition =
 		instructiveTreeDecomposition.convertToConcreteTreeDecomposition();
 	// concreteTreeDecomposition.printTermNodes();
-	std::cout << "----Evaluating-----:" << std::endl;
+	
+	
+
 	std::string output_file_path =
 		std::filesystem::path(inputController->getInputPath())
 			.parent_path()

@@ -31,8 +31,7 @@ class InputController {
 		coreList; // Each entry is a pair of core name and core attributes.
 	std::map<std::string, std::string>
 		varToCoreName; // map from variables to name of cores
-	std::map<std::string, PropertyAssignment *>
-		varToProperty; // map from var to Property
+	std::map<std::string, PropertyAssignment *> varToProperty; // map from var to Property
   public:
 	InputController(
 		std::string inputPath,
@@ -59,6 +58,9 @@ class InputController {
 			while (getline(is, path, ':'), is) paths.push_back(path);
 		}
 		return paths;
+	}
+	std::map<std::string, PropertyAssignment *> getvarToProperty() {
+		return varToProperty;
 	}
 };
 

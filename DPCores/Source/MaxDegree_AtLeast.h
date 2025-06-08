@@ -147,7 +147,7 @@ struct MaxDegree_AtLeast_DynamicCore
             {"CoreName", "MaxDegree"},
             {"CoreType", "Bool"},
             {"ParameterType", "UnsignedInt"},
-            {"PrimaryOperator", "AtLeast"},
+            // {"PrimaryOperator", "AtLeast"},
         };
     }
 

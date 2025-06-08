@@ -136,11 +136,7 @@ struct IndependentSet_Max_Core: CoreWrapper<IndependentSet_Max_Core, Independent
             witnessSet.insert(std::move(w));
     }
 
-    int inv_implementation(const Bag &bag, WitnessSet &witnessSet) const {
-        int maxSize = 0;
-        for (const auto &w : witnessSet) {
-            maxSize = std::max(maxSize,std::dynamic_pointer_cast<WitnessAlias>(w)->size);
-        }
-        return maxSize;
+    int inv_implementation(const Bag &bag, const WitnessAlias &w) const {
+       return w.size;
     }
 };

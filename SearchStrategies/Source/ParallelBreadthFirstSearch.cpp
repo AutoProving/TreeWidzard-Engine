@@ -123,11 +123,11 @@ void update_maximum(std::atomic<T> &maximum_value, const T &value) noexcept {
 }
 
 void ParallelBreadthFirstSearch::search() {
-	if (flags->get("Premise")) {
-		std::cout << " Premise is ACTIVATED" << std::endl;
-	} else {
-		std::cout << "Premise is NOT ACTIVATED" << std::endl;
-	}
+	// if (flags->get("Premise")) {
+	// 	std::cout << "Premise is ACTIVATED" << std::endl;
+	// } else {
+	// 	std::cout << "Premise is NOT ACTIVATED" << std::endl;
+	// }
 	bool printStateFlag = flags->get("PrintStates");
 	State::ptr initialState = kernel->initialState();
 	allStatesSet.insert(initialState);
@@ -530,7 +530,9 @@ void ParallelBreadthFirstSearch::search() {
 
 		for (auto it = newStatesSet.cbegin(); it != newStatesSet.cend(); it++) {
 			if (!conjecture->evaluateConjectureOnState(**it)) {
-				std::cout << "Conjecture: Not Satisfied" << std::endl;
+				std::cout << "\nResult: ";
+				std::cout << "PROPERTY NOT SATISFIED\n" << std::endl;
+				std::cout << "Counterexample found:" << std::endl;
 
 				if (noBFSDAG) {
 					std::cerr << "Rerun without -no-bfs-dag to construct a "
@@ -585,7 +587,8 @@ void ParallelBreadthFirstSearch::search() {
 			std::cout << std::endl;
 		}
 	}
-	std::cout << "Conjecture: Satisfied" << std::endl;
+	std::cout << "\nResult: ";
+	std::cout << "PROPERTY SATISFIED" << std::endl;
 }
 RunTree<State::ptr, InstructiveTreeDecompositionNodeContent>
 ParallelBreadthFirstSearch::extractCounterExampleRun(State::ptr state) {

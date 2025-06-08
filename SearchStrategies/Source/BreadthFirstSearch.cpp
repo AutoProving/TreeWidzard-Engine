@@ -118,14 +118,15 @@ void BreadthFirstSearch::extractCounterExampleStateTreeNode(
 
 void BreadthFirstSearch::search()
 {
-	if (flags->get("Premise"))
-	{
-		std::cout << " Premise is ACTIVATED" << std::endl;
-	}
-	else
-	{
-		std::cout << "Premise is NOT ACTIVATED" << std::endl;
-	}
+	// if (flags->get("Premise"))
+	// {
+	// 	std::cout << "Premise is ACTIVATED" << std::endl;
+	// }
+	// else
+	// {
+	// 	std::cout << "Premise is NOT ACTIVATED" << std::endl;
+	// }
+
 	bool printStateFlag = flags->get("PrintStates");
 	State::ptr initialState = kernel->initialState();
 	allStatesSet.insert(initialState);
@@ -531,8 +532,10 @@ void BreadthFirstSearch::search()
 		{
 			if (!conjecture->evaluateConjectureOnState(**it))
 			{
-				std::cout << "Conjecture: Not Satisfied" << std::endl;
-
+				std::cout << "\nResult: ";
+				std::cout << "PROPERTY NOT SATISFIED\n"
+						  << std::endl;
+				std::cout << "Counterexample found:" << std::endl;
 				if (noBFSDAG)
 				{
 					std::cerr << "Rerun without -no-bfs-dag to construct a "
@@ -599,7 +602,9 @@ void BreadthFirstSearch::search()
 			std::cout << std::endl;
 		}
 	}
-	std::cout << "Conjecture: Satisfied" << std::endl;
+	std::cout << "\nResult: ";
+	std::cout << "PROPERTY SATISFIED\n"
+			  << std::endl;
 }
 RunTree<State::ptr, InstructiveTreeDecompositionNodeContent>
 BreadthFirstSearch::extractCounterExampleRun(State::ptr state)

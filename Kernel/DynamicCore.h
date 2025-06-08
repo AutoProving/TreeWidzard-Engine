@@ -27,8 +27,7 @@ class DynamicCore
 {
 private:
 	WitnessSetPointer initialWitnessSet;
-	std::map<std::string, std::string>
-		attributes; // Characteristics of the core. This is initialized in the
+	std::map<std::string, std::string> attributes; // Characteristics of the core. This is initialized in the
 					// constructor of the derived class.
 	int width;
 
@@ -45,8 +44,7 @@ public:
 
 	bool isAttribute(std::string x, std::string y);
 
-	std::string getAttributeValue(
-		std::string x); // Returns "y" if (x,y) belongs to attributes.
+	std::string getAttributeValue(std::string x); // Returns "y" if (x,y) belongs to attributes.
 
 	std::map<std::string, std::string> getAttributes();
 

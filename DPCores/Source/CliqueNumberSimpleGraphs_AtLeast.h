@@ -131,7 +131,7 @@ struct CliqueNumberSimpleGraphs_AtLeast_Core
         {"CoreName", "CliqueNumberSimpleGraphs"},
         {"CoreType", "Bool"},
         {"ParameterType", "UnsignedInt"},
-        {"PrimaryOperator", "AtLeast"},
+        // {"PrimaryOperator", "AtLeast"},
     };
   }
 

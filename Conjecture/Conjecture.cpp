@@ -621,3 +621,9 @@ void Conjecture::printValues(const State &q, const ConjectureNode *node) {
 			exit(20);
 	}
 }
+
+void Conjecture::setvarToProperty(
+	const std::map<std::string, PropertyAssignment *> &varToProperty_) {
+	varToProperty = varToProperty_;
+}
+

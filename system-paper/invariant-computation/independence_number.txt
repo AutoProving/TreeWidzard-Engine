@@ -1,0 +1,3 @@
+x := IndependentSet()
+Formula
+x

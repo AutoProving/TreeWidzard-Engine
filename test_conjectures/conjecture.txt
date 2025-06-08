@@ -1,4 +1,3 @@
-x := MaxDegree(4)
-y := ChromaticNumber(4)
+x := VertexCount()
 Formula
-NOT x IMPLIES y
+INV(x) < 10

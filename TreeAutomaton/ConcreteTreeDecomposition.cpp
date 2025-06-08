@@ -470,9 +470,8 @@ ConcreteTreeDecomposition::constructWitnesses(
 	}
 }
 
-auto findMaxWitnessSetSize(
-	TermNode<RunNodeContent<State::ptr, ConcreteNode>> &node) -> std::size_t {
-	std::size_t max_witness_set_size = 0;
+auto findMaxWitnessSetSize(TermNode<RunNodeContent<State::ptr, ConcreteNode>> &node) -> std::size_t {
+	std::size_t max_witness_set_size = 0 ;
 	auto &&state = node.getNodeContent().getState();
 	auto component_count = state->numberOfComponents();
 	for (std::size_t component = 0; component != component_count; ++component) {
@@ -485,6 +484,37 @@ auto findMaxWitnessSetSize(
 
 	return max_witness_set_size;
 }
+
+auto findMaxWitnessSetSizesPerComponent(
+    TermNode<RunNodeContent<State::ptr, ConcreteNode>> &node
+) -> std::vector<std::size_t>
+{
+    // 1) Look at this node’s state
+    auto &&state       = node.getNodeContent().getState();
+    std::size_t ncomp  = state->numberOfComponents();
+    
+    // Initialize a vector of length ncomp, filled with this node’s witness‐set sizes
+    std::vector<std::size_t> max_sizes(ncomp);
+    for (std::size_t c = 0; c < ncomp; ++c) {
+        max_sizes[c] = state->getWitnessSet(int(c))->size();
+    }
+
+    // 2) Recurse into children and merge their maxima
+    for (auto &child : node.getChildren()) {
+        auto child_max = findMaxWitnessSetSizesPerComponent(*child);
+        // If a child has more components than this node, grow our vector
+        if (child_max.size() > max_sizes.size()) {
+            max_sizes.resize(child_max.size(), 0);
+        }
+        // For each component, keep the larger of (ours, child’s)
+        for (std::size_t c = 0; c < child_max.size(); ++c) {
+            max_sizes[c] = std::max(max_sizes[c], child_max[c]);
+        }
+    }
+
+    return max_sizes;
+}
+
 
 bool ConcreteTreeDecomposition::conjectureCheck(Conjecture &conjecture, Flags &flags, std::string name) {
 	std::string _str = "";
@@ -499,6 +529,10 @@ bool ConcreteTreeDecomposition::conjectureCheck(Conjecture &conjecture, Flags &f
 	//    << std::endl; std::cout << "Assignment: ";
 	//    conjecture.printValues(*runNode->getNodeContent().getState(),conjecture.getRoot());
 	//    return true;
+	std::cout<< "Formula:";
+	conjecture.print();
+	std::cout<<std::endl;
+	std::cout << "\nResult:";
 
 	auto q = *runNode->getNodeContent().getState();
 	bool result = false;
@@ -513,7 +547,10 @@ bool ConcreteTreeDecomposition::conjectureCheck(Conjecture &conjecture, Flags &f
 	}
 
 	auto kernel = conjecture.getKernel();
-	std::cout << "Variable evaluation:" << std::endl;
+	auto max_witness_set_sizes = findMaxWitnessSetSizesPerComponent(*runTree.getRoot());
+	std::cout << "\nExecution information:" << std::endl;
+
+	int i = 0;
 	for(auto m : conjecture.getVariablesToCoreName()){
 		auto var_core = m.first;
 		std::string coreType = kernel->getCoreByVar(var_core)->getAttributeValue("CoreType");
@@ -522,11 +559,16 @@ bool ConcreteTreeDecomposition::conjectureCheck(Conjecture &conjecture, Flags &f
 
 		auto result_var_inv = kernel->getCoreByVar(var_core)->inv(bag, q.getWitnessSet(kernel->getIndexByVar(var_core)));
 		
-        std::cout << var_core << ":" << result_var << "  inv("<<var_core<<"):" << result_var_inv << std::endl;
+		std::cout <<"\n" <<var_core << " := " << m.second << "(";
+		conjecture.getPropertyAssignment(var_core)->printParameters();
+		std::cout<<")" << std::endl;
+		std::cout << "Core type: " << coreType << std::endl;
+		std::cout << "Final value: " << var_core << "=" << result_var << std::endl;
+		std::cout << "Invariant value: INV("<<var_core<<")=" << result_var_inv << std::endl;
+		std::cout << "Max witness set: " << max_witness_set_sizes[i] << '\n';
+		i++;
 	}
-
-	std::cout << "Max WITNESSSET SIZE: " << findMaxWitnessSetSize(*runTree.getRoot()) << '\n';
-
+	std::cout << "-------------------------" << std::endl;
 	return result;
 	
 

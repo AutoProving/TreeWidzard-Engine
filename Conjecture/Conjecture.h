@@ -47,6 +47,7 @@ private:
     std::map<std::string, Function_Unary> functions_unary;
     ConjectureNode *root;
     DynamicKernel *kernel;
+    std::map<std::string, PropertyAssignment *> varToProperty; // map from var to Property
 public:
     Conjecture();
     ConjectureNode *getRoot() const;
@@ -65,5 +66,11 @@ public:
 
     const std::map<std::string, std::string> &getVariablesToCoreName() const;
     void setVariablesToCoreName(const std::map<std::string, std::string> &variablesToCoreName);
+
+    void setvarToProperty(const std::map<std::string, PropertyAssignment *> &varToProperty);
+    PropertyAssignment* getPropertyAssignment(const std::string& var) const {
+        auto it = varToProperty.find(var);
+        return it != varToProperty.end() ? it->second : nullptr;
+    }
 };
 #endif

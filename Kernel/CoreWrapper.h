@@ -131,7 +131,6 @@ public:
 							  WitnessSetPointer ws_ptr) override
 	{
 		const auto &witnessSet = as_witness_set(*ws_ptr);
-
 		for (const auto &w_ptr : witnessSet)
 			if (this->as_core().is_final_witness_implementation(
 					bag, WitnessAlias::as_witness(*w_ptr)))
@@ -142,83 +141,41 @@ public:
 
 	int inv(const Bag &bag, WitnessSetPointer witnessSet) override
 	{
-		// auto coreType = getAttributeValue("CoreType");
+		auto coreType = getAttributeValue("CoreType");
 
-		// if (coreType == "Bool" || coreType == "Max")
-		// {
-		// 	int max = 0;
-		// 	for (WitnessPointerConst temp : *witnessSet)
-		// 		max = std::max(max, this->as_core().weight_implementation(
-		// 								bag, WitnessAlias::as_witness(*temp)));
-		// 	return max;
-		// }
+		if (coreType == "Max")
+		{
+			int max = 0;
+			for (WitnessPointerConst temp : *witnessSet)
+				max = std::max(max, this->as_core().inv_implementation(
+										bag, WitnessAlias::as_witness(*temp)));
+			return max;
+		}
 
-		// if (coreType == "Min")
-		// {
-		// 	int min = std::numeric_limits<int>::max();
-		// 	for (WitnessPointerConst temp : *witnessSet)
-		// 		min = std::min(min, this->as_core().weight_implementation(
-		// 								bag, WitnessAlias::as_witness(*temp)));
-		// 	return min;
-		// }
+		if (coreType == "Min")
+		{
+			int min = std::numeric_limits<int>::max();
+			for (WitnessPointerConst temp : *witnessSet)
+				min = std::min(min, this->as_core().inv_implementation(
+										bag, WitnessAlias::as_witness(*temp)));
+			return min;
+		}
 
-		// throw std::runtime_error("Unknown CoreType: " + coreType);
-
-		return this->as_core().inv_implementation(bag, as_witness_set(*witnessSet));
+		// If CoreType is not set to Max or Min, return the is final witness function
+		return this->as_core().is_final_witness_set(bag, witnessSet);	
+		 
 	}
 
 	// This method will never be called through a reference to this base class.
 	// It is only here to allow the derived class to use "override" to make
 	// sure they got the signature right.
-	virtual int inv_implementation(const Bag &bag, WitnessSet &witnessSet) const{
-        // auto coreType = getAttributeValue("CoreType");
-		// if (coreType == "Max")
-		// {
-		// 	int max = 0;
-		// 	for (WitnessPointerConst temp : *witnessSet)
-		// 		max = std::max(max, this->as_core().weight_implementation(bag, WitnessAlias::as_witness(*temp)));
-		// 	return max;
-		// }
+	// virtual int inv_implementation(const Bag &bag, const WitnessAlias &witness) const{
+	// 	return this->as_core().is_final_witness_implementation(bag, witness);
+    // }
 
-		// if (coreType == "Min")
-		// {
-		// 	int min = std::numeric_limits<int>::max();
-		// 	for (WitnessPointerConst temp : *witnessSet)
-		// 		min = std::min(min, this->as_core().weight_implementation(bag, WitnessAlias::as_witness(*temp)));
-		// 	return min;
-		// }
-
-		// return final witness set
-		
-		// Use const_cast to call getAttributeValue() from a const method.
-		auto coreType = const_cast<CoreWrapper*>(this)->getAttributeValue("CoreType");
-		std::cout << "CoreType: " << coreType << std::endl;
-		if (coreType== "Max") {
-			int maxVal = 0;
-			for (const auto &w_ptr : witnessSet)
-				maxVal = std::max(maxVal, const_cast<CoreWrapper*>(this)->as_core().weight_implementation(
-					bag, WitnessAlias::as_witness(*w_ptr)));
-			return maxVal;
-		}
-		if (coreType == "Min") {
-			int minVal = std::numeric_limits<int>::max();
-			for (const auto &w_ptr : witnessSet)
-				minVal = std::min(minVal, const_cast<CoreWrapper*>(this)->as_core().weight_implementation(
-					bag, WitnessAlias::as_witness(*w_ptr)));
-			return minVal;
-		}
-		
-		// Instead of iterating over each witness, directly call is_final_witness_set.
-		// Create a temporary WitnessSetPointer that wraps witnessSet without owning it.
-		auto temp = WitnessSetPointer(&witnessSet, [](WitnessSet*){});
-		return const_cast<CoreWrapper*>(this)->is_final_witness_set(bag, temp) ? 1 : 0;
-		
-    }
-
-	virtual int weight_implementation(const Bag &bag, const WitnessAlias &witness)
+	virtual int inv_implementation(const Bag &bag, const WitnessAlias &witness)
 	{
 		auto coreType = getAttributeValue("CoreType");
-		std::cout << "CoreType 222" << coreType << std::endl;
 		return this->as_core().is_final_witness_implementation(bag, witness);
 	}
 
@@ -229,6 +186,7 @@ public:
 			i, b, WitnessAlias::as_witness(witness), *res);
 		return res;
 	}
+
 	WitnessSetPointer intro_e(unsigned i, unsigned j, const Bag &b, const Witness &witness) override
 	{
 		auto res = std::make_shared<WitnessSet>();
@@ -236,6 +194,7 @@ public:
 			i, j, b, WitnessAlias::as_witness(witness), *res);
 		return res;
 	}
+
 	WitnessSetPointer forget_v(unsigned i, const Bag &b, const Witness &witness) override
 	{
 		auto res = std::make_shared<WitnessSet>();
@@ -243,6 +202,7 @@ public:
 			i, b, WitnessAlias::as_witness(witness), *res);
 		return res;
 	}
+
 	WitnessSetPointer join(const Bag &b, const Witness &witness1, const Witness &witness2) override
 	{
 		auto res = std::make_shared<WitnessSet>();

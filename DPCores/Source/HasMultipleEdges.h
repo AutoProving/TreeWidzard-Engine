@@ -150,7 +150,7 @@ struct HasMultipleEdges_DynamicCore
             {"CoreName", "HasMultipleEdges"},
             {"CoreType", "Bool"},
             {"ParameterType", "ParameterLess"},
-            {"PrimaryOperator", "---"},
+            // {"PrimaryOperator", "---"},
         };
     }
 

@@ -1,21 +1,21 @@
 // Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 
-
 #include "../../CorePrelude.h"
 
 using namespace std;
 
-struct ChromaticNumber_AtMost_Witness : WitnessWrapper<ChromaticNumber_AtMost_Witness> {
+struct ChromaticNumber_AtMost_Witness : WitnessWrapper<ChromaticNumber_AtMost_Witness>
+{
 	//////
-  set<set<unsigned>> partialColoring;
+	set<set<unsigned>> partialColoring;
 	//////
 
 	/**
 	 * Check if the witnesses l and r are equal.
 	 */
-	friend bool is_equal_implementation(const WitnessAlias &l,
-										const WitnessAlias &r) {
-    return l.partialColoring == r.partialColoring;
+	friend bool is_equal_implementation(const WitnessAlias &l, const WitnessAlias &r)
+	{
+		return l.partialColoring == r.partialColoring;
 	}
 
 	/**
@@ -24,8 +24,9 @@ struct ChromaticNumber_AtMost_Witness : WitnessWrapper<ChromaticNumber_AtMost_Wi
 	 * as long as it's a strict total order.
 	 */
 	friend bool is_less_implementation(const WitnessAlias &l,
-									   const WitnessAlias &r){
-    return l.partialColoring < r.partialColoring;
+									   const WitnessAlias &r)
+	{
+		return l.partialColoring < r.partialColoring;
 	}
 
 	/**
@@ -37,15 +38,17 @@ struct ChromaticNumber_AtMost_Witness : WitnessWrapper<ChromaticNumber_AtMost_Wi
 	 * are renamed according to the relabeling map.
 	 */
 	WitnessAlias relabel_implementation(
-		const map<unsigned, unsigned> &relabelingMap) const {
-    auto relabeled = WitnessAlias();
-    for (const auto &cell : partialColoring) {
-      set<unsigned> relabeledCell;
-      for (const auto &vertex : cell)
-        relabeledCell.insert(relabelingMap.at(vertex));
-      relabeled.partialColoring.insert(relabeledCell);
-    }
-    return relabeled;
+		const map<unsigned, unsigned> &relabelingMap) const
+	{
+		auto relabeled = WitnessAlias();
+		for (const auto &cell : partialColoring)
+		{
+			set<unsigned> relabeledCell;
+			for (const auto &vertex : cell)
+				relabeledCell.insert(relabelingMap.at(vertex));
+			relabeled.partialColoring.insert(relabeledCell);
+		}
+		return relabeled;
 	}
 
 	/**
@@ -61,55 +64,64 @@ struct ChromaticNumber_AtMost_Witness : WitnessWrapper<ChromaticNumber_AtMost_Wi
 	 * are different they should probably supply
 	 * different hashes.
 	 */
-	void hash(Hasher &h) const override {
-    for (auto s : partialColoring) {
-      for (auto c : s) h << c;
-      h << -1u;
-    }
+	void hash(Hasher &h) const override
+	{
+		for (auto s : partialColoring)
+		{
+			for (auto c : s)
+				h << c;
+			h << -1u;
+		}
 	}
 
 	/**
 	 * Get a human readable string
 	 * representing the witness.
 	 */
-	void witness_info(std::ostream &os) const {
-    os << "partialColoring:";
-    for (auto cell : partialColoring) {
-      os << "{ ";
-      for (auto item : cell) {
-        os << item;
-        if (item != *cell.crbegin())
-          os << ",";
-      }
-      os << "}";
-    }
-    os << "\n";
+	void witness_info(std::ostream &os) const
+	{
+		os << "partialColoring:";
+		for (auto cell : partialColoring)
+		{
+			os << "{ ";
+			for (auto item : cell)
+			{
+				os << item;
+				if (item != *cell.crbegin())
+					os << ",";
+			}
+			os << "}";
+		}
+		os << "\n";
 	}
 };
 
 struct ChromaticNumber_AtMost_Core
-	: CoreWrapper<ChromaticNumber_AtMost_Core, ChromaticNumber_AtMost_Witness, WitnessSetTypeTwo> {
-  unsigned k;
+	: CoreWrapper<ChromaticNumber_AtMost_Core, ChromaticNumber_AtMost_Witness, WitnessSetTypeTwo>
+{
+	unsigned k;
 
-	static std::map<std::string, std::string> metadata() {
+	static std::map<std::string, std::string> metadata()
+	{
 		return {
 			{"CoreName", "ChromaticNumber"},
 			{"CoreType", "Bool"},
 			{"ParameterType", "UnsignedInt"},
-			{"PrimaryOperator", "AtMost"},
 		};
 	}
 
-	ChromaticNumber_AtMost_Core(const parameterType &parameters) {
-    auto [n] = unpack_typed_args<int>(parameters);
-    k = n;
-  }
+	ChromaticNumber_AtMost_Core(const parameterType &parameters)
+	{
+		auto [n] = unpack_typed_args<int>(parameters);
+		k = n;
+	}
 
 	/**
 	 * Initialize the witnessset corresponding to leaf
 	 * nodes in the decomposition.
 	 */
-	void initialize_leaf(WitnessSet &witnessSet) {
+	void initialize_leaf(WitnessSet &witnessSet)
+	{
 		witnessSet.insert(make_shared<WitnessAlias>());
 	}
 
@@ -124,23 +136,26 @@ struct ChromaticNumber_AtMost_Core
 	 * insert no results.
 	 */
 	void intro_v_implementation(unsigned i, const Bag &, const WitnessAlias &w,
-								WitnessSet &witnessSet) {
-    for (auto cell : w.partialColoring) {
-      auto witness = w.clone();
-      witness->partialColoring.erase(cell);
-      cell.insert(i);
-      witness->partialColoring.insert(cell);
-      witnessSet.insert(std::move(witness));
-    }
-    if (w.partialColoring.size() < this->k) {
-      // i can be added as an separated cell to the partition
-      auto witness = w.clone();
-      // witness->numberUsedColors = witness->numberUsedColors +1;
-      set<unsigned> iCell;
-      iCell.insert(i);
-      witness->partialColoring.insert(iCell);
-      witnessSet.insert(std::move(witness));
-    }
+								WitnessSet &witnessSet)
+	{
+		for (auto cell : w.partialColoring)
+		{
+			auto witness = w.clone();
+			witness->partialColoring.erase(cell);
+			cell.insert(i);
+			witness->partialColoring.insert(cell);
+			witnessSet.insert(std::move(witness));
+		}
+		if (w.partialColoring.size() < this->k)
+		{
+			// i can be added as an separated cell to the partition
+			auto witness = w.clone();
+			// witness->numberUsedColors = witness->numberUsedColors +1;
+			set<unsigned> iCell;
+			iCell.insert(i);
+			witness->partialColoring.insert(iCell);
+			witnessSet.insert(std::move(witness));
+		}
 	}
 
 	/**
@@ -149,13 +164,14 @@ struct ChromaticNumber_AtMost_Core
 	 * into the witnessSet.
 	 */
 	void intro_e_implementation(unsigned int i, unsigned int j, const Bag &,
-								const WitnessAlias &w, WitnessSet &witnessSet) {
-    // If i and j are in different cell then w will be returned, otherwise, it
-    // is invalid
-    for (auto cell : w.partialColoring)
-      if (cell.count(i) && cell.count(j))
-        return;
-    witnessSet.insert(w.clone());
+								const WitnessAlias &w, WitnessSet &witnessSet)
+	{
+		// If i and j are in different cell then w will be returned, otherwise, it
+		// is invalid
+		for (auto cell : w.partialColoring)
+			if (cell.count(i) && cell.count(j))
+				return;
+		witnessSet.insert(w.clone());
 	}
 
 	/**
@@ -165,64 +181,82 @@ struct ChromaticNumber_AtMost_Core
 	 */
 	void forget_v_implementation(unsigned int i, const Bag &,
 								 const WitnessAlias &w,
-								 WitnessSet &witnessSet) {
-    for (auto cell : w.partialColoring) {
-      if (cell.count(i)) {
-        auto witness = w.clone();
-        witness->partialColoring.erase(cell);
-        cell.erase(i);
-        if (!cell.empty()) {
-          witness->partialColoring.insert(cell);
-        }
-        witnessSet.insert(witness);
-        break;
-      }
-    }
+								 WitnessSet &witnessSet)
+	{
+		for (auto cell : w.partialColoring)
+		{
+			if (cell.count(i))
+			{
+				auto witness = w.clone();
+				witness->partialColoring.erase(cell);
+				cell.erase(i);
+				if (!cell.empty())
+				{
+					witness->partialColoring.insert(cell);
+				}
+				witnessSet.insert(witness);
+				break;
+			}
+		}
 	}
 
-	WitnessSetPointer join(const Bag &, const WitnessSetPointer ws_ptr1,
-						   WitnessSetPointer ws_ptr2) override {
-    //auto check = CoreWrapper<ChromaticNumber_AtMost_Core, ChromaticNumber_AtMost_Witness, WitnessSetTypeTwo>::join(bag, ws_ptr1, ws_ptr2);
+	WitnessSetPointer join(const Bag &, const WitnessSetPointer ws_ptr1, WitnessSetPointer ws_ptr2) override
+	{
+		// auto check = CoreWrapper<ChromaticNumber_AtMost_Core, ChromaticNumber_AtMost_Witness, WitnessSetTypeTwo>::join(bag, ws_ptr1, ws_ptr2);
 
-    const auto &ws1 = as_witness_set(*ws_ptr1);
-    const auto &ws2 = as_witness_set(*ws_ptr2);
-    auto newWitnessSet = std::make_shared<WitnessSet>();
+		const auto &ws1 = as_witness_set(*ws_ptr1);
+		const auto &ws2 = as_witness_set(*ws_ptr2);
+		auto newWitnessSet = std::make_shared<WitnessSet>();
 
-    std::vector<std::shared_ptr<Witness>> res;
-    std::set_intersection(ws1.begin(), ws1.end(), ws2.begin(), ws2.end(),
-                          std::back_inserter(res),
-                          [](const auto &w1, const auto &w2) {
-                            return WitnessAlias::as_witness(*w1).partialColoring < WitnessAlias::as_witness(*w2).partialColoring;
-                          });
-    for (auto w : res) {
-      newWitnessSet->insert(w);
-    }
+		
+		/* OLD CODE */
+		// std::vector<std::shared_ptr<Witness>> res;
+		// std::set_intersection(ws1.begin(), ws1.end(), ws2.begin(), ws2.end(),
+		// 					  std::back_inserter(res),
+		// 					  [](const auto &w1, const auto &w2)
+		// 					  {
+		// 						  return WitnessAlias::as_witness(*w1).partialColoring < WitnessAlias::as_witness(*w2).partialColoring;
+		// 					  });
+		// for (auto w : res)
+		// {
+		// 	newWitnessSet->insert(w);
+		// }
 
-    clean_implementation(*newWitnessSet);
+		// New implementation consistent with new c+++ standard
+		// Comparator for ordering witnesses by partialColoring
+		auto cmp = [](const std::shared_ptr<Witness> &A,
+					  const std::shared_ptr<Witness> &B)
+		{
+			const auto &cA = WitnessAlias::as_witness(*A).partialColoring;
+			const auto &cB = WitnessAlias::as_witness(*B).partialColoring;
+			return cA < cB;
+		};
 
-    /*
-    if (*check != *newWitnessSet) {
-      std::cout << "join error\n";
-      std::cout << "ws1:\n";
-      for (auto w : ws1) {
-        WitnessAlias::as_witness(*w).witness_info(std::cout);
-      }
-      std::cout << "ws2:\n";
-      for (auto w : ws2) {
-        WitnessAlias::as_witness(*w).witness_info(std::cout);
-      }
-      std::cout << "check:\n";
-      for (auto w : *check) {
-        WitnessAlias::as_witness(*w).witness_info(std::cout);
-      }
-      std::cout << "newWitnessSet:\n";
-      for (auto w : *newWitnessSet) {
-        WitnessAlias::as_witness(*w).witness_info(std::cout);
-      }
-      assert(false);
-    }
-    */
-    return newWitnessSet;
+		// Two‐pointer merge for intersection
+		auto it1 = ws1.begin(), end1 = ws1.end();
+		auto it2 = ws2.begin(), end2 = ws2.end();
+		while (it1 != end1 && it2 != end2)
+		{
+			if (cmp(*it1, *it2))
+			{
+				++it1;
+			}
+			else if (cmp(*it2, *it1))
+			{
+				++it2;
+			}
+			else
+			{
+				// element found in both
+				newWitnessSet->insert(*it1);
+				++it1;
+				++it2;
+			}
+		}
+
+		clean_implementation(*newWitnessSet);
+
+		return newWitnessSet;
 	}
 
 	/**
@@ -233,25 +267,28 @@ struct ChromaticNumber_AtMost_Core
 	 * w1 and w2 into the witnessSet.
 	 */
 	void join_implementation(const Bag &, const WitnessAlias &w1,
-							 const WitnessAlias &w2, WitnessSet &witnessSet) {
-    assert(false); // unused due to specialization above
-    if (w1.partialColoring == w2.partialColoring) {
-      witnessSet.insert(w1.clone());
-    }
+							 const WitnessAlias &w2, WitnessSet &witnessSet)
+	{
+		assert(false); // unused due to specialization above
+		if (w1.partialColoring == w2.partialColoring)
+		{
+			witnessSet.insert(w1.clone());
+		}
 	}
 
 	/**
 	 * Remove redundant witnesses from the witnessSet
 	 */
-	void clean_implementation(WitnessSet &) {
+	void clean_implementation(WitnessSet &)
+	{
 		// In most cases, you will not need to change this function.
 	}
 
 	/**
 	 * Return whether w is a final witness
 	 */
-	bool is_final_witness_implementation(const Bag &, const WitnessAlias &) {
-    	return true;
-	}	
-
+	bool is_final_witness_implementation(const Bag &, const WitnessAlias &)
+	{
+		return true;
+	}
 };
