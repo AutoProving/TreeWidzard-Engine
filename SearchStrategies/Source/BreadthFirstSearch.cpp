@@ -603,8 +603,7 @@ void BreadthFirstSearch::search()
 		}
 	}
 	std::cout << "\nResult: ";
-	std::cout << "PROPERTY SATISFIED\n"
-			  << std::endl;
+	std::cout << "PROPERTY SATISFIED" << std::endl;
 }
 RunTree<State::ptr, InstructiveTreeDecompositionNodeContent>
 BreadthFirstSearch::extractCounterExampleRun(State::ptr state)

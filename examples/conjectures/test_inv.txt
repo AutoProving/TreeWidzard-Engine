@@ -1,0 +1,4 @@
+vertices := VertexCount()
+independence := IndependentSet()
+Formula
+INV(independence) * 3 >= INV(vertices)

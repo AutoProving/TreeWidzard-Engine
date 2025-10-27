@@ -16,7 +16,34 @@ int main(int argc, char *arg[]) {
 	// Reading the input and put it in string _all_arg
 	std::string _all_arg;
 	for (int i = 1; i < argc; i++) {
-		_all_arg += arg[i];
+		std::string current_arg = arg[i];
+		
+		// User-friendly fix: normalize spacing around equals sign
+		// Convert "tw=3" to "tw = 3" and "pw=4" to "pw = 4"
+		if ((current_arg == "tw" || current_arg == "pw") && i + 1 < argc) {
+			std::string next_arg = arg[i + 1];
+			if (next_arg.length() > 1 && next_arg[0] == '=' && next_arg[1] != '=') {
+				// Handle "tw=3" -> "tw = 3"
+				_all_arg += current_arg + "\n" + "=" + "\n" + next_arg.substr(1);
+				i++; // Skip next argument since we processed it
+			} else {
+				_all_arg += current_arg;
+			}
+		} else {
+			// Check if current argument is like "tw=3" or "pw=4"
+			size_t eq_pos = current_arg.find('=');
+			if (eq_pos != std::string::npos && eq_pos > 0 && eq_pos < current_arg.length() - 1) {
+				if (current_arg.substr(0, eq_pos) == "tw" || current_arg.substr(0, eq_pos) == "pw") {
+					// Split "tw=3" into "tw = 3"
+					_all_arg += current_arg.substr(0, eq_pos) + "\n" + "=" + "\n" + current_arg.substr(eq_pos + 1);
+				} else {
+					_all_arg += current_arg;
+				}
+			} else {
+				_all_arg += current_arg;
+			}
+		}
+		
 		if (i != argc - 1) {
 			_all_arg += "\n";
 		} else {

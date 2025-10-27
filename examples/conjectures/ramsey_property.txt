@@ -1,0 +1,5 @@
+
+large_clique := CliqueNumber(4)
+independence := IndependentSet()
+Formula
+large_clique OR (INV(independence) >= 4)

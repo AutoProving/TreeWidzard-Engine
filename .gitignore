@@ -58,3 +58,37 @@ cmake-build-debug/*
 tags
 
 /test_conjectures
+
+# Build artifacts
+*.o
+*.so
+*.dylib
+*.a
+build/
+Build/
+cmake-build-*/
+
+# Generated outputs
+*CounterExample*
+*RunTree*
+*_tree_width_*
+*_path_width_*
+
+# Editor files
+*~
+*.bak
+*.orig
+.vscode/
+.idea/
+
+# Backup files
+backup-*.tar.gz
+
+# Documentation archives
+docs/archive/
+
+# Performance reports
+performance_report.txt
+memory_usage.log
+*.data
+

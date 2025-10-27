@@ -48,6 +48,7 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/Conjecture
     ${PROJECT_SOURCE_DIR}/TreeAutomaton
     ${PROJECT_SOURCE_DIR}/Multigraph
+    ${PROJECT_SOURCE_DIR}/Performance
 
     # Add other directories as needed
 )
@@ -83,7 +84,19 @@ add_library(TreeWidzard-Core STATIC
 
 # Find and link Threads (if needed)
 find_package(Threads REQUIRED)
-target_link_libraries(TreeWidzard-Core PRIVATE Threads::Threads)
+
+# Find NUMA library for performance optimization
+find_library(NUMA_LIBRARY numa)
+if(NUMA_LIBRARY)
+    message(STATUS "Found NUMA library: ${NUMA_LIBRARY}")
+    add_compile_definitions(NUMA_AVAILABLE=1)
+    set(NUMA_LIBRARIES ${NUMA_LIBRARY})
+else()
+    message(STATUS "NUMA library not found - proceeding without NUMA optimization")
+    set(NUMA_LIBRARIES "")
+endif()
+
+target_link_libraries(TreeWidzard-Core PRIVATE Threads::Threads ${NUMA_LIBRARIES})
 
 # Define the executable and link against the core library
 add_executable(treewidzard
@@ -180,8 +193,14 @@ add_executable(treewidzard
 )
 
 # Link the executable against the core library and Threads
-target_link_libraries(treewidzard PRIVATE TreeWidzard-Core ${CMAKE_DL_LIBS} Threads::Threads)
+target_link_libraries(treewidzard PRIVATE TreeWidzard-Core ${CMAKE_DL_LIBS} Threads::Threads ${NUMA_LIBRARIES})
 
 # Add subdirectories for DPCores and SearchStrategies
 add_subdirectory("DPCores")
 add_subdirectory("SearchStrategies")
+
+# Add testing subdirectory if tests are enabled
+option(BUILD_TESTS "Build tests" ON)
+if(BUILD_TESTS)
+    add_subdirectory("tests")
+endif()

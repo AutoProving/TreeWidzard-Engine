@@ -41,11 +41,12 @@ INV                                                  yylval.string = strdup(yyte
 max|min|pow                                          yylval.string = strdup(yytext); return BINARY_FUNCTION;
 abs|acos|asin|atan|cos|exp|floor|ln|log|sin|sqrt|tan yylval.string = strdup(yytext); return UNARY_FUNCTION;
 [0-9]+                                               yylval.number = std::atoi(yytext); return NUMBER_DOUBLE;
-[a-zA-Z0-9]+                                         yylval.string = strdup(yytext); return NAME;
+[a-zA-Z_][a-zA-Z0-9_]*                               yylval.string = strdup(yytext); return NAME;
 \:\=                                                 yylval.string = strdup(yytext); return SEPERATOR;
 \(                                                   yylval.string = strdup(yytext); return LEFTP;
 \)                                                   yylval.string = strdup(yytext); return RIGHTP;
 \n                                                   yylval.string = strdup(yytext); return NEWLINE;
+\/\/.*$                                               /* ignore C++ style comments */;
 \/\/[a-zA-Z0-9\t ]*\n                                yylval.string = strdup(yytext); return COMMENT;
 ,                                                    yylval.string = strdup(yytext); return COMMA;
 [ \t]+                      ;

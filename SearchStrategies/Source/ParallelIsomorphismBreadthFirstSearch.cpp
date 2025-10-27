@@ -550,6 +550,12 @@ void ParallelIsomorphismBreadthFirstSearch::search()
 				}
 
 				State::ptr badState = *it;
+				/* printing the conjectures and values of the variables */
+				std::cout << "The assignment that makes the formula false:"
+						  << std::endl;
+				conjecture->printValues(*badState, conjecture->getRoot());
+				std::cout << std::endl;
+
 				bfsDAG.addFinalState(badState);
 				string file = this->getOutputsPath();
 				if (flags->get("Premise"))
