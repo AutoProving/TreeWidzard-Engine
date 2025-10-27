@@ -11,19 +11,32 @@ node
  [
  id 3
  ]
-edge 
+node 
  [
-source 1
-target 2
+ id 4
  ]
-edge 
+node 
  [
-source 1
-target 3
+ id 5
  ]
-edge 
+node 
  [
-source 2
-target 3
+ id 6
+ ]
+node 
+ [
+ id 7
+ ]
+node 
+ [
+ id 8
+ ]
+node 
+ [
+ id 9
+ ]
+node 
+ [
+ id 10
  ]
 ]
