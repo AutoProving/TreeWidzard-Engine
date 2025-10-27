@@ -128,9 +128,6 @@ StateTreeNode StateTreeNode::introVertex(unsigned i) {
 									auxState);
 		stateTreeNode.set_kernel(this->kernel);
 		return stateTreeNode;
-									auxState);
-		stateTreeNode.set_kernel(this->kernel);
-		return stateTreeNode;
 	} else {
 		std::cout << "ERROR in function StateTreeNode::introVertex. Number "
 				  << i << " is not introducible at current bag." << std::endl;
