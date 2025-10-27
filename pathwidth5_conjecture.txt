@@ -1,0 +1,26 @@
+// TreeWidzard Pathwidth 5 Conjecture Test
+// Test whether ChromaticNumber = VertexCount for pathwidth 5 graphs
+
+Property ChromaticNumber;
+Property VertexCount;
+
+// Pathwidth 5 graph with complex structure
+Graph TestGraph {
+    // 20 vertices for substantial pathwidth 5 problem
+    Vertices: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20;
+    
+    // Edge structure that creates pathwidth 5
+    Edges: 
+        (1,2), (2,3), (3,4), (4,5), (5,6),  // Basic path
+        (1,7), (2,8), (3,9), (4,10), (5,11), // Additional connections
+        (7,8), (8,9), (9,10), (10,11),      // Create wider structure
+        (6,12), (11,13), (12,14), (13,15),  // Extend the graph
+        (14,16), (15,17), (16,18), (17,19), (18,20), // Final path
+        (12,13), (16,17), (19,20);          // Additional pathwidth structure
+}
+
+// Conjecture: For pathwidth 5 graphs, ChromaticNumber equals VertexCount
+Conjecture PathwidthFiveChromatic {
+    ForAll g in TestGraph:
+        ChromaticNumber(g) = VertexCount(g);
+}

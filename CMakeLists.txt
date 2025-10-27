@@ -1,6 +1,17 @@
 # Root CMakeLists.txt
-cmake_minimum_required(VERSION 3.18)  # Updated for CUDA support
-project(treewidzard LANGUAGES CXX CUDA)  # Add CUDA language
+cmake_minimum_required(VERSION 3.18)  # Updated for GPU support
+
+# Detect Apple Silicon and adjust GPU language support
+if(APPLE)
+    # On Apple Silicon, we use Metal instead of CUDA
+    project(treewidzard LANGUAGES CXX)
+    set(APPLE_SILICON_BUILD ON)
+    message(STATUS "Apple Silicon detected - using Metal for GPU acceleration")
+else()
+    # On other platforms, try CUDA support
+    project(treewidzard LANGUAGES CXX CUDA)
+    set(APPLE_SILICON_BUILD OFF)
+endif()
 
 # Set C++ standard to C++20
 set(CMAKE_CXX_STANDARD 20)
@@ -198,6 +209,12 @@ add_executable(treewidzard
 # Link the executable against the core library and Threads
 target_link_libraries(treewidzard PRIVATE TreeWidzard-Core ${CMAKE_DL_LIBS} Threads::Threads ${NUMA_LIBRARIES})
 
+# Link GPU library if available
+if(TARGET TreeWidzard-GPU)
+    target_link_libraries(treewidzard PRIVATE TreeWidzard-GPU)
+    message(STATUS "Linked main executable with GPU acceleration")
+endif()
+
 # Add subdirectories for DPCores and SearchStrategies
 add_subdirectory("DPCores")
 add_subdirectory("SearchStrategies")
@@ -236,6 +253,38 @@ if(TREEWIDZARD_CUDA_SUPPORT OR TREEWIDZARD_OPENCL_SUPPORT)
     endif()
     
     message(STATUS "GPU-enabled executable 'treewidzard-gpu' will be built")
+    
+elseif(TREEWIDZARD_MPS_SUPPORT)
+    message(STATUS "Creating MPS-enabled TreeWidzard executable for Apple Silicon")
+    
+    add_executable(treewidzard-mps GPU/TreeWidzardMPS.cpp)
+    target_link_libraries(treewidzard-mps PRIVATE 
+        TreeWidzard-Core 
+        TreeWidzard-GPU 
+        ${CMAKE_DL_LIBS} 
+        Threads::Threads 
+        ${NUMA_LIBRARIES}
+        ${GPU_LIBRARIES}
+    )
+    
+    # Set properties for MPS executable
+    set_target_properties(treewidzard-mps PROPERTIES
+        CXX_STANDARD 20
+        CXX_STANDARD_REQUIRED ON
+    )
+    
+    # Set Objective-C++ compilation for MPS
+    set_source_files_properties(
+        GPU/TreeWidzardMPS.cpp
+        PROPERTIES
+        COMPILE_FLAGS "-x objective-c++"
+    )
+    
+    # Add MPS compile definitions
+    target_compile_definitions(treewidzard-mps PRIVATE TREEWIDZARD_MPS_ENABLED)
+    
+    message(STATUS "MPS-enabled executable 'treewidzard-mps' will be built for Apple Silicon")
+    
 else()
     message(STATUS "No GPU support - building CPU-only version")
 endif()

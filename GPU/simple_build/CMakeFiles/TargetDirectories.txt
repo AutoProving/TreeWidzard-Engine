@@ -1,0 +1,12 @@
+/Users/farhad.vadiee/Documents/github/TreeWidzard-development/GPU/simple_build/CMakeFiles/TreeWidzard-Benchmark-Core.dir
+/Users/farhad.vadiee/Documents/github/TreeWidzard-development/GPU/simple_build/CMakeFiles/AppleGPUInterface.dir
+/Users/farhad.vadiee/Documents/github/TreeWidzard-development/GPU/simple_build/CMakeFiles/comprehensive_benchmark.dir
+/Users/farhad.vadiee/Documents/github/TreeWidzard-development/GPU/simple_build/CMakeFiles/real_problem_benchmark.dir
+/Users/farhad.vadiee/Documents/github/TreeWidzard-development/GPU/simple_build/CMakeFiles/pathwidth5_benchmark.dir
+/Users/farhad.vadiee/Documents/github/TreeWidzard-development/GPU/simple_build/CMakeFiles/pathwidth5_test.dir
+/Users/farhad.vadiee/Documents/github/TreeWidzard-development/GPU/simple_build/CMakeFiles/pathwidth5_atp_test.dir
+/Users/farhad.vadiee/Documents/github/TreeWidzard-development/GPU/simple_build/CMakeFiles/atp_pathwidth5_benchmark.dir
+/Users/farhad.vadiee/Documents/github/TreeWidzard-development/GPU/simple_build/CMakeFiles/atp_pathwidth6_benchmark.dir
+/Users/farhad.vadiee/Documents/github/TreeWidzard-development/GPU/simple_build/CMakeFiles/simple_advanced_demo.dir
+/Users/farhad.vadiee/Documents/github/TreeWidzard-development/GPU/simple_build/CMakeFiles/edit_cache.dir
+/Users/farhad.vadiee/Documents/github/TreeWidzard-development/GPU/simple_build/CMakeFiles/rebuild_cache.dir

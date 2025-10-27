@@ -1,0 +1,2 @@
+/usr/bin/ar qc libTreeWidzard-AdvancedMPS.a "CMakeFiles/TreeWidzard-AdvancedMPS.dir/AdvancedMPSAcceleration.cpp.o"
+/usr/bin/ranlib libTreeWidzard-AdvancedMPS.a
