@@ -26,7 +26,7 @@ class SearchStrategy {
 	SearchStrategy(DynamicKernel *dynamicKernel, Conjecture *conjecture,
 				   Flags *flags);
 	SearchStrategy();
-  virtual ~SearchStrategy() = default;
+	virtual ~SearchStrategy();
 
 	const std::string &getPropertyFilePath() const;
 	void setPropertyFilePath(const std::string &propertyFilePath);

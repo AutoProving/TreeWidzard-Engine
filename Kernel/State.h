@@ -2,6 +2,9 @@
 #define STATE_H
 #include <cassert>
 #include <vector>
+#include <memory>
+#include <deque>
+#include <mutex>
 #include "Bag.h"
 #include "WitnessSet.h"
 
@@ -9,13 +12,45 @@ class State : private std::enable_shared_from_this<State> {
   private:
 	Bag bag;
 	std::vector<std::shared_ptr<WitnessSet>> witnessSetVector;
+	
+	// Simple memory pool for State objects
+	struct StateMemoryPool {
+		std::deque<std::unique_ptr<State>> available;
+		std::mutex pool_mutex;
+		size_t active_allocations = 0;
+		
+		State* allocate();
+		void deallocate(State* ptr);
+		void clear();
+		size_t getActiveAllocations() const { return active_allocations; }
+	};
+	
+	static StateMemoryPool pool_;
   public:
+	// Pool management methods
+	static void initializePool(size_t initialSize = 10000);
+	static void clearPool();
+	static size_t getPoolStats();
+	
+	// Custom allocation using memory pool
+	static std::shared_ptr<State> createPooled();
+	
 	class ptr {
 	  private:
 		std::shared_ptr<const State> pointer;
 	  public:
-		ptr() { pointer = std::make_shared<State>(); }
+		ptr() { 
+			auto mutable_state = State::createPooled();
+			pointer = mutable_state;
+		}
 		ptr(std::shared_ptr<const State> pointer_) : pointer(pointer_) {}
+		ptr(std::shared_ptr<State> pointer_) : pointer(pointer_) {}
+		
+		// Allow access to mutable state during construction
+		std::shared_ptr<State> getMutableState() const {
+			return std::const_pointer_cast<State>(pointer);
+		}
+		
 		const State &operator*() const { return *pointer; }
 		const State *operator->() const { return &*pointer; }
 		bool operator<(const ptr &rhs) const { return **this < *rhs; }

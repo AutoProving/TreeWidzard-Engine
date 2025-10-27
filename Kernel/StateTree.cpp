@@ -115,16 +115,20 @@ std::string StateTreeNode::printITD() { return this->get_nodeType(); }
 // parent and children are not set here
 StateTreeNode StateTreeNode::introVertex(unsigned i) {
 	if (this->S->get_bag().vertex_introducible(i)) {
-		State *auxState = new State;
+		State::ptr auxState;
+		auto mutable_state = auxState.getMutableState();
 		Bag b = this->S->get_bag();
 		for (size_t r = 0; r < this->S->numberOfComponents(); r++) {
-			auxState->addWitnessSet(
+			mutable_state->addWitnessSet(
 				this->kernel->pointerToCoreNumber(r)->intro_v(
 					i, b, (this->S->getWitnessSet(r))));
 		}
-		auxState->set_bag(b.intro_v(i));
+		mutable_state->set_bag(b.intro_v(i));
 		StateTreeNode stateTreeNode("IntroVertex_" + std::to_string(i),
-									std::shared_ptr<const State>(auxState));
+									auxState);
+		stateTreeNode.set_kernel(this->kernel);
+		return stateTreeNode;
+									auxState);
 		stateTreeNode.set_kernel(this->kernel);
 		return stateTreeNode;
 	} else {
@@ -136,16 +140,17 @@ StateTreeNode StateTreeNode::introVertex(unsigned i) {
 
 StateTreeNode StateTreeNode::forgetVertex(unsigned i) {
 	if (this->S->get_bag().vertex_forgettable(i)) {
-		State *auxState = new State;
+		State::ptr auxState;
+		auto mutable_state = auxState.getMutableState();
 		Bag b = this->S->get_bag();
 		for (size_t r = 0; r < this->S->numberOfComponents(); r++) {
-			auxState->addWitnessSet(
+			mutable_state->addWitnessSet(
 				this->kernel->pointerToCoreNumber(r)->forget_v(
 					i, b, (this->S->getWitnessSet(r))));
 		}
-		auxState->set_bag(b.forget_v(i));
+		mutable_state->set_bag(b.forget_v(i));
 		StateTreeNode stateTreeNode("ForgetVertex_" + std::to_string(i),
-									std::shared_ptr<const State>(auxState));
+									auxState);
 		stateTreeNode.set_kernel(this->kernel);
 		return stateTreeNode;
 	} else {
@@ -157,17 +162,18 @@ StateTreeNode StateTreeNode::forgetVertex(unsigned i) {
 
 StateTreeNode StateTreeNode::introEdge(unsigned i, unsigned j) {
 	if (this->S->get_bag().edge_introducible(i, j)) {
-		State *auxState = new State;
+		State::ptr auxState;
+		auto mutable_state = auxState.getMutableState();
 		Bag b = this->S->get_bag();
 		for (size_t r = 0; r < this->S->numberOfComponents(); r++) {
-			auxState->addWitnessSet(
+			mutable_state->addWitnessSet(
 				this->kernel->pointerToCoreNumber(r)->intro_e(
 					i, j, b, (this->S->getWitnessSet(r))));
 		}
-		auxState->set_bag(b.intro_e(i, j));
+		mutable_state->set_bag(b.intro_e(i, j));
 		StateTreeNode stateTreeNode(
 			"IntroEdge_" + std::to_string(i) + "_" + std::to_string(j),
-			std::shared_ptr<const State>(auxState));
+			auxState);
 		stateTreeNode.set_kernel(this->kernel);
 		return stateTreeNode;
 	} else {
@@ -180,19 +186,20 @@ StateTreeNode StateTreeNode::introEdge(unsigned i, unsigned j) {
 
 StateTreeNode join(StateTreeNode &left, StateTreeNode &right) {
 	if (left.get_S()->get_bag().joinable(right.get_S()->get_bag())) {
-		State *auxState = new State;
+		State::ptr auxState;
+		auto mutable_state = auxState.getMutableState();
 		std::set<unsigned> elements = left.get_S()->get_bag().get_elements();
 		Bag b;
 		b.set_elements(elements);
 		for (size_t r = 0; r < left.get_S()->numberOfComponents(); r++) {
-			auxState->addWitnessSet(
+			mutable_state->addWitnessSet(
 				left.get_kernel()->pointerToCoreNumber(r)->join(
 					b, (left.get_S()->getWitnessSet(r)),
 					(right.get_S()->getWitnessSet(r))));
 		}
-		auxState->set_bag(b);
+		mutable_state->set_bag(b);
 		StateTreeNode stateTreeNode("Join",
-									std::shared_ptr<const State>(auxState));
+									auxState);
 		stateTreeNode.set_kernel(left.get_kernel());
 		return stateTreeNode;
 	} else {

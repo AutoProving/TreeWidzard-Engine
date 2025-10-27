@@ -1,0 +1,5 @@
+// Test conjecture for memory pool
+v1 := VertexCount()
+v2 := HasMultipleEdges()
+Formula
+v1 >= 4 and v2
