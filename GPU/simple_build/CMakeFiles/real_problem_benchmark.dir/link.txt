@@ -1,1 +1,0 @@
-/usr/bin/c++  -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/real_problem_benchmark.dir/real_problem_benchmark.cpp.o -o real_problem_benchmark  libAppleGPUInterface.a libTreeWidzard-Benchmark-Core.a -framework Metal -framework MetalPerformanceShaders -framework Foundation

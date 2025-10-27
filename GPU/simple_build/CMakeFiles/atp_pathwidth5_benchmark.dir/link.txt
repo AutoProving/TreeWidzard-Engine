@@ -1,1 +1,0 @@
-/usr/bin/c++  -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/atp_pathwidth5_benchmark.dir/atp_pathwidth5_simple.cpp.o -o atp_pathwidth5_benchmark  libTreeWidzard-Benchmark-Core.a

@@ -1,5 +1,0 @@
-/Users/farhad.vadiee/Documents/github/TreeWidzard-development/GPU/build_advanced/CMakeFiles/TreeWidzard-Core-Advanced.dir
-/Users/farhad.vadiee/Documents/github/TreeWidzard-development/GPU/build_advanced/CMakeFiles/TreeWidzard-AdvancedMPS.dir
-/Users/farhad.vadiee/Documents/github/TreeWidzard-development/GPU/build_advanced/CMakeFiles/advanced_mps_demo.dir
-/Users/farhad.vadiee/Documents/github/TreeWidzard-development/GPU/build_advanced/CMakeFiles/edit_cache.dir
-/Users/farhad.vadiee/Documents/github/TreeWidzard-development/GPU/build_advanced/CMakeFiles/rebuild_cache.dir

@@ -1,2 +1,0 @@
-/usr/bin/ar qc libAppleGPUInterface.a CMakeFiles/AppleGPUInterface.dir/apple_gpu_interface.mm.o
-/usr/bin/ranlib libAppleGPUInterface.a

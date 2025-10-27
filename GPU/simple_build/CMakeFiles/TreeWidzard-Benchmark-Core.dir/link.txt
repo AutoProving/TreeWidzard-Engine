@@ -1,2 +1,0 @@
-/usr/bin/ar qc libTreeWidzard-Benchmark-Core.a "CMakeFiles/TreeWidzard-Benchmark-Core.dir/Users/farhad.vadiee/Documents/github/TreeWidzard-development/Kernel/Bag.cpp.o" "CMakeFiles/TreeWidzard-Benchmark-Core.dir/Users/farhad.vadiee/Documents/github/TreeWidzard-development/Kernel/State.cpp.o"
-/usr/bin/ranlib libTreeWidzard-Benchmark-Core.a

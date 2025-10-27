@@ -1,1 +1,0 @@
-/usr/bin/c++  -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/pathwidth5_benchmark.dir/pathwidth5_benchmark.cpp.o -o pathwidth5_benchmark  libAppleGPUInterface.a libTreeWidzard-Benchmark-Core.a -framework Metal -framework MetalPerformanceShaders -framework Foundation

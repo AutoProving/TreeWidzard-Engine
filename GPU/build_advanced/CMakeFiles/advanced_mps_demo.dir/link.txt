@@ -1,1 +1,0 @@
-/usr/bin/c++  -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/advanced_mps_demo.dir/advanced_mps_demo.cpp.o -o advanced_mps_demo  libTreeWidzard-AdvancedMPS.a libTreeWidzard-Core-Advanced.a -framework Metal -framework MetalPerformanceShaders -framework Foundation
