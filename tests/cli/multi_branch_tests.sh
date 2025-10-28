@@ -173,9 +173,42 @@ run_branch_tests() {
         local report_file="tests/cli/git_test_report_${branch//\//_}.json"
     fi
     
-    # Run tests with timeout
+    # Run tests with timeout (use gtimeout if available, otherwise run without timeout)
     local start_time=$(date +%s)
-    if timeout 300 $test_cmd > "test_output_${branch//\//_}.log" 2>&1; then
+    local timeout_cmd=""
+    if command -v gtimeout >/dev/null 2>&1; then
+        timeout_cmd="gtimeout 300"
+    elif command -v timeout >/dev/null 2>&1; then
+        timeout_cmd="timeout 300"
+    fi
+    
+    if [ -n "$timeout_cmd" ]; then
+    if [ -n "$timeout_cmd" ]; then
+        if $timeout_cmd $test_cmd > "test_output_${branch//\//_}.log" 2>&1; then
+            local end_time=$(date +%s)
+            local duration=$((end_time - start_time))
+            log_success "Branch '$branch' tests passed (${duration}s)"
+            
+            # Copy report if it exists
+            if [ "$generate_report" = "true" ] && [ -f "tests/cli/git_test_report.json" ]; then
+                cp "tests/cli/git_test_report.json" "$report_file"
+            fi
+            
+            return 0
+        else
+            local end_time=$(date +%s)
+            local duration=$((end_time - start_time))
+            log_error "Branch '$branch' tests failed (${duration}s)"
+            
+            # Show last few lines of error
+            echo "Last 10 lines of output:"
+            tail -10 "test_output_${branch//\//_}.log" | sed 's/^/  /'
+            
+            return 1
+        fi
+    else
+        # Run without timeout on systems that don't have it
+        if $test_cmd > "test_output_${branch//\//_}.log" 2>&1; then
         local end_time=$(date +%s)
         local duration=$((end_time - start_time))
         log_success "Branch '$branch' tests passed (${duration}s)"
@@ -381,7 +414,9 @@ main() {
     if [ -n "$branches_to_test" ]; then
         IFS=',' read -ra branches <<< "$branches_to_test"
     else
-        readarray -t branches <<< "$(get_all_branches)"
+        while IFS= read -r line; do 
+            branches+=("$line")
+        done <<< "$(get_all_branches)"
     fi
     
     # Remove excluded branches
