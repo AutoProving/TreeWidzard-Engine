@@ -66,9 +66,8 @@ jobs:
     - name: Run Shell Git Tests
       if: matrix.test-type == 'shell'
       run: |
-        cd tests/cli
-        echo "Running shell-based git tests..."
-        ./git_tests.sh 2>&1 | tee shell_test_output.log
+        echo "Running shell-based git tests from project root..."
+        ./tests/cli/git_tests.sh 2>&1 | tee shell_test_output.log
         exit_code=${PIPESTATUS[0]}
         echo "Shell tests completed with exit code: $exit_code"
         if [ $exit_code -ne 0 ]; then
