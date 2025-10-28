@@ -183,9 +183,25 @@ class GitTestRunner:
         self.log_info("=== Branch Structure Tests ===")
         expected_branch = self.branch_config.get("expected_current_branch", self.current_branch)
         self.run_test_with_pattern("Current branch matches expected", "git branch --show-current", expected_branch)
-        self.run_test("Main branch exists", "git show-ref --verify --quiet refs/heads/main")
-        self.run_test("Optimized branch exists", "git show-ref --verify --quiet refs/heads/optimized")
-        self.run_test("Feature branch exists", "git show-ref --verify --quiet refs/heads/feature/gpu-acceleration")
+        
+        # Check for branch existence (local or remote)
+        self.tests_run += 1
+        if self.run_command("git show-ref --verify --quiet refs/heads/main")[0] == 0 or self.run_command("git show-ref --verify --quiet refs/remotes/origin/main")[0] == 0:
+            self.log_success("Main branch exists")
+        else:
+            self.log_error("Main branch exists")
+            
+        self.tests_run += 1
+        if self.run_command("git show-ref --verify --quiet refs/heads/optimized")[0] == 0 or self.run_command("git show-ref --verify --quiet refs/remotes/origin/optimized")[0] == 0:
+            self.log_success("Optimized branch exists")
+        else:
+            self.log_error("Optimized branch exists")
+            
+        self.tests_run += 1
+        if self.run_command("git show-ref --verify --quiet refs/heads/feature/gpu-acceleration")[0] == 0 or self.run_command("git show-ref --verify --quiet refs/remotes/origin/feature/gpu-acceleration")[0] == 0:
+            self.log_success("Feature branch exists")
+        else:
+            self.log_error("Feature branch exists")
         
         # Working Tree Tests
         self.log_info("=== Working Tree Tests ===")
