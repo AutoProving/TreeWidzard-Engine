@@ -127,23 +127,23 @@ class GitTestRunner:
         info = {}
         
         # Basic info
-        _, info['current_branch'] = self.run_command("git branch --show-current")
-        _, info['remote_url'] = self.run_command("git remote get-url origin")
-        _, info['commit_count'] = self.run_command("git rev-list --count HEAD")
-        _, info['last_commit'] = self.run_command("git log -1 --pretty=format:'%H %s'")
+        _, info['current_branch'], _ = self.run_command("git branch --show-current")
+        _, info['remote_url'], _ = self.run_command("git remote get-url origin")
+        _, info['commit_count'], _ = self.run_command("git rev-list --count HEAD")
+        _, info['last_commit'], _ = self.run_command("git log -1 --pretty=format:'%H %s'")
         
         # Branch info
-        _, branches_output = self.run_command("git branch -a")
+        _, branches_output, _ = self.run_command("git branch -a")
         info['branches'] = [b.strip().replace('* ', '') for b in branches_output.split('\n') if b.strip()]
         
         # Status info
-        _, status_output = self.run_command("git status --porcelain")
+        _, status_output, _ = self.run_command("git status --porcelain")
         info['untracked_files'] = len([l for l in status_output.split('\n') if l.startswith('??')])
         info['modified_files'] = len([l for l in status_output.split('\n') if l.startswith(' M')])
         info['staged_files'] = len([l for l in status_output.split('\n') if l.startswith('M ')])
         
         # Unpushed commits
-        _, unpushed_output = self.run_command("git log --oneline main..HEAD")
+        _, unpushed_output, _ = self.run_command("git log --oneline main..HEAD")
         info['unpushed_commits'] = len([l for l in unpushed_output.split('\n') if l.strip()])
         
         return info
@@ -195,11 +195,11 @@ class GitTestRunner:
         # Security Tests
         self.log_info("=== Security Tests ===")
         self.run_test("No passwords in commits", "git log --all --full-history -- | grep -i password", 1)
-        self.run_test("No API keys in commits", "git log --all --full-history -- | grep -iE '(api_key|secret|token)', 1)
+        self.run_test("No API keys in commits", "git log --all --full-history -- | grep -iE '(api_key|secret|token)'", 1)
         
         # Performance Tests
         self.log_info("=== Performance Tests ===")
-        _, repo_size = self.run_command("du -sh .git")
+        _, repo_size, _ = self.run_command("du -sh .git")
         self.log_info(f"Repository size: {repo_size}")
         
         # Custom TreeWidzard Tests
