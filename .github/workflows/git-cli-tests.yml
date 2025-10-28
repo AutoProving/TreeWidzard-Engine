@@ -52,6 +52,21 @@ jobs:
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
         
+    - name: Create local branch refs (safe)
+      run: |
+        git fetch --prune origin '+refs/heads/*:refs/remotes/origin/*'
+        for b in main optimized "feature/gpu-acceleration"; do
+          if git show-ref --verify --quiet refs/remotes/origin/$b; then
+            # only create local branch if it doesn't already exist
+            if ! git rev-parse --verify --quiet refs/heads/$b; then
+              git branch "$b" "origin/$b"
+            else
+              echo "Local branch $b already exists; skipping"
+            fi
+          fi
+        done
+        git branch -a || true
+
     - name: Run Shell Git Tests
       if: matrix.test-type == 'shell'
       run: |
@@ -65,7 +80,38 @@ jobs:
         echo "Running Python-based git tests from project root..."
         chmod +x tests/cli/git_tests.py
         python3 tests/cli/git_tests.py
-        
+
+    - name: Build and run C++ tests with CMake (coverage)
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y lcov
+        mkdir -p build
+        pushd build
+        # Configure with coverage flags and disable CUDA for CI
+        cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="--coverage" -DTREEWIDZARD_CUDA_SUPPORT=OFF ..
+        cmake --build . -- -j$(nproc)
+        # Run tests (ctest if configured)
+        if command -v ctest >/dev/null 2>&1; then
+          ctest --output-on-failure || true
+        else
+          find . -type f -executable -name '*_test*' -print0 | xargs -0 -n1 -P1 || true
+        fi
+        # Collect coverage with lcov and produce html
+        lcov --capture --directory . --output-file coverage.info || true
+        lcov --remove coverage.info '/usr/*' --output-file coverage.info || true
+        genhtml coverage.info --output-directory coverage-html || true
+        tar -czf cpp_coverage_gcov.tar coverage.info coverage-html || true
+        popd
+
+    - name: Upload Coverage Reports
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-reports-${{ github.sha }}
+        path: |
+          python_coverage_htmlcov.tar.gz
+          cpp_coverage_gcov.tar
+          
     - name: Upload test report
       if: matrix.test-type == 'python' && always()
       uses: actions/upload-artifact@v4

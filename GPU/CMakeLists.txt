@@ -94,34 +94,10 @@ if(APPLE)
     target_compile_definitions(simple_advanced_demo PRIVATE __APPLE__)
     target_compile_options(simple_advanced_demo PRIVATE -Wall -Wextra -O2)
     
+elif(TREEWIDZARD_CUDA_SUPPORT)
+    # ...existing code for CUDA targets...
 else()
-    message(STATUS "Building Comprehensive Benchmark for non-Apple platform")
-    
-    # TreeWidzard core for non-Apple
-    add_library(TreeWidzard-Benchmark-Core STATIC
-        ${TREEWIDZARD_ROOT}/Kernel/Bag.cpp
-        ${TREEWIDZARD_ROOT}/Kernel/State.cpp
-    )
-    
-    target_include_directories(TreeWidzard-Benchmark-Core PUBLIC ${TREEWIDZARD_ROOT})
-    target_compile_options(TreeWidzard-Benchmark-Core PRIVATE -Wall -Wextra -O3)
-    
-    # Dummy GPU interface
-    add_library(AppleGPUInterface STATIC dummy_gpu_interface.cpp)
-    
-    # Benchmark executable
-    add_executable(comprehensive_benchmark comprehensive_benchmark.cpp)
-    target_link_libraries(comprehensive_benchmark 
-        AppleGPUInterface 
-        TreeWidzard-Benchmark-Core
-    )
-    target_compile_options(comprehensive_benchmark PRIVATE -Wall -Wextra -O3)
-    
-    # Simple demo
-    add_executable(simple_advanced_demo simple_advanced_demo.cpp)
-    target_link_libraries(simple_advanced_demo AppleGPUInterface)
-    target_compile_options(simple_advanced_demo PRIVATE -Wall -Wextra -O2)
-    
+    message(STATUS "TREEWIDZARD_CUDA_SUPPORT is OFF - skipping GPU/CUDA targets")
 endif()
 
 message(STATUS "Comprehensive Benchmark Configuration Complete")

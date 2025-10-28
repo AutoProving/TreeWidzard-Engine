@@ -8,9 +8,22 @@ if(APPLE)
     set(APPLE_SILICON_BUILD ON)
     message(STATUS "Apple Silicon detected - using Metal for GPU acceleration")
 else()
-    # On other platforms, try CUDA support
-    project(treewidzard LANGUAGES CXX CUDA)
+    # On other platforms, start project with C++ only
+    project(treewidzard LANGUAGES CXX)
     set(APPLE_SILICON_BUILD OFF)
+endif()
+
+# Option to enable CUDA explicitly (default OFF)
+option(TREEWIDZARD_CUDA_SUPPORT "Enable CUDA support (requires nvcc)" OFF)
+
+# If user explicitly requests CUDA support, try to enable the CUDA language
+if(TREEWIDZARD_CUDA_SUPPORT)
+  enable_language(CUDA)
+  find_package(CUDAToolkit QUIET)
+  if(NOT CMAKE_CUDA_COMPILER)
+    message(FATAL_ERROR "CUDA requested (TREEWIDZARD_CUDA_SUPPORT=ON) but CUDA compiler (nvcc) was not found.")
+  endif()
+  message(STATUS "CUDA support enabled")
 endif()
 
 # Set C++ standard to C++20
@@ -293,4 +306,11 @@ endif()
 option(BUILD_TESTS "Build tests" ON)
 if(BUILD_TESTS)
     add_subdirectory("tests")
+endif()
+
+# Add GPU subdirectory only if GPU support is enabled
+if(TREEWIDZARD_CUDA_SUPPORT OR TREEWIDZARD_MPS_SUPPORT)
+    add_subdirectory("GPU")
+else()
+    message(STATUS "Skipping GPU subdirectory (no TREEWIDZARD_CUDA_SUPPORT/TREEWIDZARD_MPS_SUPPORT)")
 endif()
