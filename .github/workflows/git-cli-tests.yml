@@ -1,0 +1,170 @@
+name: Git CLI Tests
+
+on:
+  push:
+    branches: [ main, optimized, feature/gpu-acceleration ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run tests daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      test_type:
+        description: 'Type of tests to run'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+        - all
+        - shell
+        - python
+        - quick
+
+jobs:
+  git-cli-tests:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        test-type: [shell, python]
+        
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch full history for git tests
+        
+    - name: Set up Python
+      if: matrix.test-type == 'python'
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+        
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y git cmake
+        
+    - name: Configure Git
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        
+    - name: Run Shell Git Tests
+      if: matrix.test-type == 'shell'
+      run: |
+        cd tests/cli
+        ./git_tests.sh
+        
+    - name: Run Python Git Tests
+      if: matrix.test-type == 'python'
+      run: |
+        cd tests/cli
+        python3 git_tests.py
+        
+    - name: Upload test report
+      if: matrix.test-type == 'python' && always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: git-test-report
+        path: tests/cli/git_test_report.json
+        retention-days: 30
+        
+    - name: Comment PR with test results
+      if: github.event_name == 'pull_request' && matrix.test-type == 'python'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          try {
+            const reportPath = 'tests/cli/git_test_report.json';
+            if (fs.existsSync(reportPath)) {
+              const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+              const { summary } = report;
+              
+              const comment = `## 🔍 Git CLI Test Results
+              
+              **Summary:**
+              - ✅ Tests Passed: ${summary.tests_passed}
+              - ❌ Tests Failed: ${summary.tests_failed}
+              - 📊 Success Rate: ${summary.success_rate.toFixed(1)}%
+              - 🏃 Total Tests: ${summary.tests_run}
+              
+              ${summary.tests_failed === 0 ? '🎉 All tests passed!' : '⚠️ Some tests failed. Please check the logs.'}
+              `;
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            }
+          } catch (error) {
+            console.log('Could not post test results:', error.message);
+          }
+          
+  integration-tests:
+    runs-on: ubuntu-latest
+    needs: git-cli-tests
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: Run comprehensive test suite
+      run: |
+        chmod +x tests/cli/run_tests.sh
+        ./tests/cli/run_tests.sh --all --report
+        
+    - name: Check for security issues
+      run: |
+        # Check for common security issues in git history
+        echo "Checking for potential security issues..."
+        
+        # Check for passwords/secrets (should fail if found)
+        if git log --all --full-history -p | grep -iE "(password|secret|api_key|token).*=.*['\"][^'\"]{8,}['\"]"; then
+          echo "⚠️ Potential secrets found in git history!"
+          exit 1
+        else
+          echo "✅ No obvious secrets found in git history"
+        fi
+        
+        # Check for large files
+        large_files=$(git rev-list --objects --all | git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' | awk '/^blob/ {if($3 > 1048576) print $4 " (" $3 " bytes)"}')
+        if [ -n "$large_files" ]; then
+          echo "⚠️ Large files found:"
+          echo "$large_files"
+        else
+          echo "✅ No large files found"
+        fi
+        
+    - name: Validate project structure
+      run: |
+        echo "Validating TreeWidzard project structure..."
+        
+        required_files=("CMakeLists.txt" "main.cpp" "README.md" "LICENSE")
+        required_dirs=("GPU" "tests" "Kernel" "docs")
+        
+        for file in "${required_files[@]}"; do
+          if [ ! -f "$file" ]; then
+            echo "❌ Required file missing: $file"
+            exit 1
+          else
+            echo "✅ Found: $file"
+          fi
+        done
+        
+        for dir in "${required_dirs[@]}"; do
+          if [ ! -d "$dir" ]; then
+            echo "❌ Required directory missing: $dir"
+            exit 1
+          else
+            echo "✅ Found: $dir/"
+          fi
+        done
+        
+        echo "✅ Project structure validation passed"

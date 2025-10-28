@@ -67,6 +67,24 @@ tags
 build/
 Build/
 cmake-build-*/
+*/build/
+*/simple_build/
+*/test_build/
+*/build_*/
+*/*build*/
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# GPU executables and benchmarks
+atp_pathwidth*_benchmark
+pathwidth*_test
+*_benchmark
+*_demo
+simple_mps_test
 
 # Generated outputs
 *CounterExample*
@@ -92,3 +110,4 @@ performance_report.txt
 memory_usage.log
 *.data
 
+__pycache__/

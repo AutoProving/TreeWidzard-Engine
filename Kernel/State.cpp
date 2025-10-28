@@ -1,5 +1,67 @@
 #include "State.h"
 
+// Static memory pool instance
+State::StateMemoryPool State::pool_;
+
+State* State::StateMemoryPool::allocate() {
+	std::lock_guard<std::mutex> lock(pool_mutex);
+	
+	if (!available.empty()) {
+		auto state = std::move(available.back());
+		available.pop_back();
+		active_allocations++;
+		return state.release();
+	}
+	
+	// Create new state if pool is empty
+	active_allocations++;
+	return new State();
+}
+
+void State::StateMemoryPool::deallocate(State* ptr) {
+	std::lock_guard<std::mutex> lock(pool_mutex);
+	
+	if (ptr) {
+		// Reset state to clean condition
+		ptr->witnessSetVector.clear();
+		ptr->bag = Bag();
+		
+		available.emplace_back(ptr);
+		active_allocations--;
+	}
+}
+
+void State::StateMemoryPool::clear() {
+	std::lock_guard<std::mutex> lock(pool_mutex);
+	available.clear();
+	active_allocations = 0;
+}
+
+void State::initializePool(size_t initialSize) {
+	std::lock_guard<std::mutex> lock(pool_.pool_mutex);
+	
+	// Pre-allocate states for the pool
+	for (size_t i = 0; i < initialSize; ++i) {
+		pool_.available.emplace_back(std::make_unique<State>());
+	}
+}
+
+void State::clearPool() {
+	pool_.clear();
+}
+
+size_t State::getPoolStats() {
+	return pool_.getActiveAllocations();
+}
+
+std::shared_ptr<State> State::createPooled() {
+	// Use pool allocator with custom deleter that returns to pool
+	return std::shared_ptr<State>(
+		pool_.allocate(),
+		[](State* ptr) { pool_.deallocate(ptr); }
+	);
+}
+
 Bag State::get_bag() const { return State::bag; }
 
 void State::set_bag(const Bag &bag) { State::bag = bag; }
@@ -120,7 +182,7 @@ size_t State::numberOfComponents() const { return witnessSetVector.size(); }
 
 std::shared_ptr<const State> State::relabel(
 	std::map<unsigned int, unsigned int> relabelingMap) const {
-	std::shared_ptr<State> state(new State);
+	std::shared_ptr<State> state = State::createPooled();
 	std::vector<std::shared_ptr<WitnessSet>> witnessSetVec;
 	witnessSetVec.resize(witnessSetVector.size());
 	for (size_t i = 0; i < witnessSetVector.size(); i++) {
