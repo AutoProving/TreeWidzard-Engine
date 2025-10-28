@@ -3,7 +3,8 @@
 # TreeWidzard Git CLI Test Suite
 # Automated tests for git operations and repository state
 
-set -e  # Exit on any error
+# Note: Removed 'set -e' to allow tests to continue even if some fail
+# We handle errors manually in the test functions
 
 # Colors for output
 RED='\033[0;31m'
