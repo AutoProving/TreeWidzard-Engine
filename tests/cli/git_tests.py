@@ -278,9 +278,13 @@ class GitTestRunner:
 
 def main():
     # Check if we're in the right directory
-    if not os.path.exists("CMakeLists.txt") or not os.path.exists("GPU"):
+    if not os.path.exists("CMakeLists.txt"):
         print(f"{Colors.RED}Error: Please run this script from the TreeWidzard-development root directory{Colors.NC}")
         sys.exit(1)
+    
+    # GPU directory is optional (branch-dependent)
+    if not os.path.exists("GPU"):
+        print(f"{Colors.YELLOW}Warning: GPU directory not found (may not be available on this branch){Colors.NC}")
     
     runner = GitTestRunner()
     success = runner.run_comprehensive_tests()
