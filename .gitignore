@@ -110,3 +110,4 @@ performance_report.txt
 memory_usage.log
 *.data
 
+__pycache__/
