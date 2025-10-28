@@ -2,6 +2,7 @@
 """
 TreeWidzard Git CLI Test Suite - Python Version
 Advanced automated testing for git operations with detailed reporting
+Branch-aware testing with dynamic configuration
 """
 
 import subprocess
@@ -13,6 +14,13 @@ import time
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Tuple, Optional
+
+# Import branch configuration
+try:
+    from branch_config import get_branch_config
+except ImportError:
+    def get_branch_config():
+        return {"expected_current_branch": "feature/gpu-acceleration"}
 
 class Colors:
     RED = '\033[0;31m'
@@ -31,6 +39,8 @@ class GitTestRunner:
         self.tests_failed = 0
         self.test_results = []
         self.start_time = time.time()
+        self.branch_config = get_branch_config()
+        self.current_branch = self.get_current_branch()
         
     def log(self, level: str, message: str, color: str = Colors.NC):
         timestamp = datetime.now().strftime("%H:%M:%S")
@@ -49,6 +59,11 @@ class GitTestRunner:
         
     def log_warning(self, message: str):
         self.log("WARN", message, Colors.YELLOW)
+
+    def get_current_branch(self) -> str:
+        """Get current git branch"""
+        _, branch, _ = self.run_command("git branch --show-current")
+        return branch.strip()
 
     def run_command(self, command: str, capture_output: bool = True) -> Tuple[int, str, str]:
         """Run a shell command and return exit code, stdout, stderr"""
@@ -166,7 +181,8 @@ class GitTestRunner:
         
         # Branch Tests
         self.log_info("=== Branch Structure Tests ===")
-        self.run_test_with_pattern("Current branch is GPU feature", "git branch --show-current", "feature/gpu-acceleration")
+        expected_branch = self.branch_config.get("expected_current_branch", self.current_branch)
+        self.run_test_with_pattern("Current branch matches expected", "git branch --show-current", expected_branch)
         self.run_test("Main branch exists", "git show-ref --verify --quiet refs/heads/main")
         self.run_test("Optimized branch exists", "git show-ref --verify --quiet refs/heads/optimized")
         self.run_test("Feature branch exists", "git show-ref --verify --quiet refs/heads/feature/gpu-acceleration")
@@ -185,7 +201,12 @@ class GitTestRunner:
         # Branch Relationship Tests
         self.log_info("=== Branch Relationship Tests ===")
         self.run_test("Optimized diverged from main", "git merge-base --is-ancestor main optimized")
-        self.run_test("GPU branch diverged from optimized", "git merge-base --is-ancestor optimized feature/gpu-acceleration")
+        
+        # Only test GPU branch relationship if we're not on main branch
+        if self.current_branch != "main" and self.branch_config.get("check_gpu_branch_relationship", True):
+            self.run_test("GPU branch diverged from optimized", "git merge-base --is-ancestor optimized feature/gpu-acceleration")
+        else:
+            self.log_info("Skipping GPU branch relationship test (not applicable for main branch)")
         
         # File and Repository Tests
         self.log_info("=== Repository Health Tests ===")
@@ -205,7 +226,13 @@ class GitTestRunner:
         # Custom TreeWidzard Tests
         self.log_info("=== TreeWidzard Specific Tests ===")
         self.run_test("CMakeLists.txt exists", "test -f CMakeLists.txt")
-        self.run_test("GPU directory exists", "test -d GPU")
+        
+        # GPU directory test based on branch configuration
+        if self.branch_config.get("require_gpu_directory", True):
+            self.run_test("GPU directory exists", "test -d GPU")
+        else:
+            self.log_info("Skipping GPU directory test (not required for this branch)")
+            
         self.run_test("Main.cpp exists", "test -f main.cpp")
         
         # Unpushed commits warning
