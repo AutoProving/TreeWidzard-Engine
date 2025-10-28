@@ -1,0 +1,238 @@
+{
+  "timestamp": "2025-10-28T09:50:28.471017",
+  "summary": {
+    "tests_run": 21,
+    "tests_passed": 19,
+    "tests_failed": 4,
+    "success_rate": 90.47619047619048
+  },
+  "git_info": {
+    "current_branch": "feature/gpu-acceleration",
+    "remote_url": "https://github.com/farhad-vadiee/TreeWidzard-development.git",
+    "commit_count": "26",
+    "last_commit": "249919e7673e56d95634047c4f60b7674bf01261 Add multi-branch test runner for comprehensive cross-branch testing",
+    "branches": [
+      "feature/gpu-acceleration",
+      "main",
+      "optimized",
+      "remotes/origin/HEAD -> origin/main",
+      "remotes/origin/feature/gpu-acceleration",
+      "remotes/origin/main",
+      "remotes/origin/optimized"
+    ],
+    "untracked_files": 0,
+    "modified_files": 0,
+    "staged_files": 1,
+    "unpushed_commits": 16
+  },
+  "test_results": [
+    {
+      "name": "Git repository detection",
+      "command": "git rev-parse --git-dir",
+      "expected_exit_code": 0,
+      "actual_exit_code": 0,
+      "stdout": ".git",
+      "stderr": "",
+      "success": true,
+      "timestamp": "2025-10-28T09:50:27.308504"
+    },
+    {
+      "name": "Git configuration valid",
+      "command": "git config --list",
+      "expected_exit_code": 0,
+      "actual_exit_code": 0,
+      "stdout": "credential.helper=osxkeychain\ninit.defaultbranch=main\nfilter.lfs.clean=git-lfs clean -- %f\nfilter.lfs.smudge=git-lfs smudge -- %f\nfilter.lfs.process=git-lfs filter-process\nfilter.lfs.required=true\nuser.name=Farhad Vadiee\nuser.email=57391534+farhad-vadiee@users.noreply.github.com\ncore.repositoryformatversion=0\ncore.filemode=true\ncore.bare=false\ncore.logallrefupdates=true\ncore.ignorecase=true\ncore.precomposeunicode=true\nsubmodule.active=.\nremote.origin.url=https://github.com/farhad-vadiee/TreeWidzard-development.git\nremote.origin.fetch=+refs/heads/*:refs/remotes/origin/*\nbranch.main.remote=origin\nbranch.main.merge=refs/heads/main\nbranch.main.vscode-merge-base=origin/main\nlfs.repositoryformatversion=0\nbranch.optimized.vscode-merge-base=origin/main\nbranch.optimized.remote=origin\nbranch.optimized.merge=refs/heads/optimized\nbranch.feature/gpu-acceleration.vscode-merge-base=origin/main\nbranch.feature/gpu-acceleration.remote=origin\nbranch.feature/gpu-acceleration.merge=refs/heads/feature/gpu-acceleration",
+      "stderr": "",
+      "success": true,
+      "timestamp": "2025-10-28T09:50:27.323695"
+    },
+    {
+      "name": "Remote origin accessible",
+      "command": "git ls-remote --heads origin",
+      "expected_exit_code": 0,
+      "actual_exit_code": 0,
+      "stdout": "d8c6904233a50e967cda54947616af43cd844a99\trefs/heads/feature/gpu-acceleration\nc498b0ec0716135a980d2cab7c1d24836444802a\trefs/heads/main\n545d457d27a9b571b2addb2335020ad98a4a3592\trefs/heads/optimized",
+      "stderr": "",
+      "success": true,
+      "timestamp": "2025-10-28T09:50:28.103221"
+    },
+    {
+      "name": "Current branch is GPU feature",
+      "command": "git branch --show-current",
+      "expected_pattern": "feature/gpu-acceleration",
+      "stdout": "feature/gpu-acceleration",
+      "stderr": "",
+      "success": true,
+      "timestamp": "2025-10-28T09:50:28.139419"
+    },
+    {
+      "name": "Main branch exists",
+      "command": "git show-ref --verify --quiet refs/heads/main",
+      "expected_exit_code": 0,
+      "actual_exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "success": true,
+      "timestamp": "2025-10-28T09:50:28.163055"
+    },
+    {
+      "name": "Optimized branch exists",
+      "command": "git show-ref --verify --quiet refs/heads/optimized",
+      "expected_exit_code": 0,
+      "actual_exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "success": true,
+      "timestamp": "2025-10-28T09:50:28.181420"
+    },
+    {
+      "name": "Feature branch exists",
+      "command": "git show-ref --verify --quiet refs/heads/feature/gpu-acceleration",
+      "expected_exit_code": 0,
+      "actual_exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "success": true,
+      "timestamp": "2025-10-28T09:50:28.198037"
+    },
+    {
+      "name": "Working tree clean",
+      "command": "git status --porcelain",
+      "expected_pattern": "^$",
+      "stdout": "M tests/cli/multi_branch_tests.sh",
+      "stderr": "",
+      "success": false,
+      "timestamp": "2025-10-28T09:50:28.216906"
+    },
+    {
+      "name": "No merge conflicts",
+      "command": "git diff --check",
+      "expected_exit_code": 0,
+      "actual_exit_code": 2,
+      "stdout": "tests/cli/multi_branch_tests.sh:184: trailing whitespace.\n+    \ntests/cli/multi_branch_tests.sh:191: trailing whitespace.\n+            \ntests/cli/multi_branch_tests.sh:196: trailing whitespace.\n+            \ntests/cli/multi_branch_tests.sh:202: trailing whitespace.\n+            \ntests/cli/multi_branch_tests.sh:206: trailing whitespace.\n+            \ntests/cli/multi_branch_tests.sh:417: trailing whitespace.\n+        while IFS= read -r line; do",
+      "stderr": "",
+      "success": false,
+      "timestamp": "2025-10-28T09:50:28.233933"
+    },
+    {
+      "name": "Git log accessible",
+      "command": "git log --oneline -1",
+      "expected_exit_code": 0,
+      "actual_exit_code": 0,
+      "stdout": "249919e Add multi-branch test runner for comprehensive cross-branch testing",
+      "stderr": "",
+      "success": true,
+      "timestamp": "2025-10-28T09:50:28.250299"
+    },
+    {
+      "name": "Commits have valid authors",
+      "command": "git log --pretty=format:'%an' -10",
+      "expected_exit_code": 0,
+      "actual_exit_code": 0,
+      "stdout": "Farhad Vadiee\nFarhad Vadiee\nFarhad Vadiee\nFarhad Vadiee\nFarhad Vadiee\nFarhad Vadiee\nFarhad Vadiee\nFarhad Vadiee\nFarhad Vadiee\nFarhad Vadiee",
+      "stderr": "",
+      "success": true,
+      "timestamp": "2025-10-28T09:50:28.266736"
+    },
+    {
+      "name": "No empty commit messages",
+      "command": "git log --pretty=format:'%s' -10 | grep -v '^$'",
+      "expected_exit_code": 0,
+      "actual_exit_code": 0,
+      "stdout": "Add multi-branch test runner for comprehensive cross-branch testing\nAdd comprehensive documentation for Git CLI test suite\nAdd comprehensive documentation for Git CLI test suite\nFix Python git test script syntax and tuple unpacking errors\nAdd automated Git CLI test suite\nAdd branch structure documentation\nClean up GPU acceleration branch\nComplete GPU acceleration implementation\nComplete GPU acceleration implementation\nClean up temporary files and build artifacts",
+      "stderr": "",
+      "success": true,
+      "timestamp": "2025-10-28T09:50:28.284606"
+    },
+    {
+      "name": "Optimized diverged from main",
+      "command": "git merge-base --is-ancestor main optimized",
+      "expected_exit_code": 0,
+      "actual_exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "success": true,
+      "timestamp": "2025-10-28T09:50:28.299648"
+    },
+    {
+      "name": "GPU branch diverged from optimized",
+      "command": "git merge-base --is-ancestor optimized feature/gpu-acceleration",
+      "expected_exit_code": 0,
+      "actual_exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "success": true,
+      "timestamp": "2025-10-28T09:50:28.316037"
+    },
+    {
+      "name": "Important files tracked",
+      "command": "git ls-files | grep -E '\\.(cpp|h|cmake)$'",
+      "expected_exit_code": 0,
+      "actual_exit_code": 0,
+      "stdout": "BitVector/BitSet.cpp\nBitVector/BitSet.h\nBitVector/BitVector.cpp\nBitVector/BitVector.h\nConcreteTreeDecomposition/ctd_lexer.cpp\nConcreteTreeDecomposition/ctd_parser.cpp\nConjecture/Conjecture.cpp\nConjecture/Conjecture.h\nConjecture/PropertyAssignment.cpp\nConjecture/PropertyAssignment.h\nController/ConfigManager.h\nController/ErrorController.cpp\nController/ErrorController.h\nController/ErrorHandling.h\nController/InputController.cpp\nController/InputController.h\nController/InputController_Old.cpp\nController/InputController_Old.h\nController/ParseController.cpp\nController/ParseController.h\nController/Parser/command_lexer.cpp\nController/Parser/command_parser.cpp\nController/SearchController.cpp\nController/SearchController.h\nCorePrelude.h\nDPCores/Source/ChromaticNumber_AtMost.cpp\nDPCores/Source/ChromaticNumber_AtMost.h\nDPCores/Source/CliqueNumberSimpleGraphs_AtLeast.cpp\nDPCores/Source/CliqueNumberSimpleGraphs_AtLeast.h\nDPCores/Source/CliqueNumber_AtLeast.cpp\nDPCores/Source/CliqueNumber_AtLeast.h\nDPCores/Source/HasMultipleEdges.cpp\nDPCores/Source/HasMultipleEdges.h\nDPCores/Source/IndependentSet_Max.cpp\nDPCores/Source/IndependentSet_Max.h\nDPCores/Source/MaxDegree_AtLeast.cpp\nDPCores/Source/MaxDegree_AtLeast.h\nDPCores/Source/VertexCount.cpp\nDPCores/Source/VertexCount.h\nGPU/AdvancedMPSAcceleration.cpp\nGPU/AdvancedMPSAcceleration.h\nGPU/GPUAcceleration.cpp\nGPU/GPUAcceleration.h\nGPU/GPUSearchStrategy.cpp\nGPU/GPUSearchStrategy.h\nGPU/MPSAcceleration.cpp\nGPU/MPSAcceleration.h\nGPU/MPSSearchStrategy.cpp\nGPU/MPSSearchStrategy.h\nGPU/TreeWidzardGPU.cpp\nGPU/TreeWidzardMPS.cpp\nGPU/atp_pathwidth5_simple.cpp\nGPU/atp_pathwidth6_benchmark.cpp\nGPU/comprehensive_benchmark.cpp\nGPU/dummy_gpu_interface.cpp\nGPU/pathwidth5_atp_test.cpp\nGPU/pathwidth5_test.cpp\nGPU/simple_advanced_demo.cpp\nKernel/Bag.cpp\nKernel/Bag.h\nKernel/Conjecture_old.cpp\nKernel/Conjecture_old.h\nKernel/Conjecture_old_1.cpp\nKernel/Conjecture_old_1.h\nKernel/CoreWrapper.h\nKernel/DynamicCore.cpp\nKernel/DynamicCore.h\nKernel/DynamicCoreHandler.cpp\nKernel/DynamicCoreHandler.h\nKernel/DynamicKernel.cpp\nKernel/DynamicKernel.h\nKernel/Flags.cpp\nKernel/Flags.h\nKernel/PropertyAssignment.cpp\nKernel/PropertyAssignment.h\nKernel/SearchStrategy.cpp\nKernel/SearchStrategy.h\nKernel/SearchStrategyHandler.cpp\nKernel/SearchStrategyHandler.h\nKernel/State.cpp\nKernel/State.h\nKernel/StateTree.cpp\nKernel/StateTree.h\nKernel/Width.cpp\nKernel/Width.h\nKernel/Witness.cpp\nKernel/Witness.h\nKernel/WitnessSet.cpp\nKernel/WitnessSet.h\nKernel/WitnessWrapper.h\nMultigraph/MultiGraph.cpp\nMultigraph/MultiGraph.h\nParser/PropertyParser/input_lexer.cpp\nParser/PropertyParser/input_parser.cpp\nPerformance/EnhancedParallelBreadthFirstSearch.cpp\nPerformance/EnhancedParallelBreadthFirstSearch.h\nPerformance/MemoryPool.h\nPerformance/ParallelOptimization.h\nPerformance/PerformanceIntegration.h\nPerformance/PerformanceProfiler.h\nPerformance/PerformanceTimer.h\nPerformance/WitnessCache.h\nSearchStrategies/Source/BreadthFirstSearch.cpp\nSearchStrategies/Source/BreadthFirstSearch.h\nSearchStrategies/Source/IsomorphismBreadthFirstSearch.cpp\nSearchStrategies/Source/IsomorphismBreadthFirstSearch.h\nSearchStrategies/Source/ParallelBreadthFirstSearch.cpp\nSearchStrategies/Source/ParallelBreadthFirstSearch.h\nSearchStrategies/Source/ParallelIsomorphismBreadthFirstSearch.cpp\nSearchStrategies/Source/ParallelIsomorphismBreadthFirstSearch.h\nTranslation/PACE/Parser/atd_lexer.cpp\nTranslation/PACE/Parser/atd_parser.cpp\nTranslation/PACE/Parser/gr_lexer.cpp\nTranslation/PACE/Parser/gr_parser.cpp\nTranslation/PACE/Parser/old_parser/gr_lexer.cpp\nTranslation/PACE/Parser/old_parser/gr_parser.cpp\nTranslation/PACE/Parser/old_parser/td_lexer.cpp\nTranslation/PACE/Parser/old_parser/td_parser.cpp\nTranslation/PACE/Parser/td_lexer.cpp\nTranslation/PACE/Parser/td_parser.cpp\nTranslation/PACE/TreeDecompositionPACE.cpp\nTranslation/PACE/TreeDecompositionPACE.h\nTranslation/PACE/WitnessTreePACE.cpp\nTranslation/PACE/WitnessTreePACE.h\nTranslation/TreeAutomaton/term_lexer.cpp\nTranslation/TreeAutomaton/term_parser.cpp\nTreeAutomaton/ConcreteTreeDecomposition.cpp\nTreeAutomaton/ConcreteTreeDecomposition.h\nTreeAutomaton/DecompositionTree.cpp\nTreeAutomaton/DecompositionTree.h\nTreeAutomaton/InstructiveTreeDecomposition.cpp\nTreeAutomaton/InstructiveTreeDecomposition.h\nTreeAutomaton/RunTree.cpp\nTreeAutomaton/RunTree.h\nTreeAutomaton/Term.cpp\nTreeAutomaton/Term.h\nTreeAutomaton/TreeAutomaton.cpp\nTreeAutomaton/TreeAutomaton.h\nTreeAutomaton/main.cpp\ncmake/GPUSupport.cmake\nexamples/GPUBenchmark.cpp\nexamples/OptimizedSearchExample.cpp\nmain.cpp\nparallel_hashmap/btree.h\nparallel_hashmap/meminfo.h\nparallel_hashmap/phmap.h\nparallel_hashmap/phmap_base.h\nparallel_hashmap/phmap_bits.h\nparallel_hashmap/phmap_config.h\nparallel_hashmap/phmap_dump.h\nparallel_hashmap/phmap_fwd_decl.h\nparallel_hashmap/phmap_utils.h\ntests/GPUTests.cpp\ntests/benchmarks/benchmark_dp_cores.cpp\ntests/test_conjecture.cpp",
+      "stderr": "",
+      "success": true,
+      "timestamp": "2025-10-28T09:50:28.331913"
+    },
+    {
+      "name": "No large binary files",
+      "command": "git rev-list --objects --all | git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' | awk '/^blob/ {if($3 > 1048576) {print $4 \" (\" $3 \" bytes)\"; exit 1}}'",
+      "expected_exit_code": 1,
+      "actual_exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "success": false,
+      "timestamp": "2025-10-28T09:50:28.361703"
+    },
+    {
+      "name": "No passwords in commits",
+      "command": "git log --all --full-history -- | grep -i password",
+      "expected_exit_code": 1,
+      "actual_exit_code": 1,
+      "stdout": "",
+      "stderr": "",
+      "success": true,
+      "timestamp": "2025-10-28T09:50:28.379997"
+    },
+    {
+      "name": "No API keys in commits",
+      "command": "git log --all --full-history -- | grep -iE '(api_key|secret|token)'",
+      "expected_exit_code": 1,
+      "actual_exit_code": 1,
+      "stdout": "",
+      "stderr": "",
+      "success": true,
+      "timestamp": "2025-10-28T09:50:28.398871"
+    },
+    {
+      "name": "CMakeLists.txt exists",
+      "command": "test -f CMakeLists.txt",
+      "expected_exit_code": 0,
+      "actual_exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "success": true,
+      "timestamp": "2025-10-28T09:50:28.461987"
+    },
+    {
+      "name": "GPU directory exists",
+      "command": "test -d GPU",
+      "expected_exit_code": 0,
+      "actual_exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "success": true,
+      "timestamp": "2025-10-28T09:50:28.466637"
+    },
+    {
+      "name": "Main.cpp exists",
+      "command": "test -f main.cpp",
+      "expected_exit_code": 0,
+      "actual_exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "success": true,
+      "timestamp": "2025-10-28T09:50:28.470937"
+    }
+  ]
+}
