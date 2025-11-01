@@ -94,7 +94,7 @@ if(APPLE)
     target_compile_definitions(simple_advanced_demo PRIVATE __APPLE__)
     target_compile_options(simple_advanced_demo PRIVATE -Wall -Wextra -O2)
     
-elif(TREEWIDZARD_CUDA_SUPPORT)
+elseif(TREEWIDZARD_CUDA_SUPPORT)
     # ...existing code for CUDA targets...
 else()
     message(STATUS "TREEWIDZARD_CUDA_SUPPORT is OFF - skipping GPU/CUDA targets")

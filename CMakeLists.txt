@@ -309,7 +309,7 @@ if(BUILD_TESTS)
 endif()
 
 # Add GPU subdirectory only if GPU support is enabled
-if(TREEWIDZARD_CUDA_SUPPORT OR TREEWIDZARD_MPS_SUPPORT)
+if((TREEWIDZARD_CUDA_SUPPORT OR TREEWIDZARD_MPS_SUPPORT) AND NOT SKIP_GPU_SUBDIR)
     add_subdirectory("GPU")
 else()
     message(STATUS "Skipping GPU subdirectory (no TREEWIDZARD_CUDA_SUPPORT/TREEWIDZARD_MPS_SUPPORT)")
