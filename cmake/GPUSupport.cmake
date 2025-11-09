@@ -2,6 +2,18 @@
 # Add GPU support to the existing CMake configuration
 
 # Detect platform and configure appropriate GPU support
+# Allow users to force CPU-only builds and skip GPU detection entirely
+if(DEFINED TREEWIDZARD_FORCE_CPU AND TREEWIDZARD_FORCE_CPU)
+    message(STATUS "Forcing CPU-only build: skipping GPU detection")
+    set(TREEWIDZARD_MPS_SUPPORT OFF)
+    set(TREEWIDZARD_CUDA_SUPPORT OFF)
+    set(TREEWIDZARD_OPENCL_SUPPORT OFF)
+    set(GPU_LIBRARIES "")
+    set(GPU_SOURCES "")
+    set(GPU_HEADERS "")
+    return()
+endif()
+
 if(APPLE)
     message(STATUS "Apple platform detected - configuring Metal/MPS support")
     

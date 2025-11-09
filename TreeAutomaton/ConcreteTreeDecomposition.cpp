@@ -1,5 +1,6 @@
 #include "ConcreteTreeDecomposition.h"
 #include "InstructiveTreeDecomposition.h"
+#include <unordered_map>
 const Bag &ConcreteNode::getBag() const { return bag; }
 void ConcreteNode::setBag(const Bag &bag) { ConcreteNode::bag = bag; }
 const std::string &ConcreteNode::getSymbol() const { return symbol; }
@@ -276,199 +277,141 @@ std::shared_ptr<TermNode<RunNodeContent<State::ptr, ConcreteNode>>>
 ConcreteTreeDecomposition::constructWitnesses(
 	Conjecture &conjecture, std::shared_ptr<TermNode<ConcreteNode>> node,
 	Flags &flags, std::string &_str) {
-	// First, We check the type of the node
-	if (node->getNodeContent().getSymbol() == "Leaf") {
-		// // Test
-		// std::cout << "Leaf " << std::endl;
-		// //
-		// if it is an empty, then it is a leaf
-		State::ptr q = conjecture.getKernel()->initialState();
-		if (flags.get("PrintStates")) {
-			q->print();
-		}
-		std::shared_ptr<TermNode<RunNodeContent<State::ptr, ConcreteNode>>>
-			runNode(new TermNode<RunNodeContent<State::ptr, ConcreteNode>>);
-		std::shared_ptr<RunNodeContent<State::ptr, ConcreteNode>>
-			runNodeContent(new RunNodeContent<State::ptr, ConcreteNode>);
-		// // Test
-		// std::cout << "Leaf "<< q->getWitnessSet(0)->size() << std::endl;
-		// //
-		runNodeContent->setState(q);
-		runNodeContent->setRunNodeContent(node->getNodeContent());
-		runNode->setNodeContent(*runNodeContent);
-		return runNode;
-	} else if (strstr(node->getNodeContent().getSymbol().c_str(),
-					  "IntroVertex")) {
-		// // Test
-		// std::cout << "intro v " << std::endl;
-		// //
-		std::shared_ptr<TermNode<RunNodeContent<State::ptr, ConcreteNode>>>
-			runNodeChild = constructWitnesses(
-				conjecture, node->getChildren()[0], flags, _str);
-		State::ptr childState = runNodeChild->getNodeContent().getState();
-		// find the introduced vertex
-		std::set<unsigned> bagSet =
-			node->getNodeContent().getBag().get_elements();
-		std::set<unsigned> childBagSet = childState->get_bag().get_elements();
-		std::set<unsigned> bagSetDifference;
-		set_difference(
-			bagSet.begin(), bagSet.end(), childBagSet.begin(),
-			childBagSet.end(),
-			std::inserter(bagSetDifference, bagSetDifference.begin()));
-		if (bagSetDifference.size() != 1) {
-			std::cout << "ERROR: ConcreteTreeDecomposition::constructWitnesses "
-						 "in "
-					  << node->getNodeContent().getSymbol()
-					  << ":child's bag and node's bag are not valid"
-					  << std::endl;
-			std::cout << "node's bag: ";
-			node->getNodeContent().getBag().print();
-			std::cout << "\nchild's bag: ";
-			node->getChildren()[0]->getNodeContent().getBag().print();
-			exit(20);
-		}
-		State::ptr q = conjecture.getKernel()->intro_v(
-			childState, *bagSetDifference.begin());
-		if (flags.get("PrintStates")) {
-			q->print();
-		}
-		std::shared_ptr<TermNode<RunNodeContent<State::ptr, ConcreteNode>>>
-			runNode(new TermNode<RunNodeContent<State::ptr, ConcreteNode>>);
-		std::shared_ptr<RunNodeContent<State::ptr, ConcreteNode>>
-			runNodeContent(new RunNodeContent<State::ptr, ConcreteNode>);
-		// // Test
-		// std::cout << "intro v "<< q->getWitnessSet(0)->size() << std::endl;
-		// //	
-		runNodeContent->setState(q);
-		runNodeContent->setRunNodeContent(node->getNodeContent());
-		runNode->setNodeContent(*runNodeContent);
-		// str +=
-		//	node->getNodeContent().getSymbol() + "\n" + q->stateInformation();
-		runNode->addChild(runNodeChild);
-		runNodeChild->setParent(runNode);
-		return runNode;
-	} else if (strstr(node->getNodeContent().getSymbol().c_str(),
-					  "ForgetVertex")) {
-		// // Test
-		// std::cout << "forget v " << std::endl;
-		// //
-		std::shared_ptr<TermNode<RunNodeContent<State::ptr, ConcreteNode>>>
-			runNodeChild = constructWitnesses(
-				conjecture, node->getChildren()[0], flags, _str);
-		State::ptr childState = runNodeChild->getNodeContent().getState();
-		// find the forgotten vertex
-		std::set<unsigned> bagSet =
-			node->getNodeContent().getBag().get_elements();
-		std::set<unsigned> childBagSet = childState->get_bag().get_elements();
-		std::set<unsigned> bagSetDifference;
-		set_difference(
-			childBagSet.begin(), childBagSet.end(), bagSet.begin(),
-			bagSet.end(),
-			std::inserter(bagSetDifference, bagSetDifference.begin()));
-		if (bagSetDifference.size() != 1) {
-			std::cout << "ERROR: ConcreteTreeDecomposition::constructWitnesses "
-						 "in ForgetVertex child's bag and node's bag are not "
-						 "valid"
-					  << std::endl;
-			exit(20);
-		}
-		State::ptr q = conjecture.getKernel()->forget_v(
-			childState, *bagSetDifference.begin());
-		if (flags.get("PrintStates")) {
-			q->print();
-		}
-		std::shared_ptr<TermNode<RunNodeContent<State::ptr, ConcreteNode>>>
-			runNode(new TermNode<RunNodeContent<State::ptr, ConcreteNode>>);
-		std::shared_ptr<RunNodeContent<State::ptr, ConcreteNode>>
-			runNodeContent(new RunNodeContent<State::ptr, ConcreteNode>);
-		// // Test
-		// std::cout << "forget v "<< q->getWitnessSet(0)->size() << std::endl;
-		// //
-		runNodeContent->setState(q);
-		runNodeContent->setRunNodeContent(node->getNodeContent());
-		runNode->setNodeContent(*runNodeContent);
-		// str +=
-		//	node->getNodeContent().getSymbol() + "\n" + q->stateInformation();
-		runNode->addChild(runNodeChild);
-		runNodeChild->setParent(runNode);
-		return runNode;
-	} else if (strstr(node->getNodeContent().getSymbol().c_str(),
-					  "IntroEdge")) {
-		// // Test
-		// std::cout << "intro e " << std::endl;
-		// //
-		std::shared_ptr<TermNode<RunNodeContent<State::ptr, ConcreteNode>>>
-			runNodeChild = constructWitnesses(
-				conjecture, node->getChildren()[0], flags, _str);
-		State::ptr childState = runNodeChild->getNodeContent().getState();
-		std::pair<unsigned, unsigned> e =
-			node->getNodeContent().getBag().get_edge();
-		State::ptr q =
-			conjecture.getKernel()->intro_e(childState, e.first, e.second);
-		conjecture.evaluateConjectureOnState(*q);
-		// TODO: Why is this a float?
-		if (bool(flags.get("PrintStates"))) {
-			q->print();
-		}
+	(void)_str;
+    if (!node)
+        return nullptr;
 
-		std::shared_ptr<TermNode<RunNodeContent<State::ptr, ConcreteNode>>>
-			runNode(new TermNode<RunNodeContent<State::ptr, ConcreteNode>>);
-		std::shared_ptr<RunNodeContent<State::ptr, ConcreteNode>>
-			runNodeContent(new RunNodeContent<State::ptr, ConcreteNode>);
-		// // Test
-		// std::cout << "intro e "<< q->getWitnessSet(0)->size() << std::endl;
-		// //
-		runNodeContent->setState(q);
-		runNodeContent->setRunNodeContent(node->getNodeContent());
-		runNode->setNodeContent(*runNodeContent);
-		// str +=
-		//	node->getNodeContent().getSymbol() + "\n" + q->stateInformation();
-		runNode->addChild(runNodeChild);
-		runNodeChild->setParent(runNode);
-		return runNode;
-	} else if (strstr(node->getNodeContent().getSymbol().c_str(), "Join")) {
-		// // Test
-		// std::cout << "join " << std::endl;
-		// //
-		std::shared_ptr<TermNode<RunNodeContent<State::ptr, ConcreteNode>>>
-			runNodeChild1 = constructWitnesses(
-				conjecture, node->getChildren()[0], flags, _str);
-		State::ptr childState1 = runNodeChild1->getNodeContent().getState();
-		std::shared_ptr<TermNode<RunNodeContent<State::ptr, ConcreteNode>>>
-			runNodeChild2 = constructWitnesses(
-				conjecture, node->getChildren()[1], flags, _str);
-		State::ptr childState2 = runNodeChild2->getNodeContent().getState();
-		State::ptr q = conjecture.getKernel()->join(childState1, childState2);
-		if (flags.get("PrintStates")) {
-			q->print();
-		}
-		std::shared_ptr<TermNode<RunNodeContent<State::ptr, ConcreteNode>>>
-			runNode(new TermNode<RunNodeContent<State::ptr, ConcreteNode>>);
-		std::shared_ptr<RunNodeContent<State::ptr, ConcreteNode>>
-			runNodeContent(new RunNodeContent<State::ptr, ConcreteNode>);
-		// // Test
-		// std::cout << "join "<< q->getWitnessSet(0)->size() << std::endl;
-		// //
-		runNodeContent->setState(q);
-		runNodeContent->setRunNodeContent(node->getNodeContent());
-		runNode->setNodeContent(*runNodeContent);
-		// str +=
-		//	node->getNodeContent().getSymbol() + "\n" + q->stateInformation();
-		runNode->addChild(runNodeChild1);
-		runNodeChild1->setParent(runNode);
-		runNode->addChild(runNodeChild2);
-		runNodeChild2->setParent(runNode);
-		return runNode;
-	} else {
-		std::cout
-			<< "ERROR in constructWitnesses: The function could not recognize "
-			   "the type of the node"
-			<< std::endl;
-		std::cout << "The devastated node is: " << std::endl;
-		node->getNodeContent().print();
-		exit(20);
-	}
+    using RunNodePtr =
+        std::shared_ptr<TermNode<RunNodeContent<State::ptr, ConcreteNode>>>;
+    std::unordered_map<TermNode<ConcreteNode> *, RunNodePtr> memo;
+
+    struct Frame {
+        std::shared_ptr<TermNode<ConcreteNode>> node;
+        bool processed;
+    };
+
+    std::vector<Frame> stack;
+    stack.push_back({node, false});
+
+    while (!stack.empty()) {
+        auto frame = stack.back();
+        stack.pop_back();
+        auto current = frame.node;
+        if (!current)
+            continue;
+
+        if (!frame.processed) {
+            stack.push_back({current, true});
+            for (const auto &child : current->getChildren()) {
+                stack.push_back({child, false});
+            }
+            continue;
+        }
+
+        const auto &symbol = current->getNodeContent().getSymbol();
+        RunNodePtr runNode(new TermNode<RunNodeContent<State::ptr, ConcreteNode>>);
+        auto runNodeContent =
+            std::make_shared<RunNodeContent<State::ptr, ConcreteNode>>();
+
+        auto childRun = [&](size_t idx) -> RunNodePtr {
+            return memo.at(current->getChildren()[idx].get());
+        };
+
+        if (symbol == "Leaf") {
+            State::ptr q = conjecture.getKernel()->initialState();
+            if (flags.get("PrintStates"))
+                q->print();
+            runNodeContent->setState(q);
+        } else if (strstr(symbol.c_str(), "IntroVertex")) {
+            auto child = childRun(0);
+            State::ptr childState = child->getNodeContent().getState();
+            std::set<unsigned> bagSet =
+                current->getNodeContent().getBag().get_elements();
+            std::set<unsigned> childBagSet =
+                childState->get_bag().get_elements();
+            std::set<unsigned> diff;
+            set_difference(bagSet.begin(), bagSet.end(), childBagSet.begin(),
+                           childBagSet.end(),
+                           std::inserter(diff, diff.begin()));
+            if (diff.size() != 1) {
+                std::cout << "ERROR: ConcreteTreeDecomposition::constructWitnesses in "
+                          << symbol
+                          << ":child's bag and node's bag are not valid"
+                          << std::endl;
+				current->getNodeContent().getBag().print();
+				std::cout << "\nchild's bag: ";
+                current->getChildren()[0]->getNodeContent().getBag().print();
+                exit(20);
+            }
+            State::ptr q = conjecture.getKernel()->intro_v(
+                childState, *diff.begin());
+            if (flags.get("PrintStates"))
+                q->print();
+            runNodeContent->setState(q);
+            runNode->addChild(child);
+            child->setParent(runNode);
+        } else if (strstr(symbol.c_str(), "ForgetVertex")) {
+            auto child = childRun(0);
+            State::ptr childState = child->getNodeContent().getState();
+            std::set<unsigned> bagSet =
+                current->getNodeContent().getBag().get_elements();
+            std::set<unsigned> childBagSet =
+                childState->get_bag().get_elements();
+            std::set<unsigned> diff;
+            set_difference(childBagSet.begin(), childBagSet.end(),
+                           bagSet.begin(), bagSet.end(),
+                           std::inserter(diff, diff.begin()));
+            if (diff.size() != 1) {
+                std::cout << "ERROR: ConcreteTreeDecomposition::constructWitnesses in ForgetVertex child's bag and node's bag are not valid"
+                          << std::endl;
+                exit(20);
+            }
+            State::ptr q = conjecture.getKernel()->forget_v(
+                childState, *diff.begin());
+            if (flags.get("PrintStates"))
+                q->print();
+            runNodeContent->setState(q);
+            runNode->addChild(child);
+            child->setParent(runNode);
+        } else if (strstr(symbol.c_str(), "IntroEdge")) {
+            auto child = childRun(0);
+            State::ptr childState = child->getNodeContent().getState();
+            auto edge = current->getNodeContent().getBag().get_edge();
+            State::ptr q = conjecture.getKernel()->intro_e(childState, edge.first,
+                                                           edge.second);
+            conjecture.evaluateConjectureOnState(*q);
+            if (bool(flags.get("PrintStates")))
+                q->print();
+            runNodeContent->setState(q);
+            runNode->addChild(child);
+            child->setParent(runNode);
+        } else if (strstr(symbol.c_str(), "Join")) {
+            auto left = childRun(0);
+            auto right = childRun(1);
+            State::ptr childState1 = left->getNodeContent().getState();
+            State::ptr childState2 = right->getNodeContent().getState();
+            State::ptr q = conjecture.getKernel()->join(childState1, childState2);
+            if (flags.get("PrintStates"))
+                q->print();
+            runNodeContent->setState(q);
+            runNode->addChild(left);
+            left->setParent(runNode);
+            runNode->addChild(right);
+            right->setParent(runNode);
+        } else {
+            std::cout << "ERROR: ConcreteTreeDecomposition::constructWitnesses "
+                      << symbol << " node type does not exist" << std::endl;
+            exit(20);
+        }
+
+        runNodeContent->setRunNodeContent(current->getNodeContent());
+        runNode->setNodeContent(*runNodeContent);
+        memo[current.get()] = runNode;
+    }
+
+    return memo.at(node.get());
 }
+
 
 auto findMaxWitnessSetSize(TermNode<RunNodeContent<State::ptr, ConcreteNode>> &node) -> std::size_t {
 	std::size_t max_witness_set_size = 0 ;
@@ -489,30 +432,52 @@ auto findMaxWitnessSetSizesPerComponent(
     TermNode<RunNodeContent<State::ptr, ConcreteNode>> &node
 ) -> std::vector<std::size_t>
 {
-    // 1) Look at this node’s state
-    auto &&state       = node.getNodeContent().getState();
-    std::size_t ncomp  = state->numberOfComponents();
-    
-    // Initialize a vector of length ncomp, filled with this node’s witness‐set sizes
-    std::vector<std::size_t> max_sizes(ncomp);
-    for (std::size_t c = 0; c < ncomp; ++c) {
-        max_sizes[c] = state->getWitnessSet(int(c))->size();
+    using RunNodePtr = TermNode<RunNodeContent<State::ptr, ConcreteNode>>*;
+    std::unordered_map<RunNodePtr, std::vector<std::size_t>> memo;
+
+    struct Frame {
+        RunNodePtr node;
+        bool processed;
+    };
+
+    std::vector<Frame> stack;
+    stack.push_back({&node, false});
+
+    while (!stack.empty()) {
+        auto frame = stack.back();
+        stack.pop_back();
+        auto current = frame.node;
+        if (!current)
+            continue;
+
+        if (!frame.processed) {
+            stack.push_back({current, true});
+            for (auto &child : current->getChildren()) {
+                stack.push_back({child.get(), false});
+            }
+            continue;
+        }
+
+        auto &&state = current->getNodeContent().getState();
+        std::vector<std::size_t> max_sizes(state->numberOfComponents());
+        for (std::size_t c = 0; c < max_sizes.size(); ++c) {
+            max_sizes[c] = state->getWitnessSet(int(c))->size();
+        }
+
+        for (auto &child : current->getChildren()) {
+            auto child_vec = memo.at(child.get());
+            if (child_vec.size() > max_sizes.size()) {
+                max_sizes.resize(child_vec.size(), 0);
+            }
+            for (std::size_t c = 0; c < child_vec.size(); ++c) {
+                max_sizes[c] = std::max(max_sizes[c], child_vec[c]);
+            }
+        }
+
+        memo[current] = std::move(max_sizes);
     }
 
-    // 2) Recurse into children and merge their maxima
-    for (auto &child : node.getChildren()) {
-        auto child_max = findMaxWitnessSetSizesPerComponent(*child);
-        // If a child has more components than this node, grow our vector
-        if (child_max.size() > max_sizes.size()) {
-            max_sizes.resize(child_max.size(), 0);
-        }
-        // For each component, keep the larger of (ours, child’s)
-        for (std::size_t c = 0; c < child_max.size(); ++c) {
-            max_sizes[c] = std::max(max_sizes[c], child_max[c]);
-        }
-    }
-
-    return max_sizes;
+    return memo.at(&node);
 }
 
 
