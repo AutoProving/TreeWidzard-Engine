@@ -1,0 +1,5 @@
+v    := VertexCount()
+ind  := IndependentSet()
+col3 := ChromaticNumber(3)
+Formula
+col3 IMPLIES (INV(ind) * 3 >= INV(v))

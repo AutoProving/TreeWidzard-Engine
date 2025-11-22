@@ -1,0 +1,4 @@
+col3 := ChromaticNumber(3)
+col4 := ChromaticNumber(4)
+Formula
+col3 IMPLIES col4

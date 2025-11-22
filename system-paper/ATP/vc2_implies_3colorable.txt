@@ -1,0 +1,4 @@
+vc  := VertexCover(2)
+col := ChromaticNumber(3)
+Formula
+vc IMPLIES col

@@ -2,6 +2,7 @@
 #include <filesystem>
 #include <memory>
 #include <stdexcept>
+#include <unordered_map>
 
 
 #ifdef _WIN32
@@ -16,28 +17,28 @@
 
 void InputController::check_available_cores() {
 	std::cout<<"--------------- TreeWidzard Dynamic Cores LOADING INFORAMATION --------------- "<<std::endl;
-	for (std::string dynamicPluginPath : dynamicPluginPaths) {
-		for (const auto &entry :
-			 std::filesystem::directory_iterator(dynamicPluginPath)) {
-			std::string s = entry.path();
-			// for linux .so, and windows .dll
-			if (s.find(DYNAMIC_LIB_EXTENSION) != std::string::npos) {
-				std::string fileName = entry.path().filename();
-				// std::cout << "File " << fileName;
-				try {
-					auto factory = DynamicCoreHandler(s);
-					const std::string &name =
-						factory.get_metadata().at("CoreName");
-
-					auto [it, placed] =
-						coreList.emplace(name, std::move(factory));
-					if (!placed)
-						throw std::runtime_error(" Duplicate core name: " +
-												 name + "\n File:"+	s);
-					// std::cout << " Loaded. Core Name: " << name << '\n';
-				} catch (std::exception &e) {
-					std::cerr << " failed to load." << e.what() << std::endl;
+	std::unordered_map<std::string, std::string> core_locations;
+	for (const std::string &dynamicPluginPath : dynamicPluginPaths) {
+		for (const auto &entry : std::filesystem::directory_iterator(dynamicPluginPath)) {
+			const std::string library_path = entry.path();
+			if (library_path.find(DYNAMIC_LIB_EXTENSION) == std::string::npos) {
+				continue;
+			}
+			try {
+				auto factory = DynamicCoreHandler(library_path);
+				const std::string &name = factory.get_metadata().at("CoreName");
+				auto [it, placed] = coreList.emplace(name, std::move(factory));
+				if (!placed) {
+					if (auto loc = core_locations.find(name); loc != core_locations.end() && loc->second != library_path) {
+						std::cerr << "Duplicate core name '" << name
+						          << "'. Keeping " << loc->second << " and skipping "
+						          << library_path << std::endl;
+					}
+					continue;
 				}
+				core_locations[name] = library_path;
+			} catch (std::exception &e) {
+				std::cerr << " failed to load." << e.what() << std::endl;
 			}
 		}
 	}

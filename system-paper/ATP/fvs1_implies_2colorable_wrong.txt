@@ -1,0 +1,4 @@
+f   := FeedbackVertexSet(1)
+col := ChromaticNumber(2)
+Formula
+f IMPLIES col

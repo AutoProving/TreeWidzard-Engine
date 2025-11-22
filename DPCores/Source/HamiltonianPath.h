@@ -1,5 +1,11 @@
 // Hamiltonian Path DP-core (path-decomposition oriented)
 #include "../../CorePrelude.h"
+#include <deque>
+#include <map>
+#include <set>
+#include <tuple>
+#include <utility>
+#include <vector>
 using namespace std;
 
 struct HP_Witness : WitnessWrapper<HP_Witness>
@@ -8,7 +14,7 @@ struct HP_Witness : WitnessWrapper<HP_Witness>
     std::map<unsigned, unsigned> d;
     // M: endpoint matching for degree-1 vertices (canonical min->max storage)
     std::map<unsigned, unsigned> M;
-    unsigned cc = 0; // closed components fully internal
+    unsigned cc = 0; // cycle detector used during join
     unsigned ep = 0; // forgotten endpoints count
     unsigned comps = 0; // number of open components intersecting the bag
 
@@ -22,13 +28,33 @@ struct HP_Witness : WitnessWrapper<HP_Witness>
         if (l.cc != r.cc) return l.cc < r.cc;
         return l.ep < r.ep;
     }
-    HP_Witness relabel_implementation(const std::map<unsigned, unsigned> &rho) const {
-        HP_Witness w; w.cc = cc; w.ep = ep; w.comps = comps;
-        for (auto [u,deg] : d) w.d[rho.at(u)] = deg;
-        for (auto [u,v] : M) {
+
+    static void add_pair(std::map<unsigned,unsigned> &M, unsigned a, unsigned b) {
+        if (a==b) return;
+        if (a < b) M[a] = b; else M[b] = a;
+    }
+    static void erase_pair(std::map<unsigned,unsigned> &M, unsigned a) {
+        auto it = M.find(a);
+        if (it != M.end()) { M.erase(it); return; }
+        for (auto it2 = M.begin(); it2!=M.end(); ++it2) {
+            if (it2->second == a) { M.erase(it2); return; }
+        }
+    }
+
+    // Invariant: for reachable witnesses, comps == component_count(w).
+    static unsigned component_count(const WitnessAlias &w);
+
+    template<class Rho>
+    static HP_Witness relabel(const HP_Witness &w_, const Rho &rho) {
+        HP_Witness w;
+        for (auto [u,deg] : w_.d) w.d[rho.at(u)] = deg;
+        for (auto [u,v] : w_.M) {
             auto ru = rho.at(u); auto rv = rho.at(v);
             if (ru < rv) w.M[ru] = rv; else w.M[rv] = ru;
         }
+        w.cc   = w_.cc;
+        w.ep   = w_.ep;
+        w.comps = component_count(w);
         return w;
     }
     void hash(Hasher &h) const override {
@@ -38,9 +64,32 @@ struct HP_Witness : WitnessWrapper<HP_Witness>
         h << -1u << comps << cc << ep;
     }
     void witness_info(std::ostream &os) const {
-        os << "d={"; for (auto it=d.begin(); it!=d.end(); ++it){ os<<it->first<<":"<<it->second; if (next(it)!=d.end()) os<<","; } os<<"} ";
-        os << "M={"; for (auto it=M.begin(); it!=M.end(); ++it){ os<<it->first<<"->"<<it->second; if (next(it)!=M.end()) os<<","; } os<<"} ";
+        os << "d={"; for (auto it=d.begin(); it!=d.end(); ++it) { os<<it->first<<":"<<it->second; if (next(it)!=d.end()) os<<","; } os<<"} ";
+        os << "M={"; for (auto it=M.begin(); it!=M.end(); ++it) { os<<it->first<<"->"<<it->second; if (next(it)!=M.end()) os<<","; } os<<"} ";
         os << "comps="<<comps<<" cc="<<cc<<" ep="<<ep<<"\n";
+    }
+
+    HP_Witness relabel_implementation(const std::map<unsigned, unsigned> &rho) const {
+        HP_Witness w;
+        w.cc = cc;
+        w.ep = ep;
+        w.comps = comps;
+        for (auto [u,deg] : d) {
+            auto it = rho.find(u);
+            if (it != rho.end()) {
+                w.d[it->second] = deg;
+            }
+        }
+        for (auto [u,v] : M) {
+            auto itu = rho.find(u);
+            auto itv = rho.find(v);
+            if (itu != rho.end() && itv != rho.end()) {
+                unsigned ru = itu->second;
+                unsigned rv = itv->second;
+                if (ru < rv) w.M[ru] = rv; else w.M[rv] = ru;
+            }
+        }
+        return w;
     }
 };
 
@@ -56,22 +105,13 @@ struct HP_Core : CoreWrapper<HP_Core, HP_Witness, WitnessSetTypeTwo>
         for (auto &kv : M) { if (kv.second == a) { partner = kv.first; return true; } }
         return false;
     }
-    static void erase_pair(std::map<unsigned,unsigned> &M, unsigned a) {
-        auto it = M.find(a);
-        if (it!=M.end()) { unsigned b = it->second; M.erase(a); M.erase(b); return; }
-        for (auto it2 = M.begin(); it2!=M.end(); ++it2) {
-            if (it2->second == a) { unsigned b = it2->first; M.erase(b); M.erase(a); return; }
-        }
-    }
-    static void add_pair(std::map<unsigned,unsigned> &M, unsigned a, unsigned b) {
-        if (a==b) return;
-        if (a<b) M[a]=b; else M[b]=a;
-    }
-    static unsigned component_count(const HP_Witness &w) {
+
+    // Invariant: for reachable witnesses, comps == component_count(w).
+    static unsigned component_count(const WitnessAlias &w) {
+        // Count open components: degree-1 endpoints that are unmatched to another bag endpoint
         unsigned comps = 0;
-        comps += w.M.size(); // each stored pair is one component
-        for (auto &[v,deg] : w.d) {
-            if (deg==1) {
+        for (auto [v,deg] : w.d) {
+            if (deg == 1) {
                 unsigned partner;
                 if (!partner_of(w.M, v, partner)) comps += 1;
             }
@@ -120,14 +160,14 @@ struct HP_Core : CoreWrapper<HP_Core, HP_Witness, WitnessSetTypeTwo>
         bool i_zero=(di==0), j_zero=(dj==0);
         if (i_zero && j_zero) {
             // start a new open path component within the bag
-            add_pair(M,i,j);
+            HP_Witness::add_pair(M,i,j);
         } else if (i_ep && j_zero) {
             unsigned pi; bool hi = partner_of(M, i, pi);
-            if (hi) { erase_pair(M, i); add_pair(M, pi, j); }
+            if (hi) { HP_Witness::erase_pair(M, i); HP_Witness::add_pair(M, pi, j); }
             // else: i was unmatched to bag endpoints (other end already forgotten), j becomes new unmatched endpoint; no pair to add
         } else if (i_zero && j_ep) {
             unsigned pj; bool hj = partner_of(M, j, pj);
-            if (hj) { erase_pair(M, j); add_pair(M, i, pj); }
+            if (hj) { HP_Witness::erase_pair(M, j); HP_Witness::add_pair(M, i, pj); }
             // else: symmetric unmatched case; nothing to pair
         } else if (i_ep && j_ep) {
             unsigned pi, pj; bool hi = partner_of(M, i, pi); bool hj = partner_of(M, j, pj);
@@ -136,13 +176,13 @@ struct HP_Core : CoreWrapper<HP_Core, HP_Witness, WitnessSetTypeTwo>
                     // closing a cycle within the bag -> prune branch
                     return;
                 } else {
-                    erase_pair(M, i); erase_pair(M, j); add_pair(M, pi, pj);
+                    HP_Witness::erase_pair(M, i); HP_Witness::erase_pair(M, j); HP_Witness::add_pair(M, pi, pj);
                 }
             } else if (hi && !hj) {
                 // i had a bag partner; j was unmatched (outside). Removing i endpoint, leave pi unmatched in the bag.
-                erase_pair(M, i);
+                HP_Witness::erase_pair(M, i);
             } else if (!hi && hj) {
-                erase_pair(M, j);
+                HP_Witness::erase_pair(M, j);
             } else {
                 // both unmatched to bag endpoints; connecting two outside-reaching paths: nothing to pair within the bag
             }
@@ -165,7 +205,7 @@ struct HP_Core : CoreWrapper<HP_Core, HP_Witness, WitnessSetTypeTwo>
             wn->ep += 2;
         } else if (di==1) {
             auto &M = wn->M;
-            erase_pair(M, i);
+            HP_Witness::erase_pair(M, i);
             wn->ep += 1;
         }
         wn->d.erase(i);
@@ -208,9 +248,15 @@ struct HP_Core : CoreWrapper<HP_Core, HP_Witness, WitnessSetTypeTwo>
         for (auto [v,deg] : L->d) if (deg==1 && !has_partner(L->M, v)) add_edge((U64)v, make_stub(1, v), 1);
         for (auto [v,deg] : R->d) if (deg==1 && !has_partner(R->M, v)) add_edge((U64)v, make_stub(2, v), 2);
 
-        auto remove_once = [&](U64 u, U64 v, int color){
+        auto remove_both_once = [&](U64 u, U64 v, int color){
             auto &U = adj[u];
-            for (auto it = U.begin(); it!=U.end(); ++it) if (it->v==v && (color==0 || it->c==color)) { U.erase(it); break; }
+            for (auto it = U.begin(); it!=U.end(); ++it) {
+                if (it->v==v && (color==0 || it->c==color)) { U.erase(it); break; }
+            }
+            auto &V = adj[v];
+            for (auto it = V.begin(); it!=V.end(); ++it) {
+                if (it->v==u && (color==0 || it->c==color)) { V.erase(it); break; }
+            }
         };
 
         std::deque<unsigned> Q;
@@ -223,12 +269,12 @@ struct HP_Core : CoreWrapper<HP_Core, HP_Witness, WitnessSetTypeTwo>
             auto inc = it->second;
             if (inc.empty()) continue;
             if (inc.size() == 1) {
-                remove_once((U64)v, inc[0].v, inc[0].c);
+                remove_both_once((U64)v, inc[0].v, inc[0].c);
             } else if (inc.size() == 2) {
                 auto e1 = inc[0], e2 = inc[1];
                 if (e1.c == e2.c) return;
-                remove_once((U64)v, e1.v, e1.c);
-                remove_once((U64)v, e2.v, e2.c);
+                remove_both_once((U64)v, e1.v, e1.c);
+                remove_both_once((U64)v, e2.v, e2.c);
                 if (e1.v == e2.v) {
                     if (!is_stub(e1.v)) add_edge(e1.v, e1.v, 3);
                 } else {
@@ -245,7 +291,7 @@ struct HP_Core : CoreWrapper<HP_Core, HP_Witness, WitnessSetTypeTwo>
             if (is_stub(aNode)) continue;
             unsigned a = (unsigned)aNode;
             if (dsum[a] != 1) continue;
-            U64 realN = 0; int realCnt = 0;
+            unsigned realCnt = 0; U64 realN = 0;
             for (auto const &e : nb) if (!is_stub(e.v)) { realN = e.v; realCnt++; }
             if (realCnt == 1) {
                 unsigned b = (unsigned)realN;
@@ -290,6 +336,7 @@ struct HP_Core : CoreWrapper<HP_Core, HP_Witness, WitnessSetTypeTwo>
         wn->comps = component_count(*wn);
         ws.insert(std::move(wn));
     }
+
     void clean_implementation(WitnessSet &ws) {
         // Deduplicate identical states; no optimisation on cc/ep
         using Key = std::tuple<map<unsigned,unsigned>, map<unsigned,unsigned>, unsigned, unsigned>;
@@ -307,8 +354,43 @@ struct HP_Core : CoreWrapper<HP_Core, HP_Witness, WitnessSetTypeTwo>
     }
 
     bool is_final_witness_implementation(const Bag &bag, const WitnessAlias &w) {
-        if (bag.size()!=0) return false;
-        // Path: no closed cycles formed (cc==0) and exactly two endpoints forgotten; no residual endpoints
-        return (w.cc==0 && w.comps==0 && w.ep==2 && w.M.empty() && w.d.empty());
+        auto base_accept = [](const WitnessAlias &wf) {
+            // Path: no closed cycles formed (cc==0) and exactly two endpoints forgotten; no residual endpoints
+            return (wf.cc==0 && wf.comps==0 && wf.ep==2 && wf.M.empty() && wf.d.empty());
+        };
+
+        if (bag.size()==0) {
+            return base_accept(w);
+        }
+
+        // Special-case K1: single-vertex graph with no edges.
+        if (bag.size()==1 && w.cc==0 && w.ep==0 && w.comps==0 && w.M.empty()) {
+            unsigned v = *bag.get_elements().begin();
+            auto it = w.d.find(v);
+            if (it != w.d.end() && it->second == 0 && w.d.size()==1) {
+                return true;
+            }
+        }
+
+        // Special-case K2: two-vertex graph with a single edge forming a path.
+        if (bag.size()==2 && w.cc==0 && w.ep==0 && w.comps==0 && w.d.size()==2) {
+            std::vector<unsigned> verts;
+            for (unsigned v : bag.get_elements()) verts.push_back(v);
+            if (verts.size()==2) {
+                unsigned a = verts[0], b = verts[1];
+                auto ia = w.d.find(a), ib = w.d.find(b);
+                if (ia!=w.d.end() && ib!=w.d.end() && ia->second==1 && ib->second==1) {
+                    unsigned u = std::min(a,b), v = std::max(a,b);
+                    if (w.M.size()==1) {
+                        auto im = w.M.find(u);
+                        if (im != w.M.end() && im->second == v) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 };

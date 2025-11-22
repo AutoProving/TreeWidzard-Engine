@@ -1,0 +1,3 @@
+x := CliqueNumberSimpleGraphs(6)
+Formula
+NOT x
