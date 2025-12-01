@@ -96,6 +96,8 @@ jobs:
         else
           find . -type f -executable -name '*_test*' -print0 | xargs -0 -n1 -P1 || true
         fi
+        # Lightweight CLI smoke test to catch regressions early
+        timeout 60 ./treewidzard -atp tw=2 BreadthFirstSearch ../examples/conjectures/simple_3_coloring.txt
         # Collect coverage with lcov and produce html
         lcov --capture --directory . --output-file coverage.info || true
         lcov --remove coverage.info '/usr/*' --output-file coverage.info || true
