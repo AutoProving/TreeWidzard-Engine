@@ -132,21 +132,9 @@ struct FeedbackVertexSet_Core : CoreWrapper<FeedbackVertexSet_Core, FeedbackVert
         }
         unsigned ri = it_i->second;
         unsigned rj = it_j->second;
-        if (ri == rj) {
-            std::set<unsigned> component_vertices;
-            for (auto &[node, rep] : w.comp) {
-                if (rep == ri) component_vertices.insert(node);
-            }
-            for (unsigned victim : component_vertices) {
-                if (w.removed + 1 > k) break;
-                auto wv = w.clone();
-                erase_vertex(*wv, victim);
-                wv->removed += 1;
-                normalize(*wv);
-                ws.insert(std::move(wv));
-            }
-            return;
-        }
+        // If both endpoints are kept and already connected, adding this edge would
+        // create a cycle in the kept graph, so this partial solution is invalid.
+        if (ri == rj) return;
         unsigned new_root = std::min(ri, rj);
         for (auto &kv : wn->comp) {
             if (kv.second == ri || kv.second == rj) kv.second = new_root;
@@ -160,14 +148,6 @@ struct FeedbackVertexSet_Core : CoreWrapper<FeedbackVertexSet_Core, FeedbackVert
         erase_vertex(*keep_state, i);
         normalize(*keep_state);
         ws.insert(std::move(keep_state));
-
-        if (w.comp.count(i) && w.removed + 1 <= k) {
-            auto remove_state = w.clone();
-            erase_vertex(*remove_state, i);
-            remove_state->removed += 1;
-            normalize(*remove_state);
-            ws.insert(std::move(remove_state));
-        }
     }
 
     static void merge_connection(unsigned u, unsigned v, std::vector<std::shared_ptr<WitnessAlias>> &states, unsigned k) {
@@ -181,28 +161,15 @@ struct FeedbackVertexSet_Core : CoreWrapper<FeedbackVertexSet_Core, FeedbackVert
             }
             unsigned ru = it_u->second;
             unsigned rv = it_v->second;
-            if (ru == rv) {
-                std::set<unsigned> component_vertices;
-                for (auto &[node, rep] : state->comp) {
-                    if (rep == ru) component_vertices.insert(node);
-                }
-                for (unsigned victim : component_vertices) {
-                    if (state->removed + 1 > k) continue;
-                    auto wv = state->clone();
-                    erase_vertex(*wv, victim);
-                    wv->removed += 1;
-                    normalize(*wv);
-                    next.push_back(std::move(wv));
-                }
-            } else {
-                auto wn = state->clone();
-                unsigned new_root = std::min(ru, rv);
-                for (auto &kv : wn->comp) {
-                    if (kv.second == ru || kv.second == rv) kv.second = new_root;
-                }
-                normalize(*wn);
-                next.push_back(std::move(wn));
+            // A connection between already-connected endpoints would create a cycle.
+            if (ru == rv) continue;
+            auto wn = state->clone();
+            unsigned new_root = std::min(ru, rv);
+            for (auto &kv : wn->comp) {
+                if (kv.second == ru || kv.second == rv) kv.second = new_root;
             }
+            normalize(*wn);
+            next.push_back(std::move(wn));
         }
         states.swap(next);
     }

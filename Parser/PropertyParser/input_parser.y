@@ -1,19 +1,8 @@
 //Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 %defines
-%define parse.error detailed
-%define api.prefix {input_}
-%code requires {
-    #include "../../Conjecture/Conjecture.h"
-    #include "../../Kernel/Width.h"
-    #include "../../Kernel/DynamicCoreHandler.h"
-    #include <iostream>
-    #include <vector>
-    #include <map>
-    #include <stdio.h>
-    #include <stdlib.h>
-    #include <utility>
-    #include <variant>
-}
+// %define parse.error detailed  -- Removed for Bison 2.3 compatibility
+%name-prefix="input_"
+// %code requires -- Removed for Bison 2.3 compatibility. Dependencies must be included by the user of input_parser.hpp
 %{
     #include <iostream>
     #include <string.h>
@@ -36,7 +25,7 @@
     bool check_varToProperty(std::string v,std::map<std::string, PropertyAssignment*> &varToProperty);
     bool check_sub_formula_variables(char* v);
 %}
-%locations
+// %locations -- Removed to avoid YYLTYPE conflict
 %union{
      ConjectureNode *conjectureNode;
      int number;
@@ -53,9 +42,9 @@
 
 
 
-%token SEPERATOR  STRING LEFTP RIGHTP NAME NEWLINE AND OR IFF IMPLIES NOT TRUE FALSE COMMENT NUMBER_DOUBLE COMMA
+%token SEPERATOR  STRING LEFTP RIGHTP NAME AND OR IFF IMPLIES NOT TRUE FALSE COMMENT NUMBER_DOUBLE COMMA
         FORMULA_NAME EXP ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION INV_ EQUAL
-%type<string>  SEPERATOR STRING LEFTP RIGHTP NAME NEWLINE AND OR IFF IMPLIES NOT TRUE FALSE COMMENT VARIABLE ATOMIC_PREDICATE COMMA FORMULA_NAME EXP
+%type<string>  SEPERATOR STRING LEFTP RIGHTP NAME AND OR IFF IMPLIES NOT TRUE FALSE COMMENT VARIABLE ATOMIC_PREDICATE COMMA FORMULA_NAME EXP
 	ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION PARAMETER INV_ EQUAL
 %type<property> VARIABLE_CORE_ASSIGNMENT
 %type<conjectureNode> FORMULA SUB_FORMULA FORMULA_TERMINAL
@@ -77,16 +66,15 @@
 %left EQUAL
 %left BINARY_ARITHMETIC_OPERATOR
 %right NOT
-%left NEWLINE
 %right BINARY_FUNCTION
 %right UNARY_FUNCTION
 %%
 
-START            :COMMENTS VARIABLES_CORES_ASSIGNMENT FORMULA_NAME NEWLINE VARIABLES_SUBFORMULA_ASSIGNMENTS  FORMULA FORMULACOMMENTS
-                    {conj.setRoot($6); result = 0;}
+START            :COMMENTS VARIABLES_CORES_ASSIGNMENT FORMULA_NAME VARIABLES_SUBFORMULA_ASSIGNMENTS  FORMULA COMMENTS
+                    {conj.setRoot($5); result = 0;}
                  ;
-VARIABLES_CORES_ASSIGNMENT	: VARIABLES_CORES_ASSIGNMENT VARIABLE_CORE_ASSIGNMENT NEWLINE COMMENTS {}
-				| %empty
+VARIABLES_CORES_ASSIGNMENT	: VARIABLES_CORES_ASSIGNMENT VARIABLE_CORE_ASSIGNMENT COMMENTS {}
+				| /* empty */
 				;
 VARIABLE_CORE_ASSIGNMENT	: VARIABLE SEPERATOR ATOMIC_PREDICATE LEFTP PARAMETERS RIGHTP
 				{
@@ -104,7 +92,7 @@ VARIABLE_CORE_ASSIGNMENT	: VARIABLE SEPERATOR ATOMIC_PREDICATE LEFTP PARAMETERS 
 //		| NUMBER_DOUBLE { $$ = new std::vector<int>;  $$->push_back(strtod($1,NULL));}
 //		;
 ATOMIC_PREDICATE	: NAME;
-PARAMETERS	: %empty {
+PARAMETERS	: /* empty */ {
 		$$ = new std::vector<std::variant<char*,int, bool>>();
         }
         | PARAMETER {
@@ -129,7 +117,7 @@ PARAMETER	: NAME {$$ = $1;}
 //		| ATLEAST{$$=$1;}
 //		| ATMOST{$$=$1;}
 //		| LESS {$$=$1;}
-VARIABLES_SUBFORMULA_ASSIGNMENTS : EXP VARIABLE SEPERATOR SUB_FORMULA NEWLINE  VARIABLES_SUBFORMULA_ASSIGNMENTS
+VARIABLES_SUBFORMULA_ASSIGNMENTS : EXP VARIABLE SEPERATOR SUB_FORMULA  VARIABLES_SUBFORMULA_ASSIGNMENTS
 								{if(check_varToProperty($2,varToProperty)){
                                                                     std::cout<< "variable " << $2 << " declared at least two times" <<std::endl; YYERROR;}
                                                                   if(check_sub_formula_variables($2)){
@@ -137,7 +125,7 @@ VARIABLES_SUBFORMULA_ASSIGNMENTS : EXP VARIABLE SEPERATOR SUB_FORMULA NEWLINE  V
                                                                   }
                                                                   sub_formula_variables.insert(std::make_pair($2, $4));
                                                                   }
-				  | %empty
+				  | /* empty */
 				  ;
 
 SUB_FORMULA : SUB_FORMULA AND SUB_FORMULA {$$= new ConjectureNode(OPERATOR,"and");
@@ -263,11 +251,9 @@ FORMULA_TERMINAL : TRUE         {$$ = new ConjectureNode(NUMBER,1); }
 VARIABLE                : NAME                                  
                         ;
 COMMENTS                :COMMENT COMMENTS                          {}
-                        |%empty
+                        |/* empty */
                         ;
-FORMULACOMMENTS         :NEWLINE COMMENTS FORMULACOMMENTS
-                        |%empty
-                        ;
+// FORMULACOMMENTS rule removed to prevent epsilon loop
 %%
 
 void yyerror(Conjecture &/*conj*/, int &/*result*/,std::map<std::string,DynamicCoreHandler> &/*coreList*/, std::map<std::string,std::string> &/*varToCoreName*/, std::map<std::string, PropertyAssignment*> /*varToProperty*/, char const* msg){

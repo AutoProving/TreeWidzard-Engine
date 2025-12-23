@@ -1,6 +1,7 @@
 // Hamiltonian Path DP-core (path-decomposition oriented)
 #include "../../CorePrelude.h"
 #include <deque>
+#include <functional>
 #include <map>
 #include <set>
 #include <tuple>
@@ -363,33 +364,35 @@ struct HP_Core : CoreWrapper<HP_Core, HP_Witness, WitnessSetTypeTwo>
             return base_accept(w);
         }
 
-        // Special-case K1: single-vertex graph with no edges.
-        if (bag.size()==1 && w.cc==0 && w.ep==0 && w.comps==0 && w.M.empty()) {
-            unsigned v = *bag.get_elements().begin();
-            auto it = w.d.find(v);
-            if (it != w.d.end() && it->second == 0 && w.d.size()==1) {
-                return true;
-            }
-        }
+        // If the root bag is non-empty, simulate a nice decomposition suffix by
+        // forgetting the remaining bag vertices in some order.
+        std::vector<unsigned> verts;
+        for (unsigned v : bag.get_elements()) verts.push_back(v);
+        if (verts.empty()) return false;
+        std::sort(verts.begin(), verts.end());
 
-        // Special-case K2: two-vertex graph with a single edge forming a path.
-        if (bag.size()==2 && w.cc==0 && w.ep==0 && w.comps==0 && w.d.size()==2) {
-            std::vector<unsigned> verts;
-            for (unsigned v : bag.get_elements()) verts.push_back(v);
-            if (verts.size()==2) {
-                unsigned a = verts[0], b = verts[1];
-                auto ia = w.d.find(a), ib = w.d.find(b);
-                if (ia!=w.d.end() && ib!=w.d.end() && ia->second==1 && ib->second==1) {
-                    unsigned u = std::min(a,b), v = std::max(a,b);
-                    if (w.M.size()==1) {
-                        auto im = w.M.find(u);
-                        if (im != w.M.end() && im->second == v) {
-                            return true;
-                        }
-                    }
+        std::function<bool(size_t, const WitnessAlias &)> dfs =
+            [&](size_t idx, const WitnessAlias &cur) -> bool {
+                if (idx == verts.size()) {
+                    return base_accept(cur);
                 }
-            }
-        }
+
+                Bag curBag;
+                std::set<unsigned> remaining;
+                for (size_t j = idx; j < verts.size(); ++j) remaining.insert(verts[j]);
+                curBag.set_elements(remaining);
+
+                WitnessSetTypeTwo<HP_Witness> tmp;
+                this->forget_v_implementation(verts[idx], curBag, cur, tmp);
+                for (const auto &wp : tmp) {
+                    if (dfs(idx + 1, HP_Witness::as_witness(*wp))) return true;
+                }
+                return false;
+            };
+
+        do {
+            if (dfs(0, w)) return true;
+        } while (std::next_permutation(verts.begin(), verts.end()));
 
         return false;
     }

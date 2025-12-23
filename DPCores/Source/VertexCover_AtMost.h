@@ -78,31 +78,17 @@ struct VertexCover_AtMost_Core : CoreWrapper<VertexCover_AtMost_Core, VertexCove
 
     void intro_v_implementation(unsigned i, const Bag &, const WitnessAlias &w, WitnessSet &ws)
     {
-        // Just introduce the label; selection happens at edges
+        // Branch on whether i is selected into the cover.
         ws.insert(w.clone());
+        auto w_selected = w.clone();
+        w_selected->S.insert(i);
+        ws.insert(std::move(w_selected));
     }
 
     void intro_e_implementation(unsigned i, unsigned j, const Bag &, const WitnessAlias &w, WitnessSet &ws)
     {
-        // Edge {i,j} must be covered: if one endpoint already in S, keep; otherwise branch
-        if (w.S.count(i) || w.S.count(j)) {
-            ws.insert(w.clone());
-            return;
-        }
-        // Branch: pick i
-        {
-            auto wi = w.clone();
-            wi->S.insert(i);
-            // s counts selections that are already forgotten; do not change s here
-            ws.insert(std::move(wi));
-        }
-        // Branch: pick j
-        {
-            auto wj = w.clone();
-            wj->S.insert(j);
-            // s counts selections that are already forgotten; do not change s here
-            ws.insert(std::move(wj));
-        }
+        // Edge {i,j} must be covered by the current selection.
+        if (w.S.count(i) || w.S.count(j)) ws.insert(w.clone());
     }
 
     void forget_v_implementation(unsigned i, const Bag &, const WitnessAlias &w, WitnessSet &ws)

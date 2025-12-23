@@ -1,14 +1,14 @@
-/* A Bison parser, made by GNU Bison 3.8.2.  */
+/* A Bison parser, made by GNU Bison 2.3.  */
 
-/* Bison interface for Yacc-like parsers in C
+/* Skeleton interface for Bison's Yacc-like parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2021 Free Software Foundation,
-   Inc.
+   Copyright (C) 1984, 1989, 1990, 2000, 2001, 2002, 2003, 2004, 2005, 2006
+   Free Software Foundation, Inc.
 
-   This program is free software: you can redistribute it and/or modify
+   This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
+   the Free Software Foundation; either version 2, or (at your option)
+   any later version.
 
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,7 +16,9 @@
    GNU General Public License for more details.
 
    You should have received a copy of the GNU General Public License
-   along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor,
+   Boston, MA 02110-1301, USA.  */
 
 /* As a special exception, you may create a larger work that contains
    part or all of the Bison parser skeleton and distribute that work
@@ -31,122 +33,88 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-/* DO NOT RELY ON FEATURES THAT ARE NOT DOCUMENTED in the manual,
-   especially those whose name start with YY_ or yy_.  They are
-   private implementation details that can be changed or removed.  */
-
-#ifndef YY_INPUT_INPUT_PARSER_HPP_INCLUDED
-# define YY_INPUT_INPUT_PARSER_HPP_INCLUDED
-/* Debug traces.  */
-#ifndef INPUT_DEBUG
-# if defined YYDEBUG
-#if YYDEBUG
-#   define INPUT_DEBUG 1
-#  else
-#   define INPUT_DEBUG 0
-#  endif
-# else /* ! defined YYDEBUG */
-#  define INPUT_DEBUG 0
-# endif /* ! defined YYDEBUG */
-#endif  /* ! defined INPUT_DEBUG */
-#if INPUT_DEBUG
-extern int input_debug;
+/* Tokens.  */
+#ifndef YYTOKENTYPE
+# define YYTOKENTYPE
+   /* Put the tokens into the symbol table, so that GDB and other debuggers
+      know about them.  */
+   enum yytokentype {
+     SEPERATOR = 258,
+     STRING = 259,
+     LEFTP = 260,
+     RIGHTP = 261,
+     NAME = 262,
+     AND = 263,
+     OR = 264,
+     IFF = 265,
+     IMPLIES = 266,
+     NOT = 267,
+     TRUE = 268,
+     FALSE = 269,
+     COMMENT = 270,
+     NUMBER_DOUBLE = 271,
+     COMMA = 272,
+     FORMULA_NAME = 273,
+     EXP = 274,
+     ATLEAST = 275,
+     ATMOST = 276,
+     LESS = 277,
+     BIGGER = 278,
+     BINARY_ARITHMETIC_OPERATOR = 279,
+     BINARY_FUNCTION = 280,
+     UNARY_FUNCTION = 281,
+     INV_ = 282,
+     EQUAL = 283
+   };
 #endif
-/* "%code requires" blocks.  */
-#line 5 "input_parser.y"
+/* Tokens.  */
+#define SEPERATOR 258
+#define STRING 259
+#define LEFTP 260
+#define RIGHTP 261
+#define NAME 262
+#define AND 263
+#define OR 264
+#define IFF 265
+#define IMPLIES 266
+#define NOT 267
+#define TRUE 268
+#define FALSE 269
+#define COMMENT 270
+#define NUMBER_DOUBLE 271
+#define COMMA 272
+#define FORMULA_NAME 273
+#define EXP 274
+#define ATLEAST 275
+#define ATMOST 276
+#define LESS 277
+#define BIGGER 278
+#define BINARY_ARITHMETIC_OPERATOR 279
+#define BINARY_FUNCTION 280
+#define UNARY_FUNCTION 281
+#define INV_ 282
+#define EQUAL 283
 
-    #include "../../Conjecture/Conjecture.h"
-    #include "../../Kernel/Width.h"
-    #include "../../Kernel/DynamicCoreHandler.h"
-    #include <iostream>
-    #include <vector>
-    #include <map>
-    #include <stdio.h>
-    #include <stdlib.h>
-    #include <utility>
-    #include <variant>
 
-#line 70 "input_parser.hpp"
 
-/* Token kinds.  */
-#ifndef INPUT_TOKENTYPE
-# define INPUT_TOKENTYPE
-  enum input_tokentype
-  {
-    INPUT_EMPTY = -2,
-    INPUT_EOF = 0,                 /* "end of file"  */
-    INPUT_error = 256,             /* error  */
-    INPUT_UNDEF = 257,             /* "invalid token"  */
-    SEPERATOR = 258,               /* SEPERATOR  */
-    STRING = 259,                  /* STRING  */
-    LEFTP = 260,                   /* LEFTP  */
-    RIGHTP = 261,                  /* RIGHTP  */
-    NAME = 262,                    /* NAME  */
-    NEWLINE = 263,                 /* NEWLINE  */
-    AND = 264,                     /* AND  */
-    OR = 265,                      /* OR  */
-    IFF = 266,                     /* IFF  */
-    IMPLIES = 267,                 /* IMPLIES  */
-    NOT = 268,                     /* NOT  */
-    TRUE = 269,                    /* TRUE  */
-    FALSE = 270,                   /* FALSE  */
-    COMMENT = 271,                 /* COMMENT  */
-    NUMBER_DOUBLE = 272,           /* NUMBER_DOUBLE  */
-    COMMA = 273,                   /* COMMA  */
-    FORMULA_NAME = 274,            /* FORMULA_NAME  */
-    EXP = 275,                     /* EXP  */
-    ATLEAST = 276,                 /* ATLEAST  */
-    ATMOST = 277,                  /* ATMOST  */
-    LESS = 278,                    /* LESS  */
-    BIGGER = 279,                  /* BIGGER  */
-    BINARY_ARITHMETIC_OPERATOR = 280, /* BINARY_ARITHMETIC_OPERATOR  */
-    BINARY_FUNCTION = 281,         /* BINARY_FUNCTION  */
-    UNARY_FUNCTION = 282,          /* UNARY_FUNCTION  */
-    INV_ = 283,                    /* INV_  */
-    EQUAL = 284                    /* EQUAL  */
-  };
-  typedef enum input_tokentype input_token_kind_t;
-#endif
 
-/* Value type.  */
-#if ! defined INPUT_STYPE && ! defined INPUT_STYPE_IS_DECLARED
-union INPUT_STYPE
+#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
+typedef union YYSTYPE
+#line 29 "Parser/PropertyParser/input_parser.y"
 {
-#line 40 "input_parser.y"
-
      ConjectureNode *conjectureNode;
      int number;
      char* string;
      std::vector<std::variant<char*,int, bool>> *vec;
      PropertyAssignment *property;
-
-#line 124 "input_parser.hpp"
-
-};
-typedef union INPUT_STYPE INPUT_STYPE;
-# define INPUT_STYPE_IS_TRIVIAL 1
-# define INPUT_STYPE_IS_DECLARED 1
+}
+/* Line 1529 of yacc.c.  */
+#line 113 "Parser/PropertyParser/input_parser.hpp"
+	YYSTYPE;
+# define yystype YYSTYPE /* obsolescent; will be withdrawn */
+# define YYSTYPE_IS_DECLARED 1
+# define YYSTYPE_IS_TRIVIAL 1
 #endif
 
-/* Location type.  */
-#if ! defined INPUT_LTYPE && ! defined INPUT_LTYPE_IS_DECLARED
-typedef struct INPUT_LTYPE INPUT_LTYPE;
-struct INPUT_LTYPE
-{
-  int first_line;
-  int first_column;
-  int last_line;
-  int last_column;
-};
-# define INPUT_LTYPE_IS_DECLARED 1
-# define INPUT_LTYPE_IS_TRIVIAL 1
-#endif
+extern YYSTYPE input_lval;
 
-
-extern INPUT_STYPE input_lval;
-extern INPUT_LTYPE input_lloc;
-
-int input_parse (Conjecture &conj, int &result, std::map<std::string,DynamicCoreHandler> &coreList, std::map<std::string,std::string> &varToCoreName, std::map<std::string, PropertyAssignment*> &varToProperty);
-
-
-#endif /* !YY_INPUT_INPUT_PARSER_HPP_INCLUDED  */
