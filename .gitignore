@@ -111,3 +111,8 @@ memory_usage.log
 *.data
 
 __pycache__/
+
+# Generated Parser Files
+Parser/PropertyParser/input_lexer.cpp
+Parser/PropertyParser/input_parser.cpp
+Parser/PropertyParser/input_parser.hpp

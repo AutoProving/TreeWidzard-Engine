@@ -1,5 +1,5 @@
 # Root CMakeLists.txt
-cmake_minimum_required(VERSION 3.18)  # Updated for GPU support
+cmake_minimum_required(VERSION 3.18)
 
 # Detect Apple Silicon and adjust GPU language support
 if(APPLE)
@@ -12,6 +12,11 @@ else()
     project(treewidzard LANGUAGES CXX)
     set(APPLE_SILICON_BUILD OFF)
 endif()
+
+# Set C++ Standard
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Option to enable CUDA explicitly (default OFF)
 option(TREEWIDZARD_CUDA_SUPPORT "Enable CUDA support (requires nvcc)" OFF)
@@ -31,6 +36,10 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Find BISON and FLEX
+find_package(BISON 3.0 REQUIRED)
+find_package(FLEX 2.6 REQUIRED)
+
 # GPU Support Configuration
 include(cmake/GPUSupport.cmake)
 
@@ -44,9 +53,7 @@ endif()
 # Optimization and debugging flags
 add_compile_options(-O3 -g3)
 
-# Linker flags (choose one based on your needs)
-# Avoid setting both "-static" and "-rdynamic" as they may conflict
-# set(CMAKE_EXE_LINKER_FLAGS "-static")
+# Linker flags
 set(CMAKE_EXE_LINKER_FLAGS "-rdynamic")
 
 # Define compile definitions
@@ -63,6 +70,14 @@ add_compile_definitions(TREEWIDZARD_SEARCHSTRATEGIES_DEFAULT="${TREEWIDZARD_SEAR
 # Set the environment variable for subprojects
 set(ENV{TREEWIDZARD} ${PROJECT_SOURCE_DIR})
 
+# Create directory for generated parser files
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Parser/PropertyParser)
+
+# Generate Parsers
+bison_target(InputParser Parser/PropertyParser/input_parser.y ${CMAKE_CURRENT_BINARY_DIR}/Parser/PropertyParser/input_parser.cpp)
+flex_target(InputLexer Parser/PropertyParser/input_lexer.l ${CMAKE_CURRENT_BINARY_DIR}/Parser/PropertyParser/input_lexer.cpp)
+add_flex_bison_dependency(InputLexer InputParser)
+
 # Include directories
 include_directories(
     ${PROJECT_SOURCE_DIR}/Controller
@@ -76,12 +91,12 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/TreeAutomaton
     ${PROJECT_SOURCE_DIR}/Multigraph
     ${PROJECT_SOURCE_DIR}/Performance
-
-    # Add other directories as needed
+    ${CMAKE_CURRENT_BINARY_DIR}/Parser/PropertyParser # For generated headers
 )
 
 # Define the core library
-add_library(TreeWidzard-Core STATIC
+# Define the core library as STATIC or SHARED based on BUILD_SHARED_LIBS
+add_library(TreeWidzard-Core
     Kernel/DynamicCore.cpp
     Kernel/Witness.cpp
     Kernel/WitnessSet.cpp
@@ -103,11 +118,41 @@ add_library(TreeWidzard-Core STATIC
     TreeAutomaton/Term.cpp
     TreeAutomaton/RunTree.cpp
     Multigraph/MultiGraph.cpp
+    src/TreeWidzard.cpp
+    ${BISON_InputParser_OUTPUTS}
+    ${FLEX_InputLexer_OUTPUTS}
+)
+
+# Standardize version and SO version
+set_target_properties(TreeWidzard-Core PROPERTIES
+    VERSION 0.1.0
+    SOVERSION 0
+)
+
+# Installation Rules
+include(GNUInstallDirs)
+
+# Install the library
+install(TARGETS TreeWidzard-Core
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+# Install Headers (Recursive pattern or list specific dirs)
+install(DIRECTORY Kernel Conjecture TreeAutomaton Multigraph Controller
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/treewidzard/internal
+    FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
+)
+install(DIRECTORY include/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/treewidzard
     # Add other core source files here if any
 )
 
-# Specify include directories for the core library
-# Already included via main include_directories
+target_include_directories(TreeWidzard-Core PUBLIC 
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/treewidzard>
+)
 
 # Find and link Threads (if needed)
 find_package(Threads REQUIRED)
@@ -150,8 +195,6 @@ add_executable(treewidzard
     Kernel/DynamicCore.h
     Kernel/DynamicKernel.cpp
     Kernel/DynamicKernel.h
-    #Kernel/Conjecture.cpp
-    #Kernel/Conjecture.h
     Kernel/Flags.cpp
     Kernel/Flags.h
     Kernel/SearchStrategy.cpp
@@ -174,21 +217,13 @@ add_executable(treewidzard
     Conjecture/Conjecture.h
     Conjecture/PropertyAssignment.cpp
     Conjecture/PropertyAssignment.h
-    # Parser files
+    # Parser files (generated ones are in Core lib)
     Controller/Parser/command_parser.hpp
     Controller/Parser/command_parser.cpp
     Controller/Parser/command_lexer.cpp
-    Parser/PropertyParser/input_lexer.cpp
-    Parser/PropertyParser/input_parser.cpp
-    Parser/PropertyParser/input_parser.hpp
     ConcreteTreeDecomposition/ctd_parser.hpp
     ConcreteTreeDecomposition/ctd_parser.cpp
     ConcreteTreeDecomposition/ctd_lexer.cpp
-    # BitVector files
-    #BitVector/BitVector.cpp
-    #BitVector/BitVector.h
-    #BitVector/BitSet.cpp
-    #BitVector/BitSet.h
     # Translation
     Translation/PACE/TreeDecompositionPACE.cpp
     Translation/PACE/TreeDecompositionPACE.h
@@ -221,6 +256,22 @@ add_executable(treewidzard
 
 # Link the executable against the core library and Threads
 target_link_libraries(treewidzard PRIVATE TreeWidzard-Core ${CMAKE_DL_LIBS} Threads::Threads ${NUMA_LIBRARIES})
+
+# Python Bindings
+option(BUILD_PYTHON_BINDINGS "Build Python bindings" ON)
+if(BUILD_PYTHON_BINDINGS)
+    include(FetchContent)
+    FetchContent_Declare(
+      pybind11
+      URL https://github.com/pybind/pybind11/archive/refs/tags/v2.11.1.zip
+    )
+    FetchContent_MakeAvailable(pybind11)
+
+    pybind11_add_module(treewidzard_py Bindings/Python/treewidzard_py.cpp)
+    target_link_libraries(treewidzard_py PRIVATE TreeWidzard-Core)
+    
+    install(TARGETS treewidzard_py DESTINATION ${CMAKE_INSTALL_LIBDIR}/python)
+endif()
 
 # Link GPU library if available
 if(TARGET TreeWidzard-GPU)

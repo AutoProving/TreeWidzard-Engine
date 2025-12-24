@@ -16,7 +16,7 @@
 #pragma push_macro("YYLTYPE")
 #undef YYLTYPE
 
-#include "../Parser/PropertyParser/input_parser.hpp"
+#include "input_parser.hpp"
 
 #pragma pop_macro("YYLTYPE")
 #pragma pop_macro("YYSTYPE")

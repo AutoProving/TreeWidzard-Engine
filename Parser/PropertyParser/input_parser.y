@@ -1,9 +1,9 @@
 //Copyright 2020 Mateus de Oliveira Oliveira, Farhad Vadiee and CONTRIBUTORS.
 %defines
 // %define parse.error detailed  -- Removed for Bison 2.3 compatibility
-%name-prefix="input_"
-// %code requires -- Removed for Bison 2.3 compatibility. Dependencies must be included by the user of input_parser.hpp
-%{
+%define api.prefix {input_}
+
+%code requires {
     #include <iostream>
     #include <string.h>
     #include <cmath>
@@ -16,15 +16,19 @@
     #include "../../Kernel/Width.h"
     #include "../../Kernel/DynamicCoreHandler.h"
     #include <algorithm>
-    // this function will be generated
-    // using flex
-    extern int yylex();
+    
+    // Prototypes explicitly here to ensure visibility
+    int input_lex();
+    void input_error(Conjecture &conj, int &result,std::map<std::string,DynamicCoreHandler> &coreList, std::map<std::string,std::string> &varToCoreName, std::map<std::string, PropertyAssignment*> varToProperty, char const* msg);
+}
+
+// %code block for global definitions in implementation file
+%code {
     extern int input_lineno;
-    extern void yyerror(Conjecture &conj, int &result,std::map<std::string,DynamicCoreHandler> &coreList, std::map<std::string,std::string> &varToCoreName, std::map<std::string, PropertyAssignment*> varToProperty, char const* msg);
+    
+    // Global variable for sub_formula tracking
     std::map<char*,ConjectureNode*> sub_formula_variables;
-    bool check_varToProperty(std::string v,std::map<std::string, PropertyAssignment*> &varToProperty);
-    bool check_sub_formula_variables(char* v);
-%}
+}
 // %locations -- Removed to avoid YYLTYPE conflict
 %union{
      ConjectureNode *conjectureNode;
@@ -78,7 +82,7 @@ VARIABLES_CORES_ASSIGNMENT	: VARIABLES_CORES_ASSIGNMENT VARIABLE_CORE_ASSIGNMENT
 				;
 VARIABLE_CORE_ASSIGNMENT	: VARIABLE SEPERATOR ATOMIC_PREDICATE LEFTP PARAMETERS RIGHTP
 				{
-				if(check_varToProperty($1,varToProperty)){ std::cout<<" variable " << $1 << " is written at least two times" <<std::endl; YYERROR; exit(20);}
+				if(varToProperty.count($1)){ std::cout<<" variable " << $1 << " is written at least two times" <<std::endl; YYERROR; exit(20);}
 				if(!coreList.count($3)){std::cout<<"core name \""<<$3<<"\" is not exist"<<std::endl; YYERROR;}
 				$$ = new PropertyAssignment(); //$$->setParameterType("UnsignedInt");
 				$$->setName($3);
@@ -118,9 +122,9 @@ PARAMETER	: NAME {$$ = $1;}
 //		| ATMOST{$$=$1;}
 //		| LESS {$$=$1;}
 VARIABLES_SUBFORMULA_ASSIGNMENTS : EXP VARIABLE SEPERATOR SUB_FORMULA  VARIABLES_SUBFORMULA_ASSIGNMENTS
-								{if(check_varToProperty($2,varToProperty)){
+								{if(varToProperty.count($2)){
                                                                     std::cout<< "variable " << $2 << " declared at least two times" <<std::endl; YYERROR;}
-                                                                  if(check_sub_formula_variables($2)){
+                                                                  if(sub_formula_variables.count($2)){
                                                                     std::cout<< "variable " << $2 << " declared at least two times" <<std::endl; YYERROR;
                                                                   }
                                                                   sub_formula_variables.insert(std::make_pair($2, $4));
@@ -142,9 +146,9 @@ SUB_FORMULA : SUB_FORMULA AND SUB_FORMULA {$$= new ConjectureNode(OPERATOR,"and"
 
             | LEFTP SUB_FORMULA RIGHTP {$$ = $2;}
 
-            | VARIABLE {if(check_varToProperty($1,varToProperty) and !check_sub_formula_variables($1) ){
+            | VARIABLE {if(varToProperty.count($1) and !sub_formula_variables.count($1) ){
                     $$ = new ConjectureNode(CORE_VARIABLE, $1);
-                }else if(check_sub_formula_variables($1) and !check_varToProperty($1,varToProperty) ) {
+                }else if(sub_formula_variables.count($1) and !varToProperty.count($1) ) {
                     $$ = sub_formula_variables[$1];
                 }else{
                     std::cout<<" variable "<< $1 << " is not valid"<< std::endl; YYERROR;
@@ -223,7 +227,7 @@ FORMULA     : FORMULA AND FORMULA {$$ = new ConjectureNode(OPERATOR,"and");
             }
             | INV_ LEFTP FORMULA RIGHTP {$$ = new ConjectureNode(INV,$1);
             std::vector<ConjectureNode*> children;
-            if($3->getType() != CORE_VARIABLE){yyerror(conj, result, coreList, varToCoreName, varToProperty, "INV should be in a form INV(variable)" ); YYERROR;}
+            if($3->getType() != CORE_VARIABLE){input_error(conj, result, coreList, varToCoreName, varToProperty, "INV should be in a form INV(variable)" ); YYERROR;}
             children.push_back($3);	$$->setChildren(children);
             $3->setParent($$);
             }
@@ -232,9 +236,9 @@ FORMULA     : FORMULA AND FORMULA {$$ = new ConjectureNode(OPERATOR,"and");
             ;
 FORMULA_TERMINAL : TRUE         {$$ = new ConjectureNode(NUMBER,1); }
                  | FALSE        {$$ = new ConjectureNode(NUMBER,0); }
-                 | VARIABLE     { if(check_varToProperty($1,varToProperty) and !check_sub_formula_variables($1) ){
+                  | VARIABLE     { if(varToProperty.count($1) and !sub_formula_variables.count($1) ){
                                    $$ = new ConjectureNode(CORE_VARIABLE, $1);
-                                  }else if(check_sub_formula_variables($1) and !check_varToProperty($1,varToProperty) ) {
+                                  }else if(sub_formula_variables.count($1) and !varToProperty.count($1) ) {
                                     $$ = sub_formula_variables[$1];
                                   }else{
                                     std::cout<<" variable "<< $1 << " is not valid"<< std::endl; YYERROR;
@@ -256,7 +260,7 @@ COMMENTS                :COMMENT COMMENTS                          {}
 // FORMULACOMMENTS rule removed to prevent epsilon loop
 %%
 
-void yyerror(Conjecture &/*conj*/, int &/*result*/,std::map<std::string,DynamicCoreHandler> &/*coreList*/, std::map<std::string,std::string> &/*varToCoreName*/, std::map<std::string, PropertyAssignment*> /*varToProperty*/, char const* msg){
+void input_error(Conjecture &/*conj*/, int &/*result*/,std::map<std::string,DynamicCoreHandler> &/*coreList*/, std::map<std::string,std::string> &/*varToCoreName*/, std::map<std::string, PropertyAssignment*> /*varToProperty*/, char const* msg){
 
   std::cerr<< "\033[1;31mERORR:\033[0m" << std::endl;
   std::cerr<<"\033[1;31mError in the input file line " <<input_lineno << "\033[0m" << std::endl;
@@ -264,18 +268,6 @@ void yyerror(Conjecture &/*conj*/, int &/*result*/,std::map<std::string,DynamicC
 
 }
 
-bool check_varToProperty(std::string v,std::map<std::string, PropertyAssignment*> &varToProperty ){
-    if(varToProperty.count(v)){
-        return true;
-    }else{
-        return false;
-    }
-}
 
-bool check_sub_formula_variables(char* v){
-    if(sub_formula_variables.count(v)){
-        return true;
-    }else{
-        return false;
-    }
-}
+
+
