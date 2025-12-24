@@ -120,8 +120,8 @@ private:
 // RAII wrapper for automatic memory pool management
 template <typename T> class PooledObject {
 private:
+  MemoryPool<T> *pool; // Declare pool first to match initialization order
   T *obj;
-  MemoryPool<T> *pool;
 
 public:
   template <typename... Args>
