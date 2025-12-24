@@ -15,16 +15,44 @@ enable_testing()
 
 # Include test directories
 include_directories(${PROJECT_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/utils)
 
-# Test sources
-set(TEST_SOURCES
+# Unit test sources
+set(UNIT_TEST_SOURCES
+    unit/test_bag_operations.cpp
+    unit/test_witness_cache.cpp
+)
+
+# Integration test sources
+set(INTEGRATION_TEST_SOURCES
+    integration/test_atp_workflow.cpp
+)
+
+# Original test
+set(LEGACY_TEST_SOURCES
     test_conjecture.cpp
 )
 
-# Create test executable
-add_executable(run_tests ${TEST_SOURCES})
+# Create unit test executable
+add_executable(unit_tests ${UNIT_TEST_SOURCES})
+target_link_libraries(unit_tests 
+    TreeWidzard-Core
+    GTest::gtest_main
+    ${CMAKE_DL_LIBS}
+    Threads::Threads
+)
 
-# Link test executable
+# Create integration test executable
+add_executable(integration_tests ${INTEGRATION_TEST_SOURCES})
+target_link_libraries(integration_tests 
+    TreeWidzard-Core
+    GTest::gtest_main
+    ${CMAKE_DL_LIBS}
+    Threads::Threads
+)
+
+# Create legacy test executable (keep existing tests)
+add_executable(run_tests ${LEGACY_TEST_SOURCES})
 target_link_libraries(run_tests 
     TreeWidzard-Core
     GTest::gtest_main
@@ -34,6 +62,8 @@ target_link_libraries(run_tests
 
 # Add tests to CTest
 include(GoogleTest)
+gtest_discover_tests(unit_tests)
+gtest_discover_tests(integration_tests)
 gtest_discover_tests(run_tests)
 
 
