@@ -114,13 +114,18 @@ struct IndependentSet_Max_Core: CoreWrapper<IndependentSet_Max_Core, Independent
         for (const auto &w : witnessSet)
             witnesses.push_back(std::dynamic_pointer_cast<WitnessAlias>(w));
     
-        // Step 2: Sort witnesses
-        // Primary key: set of used vertices (lex order)
-        // Tie-breaker: decreasing independent set size
-        std::sort(witnesses.begin(), witnesses.end(),
-                  [](const auto &w0, const auto &w1) {
-                      return is_less_implementation(*w1, *w0);
-                  });
+        // Step 2: Sort witnesses by (used set, decreasing size).
+        // This ensures that for each fixed "used" pattern we keep the witness with maximal size.
+        std::sort(
+            witnesses.begin(),
+            witnesses.end(),
+            [](const auto &w0, const auto &w1) {
+                if (w0->used != w1->used) {
+                    return w0->used < w1->used;
+                }
+                return w0->size > w1->size;
+            }
+        );
     
         // Step 3: Remove redundant witnesses
         // For each unique set of used labels, keep only the first (largest set size)
