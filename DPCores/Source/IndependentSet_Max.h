@@ -92,7 +92,7 @@ struct IndependentSet_Max_Core: CoreWrapper<IndependentSet_Max_Core, Independent
 
     void forget_v_implementation(unsigned i, const Bag &bag, const WitnessAlias &w, WitnessSet &witnessSet) {
         auto wPrime = w.clone();
-        auto it = wPrime->used.erase(i);
+        wPrime->used.erase(i);
         witnessSet.insert(wPrime);
     }
 
@@ -142,6 +142,6 @@ struct IndependentSet_Max_Core: CoreWrapper<IndependentSet_Max_Core, Independent
     }
 
     int inv_implementation(const Bag &bag, const WitnessAlias &w) const {
-       return w.size;
+        return w.size;
     }
 };
