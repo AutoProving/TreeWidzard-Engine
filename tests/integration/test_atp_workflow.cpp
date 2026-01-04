@@ -1,6 +1,7 @@
 #include "../utils/test_helpers.h"
 #include "Kernel/Flags.h"
 #include "Kernel/Width.h"
+#include <chrono>
 #include <filesystem>
 #include <fstream>
 #include <gtest/gtest.h>
@@ -11,7 +12,10 @@ class ATPIntegrationTest : public ::testing::Test {
 protected:
   void SetUp() override {
     // Create test directory
-    test_dir = "tests/data/temp_test_" + std::to_string(time(nullptr));
+    const auto now = std::chrono::high_resolution_clock::now().time_since_epoch();
+    const auto stamp =
+        std::chrono::duration_cast<std::chrono::nanoseconds>(now).count();
+    test_dir = "tests/data/temp_test_" + std::to_string(stamp);
     std::filesystem::create_directories(test_dir);
   }
 

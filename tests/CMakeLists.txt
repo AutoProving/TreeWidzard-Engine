@@ -26,6 +26,7 @@ set(UNIT_TEST_SOURCES
 # Integration test sources
 set(INTEGRATION_TEST_SOURCES
     integration/test_atp_workflow.cpp
+    integration/test_certificates.cpp
 )
 
 # Original test
@@ -49,6 +50,16 @@ target_link_libraries(integration_tests
     GTest::gtest_main
     ${CMAKE_DL_LIBS}
     Threads::Threads
+)
+
+# Integration tests invoke `treewidzard.sh`, which depends on the main executable
+# and the dynamically loaded search strategy plugins being built.
+add_dependencies(integration_tests
+    treewidzard
+    BreadthFirstSearch
+    IsomorphismBreadthFirstSearch
+    ParallelBreadthFirstSearch
+    ParallelIsomorphismBreadthFirstSearch
 )
 
 # Create legacy test executable (keep existing tests)

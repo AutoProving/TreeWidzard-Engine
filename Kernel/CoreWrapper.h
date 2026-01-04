@@ -44,6 +44,7 @@ public:
 	{
 		auto witnessSet = std::make_shared<WitnessSet>();
 		this->as_core().initialize_leaf(*witnessSet);
+		this->as_core().clean_implementation(*witnessSet);
 		setInitialWitnessSet(std::move(witnessSet));
 	}
 

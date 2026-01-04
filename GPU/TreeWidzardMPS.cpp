@@ -1,8 +1,8 @@
 #include "../GPU/MPSAcceleration.h"
 #include "../GPU/MPSSearchStrategy.h"
 #include "../Kernel/Bag.h"
-#include "../Kernel/SearchStrategy.h"
 #include "../Kernel/State.h"
+#include "../Performance/EnhancedParallelBreadthFirstSearch.h"
 #include "../Performance/PerformanceTimer.h"
 #include <iostream>
 #include <memory>
@@ -83,7 +83,7 @@ void runBenchmark() {
   TreeWidzard::MPS::MPSSearchFactory::runMPSBenchmark();
 }
 
-std::unique_ptr<SearchStrategy>
+std::unique_ptr<TreeWidzard::SimpleSearchStrategy>
 createSearchStrategy(const std::string &strategy_name, bool force_mps,
                      bool force_cpu) {
   if (force_cpu) {

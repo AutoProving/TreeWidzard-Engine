@@ -1,7 +1,14 @@
 #include "ParallelIsomorphismBreadthFirstSearch.h"
 
+#include <atomic>
+#include <cstdlib>
+#include <memory>
 #include <mutex>
 #include <thread>
+#include <unordered_map>
+
+#include "Kernel/CertificateUtils.h"
+#include "Kernel/CertificateWriter.h"
 
 extern "C"
 {
@@ -65,6 +72,30 @@ void ParallelIsomorphismBreadthFirstSearch::search()
 	bool printStateFlag = flags->get("PrintStates");
 
 	State::ptr initialState = kernel->initialState();
+
+	std::unique_ptr<TreeWidzard::Certificates::CertificateWriter> cert;
+	std::unordered_map<State::ptr, int, State::ptr::Hash, State::ptr::Equal>
+		cert_ids;
+	std::mutex cert_lock;
+	std::atomic<int> next_cert_id = 1;
+	if (const char *cert_path = std::getenv("TREEWIDZARD_CERT_PATH"))
+	{
+		if (std::string(cert_path).size() > 0)
+		{
+			cert = std::make_unique<TreeWidzard::Certificates::CertificateWriter>(
+				cert_path);
+			const uint64_t prop_hash =
+				TreeWidzard::Certificates::fnv1a64_file(getPropertyFilePath());
+			const uint64_t dpcores_hash =
+				TreeWidzard::Certificates::dp_cores_fingerprint();
+			cert->writeHeader(kernel->get_width(), getAttributeValue("SearchName"),
+							  TreeWidzard::Certificates::CanonMode::BAG_MIN,
+							  static_cast<bool>(flags->get("Premise")), prop_hash,
+							  getPropertyFilePath(), dpcores_hash);
+			cert_ids.emplace(initialState, 0);
+			cert->writeLeaf(0);
+		}
+	}
 	allStatesSet.insert(initialState);
 	newStatesSet.insert(initialState);
 	if (!noBFSDAG)
@@ -135,6 +166,20 @@ void ParallelIsomorphismBreadthFirstSearch::search()
 							!newStatesSet.count(relabeledNewStatePointer))
 						{
 							newStatesSet.insert(relabeledNewStatePointer);
+							if (cert)
+							{
+								std::lock_guard lock(cert_lock);
+								if (!cert_ids.count(relabeledNewStatePointer))
+								{
+									const int parent_id =
+										cert_ids.at(statePointer);
+									const int new_id = next_cert_id++;
+									cert_ids.emplace(relabeledNewStatePointer,
+													 new_id);
+									cert->writeIntroVertex(new_id, parent_id,
+														   i);
+								}
+							}
 
 							State::ptr consequentState =
 								relabeledNewStatePointer;
@@ -226,6 +271,18 @@ void ParallelIsomorphismBreadthFirstSearch::search()
 						!newStatesSet.count(relabeledNewStatePointer))
 					{
 						newStatesSet.insert(relabeledNewStatePointer);
+						if (cert)
+						{
+							std::lock_guard lock(cert_lock);
+							if (!cert_ids.count(relabeledNewStatePointer))
+							{
+								const int parent_id = cert_ids.at(statePointer);
+								const int new_id = next_cert_id++;
+								cert_ids.emplace(relabeledNewStatePointer,
+												 new_id);
+								cert->writeForgetVertex(new_id, parent_id, *it);
+							}
+						}
 						State::ptr consequentState = relabeledNewStatePointer;
 						if (!noBFSDAG)
 						{
@@ -323,6 +380,23 @@ void ParallelIsomorphismBreadthFirstSearch::search()
 								{
 									newStatesSet.insert(
 										relabeledNewStatePointer);
+									if (cert)
+									{
+										std::lock_guard lock(cert_lock);
+										if (!cert_ids.count(
+												relabeledNewStatePointer))
+										{
+											const int parent_id =
+												cert_ids.at(statePointer);
+											const int new_id = next_cert_id++;
+											cert_ids.emplace(
+												relabeledNewStatePointer,
+												new_id);
+											cert->writeIntroEdge(
+												new_id, parent_id, *it,
+												*itPrime);
+										}
+									}
 									State::ptr consequentState =
 										relabeledNewStatePointer;
 									if (!noBFSDAG)
@@ -435,6 +509,25 @@ void ParallelIsomorphismBreadthFirstSearch::search()
 								{
 									newStatesSet.insert(
 										relabeledNewStatePointer);
+									if (cert)
+									{
+										std::lock_guard lock(cert_lock);
+										if (!cert_ids.count(
+												relabeledNewStatePointer))
+										{
+											const int left_id =
+												cert_ids.at(statePointer);
+											const int right_id =
+												cert_ids.at(*it);
+											const int new_id = next_cert_id++;
+											cert_ids.emplace(
+												relabeledNewStatePointer,
+												new_id);
+											cert->writeJoin(
+												new_id, left_id, right_id,
+												std::make_optional(m));
+										}
+									}
 									State::ptr consequentState =
 										relabeledNewStatePointer;
 									if (!noBFSDAG)
@@ -539,6 +632,11 @@ void ParallelIsomorphismBreadthFirstSearch::search()
 				std::cout << "\nResult: ";
 				std::cout << "PROPERTY NOT SATISFIED\n"
 						  << std::endl;
+				if (cert)
+				{
+					std::lock_guard lock(cert_lock);
+					cert->writeResultNotSatisfied(cert_ids.at(*it));
+				}
 				std::cout << "Counterexample found:" << std::endl;
 
 				if (noBFSDAG)
@@ -614,6 +712,10 @@ void ParallelIsomorphismBreadthFirstSearch::search()
 	std::cout << "\nResult: ";
 	std::cout << "PROPERTY SATISFIED\n"
 			  << std::endl;
+	if (cert)
+	{
+		cert->writeResultSatisfied();
+	}
 }
 
 map<unsigned, unsigned>

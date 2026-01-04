@@ -4,28 +4,64 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <vector>
 
 #include <sys/time.h>
 #include <unistd.h>
 
+#include "Controller/CertificateChecker.h"
 #include "Controller/Parser/command_parser.hpp"
 
 extern std::FILE *command_in;
 
 int main(int argc, char *arg[]) {
+	// Pre-parse argv for certificate options without touching the generated
+	// command parser.
+	std::vector<std::string> filtered_args;
+	filtered_args.reserve(static_cast<size_t>(argc > 0 ? argc - 1 : 0));
+
+	for (int i = 1; i < argc; ++i) {
+		const std::string current = arg[i];
+		if (current == "-cert" || current == "--cert") {
+			if (i + 1 >= argc) {
+				std::cerr << "Error: usage: -cert <file>" << std::endl;
+				return 20;
+			}
+			const std::string path = arg[i + 1];
+			setenv("TREEWIDZARD_CERT_PATH", path.c_str(), 1);
+			i++;
+			continue;
+		}
+		if (current == "-checkcert" || current == "--checkcert") {
+			if (i + 2 >= argc) {
+				std::cerr
+					<< "Error: usage: -checkcert <property_file> <certificate_file>"
+					<< std::endl;
+				return 20;
+			}
+			const std::string property_file = arg[i + 1];
+			const std::string certificate_file = arg[i + 2];
+			const bool ok =
+				check_certificate_file(property_file, certificate_file);
+			return ok ? 0 : 20;
+		}
+		filtered_args.push_back(current);
+	}
+
 	// Reading the input and put it in string _all_arg
 	std::string _all_arg;
-	for (int i = 1; i < argc; i++) {
-		std::string current_arg = arg[i];
+	for (size_t idx = 0; idx < filtered_args.size(); idx++) {
+		std::string current_arg = filtered_args[idx];
 		
 		// User-friendly fix: normalize spacing around equals sign
 		// Convert "tw=3" to "tw = 3" and "pw=4" to "pw = 4"
-		if ((current_arg == "tw" || current_arg == "pw") && i + 1 < argc) {
-			std::string next_arg = arg[i + 1];
+		if ((current_arg == "tw" || current_arg == "pw") &&
+			idx + 1 < filtered_args.size()) {
+			std::string next_arg = filtered_args[idx + 1];
 			if (next_arg.length() > 1 && next_arg[0] == '=' && next_arg[1] != '=') {
 				// Handle "tw=3" -> "tw = 3"
 				_all_arg += current_arg + "\n" + "=" + "\n" + next_arg.substr(1);
-				i++; // Skip next argument since we processed it
+				idx++; // Skip next argument since we processed it
 			} else {
 				_all_arg += current_arg;
 			}
@@ -44,7 +80,7 @@ int main(int argc, char *arg[]) {
 			}
 		}
 		
-		if (i != argc - 1) {
+		if (idx != filtered_args.size() - 1) {
 			_all_arg += "\n";
 		} else {
 			_all_arg += "\n;";

@@ -32,6 +32,12 @@ inline void show_manual() {
         -nthreads    number of threads to use in parallel
         -files       write the counter example into files. Files: ITD and Augmented ITD,
 
+	    Certificates (ATP mode):
+	        -cert <file> emit a replayable certificate (.twzcert text format)
+	        -checkcert <property file> <certificate file>
+	                    verify a certificate using the configured DP-core plugins
+	        Note: `-premise` certificates assume the premise is subgraph-closed; the checker treats it as “only successors satisfying the premise must be present”.
+
     Parsing a Tree Decomposition:
         1- For PACE Format
             ./treewidzard -modelcheck PACE [Flag Options] <property file> <graph file> <tree decomposition file>

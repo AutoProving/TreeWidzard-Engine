@@ -79,6 +79,10 @@ To print usage:
 ./Build/treewidzard --help
 ```
 
+## Testing
+
+See `docs/TESTING.md`.
+
 ## 📚 Using as a Library
 
 TreeWidzard can now be linked as a shared or static library in your own C++ projects.
@@ -138,4 +142,3 @@ if engine.solve():
 else:
     print("Property not satisfied.")
 ```
-

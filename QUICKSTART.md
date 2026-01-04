@@ -27,6 +27,28 @@ export TREEWIDZARD_SEARCHSTRATEGIES="$(pwd)/build/SearchStrategies"
 ./build/treewidzard -atp tw=3 BreadthFirstSearch examples/conjectures/simple_implies.txt
 ```
 
+## Certificates (ATP Mode)
+
+TreeWidzard can emit a replayable certificate for `PROPERTY SATISFIED` / `PROPERTY NOT SATISFIED`
+that can be validated by a separate checker (`-checkcert`).
+
+### Generate a certificate
+
+```bash
+./treewidzard.sh -atp tw=2 BreadthFirstSearch examples/conjectures/simple_implies.txt \
+  -cert proof.twzcert
+```
+
+### Check a certificate
+
+```bash
+./treewidzard.sh -checkcert examples/conjectures/simple_implies.txt proof.twzcert
+```
+
+Notes:
+- Certificates record a property hash (`H PROP_HASH ...`) and a DP-core plugin fingerprint (`H DPCORES_HASH ...`); the checker rejects mismatches.
+- If you use `-premise`, the checker enforces premise-pruned closure and requires the conjecture to be an implication.
+
 ## Available Search Strategies
 
 - `BreadthFirstSearch` - Standard breadth-first search
@@ -78,3 +100,7 @@ See `optimization_plan.md` in `.gemini/antigravity/brain/` for:
 - Performance optimization guide
 - Testing framework setup
 - Advanced usage examples
+
+## Testing
+
+See `docs/TESTING.md`. Quick run: `ctest --test-dir build --output-on-failure`.

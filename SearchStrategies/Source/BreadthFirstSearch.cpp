@@ -1,6 +1,12 @@
 #include "BreadthFirstSearch.h"
 
+#include <cstdlib>
+#include <memory>
+#include <unordered_map>
 #include <utility>
+
+#include "Kernel/CertificateUtils.h"
+#include "Kernel/CertificateWriter.h"
 
 extern "C"
 {
@@ -129,6 +135,29 @@ void BreadthFirstSearch::search()
 
 	bool printStateFlag = flags->get("PrintStates");
 	State::ptr initialState = kernel->initialState();
+
+	std::unique_ptr<TreeWidzard::Certificates::CertificateWriter> cert;
+	std::unordered_map<State::ptr, int, State::ptr::Hash, State::ptr::Equal>
+		cert_ids;
+	int next_cert_id = 1;
+	if (const char *cert_path = std::getenv("TREEWIDZARD_CERT_PATH"))
+	{
+		if (std::string(cert_path).size() > 0)
+		{
+			cert = std::make_unique<TreeWidzard::Certificates::CertificateWriter>(
+				cert_path);
+			const uint64_t prop_hash =
+				TreeWidzard::Certificates::fnv1a64_file(getPropertyFilePath());
+			const uint64_t dpcores_hash =
+				TreeWidzard::Certificates::dp_cores_fingerprint();
+			cert->writeHeader(kernel->get_width(), getAttributeValue("SearchName"),
+							  TreeWidzard::Certificates::CanonMode::NONE,
+							  static_cast<bool>(flags->get("Premise")), prop_hash,
+							  getPropertyFilePath(), dpcores_hash);
+			cert_ids.emplace(initialState, 0);
+			cert->writeLeaf(0);
+		}
+	}
 	allStatesSet.insert(initialState);
 	newStatesSet.insert(initialState);
 	if (!noBFSDAG)
@@ -193,6 +222,13 @@ void BreadthFirstSearch::search()
 							!newStatesSet.count(newStatePointer))
 						{
 							newStatesSet.insert(newStatePointer);
+							if (cert)
+							{
+								const int parent_id = cert_ids.at(statePointer);
+								const int new_id = next_cert_id++;
+								cert_ids.emplace(newStatePointer, new_id);
+								cert->writeIntroVertex(new_id, parent_id, i);
+							}
 							State::ptr consequentState = newStatePointer;
 							if (!noBFSDAG)
 							{
@@ -267,6 +303,13 @@ void BreadthFirstSearch::search()
 						!newStatesSet.count(newStatePointer))
 					{
 						newStatesSet.insert(newStatePointer);
+						if (cert)
+						{
+							const int parent_id = cert_ids.at(statePointer);
+							const int new_id = next_cert_id++;
+							cert_ids.emplace(newStatePointer, new_id);
+							cert->writeForgetVertex(new_id, parent_id, *it);
+						}
 						State::ptr consequentState = newStatePointer;
 						if (!noBFSDAG)
 						{
@@ -348,6 +391,16 @@ void BreadthFirstSearch::search()
 									!newStatesSet.count(newStatePointer))
 								{
 									newStatesSet.insert(newStatePointer);
+									if (cert)
+									{
+										const int parent_id =
+											cert_ids.at(statePointer);
+										const int new_id = next_cert_id++;
+										cert_ids.emplace(newStatePointer,
+														 new_id);
+										cert->writeIntroEdge(new_id, parent_id,
+															 *it, *itPrime);
+									}
 									State::ptr consequentState =
 										newStatePointer;
 									if (!noBFSDAG)
@@ -440,6 +493,16 @@ void BreadthFirstSearch::search()
 								!newStatesSet.count(newStatePointer))
 							{
 								newStatesSet.insert(newStatePointer);
+								if (cert)
+								{
+									const int left_id =
+										cert_ids.at(statePointer);
+									const int right_id = cert_ids.at(*it);
+									const int new_id = next_cert_id++;
+									cert_ids.emplace(newStatePointer, new_id);
+									cert->writeJoin(new_id, left_id, right_id,
+													std::nullopt);
+								}
 								State::ptr consequentState = newStatePointer;
 								if (!noBFSDAG)
 								{
@@ -535,6 +598,10 @@ void BreadthFirstSearch::search()
 				std::cout << "\nResult: ";
 				std::cout << "PROPERTY NOT SATISFIED\n"
 						  << std::endl;
+				if (cert)
+				{
+					cert->writeResultNotSatisfied(cert_ids.at(*it));
+				}
 				std::cout << "Counterexample found:" << std::endl;
 				if (noBFSDAG)
 				{
@@ -604,6 +671,10 @@ void BreadthFirstSearch::search()
 	}
 	std::cout << "\nResult: ";
 	std::cout << "PROPERTY SATISFIED" << std::endl;
+	if (cert)
+	{
+		cert->writeResultSatisfied();
+	}
 }
 RunTree<State::ptr, InstructiveTreeDecompositionNodeContent>
 BreadthFirstSearch::extractCounterExampleRun(State::ptr state)

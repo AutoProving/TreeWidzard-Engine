@@ -1,6 +1,10 @@
 # GPU Integration for TreeWidzard
 # Add GPU support to the existing CMake configuration
 
+# Optional (off by default): build the legacy GPU benchmark executable in
+# `examples/GPUBenchmark.cpp`.
+option(TREEWIDZARD_BUILD_GPU_BENCHMARK "Build treewidzard-gpu-benchmark" OFF)
+
 # Detect platform and configure appropriate GPU support
 # Allow users to force CPU-only builds and skip GPU detection entirely
 if(DEFINED TREEWIDZARD_FORCE_CPU AND TREEWIDZARD_FORCE_CPU)
@@ -34,6 +38,7 @@ if(APPLE)
             GPU/GPUSearchStrategy.cpp
             GPU/MPSAcceleration.cpp
             GPU/MPSSearchStrategy.cpp
+            Performance/EnhancedParallelBreadthFirstSearch.cpp
         )
         
         set(GPU_HEADERS
@@ -157,7 +162,7 @@ if(TREEWIDZARD_CUDA_SUPPORT OR TREEWIDZARD_OPENCL_SUPPORT OR TREEWIDZARD_MPS_SUP
     endif()
     
     # Optional: Create GPU benchmark executable
-    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/examples/GPUBenchmark.cpp)
+    if(TREEWIDZARD_BUILD_GPU_BENCHMARK AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/examples/GPUBenchmark.cpp)
         add_executable(treewidzard-gpu-benchmark 
             examples/GPUBenchmark.cpp
             ${GPU_SOURCES}

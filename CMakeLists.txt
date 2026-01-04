@@ -105,6 +105,7 @@ add_library(TreeWidzard-Core
     Kernel/SearchStrategy.cpp
     Kernel/State.cpp
     Kernel/Bag.cpp
+    Kernel/CertificateWriter.cpp
     Kernel/Width.cpp
     Kernel/StateTree.cpp
     Kernel/DynamicCoreHandler.cpp
@@ -178,6 +179,8 @@ add_executable(treewidzard
     Controller/ParseController.h
     Controller/InputController.cpp
     Controller/InputController.h
+    Controller/CertificateChecker.cpp
+    Controller/CertificateChecker.h
     Controller/AuxiliaryController.hpp
     main.cpp
     # Kernel files 

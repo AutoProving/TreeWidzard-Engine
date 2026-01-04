@@ -254,8 +254,8 @@ struct HasMultipleEdges_DynamicCore
                 witness->edgeSet.erase(e);
                 e = make_pair(*it, i);
                 witness->edgeSet.erase(e);
-                witnessSet.insert(witness);
             }
+            witnessSet.insert(witness);
         }
     }
 

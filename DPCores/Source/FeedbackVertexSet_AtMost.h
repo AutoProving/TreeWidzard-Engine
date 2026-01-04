@@ -31,6 +31,17 @@ struct FeedbackVertexSet_Witness : WitnessWrapper<FeedbackVertexSet_Witness>
             }
             w.comp[it_v->second] = it_r->second;
         }
+        // Keep a canonical component representation after relabeling:
+        // each component is represented by its smallest vertex label.
+        std::map<unsigned, unsigned> canonical;
+        for (auto &[v, r] : w.comp) {
+            auto it = canonical.find(r);
+            if (it == canonical.end() || v < it->second) canonical[r] = v;
+        }
+        for (auto &[v, r] : w.comp) {
+            auto it = canonical.find(r);
+            if (it != canonical.end()) r = it->second;
+        }
         return w;
     }
 

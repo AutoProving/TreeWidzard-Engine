@@ -153,6 +153,8 @@ Formula
 - `--help`: Show usage information
 - `-modelcheck <format>`: Model checking mode
 - `-atp <width_type>=<value>`: Automated theorem proving mode
+- `-cert <file>`: Emit a replayable `.twzcert` certificate (ATP mode)
+- `-checkcert <conjecture_file> <certificate_file>`: Verify a `.twzcert` certificate
 
 ### Width Parameters
 - `tw=<k>`: Tree width bound
@@ -168,6 +170,33 @@ Formula
 - `-nthreads <n>`: Number of threads for parallel execution
 - `-pl`: Enable parallel processing
 - `-premise`: Use premise-based reasoning
+
+## Certificates (ATP)
+
+When running in ATP mode, TreeWidzard can optionally emit a certificate file that a
+separate checker can validate without trusting the search controller (BFS/ISO-BFS,
+pruning, book-keeping).
+
+### Generate
+
+```bash
+./treewidzard.sh -atp tw=2 BreadthFirstSearch examples/conjectures/simple_implies.txt \
+  -cert proof.twzcert
+```
+
+### Verify
+
+```bash
+./treewidzard.sh -checkcert examples/conjectures/simple_implies.txt proof.twzcert
+```
+
+What the checker validates (high level):
+- The certificate matches the conjecture (`H PROP_HASH ...`) and the loaded DP-core plugins (`H DPCORES_HASH ...`).
+- For `PROPERTY NOT SATISFIED`: the referenced bad state is actually bad.
+- For `PROPERTY SATISFIED`: the logged state set contains no bad state and is closed under all successor operations (and premise-pruned closure when `-premise` was used).
+
+Trust boundary:
+- `-checkcert` is independent of the search controller, but it still relies on the DP-core transition/finality implementations and the canonization routine (when enabled).
 
 ## Output Interpretation
 
