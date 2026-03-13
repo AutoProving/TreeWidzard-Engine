@@ -79,7 +79,7 @@ class WitnessWrapper : public Witness {
 	}
 
 	Witness &set_equal(const Witness &witness) override {
-		*this = as_witness(witness);
+		this->as_witness() = as_witness(witness);
 		return *this;
 	}
 };

@@ -8,6 +8,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iomanip>
+#include <iostream>
 #include <optional>
 #include <sstream>
 #include <string>
@@ -164,4 +165,3 @@ inline uint64_t dp_cores_fingerprint() {
 } // namespace TreeWidzard::Certificates
 
 #endif
-

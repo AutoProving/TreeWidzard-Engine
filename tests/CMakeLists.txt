@@ -21,6 +21,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/utils)
 set(UNIT_TEST_SOURCES
     unit/test_bag_operations.cpp
     unit/test_core_support.cpp
+    unit/test_kernel_components.cpp
     unit/test_witness_cache.cpp
 )
 
@@ -28,6 +29,7 @@ set(UNIT_TEST_SOURCES
 set(INTEGRATION_TEST_SOURCES
     integration/test_atp_workflow.cpp
     integration/test_certificates.cpp
+    integration/test_kernel_traversal.cpp
     integration/test_public_api.cpp
 )
 
@@ -58,6 +60,7 @@ target_link_libraries(integration_tests
 # and the dynamically loaded search strategy plugins being built.
 add_dependencies(integration_tests
     treewidzard
+    VertexCount
     BreadthFirstSearch
     IsomorphismBreadthFirstSearch
     ParallelBreadthFirstSearch
