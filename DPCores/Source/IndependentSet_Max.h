@@ -65,13 +65,14 @@ struct IndependentSet_Max_Core: CoreWrapper<IndependentSet_Max_Core, Independent
     
     IndependentSet_Max_Core(const parameterType &parameters) {
         assert(parameters.size() == 0);
+        (void)parameters;
     }
 
     void initialize_leaf(WitnessSet &witnessSet) {
         witnessSet.insert(std::make_shared<WitnessAlias>());
     }
 
-    void intro_v_implementation(unsigned i, const Bag &bag, const WitnessAlias &w, WitnessSet &witnessSet) {
+    void intro_v_implementation(unsigned i, const Bag &, const WitnessAlias &w, WitnessSet &witnessSet) {
         // First case: ignoring the new label
     
         witnessSet.insert(w.clone());
@@ -84,19 +85,19 @@ struct IndependentSet_Max_Core: CoreWrapper<IndependentSet_Max_Core, Independent
         
     }
 
-    void intro_e_implementation(unsigned i, unsigned j, const Bag &bag, const WitnessAlias &w, WitnessSet &witnessSet) {
+    void intro_e_implementation(unsigned i, unsigned j, const Bag &, const WitnessAlias &w, WitnessSet &witnessSet) {
         if (w.used.count(i) && w.used.count(j))
             return; // invalid partial solution
         witnessSet.insert(w.clone());
     }
 
-    void forget_v_implementation(unsigned i, const Bag &bag, const WitnessAlias &w, WitnessSet &witnessSet) {
+    void forget_v_implementation(unsigned i, const Bag &, const WitnessAlias &w, WitnessSet &witnessSet) {
         auto wPrime = w.clone();
         wPrime->used.erase(i);
         witnessSet.insert(wPrime);
     }
 
-    void join_implementation(const Bag &bag, const WitnessAlias &w1, const WitnessAlias &w2, WitnessSet &witnessSet) {
+    void join_implementation(const Bag &, const WitnessAlias &w1, const WitnessAlias &w2, WitnessSet &witnessSet) {
         if (w1.used != w2.used) return;
         std::uint64_t joinedCount = w1.size + w2.size - w1.used.size();
         auto wPrime = w1.clone();
@@ -104,7 +105,7 @@ struct IndependentSet_Max_Core: CoreWrapper<IndependentSet_Max_Core, Independent
         witnessSet.insert(wPrime);
     }
 
-    bool is_final_witness_implementation(const Bag &b, const WitnessAlias &w) {
+    bool is_final_witness_implementation(const Bag &, const WitnessAlias &) {
         return true;
     }
 
@@ -141,7 +142,7 @@ struct IndependentSet_Max_Core: CoreWrapper<IndependentSet_Max_Core, Independent
             witnessSet.insert(std::move(w));
     }
 
-    int inv_implementation(const Bag &bag, const WitnessAlias &w) const {
+    int inv_implementation(const Bag &, const WitnessAlias &w) {
         return w.size;
     }
 };

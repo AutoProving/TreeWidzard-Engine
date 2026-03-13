@@ -139,13 +139,15 @@ public:
       return (witnessVector[idx]);
     };
     virtual void increment() override {
-      while (++idx < 8 * self->mask.size()) {
+      const int limit = static_cast<int>(8 * self->mask.size());
+      while (++idx < limit) {
         if (self->mask[idx / 8] >> (idx % 8) & 1)
           break;
       }
     };
     virtual void increment(int) {
-      while (++idx < 8 * self->mask.size()) {
+      const int limit = static_cast<int>(8 * self->mask.size());
+      while (++idx < limit) {
         if (self->mask[idx / 8] >> (idx % 8) & 1)
           break;
       }
@@ -173,7 +175,7 @@ public:
   }
   BaseIterator end() const override {
     BaseIterator baseIterator(std::unique_ptr<AbstractIterator>(
-        new WitnessSetTypeOneIterator(this, 8 * mask.size())));
+        new WitnessSetTypeOneIterator(this, static_cast<int>(8 * mask.size()))));
     return baseIterator;
   }
   virtual void insert(std::shared_ptr<Witness> w) override;
@@ -285,7 +287,7 @@ void WitnessSetTypeOne<T>::insert(std::shared_ptr<Witness> ws) {
     witnessVector.push_back(ws);
   }
 
-  while (idx >= 8 * mask.size())
+  while (idx >= static_cast<int>(8 * mask.size()))
     mask.push_back(0);
 
   mask[idx / 8] |= (1 << (idx % 8));
@@ -295,7 +297,7 @@ void WitnessSetTypeOne<T>::union_set_witness(
     std::shared_ptr<WitnessSet> witnessSet) {
   if (WitnessSetTypeOne<T> *e =
           dynamic_cast<WitnessSetTypeOne<T> *>(&*witnessSet)) {
-    for (int i = 0; i < e->mask.size(); i++) {
+    for (std::size_t i = 0; i < e->mask.size(); ++i) {
       if (i == mask.size())
         mask.push_back(e->mask[i]);
       else
@@ -341,12 +343,16 @@ template <class T> bool WitnessSetTypeOne<T>::isLess(WitnessSet &rhs) {
       return false;
     }
   }
+  std::cerr << "Error: In isLess, WitnessSet type cast error." << std::endl;
+  exit(20);
 }
 
 template <class T> bool WitnessSetTypeOne<T>::isEqual(WitnessSet &rhs) {
   if (WitnessSetTypeOne<T> *e = dynamic_cast<WitnessSetTypeOne<T> *>(&rhs)) {
     return !(*this < *e or *e < *this);
   }
+  std::cerr << "Error: In isEqual, WitnessSet type cast error." << std::endl;
+  exit(20);
 }
 
 /*
@@ -373,7 +379,7 @@ bool WitnessSetTypeOne::operator!=(WitnessSet &rhs) {
 
 template <class T> int WitnessSetTypeOne<T>::size() {
   int ret = 0;
-  for (int i = 0; i < 8 * mask.size(); i++)
+  for (std::size_t i = 0; i < 8 * mask.size(); ++i)
     ret += (mask[i / 8] >> (i % 8) & 1);
   return ret;
 }

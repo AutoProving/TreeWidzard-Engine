@@ -86,7 +86,7 @@ struct MinorContainment_K2_Core : CoreWrapper<MinorContainment_K2_Core, MinorK2_
         ws.insert(std::make_shared<WitnessAlias>());
     }
 
-    void intro_v_implementation(unsigned i, const Bag &bag, const WitnessAlias &w, WitnessSet &ws) {
+    void intro_v_implementation(unsigned i, const Bag &, const WitnessAlias &w, WitnessSet &ws) {
         // Case 1: keep u as internal (tau=-1)
         auto a = w.clone();
         if (!a->parent.count(i)) a->parent[i]=i;
@@ -100,7 +100,7 @@ struct MinorContainment_K2_Core : CoreWrapper<MinorContainment_K2_Core, MinorK2_
         c->parent[i]=i; c->tau[i]=1; ws.insert(c);
     }
 
-    void intro_e_implementation(unsigned i, unsigned j, const Bag &bag, const WitnessAlias &w, WitnessSet &ws) {
+    void intro_e_implementation(unsigned i, unsigned j, const Bag &, const WitnessAlias &w, WitnessSet &ws) {
         // union(i,j)
         auto a = w.clone();
         unsigned ri = MinorK2_Witness::find_root(a->parent,i);
@@ -125,7 +125,7 @@ struct MinorContainment_K2_Core : CoreWrapper<MinorContainment_K2_Core, MinorK2_
         ws.insert(a);
     }
 
-    void forget_v_implementation(unsigned i, const Bag &bag, const WitnessAlias &w, WitnessSet &ws) {
+    void forget_v_implementation(unsigned i, const Bag &, const WitnessAlias &w, WitnessSet &ws) {
         // When forgetting i, drop its tau entry and parent entry;
         // we conservatively keep parent of others unchanged.
         auto a = w.clone();
@@ -135,7 +135,7 @@ struct MinorContainment_K2_Core : CoreWrapper<MinorContainment_K2_Core, MinorK2_
         ws.insert(a);
     }
 
-    void join_implementation(const Bag &bag, const WitnessAlias &w1, const WitnessAlias &w2, WitnessSet &ws) {
+    void join_implementation(const Bag &, const WitnessAlias &w1, const WitnessAlias &w2, WitnessSet &ws) {
         // Require same tau on interface labels that appear in both
         for (auto [u,x] : w1.tau) {
             auto it = w2.tau.find(u);
@@ -172,7 +172,7 @@ struct MinorContainment_K2_Core : CoreWrapper<MinorContainment_K2_Core, MinorK2_
         ws.insert(a);
     }
 
-    bool is_final_witness_implementation(const Bag &b, const WitnessAlias &w) {
+    bool is_final_witness_implementation(const Bag &, const WitnessAlias &w) {
         // Accept if there exist labels u,v with tau[u]=0 and tau[v]=1 connected in UF
         return w.ok;
     }

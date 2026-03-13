@@ -165,7 +165,6 @@ void InputController::parse_input() {
 }
 
 void InputController::construct_dynamicKernel() {
-	int coreIndex = 1;
 	for (auto core : varToProperty) {
 		if (coreList.count(core.second->getName())) {
 			// std::cout << std::left << std::setw(2) << coreIndex << std::setw(5)
@@ -205,8 +204,6 @@ void InputController::construct_dynamicKernel() {
 			// 		  << core.second->getName() << "( ";
 			// core.second->printParameters();
 			// std::cout<< ")"<< std::setw(5)<<" CoreType: '" << core.second->getType()<< "'" <<std::setw(5)<< " ParameterType: " << core.second->getParameterType() << std::endl;
-
-			coreIndex++;
 		} else {
 			fail("Core " + core.first + " := " + core.second->getName() +
 				 " is not exist");

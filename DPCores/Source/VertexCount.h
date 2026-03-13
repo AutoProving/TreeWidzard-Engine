@@ -23,7 +23,7 @@ struct VertexCount_Witness : WitnessWrapper<VertexCount_Witness> {
   }
 
   WitnessAlias relabel_implementation(
-      const std::map<unsigned, unsigned> &relabelingMap) const {
+      const std::map<unsigned, unsigned> &) const {
     auto relabeled = WitnessAlias();
     relabeled.vertexCount = vertexCount;
     return relabeled;
@@ -44,6 +44,7 @@ struct VertexCount_Core
 
   VertexCount_Core(const parameterType &parameters) {
     assert(parameters.empty());
+    (void)parameters;
   }
 
   /**
@@ -64,7 +65,7 @@ struct VertexCount_Core
    * is no way to get a valid witness after inserting the vertex,
    * insert no results.
    */
-  void intro_v_implementation(unsigned i, const Bag &, const WitnessAlias &w,
+  void intro_v_implementation(unsigned, const Bag &, const WitnessAlias &w,
                               WitnessSet &witnessSet) {
     auto wPrime = w.clone();
     ++wPrime->vertexCount;
@@ -76,7 +77,7 @@ struct VertexCount_Core
    * after inserting a new edge between i and j,
    * into the witnessSet.
    */
-  void intro_e_implementation(unsigned int i, unsigned int j, const Bag &,
+  void intro_e_implementation(unsigned int, unsigned int, const Bag &,
                               const WitnessAlias &w, WitnessSet &witnessSet) {
 
     witnessSet.insert(w.clone());
@@ -87,7 +88,7 @@ struct VertexCount_Core
    * after forgetting the label of the vertex
    * currently labeled i into the witnessSet.
    */
-  void forget_v_implementation(unsigned int i, const Bag &,
+  void forget_v_implementation(unsigned int, const Bag &,
                                const WitnessAlias &w, WitnessSet &witnessSet) {
 
     witnessSet.insert(w.clone());
@@ -119,11 +120,11 @@ struct VertexCount_Core
   /**
    * Return whether w is a final witness
    */
-  bool is_final_witness_implementation(const Bag &, const WitnessAlias &w) {
+  bool is_final_witness_implementation(const Bag &, const WitnessAlias &) {
     return true;
   }
 
-  int inv_implementation(const Bag &bag, const WitnessAlias &w) const {
+  int inv_implementation(const Bag &, const WitnessAlias &w) {
     return w.vertexCount;
   }
 };

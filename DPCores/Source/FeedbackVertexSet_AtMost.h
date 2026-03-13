@@ -161,7 +161,7 @@ struct FeedbackVertexSet_Core : CoreWrapper<FeedbackVertexSet_Core, FeedbackVert
         ws.insert(std::move(keep_state));
     }
 
-    static void merge_connection(unsigned u, unsigned v, std::vector<std::shared_ptr<WitnessAlias>> &states, unsigned k) {
+    static void merge_connection(unsigned u, unsigned v, std::vector<std::shared_ptr<WitnessAlias>> &states) {
         std::vector<std::shared_ptr<WitnessAlias>> next;
         for (auto &state : states) {
             auto it_u = state->comp.find(u);
@@ -205,7 +205,7 @@ struct FeedbackVertexSet_Core : CoreWrapper<FeedbackVertexSet_Core, FeedbackVert
             if (verts.size() <= 1) continue;
             unsigned anchor = verts[0];
             for (size_t idx = 1; idx < verts.size(); ++idx) {
-                merge_connection(anchor, verts[idx], states, k);
+                merge_connection(anchor, verts[idx], states);
                 if (states.empty()) return;
             }
         }

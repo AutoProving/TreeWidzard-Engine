@@ -202,7 +202,7 @@ struct MinorContainment_Generic_Core : CoreWrapper<MinorContainment_Generic_Core
         ws.insert(a);
     }
 
-    bool is_final_witness_implementation(const Bag &bag, const WitnessAlias &w) {
+    bool is_final_witness_implementation(const Bag &, const WitnessAlias &w) {
         // All pattern vertices placed and all edges realized
         if ((int)w.placed.size() < nH) return false;
         if (H_edges.size() != w.ok_edges.size()) return false;
@@ -219,4 +219,3 @@ struct MinorContainment_Generic_Core : CoreWrapper<MinorContainment_Generic_Core
         for (auto &p : vec) ws.insert(std::move(p));
     }
 };
-

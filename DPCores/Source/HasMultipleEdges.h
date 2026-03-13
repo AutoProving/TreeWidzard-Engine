@@ -154,7 +154,7 @@ struct HasMultipleEdges_DynamicCore
         };
     }
 
-    HasMultipleEdges_DynamicCore(const parameterType &parameters)
+    HasMultipleEdges_DynamicCore(const parameterType &)
     {
         // auto [n] = unpack_typed_args<int>(parameters);
     }
