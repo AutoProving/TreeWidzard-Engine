@@ -1,7 +1,7 @@
 #include "SearchController.h"
+#include "../Kernel/PathList.h"
 #include <concepts>
 #include <filesystem>
-#include <sstream>
 
 #ifndef TREEWIDZARD_SEARCHSTRATEGIES_DEFAULT
 #define TREEWIDZARD_SEARCHSTRATEGIES_DEFAULT ""
@@ -26,13 +26,10 @@ SearchController::SearchController(std::string inputPath,
 	  flags(std::move(flags_)),
 	  width(std::move(width_)) {
 	if (const char *paths = std::getenv("TREEWIDZARD_SEARCHSTRATEGIES")) {
-		std::istringstream is(paths);
-		std::string path;
-		while (getline(is, path, ':'), is) searchPluginPaths.push_back(path);
+		searchPluginPaths = TreeWidzard::split_path_list(paths);
 	} else {
-		std::istringstream is(TREEWIDZARD_SEARCHSTRATEGIES_DEFAULT);
-		std::string path;
-		while (getline(is, path, ':'), is) searchPluginPaths.push_back(path);
+		searchPluginPaths =
+			TreeWidzard::split_path_list(TREEWIDZARD_SEARCHSTRATEGIES_DEFAULT);
 	}
 
 	inputController = new InputController(

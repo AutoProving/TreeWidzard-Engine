@@ -16,6 +16,8 @@
 #include <utility>
 #include <vector>
 
+#include "PathList.h"
+
 #ifndef TREEWIDZARD_DPCORES_DEFAULT
 #define TREEWIDZARD_DPCORES_DEFAULT ""
 #endif
@@ -97,13 +99,7 @@ inline std::optional<uint64_t> parse_hex_u64(std::string_view s) {
 }
 
 inline std::vector<std::string> split_paths(const std::string &paths) {
-	std::vector<std::string> out;
-	std::istringstream is(paths);
-	std::string path;
-	while (getline(is, path, ':'), is) {
-		if (!path.empty()) out.push_back(path);
-	}
-	return out;
+	return split_path_list(paths);
 }
 
 struct DPCoreFileEntry {

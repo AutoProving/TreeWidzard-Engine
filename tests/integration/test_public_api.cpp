@@ -5,15 +5,55 @@
 
 #include <cstdlib>
 #include <filesystem>
+#include <optional>
 #include <stdexcept>
 #include <string>
 #include <sys/wait.h>
+#include <vector>
 
 #include <gtest/gtest.h>
 
 namespace fs = std::filesystem;
 
 namespace {
+
+class ScopedEnvVar {
+public:
+  ScopedEnvVar(std::string name, std::string value) : name_(std::move(name)) {
+    if (const char *existing = std::getenv(name_.c_str())) {
+      original_ = existing;
+    }
+    set(name_, value);
+  }
+
+  ~ScopedEnvVar() {
+    if (original_.has_value()) {
+      set(name_, *original_);
+    } else {
+      clear(name_);
+    }
+  }
+
+private:
+  static void set(const std::string &name, const std::string &value) {
+#ifdef _WIN32
+    _putenv_s(name.c_str(), value.c_str());
+#else
+    setenv(name.c_str(), value.c_str(), 1);
+#endif
+  }
+
+  static void clear(const std::string &name) {
+#ifdef _WIN32
+    _putenv_s(name.c_str(), "");
+#else
+    unsetenv(name.c_str());
+#endif
+  }
+
+  std::string name_;
+  std::optional<std::string> original_;
+};
 
 auto find_repo_root() -> fs::path {
   fs::path current = fs::current_path();
@@ -207,6 +247,19 @@ TEST(PublicApi, InputControllerDiscoversKnownCores) {
 
   EXPECT_TRUE(core_handlers.contains("ChromaticNumber"));
   EXPECT_TRUE(core_handlers.contains("VertexCount"));
+}
+
+TEST(PublicApi, InputControllerDefaultPathsUsesPlatformSeparator) {
+#ifdef _WIN32
+  const std::string configured = "C:\\dpcores;D:\\alt";
+  const std::vector<std::string> expected = {"C:\\dpcores", "D:\\alt"};
+#else
+  const std::string configured = "/tmp/dpcores:/tmp/alt";
+  const std::vector<std::string> expected = {"/tmp/dpcores", "/tmp/alt"};
+#endif
+
+  ScopedEnvVar env("TREEWIDZARD_DPCORES", configured);
+  EXPECT_EQ(InputController::default_paths(), expected);
 }
 
 TEST(PublicApi, InputControllerFromSourceThrowsOnInvalidCore) {

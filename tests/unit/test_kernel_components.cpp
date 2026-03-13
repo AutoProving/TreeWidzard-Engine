@@ -408,8 +408,14 @@ TEST(KernelComponents, CertificateUtilsCoverHashingAndDiscoveryHelpers) {
   EXPECT_EQ(fnv1a64_bytes("abc"), fnv1a64_bytes(std::string_view("abc")));
   EXPECT_EQ(parse_hex_u64(hex_u64(0x1234abcdULL)), 0x1234abcdULL);
   EXPECT_FALSE(parse_hex_u64("not-hex").has_value());
+#ifdef _WIN32
+  EXPECT_EQ(split_paths("C:\\dpcores;D:\\search;;E:\\final"),
+            (std::vector<std::string>{"C:\\dpcores", "D:\\search",
+                                      "E:\\final"}));
+#else
   EXPECT_EQ(split_paths("alpha:beta::gamma"),
             (std::vector<std::string>{"alpha", "beta", "gamma"}));
+#endif
 
   const fs::path temp_dir =
       fs::temp_directory_path() / "treewidzard-kernel-dpcores";

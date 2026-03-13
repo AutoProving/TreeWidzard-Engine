@@ -5,6 +5,7 @@
 #include "../Conjecture/PropertyAssignment.h"
 #include "../Kernel/DynamicCoreHandler.h"
 #include "../Kernel/DynamicKernel.h"
+#include "../Kernel/PathList.h"
 #include <filesystem>
 #include <iomanip>
 #include <iostream>
@@ -92,19 +93,10 @@ public:
       bool quiet = false) -> std::map<std::string, DynamicCoreHandler>;
 
   static auto default_paths() -> std::vector<std::string> {
-    std::vector<std::string> paths;
     if (const char *epaths = std::getenv("TREEWIDZARD_DPCORES")) {
-      std::istringstream is(epaths);
-      std::string path;
-      while (getline(is, path, ':'), is)
-        paths.push_back(path);
-    } else {
-      std::istringstream is(TREEWIDZARD_DPCORES_DEFAULT);
-      std::string path;
-      while (getline(is, path, ':'), is)
-        paths.push_back(path);
+      return TreeWidzard::split_path_list(epaths);
     }
-    return paths;
+    return TreeWidzard::split_path_list(TREEWIDZARD_DPCORES_DEFAULT);
   }
   std::map<std::string, PropertyAssignment *> getvarToProperty() {
     return varToProperty;
