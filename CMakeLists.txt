@@ -18,11 +18,18 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Keep the default build CPU-only. GPU code is experimental and opt-in.
+option(TREEWIDZARD_ENABLE_GPU "Enable experimental GPU acceleration targets" OFF)
+
 # Option to enable CUDA explicitly (default OFF)
 option(TREEWIDZARD_CUDA_SUPPORT "Enable CUDA support (requires nvcc)" OFF)
 
 # If user explicitly requests CUDA support, try to enable the CUDA language
-if(TREEWIDZARD_CUDA_SUPPORT)
+if(TREEWIDZARD_CUDA_SUPPORT AND NOT TREEWIDZARD_ENABLE_GPU)
+  message(FATAL_ERROR "TREEWIDZARD_CUDA_SUPPORT requires TREEWIDZARD_ENABLE_GPU=ON.")
+endif()
+
+if(TREEWIDZARD_ENABLE_GPU AND TREEWIDZARD_CUDA_SUPPORT)
   enable_language(CUDA)
   find_package(CUDAToolkit QUIET)
   if(NOT CMAKE_CUDA_COMPILER)
@@ -41,7 +48,13 @@ find_package(BISON 3.0 REQUIRED)
 find_package(FLEX 2.6 REQUIRED)
 
 # GPU Support Configuration
-include(cmake/GPUSupport.cmake)
+set(TREEWIDZARD_MPS_SUPPORT OFF)
+set(TREEWIDZARD_OPENCL_SUPPORT OFF)
+if(TREEWIDZARD_ENABLE_GPU)
+    include(cmake/GPUSupport.cmake)
+else()
+    message(STATUS "GPU support disabled - building CPU-only version")
+endif()
 
 # Compiler options
 if (MSVC)
@@ -287,7 +300,7 @@ add_subdirectory("DPCores")
 add_subdirectory("SearchStrategies")
 
 # Optional: Create GPU-enabled main executable if GPU support is available
-if(TREEWIDZARD_CUDA_SUPPORT OR TREEWIDZARD_OPENCL_SUPPORT)
+if(TREEWIDZARD_ENABLE_GPU AND (TREEWIDZARD_CUDA_SUPPORT OR TREEWIDZARD_OPENCL_SUPPORT))
     message(STATUS "Creating GPU-enabled TreeWidzard executable")
     
     add_executable(treewidzard-gpu GPU/TreeWidzardGPU.cpp)
@@ -321,7 +334,7 @@ if(TREEWIDZARD_CUDA_SUPPORT OR TREEWIDZARD_OPENCL_SUPPORT)
     
     message(STATUS "GPU-enabled executable 'treewidzard-gpu' will be built")
     
-elseif(TREEWIDZARD_MPS_SUPPORT)
+elseif(TREEWIDZARD_ENABLE_GPU AND TREEWIDZARD_MPS_SUPPORT)
     message(STATUS "Creating MPS-enabled TreeWidzard executable for Apple Silicon")
     
     add_executable(treewidzard-mps GPU/TreeWidzardMPS.cpp)
@@ -363,7 +376,7 @@ if(BUILD_TESTS)
 endif()
 
 # Add GPU subdirectory only if GPU support is enabled
-if((TREEWIDZARD_CUDA_SUPPORT OR TREEWIDZARD_MPS_SUPPORT) AND NOT SKIP_GPU_SUBDIR)
+if(TREEWIDZARD_ENABLE_GPU AND (TREEWIDZARD_CUDA_SUPPORT OR TREEWIDZARD_MPS_SUPPORT) AND NOT SKIP_GPU_SUBDIR)
     add_subdirectory("GPU")
 else()
     message(STATUS "Skipping GPU subdirectory (no TREEWIDZARD_CUDA_SUPPORT/TREEWIDZARD_MPS_SUPPORT)")
