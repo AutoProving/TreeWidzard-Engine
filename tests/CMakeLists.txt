@@ -28,6 +28,7 @@ set(UNIT_TEST_SOURCES
 # Integration test sources
 set(INTEGRATION_TEST_SOURCES
     integration/test_atp_workflow.cpp
+    integration/test_cli_search.cpp
     integration/test_certificates.cpp
     integration/test_kernel_traversal.cpp
     integration/test_public_api.cpp
@@ -60,6 +61,8 @@ target_link_libraries(integration_tests
 # and the dynamically loaded search strategy plugins being built.
 add_dependencies(integration_tests
     treewidzard
+    ChromaticNumber_AtMost
+    MaxDegree_AtLeast
     VertexCount
     BreadthFirstSearch
     IsomorphismBreadthFirstSearch
