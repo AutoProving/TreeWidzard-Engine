@@ -61,6 +61,13 @@ auto run_cmd(const std::string &command) -> int {
 
 } // namespace
 
+auto make_tree_width(unsigned value) -> Width {
+  Width width;
+  width.set_name("tree_width");
+  width.set_value(value);
+  return width;
+}
+
 TEST(PublicApi, EngineFormulaShorthandReturnsTrue) {
   TreeWidzard::Engine engine;
   engine.loadCore("ChromaticNumber", 3);
@@ -87,13 +94,26 @@ TEST(PublicApi, EngineAcceptsFullConjectureDefinition) {
   EXPECT_FALSE(engine.solve());
 }
 
-TEST(PublicApi, EngineMatchesSharedInputControllerSetup) {
-  Width width;
-  width.set_name("tree_width");
-  width.set_value(3);
+TEST(PublicApi, EngineShorthandEqualityMatchesFullDefinition) {
+  TreeWidzard::Engine shorthand_engine;
+  shorthand_engine.loadCore("VertexCount");
+  shorthand_engine.setWidth(2);
+  shorthand_engine.setConjecture("x = 0");
 
+  TreeWidzard::Engine full_engine;
+  full_engine.setWidth(2);
+  full_engine.setConjecture("x := VertexCount()\nFormula\nx == 0");
+
+  const bool shorthand_result = shorthand_engine.solve();
+  const bool full_result = full_engine.solve();
+
+  EXPECT_FALSE(shorthand_result);
+  EXPECT_EQ(shorthand_result, full_result);
+}
+
+TEST(PublicApi, EngineMatchesSharedInputControllerSetup) {
   auto input_controller = InputController::fromSourceText(
-      "x := ChromaticNumber(3)\nFormula\nx", width,
+      "x := ChromaticNumber(3)\nFormula\nx", make_tree_width(3),
       InputController::default_paths(), InputControllerErrorMode::Throw);
   Flags flags;
   const bool expected =
@@ -109,6 +129,40 @@ TEST(PublicApi, EngineMatchesSharedInputControllerSetup) {
 
   EXPECT_FALSE(expected);
   EXPECT_EQ(engine.solve(), expected);
+}
+
+TEST(PublicApi, InputControllerBuildsExpectedKernelAndMappings) {
+  auto input_controller = InputController::fromSourceText(
+      "x := ChromaticNumber(3)\ny := VertexCount()\nFormula\nx",
+      make_tree_width(2), InputController::default_paths(),
+      InputControllerErrorMode::Throw);
+
+  DynamicKernel &kernel = input_controller->getDynamicKernel();
+  Conjecture &conjecture = input_controller->getConjecture();
+  const auto variables_to_core = conjecture.getVariablesToCoreName();
+  const auto properties = input_controller->getvarToProperty();
+
+  EXPECT_EQ(kernel.get_width().get_name(), "tree_width");
+  EXPECT_EQ(kernel.get_width().get_value(), 2U);
+  EXPECT_EQ(kernel.coreSize(), 2U);
+  EXPECT_TRUE(kernel.isVarExists("x"));
+  EXPECT_TRUE(kernel.isVarExists("y"));
+  EXPECT_EQ(variables_to_core.at("x"), "ChromaticNumber");
+  EXPECT_EQ(variables_to_core.at("y"), "VertexCount");
+  ASSERT_EQ(properties.size(), 2U);
+  EXPECT_EQ(properties.at("x")->getName(), "ChromaticNumber");
+  EXPECT_EQ(properties.at("x")->getParameterType(), "UnsignedInt");
+  EXPECT_EQ(properties.at("y")->getName(), "VertexCount");
+  EXPECT_EQ(properties.at("y")->getParameterType(), "None");
+}
+
+TEST(PublicApi, InputControllerFromSourceThrowsOnInvalidCore) {
+  EXPECT_THROW(
+      InputController::fromSourceText("x := TotallyMissingCore()\nFormula\nx",
+                                      make_tree_width(2),
+                                      InputController::default_paths(),
+                                      InputControllerErrorMode::Throw),
+      std::runtime_error);
 }
 
 TEST(PublicApi, EngineRejectsUnsupportedShorthandInequality) {
