@@ -115,6 +115,7 @@ add_library(TreeWidzard-Core
     Kernel/WitnessSet.cpp
     Kernel/DynamicKernel.cpp
     Kernel/Flags.cpp
+    Kernel/BreadthFirstTraversal.cpp
     Kernel/SearchStrategy.cpp
     Kernel/State.cpp
     Kernel/Bag.cpp

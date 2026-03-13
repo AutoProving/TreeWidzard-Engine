@@ -1,6 +1,7 @@
 #include "SearchController.h"
 #include <concepts>
 #include <filesystem>
+#include <sstream>
 
 #ifndef TREEWIDZARD_SEARCHSTRATEGIES_DEFAULT
 #define TREEWIDZARD_SEARCHSTRATEGIES_DEFAULT ""

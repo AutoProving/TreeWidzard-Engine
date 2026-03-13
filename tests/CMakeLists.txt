@@ -27,6 +27,7 @@ set(UNIT_TEST_SOURCES
 set(INTEGRATION_TEST_SOURCES
     integration/test_atp_workflow.cpp
     integration/test_certificates.cpp
+    integration/test_public_api.cpp
 )
 
 # Original test

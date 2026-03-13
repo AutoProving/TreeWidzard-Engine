@@ -97,13 +97,13 @@ int main() {
     TreeWidzard::Engine engine;
     
     // 1. Load a dynamic core (plugin)
-    engine.loadCore("ChromaticNumber", 0);
+    engine.loadCore("ChromaticNumber", 3);
     
     // 2. Set Width
-    engine.setWidth(5);
+    engine.setWidth(2);
     
-    // 3. Define Conjecture
-    engine.setConjecture("x = ChromaticNumber");
+    // 3. Define Conjecture over the loaded core(s)
+    engine.setConjecture("x");
     
     // 4. Solve
     bool result = engine.solve();
@@ -132,9 +132,9 @@ import treewidzard
 engine = treewidzard.Engine()
 
 # Configure
-engine.loadCore("ChromaticNumber", 0)
-engine.setWidth(10)
-engine.setConjecture("x < 10")
+engine.loadCore("ChromaticNumber", 3)
+engine.setWidth(2)
+engine.setConjecture("x")
 
 # Run
 if engine.solve():

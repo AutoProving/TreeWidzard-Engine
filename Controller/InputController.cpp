@@ -1,4 +1,5 @@
 #include "InputController.h"
+#include <cstdio>
 #include <filesystem>
 #include <memory>
 #include <stdexcept>
@@ -15,57 +16,120 @@
     #error "Unsupported operating system"
 #endif
 
-void InputController::check_available_cores() {
-	std::cout<<"--------------- TreeWidzard Dynamic Cores LOADING INFORAMATION --------------- "<<std::endl;
+[[noreturn]] void InputController::fail(const std::string &message) const {
+	if (errorMode == InputControllerErrorMode::Throw) {
+		throw std::runtime_error(message);
+	}
+	std::cerr << message << std::endl;
+	exit(20);
+}
+
+auto InputController::discover_core_handlers(
+	const std::vector<std::string> &dynamicPluginPaths, bool quiet)
+	-> std::map<std::string, DynamicCoreHandler> {
+	std::map<std::string, DynamicCoreHandler> discovered_cores;
 	std::unordered_map<std::string, std::string> core_locations;
+
 	for (const std::string &dynamicPluginPath : dynamicPluginPaths) {
-		for (const auto &entry : std::filesystem::directory_iterator(dynamicPluginPath)) {
-			const std::string library_path = entry.path();
+		std::error_code ec;
+		if (!std::filesystem::exists(dynamicPluginPath, ec) ||
+			!std::filesystem::is_directory(dynamicPluginPath, ec)) {
+			continue;
+		}
+		for (const auto &entry :
+			 std::filesystem::directory_iterator(dynamicPluginPath, ec)) {
+			if (ec) {
+				break;
+			}
+			const std::string library_path = entry.path().string();
 			if (library_path.find(DYNAMIC_LIB_EXTENSION) == std::string::npos) {
 				continue;
 			}
 			try {
 				auto factory = DynamicCoreHandler(library_path);
 				const std::string &name = factory.get_metadata().at("CoreName");
-				auto [it, placed] = coreList.emplace(name, std::move(factory));
+				auto [it, placed] =
+					discovered_cores.emplace(name, std::move(factory));
 				if (!placed) {
-					if (auto loc = core_locations.find(name); loc != core_locations.end() && loc->second != library_path) {
-						std::cerr << "Duplicate core name '" << name
-						          << "'. Keeping " << loc->second << " and skipping "
-						          << library_path << std::endl;
+					if (!quiet) {
+						if (auto loc = core_locations.find(name);
+							loc != core_locations.end() &&
+							loc->second != library_path) {
+							std::cerr << "Duplicate core name '" << name
+									  << "'. Keeping " << loc->second
+									  << " and skipping " << library_path
+									  << std::endl;
+						}
 					}
 					continue;
 				}
 				core_locations[name] = library_path;
 			} catch (std::exception &e) {
-				std::cerr << " failed to load." << e.what() << std::endl;
+				if (!quiet) {
+					std::cerr << " failed to load." << e.what() << std::endl;
+				}
 			}
 		}
 	}
+
+	return discovered_cores;
+}
+
+void InputController::check_available_cores() {
+	if (!quiet) {
+		std::cout << "--------------- TreeWidzard Dynamic Cores LOADING "
+					 "INFORAMATION --------------- "
+				  << std::endl;
+	}
+	coreList = discover_core_handlers(dynamicPluginPaths, quiet);
 }
 
 void InputController::parse_input() {
-	input_in = fopen(inputPath.c_str(), "r");
-	if (!input_in) {
-		std::perror("Input File opening failed, given path: ");
-		std::cout << inputPath << std::endl;
-		exit(20);
+	std::unique_ptr<std::FILE, decltype(&std::fclose)> input_file(nullptr,
+																  &std::fclose);
+	if (inputIsInlineSource) {
+		input_file.reset(tmpfile());
+		if (!input_file) {
+			fail("Error: failed to create a temporary input file.");
+		}
+		if (std::fputs(inputSource.c_str(), input_file.get()) < 0) {
+			fail("Error: failed to write inline conjecture source.");
+		}
+		std::rewind(input_file.get());
+	} else {
+		input_file.reset(fopen(inputPath.c_str(), "r"));
+		if (!input_file) {
+			fail("Error: input file opening failed, given path: " + inputPath);
+		}
 	}
+
 	int result = 1; // if parsing successful result will be 0 otherwise 1
-	std::cout << "Loaded DP-Cores to TreeWidzard:";
-	for (const auto &pair : coreList) {
-		std::cout << pair.first << " - "; // pair.first is the key
+	if (!quiet) {
+		std::cout << "Loaded DP-Cores to TreeWidzard:";
+		for (const auto &pair : coreList) {
+			std::cout << pair.first << " - "; // pair.first is the key
+		}
+		std::endl(std::cout);
 	}
-	std::endl(std::cout);
-	
-	input_parse(conjecture, result, coreList, varToCoreName,
-				varToProperty); // Parser function from Parser.hpp
+
+	input_in = input_file.get();
+	int parse_status = 0;
+	try {
+		parse_status =
+			input_parse(conjecture, result, coreList, varToCoreName,
+						varToProperty); // Parser function from Parser.hpp
+	} catch (const std::exception &e) {
+		input_in = nullptr;
+		fail(std::string("Error while parsing input: ") + e.what());
+	} catch (...) {
+		input_in = nullptr;
+		fail("Error while parsing input.");
+	}
+	input_in = nullptr;
 
 	// check for successful parsing
-	if (result != 0) {
-		std::cout << " Error: input file " << inputPath
-				  << " is not in valid format" << std::endl;
-		exit(20);
+	if (parse_status != 0 || result != 0) {
+		fail("Error: input file " + inputPath + " is not in valid format");
 	}
 
 	//  for (const auto &[name, props] : varToProperty) {
@@ -90,11 +154,14 @@ void InputController::parse_input() {
 	conjecture.setvarToProperty(varToProperty);
 	conjecture.setVariablesToCoreName(varToCoreName);
 	if (!conjecture.checkConjectureStructure(conjecture.getRoot())) {
-		exit(20);
+		fail("Error: input file " + inputPath + " has an invalid conjecture structure");
 	}
 
 	dynamicKernel.set_width(width);
-	std::cout << "----------------------------------------------------------" << std::endl;
+	if (!quiet) {
+		std::cout << "----------------------------------------------------------"
+				  << std::endl;
+	}
 }
 
 void InputController::construct_dynamicKernel() {
@@ -125,9 +192,7 @@ void InputController::construct_dynamicKernel() {
 			DynamicCore *corePointer = handlerCore.release();
 			corePointer->setWidth(dynamicKernel.get_width().get_value());
 			if (dynamicKernel.isVarExists(core.first)) {
-				std::cout << "ERROR: " << core.first
-						  << " exists in DynamicKernel" << std::endl;
-				exit(20);
+				fail("ERROR: " + core.first + " exists in DynamicKernel");
 			}
 			dynamicKernel.addCore(*corePointer);
 			auto varToNameAndIndex = dynamicKernel.getVarToNameAndIndex();
@@ -143,10 +208,8 @@ void InputController::construct_dynamicKernel() {
 
 			coreIndex++;
 		} else {
-			std::cout << "Core " << core.first
-					  << " := " << core.second->getName() << " is not exist"
-					  << std::endl;
-			exit(20);
+			fail("Core " + core.first + " := " + core.second->getName() +
+				 " is not exist");
 		}
 	}
 	conjecture.setKernel(&dynamicKernel);
@@ -155,25 +218,47 @@ void InputController::construct_dynamicKernel() {
 
 DynamicKernel &InputController::getDynamicKernel() { return dynamicKernel; }
 Conjecture &InputController::getConjecture() { return conjecture; }
-InputController::InputController(std::string inputPath,
-								 std::vector<std::string> dynamicPluginPaths)
-	: inputPath(std::move(inputPath)),
-	  dynamicPluginPaths(std::move(dynamicPluginPaths)) {
+InputController::InputController(std::string inputIdentifier,
+								 std::string inputSource,
+								 bool inputIsInlineSource,
+								 std::vector<std::string> dynamicPluginPaths,
+								 Width width,
+								 InputControllerErrorMode errorMode,
+								 bool quiet)
+	: inputPath(std::move(inputIdentifier)),
+	  inputSource(std::move(inputSource)),
+	  dynamicPluginPaths(std::move(dynamicPluginPaths)),
+	  width(std::move(width)),
+	  inputIsInlineSource(inputIsInlineSource),
+	  quiet(quiet),
+	  errorMode(errorMode) {
 	check_available_cores();
 	parse_input();
 	construct_dynamicKernel();
 }
 
+InputController::InputController(std::string inputPath,
+								 std::vector<std::string> dynamicPluginPaths,
+								 InputControllerErrorMode errorMode)
+	: InputController(std::move(inputPath), "", false,
+					  std::move(dynamicPluginPaths), Width(), errorMode, false) {}
+
 const std::string &InputController::getInputPath() const { return inputPath; }
 
 InputController::InputController(std::string inputPath,
 								 std::vector<std::string> dynamicPluginPaths,
-								 Width width)
-	: inputPath(inputPath),
-	  dynamicPluginPaths(dynamicPluginPaths),
-	  width(width) {
-	std::cout << "Path" << dynamicPluginPaths[0] << std::endl;
-	check_available_cores();
-	parse_input();
-	construct_dynamicKernel();
+								 Width width,
+								 InputControllerErrorMode errorMode)
+	: InputController(std::move(inputPath), "", false,
+					  std::move(dynamicPluginPaths), std::move(width),
+					  errorMode, false) {}
+
+auto InputController::fromSourceText(
+	std::string inputSource, Width width,
+	std::vector<std::string> dynamicPluginPaths,
+	InputControllerErrorMode errorMode) -> std::unique_ptr<InputController> {
+	return std::unique_ptr<InputController>(
+		new InputController("<memory>", std::move(inputSource), true,
+							 std::move(dynamicPluginPaths), std::move(width),
+							 errorMode, true));
 }

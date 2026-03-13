@@ -90,6 +90,10 @@ int main(int argc, char *arg[]) {
 	// Generating the temp file pFile
 	std::FILE *pFile;
 	pFile = tmpfile(); // c++ function for generating a temporary file
+	if (!pFile) {
+		std::cerr << "Error: failed to create a temporary command file." << std::endl;
+		return 20;
+	}
 
 	std::fputs(_all_arg.c_str(), pFile); // Write _all_arg in pFile
 	rewind(pFile); // Sets the position indicator associated with stream to the
@@ -134,9 +138,9 @@ int main(int argc, char *arg[]) {
 	int result_arg = 10;
 	std::string width_type;
 	int width_value;
-	result_arg = command_parse(result_arg, width_type, width_value);
+	const int parse_status = command_parse(result_arg, width_type, width_value);
 
 	fclose(command_in); // closing command_in
 
-	return 0;
+	return parse_status == 0 ? 0 : 20;
 }

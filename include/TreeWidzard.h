@@ -7,11 +7,9 @@
 #include <string>
 #include <vector>
 
-// Forward declarations to avoid exposing internal headers
-class DynamicKernel;
-class Conjecture;
-
 namespace TreeWidzard {
+
+class EngineImpl;
 
 /**
  * @brief Main interface for the TreeWidzard library.
@@ -24,13 +22,18 @@ public:
   /**
    * @brief Load a specific Dynamic Programming Core (plugin).
    * @param coreName Name of the core (e.g., "ChromaticNumber_AtMost")
-   * @param parameter Optional parameter (e.g., 3 for k=3)
+   * @param parameter Optional integer parameter (e.g., 3 for k=3). Use 0 for
+   * parameterless cores.
+   *
+   * Repeated calls define the shorthand variables `x`, `y`, `z`, ... used by
+   * formula-only conjecture strings passed to `setConjecture`.
    */
   void loadCore(const std::string &coreName, int parameter = 0);
 
   /**
-   * @brief Load a conjecture from a string (Legacy format).
-   * @param conjectureString The conjecture definition.
+   * @brief Load a conjecture from a string.
+   * @param conjectureString Either a full conjecture file body or a shorthand
+   * formula that references `x`, `y`, `z`, ... in `loadCore` order.
    */
   void setConjecture(const std::string &conjectureString);
 
@@ -47,9 +50,7 @@ public:
   bool solve();
 
 private:
-  std::unique_ptr<DynamicKernel> kernel;
-  std::unique_ptr<Conjecture> conjecture;
-  // Pimpl idiom or opaque pointers to hide implementation details
+  std::unique_ptr<EngineImpl> impl;
 };
 
 } // namespace TreeWidzard
