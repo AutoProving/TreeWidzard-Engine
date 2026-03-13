@@ -150,7 +150,7 @@ jobs:
         echo "Validating TreeWidzard project structure..."
         
         required_files=("CMakeLists.txt" "main.cpp" "README.md" "LICENSE")
-        required_dirs=("GPU" "tests" "Kernel" "docs")
+        required_dirs=("tests" "Kernel" "docs")
         
         for file in "${required_files[@]}"; do
           if [ ! -f "$file" ]; then

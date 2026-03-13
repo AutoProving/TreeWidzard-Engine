@@ -66,7 +66,7 @@ OPTIONS:
 EXAMPLES:
     $0                                          # Test all branches
     $0 -b main,optimized                        # Test only main and optimized
-    $0 -e feature/gpu-acceleration              # Test all except GPU feature
+    $0 -e optimized                             # Test all except optimized
     $0 --quick --summary                        # Quick tests with summary
     $0 --compare --report                       # Full comparison with reports
     $0 --no-checkout                            # Test current branch only

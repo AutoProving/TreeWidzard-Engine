@@ -151,11 +151,10 @@ Input Files → Parsers → Conjecture + TreeDecomposition
 ## Future Architecture Directions
 
 ### Potential Improvements
-1. **GPU Acceleration**: CUDA/OpenCL support for parallel DP
-2. **Distributed Computing**: Multi-node cluster support
-3. **Machine Learning Integration**: Heuristic guidance for search
-4. **Interactive Mode**: Real-time conjecture exploration
-5. **Web Interface**: Browser-based system access
+1. **Distributed Computing**: Multi-node cluster support
+2. **Machine Learning Integration**: Heuristic guidance for search
+3. **Interactive Mode**: Real-time conjecture exploration
+4. **Web Interface**: Browser-based system access
 
 ### Modularity Enhancements
 1. **Core Plugin API**: Standardized plugin interface

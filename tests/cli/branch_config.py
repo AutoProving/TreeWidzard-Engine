@@ -27,7 +27,6 @@ def get_branch_config():
         "run_structure_tests": True,
         "run_git_health_tests": True,
         "expected_current_branch": branch,
-        "require_gpu_directory": False,
         "require_feature_files": False,
         "check_branch_relationships": True
     }
@@ -44,8 +43,6 @@ def get_branch_config():
     elif branch == "optimized":
         config.update({
             "expected_current_branch": "optimized",
-            "require_gpu_directory": True,  # GPU features were merged
-            "check_gpu_branch_relationship": True,
             "run_performance_tests": True,
             "test_description": "Performance optimization validation and enhanced features"
         })
@@ -53,7 +50,6 @@ def get_branch_config():
     elif branch.startswith("feature/"):
         config.update({
             "expected_current_branch": branch,
-            "require_gpu_directory": True if "gpu" in branch else False,
             "require_feature_files": True,
             "check_all_relationships": True,
             "test_description": f"Feature-specific tests for {branch}"

@@ -56,9 +56,8 @@ EXPECTED_STATE:
   branches:
     - main
     - optimized
-    - feature/gpu-acceleration
   
-  current_branch: feature/gpu-acceleration
+  current_branch: main
   
   remote_url_pattern: "github.com/farhad-vadiee/TreeWidzard-development"
   
@@ -69,7 +68,6 @@ EXPECTED_STATE:
     - LICENSE
   
   required_directories:
-    - GPU/
     - tests/
     - docs/
     - Kernel/

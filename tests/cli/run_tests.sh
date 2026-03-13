@@ -97,7 +97,7 @@ check_prerequisites() {
     fi
     
     # Check if we're in the correct project
-    if [ ! -f "$PROJECT_ROOT/CMakeLists.txt" ] || [ ! -d "$PROJECT_ROOT/GPU" ]; then
+    if [ ! -f "$PROJECT_ROOT/CMakeLists.txt" ]; then
         log_error "Not in TreeWidzard project directory"
         return 1
     fi

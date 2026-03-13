@@ -102,7 +102,7 @@ When using `--report`, detailed JSON reports are generated:
     "success_rate": 95.2
   },
   "git_info": {
-    "current_branch": "feature/gpu-acceleration",
+    "current_branch": "main",
     "remote_url": "https://github.com/farhad-vadiee/TreeWidzard-development.git",
     "unpushed_commits": 13
   },
@@ -113,7 +113,7 @@ When using `--report`, detailed JSON reports are generated:
 ## 🤖 Continuous Integration
 
 Tests automatically run on:
-- **Push** to main branches (`main`, `optimized`, `feature/gpu-acceleration`)
+- **Push** to maintained branches (`main`, `optimized`)
 - **Pull requests** to `main`
 - **Daily schedule** at 2 AM UTC
 - **Manual triggers** via GitHub Actions

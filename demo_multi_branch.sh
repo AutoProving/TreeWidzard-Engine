@@ -35,7 +35,6 @@ echo
 # Test each branch
 test_branch "main"
 test_branch "optimized" 
-test_branch "feature/gpu-acceleration"
 
 # Return to original branch
 git checkout "$original_branch" 2>/dev/null

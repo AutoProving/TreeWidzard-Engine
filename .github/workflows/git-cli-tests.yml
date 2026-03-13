@@ -88,7 +88,7 @@ jobs:
         mkdir -p build
         pushd build
         # Configure with coverage flags and disable CUDA for CI
-        cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="--coverage" -DTREEWIDZARD_CUDA_SUPPORT=OFF ..
+        cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="--coverage" ..
         cmake --build . -- -j$(nproc)
         # Run tests (ctest if configured)
         if command -v ctest >/dev/null 2>&1; then
@@ -198,7 +198,7 @@ jobs:
         echo "Validating TreeWidzard project structure..."
         
         required_files=("CMakeLists.txt" "main.cpp" "README.md" "LICENSE")
-        required_dirs=("GPU" "tests" "Kernel" "docs")
+        required_dirs=("tests" "Kernel" "docs")
         
         for file in "${required_files[@]}"; do
           if [ ! -f "$file" ]; then

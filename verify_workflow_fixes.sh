@@ -70,7 +70,7 @@ check_branch() {
 original_branch=$(git branch --show-current)
 
 # Check all branches
-branches=("main" "optimized" "feature/gpu-acceleration")
+branches=("main" "optimized")
 
 for branch in "${branches[@]}"; do
     check_branch "$branch"

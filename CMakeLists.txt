@@ -1,42 +1,6 @@
 # Root CMakeLists.txt
 cmake_minimum_required(VERSION 3.18)
-
-# Detect Apple Silicon and adjust GPU language support
-if(APPLE)
-    # On Apple Silicon, we use Metal instead of CUDA
-    project(treewidzard LANGUAGES CXX)
-    set(APPLE_SILICON_BUILD ON)
-    message(STATUS "Apple Silicon detected - using Metal for GPU acceleration")
-else()
-    # On other platforms, start project with C++ only
-    project(treewidzard LANGUAGES CXX)
-    set(APPLE_SILICON_BUILD OFF)
-endif()
-
-# Set C++ Standard
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
-# Keep the default build CPU-only. GPU code is experimental and opt-in.
-option(TREEWIDZARD_ENABLE_GPU "Enable experimental GPU acceleration targets" OFF)
-
-# Option to enable CUDA explicitly (default OFF)
-option(TREEWIDZARD_CUDA_SUPPORT "Enable CUDA support (requires nvcc)" OFF)
-
-# If user explicitly requests CUDA support, try to enable the CUDA language
-if(TREEWIDZARD_CUDA_SUPPORT AND NOT TREEWIDZARD_ENABLE_GPU)
-  message(FATAL_ERROR "TREEWIDZARD_CUDA_SUPPORT requires TREEWIDZARD_ENABLE_GPU=ON.")
-endif()
-
-if(TREEWIDZARD_ENABLE_GPU AND TREEWIDZARD_CUDA_SUPPORT)
-  enable_language(CUDA)
-  find_package(CUDAToolkit QUIET)
-  if(NOT CMAKE_CUDA_COMPILER)
-    message(FATAL_ERROR "CUDA requested (TREEWIDZARD_CUDA_SUPPORT=ON) but CUDA compiler (nvcc) was not found.")
-  endif()
-  message(STATUS "CUDA support enabled")
-endif()
+project(treewidzard LANGUAGES CXX)
 
 # Set C++ standard to C++20
 set(CMAKE_CXX_STANDARD 20)
@@ -52,15 +16,6 @@ endif()
 # Find BISON and FLEX
 find_package(BISON 3.0 REQUIRED)
 find_package(FLEX 2.6 REQUIRED)
-
-# GPU Support Configuration
-set(TREEWIDZARD_MPS_SUPPORT OFF)
-set(TREEWIDZARD_OPENCL_SUPPORT OFF)
-if(TREEWIDZARD_ENABLE_GPU)
-    include(cmake/GPUSupport.cmake)
-else()
-    message(STATUS "GPU support disabled - building CPU-only version")
-endif()
 
 # Compiler options
 if (MSVC)
@@ -298,95 +253,12 @@ add_executable(treewidzard
 # Link the executable against the core library and Threads
 target_link_libraries(treewidzard PRIVATE TreeWidzard-Core ${CMAKE_DL_LIBS} Threads::Threads ${NUMA_LIBRARIES})
 
-# Link GPU library if available
-if(TARGET TreeWidzard-GPU)
-    target_link_libraries(treewidzard PRIVATE TreeWidzard-GPU)
-    message(STATUS "Linked main executable with GPU acceleration")
-endif()
-
 # Add subdirectories for DPCores and SearchStrategies
 add_subdirectory("DPCores")
 add_subdirectory("SearchStrategies")
-
-# Optional: Create GPU-enabled main executable if GPU support is available
-if(TREEWIDZARD_ENABLE_GPU AND (TREEWIDZARD_CUDA_SUPPORT OR TREEWIDZARD_OPENCL_SUPPORT))
-    message(STATUS "Creating GPU-enabled TreeWidzard executable")
-    
-    add_executable(treewidzard-gpu GPU/TreeWidzardGPU.cpp)
-    target_link_libraries(treewidzard-gpu PRIVATE 
-        TreeWidzard-Core 
-        TreeWidzard-GPU 
-        ${CMAKE_DL_LIBS} 
-        Threads::Threads 
-        ${NUMA_LIBRARIES}
-        ${GPU_LIBRARIES}
-    )
-    
-    # Set properties for GPU executable
-    set_target_properties(treewidzard-gpu PROPERTIES
-        CXX_STANDARD 20
-        CXX_STANDARD_REQUIRED ON
-    )
-    
-    if(TREEWIDZARD_CUDA_SUPPORT)
-        set_property(TARGET treewidzard-gpu PROPERTY CUDA_STANDARD 17)
-        set_property(TARGET treewidzard-gpu PROPERTY CUDA_ARCHITECTURES ${CMAKE_CUDA_ARCHITECTURES})
-    endif()
-    
-    # Add GPU compile definitions
-    if(TREEWIDZARD_CUDA_SUPPORT)
-        target_compile_definitions(treewidzard-gpu PRIVATE TREEWIDZARD_CUDA_ENABLED)
-    endif()
-    if(TREEWIDZARD_OPENCL_SUPPORT)
-        target_compile_definitions(treewidzard-gpu PRIVATE TREEWIDZARD_OPENCL_ENABLED)
-    endif()
-    
-    message(STATUS "GPU-enabled executable 'treewidzard-gpu' will be built")
-    
-elseif(TREEWIDZARD_ENABLE_GPU AND TREEWIDZARD_MPS_SUPPORT)
-    message(STATUS "Creating MPS-enabled TreeWidzard executable for Apple Silicon")
-    
-    add_executable(treewidzard-mps GPU/TreeWidzardMPS.cpp)
-    target_link_libraries(treewidzard-mps PRIVATE 
-        TreeWidzard-Core 
-        TreeWidzard-GPU 
-        ${CMAKE_DL_LIBS} 
-        Threads::Threads 
-        ${NUMA_LIBRARIES}
-        ${GPU_LIBRARIES}
-    )
-    
-    # Set properties for MPS executable
-    set_target_properties(treewidzard-mps PROPERTIES
-        CXX_STANDARD 20
-        CXX_STANDARD_REQUIRED ON
-    )
-    
-    # Set Objective-C++ compilation for MPS
-    set_source_files_properties(
-        GPU/TreeWidzardMPS.cpp
-        PROPERTIES
-        COMPILE_FLAGS "-x objective-c++"
-    )
-    
-    # Add MPS compile definitions
-    target_compile_definitions(treewidzard-mps PRIVATE TREEWIDZARD_MPS_ENABLED)
-    
-    message(STATUS "MPS-enabled executable 'treewidzard-mps' will be built for Apple Silicon")
-    
-else()
-    message(STATUS "No GPU support - building CPU-only version")
-endif()
 
 # Add testing subdirectory if tests are enabled
 option(BUILD_TESTS "Build tests" ON)
 if(BUILD_TESTS)
     add_subdirectory("tests")
-endif()
-
-# Add GPU subdirectory only if GPU support is enabled
-if(TREEWIDZARD_ENABLE_GPU AND (TREEWIDZARD_CUDA_SUPPORT OR TREEWIDZARD_MPS_SUPPORT) AND NOT SKIP_GPU_SUBDIR)
-    add_subdirectory("GPU")
-else()
-    message(STATUS "Skipping GPU subdirectory (no TREEWIDZARD_CUDA_SUPPORT/TREEWIDZARD_MPS_SUPPORT)")
 endif()

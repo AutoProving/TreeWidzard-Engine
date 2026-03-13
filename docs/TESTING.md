@@ -80,10 +80,7 @@ Current counts (from `ctest -N` on this repo build):
 - Entry point: `./tests/cli/run_tests.sh`.
 - Some checks may require git remotes / network access depending on configuration.
 
-## Optional: Benchmarks / GPU Targets
+## Optional: Benchmarks
 
 **`tests/benchmarks/*`**
 - Built only if the `benchmark` dependency is found.
-
-**`tests/GPUTests.cpp`**
-- Built/used only under GPU-specific CMake configuration (see `cmake/GPUSupport.cmake`).

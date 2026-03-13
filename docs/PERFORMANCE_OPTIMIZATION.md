@@ -313,10 +313,9 @@ export TREEWIDZARD_DEBUG_PERFORMANCE=1
 ## Future Enhancements
 
 ### Planned Optimizations
-1. **GPU acceleration** for embarrassingly parallel cores
-2. **Distributed computing** support for cluster environments
-3. **Machine learning** guided optimization
-4. **Advanced compiler optimizations** and vectorization
+1. **Distributed computing** support for cluster environments
+2. **Machine learning** guided optimization
+3. **Advanced compiler optimizations** and vectorization
 
 ### Research Opportunities
 1. **Adaptive algorithms** based on performance feedback

@@ -22,7 +22,7 @@ public:
  * Enhanced parallel breadth-first search with optimizations
  * 
  * This is the optimized CPU search strategy that provides the baseline
- * performance for GPU comparison.
+ * performance for the current TreeWidzard solver.
  */
 class EnhancedParallelBreadthFirstSearch : public SimpleSearchStrategy {
 private:

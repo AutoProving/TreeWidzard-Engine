@@ -20,7 +20,7 @@ try:
     from branch_config import get_branch_config
 except ImportError:
     def get_branch_config():
-        return {"expected_current_branch": "feature/gpu-acceleration"}
+        return {"expected_current_branch": "main"}
 
 class Colors:
     RED = '\033[0;31m'
@@ -197,12 +197,6 @@ class GitTestRunner:
         else:
             self.log_error("Optimized branch exists")
             
-        self.tests_run += 1
-        if self.run_command("git show-ref --verify --quiet refs/heads/feature/gpu-acceleration")[0] == 0 or self.run_command("git show-ref --verify --quiet refs/remotes/origin/feature/gpu-acceleration")[0] == 0:
-            self.log_success("Feature branch exists")
-        else:
-            self.log_error("Feature branch exists")
-        
         # Working Tree Tests
         self.log_info("=== Working Tree Tests ===")
         self.run_test_with_pattern("Working tree clean", "git status --porcelain", "^$")
@@ -239,31 +233,6 @@ class GitTestRunner:
             self.log_warning("Cannot check optimized branch relationship (error occurred)")
             self.tests_passed += 1  # Don't fail on this in CI
         
-        # Only test GPU branch relationship if we're not on main branch
-        if self.current_branch != "main" and self.branch_config.get("check_gpu_branch_relationship", True):
-            self.tests_run += 1
-            try:
-                optimized_ref_exists = (self.run_command("git show-ref optimized")[0] == 0 or 
-                                      self.run_command("git show-ref origin/optimized")[0] == 0)
-                gpu_ref_exists = (self.run_command("git show-ref feature/gpu-acceleration")[0] == 0 or 
-                                self.run_command("git show-ref origin/feature/gpu-acceleration")[0] == 0)
-                
-                if optimized_ref_exists and gpu_ref_exists:
-                    exit_code, output, _ = self.run_command("git merge-base optimized feature/gpu-acceleration 2>/dev/null || git merge-base origin/optimized origin/feature/gpu-acceleration 2>/dev/null || git merge-base optimized origin/feature/gpu-acceleration 2>/dev/null || git merge-base origin/optimized feature/gpu-acceleration")
-                    if exit_code == 0 and output.strip():
-                        self.log_success("GPU branch has common ancestor with optimized")
-                    else:
-                        self.log_warning("GPU branch relationship check inconclusive (may be normal in CI)")
-                        self.tests_passed += 1  # Don't fail on this in CI
-                else:
-                    self.log_warning("Cannot check GPU branch relationship (branches not available)")
-                    self.tests_passed += 1  # Don't fail on this in CI
-            except:
-                self.log_warning("Cannot check GPU branch relationship (error occurred)")
-                self.tests_passed += 1  # Don't fail on this in CI
-        else:
-            self.log_info("Skipping GPU branch relationship test (not applicable for main branch)")
-        
         # File and Repository Tests
         self.log_info("=== Repository Health Tests ===")
         self.run_test("Important files tracked", "git ls-files | grep -E '\\.(cpp|h|cmake)$'")
@@ -285,12 +254,6 @@ class GitTestRunner:
         self.log_info("=== TreeWidzard Specific Tests ===")
         self.run_test("CMakeLists.txt exists", "test -f CMakeLists.txt")
         
-        # GPU directory test based on branch configuration
-        if self.branch_config.get("require_gpu_directory", True):
-            self.run_test("GPU directory exists", "test -d GPU")
-        else:
-            self.log_info("Skipping GPU directory test (not required for this branch)")
-            
         self.run_test("Main.cpp exists", "test -f main.cpp")
         
         # Unpushed commits warning
@@ -339,10 +302,6 @@ def main():
     if not os.path.exists("CMakeLists.txt"):
         print(f"{Colors.RED}Error: Please run this script from the TreeWidzard-development root directory{Colors.NC}")
         sys.exit(1)
-    
-    # GPU directory is optional (branch-dependent)
-    if not os.path.exists("GPU"):
-        print(f"{Colors.YELLOW}Warning: GPU directory not found (may not be available on this branch){Colors.NC}")
     
     runner = GitTestRunner()
     success = runner.run_comprehensive_tests()

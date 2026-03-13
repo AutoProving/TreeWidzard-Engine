@@ -142,16 +142,6 @@ main() {
         ((TESTS_FAILED++))
     fi
     
-    if git show-ref --verify --quiet refs/heads/feature/gpu-acceleration || git show-ref --verify --quiet refs/remotes/origin/feature/gpu-acceleration; then
-        log_success "Feature branch exists"
-        ((TESTS_RUN++))
-        ((TESTS_PASSED++))
-    else
-        log_error "Feature branch exists"
-        ((TESTS_RUN++))
-        ((TESTS_FAILED++))
-    fi
-    
     # Test 6: Check commit history integrity
     run_test "Git log accessible" "git log --oneline -1"
     
@@ -177,22 +167,6 @@ main() {
         fi
     else
         log_info "Skipping optimized branch relationship check (branches not available locally)"
-    fi
-    
-    if git show-ref --verify --quiet refs/heads/feature/gpu-acceleration && git show-ref --verify --quiet refs/heads/optimized; then
-        if git merge-base --is-ancestor optimized feature/gpu-acceleration 2>/dev/null; then
-            log_success "GPU branch diverged from optimized"
-        else
-            log_error "GPU branch diverged from optimized (not ancestor or cannot check)"
-        fi
-        ((TESTS_RUN++))
-        if git merge-base --is-ancestor optimized feature/gpu-acceleration 2>/dev/null; then
-            ((TESTS_PASSED++))
-        else
-            ((TESTS_FAILED++))
-        fi
-    else
-        log_info "Skipping GPU branch relationship check (branches not available locally)"
     fi
     
     # Test 9: Check for merge conflicts
@@ -248,7 +222,7 @@ main() {
 }
 
 # Check if we're in the right directory
-if [ ! -f "CMakeLists.txt" ] || [ ! -d "GPU" ]; then
+if [ ! -f "CMakeLists.txt" ]; then
     log_error "Please run this script from the TreeWidzard-development root directory"
     exit 1
 fi
