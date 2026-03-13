@@ -20,6 +20,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/utils)
 # Unit test sources
 set(UNIT_TEST_SOURCES
     unit/test_bag_operations.cpp
+    unit/test_core_support.cpp
     unit/test_witness_cache.cpp
 )
 

@@ -2,6 +2,7 @@
 #include "Kernel/Bag.h"
 #include <gtest/gtest.h>
 #include <set>
+#include <string>
 #include <vector>
 
 using namespace TreeWidzard::Testing;
@@ -74,11 +75,54 @@ TEST_F(BagTest, SetElements) {
 // Test: Edge operations
 TEST_F(BagTest, EdgeOperations) {
   Bag bag;
-  bag.set_edge(1, 2);
+  bag.set_edge(2, 1);
 
   auto edge = bag.get_edge();
   EXPECT_EQ(edge.first, 1);
   EXPECT_EQ(edge.second, 2);
+}
+
+TEST_F(BagTest, BagPrintingAndInformation) {
+  Bag bag = createBag({1, 3, 5});
+
+  testing::internal::CaptureStdout();
+  bag.print();
+  const std::string printed = testing::internal::GetCapturedStdout();
+
+  EXPECT_EQ(printed, "{1,3,5}");
+  EXPECT_EQ(bag.bagInformation(), "{1,3,5}");
+}
+
+TEST_F(BagTest, IntroduceForgetAndRelabelOperations) {
+  Bag bag = createBag({1, 2});
+
+  EXPECT_TRUE(bag.vertex_introducible(3));
+  EXPECT_FALSE(bag.vertex_introducible(2));
+  EXPECT_TRUE(bag.edge_introducible(1, 2));
+  EXPECT_FALSE(bag.edge_introducible(1, 4));
+  EXPECT_TRUE(bag.vertex_forgettable(1));
+  EXPECT_FALSE(bag.vertex_forgettable(4));
+
+  Bag with_vertex = bag.intro_v(3);
+  EXPECT_EQ(with_vertex.get_elements(), std::set<unsigned>({1, 2, 3}));
+
+  Bag with_edge = with_vertex.intro_e(3, 1);
+  EXPECT_EQ(with_edge.get_edge(), std::make_pair(1U, 3U));
+
+  Bag forgot_vertex = with_edge.forget_v(3);
+  EXPECT_EQ(forgot_vertex.get_elements(), std::set<unsigned>({1, 2}));
+  EXPECT_EQ(forgot_vertex.get_edge(), std::make_pair(0U, 0U));
+
+  Bag other = createBag({1, 2});
+  Bag different = createBag({1, 4});
+  EXPECT_TRUE(forgot_vertex.joinable(other));
+  EXPECT_FALSE(forgot_vertex.joinable(different));
+
+  Bag relabel_source = createBag({1, 3});
+  relabel_source.set_edge(1, 3);
+  Bag relabeled = relabel_source.relabel({{1, 4}, {3, 7}});
+  EXPECT_EQ(relabeled.get_elements(), std::set<unsigned>({4, 7}));
+  EXPECT_EQ(relabeled.get_edge(), std::make_pair(4U, 7U));
 }
 
 // Test: Duplicate elements (sets should remove duplicates)

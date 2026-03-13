@@ -71,7 +71,6 @@ void PropertyAssignment::printParameters() {
             [](bool  b)   { std::cout << std::boolalpha << b; }
         }, param);
         if (param != this->parametersVec.back())
-            std::cout << ', ';    // space between elements
+            std::cout << ", ";    // space between elements
     }
 }
-
