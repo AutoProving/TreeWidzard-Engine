@@ -7,8 +7,6 @@ class Treewidzard < Formula
   depends_on "cmake" => :build
   depends_on "bison" => :build
   depends_on "flex" => :build
-  depends_on "python@3.11"
-
   def install
     system "cmake", "-S", ".", "-B", "build", *std_cmake_args
     system "cmake", "--build", "build"
@@ -17,8 +15,5 @@ class Treewidzard < Formula
 
   test do
     system "#{bin}/treewidzard", "--help"
-    
-    # Optional: Python import test
-    system "python3", "-c", "import treewidzard; engine = treewidzard.Engine()"
   end
 end

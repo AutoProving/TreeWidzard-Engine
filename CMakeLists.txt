@@ -274,22 +274,6 @@ add_executable(treewidzard
 # Link the executable against the core library and Threads
 target_link_libraries(treewidzard PRIVATE TreeWidzard-Core ${CMAKE_DL_LIBS} Threads::Threads ${NUMA_LIBRARIES})
 
-# Python Bindings
-option(BUILD_PYTHON_BINDINGS "Build Python bindings" ON)
-if(BUILD_PYTHON_BINDINGS)
-    include(FetchContent)
-    FetchContent_Declare(
-      pybind11
-      URL https://github.com/pybind/pybind11/archive/refs/tags/v2.11.1.zip
-    )
-    FetchContent_MakeAvailable(pybind11)
-
-    pybind11_add_module(treewidzard_py Bindings/Python/treewidzard_py.cpp)
-    target_link_libraries(treewidzard_py PRIVATE TreeWidzard-Core)
-    
-    install(TARGETS treewidzard_py DESTINATION ${CMAKE_INSTALL_LIBDIR}/python)
-endif()
-
 # Link GPU library if available
 if(TARGET TreeWidzard-GPU)
     target_link_libraries(treewidzard PRIVATE TreeWidzard-GPU)

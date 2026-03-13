@@ -110,35 +110,3 @@ int main() {
     return 0;
 }
 ```
-
-### 🐍 Python Bindings
-
-TreeWidzard includes Python bindings via `pybind11`.
-
-#### Installation
-The bindings are built automatically when `BUILD_PYTHON_BINDINGS=ON` (default).
-To install them into your Python environment:
-
-```bash
-cd Build
-sudo make install
-```
-
-#### Usage
-```python
-import treewidzard
-
-# Initialize Engine
-engine = treewidzard.Engine()
-
-# Configure
-engine.loadCore("ChromaticNumber", 3)
-engine.setWidth(2)
-engine.setConjecture("x")
-
-# Run
-if engine.solve():
-    print("Property satisfied!")
-else:
-    print("Property not satisfied.")
-```
