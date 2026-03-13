@@ -2,7 +2,7 @@ name: Git CLI Tests
 
 on:
   push:
-    branches: [ main, optimized, feature/gpu-acceleration ]
+    branches: [ main, optimized ]
   pull_request:
     branches: [ main ]
   schedule:
@@ -55,7 +55,7 @@ jobs:
     - name: Create local branch refs (safe)
       run: |
         git fetch --prune origin '+refs/heads/*:refs/remotes/origin/*'
-        for b in main optimized "feature/gpu-acceleration"; do
+        for b in main optimized; do
           if git show-ref --verify --quiet refs/remotes/origin/$b; then
             # only create local branch if it doesn't already exist
             if ! git rev-parse --verify --quiet refs/heads/$b; then
@@ -85,20 +85,13 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y lcov
-        mkdir -p build
-        pushd build
-        # Configure with coverage flags and disable CUDA for CI
-        cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="--coverage" ..
-        cmake --build . -- -j$(nproc)
-        # Run tests (ctest if configured)
-        if command -v ctest >/dev/null 2>&1; then
-          ctest --output-on-failure || true
-        else
-          find . -type f -executable -name '*_test*' -print0 | xargs -0 -n1 -P1 || true
-        fi
+        cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="--coverage"
+        cmake --build build -- -j$(nproc)
+        ctest --test-dir build --output-on-failure -j$(nproc)
         # Lightweight CLI smoke test to catch regressions early
-        timeout 60 ./treewidzard -atp tw=2 BreadthFirstSearch ../examples/conjectures/simple_3_coloring.txt
+        timeout 60 ./build/treewidzard -atp tw=2 BreadthFirstSearch examples/conjectures/simple_3_coloring.txt
         # Collect coverage with lcov and produce html
+        pushd build
         lcov --capture --directory . --output-file coverage.info || true
         lcov --remove coverage.info '/usr/*' --output-file coverage.info || true
         genhtml coverage.info --output-directory coverage-html || true
@@ -112,7 +105,7 @@ jobs:
         name: coverage-reports-${{ github.sha }}
         path: |
           python_coverage_htmlcov.tar.gz
-          cpp_coverage_gcov.tar
+          build/cpp_coverage_gcov.tar
           
     - name: Upload test report
       if: matrix.test-type == 'python' && always()

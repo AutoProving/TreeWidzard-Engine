@@ -17,7 +17,7 @@ jobs:
         
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     
     - name: Install dependencies (Ubuntu)
       if: runner.os == 'Linux'
@@ -31,62 +31,35 @@ jobs:
         brew install bison flex cmake
     
     - name: Configure CMake
-      run: |
-        mkdir -p build
-        cmake -B build -DCMAKE_BUILD_TYPE=Release
+      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
     
     - name: Build TreeWidzard
       run: cmake --build build -j $(nproc 2>/dev/null || sysctl -n hw.ncpu)
     
-    - name: Build Search Strategies
+    - name: Run CTest
       run: |
-        cmake --build build --target BreadthFirstSearch
-        cmake --build build --target ParallelBreadthFirstSearch
-        cmake --build build --target IsomorphismBreadthFirstSearch
-        cmake --build build --target ParallelIsomorphismBreadthFirstSearch
-    
-    - name: Build Tests
-      run: |
-        cmake --build build --target unit_tests
-        cmake --build build --target integration_tests
-        cmake --build build --target run_tests
-    
-    - name: Run Unit Tests
-      run: |
-        cd build
-        ./unit_tests --gtest_output=xml:unit_test_results.xml
-      continue-on-error: true
-    
-    - name: Run Integration Tests
-      run: |
-        cd build
-        export TREEWIDZARD_SEARCHSTRATEGIES="$(pwd)/SearchStrategies"
-        ./integration_tests --gtest_output=xml:integration_test_results.xml
-      continue-on-error: true
-    
-    - name: Run Legacy Tests
-      run: |
-        cd build
-        ./run_tests --gtest_output=xml:legacy_test_results.xml
-      continue-on-error: true
+        ctest --test-dir build --output-on-failure \
+          -j "$(nproc 2>/dev/null || sysctl -n hw.ncpu)" \
+          --output-junit ctest_results.xml
     
     - name: Upload Test Results
       if: always()
       uses: actions/upload-artifact@v4
       with:
         name: test-results-${{ matrix.os }}
-        path: build/*_test_results.xml
+        path: |
+          build/ctest_results.xml
+          build/Testing/**
     
     - name: Test Summary
       if: always()
       run: |
         echo "## Test Results" >> $GITHUB_STEP_SUMMARY
         echo "Build completed on ${{ matrix.os }}" >> $GITHUB_STEP_SUMMARY
-        if [ -f build/unit_test_results.xml ]; then
-          echo "✅ Unit tests executed" >> $GITHUB_STEP_SUMMARY
-        fi
-        if [ -f build/integration_test_results.xml ]; then
-          echo "✅ Integration tests executed" >> $GITHUB_STEP_SUMMARY
+        if [ -f build/ctest_results.xml ]; then
+          echo "✅ ctest completed and produced JUnit output" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "❌ ctest did not produce JUnit output" >> $GITHUB_STEP_SUMMARY
         fi
 
   code-quality:
@@ -95,15 +68,23 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
-    
+      uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y bison flex cmake build-essential
+
     - name: Check for compilation warnings
       run: |
-        mkdir -p build
-        cmake -B build -DCMAKE_BUILD_TYPE=Debug
-        cmake --build build 2>&1 | tee build_output.txt
-        
-        # Count warnings (this is informational, not blocking)
+        set -o pipefail
+        cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-Werror"
+        cmake --build build -j "$(nproc)" 2>&1 | tee build_output.txt
+
         warning_count=$(grep -c "warning:" build_output.txt || true)
         echo "Found $warning_count warnings"
         echo "## Build Warnings: $warning_count" >> $GITHUB_STEP_SUMMARY
+        if [ "$warning_count" -ne 0 ]; then
+          echo "Warnings are treated as failures in this job." >&2
+          exit 1
+        fi
