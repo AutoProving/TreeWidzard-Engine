@@ -68,6 +68,42 @@ auto make_tree_width(unsigned value) -> Width {
   return width;
 }
 
+TEST(PublicApi, EngineLoadCoreRejectsEmptyName) {
+  TreeWidzard::Engine engine;
+  EXPECT_THROW(engine.loadCore("", 0), std::invalid_argument);
+}
+
+TEST(PublicApi, EngineLoadCoreRejectsNegativeParameter) {
+  TreeWidzard::Engine engine;
+  EXPECT_THROW(engine.loadCore("ChromaticNumber", -1), std::invalid_argument);
+}
+
+TEST(PublicApi, EngineSetConjectureRejectsEmptyString) {
+  TreeWidzard::Engine engine;
+  EXPECT_THROW(engine.setConjecture(""), std::invalid_argument);
+}
+
+TEST(PublicApi, EngineSetWidthRejectsNegativeWidth) {
+  TreeWidzard::Engine engine;
+  EXPECT_THROW(engine.setWidth(-1), std::invalid_argument);
+}
+
+TEST(PublicApi, EngineSolveRequiresWidth) {
+  TreeWidzard::Engine engine;
+  engine.loadCore("ChromaticNumber", 3);
+  engine.setConjecture("x");
+
+  EXPECT_THROW(engine.solve(), std::logic_error);
+}
+
+TEST(PublicApi, EngineSolveRequiresConjecture) {
+  TreeWidzard::Engine engine;
+  engine.loadCore("ChromaticNumber", 3);
+  engine.setWidth(2);
+
+  EXPECT_THROW(engine.solve(), std::logic_error);
+}
+
 TEST(PublicApi, EngineFormulaShorthandReturnsTrue) {
   TreeWidzard::Engine engine;
   engine.loadCore("ChromaticNumber", 3);
@@ -154,6 +190,23 @@ TEST(PublicApi, InputControllerBuildsExpectedKernelAndMappings) {
   EXPECT_EQ(properties.at("x")->getParameterType(), "UnsignedInt");
   EXPECT_EQ(properties.at("y")->getName(), "VertexCount");
   EXPECT_EQ(properties.at("y")->getParameterType(), "None");
+}
+
+TEST(PublicApi, InputControllerFromSourceUsesMemoryLabel) {
+  auto input_controller = InputController::fromSourceText(
+      "x := ChromaticNumber(3)\nFormula\nx", make_tree_width(2),
+      InputController::default_paths(), InputControllerErrorMode::Throw);
+
+  EXPECT_EQ(input_controller->getInputPath(), "<memory>");
+}
+
+TEST(PublicApi, InputControllerDiscoversKnownCores) {
+  const auto core_handlers =
+      InputController::discover_core_handlers(InputController::default_paths(),
+                                             true);
+
+  EXPECT_TRUE(core_handlers.contains("ChromaticNumber"));
+  EXPECT_TRUE(core_handlers.contains("VertexCount"));
 }
 
 TEST(PublicApi, InputControllerFromSourceThrowsOnInvalidCore) {
