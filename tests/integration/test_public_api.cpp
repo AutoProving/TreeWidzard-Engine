@@ -1,4 +1,7 @@
 #include "TreeWidzard.h"
+#include "Controller/InputController.h"
+#include "Kernel/BreadthFirstTraversal.h"
+#include "Kernel/Width.h"
 
 #include <cstdlib>
 #include <filesystem>
@@ -79,9 +82,33 @@ TEST(PublicApi, EngineFormulaShorthandReturnsFalse) {
 TEST(PublicApi, EngineAcceptsFullConjectureDefinition) {
   TreeWidzard::Engine engine;
   engine.setWidth(2);
-  engine.setConjecture("x := VertexCount()\nFormula\nx >= 0");
+  engine.setConjecture("x := VertexCount()\nFormula\nx == 0");
 
-  EXPECT_TRUE(engine.solve());
+  EXPECT_FALSE(engine.solve());
+}
+
+TEST(PublicApi, EngineMatchesSharedInputControllerSetup) {
+  Width width;
+  width.set_name("tree_width");
+  width.set_value(3);
+
+  auto input_controller = InputController::fromSourceText(
+      "x := ChromaticNumber(3)\nFormula\nx", width,
+      InputController::default_paths(), InputControllerErrorMode::Throw);
+  Flags flags;
+  const bool expected =
+      TreeWidzard::runBreadthFirstTraversal(input_controller->getDynamicKernel(),
+                                            input_controller->getConjecture(),
+                                            flags)
+          .property_satisfied;
+
+  TreeWidzard::Engine engine;
+  engine.loadCore("ChromaticNumber", 3);
+  engine.setWidth(3);
+  engine.setConjecture("x");
+
+  EXPECT_FALSE(expected);
+  EXPECT_EQ(engine.solve(), expected);
 }
 
 TEST(PublicApi, EngineRejectsUnsupportedShorthandInequality) {

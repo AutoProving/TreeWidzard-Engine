@@ -7,6 +7,7 @@
 #include "../parallel_hashmap/phmap.h"
 #include <atomic>
 #include <chrono>
+#include <condition_variable>
 #include <functional>
 #include <memory>
 #include <mutex>
@@ -65,6 +66,8 @@ private:
   std::thread cleanup_thread;
   std::atomic<bool> cleanup_running;
   std::chrono::seconds cleanup_interval;
+  mutable std::mutex cleanup_mutex;
+  std::condition_variable cleanup_cv;
 
 public:
   explicit PerformanceCache(
@@ -75,17 +78,22 @@ public:
 
     // Start background cleanup thread
     cleanup_thread = std::thread([this]() {
+      std::unique_lock<std::mutex> lock(cleanup_mutex);
       while (cleanup_running) {
-        std::this_thread::sleep_for(cleanup_interval);
-        if (cleanup_running) {
-          performCleanup();
+        if (cleanup_cv.wait_for(lock, cleanup_interval,
+                                [this]() { return !cleanup_running.load(); })) {
+          break;
         }
+        lock.unlock();
+        performCleanup();
+        lock.lock();
       }
     });
   }
 
   ~PerformanceCache() {
     cleanup_running = false;
+    cleanup_cv.notify_all();
     if (cleanup_thread.joinable()) {
       cleanup_thread.join();
     }

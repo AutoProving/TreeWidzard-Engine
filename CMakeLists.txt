@@ -110,6 +110,7 @@ include_directories(
 # Define the core library
 # Define the core library as STATIC or SHARED based on BUILD_SHARED_LIBS
 add_library(TreeWidzard-Core
+    Controller/InputController.cpp
     Kernel/DynamicCore.cpp
     Kernel/Witness.cpp
     Kernel/WitnessSet.cpp
@@ -191,7 +192,6 @@ add_executable(treewidzard
     Controller/SearchController.h
     Controller/ParseController.cpp
     Controller/ParseController.h
-    Controller/InputController.cpp
     Controller/InputController.h
     Controller/CertificateChecker.cpp
     Controller/CertificateChecker.h
