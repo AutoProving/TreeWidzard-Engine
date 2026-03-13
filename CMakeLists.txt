@@ -2,6 +2,8 @@
 cmake_minimum_required(VERSION 3.18)
 project(treewidzard LANGUAGES CXX)
 
+include(CTest)
+
 # Set C++ standard to C++20
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -11,6 +13,36 @@ if(WIN32)
   set(TREEWIDZARD_PATH_LIST_SEPARATOR ";")
 else()
   set(TREEWIDZARD_PATH_LIST_SEPARATOR ":")
+endif()
+
+# Prefer modern parser generators from common package-manager prefixes before
+# falling back to the ambient PATH. This avoids fresh macOS builds picking the
+# legacy /usr/bin/bison 2.3 when a newer Homebrew installation is available.
+set(TREEWIDZARD_PARSER_TOOL_HINTS
+    /opt/homebrew/opt/bison/bin
+    /opt/homebrew/opt/flex/bin
+    /opt/homebrew/bin
+    /usr/local/opt/bison/bin
+    /usr/local/opt/flex/bin
+    /usr/local/bin
+    /opt/local/bin)
+
+find_program(TREEWIDZARD_PREFERRED_BISON
+             NAMES bison
+             HINTS ${TREEWIDZARD_PARSER_TOOL_HINTS}
+             NO_DEFAULT_PATH)
+if(TREEWIDZARD_PREFERRED_BISON)
+  set(BISON_EXECUTABLE "${TREEWIDZARD_PREFERRED_BISON}" CACHE FILEPATH
+      "Bison executable used for parser generation" FORCE)
+endif()
+
+find_program(TREEWIDZARD_PREFERRED_FLEX
+             NAMES flex
+             HINTS ${TREEWIDZARD_PARSER_TOOL_HINTS}
+             NO_DEFAULT_PATH)
+if(TREEWIDZARD_PREFERRED_FLEX)
+  set(FLEX_EXECUTABLE "${TREEWIDZARD_PREFERRED_FLEX}" CACHE FILEPATH
+      "Flex executable used for lexer generation" FORCE)
 endif()
 
 # Find BISON and FLEX
