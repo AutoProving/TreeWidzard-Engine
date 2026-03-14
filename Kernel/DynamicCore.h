@@ -15,32 +15,41 @@
 #include "WitnessSet.h"
 
 template <class... Ts>
-struct overloaded : Ts... {
+struct overloaded : Ts...
+{
 	using Ts::operator()...;
 };
 template <class... Ts>
 overloaded(Ts...) -> overloaded<Ts...>;
 using parameterType = std::vector<std::variant<char *, int, bool>>;
 
-class DynamicCore {
-  private:
+class DynamicCore
+{
+private:
 	WitnessSetPointer initialWitnessSet;
-	std::map<std::string, std::string>
-		attributes; // Characteristics of the core. This is initialized in the
+	std::map<std::string, std::string> attributes; // Characteristics of the core. This is initialized in the
 					// constructor of the derived class.
 	int width;
 
-  public:
+public:
 	DynamicCore() {}
+
 	virtual ~DynamicCore() = default;
+
 	WitnessSetPointer getInitialSet(); // returns initialSet
+
 	void setInitialWitnessSet(WitnessSetPointer witnessSetPointer);
+
 	void addAttribute(std::string x, std::string y);
+
 	bool isAttribute(std::string x, std::string y);
-	std::string getAttributeValue(
-		std::string x); // Returns "y" if (x,y) belongs to attributes.
+
+	std::string getAttributeValue(std::string x); // Returns "y" if (x,y) belongs to attributes.
+
 	std::map<std::string, std::string> getAttributes();
+
 	int getWidth();
+
 	void setWidth(int width);
 
 	// Making the methods pure virtual,
@@ -60,6 +69,7 @@ class DynamicCore {
 	virtual bool is_final_witness(const Bag &b, const Witness &witness) = 0;
 
 	virtual WitnessSetPointer clean(WitnessSetPointer witnessSet);
+
 	virtual int inv(const Bag &b, const WitnessSetPointer witnessSet) = 0;
 
 	virtual WitnessSetPointer intro_v(unsigned i, const Bag &b,

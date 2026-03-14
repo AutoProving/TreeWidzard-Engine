@@ -7,11 +7,23 @@ int td_parse(std::istream &is, TreeDecompositionPACE &td, int &result) {
 	std::istringstream line;
 
 	auto next_non_comment = [&]() {
-		while (std::getline(is, line_str) && line_str.starts_with("c"))
-			;
-		if (!line_str.size()) return false;
-		line.str(line_str);
-		line.clear();
+		// while (std::getline(is, line_str) && line_str.starts_with("c"))
+		// 	;
+		// if (!line_str.size()) return false;
+		// line.str(line_str);
+		// line.clear();
+		// return true;
+
+		while (true) {
+			if (!std::getline(is, line_str)) {
+				return false;  // Stop if getline fails (EOF or error)
+			}
+			if (!line_str.starts_with("c")) {
+				break;
+			}
+		}
+		line.clear();          // Clear any previous state
+		line.str(line_str);    // Load the new line into the stringstream
 		return true;
 	};
 

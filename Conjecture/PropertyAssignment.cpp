@@ -59,3 +59,18 @@ void PropertyAssignment::setParametersVec(const std::vector<std::variant<char *,
 }
 
 
+// helper for overloaded lambdas
+template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
+template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
+
+void PropertyAssignment::printParameters() {
+    for (const auto& param : this->parametersVec) {
+        std::visit(overloaded{
+            [](char* s)   { std::cout << '"' << s << '"'; },
+            [](int   i)   { std::cout << i; },
+            [](bool  b)   { std::cout << std::boolalpha << b; }
+        }, param);
+        if (param != this->parametersVec.back())
+            std::cout << ", ";    // space between elements
+    }
+}

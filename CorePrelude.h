@@ -5,6 +5,20 @@
 #include "Kernel/CoreWrapper.h"
 #include "Kernel/WitnessSet.h"
 #include "Kernel/WitnessWrapper.h"
+#include "Kernel/DynamicCore.h"
+
+
+#include <set>         // For std::set
+#include <map>         // For std::map
+#include <unordered_map> // If used elsewhere in your project
+#include <vector>      // For std::vector
+#include <memory>      // For std::shared_ptr, std::make_shared
+#include <cassert>     // For assert
+#include <iostream>    // For std::ostream, std::cout (if used)
+#include <string>      // For std::string
+#include <utility>     // For std::move, std::pair
+#include <algorithm>   // For std::set_intersection
+#include <iterator> 
 
 namespace detail {
 

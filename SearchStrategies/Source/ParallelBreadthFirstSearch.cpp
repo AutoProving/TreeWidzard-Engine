@@ -1,10 +1,16 @@
 #include "ParallelBreadthFirstSearch.h"
 
 #include <atomic>
+#include <cstdlib>
 #include <iostream>
+#include <memory>
 #include <mutex>
 #include <thread>
+#include <unordered_map>
 #include <utility>
+
+#include "Kernel/CertificateUtils.h"
+#include "Kernel/CertificateWriter.h"
 
 /**
  * Does not work with WitnessTypeOne.
@@ -123,13 +129,35 @@ void update_maximum(std::atomic<T> &maximum_value, const T &value) noexcept {
 }
 
 void ParallelBreadthFirstSearch::search() {
-	if (flags->get("Premise")) {
-		std::cout << " Premise is ACTIVATED" << std::endl;
-	} else {
-		std::cout << "Premise is NOT ACTIVATED" << std::endl;
-	}
+	// if (flags->get("Premise")) {
+	// 	std::cout << "Premise is ACTIVATED" << std::endl;
+	// } else {
+	// 	std::cout << "Premise is NOT ACTIVATED" << std::endl;
+	// }
 	bool printStateFlag = flags->get("PrintStates");
 	State::ptr initialState = kernel->initialState();
+
+	std::unique_ptr<TreeWidzard::Certificates::CertificateWriter> cert;
+	std::unordered_map<State::ptr, int, State::ptr::Hash, State::ptr::Equal>
+		cert_ids;
+	std::mutex cert_lock;
+	std::atomic<int> next_cert_id = 1;
+	if (const char *cert_path = std::getenv("TREEWIDZARD_CERT_PATH")) {
+		if (std::string(cert_path).size() > 0) {
+			cert = std::make_unique<TreeWidzard::Certificates::CertificateWriter>(
+				cert_path);
+			const uint64_t prop_hash =
+				TreeWidzard::Certificates::fnv1a64_file(getPropertyFilePath());
+			const uint64_t dpcores_hash =
+				TreeWidzard::Certificates::dp_cores_fingerprint();
+			cert->writeHeader(kernel->get_width(), getAttributeValue("SearchName"),
+							  TreeWidzard::Certificates::CanonMode::NONE,
+							  static_cast<bool>(flags->get("Premise")), prop_hash,
+							  getPropertyFilePath(), dpcores_hash);
+			cert_ids.emplace(initialState, 0);
+			cert->writeLeaf(0);
+		}
+	}
 	allStatesSet.insert(initialState);
 	newStatesSet.insert(initialState);
 	if (!noBFSDAG) {
@@ -193,6 +221,17 @@ void ParallelBreadthFirstSearch::search() {
 						if (!allStatesSet.count(newStatePointer) and
 							!newStatesSet.count(newStatePointer)) {
 							newStatesSet.insert(newStatePointer);
+							if (cert) {
+								std::lock_guard lock(cert_lock);
+								if (!cert_ids.count(newStatePointer)) {
+									const int parent_id =
+										cert_ids.at(statePointer);
+									const int new_id = next_cert_id++;
+									cert_ids.emplace(newStatePointer, new_id);
+									cert->writeIntroVertex(new_id, parent_id,
+														   i);
+								}
+							}
 
 							State::ptr consequentState = newStatePointer;
 
@@ -269,6 +308,17 @@ void ParallelBreadthFirstSearch::search() {
 					if (!allStatesSet.count(newStatePointer) and
 						!newStatesSet.count(newStatePointer)) {
 						newStatesSet.insert(newStatePointer);
+						if (cert) {
+							std::lock_guard lock(cert_lock);
+							if (!cert_ids.count(newStatePointer)) {
+								const int parent_id =
+									cert_ids.at(statePointer);
+								const int new_id = next_cert_id++;
+								cert_ids.emplace(newStatePointer, new_id);
+								cert->writeForgetVertex(new_id, parent_id,
+														*it);
+							}
+						}
 						State::ptr consequentState = newStatePointer;
 						if (!noBFSDAG) {
 							InstructiveTreeDecompositionNodeContent
@@ -342,6 +392,18 @@ void ParallelBreadthFirstSearch::search() {
 							if (!allStatesSet.count(newStatePointer) and
 								!newStatesSet.count(newStatePointer)) {
 								newStatesSet.insert(newStatePointer);
+								if (cert) {
+									std::lock_guard lock(cert_lock);
+									if (!cert_ids.count(newStatePointer)) {
+										const int parent_id =
+											cert_ids.at(statePointer);
+										const int new_id = next_cert_id++;
+										cert_ids.emplace(newStatePointer,
+														 new_id);
+										cert->writeIntroEdge(
+											new_id, parent_id, *it, *itPrime);
+									}
+								}
 								State::ptr consequentState = newStatePointer;
 								if (!noBFSDAG) {
 									InstructiveTreeDecompositionNodeContent
@@ -422,6 +484,20 @@ void ParallelBreadthFirstSearch::search() {
 							if (!allStatesSet.count(newStatePointer) and
 								!newStatesSet.count(newStatePointer)) {
 								newStatesSet.insert(newStatePointer);
+								if (cert) {
+									std::lock_guard lock(cert_lock);
+									if (!cert_ids.count(newStatePointer)) {
+										const int left_id =
+											cert_ids.at(statePointer);
+										const int right_id = cert_ids.at(*it);
+										const int new_id = next_cert_id++;
+										cert_ids.emplace(newStatePointer,
+														 new_id);
+										cert->writeJoin(new_id, left_id,
+														right_id,
+														std::nullopt);
+									}
+								}
 								State::ptr consequentState = newStatePointer;
 								if (!noBFSDAG) {
 									InstructiveTreeDecompositionNodeContent
@@ -530,7 +606,13 @@ void ParallelBreadthFirstSearch::search() {
 
 		for (auto it = newStatesSet.cbegin(); it != newStatesSet.cend(); it++) {
 			if (!conjecture->evaluateConjectureOnState(**it)) {
-				std::cout << "Conjecture: Not Satisfied" << std::endl;
+				std::cout << "\nResult: ";
+				std::cout << "PROPERTY NOT SATISFIED\n" << std::endl;
+				if (cert) {
+					std::lock_guard lock(cert_lock);
+					cert->writeResultNotSatisfied(cert_ids.at(*it));
+				}
+				std::cout << "Counterexample found:" << std::endl;
 
 				if (noBFSDAG) {
 					std::cerr << "Rerun without -no-bfs-dag to construct a "
@@ -540,6 +622,12 @@ void ParallelBreadthFirstSearch::search() {
 				}
 
 				State::ptr badState = *it;
+				/* printing the conjectures and values of the variables */
+				std::cout << "The assignment that makes the formula false:"
+						  << std::endl;
+				conjecture->printValues(*badState, conjecture->getRoot());
+				std::cout << std::endl;
+
 				bfsDAG.addFinalState(badState);
 				InstructiveTreeDecomposition atd =
 					extractCounterExampleTerm(badState);
@@ -585,7 +673,11 @@ void ParallelBreadthFirstSearch::search() {
 			std::cout << std::endl;
 		}
 	}
-	std::cout << "Conjecture: Satisfied" << std::endl;
+	std::cout << "\nResult: ";
+	std::cout << "PROPERTY SATISFIED" << std::endl;
+	if (cert) {
+		cert->writeResultSatisfied();
+	}
 }
 RunTree<State::ptr, InstructiveTreeDecompositionNodeContent>
 ParallelBreadthFirstSearch::extractCounterExampleRun(State::ptr state) {

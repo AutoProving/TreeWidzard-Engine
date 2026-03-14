@@ -9,9 +9,10 @@
     #include "../../Conjecture/Conjecture.h"
     #include "../../Kernel/Width.h"
     #include "input_parser.hpp"
+    // Bison prefix 'input_' renames yylval to input_lval
     #define yylval input_lval
 
-    extern int yyparse(Conjecture &conj, int &result,std::map<std::string,std::map<std::string,std::string>> &coreList, std::map<std::string,std::string> &varToCoreName, std::map<std::string, PropertyAssignment*> varToProperty, char const* msg);
+    extern int input_parse(Conjecture &conj, int &result,std::map<std::string,std::map<std::string,std::string>> &coreList, std::map<std::string,std::string> &varToCoreName, std::map<std::string, PropertyAssignment*> varToProperty, char const* msg);
 
 %}
 
@@ -22,33 +23,42 @@
 %%
         std::string string_builder;
 
-EXP                                                  yylval.string = strdup(yytext); return EXP;
-Formula|FORMULA                                      yylval.string = strdup(yytext); return FORMULA_NAME;
-FALSE|False|false                                    yylval.string = strdup(yytext); return FALSE;
-TRUE|True|true                                       yylval.string = strdup(yytext); return TRUE;
-IFF                                                  yylval.string = strdup(yytext); return IFF;
-IMPLIES                                              yylval.string = strdup(yytext); return IMPLIES;
-AND|\&\&                                             yylval.string = strdup(yytext); return AND;
-OR|\|\                                               yylval.string = strdup(yytext); return OR;
-NOT|\!                                               yylval.string = strdup(yytext); return NOT;
-INV                                                  yylval.string = strdup(yytext); return INV_;
-\<                                                   yylval.string = strdup(yytext); return LESS;
+\<\                                                  yylval.string = strdup(yytext); return LESS;
 \>                                                   yylval.string = strdup(yytext); return BIGGER;
 \>\=                                                  yylval.string = strdup(yytext); return ATLEAST;
 \<\=                                                  yylval.string = strdup(yytext); return ATMOST;
 \=\=                                                 yylval.string = strdup(yytext); return EQUAL;
 \+|\-|\*|\/                                          yylval.string = strdup(yytext); return BINARY_ARITHMETIC_OPERATOR;
-max|min|pow                                          yylval.string = strdup(yytext); return BINARY_FUNCTION;
-abs|acos|asin|atan|cos|exp|floor|ln|log|sin|sqrt|tan yylval.string = strdup(yytext); return UNARY_FUNCTION;
-[0-9]+                                               yylval.number = std::atoi(yytext); return NUMBER_DOUBLE;
-[a-zA-Z0-9]+                                         yylval.string = strdup(yytext); return NAME;
 \:\=                                                 yylval.string = strdup(yytext); return SEPERATOR;
 \(                                                   yylval.string = strdup(yytext); return LEFTP;
 \)                                                   yylval.string = strdup(yytext); return RIGHTP;
-\n                                                   yylval.string = strdup(yytext); return NEWLINE;
-\/\/[a-zA-Z0-9\t ]*\n                                yylval.string = strdup(yytext); return COMMENT;
+\/\/.*$                                               /* ignore C++ style comments */;
 ,                                                    yylval.string = strdup(yytext); return COMMA;
-[ \t]+                      ;
+[ \t\n\r]+                                           ; /* Ignore all whitespace including newlines */
+
+AND|\&\&                                             yylval.string = strdup(yytext); return AND;
+OR|\|\                                               yylval.string = strdup(yytext); return OR;
+NOT|\!                                               yylval.string = strdup(yytext); return NOT;
+
+[a-zA-Z_][a-zA-Z0-9_]*                               {
+                                                        std::string s(yytext);
+                                                        if (s == "EXP") { yylval.string = strdup(yytext); return EXP; }
+                                                        if (s == "Formula" || s == "FORMULA") { yylval.string = strdup(yytext); return FORMULA_NAME; }
+                                                        if (s == "FALSE" || s == "False" || s == "false") { yylval.string = strdup(yytext); return FALSE; }
+                                                        if (s == "TRUE" || s == "True" || s == "true") { yylval.string = strdup(yytext); return TRUE; }
+                                                        if (s == "IFF") { yylval.string = strdup(yytext); return IFF; }
+                                                        if (s == "IMPLIES") { yylval.string = strdup(yytext); return IMPLIES; }
+                                                        if (s == "AND") { yylval.string = strdup(yytext); return AND; }
+                                                        if (s == "OR") { yylval.string = strdup(yytext); return OR; }
+                                                        if (s == "NOT") { yylval.string = strdup(yytext); return NOT; }
+                                                        if (s == "INV") { yylval.string = strdup(yytext); return INV_; }
+                                                        if (s == "max" || s == "min" || s == "pow") { yylval.string = strdup(yytext); return BINARY_FUNCTION; }
+                                                        if (s == "abs" || s == "acos" || s == "asin" || s == "atan" || s == "cos" || s == "exp" || s == "floor" || s == "ln" || s == "log" || s == "sin" || s == "sqrt" || s == "tan") { yylval.string = strdup(yytext); return UNARY_FUNCTION; }
+                                                        
+                                                        yylval.string = strdup(yytext); return NAME;
+                                                     }
+
+[0-9]+                                               yylval.number = std::atoi(yytext); return NUMBER_DOUBLE;
 
 \"      string_builder.clear(); BEGIN(str);
 

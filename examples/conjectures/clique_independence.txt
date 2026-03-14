@@ -1,0 +1,6 @@
+
+clique := CliqueNumber(3)
+independence := IndependentSet()
+vertices := VertexCount()
+Formula
+clique AND (INV(independence) * 3 >= INV(vertices))

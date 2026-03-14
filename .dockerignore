@@ -1,0 +1,11 @@
+build/
+build_cpu_force/
+.git/
+.github/
+.DS_Store
+tmp/
+*.log
+_output/
+Parser/PropertyParser/input_lexer.cpp
+Parser/PropertyParser/input_parser.cpp
+Parser/PropertyParser/input_parser.hpp

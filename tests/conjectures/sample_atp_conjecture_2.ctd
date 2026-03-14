@@ -1,0 +1,7 @@
+# Sample ATP Conjecture Test Case 2
+# Pathwidth 7, VertexCount property
+vertices: 15
+pathwidth: 7
+property: VertexCount
+expected: 15
+# Description: Vertex count for pathwidth 7 decomposition with 15 vertices should be 15.

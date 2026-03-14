@@ -1,0 +1,7 @@
+# Sample ATP Conjecture Test Case 1
+# Pathwidth 5, Chromatic Number property
+vertices: 10
+pathwidth: 5
+property: ChromaticNumber
+expected: 6
+# Description: Chromatic number for pathwidth 5 decomposition with 10 vertices should be 6.

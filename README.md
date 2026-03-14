@@ -1,6 +1,35 @@
 # TreeWidzard
 
-## Installation
+## 🐳 Quick Start (Docker)
+
+The easiest way to run TreeWidzard is using Docker. This avoids setting up C++ compilers and dependencies manually.
+
+### Prerequisites
+- [Docker](https://docs.docker.com/get-docker/) installed.
+
+### Running TreeWidzard
+To run the tool on files in your current directory:
+
+```bash
+# Pull and run the latest version
+docker run --rm -v $(pwd):/data ghcr.io/farhad-vadiee/treewidzard:latest --help
+```
+
+To analyze files (e.g., a graph and property file in your current folder):
+```bash
+docker run --rm -v $(pwd):/data ghcr.io/farhad-vadiee/treewidzard:latest \
+    -modelcheck PACE /data/property.txt /data/graph.gr
+```
+
+### Building Locally (Optional)
+If you prefer to build the image yourself:
+```bash
+docker build -t treewidzard:latest .
+docker run --rm -v $(pwd):/data treewidzard:latest --help
+```
+
+## Installation (Build from Source)
+
 
 All commands below should be executed in a Linux terminal. For instance, in Ubuntu to open a terminal click in ``activities`` and then type ``terminal``.
 
@@ -48,4 +77,36 @@ cmake --build Build
 To print usage:
 ```
 ./Build/treewidzard --help
+```
+
+## Testing
+
+See `docs/TESTING.md`.
+
+## 📚 Using as a Library
+
+TreeWidzard can now be linked as a shared or static library in your own C++ projects.
+
+### C++ API (`libtreewidzard`)
+Link against `TreeWidzard-Core` and include the public header:
+
+```cpp
+#include <treewidzard/TreeWidzard.h>
+
+int main() {
+    TreeWidzard::Engine engine;
+    
+    // 1. Load a dynamic core (plugin)
+    engine.loadCore("ChromaticNumber", 3);
+    
+    // 2. Set Width
+    engine.setWidth(2);
+    
+    // 3. Define Conjecture over the loaded core(s)
+    engine.setConjecture("x");
+    
+    // 4. Solve
+    bool result = engine.solve();
+    return 0;
+}
 ```

@@ -1,0 +1,116 @@
+# Git CLI Test Configuration
+# Configuration file for automated git testing
+
+# Test categories and their importance levels
+TEST_CATEGORIES:
+  core:
+    name: "Core Git Operations"
+    importance: critical
+    tests:
+      - repository_detection
+      - remote_connectivity
+      - basic_commands
+      
+  branches:
+    name: "Branch Management"
+    importance: high
+    tests:
+      - branch_existence
+      - branch_relationships
+      - merge_conflicts
+      
+  working_tree:
+    name: "Working Tree Status"
+    importance: high
+    tests:
+      - clean_working_tree
+      - file_tracking
+      - uncommitted_changes
+      
+  history:
+    name: "Commit History"
+    importance: medium
+    tests:
+      - commit_integrity
+      - commit_messages
+      - author_information
+      
+  security:
+    name: "Security Checks"
+    importance: high
+    tests:
+      - no_secrets
+      - no_sensitive_data
+      - proper_permissions
+      
+  performance:
+    name: "Repository Performance"
+    importance: low
+    tests:
+      - repository_size
+      - large_files
+      - object_count
+
+# Expected repository state
+EXPECTED_STATE:
+  branches:
+    - main
+    - optimized
+  
+  current_branch: main
+  
+  remote_url_pattern: "github.com/farhad-vadiee/TreeWidzard-development"
+  
+  required_files:
+    - CMakeLists.txt
+    - main.cpp
+    - README.md
+    - LICENSE
+  
+  required_directories:
+    - tests/
+    - docs/
+    - Kernel/
+
+# Test thresholds
+THRESHOLDS:
+  max_repo_size_mb: 100
+  max_file_size_mb: 10
+  max_unpushed_commits: 20
+  min_commit_message_length: 10
+
+# Patterns to ignore in security scans
+SECURITY_IGNORE_PATTERNS:
+  - "# Password: placeholder"
+  - "// TODO: Replace with actual API key"
+  - "example_password"
+  - "test_secret"
+
+# Commands that should work in the repository
+REQUIRED_COMMANDS:
+  - "git status"
+  - "git log --oneline -1"
+  - "git branch"
+  - "git remote -v"
+  - "cmake --version"
+
+# File patterns that should be tracked
+TRACKED_FILE_PATTERNS:
+  - "*.cpp"
+  - "*.h"
+  - "*.cmake"
+  - "*.md"
+  - "*.yml"
+  - "*.yaml"
+  - "*.json"
+
+# File patterns that should NOT be tracked
+UNTRACKED_FILE_PATTERNS:
+  - "*.o"
+  - "*.so"
+  - "*.dylib"
+  - "*.exe"
+  - "build/"
+  - ".DS_Store"
+  - "*.log"
+  - "*.tmp"

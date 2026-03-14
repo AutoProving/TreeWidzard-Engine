@@ -1,3 +1,36 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
 /.DS_Store
 .DS_Store
 .idea
@@ -23,3 +56,64 @@ cmake-build-debug/*
 /small-test/*
 /small-test/
 tags
+
+/test_conjectures
+
+# Build artifacts
+*.o
+*.so
+*.dylib
+*.a
+build/
+Build/
+build_*/
+cmake-build-*/
+*/build/
+*/simple_build/
+*/test_build/
+*/build_*/
+*/*build*/
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# GPU executables and benchmarks
+atp_pathwidth*_benchmark
+pathwidth*_test
+*_benchmark
+*_demo
+simple_mps_test
+
+# Generated outputs
+*CounterExample*
+*RunTree*
+*_tree_width_*
+*_path_width_*
+
+# Editor files
+*~
+*.bak
+*.orig
+.vscode/
+.idea/
+
+# Backup files
+backup-*.tar.gz
+
+# Documentation archives
+docs/archive/
+
+# Performance reports
+performance_report.txt
+memory_usage.log
+*.data
+
+__pycache__/
+
+# Generated Parser Files
+Parser/PropertyParser/input_lexer.cpp
+Parser/PropertyParser/input_parser.cpp
+Parser/PropertyParser/input_parser.hpp

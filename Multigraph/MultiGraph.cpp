@@ -77,12 +77,12 @@ std::set<unsigned> MultiGraph::edgesBetweenVertices(unsigned i, unsigned j) {
 }
 
 void MultiGraph::printGraph() {
-	std::cout << "vertices:" << std::endl;
+	std::cout << "Vertices:" << std::endl;
 	for (std::set<unsigned>::iterator it = this->vertices.begin();
 		 it != this->vertices.end(); ++it) {
 		std::cout << *it << std::endl;
 	}
-	std::cout << "Edges" << std::endl;
+	std::cout << "Edges:" << std::endl;
 	for (std::set<unsigned>::iterator itr = this->edges.begin();
 		 itr != this->edges.end(); ++itr) {
 		std::cout << *itr << "\t";

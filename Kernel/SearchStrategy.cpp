@@ -11,11 +11,19 @@ SearchStrategy::SearchStrategy() {
 	flags = nullptr;
 }
 
+SearchStrategy::~SearchStrategy() {
+	// Clean up State memory pool
+	State::clearPool();
+}
+
 SearchStrategy::SearchStrategy(DynamicKernel *dynamicKernel,
 							   Conjecture *conjecture, Flags *flags) {
 	this->kernel = dynamicKernel;
 	this->conjecture = conjecture;
 	this->flags = flags;
+	
+	// Initialize State memory pool for efficient allocation
+	State::initializePool(10000);
 }
 
 void SearchStrategy::addAttribute(std::string x, std::string y) {
