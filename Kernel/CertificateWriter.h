@@ -1,6 +1,7 @@
 #ifndef TREEWIDZARD_CERTIFICATE_WRITER_H
 #define TREEWIDZARD_CERTIFICATE_WRITER_H
 
+#include <cstdint>
 #include <fstream>
 #include <map>
 #include <optional>
@@ -42,4 +43,3 @@ class CertificateWriter {
 } // namespace TreeWidzard::Certificates
 
 #endif
-
