@@ -104,4 +104,9 @@ foreach(file ${files})
         TreeWidzard-Core
         Threads::Threads
     )
+
+    install(TARGETS ${search_strategy_name}
+        LIBRARY DESTINATION ${TREEWIDZARD_INSTALL_SEARCHSTRATEGIES_DIR}
+        RUNTIME DESTINATION ${TREEWIDZARD_INSTALL_SEARCHSTRATEGIES_DIR}
+    )
 endforeach()

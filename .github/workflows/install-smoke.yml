@@ -1,0 +1,121 @@
+name: Install Smoke
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  install-smoke:
+    name: Install Smoke on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y bison flex cmake build-essential
+
+      - name: Install dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install bison flex cmake
+
+      - name: Install dependencies (Windows)
+        if: runner.os == 'Windows'
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >-
+            mingw-w64-x86_64-toolchain
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-ninja
+            mingw-w64-x86_64-bison
+            mingw-w64-x86_64-flex
+
+      - name: Configure install smoke build (Unix)
+        if: runner.os != 'Windows'
+        run: |
+          cmake -S . -B build-install \
+            -DBUILD_TESTS=OFF \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX="$PWD/install-root"
+
+      - name: Configure install smoke build (Windows)
+        if: runner.os == 'Windows'
+        shell: msys2 {0}
+        run: |
+          cmake -S . -B build-install -G Ninja \
+            -DBUILD_TESTS=OFF \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX="$PWD/install-root"
+
+      - name: Build install smoke artifacts (Unix)
+        if: runner.os != 'Windows'
+        run: |
+          cmake --build build-install -j "$(nproc 2>/dev/null || sysctl -n hw.ncpu)"
+
+      - name: Build install smoke artifacts (Windows)
+        if: runner.os == 'Windows'
+        shell: msys2 {0}
+        run: |
+          cmake --build build-install -j "$(nproc)"
+
+      - name: Install (Unix)
+        if: runner.os != 'Windows'
+        run: |
+          cmake --install build-install
+
+      - name: Install (Windows)
+        if: runner.os == 'Windows'
+        shell: msys2 {0}
+        run: |
+          cmake --install build-install
+
+      - name: Run installed smoke test (Unix)
+        if: runner.os != 'Windows'
+        run: |
+          SMOKE_DIR="$PWD/install-smoke-data"
+          mkdir -p "$SMOKE_DIR"
+          cat > "$SMOKE_DIR/simple_implies.txt" <<'EOF'
+          x := MaxDegree(4)
+          y := ChromaticNumber(4)
+          Formula
+          x IMPLIES y
+          EOF
+
+          "$PWD/install-root/bin/treewidzard" --help
+          (
+            cd "$SMOKE_DIR"
+            "$PWD/../install-root/bin/treewidzard" -atp tw=2 BreadthFirstSearch "$SMOKE_DIR/simple_implies.txt"
+          )
+
+      - name: Run installed smoke test (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $smokeDir = Join-Path $env:GITHUB_WORKSPACE 'install-smoke-data'
+          New-Item -ItemType Directory -Force -Path $smokeDir | Out-Null
+          @"
+x := MaxDegree(4)
+y := ChromaticNumber(4)
+Formula
+x IMPLIES y
+"@ | Set-Content (Join-Path $smokeDir 'simple_implies.txt')
+
+          $launcher = Join-Path $env:GITHUB_WORKSPACE 'install-root\bin\treewidzard.bat'
+          & $launcher --help
+          Push-Location $smokeDir
+          & $launcher -atp tw=2 BreadthFirstSearch (Join-Path $smokeDir 'simple_implies.txt')
+          Pop-Location

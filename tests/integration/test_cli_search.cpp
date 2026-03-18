@@ -1,3 +1,6 @@
+#include "../utils/cli_test_support.h"
+
+#include <chrono>
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
@@ -5,12 +8,15 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
-#include <sys/wait.h>
 #include <vector>
 
 #include <gtest/gtest.h>
 
 namespace fs = std::filesystem;
+using TreeWidzard::Testing::decode_system_result;
+using TreeWidzard::Testing::find_repo_root;
+using TreeWidzard::Testing::launcher_path;
+using TreeWidzard::Testing::shell_quote;
 
 namespace {
 
@@ -33,52 +39,13 @@ enum class SolverVerdict {
   NotSatisfied,
 };
 
-auto find_repo_root() -> fs::path {
-  fs::path current = fs::current_path();
-  for (int depth = 0; depth < 10; ++depth) {
-    if (fs::exists(current / "treewidzard.sh") &&
-        fs::exists(current / "CMakeLists.txt")) {
-      return current;
-    }
-    if (!current.has_parent_path()) {
-      break;
-    }
-    current = current.parent_path();
-  }
-  throw std::runtime_error("could not locate repo root");
-}
-
-auto shell_quote(const std::string &value) -> std::string {
-  std::string quoted;
-  quoted.reserve(value.size() + 2);
-  quoted.push_back('\'');
-  for (const char c : value) {
-    if (c == '\'') {
-      quoted += "'\\''";
-    } else {
-      quoted.push_back(c);
-    }
-  }
-  quoted.push_back('\'');
-  return quoted;
-}
-
 auto run_capture(const std::string &command, const fs::path &capture_path)
     -> CommandResult {
   const std::string full_command =
       command + " > " + shell_quote(capture_path.string()) + " 2>&1";
 
   const int rc = std::system(full_command.c_str());
-  int exit_code = 127;
-  if (rc != -1) {
-    if (WIFEXITED(rc)) {
-      exit_code = WEXITSTATUS(rc);
-    } else if (WIFSIGNALED(rc)) {
-      exit_code = 128 + WTERMSIG(rc);
-    } else {
-      exit_code = rc;
-    }
-  }
+  const int exit_code = decode_system_result(rc);
 
   std::ifstream in(capture_path);
   if (!in) {
@@ -140,7 +107,7 @@ auto build_search_command(const fs::path &root, const std::string &width_flag,
                           const std::optional<fs::path> &cert_file = std::nullopt)
     -> std::string {
   std::string command =
-      shell_quote((root / "treewidzard.sh").string()) + " -atp " + width_flag +
+      shell_quote(launcher_path(root).string()) + " -atp " + width_flag +
       "=" + std::to_string(width_value) + " ";
 
   for (const auto &flag : flags) {
@@ -159,7 +126,7 @@ auto build_search_command(const fs::path &root, const std::string &width_flag,
 
 auto build_checkcert_command(const fs::path &root, const fs::path &property_file,
                              const fs::path &cert_file) -> std::string {
-  return shell_quote((root / "treewidzard.sh").string()) + " -checkcert " +
+  return shell_quote(launcher_path(root).string()) + " -checkcert " +
          shell_quote(property_file.string()) + " " +
          shell_quote(cert_file.string());
 }

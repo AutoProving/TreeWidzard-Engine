@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.18)
 project(treewidzard LANGUAGES CXX)
 
 include(CTest)
+include(GNUInstallDirs)
 
 # Set C++ standard to C++20
 set(CMAKE_CXX_STANDARD 20)
@@ -67,16 +68,40 @@ add_compile_definitions(YY_NO_INPUT=1 YY_NO_UNPUT=1)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-# Define default paths for DPCores and SearchStrategies
-set(TREEWIDZARD_DPCORES_DEFAULT_RAW "${CMAKE_CURRENT_BINARY_DIR}/DPCores")
+# Install layout for runtime-discovered plugins and the installed CLI wrapper.
+set(TREEWIDZARD_INSTALL_RUNTIME_DIR
+    "${CMAKE_INSTALL_LIBEXECDIR}/treewidzard")
+set(TREEWIDZARD_INSTALL_DPCORES_DIR
+    "${TREEWIDZARD_INSTALL_RUNTIME_DIR}/DPCores")
+set(TREEWIDZARD_INSTALL_SEARCHSTRATEGIES_DIR
+    "${TREEWIDZARD_INSTALL_RUNTIME_DIR}/SearchStrategies")
+set(TREEWIDZARD_INSTALL_FULL_RUNTIME_DIR
+    "${CMAKE_INSTALL_FULL_LIBEXECDIR}/treewidzard")
+set(TREEWIDZARD_INSTALL_FULL_DPCORES_DIR
+    "${TREEWIDZARD_INSTALL_FULL_RUNTIME_DIR}/DPCores")
+set(TREEWIDZARD_INSTALL_FULL_SEARCHSTRATEGIES_DIR
+    "${TREEWIDZARD_INSTALL_FULL_RUNTIME_DIR}/SearchStrategies")
+
+# Define default paths for DPCores and SearchStrategies. Build-tree locations
+# come first so local development is unaffected; installed wrappers override
+# these via environment variables for clean installs.
+set(TREEWIDZARD_DPCORES_DEFAULT_CANDIDATES
+    "${CMAKE_CURRENT_BINARY_DIR}/DPCores"
+    "${TREEWIDZARD_INSTALL_FULL_DPCORES_DIR}")
+list(JOIN TREEWIDZARD_DPCORES_DEFAULT_CANDIDATES
+     "${TREEWIDZARD_PATH_LIST_SEPARATOR}" TREEWIDZARD_DPCORES_DEFAULT_RAW)
 if(DEFINED TREEWIDZARD_DPCORES_DEFAULT AND
    NOT "${TREEWIDZARD_DPCORES_DEFAULT}" STREQUAL "")
   string(APPEND TREEWIDZARD_DPCORES_DEFAULT_RAW
          "${TREEWIDZARD_PATH_LIST_SEPARATOR}${TREEWIDZARD_DPCORES_DEFAULT}")
 endif()
 
-set(TREEWIDZARD_SEARCHSTRATEGIES_DEFAULT_RAW
-    "${CMAKE_CURRENT_BINARY_DIR}/SearchStrategies")
+set(TREEWIDZARD_SEARCHSTRATEGIES_DEFAULT_CANDIDATES
+    "${CMAKE_CURRENT_BINARY_DIR}/SearchStrategies"
+    "${TREEWIDZARD_INSTALL_FULL_SEARCHSTRATEGIES_DIR}")
+list(JOIN TREEWIDZARD_SEARCHSTRATEGIES_DEFAULT_CANDIDATES
+     "${TREEWIDZARD_PATH_LIST_SEPARATOR}"
+     TREEWIDZARD_SEARCHSTRATEGIES_DEFAULT_RAW)
 if(DEFINED TREEWIDZARD_SEARCHSTRATEGIES_DEFAULT AND
    NOT "${TREEWIDZARD_SEARCHSTRATEGIES_DEFAULT}" STREQUAL "")
   string(APPEND TREEWIDZARD_SEARCHSTRATEGIES_DEFAULT_RAW
@@ -155,9 +180,6 @@ set_target_properties(TreeWidzard-Core PROPERTIES
     VERSION 0.1.0
     SOVERSION 0
 )
-
-# Installation Rules
-include(GNUInstallDirs)
 
 # Install the library
 install(TARGETS TreeWidzard-Core
@@ -284,6 +306,34 @@ add_executable(treewidzard
 
 # Link the executable against the core library and Threads
 target_link_libraries(treewidzard PRIVATE TreeWidzard-Core ${CMAKE_DL_LIBS} Threads::Threads ${NUMA_LIBRARIES})
+
+install(TARGETS treewidzard
+    RUNTIME DESTINATION ${TREEWIDZARD_INSTALL_RUNTIME_DIR}
+)
+
+if(WIN32)
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmake/treewidzard-install.bat.in
+        ${CMAKE_CURRENT_BINARY_DIR}/treewidzard-install.bat
+        @ONLY
+    )
+
+    install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/treewidzard-install.bat
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+        RENAME treewidzard.bat
+    )
+else()
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmake/treewidzard-install.in
+        ${CMAKE_CURRENT_BINARY_DIR}/treewidzard-install
+        @ONLY
+    )
+
+    install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/treewidzard-install
+        DESTINATION ${CMAKE_INSTALL_BINDIR}
+        RENAME treewidzard
+    )
+endif()
 
 # Add subdirectories for DPCores and SearchStrategies
 add_subdirectory("DPCores")

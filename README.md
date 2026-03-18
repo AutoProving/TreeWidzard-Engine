@@ -28,60 +28,187 @@ docker build -t treewidzard:latest .
 docker run --rm -v $(pwd):/data treewidzard:latest --help
 ```
 
+## Recommended For Non-Specialists
+
+If you do not want to install compilers or build tools, use one of these:
+
+1. Docker: run `ghcr.io/farhad-vadiee/treewidzard:latest`
+2. GitHub Releases: download the archive for your platform, unpack it, and run the launcher in `treewidzard/bin/`
+
+When release archives are published, the launcher paths are:
+
+- Linux/macOS: `treewidzard/bin/treewidzard`
+- Windows: `treewidzard\\bin\\treewidzard.bat`
+
 ## Installation (Build from Source)
 
-
-All commands below should be executed in a Linux terminal. For instance, in Ubuntu to open a terminal click in ``activities`` and then type ``terminal``.
+Building from source is mainly for developers. TreeWidzard can be built from the command line on Linux, macOS, and Windows.
 
 ### Requirements
-The following software are assumed to be installed on your machine:
 
-1- A C++20 compiler (tested with GCC/11.2.0, should also work with any later version)
+- A C++20 compiler
+- CMake 3.18 or newer
+- Bison 3.0 or newer
+- Flex 2.6 or newer
 
-2- CMake/3.0.0 or a later version
+### Install Prerequisites
 
-### First Installation
+#### Linux (Ubuntu/Debian)
 
-Clone from GitHub:
-```commandline
-git clone https://github.com/AutoProving/TreeWidzard-Engine
+```bash
+sudo apt-get update
+sudo apt-get install -y git cmake build-essential bison flex
 ```
 
-Move into the TreeWidzard directory:
-```commandline
-cd TreeWidzard-Engine
+#### macOS (Homebrew)
+
+```bash
+brew install git cmake bison flex
 ```
 
-Configure build directory using CMake (here with the build directory named `Build`):
-```commandline
-cmake -BBuild
+#### Windows (MSYS2 MinGW 64-bit)
+
+Install [MSYS2](https://www.msys2.org/), open the `MSYS2 MinGW 64-bit` terminal, then run:
+
+```bash
+pacman -Syu
 ```
 
-Compile the program:
-```commandline
-cmake --build Build
+Close that terminal, reopen `MSYS2 MinGW 64-bit`, then run:
+
+```bash
+pacman -S --needed \
+  git \
+  mingw-w64-x86_64-toolchain \
+  mingw-w64-x86_64-cmake \
+  mingw-w64-x86_64-ninja \
+  mingw-w64-x86_64-bison \
+  mingw-w64-x86_64-flex
+```
+
+### Build In Place
+
+Use your repository URL or fork URL:
+
+```bash
+git clone https://github.com/farhad-vadiee/TreeWidzard.git
+cd TreeWidzard
+```
+
+On Linux or macOS:
+
+```bash
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build -j
+./treewidzard.sh --help
+```
+
+On Windows, run these from the `MSYS2 MinGW 64-bit` terminal:
+
+```bash
+cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+cmake --build build -j
+./treewidzard.bat --help
+```
+
+### Install To a Self-Contained Prefix
+
+On Linux or macOS:
+
+```bash
+cmake -S . -B build-install -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PWD/install"
+cmake --build build-install -j
+cmake --install build-install
+./install/bin/treewidzard --help
+```
+
+On Windows, run these from the `MSYS2 MinGW 64-bit` terminal:
+
+```bash
+cmake -S . -B build-install -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PWD/install"
+cmake --build build-install -j
+cmake --install build-install
+./install/bin/treewidzard.bat --help
 ```
 
 ### Updating
-Download any changes to the bundling code itself:
-```commandline
+
+Download new changes:
+
+```bash
 git pull
 ```
 
-For recompiling, run this again:
-```commandline
-cmake --build Build
+Rebuild:
+
+```bash
+cmake --build build
 ```
 
 ## Running TreeWidzard
-To print usage:
+
+To print usage from the build tree on Linux or macOS:
+
+```bash
+./treewidzard.sh --help
 ```
-./Build/treewidzard --help
+
+To print usage from the build tree on Windows:
+
+```bash
+./treewidzard.bat --help
+```
+
+To run the installed binary from the optional install prefix on Linux or macOS:
+
+```bash
+./install/bin/treewidzard --help
+```
+
+To run the installed binary from the optional install prefix on Windows:
+
+```bash
+./install/bin/treewidzard.bat --help
+```
+
+## Minimal Conjecture Example
+
+Example conjecture file:
+
+```text
+x := MaxDegree(4)
+y := ChromaticNumber(4)
+Formula
+x IMPLIES y
+```
+
+Example ATP run from the build tree on Linux or macOS:
+
+```bash
+./treewidzard.sh -atp tw=2 BreadthFirstSearch examples/conjectures/simple_implies.txt
+```
+
+On Windows:
+
+```bash
+./treewidzard.bat -atp tw=2 BreadthFirstSearch examples/conjectures/simple_implies.txt
 ```
 
 ## Testing
 
-See `docs/TESTING.md`.
+Run the test suite from the repo root:
+
+```bash
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build -j
+ctest --test-dir build --output-on-failure -j
+```
+
+Run only certificate tests:
+
+```bash
+ctest --test-dir build --output-on-failure -R '^Certificates\\.'
+```
 
 ## 📚 Using as a Library
 

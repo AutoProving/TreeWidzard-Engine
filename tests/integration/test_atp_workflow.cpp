@@ -36,6 +36,20 @@ protected:
   std::string test_dir;
 };
 
+namespace {
+
+auto dynamic_library_extension() -> const char * {
+#ifdef _WIN32
+  return ".dll";
+#elif __APPLE__
+  return ".dylib";
+#else
+  return ".so";
+#endif
+}
+
+} // namespace
+
 // Test: Simple conjecture file creation
 TEST_F(ATPIntegrationTest, ConjectureFileCreation) {
   std::string conjecture = R"(x := ChromaticNumber(3)
@@ -125,8 +139,9 @@ TEST_F(ATPIntegrationTest, SearchStrategyAvailability) {
   if (std::filesystem::exists(search_dir)) {
     int found_count = 0;
     for (const auto &strategy : strategies) {
-      std::string dylib_path = search_dir + "/" + strategy + ".dylib";
-      if (std::filesystem::exists(dylib_path)) {
+      std::string library_path =
+          search_dir + "/" + strategy + dynamic_library_extension();
+      if (std::filesystem::exists(library_path)) {
         found_count++;
       }
     }

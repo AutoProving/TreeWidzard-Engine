@@ -1,3 +1,5 @@
+#include "../utils/cli_test_support.h"
+
 #include "TreeWidzard.h"
 #include "Controller/InputController.h"
 #include "Kernel/BreadthFirstTraversal.h"
@@ -8,12 +10,15 @@
 #include <optional>
 #include <stdexcept>
 #include <string>
-#include <sys/wait.h>
 #include <vector>
 
 #include <gtest/gtest.h>
 
 namespace fs = std::filesystem;
+using TreeWidzard::Testing::find_repo_root;
+using TreeWidzard::Testing::launcher_path;
+using TreeWidzard::Testing::run_cmd;
+using TreeWidzard::Testing::shell_quote;
 
 namespace {
 
@@ -54,50 +59,6 @@ private:
   std::string name_;
   std::optional<std::string> original_;
 };
-
-auto find_repo_root() -> fs::path {
-  fs::path current = fs::current_path();
-  for (int depth = 0; depth < 10; ++depth) {
-    if (fs::exists(current / "treewidzard.sh") &&
-        fs::exists(current / "CMakeLists.txt")) {
-      return current;
-    }
-    if (!current.has_parent_path()) {
-      break;
-    }
-    current = current.parent_path();
-  }
-  throw std::runtime_error("could not locate repo root");
-}
-
-auto shell_quote(const std::string &value) -> std::string {
-  std::string quoted;
-  quoted.reserve(value.size() + 2);
-  quoted.push_back('\'');
-  for (const char c : value) {
-    if (c == '\'') {
-      quoted += "'\\''";
-    } else {
-      quoted.push_back(c);
-    }
-  }
-  quoted.push_back('\'');
-  return quoted;
-}
-
-auto run_cmd(const std::string &command) -> int {
-  const int rc = std::system(command.c_str());
-  if (rc == -1) {
-    return 127;
-  }
-  if (WIFEXITED(rc)) {
-    return WEXITSTATUS(rc);
-  }
-  if (WIFSIGNALED(rc)) {
-    return 128 + WTERMSIG(rc);
-  }
-  return rc;
-}
 
 } // namespace
 
@@ -292,7 +253,7 @@ TEST(PublicApi, EngineRejectsUnexpectedParameterForParameterlessCore) {
 TEST(PublicApi, InvalidCliInvocationReturnsNonZero) {
   const fs::path root = find_repo_root();
   const std::string command =
-      shell_quote((root / "treewidzard.sh").string());
+      shell_quote(launcher_path(root).string());
 
   EXPECT_NE(run_cmd(command), 0);
 }

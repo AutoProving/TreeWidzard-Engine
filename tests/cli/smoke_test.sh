@@ -3,15 +3,35 @@
 # Smoke Test for TreeWidzard
 # Verifies that the executable runs and prints help
 
-# Locate executable
-if [ -f "./treewidzard" ]; then
-    EXE="./treewidzard"
-elif [ -f "build/treewidzard" ]; then
-    EXE="build/treewidzard"
-elif [ -f "/app/build/treewidzard" ]; then
-    EXE="/app/build/treewidzard"
-else
-    echo "Error: treewidzard executable not found"
+set -euo pipefail
+shopt -s nullglob
+
+resolve_executable() {
+    if [ -n "${TREEWIDZARD_BUILD_DIR:-}" ] && [ -f "${TREEWIDZARD_BUILD_DIR}/treewidzard" ]; then
+        printf '%s\n' "${TREEWIDZARD_BUILD_DIR}/treewidzard"
+        return 0
+    fi
+
+    local candidates=(
+        "./treewidzard"
+        "./build/treewidzard"
+        "./Build/treewidzard"
+        ./build*/treewidzard
+        "/app/build/treewidzard"
+    )
+    local candidate
+    for candidate in "${candidates[@]}"; do
+        if [ -f "$candidate" ]; then
+            printf '%s\n' "$candidate"
+            return 0
+        fi
+    done
+
+    return 1
+}
+
+if ! EXE="$(resolve_executable)"; then
+    echo "Error: treewidzard executable not found" >&2
     exit 1
 fi
 
@@ -19,8 +39,10 @@ echo "Using executable: $EXE"
 
 # Run help command
 echo "Running help check..."
-OUTPUT=$($EXE --help 2>&1 || true)
+set +e
+OUTPUT=$("$EXE" --help 2>&1)
 EXIT_CODE=$?
+set -e
 
 echo "Exit code: $EXIT_CODE"
 

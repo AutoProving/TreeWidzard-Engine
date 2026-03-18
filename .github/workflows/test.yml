@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         
     steps:
     - name: Checkout code
@@ -29,17 +29,51 @@ jobs:
       if: runner.os == 'macOS'
       run: |
         brew install bison flex cmake
-    
-    - name: Configure CMake
+
+    - name: Install dependencies (Windows)
+      if: runner.os == 'Windows'
+      uses: msys2/setup-msys2@v2
+      with:
+        msystem: MINGW64
+        update: true
+        install: >-
+          mingw-w64-x86_64-toolchain
+          mingw-w64-x86_64-cmake
+          mingw-w64-x86_64-ninja
+          mingw-w64-x86_64-bison
+          mingw-w64-x86_64-flex
+
+    - name: Configure CMake (Unix)
+      if: runner.os != 'Windows'
       run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-    
-    - name: Build TreeWidzard
+
+    - name: Configure CMake (Windows)
+      if: runner.os == 'Windows'
+      shell: msys2 {0}
+      run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build TreeWidzard (Unix)
+      if: runner.os != 'Windows'
       run: cmake --build build -j $(nproc 2>/dev/null || sysctl -n hw.ncpu)
-    
-    - name: Run CTest
+
+    - name: Build TreeWidzard (Windows)
+      if: runner.os == 'Windows'
+      shell: msys2 {0}
+      run: cmake --build build -j "$(nproc)"
+
+    - name: Run CTest (Unix)
+      if: runner.os != 'Windows'
       run: |
         ctest --test-dir build --output-on-failure \
           -j "$(nproc 2>/dev/null || sysctl -n hw.ncpu)" \
+          --output-junit ctest_results.xml
+
+    - name: Run CTest (Windows)
+      if: runner.os == 'Windows'
+      shell: msys2 {0}
+      run: |
+        ctest --test-dir build --output-on-failure \
+          -j "$(nproc)" \
           --output-junit ctest_results.xml
     
     - name: Upload Test Results
@@ -51,8 +85,8 @@ jobs:
           build/ctest_results.xml
           build/Testing/**
     
-    - name: Test Summary
-      if: always()
+    - name: Test Summary (Unix)
+      if: always() && runner.os != 'Windows'
       run: |
         echo "## Test Results" >> $GITHUB_STEP_SUMMARY
         echo "Build completed on ${{ matrix.os }}" >> $GITHUB_STEP_SUMMARY
@@ -61,6 +95,18 @@ jobs:
         else
           echo "❌ ctest did not produce JUnit output" >> $GITHUB_STEP_SUMMARY
         fi
+
+    - name: Test Summary (Windows)
+      if: always() && runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "## Test Results"
+        Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "Build completed on ${{ matrix.os }}"
+        if (Test-Path 'build/ctest_results.xml') {
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "ctest completed and produced JUnit output"
+        } else {
+          Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "ctest did not produce JUnit output"
+        }
 
   code-quality:
     name: Code Quality Checks

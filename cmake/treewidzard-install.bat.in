@@ -1,0 +1,16 @@
+@echo off
+setlocal
+
+set "SCRIPT_DIR=%~dp0"
+set "TREEWIDZARD_RUNTIME_DIR=%SCRIPT_DIR%..\libexec\treewidzard"
+set "TREEWIDZARD_DPCORES=%TREEWIDZARD_RUNTIME_DIR%\DPCores"
+set "TREEWIDZARD_SEARCHSTRATEGIES=%TREEWIDZARD_RUNTIME_DIR%\SearchStrategies"
+set "PATH=%TREEWIDZARD_RUNTIME_DIR%;%PATH%"
+
+if not exist "%TREEWIDZARD_RUNTIME_DIR%\treewidzard.exe" (
+    echo Error: installed treewidzard executable not found at "%TREEWIDZARD_RUNTIME_DIR%\treewidzard.exe" 1>&2
+    exit /b 1
+)
+
+"%TREEWIDZARD_RUNTIME_DIR%\treewidzard.exe" %*
+exit /b %ERRORLEVEL%

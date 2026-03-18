@@ -65,4 +65,9 @@ foreach(file ${files})
         TreeWidzard-Core
         Threads::Threads
     )
+
+    install(TARGETS ${core_name}
+        LIBRARY DESTINATION ${TREEWIDZARD_INSTALL_DPCORES_DIR}
+        RUNTIME DESTINATION ${TREEWIDZARD_INSTALL_DPCORES_DIR}
+    )
 endforeach()
