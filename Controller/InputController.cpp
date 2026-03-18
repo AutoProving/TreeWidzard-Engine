@@ -85,8 +85,15 @@ void InputController::check_available_cores() {
 }
 
 void InputController::parse_input() {
-	std::unique_ptr<std::FILE, decltype(&std::fclose)> input_file(nullptr,
-																  &std::fclose);
+	struct FileCloser {
+		void operator()(std::FILE *file) const noexcept {
+			if (file) {
+				std::fclose(file);
+			}
+		}
+	};
+
+	std::unique_ptr<std::FILE, FileCloser> input_file(nullptr);
 	if (inputIsInlineSource) {
 		input_file.reset(tmpfile());
 		if (!input_file) {
