@@ -1,7 +1,6 @@
 #ifndef SEARCHSTRATEGYHANDLER_H
 #define SEARCHSTRATEGYHANDLER_H
 
-#include <dlfcn.h>
 #include <algorithm>
 #include <iostream>
 #include <memory>

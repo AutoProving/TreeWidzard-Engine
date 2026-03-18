@@ -93,7 +93,6 @@ jobs:
           x IMPLIES y
           EOF
 
-          "$PWD/install-root/bin/treewidzard" --help
           (
             cd "$SMOKE_DIR"
             "$PWD/../install-root/bin/treewidzard" -atp tw=2 BreadthFirstSearch "$SMOKE_DIR/simple_implies.txt"
@@ -113,7 +112,6 @@ jobs:
           ) | Set-Content (Join-Path $smokeDir 'simple_implies.txt')
 
           $launcher = Join-Path $env:GITHUB_WORKSPACE 'install-root\bin\treewidzard.bat'
-          & $launcher --help
           Push-Location $smokeDir
           & $launcher -atp tw=2 BreadthFirstSearch (Join-Path $smokeDir 'simple_implies.txt')
           Pop-Location

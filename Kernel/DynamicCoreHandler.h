@@ -1,7 +1,6 @@
 #ifndef DYNAMICCOREHANDLER_H
 #define DYNAMICCOREHANDLER_H
 
-#include <dlfcn.h>
 #include <iostream>
 #include <memory>
 #include <stdexcept>
