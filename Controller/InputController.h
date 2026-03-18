@@ -18,9 +18,27 @@
 #undef YYSTYPE
 #pragma push_macro("YYLTYPE")
 #undef YYLTYPE
+#ifdef TRUE
+#pragma push_macro("TRUE")
+#undef TRUE
+#define TREEWIDZARD_RESTORE_TRUE_MACRO 1
+#endif
+#ifdef FALSE
+#pragma push_macro("FALSE")
+#undef FALSE
+#define TREEWIDZARD_RESTORE_FALSE_MACRO 1
+#endif
 
 #include "input_parser.hpp"
 
+#ifdef TREEWIDZARD_RESTORE_FALSE_MACRO
+#pragma pop_macro("FALSE")
+#undef TREEWIDZARD_RESTORE_FALSE_MACRO
+#endif
+#ifdef TREEWIDZARD_RESTORE_TRUE_MACRO
+#pragma pop_macro("TRUE")
+#undef TREEWIDZARD_RESTORE_TRUE_MACRO
+#endif
 #pragma pop_macro("YYLTYPE")
 #pragma pop_macro("YYSTYPE")
 
