@@ -9,6 +9,7 @@
 #include <filesystem>
 #include <fstream>
 #include <algorithm>
+#include <cstdlib>
 #include <optional>
 #include <sstream>
 #include <string>
@@ -36,18 +37,34 @@ public:
     if (const char *existing = std::getenv(name_.c_str())) {
       original_ = existing;
     }
-    setenv(name_.c_str(), value.c_str(), 1);
+    set(name_, value);
   }
 
   ~ScopedEnvVar() {
     if (original_.has_value()) {
-      setenv(name_.c_str(), original_->c_str(), 1);
+      set(name_, *original_);
     } else {
-      unsetenv(name_.c_str());
+      clear(name_);
     }
   }
 
 private:
+  static void set(const std::string &name, const std::string &value) {
+#ifdef _WIN32
+    _putenv_s(name.c_str(), value.c_str());
+#else
+    setenv(name.c_str(), value.c_str(), 1);
+#endif
+  }
+
+  static void clear(const std::string &name) {
+#ifdef _WIN32
+    _putenv_s(name.c_str(), "");
+#else
+    unsetenv(name.c_str());
+#endif
+  }
+
   std::string name_;
   std::optional<std::string> original_;
 };

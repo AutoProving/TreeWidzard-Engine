@@ -1,4 +1,5 @@
 #include <chrono>
+#include <cstdlib>
 #include <cstdio>
 #include <ctime>
 #include <filesystem>
@@ -14,6 +15,19 @@
 
 extern std::FILE *command_in;
 
+namespace {
+
+auto set_environment_variable(const char *name, const std::string &value)
+    -> int {
+#ifdef _WIN32
+	return _putenv_s(name, value.c_str());
+#else
+	return setenv(name, value.c_str(), 1);
+#endif
+}
+
+} // namespace
+
 int main(int argc, char *arg[]) {
 	// Pre-parse argv for certificate options without touching the generated
 	// command parser.
@@ -28,7 +42,11 @@ int main(int argc, char *arg[]) {
 				return 20;
 			}
 			const std::string path = arg[i + 1];
-			setenv("TREEWIDZARD_CERT_PATH", path.c_str(), 1);
+			if (set_environment_variable("TREEWIDZARD_CERT_PATH", path) != 0) {
+				std::cerr << "Error: failed to set TREEWIDZARD_CERT_PATH."
+					  << std::endl;
+				return 20;
+			}
 			i++;
 			continue;
 		}
