@@ -107,12 +107,12 @@ jobs:
         run: |
           $smokeDir = Join-Path $env:GITHUB_WORKSPACE 'install-smoke-data'
           New-Item -ItemType Directory -Force -Path $smokeDir | Out-Null
-          @"
-x := MaxDegree(4)
-y := ChromaticNumber(4)
-Formula
-x IMPLIES y
-"@ | Set-Content (Join-Path $smokeDir 'simple_implies.txt')
+          @(
+            'x := MaxDegree(4)',
+            'y := ChromaticNumber(4)',
+            'Formula',
+            'x IMPLIES y'
+          ) | Set-Content (Join-Path $smokeDir 'simple_implies.txt')
 
           $launcher = Join-Path $env:GITHUB_WORKSPACE 'install-root\bin\treewidzard.bat'
           & $launcher --help
