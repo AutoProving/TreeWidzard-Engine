@@ -1,72 +1,80 @@
 # TreeWidzard
 
-## 🐳 Quick Start (Docker)
+## Quick Start
 
-The easiest way to run TreeWidzard is using Docker. This avoids setting up C++ compilers and dependencies manually.
+For most users, the simplest path is a release archive.
 
-### Prerequisites
-- [Docker](https://docs.docker.com/get-docker/) installed.
+1. Download the archive for your platform from the repository's GitHub Releases page.
+2. Unpack it.
+3. Run the launcher in `treewidzard/bin/`.
 
-### Running TreeWidzard
-To run the tool on files in your current directory:
-
-```bash
-# Pull and run the latest version
-docker run --rm -v $(pwd):/data ghcr.io/farhad-vadiee/treewidzard:latest --help
-```
-
-To analyze files (e.g., a graph and property file in your current folder):
-```bash
-docker run --rm -v $(pwd):/data ghcr.io/farhad-vadiee/treewidzard:latest \
-    -modelcheck PACE /data/property.txt /data/graph.gr
-```
-
-### Building Locally (Optional)
-If you prefer to build the image yourself:
-```bash
-docker build -t treewidzard:latest .
-docker run --rm -v $(pwd):/data treewidzard:latest --help
-```
-
-## Recommended For Non-Specialists
-
-If you do not want to install compilers or build tools, use one of these:
-
-1. Docker: run `ghcr.io/farhad-vadiee/treewidzard:latest`
-2. GitHub Releases: download the archive for your platform, unpack it, and run the launcher in `treewidzard/bin/`
-
-When release archives are published, the launcher paths are:
+Launcher paths:
 
 - Linux/macOS: `treewidzard/bin/treewidzard`
 - Windows: `treewidzard\\bin\\treewidzard.bat`
 
 ## Installation (Build from Source)
 
-Building from source is mainly for developers. TreeWidzard can be built from the command line on Linux, macOS, and Windows.
+Building from source is mainly for developers.
 
-### Requirements
+1. Clone the repository:
 
-- A C++20 compiler
-- CMake 3.18 or newer
-- Bison 3.0 or newer
-- Flex 2.6 or newer
+```bash
+git clone https://github.com/farhad-vadiee/TreeWidzard.git
+cd TreeWidzard
+```
 
-### Install Prerequisites
+2. Check whether the current machine already has the required build tools.
 
-#### Linux (Ubuntu/Debian)
+On Linux or macOS:
+
+```bash
+./check_requirements.sh
+```
+
+On Windows:
+
+```bat
+check_requirements.bat
+```
+
+3. If the checker passes:
+
+On Linux or macOS:
+
+```bash
+mkdir -p build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+make
+```
+
+On Windows, run these from the `MSYS2 MinGW 64-bit` terminal:
+
+```bash
+mkdir build
+cd build
+cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release
+ninja
+```
+
+4. If the checker fails, install the missing requirements for your system and run the checker again.
+
+Linux (Ubuntu/Debian):
 
 ```bash
 sudo apt-get update
-sudo apt-get install -y git cmake build-essential bison flex
+sudo apt-get install -y git cmake build-essential
 ```
 
-#### macOS (Homebrew)
+macOS (Homebrew):
 
 ```bash
-brew install git cmake bison flex
+xcode-select --install
+brew install git cmake
 ```
 
-#### Windows (MSYS2 MinGW 64-bit)
+Windows (MSYS2 MinGW 64-bit):
 
 Install [MSYS2](https://www.msys2.org/), open the `MSYS2 MinGW 64-bit` terminal, then run:
 
@@ -81,34 +89,28 @@ pacman -S --needed \
   git \
   mingw-w64-x86_64-toolchain \
   mingw-w64-x86_64-cmake \
-  mingw-w64-x86_64-ninja \
-  mingw-w64-x86_64-bison \
-  mingw-w64-x86_64-flex
+  mingw-w64-x86_64-ninja
 ```
 
-### Build In Place
+The checked-in parser sources are used by default, so most source builds do not require Bison or Flex.
 
-Use your repository URL or fork URL:
+### Optional: Regenerate the Parser
 
-```bash
-git clone https://github.com/farhad-vadiee/TreeWidzard.git
-cd TreeWidzard
-```
+The repository already includes generated parser files:
 
-On Linux or macOS:
+- `Parser/PropertyParser/input_parser.cpp`
+- `Parser/PropertyParser/input_parser.hpp`
+- `Parser/PropertyParser/input_lexer.cpp`
 
-```bash
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build -j
-./treewidzard.sh --help
-```
+You only need Bison 3.0+ and Flex 2.6+ if you edit:
 
-On Windows, run these from the `MSYS2 MinGW 64-bit` terminal:
+- `Parser/PropertyParser/input_parser.y`
+- `Parser/PropertyParser/input_lexer.l`
+
+To regenerate those files during configuration:
 
 ```bash
-cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
-cmake --build build -j
-./treewidzard.bat --help
+cmake -S . -B build -DTREEWIDZARD_REGENERATE_PROPERTY_PARSER=ON
 ```
 
 ### Install To a Self-Contained Prefix

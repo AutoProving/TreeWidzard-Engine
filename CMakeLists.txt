@@ -16,39 +16,52 @@ else()
   set(TREEWIDZARD_PATH_LIST_SEPARATOR ":")
 endif()
 
-# Prefer modern parser generators from common package-manager prefixes before
-# falling back to the ambient PATH. This avoids fresh macOS builds picking the
-# legacy /usr/bin/bison 2.3 when a newer Homebrew installation is available.
-set(TREEWIDZARD_PARSER_TOOL_HINTS
-    /opt/homebrew/opt/bison/bin
-    /opt/homebrew/opt/flex/bin
-    /opt/homebrew/bin
-    /usr/local/opt/bison/bin
-    /usr/local/opt/flex/bin
-    /usr/local/bin
-    /opt/local/bin)
+option(TREEWIDZARD_REGENERATE_PROPERTY_PARSER
+       "Regenerate Parser/PropertyParser sources from the grammar and lexer inputs"
+       OFF)
 
-find_program(TREEWIDZARD_PREFERRED_BISON
-             NAMES bison
-             HINTS ${TREEWIDZARD_PARSER_TOOL_HINTS}
-             NO_DEFAULT_PATH)
-if(TREEWIDZARD_PREFERRED_BISON)
-  set(BISON_EXECUTABLE "${TREEWIDZARD_PREFERRED_BISON}" CACHE FILEPATH
-      "Bison executable used for parser generation" FORCE)
+set(TREEWIDZARD_PROPERTY_PARSER_DIR
+    "${PROJECT_SOURCE_DIR}/Parser/PropertyParser")
+set(TREEWIDZARD_CHECKED_IN_PROPERTY_PARSER_FILES
+    "${TREEWIDZARD_PROPERTY_PARSER_DIR}/input_parser.cpp"
+    "${TREEWIDZARD_PROPERTY_PARSER_DIR}/input_parser.hpp"
+    "${TREEWIDZARD_PROPERTY_PARSER_DIR}/input_lexer.cpp")
+
+if(TREEWIDZARD_REGENERATE_PROPERTY_PARSER)
+  # Prefer modern parser generators from common package-manager prefixes before
+  # falling back to the ambient PATH. This avoids fresh macOS builds picking
+  # the legacy /usr/bin/bison 2.3 when a newer Homebrew installation is
+  # available.
+  set(TREEWIDZARD_PARSER_TOOL_HINTS
+      /opt/homebrew/opt/bison/bin
+      /opt/homebrew/opt/flex/bin
+      /opt/homebrew/bin
+      /usr/local/opt/bison/bin
+      /usr/local/opt/flex/bin
+      /usr/local/bin
+      /opt/local/bin)
+
+  find_program(TREEWIDZARD_PREFERRED_BISON
+               NAMES bison
+               HINTS ${TREEWIDZARD_PARSER_TOOL_HINTS}
+               NO_DEFAULT_PATH)
+  if(TREEWIDZARD_PREFERRED_BISON)
+    set(BISON_EXECUTABLE "${TREEWIDZARD_PREFERRED_BISON}" CACHE FILEPATH
+        "Bison executable used for parser generation" FORCE)
+  endif()
+
+  find_program(TREEWIDZARD_PREFERRED_FLEX
+               NAMES flex
+               HINTS ${TREEWIDZARD_PARSER_TOOL_HINTS}
+               NO_DEFAULT_PATH)
+  if(TREEWIDZARD_PREFERRED_FLEX)
+    set(FLEX_EXECUTABLE "${TREEWIDZARD_PREFERRED_FLEX}" CACHE FILEPATH
+        "Flex executable used for lexer generation" FORCE)
+  endif()
+
+  find_package(BISON 3.0 REQUIRED)
+  find_package(FLEX 2.6 REQUIRED)
 endif()
-
-find_program(TREEWIDZARD_PREFERRED_FLEX
-             NAMES flex
-             HINTS ${TREEWIDZARD_PARSER_TOOL_HINTS}
-             NO_DEFAULT_PATH)
-if(TREEWIDZARD_PREFERRED_FLEX)
-  set(FLEX_EXECUTABLE "${TREEWIDZARD_PREFERRED_FLEX}" CACHE FILEPATH
-      "Flex executable used for lexer generation" FORCE)
-endif()
-
-# Find BISON and FLEX
-find_package(BISON 3.0 REQUIRED)
-find_package(FLEX 2.6 REQUIRED)
 
 # Compiler options
 if (MSVC)
@@ -119,19 +132,58 @@ add_compile_definitions(TREEWIDZARD_SEARCHSTRATEGIES_DEFAULT="${TREEWIDZARD_SEAR
 # Set the environment variable for subprojects
 set(ENV{TREEWIDZARD} ${PROJECT_SOURCE_DIR})
 
-# Create directory for generated parser files
-file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Parser/PropertyParser)
+if(TREEWIDZARD_REGENERATE_PROPERTY_PARSER)
+    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/Parser/PropertyParser)
 
-# Generate Parsers
-bison_target(InputParser Parser/PropertyParser/input_parser.y ${CMAKE_CURRENT_BINARY_DIR}/Parser/PropertyParser/input_parser.cpp)
-flex_target(InputLexer Parser/PropertyParser/input_lexer.l ${CMAKE_CURRENT_BINARY_DIR}/Parser/PropertyParser/input_lexer.cpp)
-add_flex_bison_dependency(InputLexer InputParser)
+    bison_target(
+        InputParser
+        Parser/PropertyParser/input_parser.y
+        ${CMAKE_CURRENT_BINARY_DIR}/Parser/PropertyParser/input_parser.cpp
+        DEFINES_FILE
+        ${CMAKE_CURRENT_BINARY_DIR}/Parser/PropertyParser/input_parser.hpp
+    )
+    flex_target(
+        InputLexer
+        Parser/PropertyParser/input_lexer.l
+        ${CMAKE_CURRENT_BINARY_DIR}/Parser/PropertyParser/input_lexer.cpp
+    )
+    add_flex_bison_dependency(InputLexer InputParser)
+
+    set(TREEWIDZARD_PROPERTY_PARSER_SOURCES
+        ${BISON_InputParser_OUTPUTS}
+        ${FLEX_InputLexer_OUTPUTS}
+    )
+    set(TREEWIDZARD_PROPERTY_PARSER_INCLUDE_DIR
+        ${CMAKE_CURRENT_BINARY_DIR}/Parser/PropertyParser
+    )
+
+    message(STATUS "Regenerating property parser sources with Bison/Flex")
+else()
+    foreach(TREEWIDZARD_PROPERTY_PARSER_FILE
+            IN LISTS TREEWIDZARD_CHECKED_IN_PROPERTY_PARSER_FILES)
+        if(NOT EXISTS "${TREEWIDZARD_PROPERTY_PARSER_FILE}")
+            message(FATAL_ERROR
+                "Missing checked-in parser source '${TREEWIDZARD_PROPERTY_PARSER_FILE}'. "
+                "Reconfigure with -DTREEWIDZARD_REGENERATE_PROPERTY_PARSER=ON after installing Bison and Flex."
+            )
+        endif()
+    endforeach()
+
+    set(TREEWIDZARD_PROPERTY_PARSER_SOURCES
+        ${TREEWIDZARD_PROPERTY_PARSER_DIR}/input_parser.cpp
+        ${TREEWIDZARD_PROPERTY_PARSER_DIR}/input_lexer.cpp
+    )
+    set(TREEWIDZARD_PROPERTY_PARSER_INCLUDE_DIR
+        ${TREEWIDZARD_PROPERTY_PARSER_DIR}
+    )
+
+    message(STATUS "Using checked-in property parser sources")
+endif()
 
 # Include directories
 include_directories(
     ${PROJECT_SOURCE_DIR}/Controller
     ${PROJECT_SOURCE_DIR}/Kernel
-    ${PROJECT_SOURCE_DIR}/Parser/PropertyParser
     ${PROJECT_SOURCE_DIR}/Controller/Parser
     ${PROJECT_SOURCE_DIR}/ConcreteTreeDecomposition
     ${PROJECT_SOURCE_DIR}/Translation/PACE/Parser
@@ -140,7 +192,7 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/TreeAutomaton
     ${PROJECT_SOURCE_DIR}/Multigraph
     ${PROJECT_SOURCE_DIR}/Performance
-    ${CMAKE_CURRENT_BINARY_DIR}/Parser/PropertyParser # For generated headers
+    ${TREEWIDZARD_PROPERTY_PARSER_INCLUDE_DIR}
 )
 
 # Define the core library
@@ -171,8 +223,7 @@ add_library(TreeWidzard-Core
     TreeAutomaton/RunTree.cpp
     Multigraph/MultiGraph.cpp
     src/TreeWidzard.cpp
-    ${BISON_InputParser_OUTPUTS}
-    ${FLEX_InputLexer_OUTPUTS}
+    ${TREEWIDZARD_PROPERTY_PARSER_SOURCES}
 )
 
 # Standardize version and SO version
