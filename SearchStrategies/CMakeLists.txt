@@ -30,7 +30,7 @@
 
 ######
 cmake_minimum_required(VERSION 3.10)
-project(TreeWidzard-SearchStrategies)
+project(TreeWidzard-SearchStrategies LANGUAGES CXX)
 
 # Set C++ standard to C++20
 set(CMAKE_CXX_STANDARD 20)

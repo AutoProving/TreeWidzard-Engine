@@ -73,9 +73,6 @@ endif()
 # Optimization and debugging flags
 add_compile_options(-O3 -g3)
 
-# Linker flags
-set(CMAKE_EXE_LINKER_FLAGS "-rdynamic")
-
 # Define compile definitions
 add_compile_definitions(YY_NO_INPUT=1 YY_NO_UNPUT=1)
 

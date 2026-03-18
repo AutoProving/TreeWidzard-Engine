@@ -1,6 +1,6 @@
 # DPCores/CMakeLists.txt
 cmake_minimum_required(VERSION 3.10)
-project(TreeWidzard-DPCores)
+project(TreeWidzard-DPCores LANGUAGES CXX)
 
 # Set C++ standard to C++20
 set(CMAKE_CXX_STANDARD 20)
