@@ -46,9 +46,9 @@
 
 
 
-%token SEPERATOR  STRING LEFTP RIGHTP NAME AND OR IFF IMPLIES NOT TRUE FALSE COMMENT NUMBER_DOUBLE COMMA
+%token SEPERATOR  STRING LEFTP RIGHTP NAME AND OR IFF IMPLIES NOT BOOL_TRUE BOOL_FALSE COMMENT NUMBER_DOUBLE COMMA
         FORMULA_NAME EXP ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION INV_ EQUAL
-%type<string>  SEPERATOR STRING LEFTP RIGHTP NAME AND OR IFF IMPLIES NOT TRUE FALSE COMMENT VARIABLE ATOMIC_PREDICATE COMMA FORMULA_NAME EXP
+%type<string>  SEPERATOR STRING LEFTP RIGHTP NAME AND OR IFF IMPLIES NOT BOOL_TRUE BOOL_FALSE COMMENT VARIABLE ATOMIC_PREDICATE COMMA FORMULA_NAME EXP
 	ATLEAST ATMOST LESS BIGGER BINARY_ARITHMETIC_OPERATOR BINARY_FUNCTION UNARY_FUNCTION PARAMETER INV_ EQUAL
 %type<property> VARIABLE_CORE_ASSIGNMENT
 %type<conjectureNode> FORMULA SUB_FORMULA FORMULA_TERMINAL
@@ -155,9 +155,9 @@ SUB_FORMULA : SUB_FORMULA AND SUB_FORMULA {$$= new ConjectureNode(OPERATOR,"and"
                 }
             }
 
-            | TRUE {$$ = new ConjectureNode(NUMBER,1);}
+            | BOOL_TRUE {$$ = new ConjectureNode(NUMBER,1);}
 
-            | FALSE {$$ = new ConjectureNode(NUMBER,0);}
+            | BOOL_FALSE {$$ = new ConjectureNode(NUMBER,0);}
 
             | NUMBER_DOUBLE {$$= new ConjectureNode(NUMBER,$1);}
             ;
@@ -234,8 +234,8 @@ FORMULA     : FORMULA AND FORMULA {$$ = new ConjectureNode(OPERATOR,"and");
             | LEFTP FORMULA RIGHTP      {$$ = $2;}
             | FORMULA_TERMINAL
             ;
-FORMULA_TERMINAL : TRUE         {$$ = new ConjectureNode(NUMBER,1); }
-                 | FALSE        {$$ = new ConjectureNode(NUMBER,0); }
+FORMULA_TERMINAL : BOOL_TRUE    {$$ = new ConjectureNode(NUMBER,1); }
+                 | BOOL_FALSE   {$$ = new ConjectureNode(NUMBER,0); }
                   | VARIABLE     { if(varToProperty.count($1) and !sub_formula_variables.count($1) ){
                                    $$ = new ConjectureNode(CORE_VARIABLE, $1);
                                   }else if(sub_formula_variables.count($1) and !varToProperty.count($1) ) {
@@ -267,7 +267,6 @@ void input_error(Conjecture &/*conj*/, int &/*result*/,std::map<std::string,Dyna
   std::cerr << "\033[1;31m"<<msg <<"\033[0m"<< std::endl;
 
 }
-
 
 
 

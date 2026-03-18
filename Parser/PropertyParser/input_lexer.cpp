@@ -1161,8 +1161,8 @@ YY_RULE_SETUP
                                                         std::string s(yytext);
                                                         if (s == "EXP") { yylval.string = strdup(yytext); return EXP; }
                                                         if (s == "Formula" || s == "FORMULA") { yylval.string = strdup(yytext); return FORMULA_NAME; }
-                                                        if (s == "FALSE" || s == "False" || s == "false") { yylval.string = strdup(yytext); return FALSE; }
-                                                        if (s == "TRUE" || s == "True" || s == "true") { yylval.string = strdup(yytext); return TRUE; }
+                                                        if (s == "FALSE" || s == "False" || s == "false") { yylval.string = strdup(yytext); return BOOL_FALSE; }
+                                                        if (s == "TRUE" || s == "True" || s == "true") { yylval.string = strdup(yytext); return BOOL_TRUE; }
                                                         if (s == "IFF") { yylval.string = strdup(yytext); return IFF; }
                                                         if (s == "IMPLIES") { yylval.string = strdup(yytext); return IMPLIES; }
                                                         if (s == "AND") { yylval.string = strdup(yytext); return AND; }

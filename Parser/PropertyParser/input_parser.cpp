@@ -114,8 +114,8 @@ enum yysymbol_kind_t
   YYSYMBOL_IFF = 10,                       /* IFF  */
   YYSYMBOL_IMPLIES = 11,                   /* IMPLIES  */
   YYSYMBOL_NOT = 12,                       /* NOT  */
-  YYSYMBOL_TRUE = 13,                      /* TRUE  */
-  YYSYMBOL_FALSE = 14,                     /* FALSE  */
+  YYSYMBOL_BOOL_TRUE = 13,                 /* TRUE  */
+  YYSYMBOL_BOOL_FALSE = 14,                /* FALSE  */
   YYSYMBOL_COMMENT = 15,                   /* COMMENT  */
   YYSYMBOL_NUMBER_DOUBLE = 16,             /* NUMBER_DOUBLE  */
   YYSYMBOL_COMMA = 17,                     /* COMMA  */
@@ -1333,13 +1333,13 @@ yyreduce:
 #line 1334 "Parser/PropertyParser/input_parser.cpp"
     break;
 
-  case 20: /* SUB_FORMULA: TRUE  */
+  case 20: /* SUB_FORMULA: BOOL_TRUE  */
 #line 158 "Parser/PropertyParser/input_parser.y"
                    {(yyval.conjectureNode) = new ConjectureNode(NUMBER,1);}
 #line 1340 "Parser/PropertyParser/input_parser.cpp"
     break;
 
-  case 21: /* SUB_FORMULA: FALSE  */
+  case 21: /* SUB_FORMULA: BOOL_FALSE  */
 #line 160 "Parser/PropertyParser/input_parser.y"
                     {(yyval.conjectureNode) = new ConjectureNode(NUMBER,0);}
 #line 1346 "Parser/PropertyParser/input_parser.cpp"
@@ -1497,13 +1497,13 @@ yyreduce:
 #line 1498 "Parser/PropertyParser/input_parser.cpp"
     break;
 
-  case 39: /* FORMULA_TERMINAL: TRUE  */
+  case 39: /* FORMULA_TERMINAL: BOOL_TRUE  */
 #line 237 "Parser/PropertyParser/input_parser.y"
                                 {(yyval.conjectureNode) = new ConjectureNode(NUMBER,1); }
 #line 1504 "Parser/PropertyParser/input_parser.cpp"
     break;
 
-  case 40: /* FORMULA_TERMINAL: FALSE  */
+  case 40: /* FORMULA_TERMINAL: BOOL_FALSE  */
 #line 238 "Parser/PropertyParser/input_parser.y"
                                 {(yyval.conjectureNode) = new ConjectureNode(NUMBER,0); }
 #line 1510 "Parser/PropertyParser/input_parser.cpp"
