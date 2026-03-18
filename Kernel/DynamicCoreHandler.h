@@ -5,9 +5,9 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
-#include "../DynamicLibraryLoader/dynamic_library_loader.hpp"
 #include "../Multigraph/MultiGraph.h"
 #include "DynamicCore.h"
+#include "../DynamicLibraryLoader/dynamic_library_loader.hpp"
 
 class DynamicCoreHandler {
 	DynamicLibraryLoader<

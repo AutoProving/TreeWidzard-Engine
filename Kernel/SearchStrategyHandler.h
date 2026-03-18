@@ -4,8 +4,8 @@
 #include <algorithm>
 #include <iostream>
 #include <memory>
-#include "../DynamicLibraryLoader/dynamic_library_loader.hpp"
 #include "SearchStrategy.h"
+#include "../DynamicLibraryLoader/dynamic_library_loader.hpp"
 
 class SearchStrategyHandler {
   public:
