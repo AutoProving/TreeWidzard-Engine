@@ -121,7 +121,8 @@ struct MinorContainment_Generic_Core : CoreWrapper<MinorContainment_Generic_Core
     void parse_edges(const std::string &s) {
         std::istringstream iss(s);
         int a,b; while (iss>>a>>b) {
-            if (a==b) continue; if (a>b) std::swap(a,b);
+            if (a==b) continue;
+            if (a>b) std::swap(a,b);
             H_edges.insert({a,b});
         }
     }
@@ -132,7 +133,8 @@ struct MinorContainment_Generic_Core : CoreWrapper<MinorContainment_Generic_Core
         // Option 1: internal
         {
             auto a = w.clone();
-            if (!a->parent.count(i)) a->parent[i]=i; if (!a->tau.count(i)) a->tau[i] = -1;
+            if (!a->parent.count(i)) a->parent[i]=i;
+            if (!a->tau.count(i)) a->tau[i] = -1;
             ws.insert(a);
         }
         // Option 2: assign to any pattern vertex x in [0..nH-1]
@@ -155,7 +157,9 @@ struct MinorContainment_Generic_Core : CoreWrapper<MinorContainment_Generic_Core
         }
         for (auto &[r,vec] : root_labels) {
             for (size_t p=0;p<vec.size();++p) for (size_t q=p+1;q<vec.size();++q) {
-                int x = vec[p], y = vec[q]; if (x==y) continue; if (x>y) std::swap(x,y);
+                int x = vec[p], y = vec[q];
+                if (x==y) continue;
+                if (x>y) std::swap(x,y);
                 if (H_edges.count({x,y})) a->ok_edges.insert({x,y});
             }
         }
@@ -183,7 +187,9 @@ struct MinorContainment_Generic_Core : CoreWrapper<MinorContainment_Generic_Core
             if (r1u!=r1r2) a->parent[r1u]=r1r2;
         }
         // Merge tau: prefer existing, otherwise take w2's
-        for (auto [u,x] : w2.tau) if (!a->tau.count(u)) a->tau[u]=x;
+        for (auto [u,x] : w2.tau) {
+            if (!a->tau.count(u)) a->tau[u]=x;
+        }
         // Merge ok_edges and placed
         a->ok_edges.insert(w2.ok_edges.begin(), w2.ok_edges.end());
         a->placed.insert(w2.placed.begin(), w2.placed.end());
@@ -195,7 +201,9 @@ struct MinorContainment_Generic_Core : CoreWrapper<MinorContainment_Generic_Core
         }
         for (auto &[r,vec] : root_labels) {
             for (size_t p=0;p<vec.size();++p) for (size_t q=p+1;q<vec.size();++q) {
-                int x = vec[p], y = vec[q]; if (x==y) continue; if (x>y) std::swap(x,y);
+                int x = vec[p], y = vec[q];
+                if (x==y) continue;
+                if (x>y) std::swap(x,y);
                 if (H_edges.count({x,y})) a->ok_edges.insert({x,y});
             }
         }

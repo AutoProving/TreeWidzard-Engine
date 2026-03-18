@@ -84,6 +84,15 @@ inline auto shell_quote(const std::string &value) -> std::string {
 #endif
 }
 
+inline auto launcher_command(const std::filesystem::path &root)
+    -> std::string {
+#ifdef _WIN32
+  return "call " + shell_quote(launcher_path(root).string());
+#else
+  return shell_quote(launcher_path(root).string());
+#endif
+}
+
 inline auto decode_system_result(int rc) -> int {
   if (rc == -1) {
     return 127;

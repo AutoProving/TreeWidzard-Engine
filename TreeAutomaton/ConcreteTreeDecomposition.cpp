@@ -308,7 +308,7 @@ ConcreteTreeDecomposition::constructWitnesses(
             continue;
         }
 
-        const auto &symbol = current->getNodeContent().getSymbol();
+        const std::string symbol = current->getNodeContent().getSymbol();
         RunNodePtr runNode(new TermNode<RunNodeContent<State::ptr, ConcreteNode>>);
         auto runNodeContent =
             std::make_shared<RunNodeContent<State::ptr, ConcreteNode>>();

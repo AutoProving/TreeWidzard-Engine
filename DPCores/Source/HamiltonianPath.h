@@ -46,7 +46,7 @@ struct HP_Witness : WitnessWrapper<HP_Witness>
     static unsigned component_count(const WitnessAlias &w);
 
     template<class Rho>
-    static HP_Witness relabel(const HP_Witness &w_, const Rho &rho) {
+    static HP_Witness relabel_copy(const HP_Witness &w_, const Rho &rho) {
         HP_Witness w;
         for (auto [u,deg] : w_.d) w.d[rho.at(u)] = deg;
         for (auto [u,v] : w_.M) {

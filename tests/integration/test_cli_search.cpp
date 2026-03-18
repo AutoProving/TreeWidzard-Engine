@@ -15,7 +15,7 @@
 namespace fs = std::filesystem;
 using TreeWidzard::Testing::decode_system_result;
 using TreeWidzard::Testing::find_repo_root;
-using TreeWidzard::Testing::launcher_path;
+using TreeWidzard::Testing::launcher_command;
 using TreeWidzard::Testing::shell_quote;
 
 namespace {
@@ -107,7 +107,7 @@ auto build_search_command(const fs::path &root, const std::string &width_flag,
                           const std::optional<fs::path> &cert_file = std::nullopt)
     -> std::string {
   std::string command =
-      shell_quote(launcher_path(root).string()) + " -atp " + width_flag +
+      launcher_command(root) + " -atp " + width_flag +
       "=" + std::to_string(width_value) + " ";
 
   for (const auto &flag : flags) {
@@ -126,7 +126,7 @@ auto build_search_command(const fs::path &root, const std::string &width_flag,
 
 auto build_checkcert_command(const fs::path &root, const fs::path &property_file,
                              const fs::path &cert_file) -> std::string {
-  return shell_quote(launcher_path(root).string()) + " -checkcert " +
+  return launcher_command(root) + " -checkcert " +
          shell_quote(property_file.string()) + " " +
          shell_quote(cert_file.string());
 }

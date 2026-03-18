@@ -14,6 +14,7 @@
 
 namespace fs = std::filesystem;
 using TreeWidzard::Testing::find_repo_root;
+using TreeWidzard::Testing::launcher_command;
 using TreeWidzard::Testing::launcher_path;
 using TreeWidzard::Testing::run_cmd;
 using TreeWidzard::Testing::shell_quote;
@@ -62,14 +63,14 @@ TEST(Certificates, BFS_SAT_GeneratesAndChecks) {
 	const fs::path cert = tmp.path / "bfs_sat.twzcert";
 
 	const std::string gen =
-		shell_quote(launcher_path(root).string()) +
+		launcher_command(root) +
 		" -atp tw=2 BreadthFirstSearch " + shell_quote(property.string()) +
 		" -cert " + shell_quote(cert.string());
 	ASSERT_EQ(run_cmd(gen), 0);
 	ASSERT_TRUE(fs::exists(cert));
 
 	const std::string chk =
-		shell_quote(launcher_path(root).string()) + " -checkcert " +
+		launcher_command(root) + " -checkcert " +
 		shell_quote(property.string()) + " " + shell_quote(cert.string());
 	ASSERT_EQ(run_cmd(chk), 0);
 }
@@ -82,14 +83,14 @@ TEST(Certificates, ISO_SAT_GeneratesAndChecks) {
 	const fs::path cert = tmp.path / "iso_sat.twzcert";
 
 	const std::string gen =
-		shell_quote(launcher_path(root).string()) +
+		launcher_command(root) +
 		" -atp tw=2 IsomorphismBreadthFirstSearch " +
 		shell_quote(property.string()) + " -cert " + shell_quote(cert.string());
 	ASSERT_EQ(run_cmd(gen), 0);
 	ASSERT_TRUE(fs::exists(cert));
 
 	const std::string chk =
-		shell_quote(launcher_path(root).string()) + " -checkcert " +
+		launcher_command(root) + " -checkcert " +
 		shell_quote(property.string()) + " " + shell_quote(cert.string());
 	ASSERT_EQ(run_cmd(chk), 0);
 }
@@ -102,14 +103,14 @@ TEST(Certificates, PBFS_SAT_GeneratesAndChecks) {
 	const fs::path cert = tmp.path / "pbfs_sat.twzcert";
 
 	const std::string gen =
-		shell_quote(launcher_path(root).string()) +
+		launcher_command(root) +
 		" -atp tw=2 -nthreads 2 ParallelBreadthFirstSearch " +
 		shell_quote(property.string()) + " -cert " + shell_quote(cert.string());
 	ASSERT_EQ(run_cmd(gen), 0);
 	ASSERT_TRUE(fs::exists(cert));
 
 	const std::string chk =
-		shell_quote(launcher_path(root).string()) + " -checkcert " +
+		launcher_command(root) + " -checkcert " +
 		shell_quote(property.string()) + " " + shell_quote(cert.string());
 	ASSERT_EQ(run_cmd(chk), 0);
 }
@@ -122,14 +123,14 @@ TEST(Certificates, PISO_SAT_GeneratesAndChecks) {
 	const fs::path cert = tmp.path / "piso_sat.twzcert";
 
 	const std::string gen =
-		shell_quote(launcher_path(root).string()) +
+		launcher_command(root) +
 		" -atp tw=2 -nthreads 2 ParallelIsomorphismBreadthFirstSearch " +
 		shell_quote(property.string()) + " -cert " + shell_quote(cert.string());
 	ASSERT_EQ(run_cmd(gen), 0);
 	ASSERT_TRUE(fs::exists(cert));
 
 	const std::string chk =
-		shell_quote(launcher_path(root).string()) + " -checkcert " +
+		launcher_command(root) + " -checkcert " +
 		shell_quote(property.string()) + " " + shell_quote(cert.string());
 	ASSERT_EQ(run_cmd(chk), 0);
 }
@@ -142,14 +143,14 @@ TEST(Certificates, Premise_BFS_SAT_GeneratesAndChecks) {
 	const fs::path cert = tmp.path / "bfs_premise_sat.twzcert";
 
 	const std::string gen =
-		shell_quote(launcher_path(root).string()) +
+		launcher_command(root) +
 		" -atp tw=2 -premise BreadthFirstSearch " +
 		shell_quote(property.string()) + " -cert " + shell_quote(cert.string());
 	ASSERT_EQ(run_cmd(gen), 0);
 	ASSERT_TRUE(fs::exists(cert));
 
 	const std::string chk =
-		shell_quote(launcher_path(root).string()) + " -checkcert " +
+		launcher_command(root) + " -checkcert " +
 		shell_quote(property.string()) + " " + shell_quote(cert.string());
 	ASSERT_EQ(run_cmd(chk), 0);
 
@@ -167,14 +168,14 @@ TEST(Certificates, BFS_NO_GeneratesAndChecks) {
 	const fs::path cert = tmp.path / "bfs_no.twzcert";
 
 	const std::string gen =
-		shell_quote(launcher_path(root).string()) +
+		launcher_command(root) +
 		" -atp tw=3 BreadthFirstSearch " + shell_quote(property.string()) +
 		" -cert " + shell_quote(cert.string());
 	ASSERT_EQ(run_cmd(gen), 0);
 	ASSERT_TRUE(fs::exists(cert));
 
 	const std::string chk =
-		shell_quote(launcher_path(root).string()) + " -checkcert " +
+		launcher_command(root) + " -checkcert " +
 		shell_quote(property.string()) + " " + shell_quote(cert.string());
 	ASSERT_EQ(run_cmd(chk), 0);
 }
@@ -187,7 +188,7 @@ TEST(Certificates, Negative_TruncatedSATRejected) {
 	const fs::path cert = tmp.path / "bfs_sat.twzcert";
 
 	const std::string gen =
-		shell_quote(launcher_path(root).string()) +
+		launcher_command(root) +
 		" -atp tw=2 BreadthFirstSearch " + shell_quote(property.string()) +
 		" -cert " + shell_quote(cert.string());
 	ASSERT_EQ(run_cmd(gen), 0);
@@ -204,7 +205,7 @@ TEST(Certificates, Negative_TruncatedSATRejected) {
 	write_lines(truncated, out);
 
 	const std::string chk =
-		shell_quote(launcher_path(root).string()) + " -checkcert " +
+		launcher_command(root) + " -checkcert " +
 		shell_quote(property.string()) + " " + shell_quote(truncated.string());
 	ASSERT_NE(run_cmd(chk), 0);
 }
@@ -219,13 +220,13 @@ TEST(Certificates, Negative_WrongPropertyRejected) {
 	const fs::path cert = tmp.path / "bfs_sat.twzcert";
 
 	const std::string gen =
-		shell_quote(launcher_path(root).string()) +
+		launcher_command(root) +
 		" -atp tw=2 BreadthFirstSearch " + shell_quote(property_ok.string()) +
 		" -cert " + shell_quote(cert.string());
 	ASSERT_EQ(run_cmd(gen), 0);
 
 	const std::string chk =
-		shell_quote(launcher_path(root).string()) + " -checkcert " +
+		launcher_command(root) + " -checkcert " +
 		shell_quote(property_bad.string()) + " " + shell_quote(cert.string());
 	ASSERT_NE(run_cmd(chk), 0);
 }
@@ -238,7 +239,7 @@ TEST(Certificates, Negative_TamperedHeaderRejected) {
 	const fs::path cert = tmp.path / "bfs_sat.twzcert";
 
 	const std::string gen =
-		shell_quote(launcher_path(root).string()) +
+		launcher_command(root) +
 		" -atp tw=2 BreadthFirstSearch " + shell_quote(property.string()) +
 		" -cert " + shell_quote(cert.string());
 	ASSERT_EQ(run_cmd(gen), 0);
@@ -255,7 +256,7 @@ TEST(Certificates, Negative_TamperedHeaderRejected) {
 	write_lines(tampered, out);
 
 	const std::string chk =
-		shell_quote(launcher_path(root).string()) + " -checkcert " +
+		launcher_command(root) + " -checkcert " +
 		shell_quote(property.string()) + " " + shell_quote(tampered.string());
 	ASSERT_NE(run_cmd(chk), 0);
 }
@@ -268,7 +269,7 @@ TEST(Certificates, Negative_PremiseRequiresImplication) {
 	const fs::path cert = tmp.path / "bfs_no.twzcert";
 
 	const std::string gen =
-		shell_quote(launcher_path(root).string()) +
+		launcher_command(root) +
 		" -atp tw=3 BreadthFirstSearch " + shell_quote(property.string()) +
 		" -cert " + shell_quote(cert.string());
 	ASSERT_EQ(run_cmd(gen), 0);
@@ -284,7 +285,7 @@ TEST(Certificates, Negative_PremiseRequiresImplication) {
 	write_lines(tampered, lines);
 
 	const std::string chk =
-		shell_quote(launcher_path(root).string()) + " -checkcert " +
+		launcher_command(root) + " -checkcert " +
 		shell_quote(property.string()) + " " + shell_quote(tampered.string());
 	ASSERT_NE(run_cmd(chk), 0);
 }
@@ -297,7 +298,7 @@ TEST(Certificates, Negative_InvalidOpRejected) {
 	const fs::path cert = tmp.path / "bfs_sat.twzcert";
 
 	const std::string gen =
-		shell_quote(launcher_path(root).string()) +
+		launcher_command(root) +
 		" -atp tw=2 BreadthFirstSearch " + shell_quote(property.string()) +
 		" -cert " + shell_quote(cert.string());
 	ASSERT_EQ(run_cmd(gen), 0);
@@ -320,7 +321,7 @@ TEST(Certificates, Negative_InvalidOpRejected) {
 	write_lines(invalid, lines);
 
 	const std::string chk =
-		shell_quote(launcher_path(root).string()) + " -checkcert " +
+		launcher_command(root) + " -checkcert " +
 		shell_quote(property.string()) + " " + shell_quote(invalid.string());
 	ASSERT_NE(run_cmd(chk), 0);
 }
@@ -333,7 +334,7 @@ TEST(Certificates, Negative_InvalidJoinMapRejected) {
 	const fs::path cert = tmp.path / "iso_sat.twzcert";
 
 	const std::string gen =
-		shell_quote(launcher_path(root).string()) +
+		launcher_command(root) +
 		" -atp tw=2 IsomorphismBreadthFirstSearch " +
 		shell_quote(property.string()) + " -cert " + shell_quote(cert.string());
 	ASSERT_EQ(run_cmd(gen), 0);
@@ -352,7 +353,7 @@ TEST(Certificates, Negative_InvalidJoinMapRejected) {
 	write_lines(invalid, lines);
 
 	const std::string chk =
-		shell_quote(launcher_path(root).string()) + " -checkcert " +
+		launcher_command(root) + " -checkcert " +
 		shell_quote(property.string()) + " " + shell_quote(invalid.string());
 	ASSERT_NE(run_cmd(chk), 0);
 }

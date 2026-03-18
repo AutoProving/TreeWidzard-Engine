@@ -104,7 +104,7 @@ auto build_conjecture_source(
     }
 
     const auto &metadata = handler_it->second.get_metadata();
-    const std::string &parameter_type =
+    const std::string parameter_type =
         require_metadata_value(metadata, "ParameterType");
 
     conjecture_source << default_variable_name(index) << " := " << core_name

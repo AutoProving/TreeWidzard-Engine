@@ -83,5 +83,14 @@ target_link_libraries(run_tests
 # Add tests to CTest
 include(GoogleTest)
 gtest_discover_tests(unit_tests)
-gtest_discover_tests(integration_tests)
+
+set(TREEWIDZARD_INTEGRATION_TEST_ENV
+    "TREEWIDZARD_BUILD_DIR=${PROJECT_BINARY_DIR}"
+    "TREEWIDZARD_DPCORES=${PROJECT_BINARY_DIR}/DPCores"
+    "TREEWIDZARD_SEARCHSTRATEGIES=${PROJECT_BINARY_DIR}/SearchStrategies"
+)
+gtest_discover_tests(integration_tests
+    PROPERTIES
+        ENVIRONMENT "${TREEWIDZARD_INTEGRATION_TEST_ENV}"
+)
 gtest_discover_tests(run_tests)

@@ -16,6 +16,7 @@
 
 namespace fs = std::filesystem;
 using TreeWidzard::Testing::find_repo_root;
+using TreeWidzard::Testing::launcher_command;
 using TreeWidzard::Testing::launcher_path;
 using TreeWidzard::Testing::run_cmd;
 using TreeWidzard::Testing::shell_quote;
@@ -252,8 +253,7 @@ TEST(PublicApi, EngineRejectsUnexpectedParameterForParameterlessCore) {
 
 TEST(PublicApi, InvalidCliInvocationReturnsNonZero) {
   const fs::path root = find_repo_root();
-  const std::string command =
-      shell_quote(launcher_path(root).string());
+  const std::string command = launcher_command(root);
 
   EXPECT_NE(run_cmd(command), 0);
 }
