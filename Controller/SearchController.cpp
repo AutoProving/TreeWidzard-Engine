@@ -41,7 +41,7 @@ void SearchController::check_search() {
 		for (const auto &searchPluginPath : searchPluginPaths) {
 			for (const auto &entry :
 				 std::filesystem::directory_iterator(searchPluginPath)) {
-				std::string s = entry.path();
+				std::string s = entry.path().string();
 				// for linux .so, and windows .dll
 				if (s.find(DYNAMIC_LIB_EXTENSION) != std::string::npos) {
 					char *lib_path = const_cast<char *>(s.c_str());
