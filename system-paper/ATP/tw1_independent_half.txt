@@ -1,4 +1,0 @@
-v := VertexCount()
-ind := IndependentSet()
-Formula
-INV(ind) * 2 >= INV(v)

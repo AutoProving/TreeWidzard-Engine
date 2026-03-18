@@ -1,3 +1,0 @@
-x := CliqueNumberSimpleGraphs(5)
-Formula
-NOT x

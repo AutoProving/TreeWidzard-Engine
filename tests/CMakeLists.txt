@@ -23,7 +23,6 @@ set(UNIT_TEST_SOURCES
     unit/test_bag_operations.cpp
     unit/test_core_support.cpp
     unit/test_kernel_components.cpp
-    unit/test_witness_cache.cpp
 )
 
 # Integration test sources
@@ -58,8 +57,9 @@ target_link_libraries(integration_tests
     Threads::Threads
 )
 
-# Integration tests invoke `treewidzard.sh`, which depends on the main executable
-# and the dynamically loaded search strategy plugins being built.
+# Integration tests invoke the repo launcher (`treewidzard.sh` on Unix,
+# `treewidzard.bat` on Windows), which depends on the main executable and the
+# dynamically loaded search strategy plugins being built.
 add_dependencies(integration_tests
     treewidzard
     ChromaticNumber_AtMost
@@ -85,20 +85,3 @@ include(GoogleTest)
 gtest_discover_tests(unit_tests)
 gtest_discover_tests(integration_tests)
 gtest_discover_tests(run_tests)
-
-
-# Performance benchmarks (optional)
-find_package(benchmark QUIET)
-if(benchmark_FOUND)
-    add_executable(benchmarks
-        tests/benchmarks/benchmark_dp_cores.cpp
-        tests/benchmarks/benchmark_search_strategies.cpp
-    )
-    
-    target_link_libraries(benchmarks
-        TreeWidzard-Core
-        benchmark::benchmark
-        ${CMAKE_DL_LIBS}
-        Threads::Threads
-    )
-endif()

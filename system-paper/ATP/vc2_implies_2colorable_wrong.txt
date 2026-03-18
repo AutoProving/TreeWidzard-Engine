@@ -1,4 +1,0 @@
-vc  := VertexCover(2)
-col := ChromaticNumber(2)
-Formula
-vc IMPLIES col

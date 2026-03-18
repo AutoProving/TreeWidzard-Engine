@@ -1,3 +1,0 @@
-./treewidzard -modelcheck ITD ../system-paper/invariant-computation/independence_number.txt ../system-paper/invariant-computation/diamondITD.txt
-
-./treewidzard -modelcheck PACE ../system-paper/invariant-computation/independence_number.txt ../system-paper/invariant-computation/diamond.gr ../system-paper/invariant-computation/diamond.td

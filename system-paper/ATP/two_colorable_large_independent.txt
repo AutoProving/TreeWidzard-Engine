@@ -1,5 +1,0 @@
-v   := VertexCount()
-ind := IndependentSet()
-bip := ChromaticNumber(2)
-Formula
-bip IMPLIES (INV(ind) * 2 >= INV(v))

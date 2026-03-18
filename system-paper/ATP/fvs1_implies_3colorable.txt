@@ -1,4 +1,0 @@
-f   := FeedbackVertexSet(1)
-col := ChromaticNumber(3)
-Formula
-f IMPLIES col

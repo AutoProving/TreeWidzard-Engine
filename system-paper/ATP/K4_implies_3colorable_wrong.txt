@@ -1,4 +1,0 @@
-k4  := CliqueNumberSimpleGraphs(4)
-col := ChromaticNumber(3)
-Formula
-k4 IMPLIES col

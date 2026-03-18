@@ -1,3 +1,0 @@
-x := PerfectMatching()
-Formula
-x

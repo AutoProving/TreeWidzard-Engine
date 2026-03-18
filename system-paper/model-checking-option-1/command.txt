@@ -1,1 +1,0 @@
-./treewidzard -modelcheck PACE ../system-paper/model-checking-option-1/three_colorable.txt ../system-paper/model-checking-option-1/diamond.gr ../system-paper/model-checking-option-1/diamond.td

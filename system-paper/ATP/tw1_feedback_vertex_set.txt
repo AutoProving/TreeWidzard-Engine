@@ -1,3 +1,0 @@
-x := FeedbackVertexSet(0)
-Formula
-x

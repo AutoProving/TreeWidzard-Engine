@@ -1,3 +1,0 @@
-x := ChromaticNumber(9)
-Formula
-x

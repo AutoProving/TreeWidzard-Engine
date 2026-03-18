@@ -1,3 +1,0 @@
-x := ChromaticNumber(8)
-Formula
-x

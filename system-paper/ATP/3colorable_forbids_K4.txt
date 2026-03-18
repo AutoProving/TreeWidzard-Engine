@@ -1,4 +1,0 @@
-col3 := ChromaticNumber(3)
-k4   := CliqueNumberSimpleGraphs(4)
-Formula
-col3 IMPLIES NOT k4

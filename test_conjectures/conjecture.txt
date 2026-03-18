@@ -1,3 +1,0 @@
-x := VertexCount()
-Formula
-INV(x) < 10
