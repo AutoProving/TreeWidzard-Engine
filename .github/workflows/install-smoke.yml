@@ -36,7 +36,7 @@ jobs:
         uses: msys2/setup-msys2@v2
         with:
           msystem: MINGW64
-          update: true
+          update: false
           install: >-
             mingw-w64-x86_64-toolchain
             mingw-w64-x86_64-cmake
@@ -80,6 +80,27 @@ jobs:
         shell: msys2 {0}
         run: |
           cmake --install build-install
+
+      - name: Bundle Windows runtime DLLs
+        if: runner.os == 'Windows'
+        shell: msys2 {0}
+        run: |
+          set -euo pipefail
+          runtime_dir="$PWD/install-root/libexec/treewidzard"
+          deps_file="$PWD/windows-runtime-deps.txt"
+          : > "$deps_file"
+
+          ldd "$runtime_dir/treewidzard.exe" | awk '/=> \// { print $3 }' >> "$deps_file"
+          find "$runtime_dir/DPCores" "$runtime_dir/SearchStrategies" -name '*.dll' -print0 |
+          while IFS= read -r -d '' dll; do
+            ldd "$dll" | awk '/=> \// { print $3 }' >> "$deps_file"
+          done
+
+          sort -u "$deps_file" | while IFS= read -r dep; do
+            if [ -n "$dep" ]; then
+              cp -f "$dep" "$runtime_dir/"
+            fi
+          done
 
       - name: Run installed smoke test (Unix)
         if: runner.os != 'Windows'
