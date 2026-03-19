@@ -6,9 +6,7 @@
 #include <stdexcept>
 #include <string>
 
-#ifdef _WIN32
-#include <windows.h>
-#else
+#ifndef _WIN32
 #include <sys/wait.h>
 #endif
 
