@@ -64,6 +64,10 @@ void ConcreteTreeDecomposition::traverseNode(
 	} else if (strstr(node.getNodeContent().getSymbol().c_str(),
 					  "IntroVertex")) {
 		/////////////// Finding the introduced vertex ///////////
+		if (node.getChildren().empty()) {
+			std::cout << "ERROR: IntroVertex node has no children" << std::endl;
+			exit(20);
+		}
 		std::set<unsigned> bagSet =
 			node.getNodeContent().getBag().get_elements();
 		std::set<unsigned> childBagSet =
@@ -87,6 +91,10 @@ void ConcreteTreeDecomposition::traverseNode(
 	} else if (strstr(node.getNodeContent().getSymbol().c_str(),
 					  "ForgetVertex")) {
 		/////////////// Finding the Forgotten vertex ///////////
+		if (node.getChildren().empty()) {
+			std::cout << "ERROR: ForgetVertex node has no children" << std::endl;
+			exit(20);
+		}
 		std::set<unsigned> bagSet =
 			node.getNodeContent().getBag().get_elements();
 		std::set<unsigned> childBagSet =
@@ -110,6 +118,10 @@ void ConcreteTreeDecomposition::traverseNode(
 					 nVertices,
 					 nEdges); // Nothing happens. Just process the next bag.
 	} else if (strstr(node.getNodeContent().getSymbol().c_str(), "IntroEdge")) {
+		if (node.getChildren().empty()) {
+			std::cout << "ERROR: IntroEdge node has no children" << std::endl;
+			exit(20);
+		}
 		nEdges = nEdges + 1;
 		std::pair<unsigned, unsigned> e =
 			node.getNodeContent().getBag().get_edge();
@@ -119,6 +131,11 @@ void ConcreteTreeDecomposition::traverseNode(
 		traverseNode(*(node.getChildren()[0]), G, colorToVertexMapCopy,
 					 nVertices, nEdges);
 	} else if (node.getNodeContent().getSymbol() == "Join") {
+		if (node.getChildren().size() < 2) {
+			std::cout << "ERROR: Join node must have at least 2 children, has "
+					  << node.getChildren().size() << std::endl;
+			exit(20);
+		}
 		traverseNode(*(node.getChildren()[0]), G, colorToVertexMapCopy,
 					 nVertices, nEdges);
 		traverseNode(*(node.getChildren()[1]), G, colorToVertexMapCopy,

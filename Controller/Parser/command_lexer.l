@@ -31,7 +31,7 @@ pw                          yylval.string = strdup(yytext); return command_pw;
 PACE                        yylval.string = strdup(yytext); return command_parse_pace;
 ITD                    yylval.string = strdup(yytext); return command_parse_itd;
 ;                           yylval.string = strdup(yytext); return command_end;
-[0-9\.]+                    yylval.number = std::stof(yytext);   return command_number;
+[0-9]+(\.[0-9]+)?           yylval.number = std::stof(yytext);   return command_number;
 .+                          yylval.string = strdup(yytext); return command_string;
 [\n \t \r]                  ;
 %%

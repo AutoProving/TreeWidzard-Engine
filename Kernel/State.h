@@ -1,10 +1,11 @@
 #ifndef STATE_H
 #define STATE_H
 #include <cassert>
-#include <vector>
-#include <memory>
+#include <cstdint>
 #include <deque>
+#include <memory>
 #include <mutex>
+#include <vector>
 #include "Bag.h"
 #include "WitnessSet.h"
 
@@ -12,6 +13,8 @@ class State : private std::enable_shared_from_this<State> {
   private:
 	Bag bag;
 	std::vector<std::shared_ptr<WitnessSet>> witnessSetVector;
+	mutable bool hashCacheValid = false;
+	mutable uint64_t hashCache = 0;
 	
 	// Simple memory pool for State objects
 	struct StateMemoryPool {
@@ -65,11 +68,8 @@ class State : private std::enable_shared_from_this<State> {
 		}
 
 		struct Hash {
-			const uint64_t seed_ = 0;
 			uint64_t operator()(const State::ptr &ptr) const {
-				Hasher h(seed_);
-				ptr->hash(h);
-				return h.get();
+				return ptr->hashValue();
 			}
 		};
 		
@@ -82,12 +82,15 @@ class State : private std::enable_shared_from_this<State> {
 
 	ptr get_ptr() const { return ptr(this->shared_from_this()); }
 
-	Bag get_bag() const;
+	const Bag &get_bag() const;
+	Bag get_bag_copy() const;
 
 	void set_bag(const Bag &bag);
 
 	void setWitnessSetVector(
 		const std::vector<std::shared_ptr<WitnessSet>> &witnessSetVector);
+	void setWitnessSetVector(
+		std::vector<std::shared_ptr<WitnessSet>> &&witnessSetVector);
 
 	void addWitnessSet(std::shared_ptr<WitnessSet>);
 
@@ -109,7 +112,8 @@ class State : private std::enable_shared_from_this<State> {
 
 	std::string stateInformation() const;
 
-	std::shared_ptr<WitnessSet> getWitnessSet(int) const;
+	const std::shared_ptr<WitnessSet> &getWitnessSet(int) const;
+	std::shared_ptr<WitnessSet> getWitnessSetCopy(int) const;
 
 	size_t numberOfComponents() const;
 
@@ -119,6 +123,11 @@ class State : private std::enable_shared_from_this<State> {
 			   // relabel function propagates this relabeling to a State
 
 	void hash(Hasher &h) const;
+	uint64_t hashValue() const;
+
+  private:
+	void invalidateHashCache();
+	uint64_t computeHashValue() const;
 };
 
 #endif

@@ -57,7 +57,7 @@ struct IndependentSet_Max_Core: CoreWrapper<IndependentSet_Max_Core, Independent
     */
     static std::map<std::string, std::string> metadata() {
         return {
-            {"CoreName", "IndependentSet"},
+            {"CoreName", "IndependentSet_Max"},
             {"CoreType", "Max"},
             {"ParameterType", "None"},
         };
@@ -99,7 +99,7 @@ struct IndependentSet_Max_Core: CoreWrapper<IndependentSet_Max_Core, Independent
 
     void join_implementation(const Bag &, const WitnessAlias &w1, const WitnessAlias &w2, WitnessSet &witnessSet) {
         if (w1.used != w2.used) return;
-        std::uint64_t joinedCount = w1.size + w2.size - w1.used.size();
+        int joinedCount = w1.size + w2.size - static_cast<int>(w1.used.size());
         auto wPrime = w1.clone();
         wPrime->size = joinedCount;
         witnessSet.insert(wPrime);
@@ -114,9 +114,8 @@ struct IndependentSet_Max_Core: CoreWrapper<IndependentSet_Max_Core, Independent
         auto witnesses = std::vector<std::shared_ptr<WitnessAlias>>();
         for (const auto &w : witnessSet)
             witnesses.push_back(std::dynamic_pointer_cast<WitnessAlias>(w));
-    
+
         // Step 2: Sort witnesses by (used set, decreasing size).
-        // This ensures that for each fixed "used" pattern we keep the witness with maximal size.
         std::sort(
             witnesses.begin(),
             witnesses.end(),
@@ -127,18 +126,40 @@ struct IndependentSet_Max_Core: CoreWrapper<IndependentSet_Max_Core, Independent
                 return w0->size > w1->size;
             }
         );
-    
-        // Step 3: Remove redundant witnesses
-        // For each unique set of used labels, keep only the first (largest set size)
+
+        // Step 3: Remove redundant witnesses (same used set, keep largest size)
         witnesses.erase(std::unique(witnesses.begin(), witnesses.end(),
                                     [](const auto &w0, const auto &w1) {
                                         return w0->used == w1->used;
                                     }),
                         witnesses.end());
-    
-        // Step 4: Replace the original witness set with the cleaned one
+
+        // Step 4: Dominance pruning — if witness A has used ⊇ B.used and A.size >= B.size,
+        // then B is dominated and can be dropped. Sort by decreasing size for greedy pruning.
+        std::sort(witnesses.begin(), witnesses.end(),
+            [](const auto &a, const auto &b) { return a->size > b->size; });
+
+        std::vector<std::shared_ptr<WitnessAlias>> pruned;
+        pruned.reserve(witnesses.size());
+        for (auto &w : witnesses) {
+            bool dominated = false;
+            for (const auto &kept : pruned) {
+                // Check if kept dominates w: kept.size >= w.size (guaranteed by sort order)
+                // and w.used ⊆ kept.used
+                if (std::includes(kept->used.begin(), kept->used.end(),
+                                  w->used.begin(), w->used.end())) {
+                    dominated = true;
+                    break;
+                }
+            }
+            if (!dominated) {
+                pruned.push_back(std::move(w));
+            }
+        }
+
+        // Step 5: Replace the original witness set with the cleaned one
         witnessSet = WitnessSet();
-        for (auto &w : witnesses)
+        for (auto &w : pruned)
             witnessSet.insert(std::move(w));
     }
 

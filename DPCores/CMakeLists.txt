@@ -66,6 +66,12 @@ foreach(file ${files})
         Threads::Threads
     )
 
+    if(DEFINED TREEWIDZARD_PLUGIN_INSTALL_RPATH)
+        set_target_properties(${core_name} PROPERTIES
+            INSTALL_RPATH "${TREEWIDZARD_PLUGIN_INSTALL_RPATH}"
+        )
+    endif()
+
     install(TARGETS ${core_name}
         LIBRARY DESTINATION ${TREEWIDZARD_INSTALL_DPCORES_DIR}
         RUNTIME DESTINATION ${TREEWIDZARD_INSTALL_DPCORES_DIR}

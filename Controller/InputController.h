@@ -6,6 +6,7 @@
 #include "../Kernel/DynamicCoreHandler.h"
 #include "../Kernel/DynamicKernel.h"
 #include "../Kernel/PathList.h"
+#include "../Kernel/RuntimePaths.h"
 #include <filesystem>
 #include <iomanip>
 #include <iostream>
@@ -29,7 +30,7 @@
 #define TREEWIDZARD_RESTORE_FALSE_MACRO 1
 #endif
 
-#include "input_parser.hpp"
+#include "../Parser/PropertyParser/input_parser.hpp"
 
 #ifdef TREEWIDZARD_RESTORE_FALSE_MACRO
 #pragma pop_macro("FALSE")
@@ -68,6 +69,7 @@ private:
   DynamicKernel dynamicKernel;
   Width width;
   Conjecture conjecture;
+  std::vector<std::unique_ptr<DynamicCore>> ownedCores; // Owns cores created during construction
   bool inputIsInlineSource = false;
   bool quiet = false;
   InputControllerErrorMode errorMode = InputControllerErrorMode::Exit;
@@ -110,12 +112,7 @@ public:
       const std::vector<std::string> &dynamicPluginPath = default_paths(),
       bool quiet = false) -> std::map<std::string, DynamicCoreHandler>;
 
-  static auto default_paths() -> std::vector<std::string> {
-    if (const char *epaths = std::getenv("TREEWIDZARD_DPCORES")) {
-      return TreeWidzard::split_path_list(epaths);
-    }
-    return TreeWidzard::split_path_list(TREEWIDZARD_DPCORES_DEFAULT);
-  }
+  static auto default_paths() -> std::vector<std::string>;
   std::map<std::string, PropertyAssignment *> getvarToProperty() {
     return varToProperty;
   }

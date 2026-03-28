@@ -23,14 +23,14 @@ inline void show_manual() {
     [Width]: tw|pw = number
                 example: tw = 2 (The program will search graphs with tree-width at most 2)
                 example: pw = 2 (The program will search graphs with path-width at most 2)
-    Flag Options:
-        -pl          print loop
-        -ps          print states
-        -st          print state tree decomposition if a counterexample is found
-        -pdbgn       print directed bipartite graph in NAUTY format
-        -no-bfs-dag  disable creation of the bfs dag, to speed up the search (NOT WORKING IN THIS VERSION)
-        -nthreads    number of threads to use in parallel
-        -files       write the counter example into files. Files: ITD and Augmented ITD,
+	    Flag Options:
+	        -pl          print loop
+	        -ps          print states
+	        -st          print state tree decomposition if a counterexample is found (BreadthFirstSearch variants)
+	        -pdbgn       write directed bipartite graph in NAUTY format
+	        -no-bfs-dag  disable creation of the bfs dag, to speed up the search (NOT WORKING IN THIS VERSION)
+	        -nthreads    number of threads to use in parallel
+	        -files       write the counterexample artifacts into files
 
 	    Certificates (ATP mode):
 	        -cert <file> emit a replayable certificate (.twzcert text format)
@@ -46,7 +46,7 @@ inline void show_manual() {
      Flag Options:
             -files     write the counter example into files. Files: ITD and Augmented ITD, RunTree, Graph File, Graph in GML Format, Graph in PACE Format, Tree Decomposition
 )___";
-	exit(20);
+	exit(0);
 }
 
 #endif // TREEWIDZARD_AUXILIARYCONTROLLER_HPP

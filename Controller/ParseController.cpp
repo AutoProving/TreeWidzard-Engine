@@ -3,11 +3,18 @@
 ParseController::ParseController(const Flags &flag,
 								 const std::string &inputPath) {
 	this->flag = flag;
-	inputController = std::make_unique<InputController>(inputPath);
+	this->inputPath = inputPath;
+}
+
+void ParseController::ensureInputController() {
+	if (!inputController) {
+		inputController = std::make_unique<InputController>(inputPath);
+	}
 }
 
 void ParseController::parse_pace(std::string graphPath,
 								 std::string decompositionPath) {
+	ensureInputController();
 	auto multigraph = std::make_shared<MultiGraph>();
 
 	std::ifstream gr_in(graphPath);
@@ -104,6 +111,14 @@ void ParseController::parse_pace(std::string graphPath,
 }
 
 void ParseController::parse_itd(std::string itdPath) {
+	ensureInputController();
+	extern std::map<
+		int, std::shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>>>
+		labelToNode;
+	extern std::map<int, int> labelToParentLabel;
+	labelToNode.clear();
+	labelToParentLabel.clear();
+
 	atd_in = fopen(itdPath.c_str(), "r");
 	if (!atd_in) {
 		std::perror("File opening failed");
@@ -161,22 +176,25 @@ void ParseController::parse_itd(std::string itdPath) {
 }
 
 void ParseController::test_term() {
-	//    InstructiveTreeDecompositionNodeContent
-	//    instructiveTreeDecompositionNodeContent1("IntroVertex_13456");
-	//    InstructiveTreeDecompositionNodeContent
-	//    instructiveTreeDecompositionNodeContent2("IntroVertex_7_9");
-	//    ConcreteTreeDecomposition instructiveTreeDecomposition;
-	//    shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>> a1(new
-	//    TermNode<InstructiveTreeDecompositionNodeContent>);
-	//    shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>> a2(new
-	//    TermNode<InstructiveTreeDecompositionNodeContent>);
-	//    a1->setNodeContent(instructiveTreeDecompositionNodeContent1);
-	//    a2->setNodeContent(instructiveTreeDecompositionNodeContent2);
-	//    vector<shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>>
-	//    > children; children.push_back(a2); a2->setParent(a1);
-	//    a1->setChildren(children);
-	//    instructiveTreeDecomposition.setRoot(a1);
-	//    instructiveTreeDecomposition.printTermNodes();
-	//    TreeAutomaton<FarhadState,InstructiveTreeDecompositionNodeContent>
-	//    treeAutomaton;
+	extern std::FILE *term_in;
+	term_in = fopen(inputPath.c_str(), "r");
+	if (!term_in) {
+		std::perror("File opening failed");
+		std::cerr << "\n " << inputPath << " could not open." << std::endl;
+		exit(20);
+	}
+
+	Term<std::string> term;
+	int result = 0;
+	result = term_parse(term, result);
+	fclose(term_in);
+	term_in = nullptr;
+
+	if (result != 0) {
+		std::cout << " Error: input file " << inputPath
+				  << " is not in valid format" << std::endl;
+		exit(20);
+	}
+
+	term.printTermNodes();
 }

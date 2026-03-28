@@ -66,7 +66,7 @@ class WitnessWrapper : public Witness {
 	std::shared_ptr<Witness> relabel(
 		const std::map<unsigned, unsigned> &relabelingMap) const override {
 		return std::make_shared<WitnessAlias>(
-			((const WitnessAlias *)this)
+			static_cast<const WitnessAlias *>(this)
 				->relabel_implementation(relabelingMap));
 	}
 

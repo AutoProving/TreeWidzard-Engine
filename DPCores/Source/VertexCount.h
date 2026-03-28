@@ -103,8 +103,8 @@ struct VertexCount_Core
    */
   void join_implementation(const Bag &b, const WitnessAlias &w1,
                            const WitnessAlias &w2, WitnessSet &witnessSet) {
-    unsigned joinedCount =
-        w1.vertexCount + w2.vertexCount - b.get_elements().size();
+    int joinedCount =
+        w1.vertexCount + w2.vertexCount - static_cast<int>(b.get_elements().size());
     auto wPrime = std::make_shared<WitnessAlias>();
     wPrime->vertexCount = joinedCount;
     witnessSet.insert(wPrime);
@@ -125,7 +125,7 @@ struct VertexCount_Core
   }
 
   int inv_implementation(const Bag &, const WitnessAlias &w) {
-    return w.vertexCount;
+    return static_cast<int>(w.vertexCount);
   }
 };
 

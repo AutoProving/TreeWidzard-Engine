@@ -71,7 +71,7 @@ struct MinorContainment_K2_Core : CoreWrapper<MinorContainment_K2_Core, MinorK2_
 {
     static std::map<std::string, std::string> metadata() {
         return {
-            {"CoreName","MinorK2"},
+            {"CoreName","MinorContainment_K2"},
             {"CoreType","Decision"},
             {"ParameterType","None"}
         };

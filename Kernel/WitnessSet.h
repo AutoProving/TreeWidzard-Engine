@@ -1,6 +1,9 @@
 #ifndef WITNESSSET_H
 #define WITNESSSET_H
 
+#include <algorithm>
+#include <bit>
+#include <cstdint>
 #include <map>
 #include <memory>
 #include <set>
@@ -40,8 +43,8 @@ public:
     else
       it = nullptr;
   };
-  BaseIterator(std::unique_ptr<AbstractIterator> it) {
-    this->it = std::move(it);
+  BaseIterator(std::unique_ptr<AbstractIterator> iter) {
+    this->it = std::move(iter);
   }
   BaseIterator() {};
   const valueType operator*() const { return it->dereference(); }
@@ -126,7 +129,20 @@ public:
   static std::map<std::shared_ptr<Witness>, int, Witness::IsLessSharedPtr>
       allWitnesses;
   static std::vector<std::shared_ptr<Witness>> witnessVector;
+#ifdef TREEWIDZARD_SINGLE_THREADED
+  struct NoOpMutex {
+    void lock() {}
+    void unlock() {}
+    bool try_lock() { return true; }
+  };
+  static NoOpMutex witnessMutex;
+#else
+  static std::mutex witnessMutex;
+#endif
   std::vector<uint8_t> mask;
+  int cardinality = 0;
+  mutable bool hashCacheValid = false;
+  mutable uint64_t hashCache = 0;
   class WitnessSetTypeOneIterator : public AbstractIterator {
   private:
     const WitnessSetTypeOne<T> *self;
@@ -178,6 +194,22 @@ public:
         new WitnessSetTypeOneIterator(this, static_cast<int>(8 * mask.size()))));
     return baseIterator;
   }
+
+  // Direct access: returns indices of set bits for direct iteration
+  std::vector<int> direct_indices() const {
+    std::vector<int> indices;
+    indices.reserve(cardinality);
+    const int limit = static_cast<int>(8 * mask.size());
+    for (int idx = 0; idx < limit; ++idx) {
+      if (mask[idx / 8] >> (idx % 8) & 1)
+        indices.push_back(idx);
+    }
+    return indices;
+  }
+  static const std::vector<std::shared_ptr<Witness>>& direct_witness_vector() {
+    return witnessVector;
+  }
+
   virtual void insert(std::shared_ptr<Witness> w) override;
   virtual void
   union_set_witness(std::shared_ptr<WitnessSet> witnessSet) override;
@@ -192,6 +224,12 @@ public:
   }
   int witnessVectorSize() { return witnessVector.size(); }
   void setEqual(const WitnessSet &other) override;
+
+private:
+  void invalidateHashCache() {
+    hashCacheValid = false;
+    hashCache = 0;
+  }
 };
 
 template <class T> class WitnessSetTypeTwo : public WitnessSet {
@@ -211,10 +249,34 @@ private:
     }
   };
 
-  using InnerContainer = std::set<std::shared_ptr<Witness>, compare>;
-  // using InnerContainer =
-  //      std::unordered_set<std::shared_ptr<Witness>, hash>;
+  using InnerContainer = std::vector<std::shared_ptr<Witness>>;
   InnerContainer container;
+  mutable bool hashCacheValid = false;
+  mutable uint64_t hashCache = 0;
+
+  void flush_pending() const {
+    if (pending.empty()) return;
+    // Sort pending by witness order
+    std::sort(pending.begin(), pending.end(), compare{});
+    // Remove duplicates within pending
+    auto last = std::unique(pending.begin(), pending.end(),
+        [](const auto &a, const auto &b) { return !compare{}(a, b) && !compare{}(b, a); });
+    pending.erase(last, pending.end());
+    // Merge pending into container
+    InnerContainer merged;
+    merged.reserve(container.size() + pending.size());
+    std::merge(container.begin(), container.end(),
+               pending.begin(), pending.end(),
+               std::back_inserter(merged), compare{});
+    // Remove duplicates from merge result
+    auto mlast = std::unique(merged.begin(), merged.end(),
+        [](const auto &a, const auto &b) { return !compare{}(a, b) && !compare{}(b, a); });
+    merged.erase(mlast, merged.end());
+    const_cast<InnerContainer&>(container) = std::move(merged);
+    pending.clear();
+  }
+
+  mutable InnerContainer pending;  // Unsorted buffer for batch insertion
 
   class WitnessSetTypeTwoIterator : public AbstractIterator {
   private:
@@ -242,15 +304,24 @@ private:
 
 public:
   BaseIterator begin() const override {
+    flush_pending();
     BaseIterator baseIterator(std::unique_ptr<AbstractIterator>(
         new WitnessSetTypeTwoIterator(container.begin())));
     return baseIterator;
   }
   BaseIterator end() const override {
+    flush_pending();
     BaseIterator baseIterator(std::unique_ptr<AbstractIterator>(
         new WitnessSetTypeTwoIterator(container.end())));
     return baseIterator;
   }
+
+  // Direct access methods bypassing virtual BaseIterator
+  const InnerContainer& direct_container() const {
+    flush_pending();
+    return container;
+  }
+
   void insert(std::shared_ptr<Witness> w) override;
   void union_set_witness(std::shared_ptr<WitnessSet> witnessSet) override;
   void print() override;
@@ -263,6 +334,17 @@ public:
     return std::make_shared<WitnessSetTypeTwo<T>>();
   }
   void setEqual(const WitnessSet &other) override;
+
+private:
+  static bool witnessesEqual(const std::shared_ptr<Witness> &lhs,
+                             const std::shared_ptr<Witness> &rhs) {
+    return !compare{}(lhs, rhs) && !compare{}(rhs, lhs);
+  }
+
+  void invalidateHashCache() {
+    hashCacheValid = false;
+    hashCache = 0;
+  }
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -273,35 +355,65 @@ std::map<std::shared_ptr<Witness>, int, Witness::IsLessSharedPtr>
     WitnessSetTypeOne<T>::allWitnesses;
 template <class T>
 std::vector<std::shared_ptr<Witness>> WitnessSetTypeOne<T>::witnessVector;
+#ifdef TREEWIDZARD_SINGLE_THREADED
+template <class T>
+typename WitnessSetTypeOne<T>::NoOpMutex WitnessSetTypeOne<T>::witnessMutex;
+#else
+template <class T>
+std::mutex WitnessSetTypeOne<T>::witnessMutex;
+#endif
 
 template <class T>
 void WitnessSetTypeOne<T>::insert(std::shared_ptr<Witness> ws) {
   int idx = -1;
-  auto it = allWitnesses.find(ws);
-  if (it != allWitnesses.end()) {
-    idx = it->second;
-  } else {
-    // new witness
-    idx = allWitnesses.size();
-    allWitnesses[ws] = idx;
-    witnessVector.push_back(ws);
+  {
+    std::lock_guard<std::mutex> lock(witnessMutex);
+    auto it = allWitnesses.find(ws);
+    if (it != allWitnesses.end()) {
+      idx = it->second;
+    } else {
+      // new witness
+      idx = allWitnesses.size();
+      allWitnesses[ws] = idx;
+      witnessVector.push_back(ws);
+    }
   }
 
-  while (idx >= static_cast<int>(8 * mask.size()))
-    mask.push_back(0);
+  if (idx >= static_cast<int>(8 * mask.size())) {
+    const std::size_t needed = static_cast<std::size_t>(idx / 8) + 1;
+    mask.resize(std::max(needed, mask.size() * 2), 0);
+  }
 
-  mask[idx / 8] |= (1 << (idx % 8));
+  const std::size_t byte_index = static_cast<std::size_t>(idx / 8);
+  const uint8_t bit = static_cast<uint8_t>(1u << (idx % 8));
+  if ((mask[byte_index] & bit) == 0) {
+    mask[byte_index] |= bit;
+    ++cardinality;
+    invalidateHashCache();
+  }
 }
 template <class T>
 void WitnessSetTypeOne<T>::union_set_witness(
     std::shared_ptr<WitnessSet> witnessSet) {
   if (WitnessSetTypeOne<T> *e =
           dynamic_cast<WitnessSetTypeOne<T> *>(&*witnessSet)) {
+    bool changed = false;
     for (std::size_t i = 0; i < e->mask.size(); ++i) {
       if (i == mask.size())
-        mask.push_back(e->mask[i]);
-      else
-        mask[i] |= e->mask[i];
+        mask.push_back(0);
+
+      const uint8_t old_byte = mask[i];
+      const uint8_t merged_byte = static_cast<uint8_t>(old_byte | e->mask[i]);
+      if (merged_byte != old_byte) {
+        cardinality += static_cast<int>(
+            std::popcount(static_cast<unsigned>(merged_byte)) -
+            std::popcount(static_cast<unsigned>(old_byte)));
+        mask[i] = merged_byte;
+        changed = true;
+      }
+    }
+    if (changed) {
+      invalidateHashCache();
     }
   }
 }
@@ -318,10 +430,16 @@ template <class T> std::string WitnessSetTypeOne<T>::witnessSetInformation() {
 }
 
 template <class T> void WitnessSetTypeOne<T>::hash(Hasher &h) const {
-  for (const auto &element : *this) {
-    element->hash(h);
-    h << -2u;
+  if (!hashCacheValid) {
+    Hasher inner(0);
+    inner << static_cast<unsigned>(mask.size());
+    for (const auto byte : mask) {
+      inner << static_cast<unsigned>(byte);
+    }
+    hashCache = inner.get();
+    hashCacheValid = true;
   }
+  h << hashCache;
 }
 
 template <class T> bool WitnessSetTypeOne<T>::isLess(WitnessSet &rhs) {
@@ -349,7 +467,7 @@ template <class T> bool WitnessSetTypeOne<T>::isLess(WitnessSet &rhs) {
 
 template <class T> bool WitnessSetTypeOne<T>::isEqual(WitnessSet &rhs) {
   if (WitnessSetTypeOne<T> *e = dynamic_cast<WitnessSetTypeOne<T> *>(&rhs)) {
-    return !(*this < *e or *e < *this);
+    return mask == e->mask;
   }
   std::cerr << "Error: In isEqual, WitnessSet type cast error." << std::endl;
   exit(20);
@@ -377,12 +495,7 @@ bool WitnessSetTypeOne::operator!=(WitnessSet &rhs) {
 
 }*/
 
-template <class T> int WitnessSetTypeOne<T>::size() {
-  int ret = 0;
-  for (std::size_t i = 0; i < 8 * mask.size(); ++i)
-    ret += (mask[i / 8] >> (i % 8) & 1);
-  return ret;
-}
+template <class T> int WitnessSetTypeOne<T>::size() { return cardinality; }
 
 template <class T>
 void WitnessSetTypeOne<T>::setEqual(const WitnessSet &other) {
@@ -398,13 +511,48 @@ void WitnessSetTypeOne<T>::setEqual(const WitnessSet &other) {
 /////////////WitnessSet TYPE Two////////////////
 template <class T>
 void WitnessSetTypeTwo<T>::insert(std::shared_ptr<Witness> ws) {
-  container.insert(ws);
+  // Add to pending buffer instead of doing O(n) shift immediately
+  pending.push_back(std::move(ws));
+  invalidateHashCache();
 }
 template <class T>
 void WitnessSetTypeTwo<T>::union_set_witness(
     std::shared_ptr<WitnessSet> witnessSet) {
-  for (auto element : *witnessSet)
-    container.insert(element);
+  if (&*witnessSet == this) {
+    return;
+  }
+
+  if (auto *typed_rhs = dynamic_cast<WitnessSetTypeTwo<T> *>(&*witnessSet)) {
+    flush_pending();
+    typed_rhs->flush_pending();
+    InnerContainer merged;
+    merged.reserve(container.size() + typed_rhs->container.size());
+
+    auto lhs_it = container.begin();
+    auto rhs_it = typed_rhs->container.begin();
+    while (lhs_it != container.end() || rhs_it != typed_rhs->container.end()) {
+      if (rhs_it == typed_rhs->container.end() ||
+          (lhs_it != container.end() && compare{}(*lhs_it, *rhs_it))) {
+        merged.push_back(*lhs_it);
+        ++lhs_it;
+      } else if (lhs_it == container.end() || compare{}(*rhs_it, *lhs_it)) {
+        merged.push_back(*rhs_it);
+        ++rhs_it;
+      } else {
+        merged.push_back(*lhs_it);
+        ++lhs_it;
+        ++rhs_it;
+      }
+    }
+
+    container = std::move(merged);
+    invalidateHashCache();
+    return;
+  }
+
+  for (const auto &element : *witnessSet) {
+    insert(element);
+  }
 }
 template <class T> void WitnessSetTypeTwo<T>::print() {
   for (auto element : *this)
@@ -417,21 +565,30 @@ template <class T> std::string WitnessSetTypeTwo<T>::witnessSetInformation() {
   return info;
 }
 template <class T> void WitnessSetTypeTwo<T>::hash(Hasher &h) const {
-  for (const auto &element : *this) {
-    element->hash(h);
-    h << -2u;
+  flush_pending();
+  if (!hashCacheValid) {
+    Hasher inner(0);
+    for (const auto &element : container) {
+      element->hash(inner);
+      inner << -2u;
+    }
+    hashCache = inner.get();
+    hashCacheValid = true;
   }
+  h << hashCache;
 }
 
 template <class T> bool WitnessSetTypeTwo<T>::isLess(WitnessSet &rhs) {
+  flush_pending();
   if (WitnessSetTypeTwo<T> *e = dynamic_cast<WitnessSetTypeTwo<T> *>(&rhs)) {
-    if (size() < rhs.size()) {
+    e->flush_pending();
+    if (container.size() < e->container.size()) {
       return true;
-    } else if (rhs.size() < size()) {
+    } else if (e->container.size() < container.size()) {
       return false;
     } else {
-      auto it = rhs.begin();
-      for (auto element : *this) {
+      auto it = e->container.begin();
+      for (const auto &element : container) {
         if (**it < *element) {
           return false;
         } else if (*element < **it) {
@@ -448,16 +605,16 @@ template <class T> bool WitnessSetTypeTwo<T>::isLess(WitnessSet &rhs) {
 }
 
 template <class T> bool WitnessSetTypeTwo<T>::isEqual(WitnessSet &rhs) {
+  flush_pending();
   if (WitnessSetTypeTwo *e = dynamic_cast<WitnessSetTypeTwo *>(&rhs)) {
-    if (size() != rhs.size()) {
+    e->flush_pending();
+    if (container.size() != e->container.size()) {
       return false;
-    } else {
-      auto it = rhs.begin();
-      for (auto element : *this) {
-        if (!(*element == **it)) {
-          return false;
-        }
-        ++it;
+    }
+
+    for (std::size_t i = 0; i < container.size(); ++i) {
+      if (!witnessesEqual(container[i], e->container[i])) {
+        return false;
       }
     }
     return true;
@@ -467,7 +624,10 @@ template <class T> bool WitnessSetTypeTwo<T>::isEqual(WitnessSet &rhs) {
   }
 }
 
-template <class T> int WitnessSetTypeTwo<T>::size() { return container.size(); }
+template <class T> int WitnessSetTypeTwo<T>::size() {
+  flush_pending();
+  return static_cast<int>(container.size());
+}
 
 template <class T>
 void WitnessSetTypeTwo<T>::setEqual(const WitnessSet &other) {

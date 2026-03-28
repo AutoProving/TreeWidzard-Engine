@@ -13,6 +13,7 @@
 #include "../Translation/PACE/Parser/td_parser.hpp"
 #include "../Translation/PACE/TreeDecompositionPACE.h"
 #include "../Translation/PACE/WitnessTreePACE.h"
+#include "../Translation/TreeAutomaton/term_parser.hpp"
 #include "../TreeAutomaton/InstructiveTreeDecomposition.h"
 #include "../TreeAutomaton/TreeAutomaton.h"
 #include "InputController.h"
@@ -23,7 +24,9 @@ extern std::FILE *atd_in;
 class ParseController {
   private:
 	Flags flag;
+	std::string inputPath;
 	std::unique_ptr<InputController> inputController;
+	void ensureInputController();
 
   public:
 	// constructor

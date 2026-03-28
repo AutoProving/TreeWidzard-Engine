@@ -66,7 +66,7 @@ struct FeedbackVertexSet_Core : CoreWrapper<FeedbackVertexSet_Core, FeedbackVert
 
     static std::map<std::string, std::string> metadata() {
         return {
-            {"CoreName", "FeedbackVertexSet"},
+            {"CoreName", "FeedbackVertexSet_AtMost"},
             {"CoreType", "Bool"},
             {"ParameterType", "UnsignedInt"},
         };
@@ -81,15 +81,25 @@ struct FeedbackVertexSet_Core : CoreWrapper<FeedbackVertexSet_Core, FeedbackVert
         k = static_cast<unsigned>(limit);
     }
 
+    static unsigned find_root(std::map<unsigned, unsigned> &comp, unsigned x) {
+        auto it = comp.find(x);
+        if (it == comp.end() || it->second == x) return x;
+        unsigned root = find_root(comp, it->second);
+        it->second = root;  // path compression
+        return root;
+    }
+
     static void normalize(WitnessAlias &w) {
         std::map<unsigned, unsigned> canonical;
         for (auto &[v, r] : w.comp) {
-            auto it = canonical.find(r);
-            if (it == canonical.end() || v < it->second) canonical[r] = v;
+            unsigned root = find_root(w.comp, v);
+            auto it = canonical.find(root);
+            if (it == canonical.end() || v < it->second) canonical[root] = v;
         }
         for (auto &[v, r] : w.comp) {
-            auto it = canonical.find(r);
-            if (it != canonical.end()) r = it->second;
+            unsigned root = find_root(w.comp, v);
+            auto it = canonical.find(root);
+            if (it != canonical.end()) w.comp[v] = it->second;
         }
     }
 
@@ -141,14 +151,17 @@ struct FeedbackVertexSet_Core : CoreWrapper<FeedbackVertexSet_Core, FeedbackVert
             ws.insert(std::move(wn));
             return;
         }
-        unsigned ri = it_i->second;
-        unsigned rj = it_j->second;
+        unsigned ri = find_root(wn->comp, i);
+        unsigned rj = find_root(wn->comp, j);
         // If both endpoints are kept and already connected, adding this edge would
         // create a cycle in the kept graph, so this partial solution is invalid.
         if (ri == rj) return;
         unsigned new_root = std::min(ri, rj);
         for (auto &kv : wn->comp) {
-            if (kv.second == ri || kv.second == rj) kv.second = new_root;
+            unsigned kv_root = find_root(wn->comp, kv.first);
+            if (kv_root == ri || kv_root == rj) {
+                wn->comp[kv.first] = new_root;
+            }
         }
         normalize(*wn);
         ws.insert(std::move(wn));
@@ -170,14 +183,17 @@ struct FeedbackVertexSet_Core : CoreWrapper<FeedbackVertexSet_Core, FeedbackVert
                 next.push_back(state);
                 continue;
             }
-            unsigned ru = it_u->second;
-            unsigned rv = it_v->second;
+            unsigned ru = find_root(state->comp, u);
+            unsigned rv = find_root(state->comp, v);
             // A connection between already-connected endpoints would create a cycle.
             if (ru == rv) continue;
             auto wn = state->clone();
             unsigned new_root = std::min(ru, rv);
             for (auto &kv : wn->comp) {
-                if (kv.second == ru || kv.second == rv) kv.second = new_root;
+                unsigned kv_root = find_root(wn->comp, kv.first);
+                if (kv_root == ru || kv_root == rv) {
+                    wn->comp[kv.first] = new_root;
+                }
             }
             normalize(*wn);
             next.push_back(std::move(wn));
@@ -190,7 +206,7 @@ struct FeedbackVertexSet_Core : CoreWrapper<FeedbackVertexSet_Core, FeedbackVert
         for (const auto &[v, _] : w1.comp) {
             if (!w2.comp.count(v)) return;
         }
-        unsigned bag_size = bag.size();
+        unsigned bag_size = static_cast<unsigned>(bag.size());
         unsigned kept_vertices = static_cast<unsigned>(w1.comp.size());
         unsigned removed_in_bag = (bag_size >= kept_vertices) ? (bag_size - kept_vertices) : 0;
 

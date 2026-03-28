@@ -100,6 +100,8 @@ TEST(CoreSupport, FlagsDefaultAndOverrideBehavior) {
 
   EXPECT_EQ(flags.get("PrintStates"), 0.0f);
   EXPECT_EQ(flags.get("Premise"), 0.0f);
+  EXPECT_EQ(flags.get("StateTree"), 0.0f);
+  EXPECT_EQ(flags.get("PrintDirectedBipartiteGraphNAUTY"), 0.0f);
   EXPECT_EQ(flags.get("MissingFlag"), -1.0f);
 
   flags.add_flag("Premise", 1.0f);
@@ -112,7 +114,7 @@ TEST(CoreSupport, FlagsDefaultAndOverrideBehavior) {
 
 TEST(CoreSupport, PropertyAssignmentCoversGettersSettersAndPrinting) {
   PropertyAssignment assignment;
-  assignment.setName("ChromaticNumber");
+  assignment.setName("ChromaticNumber_AtMost");
   assignment.setOp("<=");
   assignment.setParameters({1, 2, 3});
   assignment.setParameterType("UnsignedInt");
@@ -124,7 +126,7 @@ TEST(CoreSupport, PropertyAssignmentCoversGettersSettersAndPrinting) {
       const_cast<char *>(label.c_str()), 7, true};
   assignment.setParametersVec(parameter_vec);
 
-  EXPECT_EQ(assignment.getName(), "ChromaticNumber");
+  EXPECT_EQ(assignment.getName(), "ChromaticNumber_AtMost");
   EXPECT_EQ(assignment.getOp(), "<=");
   EXPECT_EQ(assignment.getParameters(), std::vector<int>({1, 2, 3}));
   EXPECT_EQ(assignment.getParameterType(), "UnsignedInt");
@@ -185,10 +187,16 @@ TEST(CoreSupport, StateComparisonHashRelabelAndInformation) {
   state_b.hash(hash_b);
   EXPECT_EQ(hash_a.get(), hash_b.get());
 
+  const uint64_t cached_before = state_a.hashValue();
+  state_a.set_bag(make_bag({1, 2, 3}));
+  const uint64_t cached_after = state_a.hashValue();
+  EXPECT_NE(cached_before, cached_after);
+  EXPECT_EQ(cached_after, state_a.hashValue());
+
   testing::internal::CaptureStdout();
   state_a.print();
   const std::string printed = testing::internal::GetCapturedStdout();
-  EXPECT_NE(printed.find("{1,2}"), std::string::npos);
+  EXPECT_NE(printed.find("{1,2,3}"), std::string::npos);
 
   const std::string info = state_a.stateInformation();
   EXPECT_NE(info.find("Core 1 WitnessSet"), std::string::npos);

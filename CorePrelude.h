@@ -1,24 +1,17 @@
 #pragma once
 
-#include <optional>
+// Core kernel headers — these transitively include most STL headers needed by DP cores
+// (algorithm, cassert, iterator, map, memory, set, string, utility, vector)
 #include "Kernel/Bag.h"
 #include "Kernel/CoreWrapper.h"
 #include "Kernel/WitnessSet.h"
 #include "Kernel/WitnessWrapper.h"
 #include "Kernel/DynamicCore.h"
 
-
-#include <set>         // For std::set
-#include <map>         // For std::map
-#include <unordered_map> // If used elsewhere in your project
-#include <vector>      // For std::vector
-#include <memory>      // For std::shared_ptr, std::make_shared
-#include <cassert>     // For assert
-#include <iostream>    // For std::ostream, std::cout (if used)
-#include <string>      // For std::string
-#include <utility>     // For std::move, std::pair
-#include <algorithm>   // For std::set_intersection
-#include <iterator> 
+// Additional STL headers not guaranteed by kernel includes
+#include <optional>
+#include <unordered_map>
+#include <iostream>
 
 namespace detail {
 
@@ -40,12 +33,6 @@ auto try_unpack_typed_args_impl(std::tuple<Ts...> &result, const auto &vec)
 
 } // namespace detail
 
-/// Given a vector of variants,
-/// try to unpack them into a tuple
-/// that is no longer variant (i.e. typed).
-///
-/// Returns nullopt if the vector is not of the right size,
-/// or if any of the variants are not of the right type.
 template <class... Ts>
 auto try_unpack_typed_args(const auto &vec)
 	-> std::optional<std::tuple<Ts...>> {
@@ -59,12 +46,6 @@ auto try_unpack_typed_args(const auto &vec)
 	return result;
 }
 
-/// Given a vector of variants,
-/// try to unpack them into a tuple
-/// that is no longer variant (i.e. typed).
-///
-/// Throws if the vector is not of the right size,
-/// or if any of the variants are not of the right type.
 template <class... Ts>
 auto unpack_typed_args(const auto &vec) -> std::tuple<Ts...> {
 	if (auto result = try_unpack_typed_args<Ts...>(vec))

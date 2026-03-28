@@ -16,6 +16,8 @@
     #error "Unsupported operating system"
 #endif
 
+extern std::map<std::string, ConjectureNode *> sub_formula_variables;
+
 [[noreturn]] void InputController::fail(const std::string &message) const {
 	if (errorMode == InputControllerErrorMode::Throw) {
 		throw std::runtime_error(message);
@@ -121,6 +123,7 @@ void InputController::parse_input() {
 
 	input_in = input_file.get();
 	int parse_status = 0;
+	sub_formula_variables.clear();
 	try {
 		parse_status =
 			input_parse(conjecture, result, coreList, varToCoreName,
@@ -195,11 +198,12 @@ void InputController::construct_dynamicKernel() {
 			std::unique_ptr<DynamicCore> handlerCore =
 				coreList.at(core.second->getName())
 					.create(core.second->getParametersVec());
-			DynamicCore *corePointer = handlerCore.release();
-			corePointer->setWidth(dynamicKernel.get_width().get_value());
+			handlerCore->setWidth(dynamicKernel.get_width().get_value());
 			if (dynamicKernel.isVarExists(core.first)) {
 				fail("ERROR: " + core.first + " exists in DynamicKernel");
 			}
+			DynamicCore *corePointer = handlerCore.get();
+			ownedCores.push_back(std::move(handlerCore));
 			dynamicKernel.addCore(*corePointer);
 			auto varToNameAndIndex = dynamicKernel.getVarToNameAndIndex();
 			varToNameAndIndex.insert(
@@ -256,6 +260,11 @@ InputController::InputController(std::string inputPath,
 	: InputController(std::move(inputPath), "", false,
 					  std::move(dynamicPluginPaths), std::move(width),
 					  errorMode, false) {}
+
+auto InputController::default_paths() -> std::vector<std::string> {
+	return TreeWidzard::default_plugin_paths(
+		"TREEWIDZARD_DPCORES", TREEWIDZARD_DPCORES_DEFAULT, "DPCores");
+}
 
 auto InputController::fromSourceText(
 	std::string inputSource, Width width,

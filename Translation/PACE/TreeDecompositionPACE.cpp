@@ -1,5 +1,25 @@
 #include "TreeDecompositionPACE.h"
 
+namespace {
+
+[[noreturn]] void report_tree_decomposition_error(const std::string &message) {
+	std::cout << "ERROR in TreeDecompositionPACE: " << message << std::endl;
+	exit(20);
+}
+
+void require_vertex_label(unsigned vertex, size_t max_vertex_label,
+						  const char *context) {
+	if (vertex == 0 || vertex > max_vertex_label) {
+		report_tree_decomposition_error(std::string(context) +
+										" references vertex " +
+										std::to_string(vertex) +
+										" outside the graph range 1.." +
+										std::to_string(max_vertex_label));
+	}
+}
+
+} // namespace
+
 RawInstructiveTreeDecomposition::RawInstructiveTreeDecomposition() {
 	// constructor
 }
@@ -180,6 +200,11 @@ bool TreeDecompositionPACE::constructRaw() {
 			if (!visited_bags.count(neighbor)) {
 				constructInnerNodes(visited_bags, neighbor, root);
 			}
+		}
+		if (visited_bags.size() != bags.size()) {
+			std::cout << "ERROR in TreeDecompositionPACE::constructRaw tree "
+						 "decomposition is disconnected" << std::endl;
+			return false;
 		}
 		return true;
 	} else {
@@ -600,6 +625,12 @@ bool TreeDecompositionPACE::colorNode(
 			unsigned color = 1;
 			const auto &elements = current_node->bag.get_elements();
 			for (unsigned v : elements) {
+				require_vertex_label(v, vertex_colors.size(),
+									 "colorNode(root)");
+				if (color > colors.size()) {
+					report_tree_decomposition_error(
+						"root bag requires more than width + 1 colors");
+				}
 				vertex_colors[v - 1] = color;
 				colors[color - 1] = v;
 				current_node->color_to_vertex_map.insert({color, v});
@@ -616,6 +647,8 @@ bool TreeDecompositionPACE::colorNode(
 			current_node->color_to_vertex_map =
 				current_node->parent->color_to_vertex_map;
 			for (unsigned v : set_diff) {
+				require_vertex_label(v, vertex_colors.size(),
+									 "colorNode(forget)");
 				unsigned color_id = vertex_colors[v - 1];
 				if (color_id == 0 || color_id > colors.size()) {
 					std::cout << "ERROR in TreeDecompositionPACE::colorNode "
@@ -630,6 +663,8 @@ bool TreeDecompositionPACE::colorNode(
 						   elements_parent.begin(), elements_parent.end(),
 						   inserter(set_diff, set_diff.begin()));
 			for (unsigned v : set_diff) {
+				require_vertex_label(v, vertex_colors.size(),
+									 "colorNode(introduce)");
 				auto slot =
 					std::find(colors.begin(), colors.end(), static_cast<unsigned>(0));
 				if (slot == colors.end()) {
@@ -662,7 +697,9 @@ bool TreeDecompositionPACE::colorTree() {
 	std::vector<unsigned> color_vertex;
 	std::vector<unsigned> vertex_color;
 	color_vertex.resize(width + 1, 0);
-	vertex_color.resize(multigraph->getVertices().size(), 0);
+	vertex_color.resize(
+		std::max<size_t>(num_graph_vertices, multigraph->getVertices().size()),
+		0);
 	return colorNode(root, std::move(color_vertex), std::move(vertex_color));
 }
 bool TreeDecompositionPACE::updateInnerNodeTD(
@@ -718,7 +755,12 @@ bool TreeDecompositionPACE::updateTD() {
 }
 
 void TreeDecompositionPACE::construct() {
-	constructRaw();
+	if (!validateParsedInput()) {
+		report_tree_decomposition_error("parsed input is not a valid tree decomposition");
+	}
+	if (!constructRaw()) {
+		report_tree_decomposition_error("failed to construct a connected raw tree decomposition");
+	}
 	convertToBinary(root);
 	joinFormat(root);
 	addEmptyNodes(root);
@@ -726,6 +768,10 @@ void TreeDecompositionPACE::construct() {
 	addForgetVertex(root);
 	std::set<unsigned> visited_edges;
 	addIntroEdge(root, visited_edges);
+	if (multigraph && visited_edges.size() != multigraph->getEdges().size()) {
+		report_tree_decomposition_error(
+			"tree decomposition does not cover every graph edge");
+	}
 	colorTree();
 	updateTD();
 	validateTree(root);
@@ -816,6 +862,55 @@ unsigned int TreeDecompositionPACE::getWidth() const { return width; }
 
 const std::string &TreeDecompositionPACE::getWidthType() const {
 	return width_type;
+}
+
+bool TreeDecompositionPACE::validateParsedInput() const {
+	if (!multigraph) {
+		std::cout << "ERROR in TreeDecompositionPACE::validateParsedInput "
+					 "multigraph is not set"
+				  << std::endl;
+		return false;
+	}
+	if (bags.empty()) {
+		std::cout << "ERROR in TreeDecompositionPACE::validateParsedInput bags "
+					 "are empty"
+				  << std::endl;
+		return false;
+	}
+	if (num_vertices != bags.size()) {
+		std::cout << "ERROR in TreeDecompositionPACE::validateParsedInput number "
+					 "of bags does not match the parsed header"
+				  << std::endl;
+		return false;
+	}
+	if (num_vertices > 0 && edges.size() + 1 != num_vertices) {
+		std::cout << "ERROR in TreeDecompositionPACE::validateParsedInput tree "
+					 "decomposition edges do not form a tree"
+				  << std::endl;
+		return false;
+	}
+
+	const auto &graph_vertices = multigraph->getVertices();
+	const size_t max_vertex_label =
+		std::max<size_t>(num_graph_vertices, graph_vertices.size());
+	for (const auto &bag : bags) {
+		if (bag.size() > width + 1) {
+			std::cout << "ERROR in TreeDecompositionPACE::validateParsedInput bag "
+						 "size exceeds width + 1"
+					  << std::endl;
+			return false;
+		}
+		for (unsigned vertex : bag) {
+			if (vertex == 0 || vertex > max_vertex_label ||
+				graph_vertices.count(vertex) == 0) {
+				std::cout << "ERROR in TreeDecompositionPACE::validateParsedInput "
+							 "bag references invalid graph vertex "
+						  << vertex << std::endl;
+				return false;
+			}
+		}
+	}
+	return true;
 }
 
 bool TreeDecompositionPACE::validateTree(

@@ -5,6 +5,7 @@
 #include <vector>
 #include <iostream>
 #include <set>
+#include <type_traits>
 
 class TermNodeContentType{
 public:
@@ -110,7 +111,11 @@ void TermNode<TermNodeContent>::printTermNode(unsigned &label) {
     }
     label++;
     std::cout<<label <<"  ";
-    nodeContent.print() ;
+    if constexpr (std::is_same_v<TermNodeContent, std::string>) {
+        std::cout << nodeContent;
+    } else {
+        nodeContent.print();
+    }
     if(childrenLabel.size()){
         std::cout<<"(";
         for(auto childNo:childrenLabel){
@@ -140,7 +145,14 @@ std::string TermNode<TermNodeContent>::nodeInformation(unsigned int &label) {
     }
     label++;
 
-    std::string t = std::to_string(label) + " "+ nodeContent.nodeInformation();
+    std::string content_information;
+    if constexpr (std::is_same_v<TermNodeContent, std::string>) {
+        content_information = nodeContent;
+    } else {
+        content_information = nodeContent.nodeInformation();
+    }
+
+    std::string t = std::to_string(label) + " "+ content_information;
     if(childrenLabel.size()){
         t+= "(";
         for(auto childNo:childrenLabel){

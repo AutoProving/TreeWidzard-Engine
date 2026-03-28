@@ -1,8 +1,8 @@
 
-high_degree := MaxDegree(5)
-medium_degree := MaxDegree(3)
-very_colorable := ChromaticNumber(6)
-moderately_colorable := ChromaticNumber(4)
+high_degree := MaxDegree_AtLeast(5)
+medium_degree := MaxDegree_AtLeast(3)
+very_colorable := ChromaticNumber_AtMost(6)
+moderately_colorable := ChromaticNumber_AtMost(4)
 
 Formula
 (high_degree IMPLIES very_colorable) AND 

@@ -77,24 +77,25 @@
 #define yylloc          term_lloc
 
 /* First part of user prologue.  */
-#line 8 "term_parser.y"
+#line 11 "Translation/TreeAutomaton/term_parser.y"
 
-    #include <iostream>
-    #include <string.h>
+    #include <algorithm>
     #include <cmath>
+    #include <iostream>
+    #include <map>
+    #include <memory>
+    #include <set>
+    #include <string>
+    #include <string.h>
     #include <vector>
     #include "../../TreeAutomaton/TreeAutomaton.h"
-    #include <algorithm>
-   
-    // this function will be generated
-    // using flex
+
     extern int yylex();
     extern int term_lineno;
     template<class S>
     extern void yyerror(Term<S> &term, int &result, char const* msg);
-  
 
-#line 98 "term_parser.cpp"
+#line 99 "Translation/TreeAutomaton/term_parser.cpp"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -129,18 +130,30 @@ enum yysymbol_kind_t
   YYSYMBOL_TR_COMMENT = 4,                 /* TR_COMMENT  */
   YYSYMBOL_TR_NEWLINE = 5,                 /* TR_NEWLINE  */
   YYSYMBOL_TR_NODE_SYMBOL = 6,             /* TR_NODE_SYMBOL  */
-  YYSYMBOL_TR_SEPARATOR = 7,               /* TR_SEPARATOR  */
-  YYSYMBOL_YYACCEPT = 8,                   /* $accept  */
-  YYSYMBOL_TR_START = 9,                   /* TR_START  */
-  YYSYMBOL_TR_NODES_INFO1 = 10,            /* TR_NODES_INFO1  */
-  YYSYMBOL_TR_NODES_INFO2 = 11,            /* TR_NODES_INFO2  */
-  YYSYMBOL_TR_NODE_CHILDREN = 12,          /* TR_NODE_CHILDREN  */
-  YYSYMBOL_TR_COMMENTS = 13                /* TR_COMMENTS  */
+  YYSYMBOL_TR_LEFTP = 7,                   /* TR_LEFTP  */
+  YYSYMBOL_TR_RIGHTP = 8,                  /* TR_RIGHTP  */
+  YYSYMBOL_TR_COMMA = 9,                   /* TR_COMMA  */
+  YYSYMBOL_YYACCEPT = 10,                  /* $accept  */
+  YYSYMBOL_TR_START = 11,                  /* TR_START  */
+  YYSYMBOL_12_1 = 12,                      /* $@1  */
+  YYSYMBOL_TR_LINES = 13,                  /* TR_LINES  */
+  YYSYMBOL_TR_LINE = 14,                   /* TR_LINE  */
+  YYSYMBOL_TR_NODE_LINE = 15,              /* TR_NODE_LINE  */
+  YYSYMBOL_TR_OPTIONAL_CHILDREN = 16,      /* TR_OPTIONAL_CHILDREN  */
+  YYSYMBOL_TR_CHILDREN = 17                /* TR_CHILDREN  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
 
 
+/* Unqualified %code blocks.  */
+#line 44 "Translation/TreeAutomaton/term_parser.y"
+
+    std::map<unsigned, std::shared_ptr<TermNode<std::string>>> term_label_to_node;
+    std::map<unsigned, std::vector<unsigned>> term_children_by_label;
+    std::map<unsigned, unsigned> term_parent_by_label;
+
+#line 157 "Translation/TreeAutomaton/term_parser.cpp"
 
 #ifdef short
 # undef short
@@ -464,21 +477,21 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  8
+#define YYFINAL  3
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   17
+#define YYLAST   16
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  8
+#define YYNTOKENS  10
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  6
+#define YYNNTS  8
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  13
+#define YYNRULES  14
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  22
+#define YYNSTATES  21
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   262
+#define YYMAXUTOK   264
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -518,15 +531,15 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7
+       5,     6,     7,     8,     9
 };
 
 #if TERM_DEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_int8 yyrline[] =
+static const yytype_uint8 yyrline[] =
 {
-       0,    41,    41,    43,    44,    45,    47,    48,    49,    52,
-      53,    54,    56,    57
+       0,    52,    52,    52,   105,   106,   108,   109,   110,   111,
+     113,   126,   127,   129,   134
 };
 #endif
 
@@ -543,9 +556,9 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
 static const char *const yytname[] =
 {
   "\"end of file\"", "error", "\"invalid token\"", "TR_NODE_NUM",
-  "TR_COMMENT", "TR_NEWLINE", "TR_NODE_SYMBOL", "TR_SEPARATOR", "$accept",
-  "TR_START", "TR_NODES_INFO1", "TR_NODES_INFO2", "TR_NODE_CHILDREN",
-  "TR_COMMENTS", YY_NULLPTR
+  "TR_COMMENT", "TR_NEWLINE", "TR_NODE_SYMBOL", "TR_LEFTP", "TR_RIGHTP",
+  "TR_COMMA", "$accept", "TR_START", "$@1", "TR_LINES", "TR_LINE",
+  "TR_NODE_LINE", "TR_OPTIONAL_CHILDREN", "TR_CHILDREN", YY_NULLPTR
 };
 
 static const char *
@@ -555,7 +568,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-15)
+#define YYPACT_NINF (-6)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -569,9 +582,9 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-       1,    -5,     3,     8,   -15,     1,     4,   -15,   -15,   -15,
-       6,     9,    10,   -15,    -2,   -15,     7,   -15,     5,     6,
-      10,   -15
+      -6,     5,    -3,    -6,     0,     2,    -6,    -6,    -3,     3,
+       4,    -6,    -6,    -6,     6,    -6,    -6,    -5,    -6,     7,
+      -6
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -579,21 +592,21 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       5,     0,    13,     0,     2,     5,     0,    12,     1,     4,
-      11,    10,     8,     9,     8,     3,     0,     7,     0,    11,
-       8,     6
+       2,     0,     5,     1,     0,     0,     7,     3,     5,     9,
+      12,     6,     4,     8,     0,    10,    13,     0,    11,     0,
+      14
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -15,   -15,    11,   -14,    -6,    15
+      -6,    -6,    -6,     8,    -6,    -6,    -6,    -6
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     3,     4,    15,    12,     5
+       0,     1,     2,     7,     8,     9,    15,    17
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -601,37 +614,37 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      17,    16,     6,    14,     1,     2,    21,     2,     8,    11,
-      10,    19,    13,    20,    18,    14,     9,     7
+       4,     5,     6,    18,    19,     3,    10,    11,    13,    16,
+      20,    14,     0,     0,     0,     0,    12
 };
 
 static const yytype_int8 yycheck[] =
 {
-      14,     3,     7,     5,     3,     4,    20,     4,     0,     3,
-       6,     6,     3,    19,     7,     5,     5,     2
+       3,     4,     5,     8,     9,     0,     6,     5,     5,     3,
+       3,     7,    -1,    -1,    -1,    -1,     8
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     3,     4,     9,    10,    13,     7,    13,     0,    10,
-       6,     3,    12,     3,     5,    11,     3,    11,     7,     6,
-      12,    11
+       0,    11,    12,     0,     3,     4,     5,    13,    14,    15,
+       6,     5,    13,     5,     7,    16,     3,    17,     8,     9,
+       3
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,     8,     9,    10,    10,    10,    11,    11,    11,    12,
-      12,    12,    13,    13
+       0,    10,    12,    11,    13,    13,    14,    14,    14,    14,
+      15,    16,    16,    17,    17
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     1,     5,     2,     0,     6,     2,     0,     2,
-       1,     0,     2,     0
+       0,     2,     0,     2,     2,     0,     2,     1,     2,     1,
+       3,     3,     0,     1,     3
 };
 
 
@@ -1211,14 +1224,115 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-  case 2: /* TR_START: TR_NODES_INFO1  */
-#line 41 "term_parser.y"
-                                                                       {std::cout<<"hello"<<std::endl;}
-#line 1218 "term_parser.cpp"
+  case 2: /* $@1: %empty  */
+#line 52 "Translation/TreeAutomaton/term_parser.y"
+                             {
+                                term_label_to_node.clear();
+                                term_children_by_label.clear();
+                                term_parent_by_label.clear();
+                             }
+#line 1235 "Translation/TreeAutomaton/term_parser.cpp"
+    break;
+
+  case 3: /* TR_START: $@1 TR_LINES  */
+#line 58 "Translation/TreeAutomaton/term_parser.y"
+                             {
+                                for (const auto &entry : term_children_by_label) {
+                                    auto parent_it = term_label_to_node.find(entry.first);
+                                    if (parent_it == term_label_to_node.end()) {
+                                        std::cout << "missing node " << entry.first << std::endl;
+                                        YYERROR;
+                                    }
+
+                                    std::vector<std::shared_ptr<TermNode<std::string>>> children;
+                                    for (unsigned child_label : entry.second) {
+                                        auto child_it = term_label_to_node.find(child_label);
+                                        if (child_it == term_label_to_node.end()) {
+                                            std::cout << "child label " << child_label << " is not defined" << std::endl;
+                                            YYERROR;
+                                        }
+                                        if (term_parent_by_label.count(child_label)) {
+                                            std::cout << "node " << child_label << " has two parents "
+                                                      << term_parent_by_label[child_label] << " and "
+                                                      << entry.first << std::endl;
+                                            YYERROR;
+                                        }
+                                        term_parent_by_label[child_label] = entry.first;
+                                        child_it->second->setParent(parent_it->second);
+                                        children.push_back(child_it->second);
+                                    }
+                                    parent_it->second->setChildren(children);
+                                }
+
+                                std::set<unsigned> root_candidates;
+                                for (const auto &entry : term_label_to_node) {
+                                    if (!term_parent_by_label.count(entry.first)) {
+                                        root_candidates.insert(entry.first);
+                                    }
+                                }
+
+                                if (term_label_to_node.empty()) {
+                                    result = 0;
+                                } else if (root_candidates.size() != 1) {
+                                    std::cout << "term should have exactly one root" << std::endl;
+                                    YYERROR;
+                                } else {
+                                    auto root = term_label_to_node[*root_candidates.begin()];
+                                    term.setRoot(root);
+                                    result = 0;
+                                }
+                             }
+#line 1286 "Translation/TreeAutomaton/term_parser.cpp"
+    break;
+
+  case 10: /* TR_NODE_LINE: TR_NODE_NUM TR_NODE_SYMBOL TR_OPTIONAL_CHILDREN  */
+#line 114 "Translation/TreeAutomaton/term_parser.y"
+                             {
+                                if (term_label_to_node.count((yyvsp[-2].number))) {
+                                    std::cout << "label " << (yyvsp[-2].number) << " is repeated" << std::endl;
+                                    YYERROR;
+                                }
+                                auto node = std::make_shared<TermNode<std::string>>();
+                                node->setNodeContent(std::string((yyvsp[-1].string)));
+                                term_label_to_node[(yyvsp[-2].number)] = node;
+                                term_children_by_label[(yyvsp[-2].number)] = *(yyvsp[0].numbers);
+                                delete (yyvsp[0].numbers);
+                             }
+#line 1302 "Translation/TreeAutomaton/term_parser.cpp"
+    break;
+
+  case 11: /* TR_OPTIONAL_CHILDREN: TR_LEFTP TR_CHILDREN TR_RIGHTP  */
+#line 126 "Translation/TreeAutomaton/term_parser.y"
+                                                            { (yyval.numbers) = (yyvsp[-1].numbers); }
+#line 1308 "Translation/TreeAutomaton/term_parser.cpp"
+    break;
+
+  case 12: /* TR_OPTIONAL_CHILDREN: %empty  */
+#line 127 "Translation/TreeAutomaton/term_parser.y"
+                                                           { (yyval.numbers) = new std::vector<unsigned>; }
+#line 1314 "Translation/TreeAutomaton/term_parser.cpp"
+    break;
+
+  case 13: /* TR_CHILDREN: TR_NODE_NUM  */
+#line 130 "Translation/TreeAutomaton/term_parser.y"
+                             {
+                                (yyval.numbers) = new std::vector<unsigned>;
+                                (yyval.numbers)->push_back((yyvsp[0].number));
+                             }
+#line 1323 "Translation/TreeAutomaton/term_parser.cpp"
+    break;
+
+  case 14: /* TR_CHILDREN: TR_CHILDREN TR_COMMA TR_NODE_NUM  */
+#line 135 "Translation/TreeAutomaton/term_parser.y"
+                             {
+                                (yyval.numbers) = (yyvsp[-2].numbers);
+                                (yyval.numbers)->push_back((yyvsp[0].number));
+                             }
+#line 1332 "Translation/TreeAutomaton/term_parser.cpp"
     break;
 
 
-#line 1222 "term_parser.cpp"
+#line 1336 "Translation/TreeAutomaton/term_parser.cpp"
 
       default: break;
     }
@@ -1416,10 +1530,9 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 59 "term_parser.y"
+#line 141 "Translation/TreeAutomaton/term_parser.y"
 
 template<class S>
 void yyerror(Term<S> &/*term*/, int &/*result*/, char const* msg){
   std::cout<<"Syntax Error: "<< msg << " " <<term_lineno << std::endl;
-  // error printing  disabled, it is handeled in main.cpp 
 }

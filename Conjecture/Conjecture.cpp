@@ -15,32 +15,31 @@ double Conjecture::evaluateConjectureNodeOnState(const State &q, const Conjectur
 	// f(const shared_ptr<const Witness> w)
 	//
 
-	switch (node->getType()) {
-		case CORE_VARIABLE:
-			if (variablesToCoreName.count(node->getVal())) {
-				std::string coreType = kernel->getCoreByVar(node->getVal())
-										   ->getAttributeValue("CoreType");
-				Bag bag = q.get_bag();
-				result = kernel->getCoreByVar(node->getVal())
-							 ->is_final_witness_set(
-								 bag, q.getWitnessSet(kernel->getIndexByVar(
-										  node->getVal())));
-				break;
-			} else {
+		switch (node->getType()) {
+			case CORE_VARIABLE:
+				if (variablesToCoreName.count(node->getVal())) {
+					auto *core = kernel->getCoreByVar(node->getVal());
+					const int index = kernel->getIndexByVar(node->getVal());
+					const Bag &bag = q.get_bag();
+					result = core->is_final_witness_set(bag, q.getWitnessSet(index));
+					break;
+				} else {
 				// error
 				std::cout
 					<< "Error in Conjecture::evaluateConjectureNodeOnState.";
 				exit(20);
 			}
-		case INV:
-			if (node->getChildren().size() == 1) {
-				if (node->getChildren()[0]->getType() == CORE_VARIABLE) {
-					Bag bag = q.get_bag();
-          auto core = kernel->getCoreByVar(node->getChildren()[0]->getVal());
-					result = core->inv(bag, q.getWitnessSet(kernel->getIndexByVar(
-										   node->getChildren()[0]->getVal())));
-					break;
-				} else {
+			case INV:
+				if (node->getChildren().size() == 1) {
+					if (node->getChildren()[0]->getType() == CORE_VARIABLE) {
+						const std::string &variable =
+							node->getChildren()[0]->getVal();
+						auto *core = kernel->getCoreByVar(variable);
+						const int index = kernel->getIndexByVar(variable);
+						const Bag &bag = q.get_bag();
+						result = core->inv(bag, q.getWitnessSet(index));
+						break;
+					} else {
 					std::cout << "Error in "
 								 "Conjecture::evaluateConjectureNodeOnState: "
 								 "INV is not in a valid form. A core variable "
@@ -550,7 +549,7 @@ void Conjecture::printValues(const State &q, const ConjectureNode *node) {
 			std::cout << " " << node->getVal() << "(";
 			printValues(q, node->getChildren()[0]);
 			std::cout << ",";
-			printValues(q, node->getChildren()[0]);
+			printValues(q, node->getChildren()[1]);
 			std::cout << ")";
 			return;
 
@@ -626,4 +625,3 @@ void Conjecture::setvarToProperty(
 	const std::map<std::string, PropertyAssignment *> &varToProperty_) {
 	varToProperty = varToProperty_;
 }
-

@@ -4,6 +4,7 @@
 #include "Kernel/SearchStrategy.h"
 #include "Kernel/StateTree.h"
 #include "Kernel/WitnessSet.h"
+#include "Multigraph/MultiGraph.h"
 #include "tests/utils/kernel_test_doubles.h"
 
 #include <filesystem>
@@ -251,6 +252,38 @@ TEST(KernelComponents, DynamicKernelOperationsAndMappings) {
   EXPECT_EQ(first_witness_value(joined->getWitnessSet(0)), 14);
 }
 
+TEST(KernelComponents, DynamicKernelUsesPooledStateConstruction) {
+  State::clearPool();
+  State::initializePool(4);
+
+  {
+    CountingCore core;
+    DynamicKernel kernel;
+    Width width = make_tree_width(2);
+    kernel.set_width(width);
+    kernel.addCore(core);
+
+    auto initial = kernel.initialState();
+    EXPECT_EQ(State::getPoolStats(), 1U);
+    EXPECT_TRUE(initial->get_bag().get_elements().empty());
+    EXPECT_EQ(first_witness_value(initial->getWitnessSet(0)), 0);
+
+    auto introduced = kernel.intro_v(initial, 1);
+    EXPECT_EQ(State::getPoolStats(), 2U);
+    EXPECT_EQ(introduced->get_bag().get_elements(),
+              (std::set<unsigned>{1}));
+    EXPECT_EQ(first_witness_value(introduced->getWitnessSet(0)), 1);
+
+    auto forgotten = kernel.forget_v(introduced, 1);
+    EXPECT_EQ(State::getPoolStats(), 3U);
+    EXPECT_TRUE(forgotten->get_bag().get_elements().empty());
+    EXPECT_EQ(first_witness_value(forgotten->getWitnessSet(0)), 1);
+  }
+
+  EXPECT_EQ(State::getPoolStats(), 0U);
+  State::clearPool();
+}
+
 TEST(KernelComponents, SearchStrategyBaseStoresConfiguration) {
   DynamicKernel kernel;
   Conjecture conjecture;
@@ -379,6 +412,32 @@ TEST(KernelComponents, StateTreeExtractMultiGraphExitsUntilImplemented) {
       kernel);
 
   EXPECT_EXIT(tree.extractMultiGraph(), ::testing::ExitedWithCode(20), "");
+}
+
+TEST(KernelComponents, MultiGraphPrintAndReadRoundTrip) {
+  MultiGraph original;
+  original.addVertex(1);
+  original.addVertex(2);
+  original.addVertex(3);
+  original.addEdgeLabel(1);
+  original.addIncidence(1, 1);
+  original.addIncidence(1, 2);
+  original.addEdgeLabel(2);
+  original.addIncidence(2, 2);
+  original.addIncidence(2, 3);
+
+  const fs::path file =
+      fs::temp_directory_path() / "treewidzard-multigraph-roundtrip.txt";
+  original.printToFile(file.string());
+
+  std::ifstream in(file);
+  ASSERT_TRUE(in.is_open());
+  MultiGraph restored;
+  restored.readFromFile(in);
+
+  EXPECT_EQ(restored.getVertices(), original.getVertices());
+  EXPECT_EQ(restored.getEdges(), original.getEdges());
+  EXPECT_EQ(restored.getIncidenceMap(), original.getIncidenceMap());
 }
 
 TEST(KernelComponents, CertificateWriterWritesExpectedTranscript) {

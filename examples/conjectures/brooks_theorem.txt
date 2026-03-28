@@ -1,4 +1,4 @@
-max_deg := MaxDegree(4)
-chromatic := ChromaticNumber(4)
+max_deg := MaxDegree_AtLeast(4)
+chromatic := ChromaticNumber_AtMost(4)
 Formula
 max_deg IMPLIES chromatic

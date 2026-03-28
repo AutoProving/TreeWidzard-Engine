@@ -1,6 +1,7 @@
 #ifndef CURRENT_BREADTHFIRSTSEARCH_H
 #define CURRENT_BREADTHFIRSTSEARCH_H
 #include <cmath>
+#include <unordered_map>
 
 #include "Kernel/SearchStrategy.h"
 #include "Kernel/StateTree.h"
@@ -13,7 +14,12 @@ using namespace std::chrono;
 
 class BreadthFirstSearch : public SearchStrategy {
   private:
-	TreeAutomaton<State::ptr, InstructiveTreeDecompositionNodeContent> bfsDAG; // Constructs a DAG corresponding to the BFS.
+	std::unordered_map<
+		State::ptr,
+		Transition<State::ptr, InstructiveTreeDecompositionNodeContent>,
+		State::ptr::Hash,
+		State::ptr::Equal>
+		counterexampleTrace;
 	set<State::ptr> allStatesSet;
 	set<State::ptr> intermediateStatesSet;
 	set<State::ptr> newStatesSet;

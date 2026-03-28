@@ -6,14 +6,17 @@ struct PerfectMatching_Witness : WitnessWrapper<PerfectMatching_Witness>
 {
     // pairs: store canonical pairs (u -> v) with u < v
     std::map<unsigned, unsigned> pairs;
+    // reverse_pairs: store inverse pairs (v -> u) for O(log n) reverse lookups
+    std::map<unsigned, unsigned> reverse_pairs;
     // satisfied: vertices already matched to a partner that has been forgotten
     std::set<unsigned> satisfied;
 
     friend bool is_equal_implementation(const WitnessAlias &l, const WitnessAlias &r) {
-        return std::tie(l.pairs, l.satisfied) == std::tie(r.pairs, r.satisfied);
+        return std::tie(l.pairs, l.reverse_pairs, l.satisfied) == std::tie(r.pairs, r.reverse_pairs, r.satisfied);
     }
     friend bool is_less_implementation(const WitnessAlias &l, const WitnessAlias &r) {
         if (l.pairs != r.pairs) return l.pairs < r.pairs;
+        if (l.reverse_pairs != r.reverse_pairs) return l.reverse_pairs < r.reverse_pairs;
         return l.satisfied < r.satisfied;
     }
     WitnessAlias relabel_implementation(const std::map<unsigned, unsigned> &rho) const {
@@ -28,6 +31,7 @@ struct PerfectMatching_Witness : WitnessWrapper<PerfectMatching_Witness>
             unsigned a = std::min(it_u->second, it_v->second);
             unsigned b = std::max(it_u->second, it_v->second);
             w.pairs[a] = b;
+            w.reverse_pairs[b] = a;
         }
         for (auto v : satisfied) {
             auto it = rho.find(v);
@@ -41,6 +45,8 @@ struct PerfectMatching_Witness : WitnessWrapper<PerfectMatching_Witness>
     }
     void hash(Hasher &h) const override {
         for (auto &[u, v] : pairs) { h << u << v; }
+        h << -1u;
+        for (auto &[v, u] : reverse_pairs) { h << v << u; }
         h << -1u;
         for (auto v : satisfied) h << v;
     }
@@ -65,9 +71,11 @@ struct PerfectMatching_Core : CoreWrapper<PerfectMatching_Core, PerfectMatching_
 
     static void remove_pair(WitnessAlias &w, unsigned a, unsigned b) {
         unsigned u = std::min(a, b);
+        unsigned v = std::max(a, b);
         auto it = w.pairs.find(u);
         if (it != w.pairs.end()) {
             w.pairs.erase(it);
+            w.reverse_pairs.erase(v);
         }
     }
 
@@ -89,11 +97,10 @@ struct PerfectMatching_Core : CoreWrapper<PerfectMatching_Core, PerfectMatching_
             partner = it->second;
             return true;
         }
-        for (auto const &[u, t] : w.pairs) {
-            if (t == v) {
-                partner = u;
-                return true;
-            }
+        auto rit = w.reverse_pairs.find(v);
+        if (rit != w.reverse_pairs.end()) {
+            partner = rit->second;
+            return true;
         }
         return false;
     }
@@ -116,6 +123,7 @@ struct PerfectMatching_Core : CoreWrapper<PerfectMatching_Core, PerfectMatching_
         unsigned u = std::min(i,j);
         unsigned v = std::max(i,j);
         wn->pairs[u] = v;
+        wn->reverse_pairs[v] = u;
         ws.insert(std::move(wn));
     }
 
@@ -125,9 +133,11 @@ struct PerfectMatching_Core : CoreWrapper<PerfectMatching_Core, PerfectMatching_
             auto wn = w.clone();
             if (w.pairs.count(v)) {
                 wn->pairs.erase(v);
+                wn->reverse_pairs.erase(partner);
                 wn->satisfied.insert(partner);
             } else {
                 wn->pairs.erase(partner);
+                wn->reverse_pairs.erase(v);
                 wn->satisfied.insert(partner);
             }
             ws.insert(std::move(wn));
@@ -152,6 +162,7 @@ struct PerfectMatching_Core : CoreWrapper<PerfectMatching_Core, PerfectMatching_
                 if (!in_bag.count(u) || !in_bag.count(v)) return false;
                 if (used.count(u) || used.count(v)) return false;
                 wn->pairs[u] = v;
+                wn->reverse_pairs[v] = u;
                 used.insert(u);
                 used.insert(v);
             }

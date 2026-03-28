@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_TERM_TERM_PARSER_HPP_INCLUDED
-# define YY_TERM_TERM_PARSER_HPP_INCLUDED
+#ifndef YY_TERM_TRANSLATION_TREEAUTOMATON_TERM_PARSER_HPP_INCLUDED
+# define YY_TERM_TRANSLATION_TREEAUTOMATON_TERM_PARSER_HPP_INCLUDED
 /* Debug traces.  */
 #ifndef TERM_DEBUG
 # if defined YYDEBUG
@@ -53,13 +53,16 @@
 extern int term_debug;
 #endif
 /* "%code requires" blocks.  */
-#line 3 "term_parser.y"
+#line 3 "Translation/TreeAutomaton/term_parser.y"
 
     #include "../../TreeAutomaton/TreeAutomaton.h"
     #include <iostream>
+    #include <map>
+    #include <memory>
+    #include <set>
     #include <vector>
 
-#line 63 "term_parser.hpp"
+#line 66 "Translation/TreeAutomaton/term_parser.hpp"
 
 /* Token kinds.  */
 #ifndef TERM_TOKENTYPE
@@ -74,7 +77,9 @@ extern int term_debug;
     TR_COMMENT = 259,              /* TR_COMMENT  */
     TR_NEWLINE = 260,              /* TR_NEWLINE  */
     TR_NODE_SYMBOL = 261,          /* TR_NODE_SYMBOL  */
-    TR_SEPARATOR = 262             /* TR_SEPARATOR  */
+    TR_LEFTP = 262,                /* TR_LEFTP  */
+    TR_RIGHTP = 263,               /* TR_RIGHTP  */
+    TR_COMMA = 264                 /* TR_COMMA  */
   };
   typedef enum term_tokentype term_token_kind_t;
 #endif
@@ -83,13 +88,13 @@ extern int term_debug;
 #if ! defined TERM_STYPE && ! defined TERM_STYPE_IS_DECLARED
 union TERM_STYPE
 {
-#line 24 "term_parser.y"
+#line 29 "Translation/TreeAutomaton/term_parser.y"
 
      unsigned number;
      char* string;
+     std::vector<unsigned>* numbers;
 
-
-#line 93 "term_parser.hpp"
+#line 98 "Translation/TreeAutomaton/term_parser.hpp"
 
 };
 typedef union TERM_STYPE TERM_STYPE;
@@ -118,4 +123,4 @@ extern TERM_LTYPE term_lloc;
 int term_parse (Term<std::string> &term, int &result);
 
 
-#endif /* !YY_TERM_TERM_PARSER_HPP_INCLUDED  */
+#endif /* !YY_TERM_TRANSLATION_TREEAUTOMATON_TERM_PARSER_HPP_INCLUDED  */

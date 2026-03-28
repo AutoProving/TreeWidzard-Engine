@@ -2,6 +2,7 @@
 #include "../Conjecture/PropertyAssignment.h"
 #include "../Kernel/DynamicKernel.h"
 #include <gtest/gtest.h>
+#include <string>
 
 class ConjectureTest : public ::testing::Test {
 protected:
@@ -22,6 +23,10 @@ protected:
 TEST_F(ConjectureTest, BasicConjectureCreation) {
   ASSERT_NE(conjecture, nullptr);
   EXPECT_EQ(conjecture->getRoot(), nullptr);
+  EXPECT_EQ(conjecture->getKernel(), nullptr);
+
+  ConjectureNode node(NUMBER, "", 1.0);
+  EXPECT_EQ(node.getParent(), nullptr);
 }
 
 TEST_F(ConjectureTest, SimpleArithmeticEvaluation) {
@@ -153,6 +158,22 @@ TEST_F(ConjectureTest, EmptyConjectureHandling) {
   });
 }
 
+TEST_F(ConjectureTest, PrintValuesUsesBothChildrenForBinaryFunctions) {
+  auto root = new ConjectureNode(FUNCTION_BINARY, "min", 0);
+  std::vector<ConjectureNode *> children;
+  children.push_back(new ConjectureNode(NUMBER, "", 5.0));
+  children.push_back(new ConjectureNode(NUMBER, "", 3.0));
+  root->setChildren(children);
+  conjecture->setRoot(root);
+
+  State state;
+  testing::internal::CaptureStdout();
+  conjecture->printValues(state, root);
+  const std::string output = testing::internal::GetCapturedStdout();
+
+  EXPECT_NE(output.find("min(5,3)"), std::string::npos);
+}
+
 // Test fixture for property assignments
 class PropertyAssignmentTest : public ::testing::Test {
 protected:
@@ -165,12 +186,12 @@ TEST_F(PropertyAssignmentTest, BasicPropertyAssignment) {
   ASSERT_NE(assignment, nullptr);
 
   // Test setting and getting property name
-  assignment->setName("ChromaticNumber");
-  EXPECT_EQ(assignment->getName(), "ChromaticNumber");
+  assignment->setName("ChromaticNumber_AtMost");
+  EXPECT_EQ(assignment->getName(), "ChromaticNumber_AtMost");
 }
 
 TEST_F(PropertyAssignmentTest, ParameterHandling) {
-  assignment->setName("ChromaticNumber");
+  assignment->setName("ChromaticNumber_AtMost");
 
   // Test parameter management
   std::vector<int> params = {4};
@@ -201,10 +222,10 @@ TEST_F(ConjectureIntegrationTest, KernelIntegration) {
 TEST_F(ConjectureIntegrationTest, VariableToPropertyMapping) {
   // Test variable to property mapping
   std::map<std::string, std::string> mapping;
-  mapping["x"] = "ChromaticNumber";
+  mapping["x"] = "ChromaticNumber_AtMost";
 
   conjecture->setVariablesToCoreName(mapping);
 
   auto retrieved_mapping = conjecture->getVariablesToCoreName();
-  EXPECT_EQ(retrieved_mapping.at("x"), "ChromaticNumber");
+  EXPECT_EQ(retrieved_mapping.at("x"), "ChromaticNumber_AtMost");
 }

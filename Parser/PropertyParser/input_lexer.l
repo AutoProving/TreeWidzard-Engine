@@ -7,12 +7,15 @@
     #include <map>
     #include "../../Conjecture/PropertyAssignment.h"
     #include "../../Conjecture/Conjecture.h"
+    #include "../../Kernel/DynamicCoreHandler.h"
     #include "../../Kernel/Width.h"
     #include "input_parser.hpp"
     // Bison prefix 'input_' renames yylval to input_lval
     #define yylval input_lval
 
-    extern int input_parse(Conjecture &conj, int &result,std::map<std::string,std::map<std::string,std::string>> &coreList, std::map<std::string,std::string> &varToCoreName, std::map<std::string, PropertyAssignment*> varToProperty, char const* msg);
+    extern int input_parse(Conjecture &conj, int &result, std::map<std::string,DynamicCoreHandler> &coreList,
+                           std::map<std::string,std::string> &varToCoreName,
+                           std::map<std::string, PropertyAssignment*> &varToProperty);
 
 %}
 

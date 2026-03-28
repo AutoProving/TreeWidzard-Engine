@@ -10,7 +10,7 @@ using namespace std;
 struct ChromaticNumber_AtMost_Witness
     : WitnessWrapper<ChromaticNumber_AtMost_Witness> {
   //////
-  set<set<unsigned>> partialColoring;
+  vector<set<unsigned>> partialColoring;
   //////
 
   /**
@@ -46,8 +46,10 @@ struct ChromaticNumber_AtMost_Witness
       set<unsigned> relabeledCell;
       for (const auto &vertex : cell)
         relabeledCell.insert(relabelingMap.at(vertex));
-      relabeled.partialColoring.insert(relabeledCell);
+      relabeled.partialColoring.push_back(relabeledCell);
     }
+    // Sort the vector to maintain canonical form for equality comparison
+    std::sort(relabeled.partialColoring.begin(), relabeled.partialColoring.end());
     return relabeled;
   }
 
@@ -65,8 +67,8 @@ struct ChromaticNumber_AtMost_Witness
    * different hashes.
    */
   void hash(Hasher &h) const override {
-    for (auto s : partialColoring) {
-      for (auto c : s)
+    for (const auto &s : partialColoring) {
+      for (const auto &c : s)
         h << c;
       h << -1u;
     }
@@ -78,9 +80,9 @@ struct ChromaticNumber_AtMost_Witness
    */
   void witness_info(std::ostream &os) const {
     os << "partialColoring:";
-    for (auto cell : partialColoring) {
+    for (const auto &cell : partialColoring) {
       os << "{ ";
-      for (auto item : cell) {
+      for (const auto &item : cell) {
         os << item;
         if (item != *cell.crbegin())
           os << ",";
@@ -98,7 +100,7 @@ struct ChromaticNumber_AtMost_Core
 
   static std::map<std::string, std::string> metadata() {
     return {
-        {"CoreName", "ChromaticNumber"},
+        {"CoreName", "ChromaticNumber_AtMost"},
         {"CoreType", "Bool"},
         {"ParameterType", "UnsignedInt"},
     };
@@ -106,7 +108,7 @@ struct ChromaticNumber_AtMost_Core
 
   ChromaticNumber_AtMost_Core(const parameterType &parameters) {
     auto [n] = unpack_typed_args<int>(parameters);
-    k = n;
+    k = static_cast<unsigned>(n);
   }
 
   /**
@@ -129,11 +131,11 @@ struct ChromaticNumber_AtMost_Core
    */
   void intro_v_implementation(unsigned i, const Bag &, const WitnessAlias &w,
                               WitnessSet &witnessSet) {
-    for (auto cell : w.partialColoring) {
+    for (size_t idx = 0; idx < w.partialColoring.size(); ++idx) {
       auto witness = w.clone();
-      witness->partialColoring.erase(cell);
-      cell.insert(i);
-      witness->partialColoring.insert(cell);
+      witness->partialColoring[idx].insert(i);
+      // Sort to maintain canonical form
+      std::sort(witness->partialColoring.begin(), witness->partialColoring.end());
       witnessSet.insert(std::move(witness));
     }
     if (w.partialColoring.size() < this->k) {
@@ -142,7 +144,9 @@ struct ChromaticNumber_AtMost_Core
       // witness->numberUsedColors = witness->numberUsedColors +1;
       set<unsigned> iCell;
       iCell.insert(i);
-      witness->partialColoring.insert(iCell);
+      witness->partialColoring.push_back(iCell);
+      // Sort to maintain canonical form
+      std::sort(witness->partialColoring.begin(), witness->partialColoring.end());
       witnessSet.insert(std::move(witness));
     }
   }
@@ -156,9 +160,10 @@ struct ChromaticNumber_AtMost_Core
                               const WitnessAlias &w, WitnessSet &witnessSet) {
     // If i and j are in different cell then w will be returned, otherwise, it
     // is invalid
-    for (auto cell : w.partialColoring)
+    for (const auto &cell : w.partialColoring) {
       if (cell.count(i) && cell.count(j))
         return;
+    }
     witnessSet.insert(w.clone());
   }
 
@@ -169,85 +174,31 @@ struct ChromaticNumber_AtMost_Core
    */
   void forget_v_implementation(unsigned int i, const Bag &,
                                const WitnessAlias &w, WitnessSet &witnessSet) {
-    for (auto cell : w.partialColoring) {
-      if (cell.count(i)) {
+    for (size_t idx = 0; idx < w.partialColoring.size(); ++idx) {
+      if (w.partialColoring[idx].count(i)) {
         auto witness = w.clone();
-        witness->partialColoring.erase(cell);
-        cell.erase(i);
-        if (!cell.empty()) {
-          witness->partialColoring.insert(cell);
+        witness->partialColoring[idx].erase(i);
+        if (witness->partialColoring[idx].empty()) {
+          // Remove the empty cell from the vector
+          witness->partialColoring.erase(witness->partialColoring.begin() + static_cast<ptrdiff_t>(idx));
         }
-        witnessSet.insert(witness);
+        witnessSet.insert(std::move(witness));
         break;
       }
     }
   }
 
-  WitnessSetPointer join(const Bag &, const WitnessSetPointer ws_ptr1,
-                         WitnessSetPointer ws_ptr2) override {
-    // auto check = CoreWrapper<ChromaticNumber_AtMost_Core,
-    // ChromaticNumber_AtMost_Witness, WitnessSetTypeTwo>::join(bag, ws_ptr1,
-    // ws_ptr2);
-
-    const auto &ws1 = as_witness_set(*ws_ptr1);
-    const auto &ws2 = as_witness_set(*ws_ptr2);
-    auto newWitnessSet = std::make_shared<WitnessSet>();
-
-    /* OLD CODE */
-    // std::vector<std::shared_ptr<Witness>> res;
-    // std::set_intersection(ws1.begin(), ws1.end(), ws2.begin(), ws2.end(),
-    // 					  std::back_inserter(res),
-    // 					  [](const auto &w1, const auto &w2)
-    // 					  {
-    // 						  return
-    // WitnessAlias::as_witness(*w1).partialColoring <
-    // WitnessAlias::as_witness(*w2).partialColoring;
-    // 					  });
-    // for (auto w : res)
-    // {
-    // 	newWitnessSet->insert(w);
-    // }
-
-    // New implementation consistent with new c+++ standard
-    // Comparator for ordering witnesses by partialColoring
-    auto cmp = [](const std::shared_ptr<Witness> &A,
-                  const std::shared_ptr<Witness> &B) {
-      const auto &cA = WitnessAlias::as_witness(*A).partialColoring;
-      const auto &cB = WitnessAlias::as_witness(*B).partialColoring;
-      return cA < cB;
-    };
-
-    // Two‐pointer merge for intersection
-    auto it1 = ws1.begin(), end1 = ws1.end();
-    auto it2 = ws2.begin(), end2 = ws2.end();
-    while (it1 != end1 && it2 != end2) {
-      if (cmp(*it1, *it2)) {
-        ++it1;
-      } else if (cmp(*it2, *it1)) {
-        ++it2;
-      } else {
-        // element found in both
-        newWitnessSet->insert(*it1);
-        ++it1;
-        ++it2;
-      }
-    }
-
-    clean_implementation(*newWitnessSet);
-
-    return newWitnessSet;
-  }
-
   /**
-   * Optional
-   * Is used for treewidth, but not for pathwidth.
-   *
-   * Insert what the witness results from joining
-   * w1 and w2 into the witnessSet.
+   * Join two witnesses from two subtrees.
+   * For chromatic number, two partial colorings can be joined if they
+   * agree on the vertices currently in the bag (i.e., the restriction
+   * of both colorings to the bag vertices yields the same partition).
+   * Since forget_v removes vertices from the coloring, at a join node
+   * only bag vertices remain in the witness. Therefore, two witnesses
+   * are compatible iff they are equal (same partition of bag vertices).
    */
   void join_implementation(const Bag &, const WitnessAlias &w1,
                            const WitnessAlias &w2, WitnessSet &witnessSet) {
-    assert(false); // unused due to specialization above
     if (w1.partialColoring == w2.partialColoring) {
       witnessSet.insert(w1.clone());
     }

@@ -51,21 +51,20 @@ struct CliqueNumberSimpleGraphs_AtLeast_Witness : WitnessWrapper<CliqueNumberSim
 
     relabeledWitness.found = this->found;
     relabeledWitness.size = this->size;
-    for (auto p : this->partialClique)
+    for (const auto &[vertex, count] : this->partialClique)
     {
-      auto it = relabelingMap.find(p.first);
+      auto it = relabelingMap.find(vertex);
 
       if (it != relabelingMap.end())
       {
-        relabeledWitness.partialClique.insert(
-            std::make_pair(it->second, p.second));
+        relabeledWitness.partialClique.emplace(it->second, count);
       }
       else
       {
         std::cerr << "Error: CliqueNumberSimpleGraphs_AtLeast_Witness::relabel "
-                  << p.first << "in the map\n";
+                  << vertex << "in the map\n";
         print();
-        for (auto l : relabelingMap)
+        for (const auto &l : relabelingMap)
         {
           std::cerr << l.first << "->" << l.second << '\n';
         }
@@ -92,7 +91,7 @@ struct CliqueNumberSimpleGraphs_AtLeast_Witness : WitnessWrapper<CliqueNumberSim
   {
     h << found;
     h << -1u;
-    for (auto [i, j] : partialClique)
+    for (const auto &[i, j] : partialClique)
     {
       h << i << j;
     }
@@ -111,7 +110,9 @@ struct CliqueNumberSimpleGraphs_AtLeast_Witness : WitnessWrapper<CliqueNumberSim
     for (auto it = partialClique.begin(); it != partialClique.end(); ++it)
     {
       os << it->first << "->" << it->second;
-      if (it != --partialClique.end())
+      auto next = it;
+      ++next;
+      if (next != partialClique.end())
       {
         os << ",";
       }
@@ -128,7 +129,7 @@ struct CliqueNumberSimpleGraphs_AtLeast_Core
   static std::map<std::string, std::string> metadata()
   {
     return {
-        {"CoreName", "CliqueNumberSimpleGraphs"},
+        {"CoreName", "CliqueNumberSimpleGraphs_AtLeast"},
         {"CoreType", "Bool"},
         {"ParameterType", "UnsignedInt"},
         // {"PrimaryOperator", "AtLeast"},
@@ -192,37 +193,36 @@ struct CliqueNumberSimpleGraphs_AtLeast_Core
     if (w.found)
     {
       witnessSet.insert(w.clone());
+      return;
     }
-    else
+
+    const auto clique_i = w.partialClique.find(i);
+    const auto clique_j = w.partialClique.find(j);
+    if (clique_i == w.partialClique.end() || clique_j == w.partialClique.end())
+    {
+      // Either i or j is not in the clique, so that {i,j} cannot be added
+      // to the clique.
+      witnessSet.insert(w.clone());
+      return;
+    }
+
+    // Both i and j are in the clique, so that the counters of i and j
+    // will be increased by one.
+    const unsigned iCounter = clique_i->second;
+    const unsigned jCounter = clique_j->second;
+    if (iCounter < cliqueSize - 1 and jCounter < cliqueSize - 1)
     {
       auto witness = w.clone();
-
-      if (w.partialClique.count(i) and w.partialClique.count(j))
+      auto witness_i = witness->partialClique.find(i);
+      auto witness_j = witness->partialClique.find(j);
+      ++witness_i->second;
+      ++witness_j->second;
+      if (isCompleteClique(*witness))
       {
-        // Both i and j are in the clique, so that the counters of i and j
-        // will be increased by one.
-        unsigned iCounter = witness->partialClique[i];
-        unsigned jCounter = witness->partialClique[j];
-        if (iCounter < cliqueSize - 1 and jCounter < cliqueSize - 1)
-        {
-          witness->partialClique.erase(i);
-          witness->partialClique.erase(j);
-          witness->partialClique.insert(std::make_pair(i, iCounter + 1));
-          witness->partialClique.insert(std::make_pair(j, jCounter + 1));
-          if (isCompleteClique(*witness))
-          {
-            witness->found = true;
-            witness->partialClique.clear();
-          }
-          witnessSet.insert(std::move(witness));
-        }
+        witness->found = true;
+        witness->partialClique.clear();
       }
-      else
-      {
-        // Either i or j is not in the clique, so that {i,j} cannot be added
-        // to the clique.
-        witnessSet.insert(std::move(witness));
-      }
+      witnessSet.insert(std::move(witness));
     }
   }
 
@@ -241,13 +241,14 @@ struct CliqueNumberSimpleGraphs_AtLeast_Core
     }
     else
     {
-      std::map<unsigned, unsigned> partialCliqueW = w.partialClique;
-      if (partialCliqueW.count(i))
+      const auto partial_clique_it = w.partialClique.find(i);
+      if (partial_clique_it != w.partialClique.end())
       {
         // A vertex only can be forgotten when the size of the clique is
         // equal to cliqueSize. And the forgotten vertex has cliqueSize-1
         // neighbors.
-        if (w.size == cliqueSize and partialCliqueW[i] == cliqueSize - 1)
+        if (w.size == cliqueSize and
+            partial_clique_it->second == cliqueSize - 1)
         {
           auto witness = w.clone();
           witness->partialClique.erase(i);
@@ -306,15 +307,12 @@ struct CliqueNumberSimpleGraphs_AtLeast_Core
           // Now we check if the domains of the partialCliques are the
           // same. If the in the checking process we realize that they do
           // not have the same domains, we return the empty set.
-          for (auto p : w2.partialClique)
+          for (const auto &[vertex, count] : w2.partialClique)
           {
-            if (witness->partialClique.count(p.first))
+            auto pos = witness->partialClique.find(vertex);
+            if (pos != witness->partialClique.end())
             {
-              unsigned pCounter =
-                  p.second + witness->partialClique[p.first];
-              witness->partialClique.erase(p.first);
-              witness->partialClique.insert(
-                  std::make_pair(p.first, pCounter));
+              pos->second += count;
             }
             else
             {
@@ -375,7 +373,7 @@ struct CliqueNumberSimpleGraphs_AtLeast_Core
   {
     if (w.size == cliqueSize)
     {
-      for (auto m : w.partialClique)
+      for (const auto &m : w.partialClique)
       {
         if (m.second != cliqueSize - 1)
         {

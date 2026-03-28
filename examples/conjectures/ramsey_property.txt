@@ -1,5 +1,5 @@
 
-large_clique := CliqueNumber(4)
-independence := IndependentSet()
+large_clique := CliqueNumber_AtLeast(4)
+independence := IndependentSet_Max()
 Formula
 large_clique OR (INV(independence) >= 4)

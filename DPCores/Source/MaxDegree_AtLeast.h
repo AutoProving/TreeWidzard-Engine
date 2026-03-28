@@ -56,31 +56,29 @@ struct MaxDegree_AtLeast_Witness : WitnessWrapper<MaxDegree_AtLeast_Witness>
     {
         auto relabeled = WitnessAlias();
 
-        map<unsigned, unsigned> m;
         if (found)
         {
             relabeled.found = true;
             return relabeled;
         }
-        else
+
+        map<unsigned, unsigned> m;
+        for (const auto &[vertex, degree] : degreeCounter)
         {
-            for (auto element : degreeCounter)
+            auto it = relabelingMap.find(vertex);
+            if (it != relabelingMap.end())
             {
-                auto it = relabelingMap.find(element.first);
-                if (it != relabelingMap.end())
-                {
-                    m.insert(make_pair(it->second, element.second));
-                }
-                else
-                {
-                    std::cerr << "Error: MaxDegree_AtLeast_Witness::relabel " << element.first << " is not in the map" << endl;
-                    std::cerr << " map:";
-                    exit(20);
-                }
+                m.emplace(it->second, degree);
             }
-            relabeled.degreeCounter = m;
-            relabeled.found = found;
+            else
+            {
+                std::cerr << "Error: MaxDegree_AtLeast_Witness::relabel " << vertex << " is not in the map" << endl;
+                std::cerr << " map:";
+                exit(20);
+            }
         }
+        relabeled.degreeCounter = std::move(m);
+        relabeled.found = found;
 
         return relabeled;
     }
@@ -103,7 +101,7 @@ struct MaxDegree_AtLeast_Witness : WitnessWrapper<MaxDegree_AtLeast_Witness>
 
         h << found;
         h << -1u;
-        for (auto [i, j] : degreeCounter)
+        for (const auto &[i, j] : degreeCounter)
         {
             h << i << j;
         }
@@ -116,22 +114,17 @@ struct MaxDegree_AtLeast_Witness : WitnessWrapper<MaxDegree_AtLeast_Witness>
      */
     void witness_info(std::ostream &os) const
     {
-
-        map<unsigned, unsigned> wDegreeCounter = degreeCounter;
-        string info;
-        info = "{";
-        for (map<unsigned, unsigned>::iterator it = wDegreeCounter.begin(); it != wDegreeCounter.end(); it++)
+        os << "{";
+        for (auto it = degreeCounter.begin(); it != degreeCounter.end(); ++it)
         {
             auto tempIt = it;
-            info = info + to_string(it->first) + " -> " + to_string(it->second);
-            if (++tempIt != wDegreeCounter.end())
+            os << it->first << " -> " << it->second;
+            if (++tempIt != degreeCounter.end())
             {
-                info = info + ", ";
+                os << ", ";
             }
         }
-        info = info + "} " + "found : " + to_string(found);
-        os << info;
-
+        os << "} found : " << found;
         os << "\n";
     }
 };
@@ -144,7 +137,7 @@ struct MaxDegree_AtLeast_DynamicCore
     static std::map<std::string, std::string> metadata()
     {
         return {
-            {"CoreName", "MaxDegree"},
+            {"CoreName", "MaxDegree_AtLeast"},
             {"CoreType", "Bool"},
             {"ParameterType", "UnsignedInt"},
             // {"PrimaryOperator", "AtLeast"},
@@ -154,7 +147,7 @@ struct MaxDegree_AtLeast_DynamicCore
     MaxDegree_AtLeast_DynamicCore(const parameterType &parameters)
     {
         auto [n] = unpack_typed_args<int>(parameters);
-        maxDegree = n;
+        maxDegree = static_cast<unsigned>(n);
     }
 
     /**
@@ -186,9 +179,8 @@ struct MaxDegree_AtLeast_DynamicCore
         else
         {
             auto witness = w.clone();
-            witness->degreeCounter = w.degreeCounter;
-            witness->degreeCounter.insert(make_pair(i, 0));
-            witnessSet.insert(witness);
+            witness->degreeCounter.emplace(i, 0);
+            witnessSet.insert(std::move(witness));
         }
     }
 
@@ -203,36 +195,48 @@ struct MaxDegree_AtLeast_DynamicCore
 
         if (w.found)
         {
-
             witnessSet.insert(w.clone());
+            return;
         }
-        else if (i != j and w.degreeCounter.find(i)->second < this->maxDegree - 1 and w.degreeCounter.find(j)->second < this->maxDegree - 1)
+
+        const auto it_i = w.degreeCounter.find(i);
+        if (i != j)
         {
-            auto wPrime = w.clone();
-            // wPrime->degreeCounter = w->degreeCounter;
-            wPrime->degreeCounter.erase(i);
-            wPrime->degreeCounter.erase(j);
-            wPrime->degreeCounter.insert(make_pair(i, w.degreeCounter.find(i)->second + 1));
-            wPrime->degreeCounter.insert(make_pair(j, w.degreeCounter.find(j)->second + 1));
-            wPrime->found = false;
-            witnessSet.insert(wPrime);
+            const auto it_j = w.degreeCounter.find(j);
+            if (it_i->second < this->maxDegree - 1 &&
+                it_j->second < this->maxDegree - 1)
+            {
+                auto wPrime = w.clone();
+                auto prime_i = wPrime->degreeCounter.find(i);
+                auto prime_j = wPrime->degreeCounter.find(j);
+                ++prime_i->second;
+                ++prime_j->second;
+                witnessSet.insert(std::move(wPrime));
+            }
+            else
+            {
+                auto wPrime = w.clone();
+                wPrime->found = true;
+                wPrime->degreeCounter.clear();
+                witnessSet.insert(std::move(wPrime));
+            }
+            return;
         }
-        else if (i == j and w.degreeCounter.find(i)->second < this->maxDegree - 2)
+
+        if (it_i->second < this->maxDegree - 2)
         {
             // This case is inactive at the moment. It would be active if self-loops were allowed.
             auto wPrime = w.clone();
-            // wPrime->degreeCounter = w->degreeCounter;
-            wPrime->degreeCounter.erase(i);
-            wPrime->degreeCounter.insert(make_pair(i, w.degreeCounter.find(i)->second + 2));
-            witnessSet.insert(wPrime);
+            auto prime_i = wPrime->degreeCounter.find(i);
+            prime_i->second += 2;
+            witnessSet.insert(std::move(wPrime));
         }
         else
         {
             auto wPrime = w.clone();
             wPrime->found = true;
-            map<unsigned, unsigned> emptyMap;
-            wPrime->degreeCounter = emptyMap;
-            witnessSet.insert(wPrime);
+            wPrime->degreeCounter.clear();
+            witnessSet.insert(std::move(wPrime));
         }
     }
 
@@ -254,10 +258,8 @@ struct MaxDegree_AtLeast_DynamicCore
         else
         {
             auto wPrime = w.clone();
-            wPrime->found = false;
-            wPrime->degreeCounter = w.degreeCounter;
             wPrime->degreeCounter.erase(i);
-            witnessSet.insert(wPrime);
+            witnessSet.insert(std::move(wPrime));
         }
     }
 
@@ -271,53 +273,52 @@ struct MaxDegree_AtLeast_DynamicCore
     void join_implementation(const Bag &, const WitnessAlias &w1,
                              const WitnessAlias &w2, WitnessSet &witnessSet)
     {
-
-        // MaxDegree_AtLeast_WitnessPointer wPrime = createWitness();
         if (w1.found)
         {
-
             witnessSet.insert(w1.clone());
         }
         else if (w2.found)
         {
-
             witnessSet.insert(w2.clone());
         }
         else
         {
-            map<unsigned, unsigned> temp1 = w1.degreeCounter;
-            map<unsigned, unsigned> temp2 = w2.degreeCounter;
-            map<unsigned, unsigned> temp;
-            bool found = false;
-            map<unsigned, unsigned>::iterator it1 = temp1.begin();
-            for (map<unsigned, unsigned>::iterator it2 = temp2.begin(); it2 != temp2.end(); ++it2)
+            // Validate that both witnesses have the same vertex set (same bag)
+            if (w1.degreeCounter.size() != w2.degreeCounter.size())
             {
-                if (it1->second + it2->second < this->maxDegree)
+                return; // incompatible witnesses
+            }
+
+            auto wPrime = std::make_shared<WitnessAlias>();
+            bool found = false;
+
+            auto it1 = w1.degreeCounter.begin();
+            auto it2 = w2.degreeCounter.begin();
+            while (it1 != w1.degreeCounter.end() && it2 != w2.degreeCounter.end())
+            {
+                // Verify both iterators refer to the same vertex
+                if (it1->first != it2->first)
                 {
-                    temp.insert(make_pair(it1->first, it1->second + it2->second));
-                    it1++;
+                    return; // different vertex sets, incompatible
                 }
-                else
+
+                unsigned combined = it1->second + it2->second;
+                if (combined >= this->maxDegree)
                 {
                     found = true;
                     break;
                 }
+                wPrime->degreeCounter.emplace(it1->first, combined);
+                ++it1;
+                ++it2;
             }
-            if (found == false)
+
+            if (found)
             {
-                auto wPrime = w1.clone();
-                wPrime->found = false;
-                wPrime->degreeCounter = temp;
-                witnessSet.insert(wPrime);
-            }
-            else
-            {
-                auto wPrime = w1.clone();
                 wPrime->found = true;
-                map<unsigned, unsigned> emptyMap;
-                wPrime->degreeCounter = emptyMap;
-                witnessSet.insert(wPrime);
+                wPrime->degreeCounter.clear();
             }
+            witnessSet.insert(std::move(wPrime));
         }
     }
 

@@ -1,5 +1,6 @@
 #include "SearchController.h"
 #include "../Kernel/PathList.h"
+#include "../Kernel/RuntimePaths.h"
 #include <concepts>
 #include <filesystem>
 
@@ -28,8 +29,9 @@ SearchController::SearchController(std::string inputPath,
 	if (const char *paths = std::getenv("TREEWIDZARD_SEARCHSTRATEGIES")) {
 		searchPluginPaths = TreeWidzard::split_path_list(paths);
 	} else {
-		searchPluginPaths =
-			TreeWidzard::split_path_list(TREEWIDZARD_SEARCHSTRATEGIES_DEFAULT);
+		searchPluginPaths = TreeWidzard::default_plugin_paths(
+			"TREEWIDZARD_SEARCHSTRATEGIES",
+			TREEWIDZARD_SEARCHSTRATEGIES_DEFAULT, "SearchStrategies");
 	}
 
 	inputController = new InputController(
@@ -39,8 +41,16 @@ SearchController::SearchController(std::string inputPath,
 void SearchController::check_search() {
 	try {
 		for (const auto &searchPluginPath : searchPluginPaths) {
+			std::error_code ec;
+			if (!std::filesystem::exists(searchPluginPath, ec) ||
+				!std::filesystem::is_directory(searchPluginPath, ec)) {
+				continue;
+			}
 			for (const auto &entry :
-				 std::filesystem::directory_iterator(searchPluginPath)) {
+				 std::filesystem::directory_iterator(searchPluginPath, ec)) {
+				if (ec) {
+					break;
+				}
 				std::string s = entry.path().string();
 				// for linux .so, and windows .dll
 				if (s.find(DYNAMIC_LIB_EXTENSION) != std::string::npos) {

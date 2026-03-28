@@ -6,6 +6,8 @@ Flags::Flags() {
 	content.insert({"StateSize", 0});		// prints size of state
 	content.insert({"Premise", 0});
 	content.insert({"NoBFSDAG", 0});
+	content.insert({"StateTree", 0});
+	content.insert({"PrintDirectedBipartiteGraphNAUTY", 0});
 	content.insert({"WriteToFiles", 0});
 }
 

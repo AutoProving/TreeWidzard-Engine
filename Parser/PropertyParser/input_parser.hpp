@@ -93,8 +93,8 @@ extern int input_debug;
     IFF = 265,                     /* IFF  */
     IMPLIES = 266,                 /* IMPLIES  */
     NOT = 267,                     /* NOT  */
-    BOOL_TRUE = 268,               /* TRUE  */
-    BOOL_FALSE = 269,              /* FALSE  */
+    BOOL_TRUE = 268,               /* BOOL_TRUE  */
+    BOOL_FALSE = 269,              /* BOOL_FALSE  */
     COMMENT = 270,                 /* COMMENT  */
     NUMBER_DOUBLE = 271,           /* NUMBER_DOUBLE  */
     COMMA = 272,                   /* COMMA  */

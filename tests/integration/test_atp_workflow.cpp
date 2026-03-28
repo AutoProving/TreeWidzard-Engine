@@ -52,8 +52,8 @@ auto dynamic_library_extension() -> const char * {
 
 // Test: Simple conjecture file creation
 TEST_F(ATPIntegrationTest, ConjectureFileCreation) {
-  std::string conjecture = R"(x := ChromaticNumber(3)
-y := ChromaticNumber(4)
+  std::string conjecture = R"(x := ChromaticNumber_AtMost(3)
+y := ChromaticNumber_AtMost(4)
 Formula
 x IMPLIES y)";
 
@@ -63,8 +63,8 @@ x IMPLIES y)";
 
 // Test: Conjecture file parsing
 TEST_F(ATPIntegrationTest, ConjectureFileParsing) {
-  std::string conjecture = R"(x := MaxDegree(4)
-y := ChromaticNumber(4)
+  std::string conjecture = R"(x := MaxDegree_AtLeast(4)
+y := ChromaticNumber_AtMost(4)
 Formula
 x IMPLIES y)";
 
@@ -77,8 +77,8 @@ x IMPLIES y)";
   std::string content((std::istreambuf_iterator<char>(file)),
                       std::istreambuf_iterator<char>());
 
-  EXPECT_TRUE(content.find("MaxDegree") != std::string::npos);
-  EXPECT_TRUE(content.find("ChromaticNumber") != std::string::npos);
+  EXPECT_TRUE(content.find("MaxDegree_AtLeast") != std::string::npos);
+  EXPECT_TRUE(content.find("ChromaticNumber_AtMost") != std::string::npos);
   EXPECT_TRUE(content.find("IMPLIES") != std::string::npos);
 }
 
@@ -117,9 +117,9 @@ TEST_F(ATPIntegrationTest, FlagsConfiguration) {
 // Test: Multiple conjectures
 TEST_F(ATPIntegrationTest, MultipleConjectures) {
   std::vector<std::string> conjectures = {
-      "x := MaxDegree(3)\ny := ChromaticNumber(3)\nFormula\nx IMPLIES y",
-      "x := MaxDegree(4)\ny := ChromaticNumber(4)\nFormula\nx IMPLIES y",
-      "x := MaxDegree(5)\ny := ChromaticNumber(5)\nFormula\nx IMPLIES y"};
+      "x := MaxDegree_AtLeast(3)\ny := ChromaticNumber_AtMost(3)\nFormula\nx IMPLIES y",
+      "x := MaxDegree_AtLeast(4)\ny := ChromaticNumber_AtMost(4)\nFormula\nx IMPLIES y",
+      "x := MaxDegree_AtLeast(5)\ny := ChromaticNumber_AtMost(5)\nFormula\nx IMPLIES y"};
 
   for (size_t i = 0; i < conjectures.size(); i++) {
     std::string filepath =

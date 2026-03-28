@@ -38,6 +38,8 @@ struct HC_Witness : WitnessWrapper<HC_Witness>
     static void erase_pair(std::map<unsigned,unsigned> &M, unsigned a) {
         auto it = M.find(a);
         if (it != M.end()) { M.erase(it); return; }
+        // Reverse lookup: find key k where M[k] == a. Since M is canonical (key < value),
+        // we need at most one pass through values.
         for (auto it2 = M.begin(); it2!=M.end(); ++it2) {
             if (it2->second == a) { M.erase(it2); return; }
         }
@@ -68,7 +70,7 @@ struct HC_Witness : WitnessWrapper<HC_Witness>
 struct HC_Core : CoreWrapper<HC_Core, HC_Witness, WitnessSetTypeTwo>
 {
     static std::map<std::string, std::string> metadata() {
-        return {{"CoreName","HC"}, {"CoreType","Bool"}, {"ParameterType","None"}};
+        return {{"CoreName","HamiltonianCycle"}, {"CoreType","Bool"}, {"ParameterType","None"}};
     }
 
     static bool partner_of(const std::map<unsigned,unsigned> &M, unsigned a, unsigned &partner) {
@@ -188,13 +190,18 @@ struct HC_Core : CoreWrapper<HC_Core, HC_Witness, WitnessSetTypeTwo>
             adj[b].push_back({a,color});
         };
         auto remove_both_once = [&](U64 u, U64 v, int color){
+            // Use swap-and-pop instead of erase to avoid O(degree) shifts
             auto &U = adj[u];
-            for (auto it = U.begin(); it!=U.end(); ++it) {
-                if (it->v==v && (color==0 || it->c==color)) { U.erase(it); break; }
+            for (size_t i = 0; i < U.size(); ++i) {
+                if (U[i].v==v && (color==0 || U[i].c==color)) {
+                    U[i] = U.back(); U.pop_back(); break;
+                }
             }
             auto &V = adj[v];
-            for (auto it = V.begin(); it!=V.end(); ++it) {
-                if (it->v==u && (color==0 || it->c==color)) { V.erase(it); break; }
+            for (size_t i = 0; i < V.size(); ++i) {
+                if (V[i].v==u && (color==0 || V[i].c==color)) {
+                    V[i] = V.back(); V.pop_back(); break;
+                }
             }
         };
 
@@ -206,10 +213,10 @@ struct HC_Core : CoreWrapper<HC_Core, HC_Witness, WitnessSetTypeTwo>
         };
 
         // Add matching edges (within-bag paths) and stubs for unmatched bag endpoints
-        for (auto [a,b] : L->M) add_edge((U64)a, (U64)b, 1);
-        for (auto [a,b] : R->M) add_edge((U64)a, (U64)b, 2);
-        for (auto [v,deg] : L->d) if (deg==1 && !has_partner(L->M, v)) add_edge((U64)v, make_stub(1, v), 1);
-        for (auto [v,deg] : R->d) if (deg==1 && !has_partner(R->M, v)) add_edge((U64)v, make_stub(2, v), 2);
+        for (auto [a,b] : L->M) add_edge(static_cast<U64>(a), static_cast<U64>(b), 1);
+        for (auto [a,b] : R->M) add_edge(static_cast<U64>(a), static_cast<U64>(b), 2);
+        for (auto [v,deg] : L->d) if (deg==1 && !has_partner(L->M, v)) add_edge(static_cast<U64>(v), make_stub(1, v), 1);
+        for (auto [v,deg] : R->d) if (deg==1 && !has_partner(R->M, v)) add_edge(static_cast<U64>(v), make_stub(2, v), 2);
 
         // Contract all bag vertices with final degree 2.
         // For correctness with this representation, each such vertex must receive exactly one "port" from each side.
@@ -220,7 +227,7 @@ struct HC_Core : CoreWrapper<HC_Core, HC_Witness, WitnessSetTypeTwo>
         while (!Q.empty()) {
             unsigned v = Q.front(); Q.pop_front();
             if (dsum[v] != 2) continue;
-            auto it = adj.find((U64)v);
+            auto it = adj.find(static_cast<U64>(v));
             std::vector<Edge> inc = (it==adj.end() ? std::vector<Edge>{} : it->second);
 
             // Count how many degree contributions come from each child.
@@ -241,8 +248,8 @@ struct HC_Core : CoreWrapper<HC_Core, HC_Witness, WitnessSetTypeTwo>
             if (e1.c == e2.c) return; // both ports from the same side -> not representable
 
             // Remove the two ports (symmetrically) and connect their other ends
-            remove_both_once((U64)v, e1.v, e1.c);
-            remove_both_once((U64)v, e2.v, e2.c);
+            remove_both_once(static_cast<U64>(v), e1.v, e1.c);
+            remove_both_once(static_cast<U64>(v), e2.v, e2.c);
             if (e1.v == e2.v) {
                 // Contracting v yields a loop at neighbor -> that is a closed cycle component
                 if (!is_stub(e1.v)) {
@@ -296,7 +303,7 @@ struct HC_Core : CoreWrapper<HC_Core, HC_Witness, WitnessSetTypeTwo>
         std::set<unsigned> used;
         for (auto const &[aNode, nb] : adj) {
             if (is_stub(aNode)) continue;
-            unsigned a = (unsigned)aNode;
+            unsigned a = static_cast<unsigned>(aNode);
             if (wn->d[a] != 1) continue;
 
             // Count real (non-stub) neighbors of a
@@ -306,7 +313,7 @@ struct HC_Core : CoreWrapper<HC_Core, HC_Witness, WitnessSetTypeTwo>
                 // a connects only to stubs -> remains unmatched in M
                 continue;
             } else if (realCnt == 1) {
-                unsigned b = (unsigned)realN;
+                unsigned b = static_cast<unsigned>(realN);
                 if (wn->d[b] != 1) return;           // inconsistent
                 if (!used.count(a) && !used.count(b)) {
                     if (a < b) Mnew[a] = b; else Mnew[b] = a;

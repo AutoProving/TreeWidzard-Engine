@@ -9,6 +9,108 @@
 #include "Kernel/CertificateUtils.h"
 #include "Kernel/CertificateWriter.h"
 
+namespace {
+
+using CounterexampleTrace = std::unordered_map<
+	State::ptr,
+	Transition<State::ptr, InstructiveTreeDecompositionNodeContent>,
+	State::ptr::Hash,
+	State::ptr::Equal>;
+
+auto lookup_transition(const CounterexampleTrace &trace, const State::ptr &state)
+	-> const Transition<State::ptr, InstructiveTreeDecompositionNodeContent> & {
+	const auto it = trace.find(state);
+	if (it == trace.end())
+	{
+		std::cerr << "Error: No transition with consequent equal to the input "
+					 "state."
+				  << std::endl;
+		std::exit(20);
+	}
+	return it->second;
+}
+
+void record_transition(CounterexampleTrace &trace, const State::ptr &state,
+					   const std::string &symbol,
+					   const std::vector<State::ptr> &antecedents)
+{
+	InstructiveTreeDecompositionNodeContent content(symbol);
+	Transition<State::ptr, InstructiveTreeDecompositionNodeContent> candidate(
+		state, content, antecedents);
+	const auto [it, inserted] = trace.emplace(state, candidate);
+	if (!inserted && candidate < it->second)
+	{
+		it->second = std::move(candidate);
+	}
+}
+
+void populate_term_node(
+	const CounterexampleTrace &trace, const State::ptr &state,
+	const shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>> &node)
+{
+	const auto &transition = lookup_transition(trace, state);
+	node->setNodeContent(transition.getTransitionContent());
+	for (const auto &antecedent : transition.getAntecedentStates())
+	{
+		shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>> child(
+			new TermNode<InstructiveTreeDecompositionNodeContent>);
+		child->setParent(node);
+		node->addChild(child);
+		populate_term_node(trace, antecedent, child);
+	}
+}
+
+void populate_run_node(
+	const CounterexampleTrace &trace, const State::ptr &state,
+	const shared_ptr<TermNode<
+		RunNodeContent<State::ptr, InstructiveTreeDecompositionNodeContent>>> &node)
+{
+	const auto &transition = lookup_transition(trace, state);
+	RunNodeContent<State::ptr, InstructiveTreeDecompositionNodeContent> runNode;
+	runNode.setState(state);
+	runNode.setRunNodeContent(transition.getTransitionContent());
+	node->setNodeContent(runNode);
+
+	std::vector<shared_ptr<TermNode<
+		RunNodeContent<State::ptr, InstructiveTreeDecompositionNodeContent>>>>
+		children;
+	children.reserve(transition.getAntecedentStates().size());
+	for (const auto &antecedent : transition.getAntecedentStates())
+	{
+		shared_ptr<TermNode<RunNodeContent<
+			State::ptr, InstructiveTreeDecompositionNodeContent>>>
+			child(new TermNode<RunNodeContent<
+				  State::ptr, InstructiveTreeDecompositionNodeContent>>);
+		child->setParent(node);
+		populate_run_node(trace, antecedent, child);
+		children.push_back(child);
+	}
+	node->setChildren(children);
+}
+
+void populate_state_tree_node(const CounterexampleTrace &trace,
+							  const State::ptr &state,
+							  const shared_ptr<StateTreeNode> &node)
+{
+	const auto &transition = lookup_transition(trace, state);
+	node->set_nodeType(transition.getTransitionContent().getSymbol());
+	node->set_S(state);
+
+	vector<shared_ptr<StateTreeNode>> children;
+	children.reserve(transition.getAntecedentStates().size());
+	for (const auto &antecedent : transition.getAntecedentStates())
+	{
+		shared_ptr<StateTreeNode> child(new StateTreeNode);
+		child->set_parent(node);
+		child->set_kernel(node->get_kernel());
+		populate_state_tree_node(trace, antecedent, child);
+		children.push_back(child);
+	}
+	node->set_children(children);
+}
+
+} // namespace
+
 extern "C"
 {
 	std::map<std::string, std::string> *metadata()
@@ -42,8 +144,10 @@ InstructiveTreeDecomposition BreadthFirstSearch::extractCounterExampleTerm(
 	State::ptr state)
 {
 	InstructiveTreeDecomposition atd;
-	shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>> rootNode;
-	rootNode = bfsDAG.retrieveTermAcyclicAutomaton(state);
+	shared_ptr<TermNode<InstructiveTreeDecompositionNodeContent>> rootNode(
+		new TermNode<InstructiveTreeDecompositionNodeContent>);
+	rootNode->setParent(nullptr);
+	populate_term_node(counterexampleTrace, state, rootNode);
 	atd.setRoot(rootNode);
 	return atd;
 }
@@ -63,69 +167,13 @@ StateTree BreadthFirstSearch::extractCounterExampleStateTree(State::ptr state)
 void BreadthFirstSearch::extractCounterExampleStateTreeNode(
 	State::ptr state, shared_ptr<StateTreeNode> node)
 {
-	// Assumes that the automaton is acyclic and that each state has a
-	// transition in which the state is the consequent
-	if (!bfsDAG.getTransitions().empty())
-	{
-		InstructiveTreeDecompositionNodeContent a;
-		a.setSymbol(
-			a.smallestContent()); // Creates a symbol of type TermNodeContent
-								  // and set it to the smallest symbol
-		vector<State::ptr> emptyAntecedents;
-		Transition<State::ptr, InstructiveTreeDecompositionNodeContent> t(
-			state, a, emptyAntecedents); // This is the smallest transition with
-										 // a consequent equal to state
-		auto it = bfsDAG.getTransitions().upper_bound(t);
-		if (it != bfsDAG.getTransitions().begin())
-		{
-			it--; // This is always defined, since the transition set is
-				  // non-empty
-		}
-		auto itAux = it;
-		if (itAux->getConsequentState() != state)
-		{
-			itAux++;
-			if (itAux != bfsDAG.getTransitions().end())
-			{
-				if (itAux->getConsequentState() != state)
-				{
-					std::cout
-						<< "Error: No transition with consequent equal to the "
-						   "input state.";
-					exit(20);
-				}
-			}
-			else
-			{
-				std::cout << "Error: No transition with consequent equal to "
-							 "the input state.";
-				exit(20);
-			}
-		}
-		node->set_nodeType(itAux->getTransitionContent().getSymbol());
-		node->set_S(state);
-		vector<shared_ptr<StateTreeNode>> children;
-		for (size_t i = 0; i < itAux->getAntecedentStates().size(); i++)
-		{
-			shared_ptr<StateTreeNode> child(new StateTreeNode);
-			child->set_parent(node);
-			child->set_kernel(node->get_kernel());
-			children.push_back(child);
-			extractCounterExampleStateTreeNode(itAux->getAntecedentStates()[i],
-											   child);
-		}
-		node->set_children(children);
-	}
-	else
-	{
-		std::cout << "Error: The automaton has no transitions." << std::endl;
-		exit(20);
-	}
+	populate_state_tree_node(counterexampleTrace, state, node);
 }
 
 void BreadthFirstSearch::search()
 {
 	bool printStateFlag = flags->get("PrintStates");
+	counterexampleTrace.clear();
 
 	std::unique_ptr<TreeWidzard::Certificates::CertificateWriter> cert;
 	std::unordered_map<State::ptr, int, State::ptr::Hash, State::ptr::Equal>
@@ -219,13 +267,7 @@ void BreadthFirstSearch::search()
 		}
 		if (!noBFSDAG)
 		{
-			bfsDAG.addState(initialState);
-			InstructiveTreeDecompositionNodeContent initialTransitionContent("Leaf");
-			vector<State::ptr> initialAntecedents;
-			Transition<State::ptr, InstructiveTreeDecompositionNodeContent>
-				initialTransition(initialState, initialTransitionContent,
-								  initialAntecedents);
-			bfsDAG.addTransition(initialTransition);
+			record_transition(counterexampleTrace, initialState, "Leaf", {});
 		}
 	};
 	hooks.on_state_discovered =
@@ -266,34 +308,28 @@ void BreadthFirstSearch::search()
 
 			if (!noBFSDAG)
 			{
-				bfsDAG.addState(event.consequent_state);
 				vector<State::ptr> antecedentStates;
 				antecedentStates.push_back(event.first_parent);
-				InstructiveTreeDecompositionNodeContent transitionContent("Leaf");
+				std::string symbol = "Leaf";
 				switch (event.kind)
 				{
 					case TreeWidzard::BreadthFirstExpansionKind::IntroVertex:
-						transitionContent.setSymbol("IntroVertex_" +
-													to_string(event.value));
+						symbol = "IntroVertex_" + to_string(event.value);
 						break;
 					case TreeWidzard::BreadthFirstExpansionKind::ForgetVertex:
-						transitionContent.setSymbol("ForgetVertex_" +
-													to_string(event.value));
+						symbol = "ForgetVertex_" + to_string(event.value);
 						break;
 					case TreeWidzard::BreadthFirstExpansionKind::IntroEdge:
-						transitionContent.setSymbol("IntroEdge_" +
-													to_string(event.value) + "_" +
-													to_string(event.secondary_value));
+						symbol = "IntroEdge_" + to_string(event.value) + "_" +
+								 to_string(event.secondary_value);
 						break;
 					case TreeWidzard::BreadthFirstExpansionKind::Join:
-						transitionContent.setSymbol("Join");
+						symbol = "Join";
 						antecedentStates.push_back(*event.second_parent);
 						break;
 				}
-				Transition<State::ptr, InstructiveTreeDecompositionNodeContent>
-					transition(event.consequent_state, transitionContent,
-							   antecedentStates);
-				bfsDAG.addTransition(transition);
+				record_transition(counterexampleTrace, event.consequent_state,
+								 symbol, antecedentStates);
 			}
 
 			print_transition(event);
@@ -328,6 +364,10 @@ void BreadthFirstSearch::search()
 	if (!traversal_result.property_satisfied)
 	{
 		State::ptr badState = *traversal_result.counterexample_state;
+		const bool printStateTreeFlag = flags->get("StateTree");
+		const bool writeFilesFlag = flags->get("WriteToFiles");
+		const bool printDirectedBipartiteGraphFlag =
+			flags->get("PrintDirectedBipartiteGraphNAUTY");
 		std::cout << "\nResult: ";
 		std::cout << "PROPERTY NOT SATISFIED\n"
 				  << std::endl;
@@ -349,32 +389,46 @@ void BreadthFirstSearch::search()
 		conjecture->printValues(*badState, conjecture->getRoot());
 		std::cout << std::endl;
 
-		bfsDAG.addFinalState(badState);
-		InstructiveTreeDecomposition atd =
-			extractCounterExampleTerm(badState);
+		if (printStateTreeFlag)
+		{
+			std::cout << "Counterexample state tree:" << std::endl;
+			StateTree stateTree = extractCounterExampleStateTree(badState);
+			stateTree.printStateTree();
+			std::cout << std::endl;
+		}
+
 		string file = this->getOutputsPath();
 		if (flags->get("Premise"))
 		{
 			file += "_Premise";
 		}
 		file += "_CounterExample";
-		ConcreteTreeDecomposition ctd =
-			atd.convertToConcreteTreeDecomposition();
-		RunTree<State::ptr, InstructiveTreeDecompositionNodeContent>
-			runTree = extractCounterExampleRun(badState);
-		MultiGraph multiGraph = ctd.extractMultiGraph();
-		multiGraph.printGraph();
-		atd.writeToFile(file + "_ITD.txt");
-		ctd.writeToFile(file + "_ConcreteDecomposition.txt");
-		runTree.writeToFile(file + "_RunTree.txt");
-		multiGraph.printToFile(file + "_Graph.txt");
-		multiGraph.convertToGML(file + "_GMLGraph.gml");
-		multiGraph.printToFilePACEFormat(file + "_GraphPaceFormat.gr");
 
-		if (flags->get("PrintDirectedBipartiteGraphNAUTY"))
+		if (writeFilesFlag || printDirectedBipartiteGraphFlag)
 		{
-			multiGraph.printToFileDirectedBipartiteGraphNAUTY(
-				file + "_DirectedBipartiteGraphNAUTY.txt");
+			InstructiveTreeDecomposition atd =
+				extractCounterExampleTerm(badState);
+			ConcreteTreeDecomposition ctd =
+				atd.convertToConcreteTreeDecomposition();
+			RunTree<State::ptr, InstructiveTreeDecompositionNodeContent>
+				runTree = extractCounterExampleRun(badState);
+			MultiGraph multiGraph = ctd.extractMultiGraph();
+			multiGraph.printGraph();
+			if (writeFilesFlag)
+			{
+				atd.writeToFile(file + "_ITD.txt");
+				ctd.writeToFile(file + "_ConcreteDecomposition.txt");
+				runTree.writeToFile(file + "_RunTree.txt");
+				multiGraph.printToFile(file + "_Graph.txt");
+				multiGraph.convertToGML(file + "_GMLGraph.gml");
+				multiGraph.printToFilePACEFormat(file + "_GraphPaceFormat.gr");
+			}
+
+			if (printDirectedBipartiteGraphFlag)
+			{
+				multiGraph.printToFileDirectedBipartiteGraphNAUTY(
+					file + "_DirectedBipartiteGraphNAUTY.txt");
+			}
 		}
 
 		return;
@@ -390,7 +444,13 @@ void BreadthFirstSearch::search()
 RunTree<State::ptr, InstructiveTreeDecompositionNodeContent>
 BreadthFirstSearch::extractCounterExampleRun(State::ptr state)
 {
-	RunTree<State::ptr, InstructiveTreeDecompositionNodeContent> runTree =
-		bfsDAG.retrieveRunAcyclicAutomaton(state);
+	shared_ptr<TermNode<RunNodeContent<
+		State::ptr, InstructiveTreeDecompositionNodeContent>>>
+		root(new TermNode<RunNodeContent<
+			 State::ptr, InstructiveTreeDecompositionNodeContent>>);
+	root->setParent(nullptr);
+	populate_run_node(counterexampleTrace, state, root);
+	RunTree<State::ptr, InstructiveTreeDecompositionNodeContent> runTree;
+	runTree.setRoot(root);
 	return runTree;
 }

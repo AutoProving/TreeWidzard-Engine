@@ -283,28 +283,43 @@ struct HasMultipleEdges_DynamicCore
         }
         else
         {
-            set<pair<unsigned, unsigned>> intersection_set;
-            set<pair<unsigned, unsigned>> wOneSet = w1.edgeSet;
-            set<pair<unsigned, unsigned>> wTwoSet = w2.edgeSet;
+            // Single-pass merge: detect intersection and build union simultaneously
+            // No copies of the original edge sets needed
             auto witness = w1.clone();
-
-            set_intersection(wOneSet.begin(), wOneSet.end(), wTwoSet.begin(), wTwoSet.end(), std::inserter(intersection_set, intersection_set.begin()));
-            if (intersection_set.size() > 0)
-            {
+            bool has_duplicate = false;
+            set<pair<unsigned, unsigned>> merged;
+            auto it1 = w1.edgeSet.begin();
+            auto it2 = w2.edgeSet.begin();
+            while (it1 != w1.edgeSet.end() && it2 != w2.edgeSet.end()) {
+                if (*it1 < *it2) {
+                    merged.insert(merged.end(), *it1);
+                    ++it1;
+                } else if (*it2 < *it1) {
+                    merged.insert(merged.end(), *it2);
+                    ++it2;
+                } else {
+                    // Duplicate edge found
+                    has_duplicate = true;
+                    break;
+                }
+            }
+            if (has_duplicate) {
                 witness->found = true;
                 witness->edgeSet.clear();
-                witnessSet.insert(witness);
-            }
-            else
-            {
-                set<pair<unsigned, unsigned>> union_set;
-                set<pair<unsigned, unsigned>> wOneSet = w1.edgeSet;
-                set<pair<unsigned, unsigned>> wTwoSet = w2.edgeSet;
-                set_union(wOneSet.begin(), wOneSet.end(), wTwoSet.begin(), wTwoSet.end(), std::inserter(union_set, union_set.begin()));
+            } else {
+                // No duplicates — finish building the union
+                while (it1 != w1.edgeSet.end()) {
+                    merged.insert(merged.end(), *it1);
+                    ++it1;
+                }
+                while (it2 != w2.edgeSet.end()) {
+                    merged.insert(merged.end(), *it2);
+                    ++it2;
+                }
                 witness->found = false;
-                witness->edgeSet = union_set;
-                witnessSet.insert(witness);
+                witness->edgeSet = std::move(merged);
             }
+            witnessSet.insert(witness);
         }
     }
 

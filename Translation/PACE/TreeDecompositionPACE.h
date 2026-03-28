@@ -89,6 +89,7 @@ class TreeDecompositionPACE {
 		std::shared_ptr<RawInstructiveTreeDecomposition> node, unsigned &number,
 		unsigned parentno);
 	bool updateTD();
+	bool validateParsedInput() const;
 	void construct();
 	bool validateTree(std::shared_ptr<RawInstructiveTreeDecomposition> node);
 	void createCTDNode(std::shared_ptr<TermNode<ConcreteNode>> cnode,

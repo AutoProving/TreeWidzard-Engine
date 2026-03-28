@@ -10,6 +10,40 @@
 #include "Kernel/CertificateUtils.h"
 #include "Kernel/CertificateWriter.h"
 
+namespace {
+
+struct BagSignature {
+	std::vector<unsigned> elements;
+
+	bool operator==(const BagSignature &rhs) const { return elements == rhs.elements; }
+};
+
+struct BagSignatureHash {
+	auto operator()(const BagSignature &signature) const -> std::size_t {
+		Hasher h(0);
+		h << static_cast<unsigned>(signature.elements.size());
+		for (unsigned element : signature.elements)
+		{
+			h << element;
+		}
+		return h.get();
+	}
+};
+
+auto make_bag_signature(const std::set<unsigned> &elements) -> BagSignature
+{
+	BagSignature signature;
+	signature.elements.assign(elements.begin(), elements.end());
+	return signature;
+}
+
+auto make_bag_signature(const Bag &bag) -> BagSignature
+{
+	return make_bag_signature(bag.get_elements());
+}
+
+} // namespace
+
 extern "C"
 {
 	std::map<std::string, std::string> *metadata()
@@ -119,6 +153,14 @@ void ParallelIsomorphismBreadthFirstSearch::search()
 	cout << left << setw(25) << "Iteration" << setw(25) << "ALLSTATES"
 		 << setw(25) << "NEWSTATES"
 		 << "Max WITNESSSET SIZE" << endl;
+	const bool enable_joins = kernel->get_width().get_name() == "tree_width";
+	std::unordered_map<BagSignature, std::vector<State::ptr>, BagSignatureHash>
+		joinBuckets;
+	if (enable_joins)
+	{
+		joinBuckets[make_bag_signature(initialState->get_bag())].push_back(
+			initialState);
+	}
 
 	std::mutex everything_lock;
 
@@ -471,19 +513,19 @@ void ParallelIsomorphismBreadthFirstSearch::search()
 			}
 
 			// join
-			if (kernel->get_width().get_name() == "tree_width")
+			if (enable_joins)
 			{
-				// join
-				for (auto it = allStatesSet.begin(); it != allStatesSet.end();
-					 it++)
+				const auto bucket_it =
+					joinBuckets.find(make_bag_signature(statePointer->get_bag()));
+				if (bucket_it != joinBuckets.end())
 				{
-					if (statePointer->get_bag().joinable((*it)->get_bag()))
+					for (const auto &joinState : bucket_it->second)
 					{
 						map<unsigned, unsigned> m =
 							identityMap(statePointer->get_bag().get_elements());
 						do
 						{
-							State::ptr relabeledState = (*it)->relabel(m);
+							State::ptr relabeledState = joinState->relabel(m);
 							State::ptr newStatePointer =
 								kernel->join(statePointer, relabeledState);
 							State::ptr relabeledNewStatePointer =
@@ -518,7 +560,7 @@ void ParallelIsomorphismBreadthFirstSearch::search()
 											const int left_id =
 												cert_ids.at(statePointer);
 											const int right_id =
-												cert_ids.at(*it);
+												cert_ids.at(joinState);
 											const int new_id = next_cert_id++;
 											cert_ids.emplace(
 												relabeledNewStatePointer,
@@ -537,7 +579,7 @@ void ParallelIsomorphismBreadthFirstSearch::search()
 										vector<State::ptr> antecedentStates;
 										antecedentStates.push_back(
 											statePointer);
-										antecedentStates.push_back(*it);
+										antecedentStates.push_back(joinState);
 										Transition<
 											State::ptr,
 											InstructiveTreeDecompositionNodeContent>
@@ -627,11 +669,15 @@ void ParallelIsomorphismBreadthFirstSearch::search()
 
 		for (auto it = newStatesSet.begin(); it != newStatesSet.end(); it++)
 		{
-			if (!conjecture->evaluateConjectureOnState(**it))
-			{
-				std::cout << "\nResult: ";
-				std::cout << "PROPERTY NOT SATISFIED\n"
-						  << std::endl;
+				if (!conjecture->evaluateConjectureOnState(**it))
+				{
+					const bool printStateTreeFlag = flags->get("StateTree");
+					const bool writeFilesFlag = flags->get("WriteToFiles");
+					const bool printDirectedBipartiteGraphFlag =
+						flags->get("PrintDirectedBipartiteGraphNAUTY");
+					std::cout << "\nResult: ";
+					std::cout << "PROPERTY NOT SATISFIED\n"
+							  << std::endl;
 				if (cert)
 				{
 					std::lock_guard lock(cert_lock);
@@ -649,52 +695,71 @@ void ParallelIsomorphismBreadthFirstSearch::search()
 
 				State::ptr badState = *it;
 				/* printing the conjectures and values of the variables */
-				std::cout << "The assignment that makes the formula false:"
-						  << std::endl;
-				conjecture->printValues(*badState, conjecture->getRoot());
-				std::cout << std::endl;
+					std::cout << "The assignment that makes the formula false:"
+							  << std::endl;
+					conjecture->printValues(*badState, conjecture->getRoot());
+					std::cout << std::endl;
 
-				bfsDAG.addFinalState(badState);
-				string file = this->getOutputsPath();
-				if (flags->get("Premise"))
-				{
-					file += "_Premise";
-				}
-				file += "_CounterExample";
+					if (printStateTreeFlag)
+					{
+						std::cout
+							<< "State tree output is not supported for "
+							<< getAttributeValue("SearchName") << "." << std::endl;
+					}
 
-				RunTree<State::ptr, InstructiveTreeDecompositionNodeContent>
-					runTree = extractRunTree(*it);
+					string file = this->getOutputsPath();
+					if (flags->get("Premise"))
+					{
+						file += "_Premise";
+					}
+					file += "_CounterExample";
 
-				///=======Instructive Tree=========///
-				Term<InstructiveTreeDecompositionNodeContent> *term =
-					new InstructiveTreeDecomposition;
-				*term = runTree.convertRunToTerm(runTree);
-				InstructiveTreeDecomposition *atd =
-					static_cast<InstructiveTreeDecomposition *>(term);
-				///=======Concrete TREE=========///
-				ConcreteTreeDecomposition ctd =
-					atd->convertToConcreteTreeDecomposition();
-				MultiGraph multiGraph = ctd.extractMultiGraph();
-				multiGraph.printGraph();
+					if (writeFilesFlag || printDirectedBipartiteGraphFlag)
+					{
+						bfsDAG.addFinalState(badState);
+						RunTree<State::ptr, InstructiveTreeDecompositionNodeContent>
+							runTree = extractRunTree(*it);
 
-				runTree.writeToFile(file + "_RunTree.txt");
-				atd->writeToFile(file + "_ITD.txt");
-				ctd.writeToFile(file + "_ConcreteDecomposition.txt");
-				multiGraph.printToFile(file + "_Graph.txt");
-				multiGraph.convertToGML(file + "_GMLGraph.gml");
-				multiGraph.printToFilePACEFormat(file + "_GraphPaceFormat.gr");
+						///=======Instructive Tree=========///
+						Term<InstructiveTreeDecompositionNodeContent> *term =
+							new InstructiveTreeDecomposition;
+						*term = runTree.convertRunToTerm(runTree);
+						InstructiveTreeDecomposition *atd =
+							static_cast<InstructiveTreeDecomposition *>(term);
+						///=======Concrete TREE=========///
+						ConcreteTreeDecomposition ctd =
+							atd->convertToConcreteTreeDecomposition();
+						MultiGraph multiGraph = ctd.extractMultiGraph();
+						multiGraph.printGraph();
 
-				if (flags->get("PrintDirectedBipartiteGraphNAUTY"))
-				{
-					multiGraph.printToFileDirectedBipartiteGraphNAUTY(
-						file + "_DirectedBipartiteGraphNAUTY.txt");
-				}
+						if (writeFilesFlag)
+						{
+							runTree.writeToFile(file + "_RunTree.txt");
+							atd->writeToFile(file + "_ITD.txt");
+							ctd.writeToFile(file + "_ConcreteDecomposition.txt");
+							multiGraph.printToFile(file + "_Graph.txt");
+							multiGraph.convertToGML(file + "_GMLGraph.gml");
+							multiGraph.printToFilePACEFormat(file + "_GraphPaceFormat.gr");
+						}
+
+						if (printDirectedBipartiteGraphFlag)
+						{
+							multiGraph.printToFileDirectedBipartiteGraphNAUTY(
+								file + "_DirectedBipartiteGraphNAUTY.txt");
+						}
+					}
 
 				return;
 			}
 		}
 		for (const auto &x : newStatesSet)
+		{
 			allStatesSet.insert(x);
+			if (enable_joins)
+			{
+				joinBuckets[make_bag_signature(x->get_bag())].push_back(x);
+			}
+		}
 		if (flags->get("LoopTime") == 1)
 		{
 			cout << left << setw(25) << iterationNumber << setw(25)

@@ -235,6 +235,24 @@ TEST(KernelTraversal, BreadthFirstTraversalStopsAtCounterexample) {
             1);
 }
 
+TEST(KernelTraversal, BreadthFirstTraversalChecksInitialStateBeforeExpansion) {
+  DynamicKernel kernel;
+  BoundedCountingCore core;
+  configure_kernel(kernel, core);
+  ConjectureHarness harness;
+  Conjecture conjecture = make_inv_leq_conjecture(kernel, harness, -1.0);
+  Flags flags;
+
+  const auto result = TreeWidzard::runBreadthFirstTraversal(kernel, conjecture,
+                                                            flags);
+
+  EXPECT_FALSE(result.property_satisfied);
+  ASSERT_TRUE(result.counterexample_state.has_value());
+  EXPECT_EQ(result.iterations, 0);
+  EXPECT_EQ(result.total_states, 1U);
+  EXPECT_TRUE(result.counterexample_state.value()->get_bag().get_elements().empty());
+}
+
 TEST(KernelTraversal, DynamicCoreHandlerLoadsCompiledCorePlugin) {
   const fs::path library_path = make_artifact_path(
       fs::path("DPCores") /

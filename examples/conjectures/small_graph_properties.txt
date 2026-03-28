@@ -1,7 +1,7 @@
 
 vertices := VertexCount()
-has_triangle := CliqueNumber(3)
-very_independent := IndependentSet()
+has_triangle := CliqueNumber_AtLeast(3)
+very_independent := IndependentSet_Max()
 
 Formula
 (INV(vertices) <= 6) AND 

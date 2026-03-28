@@ -21,7 +21,7 @@ private:
     std::string val; // Name of the Node
     double x = 0; // Value of the Node if it is NUMBER
     std::vector<ConjectureNode *> children;
-    ConjectureNode *parent;
+    ConjectureNode *parent = nullptr;
 public:
     ConjectureNode(TokenType type, const std::string &val);
     ConjectureNode(TokenType type, double x);
@@ -45,8 +45,8 @@ private:
     std::map<std::string, std::string> variablesToCoreName; // Map from variables To CoreName
     std::map<std::string, Function_Binary> functions_binary;
     std::map<std::string, Function_Unary> functions_unary;
-    ConjectureNode *root;
-    DynamicKernel *kernel;
+    ConjectureNode *root = nullptr;
+    DynamicKernel *kernel = nullptr;
     std::map<std::string, PropertyAssignment *> varToProperty; // map from var to Property
 public:
     Conjecture();

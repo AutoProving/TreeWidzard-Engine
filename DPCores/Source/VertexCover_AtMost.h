@@ -59,7 +59,7 @@ struct VertexCover_AtMost_Core : CoreWrapper<VertexCover_AtMost_Core, VertexCove
     static std::map<std::string, std::string> metadata()
     {
         return {
-            {"CoreName", "VertexCover"},
+            {"CoreName", "VertexCover_AtMost"},
             {"CoreType", "Bool"},
             {"ParameterType", "UnsignedInt"},
         };
@@ -68,7 +68,7 @@ struct VertexCover_AtMost_Core : CoreWrapper<VertexCover_AtMost_Core, VertexCove
     VertexCover_AtMost_Core(const parameterType &parameters)
     {
         auto [n] = unpack_typed_args<int>(parameters);
-        r = n;
+        r = static_cast<unsigned>(n);
     }
 
     void initialize_leaf(WitnessSet &ws)
@@ -114,8 +114,15 @@ struct VertexCover_AtMost_Core : CoreWrapper<VertexCover_AtMost_Core, VertexCove
 
     void clean_implementation(WitnessSet &ws)
     {
-        // Keep minimal s per S
-        std::map<std::set<unsigned>, unsigned> best;
+        // Keep minimal s per S — use hash map for faster lookup
+        struct SetHash {
+            size_t operator()(const std::set<unsigned> &s) const {
+                Hasher h(0);
+                for (unsigned v : s) h << v;
+                return h.get();
+            }
+        };
+        std::unordered_map<std::set<unsigned>, unsigned, SetHash> best;
         for (const auto &w_ptr : ws) {
             const auto &w = WitnessAlias::as_witness(*w_ptr);
             auto it = best.find(w.S);
@@ -133,6 +140,6 @@ struct VertexCover_AtMost_Core : CoreWrapper<VertexCover_AtMost_Core, VertexCove
     bool is_final_witness_implementation(const Bag &, const WitnessAlias &w)
     {
         // Accept if budget not exceeded
-        return (w.s + (unsigned)w.S.size()) <= r;
+        return (w.s + static_cast<unsigned>(w.S.size())) <= r;
     }
 };

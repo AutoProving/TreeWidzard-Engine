@@ -9,26 +9,27 @@ size_t DynamicKernel::coreSize() {
     return cores.size();
 }
 State::ptr DynamicKernel::initialState() {
-	State *initialState = new State;
+	auto initialState = State::createPooled();
 	Bag emptyBag; // Empty
 	for (size_t k = 0; k < cores.size(); ++k) {
-    auto initialSet = cores[k]->getInitialSet();
-    assert(initialSet);
+		auto initialSet = cores[k]->getInitialSet();
+		assert(initialSet);
 		initialState->addWitnessSet(std::move(initialSet));
 	}
 	initialState->set_bag(emptyBag);
-	return std::shared_ptr<const State>(initialState);
+	return initialState;
 }
 
 State::ptr DynamicKernel::intro_v(State::ptr q, unsigned i) {
-	if (q->get_bag().vertex_introducible(i)) {
-		State *aux = new State;
-		Bag b = q->get_bag();
+	const Bag &bag = q->get_bag();
+	if (bag.vertex_introducible(i)) {
+		auto aux = State::createPooled();
 		for (size_t r = 0; r < cores.size(); r++) {
-			aux->addWitnessSet(cores[r]->intro_v(i, b, (q->getWitnessSet(r))));
+			aux->addWitnessSet(
+				cores[r]->intro_v(i, bag, q->getWitnessSet(static_cast<int>(r))));
 		}
-		aux->set_bag(b.intro_v(i));
-		return std::shared_ptr<const State>(aux);
+		aux->set_bag(bag.intro_v(i));
+		return aux;
 	} else {
 		std::cerr << "Error in function DynamicKernel::intro_v. The bag is not "<<i<<
 				" introducible"
@@ -39,15 +40,15 @@ State::ptr DynamicKernel::intro_v(State::ptr q, unsigned i) {
 
 State::ptr DynamicKernel::intro_e(const State::ptr q, const unsigned i,
 								  const unsigned j) {
-	if (q->get_bag().edge_introducible(i, j)) {
-		State *aux = new State;
-		Bag b = q->get_bag();
+	const Bag &bag = q->get_bag();
+	if (bag.edge_introducible(i, j)) {
+		auto aux = State::createPooled();
 		for (size_t r = 0; r < cores.size(); r++) {
 			aux->addWitnessSet(
-				cores[r]->intro_e(i, j, b, (q->getWitnessSet(r))));
+				cores[r]->intro_e(i, j, bag, q->getWitnessSet(static_cast<int>(r))));
 		}
-		aux->set_bag(b.intro_e(i, j));
-		return std::shared_ptr<const State>(aux);
+		aux->set_bag(bag.intro_e(i, j));
+		return aux;
 	} else {
 		std::cerr << "Error in function DynamicKernel::intro_e. The bag is not "<<i <<", "<<j<<
 				" introducible"
@@ -57,15 +58,15 @@ State::ptr DynamicKernel::intro_e(const State::ptr q, const unsigned i,
 }
 
 State::ptr DynamicKernel::forget_v(State::ptr q, unsigned i) {
-	if (q->get_bag().vertex_forgettable(i)) {
-		State *aux = new State;
-		Bag b = q->get_bag();
+	const Bag &bag = q->get_bag();
+	if (bag.vertex_forgettable(i)) {
+		auto aux = State::createPooled();
 		for (size_t r = 0; r < cores.size(); r++) {
 			aux->addWitnessSet(
-				cores[r]->forget_v(i, b, (q->getWitnessSet(r))));
+				cores[r]->forget_v(i, bag, q->getWitnessSet(static_cast<int>(r))));
 		}
-		aux->set_bag(b.forget_v(i));
-		return std::shared_ptr<const State>(aux);
+		aux->set_bag(bag.forget_v(i));
+		return aux;
 	} else {
 		std::cerr << "Error in function DynamicKernel::forget_v. The bag is not "<<i<<
 				" forgettable"
@@ -75,17 +76,18 @@ State::ptr DynamicKernel::forget_v(State::ptr q, unsigned i) {
 }
 
 State::ptr DynamicKernel::join(State::ptr q1, State::ptr q2) {
-	if (q1->get_bag().joinable(q2->get_bag())) {
-		State *aux = new State;
-		std::set<unsigned> elements = q1->get_bag().get_elements();
-		Bag b;
-		b.set_elements(elements);
+	const Bag &left_bag = q1->get_bag();
+	const Bag &right_bag = q2->get_bag();
+	if (left_bag.joinable(right_bag)) {
+		auto aux = State::createPooled();
+		Bag b = left_bag;
 		// in join the new state should not have an edge
 		for (size_t r = 0; r < cores.size(); r++) {
-			aux->addWitnessSet(cores[r]->join(b, (q1->getWitnessSet(r)), (q2->getWitnessSet(r))));
+			aux->addWitnessSet(
+				cores[r]->join(b, q1->getWitnessSet(static_cast<int>(r)), q2->getWitnessSet(static_cast<int>(r))));
 		}
 		aux->set_bag(b);
-		return std::shared_ptr<const State>(aux);
+		return aux;
 	} else {
 		std::cerr << "Error in function DynamicKernel::join. The bags are not "
 				"joinable"
@@ -109,10 +111,10 @@ DynamicCore* DynamicKernel::pointerToCoreNumber(unsigned i) {
 
 Width& DynamicKernel::get_width() { return width; }
 
-void DynamicKernel::set_width(Width& width) { DynamicKernel::width = width; }
+void DynamicKernel::set_width(Width& w) { width = w; }
 
 
-bool DynamicKernel::isVarExists(std::string var) {
+bool DynamicKernel::isVarExists(const std::string &var) {
     if(varToNameAndIndex.count(var)){
         return true;
     }else{
@@ -124,21 +126,21 @@ const std::map<std::string, std::pair<std::string, int>> &DynamicKernel::getVarT
     return varToNameAndIndex;
 }
 
-void DynamicKernel::setVarToNameAndIndex(const std::map<std::string, std::pair<std::string, int>> &varToNameAndIndex) {
-    DynamicKernel::varToNameAndIndex = varToNameAndIndex;
+void DynamicKernel::setVarToNameAndIndex(const std::map<std::string, std::pair<std::string, int>> &newVarToNameAndIndex) {
+    varToNameAndIndex = newVarToNameAndIndex;
 }
 
 
-DynamicCore* DynamicKernel::getCoreByVar(std::string var) {
+DynamicCore* DynamicKernel::getCoreByVar(const std::string &var) {
     if(isVarExists(var)){
-        return cores[varToNameAndIndex[var].second] ;
+        return cores[static_cast<size_t>(varToNameAndIndex[var].second)] ;
     }else{
         std::cout<<"Error DynamicKernel::getCoreByVar core doesn't exist"<<std::endl;
         exit(20);
     }
 }
 
-int DynamicKernel::getIndexByVar(std::string var) {
+int DynamicKernel::getIndexByVar(const std::string &var) {
     if(isVarExists(var)){
         return varToNameAndIndex[var].second ;
     }else{

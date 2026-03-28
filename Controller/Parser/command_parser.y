@@ -14,6 +14,7 @@
     #include <memory>
     #include <set>
     #include <tuple>
+    #include <limits>
     #include <algorithm>
     #include "../SearchController.h"
     #include "../../Kernel/Flags.h"
@@ -26,6 +27,18 @@
     extern int command_lineno;
     extern void yyerror(int &result, std::string &width_type, int &width_value,char const* msg);
     Flags flags;
+
+    int require_non_negative_integer(float value, const char *field_name) {
+        if (value < 0 || std::floor(value) != value) {
+            std::cout << field_name << " should be a non-negative integer" << std::endl;
+            return -1;
+        }
+        if (value > static_cast<float>(std::numeric_limits<int>::max())) {
+            std::cout << field_name << " is too large" << std::endl;
+            return -1;
+        }
+        return static_cast<int>(value);
+    }
 
   %}
 %locations
@@ -71,8 +84,8 @@ command_search      : command_search_signature command_width command_flags
                                                                                                      }
 
                     ;
-command_width 	    : command_pw  command_equal command_number {width_type = "path_width"; if($3<0){std::cout<< "width value should be not negative" << std::endl; YYERROR;} width_value=$3;}
-		    | command_tw command_equal command_number {width_type = "tree_width"; if($3<0){std::cout<< "width value should be not negative" << std::endl; YYERROR;} width_value=$3;}
+command_width 	    : command_pw  command_equal command_number {width_type = "path_width"; width_value = require_non_negative_integer($3, "width value"); if (width_value < 0) { YYERROR; }}
+		    | command_tw command_equal command_number {width_type = "tree_width"; width_value = require_non_negative_integer($3, "width value"); if (width_value < 0) { YYERROR; }}
 command_random	    : command_random_signature command_number command_number command_number command_number {
 													    if($3+$4>1){std::cout<<"sum of the probalities is bigger than 1"<<std::endl;
 													    YYERROR;}
@@ -87,7 +100,7 @@ command_flags       : command_print_state_flag command_flags {flags.add_flag("Pr
                     | command_print_state_tree command_flags {flags.add_flag("StateTree", 1);}
                     | command_premise command_flags {flags.add_flag("Premise", 1);}
                     | command_no_bfs_dag command_flags {flags.add_flag("NoBFSDAG", 1);}
-                    | command_nthreads command_number command_flags { if ($2<1){std::cout<< "Number of threads to use should be at least 1." << std::endl; YYERROR; } flags.add_flag("NThreads", $2);}
+                    | command_nthreads command_number command_flags { int nthreads = require_non_negative_integer($2, "Number of threads to use"); if (nthreads < 0) { YYERROR; } if (nthreads < 1){std::cout<< "Number of threads to use should be at least 1." << std::endl; YYERROR; } flags.add_flag("NThreads", static_cast<float>(nthreads));}
                     | command_print_directed_bipartite_graph command_flags {flags.add_flag("PrintDirectedBipartiteGraphNAUTY", 1);}
                     | command_write_files command_flags {flags.add_flag("WriteToFiles", 1);}
                     |                                        {}

@@ -13,11 +13,12 @@
 %option yylineno
 
 %%
-:                           yylval.string = strdup(yytext); return TR_SEPARATOR;
+\(                          yylval.string = strdup(yytext); return TR_LEFTP;
+\)                          yylval.string = strdup(yytext); return TR_RIGHTP;
+,                           yylval.string = strdup(yytext); return TR_COMMA;
 [0-9]+                      yylval.number = atoi(yytext); return TR_NODE_NUM;
-"//".*\n                       yylval.string = strdup(yytext); return TR_COMMENT;
-[a-zA-Z]+                   yylval.string = strdup(yytext); return TR_NODE_SYMBOL;
-\n                          yylval.string= strdup(yytext);  return TR_NEWLINE;
+"//"[^\n]*                  yylval.string = strdup(yytext); return TR_COMMENT;
+[a-zA-Z_][a-zA-Z0-9_]*      yylval.string = strdup(yytext); return TR_NODE_SYMBOL;
+\n                          yylval.string = strdup(yytext); return TR_NEWLINE;
 [\r \t]+                    ;
 %%
-

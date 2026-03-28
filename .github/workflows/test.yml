@@ -73,6 +73,87 @@ jobs:
         ctest --test-dir build --output-on-failure \
           -j "$(nproc)" \
           --output-junit ctest_results.xml
+
+    - name: Configure shared install smoke build (Unix)
+      if: runner.os != 'Windows'
+      run: cmake -S . -B build_install -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_TESTS=OFF
+
+    - name: Configure shared install smoke build (Windows)
+      if: runner.os == 'Windows'
+      shell: msys2 {0}
+      run: cmake -S . -B build_install -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_TESTS=OFF
+
+    - name: Build shared install smoke tree (Unix)
+      if: runner.os != 'Windows'
+      run: cmake --build build_install -j "$(nproc 2>/dev/null || sysctl -n hw.ncpu)"
+
+    - name: Build shared install smoke tree (Windows)
+      if: runner.os == 'Windows'
+      shell: msys2 {0}
+      run: cmake --build build_install -j "$(nproc)"
+
+    - name: Install and relocate TreeWidzard (Unix)
+      if: runner.os != 'Windows'
+      run: |
+        rm -rf install_tree relocated_tree smoke_build
+        cmake --install build_install --prefix install_tree
+        mv install_tree relocated_tree
+
+    - name: Install and relocate TreeWidzard (Windows)
+      if: runner.os == 'Windows'
+      shell: msys2 {0}
+      run: |
+        rm -rf install_tree relocated_tree smoke_build
+        cmake --install build_install --prefix install_tree
+        mv install_tree relocated_tree
+
+    - name: Smoke test relocated launcher (Unix)
+      if: runner.os != 'Windows'
+      run: |
+        relocated_root="$PWD/relocated_tree"
+        output="$("$relocated_root/bin/treewidzard" -atp tw=2 BreadthFirstSearch "$PWD/examples/conjectures/simple_implies.txt")"
+        echo "$output"
+        grep -q "PROPERTY SATISFIED" <<< "$output"
+
+    - name: Smoke test relocated launcher (Windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        $root = Join-Path $pwd 'relocated_tree'
+        $property = Join-Path $pwd 'examples/conjectures/simple_implies.txt'
+        $output = & (Join-Path $root 'bin/treewidzard.bat') -atp tw=2 BreadthFirstSearch $property 2>&1 | Out-String
+        Write-Host $output
+        if ($LASTEXITCODE -ne 0 -or $output -notmatch 'PROPERTY SATISFIED') {
+          exit 1
+        }
+
+    - name: Build install smoke consumer (Unix)
+      if: runner.os != 'Windows'
+      run: |
+        cmake -S tests/install_smoke -B smoke_build -DTREEWIDZARD_INSTALL_PREFIX="$PWD/relocated_tree"
+        cmake --build smoke_build -j "$(nproc 2>/dev/null || sysctl -n hw.ncpu)"
+
+    - name: Build install smoke consumer (Windows)
+      if: runner.os == 'Windows'
+      shell: msys2 {0}
+      run: |
+        cmake -S tests/install_smoke -B smoke_build -G Ninja -DTREEWIDZARD_INSTALL_PREFIX="$PWD/relocated_tree"
+        cmake --build smoke_build -j "$(nproc)"
+
+    - name: Run install smoke consumer (Unix)
+      if: runner.os != 'Windows'
+      run: ./smoke_build/treewidzard_install_smoke
+
+    - name: Run install smoke consumer (Windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        $root = Join-Path $pwd 'relocated_tree'
+        $env:PATH = (Join-Path $root 'bin') + ';' + $env:PATH
+        & (Join-Path $pwd 'smoke_build/treewidzard_install_smoke.exe')
+        if ($LASTEXITCODE -ne 0) {
+          exit $LASTEXITCODE
+        }
     
     - name: Upload Test Results
       if: always()

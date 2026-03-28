@@ -92,10 +92,22 @@ set(TREEWIDZARD_INSTALL_FULL_DPCORES_DIR
 set(TREEWIDZARD_INSTALL_FULL_SEARCHSTRATEGIES_DIR
     "${TREEWIDZARD_INSTALL_FULL_RUNTIME_DIR}/SearchStrategies")
 
+if(APPLE)
+  set(TREEWIDZARD_EXEC_INSTALL_RPATH
+      "@loader_path/../../${CMAKE_INSTALL_LIBDIR}")
+  set(TREEWIDZARD_PLUGIN_INSTALL_RPATH
+      "@loader_path/../../../${CMAKE_INSTALL_LIBDIR}")
+elseif(UNIX)
+  set(TREEWIDZARD_EXEC_INSTALL_RPATH
+      "$ORIGIN/../../${CMAKE_INSTALL_LIBDIR}")
+  set(TREEWIDZARD_PLUGIN_INSTALL_RPATH
+      "$ORIGIN/../../../${CMAKE_INSTALL_LIBDIR}")
+endif()
+
 # Define default paths for DPCores and SearchStrategies. Keep the compiled-in
-# fallback to the build tree only. Installed launchers override these via
-# environment variables, which avoids Windows compile-definition quoting issues
-# for semicolon-separated path lists.
+# fallback to the build tree only. Installed binaries now discover adjacent
+# libexec directories at runtime, so the compiled defaults only serve build-tree
+# execution and explicit overrides.
 set(TREEWIDZARD_DPCORES_DEFAULT_RAW
     "${CMAKE_CURRENT_BINARY_DIR}/DPCores")
 if(DEFINED TREEWIDZARD_DPCORES_DEFAULT AND
@@ -191,6 +203,7 @@ include_directories(
 add_library(TreeWidzard-Core
     Controller/InputController.cpp
     Kernel/DynamicCore.cpp
+    Kernel/RuntimePaths.cpp
     Kernel/Witness.cpp
     Kernel/WitnessSet.cpp
     Kernel/DynamicKernel.cpp
@@ -223,6 +236,12 @@ set_target_properties(TreeWidzard-Core PROPERTIES
     SOVERSION 0
 )
 
+if(APPLE)
+  set_target_properties(TreeWidzard-Core PROPERTIES
+      MACOSX_RPATH ON
+      INSTALL_NAME_DIR "@rpath")
+endif()
+
 # Install the library
 install(TARGETS TreeWidzard-Core
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
@@ -232,6 +251,8 @@ install(TARGETS TreeWidzard-Core
 
 # Install Headers (Recursive pattern or list specific dirs)
 install(DIRECTORY Kernel Conjecture TreeAutomaton Multigraph Controller
+                  ConcreteTreeDecomposition Translation Parser
+                  DynamicLibraryLoader
     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/treewidzard/internal
     FILES_MATCHING PATTERN "*.h" PATTERN "*.hpp"
 )
@@ -243,6 +264,7 @@ install(DIRECTORY include/
 target_include_directories(TreeWidzard-Core PUBLIC 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/treewidzard>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/treewidzard/internal>
 )
 
 # Find and link Threads (if needed)
@@ -259,7 +281,7 @@ else()
     set(NUMA_LIBRARIES "")
 endif()
 
-target_link_libraries(TreeWidzard-Core PRIVATE Threads::Threads ${NUMA_LIBRARIES})
+target_link_libraries(TreeWidzard-Core PUBLIC Threads::Threads ${NUMA_LIBRARIES} ${CMAKE_DL_LIBS})
 
 # Define the executable and link against the core library
 add_executable(treewidzard
@@ -329,7 +351,6 @@ add_executable(treewidzard
     Translation/PACE/Parser/atd_parser.cpp
     Translation/PACE/Parser/atd_parser.hpp
     Translation/TreeAutomaton/term_parser.cpp
-    Translation/TreeAutomaton/term_parser.cpp
     Translation/TreeAutomaton/term_lexer.cpp
     # TreeAutomaton
     TreeAutomaton/TreeAutomaton.h
@@ -348,6 +369,11 @@ add_executable(treewidzard
 
 # Link the executable against the core library and Threads
 target_link_libraries(treewidzard PRIVATE TreeWidzard-Core ${CMAKE_DL_LIBS} Threads::Threads ${NUMA_LIBRARIES})
+
+if(DEFINED TREEWIDZARD_EXEC_INSTALL_RPATH)
+  set_target_properties(treewidzard PROPERTIES
+      INSTALL_RPATH "${TREEWIDZARD_EXEC_INSTALL_RPATH}")
+endif()
 
 install(TARGETS treewidzard
     RUNTIME DESTINATION ${TREEWIDZARD_INSTALL_RUNTIME_DIR}

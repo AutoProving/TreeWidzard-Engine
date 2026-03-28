@@ -1,25 +1,29 @@
 #include "Bag.h"
 
+#include <iterator>
+
 size_t Bag::size() const { return elements.size(); }
 
 void Bag::set_edge(unsigned i, unsigned j) {
 	if (i < j) {
-		Bag::i = i;
-		Bag::j = j;
+		edge_i = i;
+		edge_j = j;
 	} else {
-		Bag::i = j;
-		Bag::j = i;
+		edge_i = j;
+		edge_j = i;
 	}
 }
 
 std::pair<unsigned, unsigned> Bag::get_edge() const {
-	return std::make_pair(i, j);
+	return std::make_pair(edge_i, edge_j);
 }
 
-std::set<unsigned> Bag::get_elements() const { return elements; }
+const std::set<unsigned> &Bag::get_elements() const { return elements; }
 
-void Bag::set_elements(const std::set<unsigned> &elements) {
-	this->elements = elements;
+std::set<unsigned> Bag::get_elements_copy() const { return elements; }
+
+void Bag::set_elements(const std::set<unsigned> &new_elements) {
+	elements = new_elements;
 }
 
 // void Bag::print() {
@@ -55,61 +59,51 @@ void Bag::set_elements(const std::set<unsigned> &elements) {
 
 void Bag::print() {
 	std::cout << "{";
-	for (auto element : elements) {
-		std::cout << element;
-		if (element != *(--elements.end())) std::cout << ",";
+	for (auto it = elements.begin(); it != elements.end(); ++it) {
+		std::cout << *it;
+		if (std::next(it) != elements.end()) std::cout << ",";
 	}
 	std::cout << "}";
 }
 
 void Bag::print() const {
 	std::cout << "{";
-	for (auto element : elements) {
-		std::cout << element;
-		if (element != *(--elements.end())) std::cout << ",";
+	for (auto it = elements.begin(); it != elements.end(); ++it) {
+		std::cout << *it;
+		if (std::next(it) != elements.end()) std::cout << ",";
 	}
 	std::cout << "}";
 }
 std::string Bag::bagInformation() const {
 	std::string info("{");
-	for (auto element : elements) {
-		info = info + std::to_string(element);
-		if (element != *(--elements.end())) info = info + ",";
+	for (auto it = elements.begin(); it != elements.end(); ++it) {
+		info = info + std::to_string(*it);
+		if (std::next(it) != elements.end()) info = info + ",";
 	}
 	info = info + "}";
 	return info;
 }
 
-// bool Bag::operator<(const Bag &rhs) const {
-//	if (elements < rhs.get_elements()) {
-//		return true;
-//	} else if (rhs.get_elements() < elements) {
-//		return false;
-//	} else if (this->get_edge() < rhs.get_edge()) {
-//		return true;
-//	} else {
-//		return false;
-//	}
-// }
-
 bool Bag::operator<(const Bag &rhs) const {
-	return elements < rhs.get_elements();
+	if (elements < rhs.elements) {
+		return true;
+	} else if (rhs.elements < elements) {
+		return false;
+	} else if (this->get_edge() < rhs.get_edge()) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
-// bool Bag::operator==(const Bag &rhs) const {
-//	if (elements == rhs.get_elements() and this->get_edge() == rhs.get_edge()) {
-//		return true;
-//	} else {
-//		return false;
-//	}
-// }
-
 bool Bag::operator==(const Bag &rhs) const {
-	return elements == rhs.get_elements();
+	return elements == rhs.elements and this->get_edge() == rhs.get_edge();
 }
 
 void Bag::hash(Hasher &h) const {
-	for (unsigned i : elements) h << i;
+	for (unsigned elem : elements) h << elem;
+	h << edge_i;
+	h << edge_j;
 }
 
 bool Bag::vertex_introducible(unsigned i) const {
@@ -137,35 +131,34 @@ bool Bag::vertex_forgettable(unsigned i) const {
 	}
 }
 
-bool Bag::joinable(Bag b) {
-	if (this->elements == b.get_elements()) {
-		return true;
+bool Bag::joinable(const Bag &b) const {
+	return elements == b.elements;
+}
+
+Bag Bag::intro_v(unsigned v) const {
+	Bag result = *this;
+	result.elements.insert(v);
+	return result;
+}
+
+Bag Bag::intro_e(unsigned ei, unsigned ej) const {
+	Bag result = *this;
+	if (ei < ej) {
+		result.set_edge(ei, ej);
 	} else {
-		return false;
+		result.set_edge(ej, ei);
 	}
+	return result;
 }
 
-Bag Bag::intro_v(unsigned i) {
-	elements.insert(i);
-	return *this;
-}
-
-Bag Bag::intro_e(unsigned i, unsigned j) {
-	if (i < j) {
-		set_edge(i, j);
-	} else {
-		set_edge(j, i);
+Bag Bag::forget_v(unsigned v) const {
+	Bag result = *this;
+	result.elements.erase(v);
+	if (result.edge_i == v or result.edge_j == v) {
+		result.edge_i = 0;
+		result.edge_j = 0;
 	}
-	return *this;
-}
-
-Bag Bag::forget_v(unsigned i) {
-	elements.erase(i);
-	if (this->i == i or this->j == i) {
-		this->i = 0;
-		this->j = 0;
-	}
-	return *this;
+	return result;
 }
 
 Bag Bag::relabel(std::map<unsigned int, unsigned int> relabelingMap) const {
@@ -181,6 +174,14 @@ Bag Bag::relabel(std::map<unsigned int, unsigned int> relabelingMap) const {
 		}
 	}
 	b.set_elements(bagElements);
-	b.set_edge(relabelingMap[this->i], relabelingMap[this->j]);
+	if (this->edge_i != 0 && this->edge_j != 0) {
+		if (relabelingMap.count(this->edge_i) && relabelingMap.count(this->edge_j)) {
+			b.set_edge(relabelingMap[this->edge_i], relabelingMap[this->edge_j]);
+		} else {
+			std::cout << "Error: Bag::relabel edge vertices not in relabeling map"
+					  << std::endl;
+			exit(20);
+		}
+	}
 	return b;
 }

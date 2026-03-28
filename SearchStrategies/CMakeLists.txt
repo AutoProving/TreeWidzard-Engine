@@ -105,6 +105,12 @@ foreach(file ${files})
         Threads::Threads
     )
 
+    if(DEFINED TREEWIDZARD_PLUGIN_INSTALL_RPATH)
+        set_target_properties(${search_strategy_name} PROPERTIES
+            INSTALL_RPATH "${TREEWIDZARD_PLUGIN_INSTALL_RPATH}"
+        )
+    endif()
+
     install(TARGETS ${search_strategy_name}
         LIBRARY DESTINATION ${TREEWIDZARD_INSTALL_SEARCHSTRATEGIES_DIR}
         RUNTIME DESTINATION ${TREEWIDZARD_INSTALL_SEARCHSTRATEGIES_DIR}

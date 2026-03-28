@@ -77,7 +77,7 @@ TEST(PublicApi, EngineLoadCoreRejectsEmptyName) {
 
 TEST(PublicApi, EngineLoadCoreRejectsNegativeParameter) {
   TreeWidzard::Engine engine;
-  EXPECT_THROW(engine.loadCore("ChromaticNumber", -1), std::invalid_argument);
+  EXPECT_THROW(engine.loadCore("ChromaticNumber_AtMost", -1), std::invalid_argument);
 }
 
 TEST(PublicApi, EngineSetConjectureRejectsEmptyString) {
@@ -92,7 +92,7 @@ TEST(PublicApi, EngineSetWidthRejectsNegativeWidth) {
 
 TEST(PublicApi, EngineSolveRequiresWidth) {
   TreeWidzard::Engine engine;
-  engine.loadCore("ChromaticNumber", 3);
+  engine.loadCore("ChromaticNumber_AtMost", 3);
   engine.setConjecture("x");
 
   EXPECT_THROW(engine.solve(), std::logic_error);
@@ -100,7 +100,7 @@ TEST(PublicApi, EngineSolveRequiresWidth) {
 
 TEST(PublicApi, EngineSolveRequiresConjecture) {
   TreeWidzard::Engine engine;
-  engine.loadCore("ChromaticNumber", 3);
+  engine.loadCore("ChromaticNumber_AtMost", 3);
   engine.setWidth(2);
 
   EXPECT_THROW(engine.solve(), std::logic_error);
@@ -108,7 +108,7 @@ TEST(PublicApi, EngineSolveRequiresConjecture) {
 
 TEST(PublicApi, EngineFormulaShorthandReturnsTrue) {
   TreeWidzard::Engine engine;
-  engine.loadCore("ChromaticNumber", 3);
+  engine.loadCore("ChromaticNumber_AtMost", 3);
   engine.setWidth(2);
   engine.setConjecture("x");
 
@@ -117,7 +117,7 @@ TEST(PublicApi, EngineFormulaShorthandReturnsTrue) {
 
 TEST(PublicApi, EngineFormulaShorthandReturnsFalse) {
   TreeWidzard::Engine engine;
-  engine.loadCore("ChromaticNumber", 3);
+  engine.loadCore("ChromaticNumber_AtMost", 3);
   engine.setWidth(3);
   engine.setConjecture("x");
 
@@ -130,6 +130,17 @@ TEST(PublicApi, EngineAcceptsFullConjectureDefinition) {
   engine.setConjecture("x := VertexCount()\nFormula\nx == 0");
 
   EXPECT_FALSE(engine.solve());
+}
+
+TEST(PublicApi, EngineSupportsExpAliasesInFullConjectures) {
+  TreeWidzard::Engine engine;
+  engine.setWidth(2);
+  engine.setConjecture(
+      "Formula\n"
+      "EXP alias := TRUE\n"
+      "alias");
+
+  EXPECT_TRUE(engine.solve());
 }
 
 TEST(PublicApi, EngineShorthandEqualityMatchesFullDefinition) {
@@ -161,7 +172,7 @@ TEST(PublicApi, EngineMatchesSharedInputControllerSetup) {
           .property_satisfied;
 
   TreeWidzard::Engine engine;
-  engine.loadCore("ChromaticNumber", 3);
+  engine.loadCore("ChromaticNumber_AtMost", 3);
   engine.setWidth(3);
   engine.setConjecture("x");
 
@@ -185,10 +196,10 @@ TEST(PublicApi, InputControllerBuildsExpectedKernelAndMappings) {
   EXPECT_EQ(kernel.coreSize(), 2U);
   EXPECT_TRUE(kernel.isVarExists("x"));
   EXPECT_TRUE(kernel.isVarExists("y"));
-  EXPECT_EQ(variables_to_core.at("x"), "ChromaticNumber");
+  EXPECT_EQ(variables_to_core.at("x"), "ChromaticNumber_AtMost");
   EXPECT_EQ(variables_to_core.at("y"), "VertexCount");
   ASSERT_EQ(properties.size(), 2U);
-  EXPECT_EQ(properties.at("x")->getName(), "ChromaticNumber");
+  EXPECT_EQ(properties.at("x")->getName(), "ChromaticNumber_AtMost");
   EXPECT_EQ(properties.at("x")->getParameterType(), "UnsignedInt");
   EXPECT_EQ(properties.at("y")->getName(), "VertexCount");
   EXPECT_EQ(properties.at("y")->getParameterType(), "None");
@@ -207,7 +218,7 @@ TEST(PublicApi, InputControllerDiscoversKnownCores) {
       InputController::discover_core_handlers(InputController::default_paths(),
                                              true);
 
-  EXPECT_TRUE(core_handlers.contains("ChromaticNumber"));
+  EXPECT_TRUE(core_handlers.contains("ChromaticNumber_AtMost"));
   EXPECT_TRUE(core_handlers.contains("VertexCount"));
 }
 
@@ -235,7 +246,7 @@ TEST(PublicApi, InputControllerFromSourceThrowsOnInvalidCore) {
 
 TEST(PublicApi, EngineRejectsUnsupportedShorthandInequality) {
   TreeWidzard::Engine engine;
-  engine.loadCore("ChromaticNumber", 3);
+  engine.loadCore("ChromaticNumber_AtMost", 3);
   engine.setWidth(2);
   engine.setConjecture("x != x");
 

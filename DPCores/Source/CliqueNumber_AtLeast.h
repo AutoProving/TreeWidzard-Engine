@@ -112,7 +112,7 @@ struct CliqueNumberSimpleGraphs_AtLeast_Core
 
 	static std::map<std::string, std::string> metadata() {
 		return {
-			{"CoreName", "CliqueNumber"},
+			{"CoreName", "CliqueNumber_AtLeast"},
 			{"CoreType", "Bool"},
 			{"ParameterType", "UnsignedInt"},
 			// {"PrimaryOperator", "AtLeast"},
@@ -174,10 +174,11 @@ struct CliqueNumberSimpleGraphs_AtLeast_Core
       auto witness = w.clone();
 
       if (w.partialClique.count(i) and w.partialClique.count(j)) {
-        // Both i and j are in the clique, so that the counters of i and j
-        // will be increased by one.
+        // Both i and j are in the clique, so increment their edge counters.
         unsigned iCounter = witness->partialClique[i];
         unsigned jCounter = witness->partialClique[j];
+        // Each vertex in a k-clique has exactly k-1 neighbors within
+        // the clique. Counters must not exceed cliqueSize - 1.
         if (iCounter < cliqueSize - 1 and jCounter < cliqueSize - 1) {
           witness->partialClique.erase(i);
           witness->partialClique.erase(j);
@@ -189,6 +190,9 @@ struct CliqueNumberSimpleGraphs_AtLeast_Core
           }
           witnessSet.insert(std::move(witness));
         }
+        // If a counter would exceed cliqueSize - 1, this edge makes
+        // the partial clique invalid (a vertex would have too many
+        // neighbors). This witness is correctly dropped.
 
       } else {
         // Either i or j is not in the clique, so that {i,j} cannot be added

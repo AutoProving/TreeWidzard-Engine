@@ -15,6 +15,23 @@ private:
 	friend Core;
 
 	Core &as_core() { return *static_cast<Core *>(this); }
+
+	// Helper to iterate witnesses efficiently, bypassing virtual dispatch when possible
+	template<typename WS, typename Fn>
+	static void for_each_witness(const WS &witnessSet, Fn &&fn) {
+		if constexpr (requires { witnessSet.direct_container(); }) {
+			for (const auto &w_ptr : witnessSet.direct_container())
+				fn(w_ptr);
+		} else if constexpr (requires { witnessSet.direct_indices(); }) {
+			auto indices = witnessSet.direct_indices();
+			const auto &wv = WS::direct_witness_vector();
+			for (int idx : indices)
+				fn(wv[idx]);
+		} else {
+			for (const auto &w_ptr : witnessSet)
+				fn(w_ptr);
+		}
+	}
 	static WitnessSetType<WitnessAlias> &as_witness_set(::WitnessSet &witnessSetBase)
 	{
 #ifdef ENABLE_DEBUG_INFO
@@ -54,9 +71,10 @@ public:
 		const auto &witnessSet = as_witness_set(*ws_ptr);
 		auto newWitnessSet = std::make_shared<WitnessSet>();
 
-		for (const auto &w_ptr : witnessSet)
+		for_each_witness(witnessSet, [&](const auto &w_ptr) {
 			this->as_core().intro_v_implementation(
 				i, b, WitnessAlias::as_witness(*w_ptr), *newWitnessSet);
+		});
 
 		this->as_core().clean_implementation(*newWitnessSet);
 
@@ -69,9 +87,10 @@ public:
 		const auto &witnessSet = as_witness_set(*ws_ptr);
 		auto newWitnessSet = std::make_shared<WitnessSet>();
 
-		for (const auto &w_ptr : witnessSet)
+		for_each_witness(witnessSet, [&](const auto &w_ptr) {
 			this->as_core().intro_e_implementation(
 				i, j, b, WitnessAlias::as_witness(*w_ptr), *newWitnessSet);
+		});
 
 		this->as_core().clean_implementation(*newWitnessSet);
 		return newWitnessSet;
@@ -83,9 +102,10 @@ public:
 		const auto &witnessSet = as_witness_set(*ws_ptr);
 		auto newWitnessSet = std::make_shared<WitnessSet>();
 
-		for (const auto &w_ptr : witnessSet)
+		for_each_witness(witnessSet, [&](const auto &w_ptr) {
 			this->as_core().forget_v_implementation(
 				i, b, WitnessAlias::as_witness(*w_ptr), *newWitnessSet);
+		});
 
 		this->as_core().clean_implementation(*newWitnessSet);
 		return newWitnessSet;
@@ -98,11 +118,13 @@ public:
 		const auto &ws2 = as_witness_set(*ws_ptr2);
 		auto newWitnessSet = std::make_shared<WitnessSet>();
 
-		for (const auto &w_ptr1 : ws1)
-			for (const auto &w_ptr2 : ws2)
+		for_each_witness(ws1, [&](const auto &w_ptr1) {
+			for_each_witness(ws2, [&](const auto &w_ptr2) {
 				this->as_core().join_implementation(
 					b, WitnessAlias::as_witness(*w_ptr1),
 					WitnessAlias::as_witness(*w_ptr2), *newWitnessSet);
+			});
+		});
 
 		this->as_core().clean_implementation(*newWitnessSet);
 		return newWitnessSet;
@@ -132,39 +154,44 @@ public:
 							  WitnessSetPointer ws_ptr) override
 	{
 		const auto &witnessSet = as_witness_set(*ws_ptr);
-		for (const auto &w_ptr : witnessSet)
+		bool result = false;
+		for_each_witness(witnessSet, [&](const auto &w_ptr) {
 			if (this->as_core().is_final_witness_implementation(
 					bag, WitnessAlias::as_witness(*w_ptr)))
-				return true;
+				result = true;
+		});
 
-		return false;
+		return result;
 	}
 
 	int inv(const Bag &bag, WitnessSetPointer witnessSet) override
 	{
 		auto coreType = getAttributeValue("CoreType");
+		const auto &witnessSetRef = as_witness_set(*witnessSet);
 
 		if (coreType == "Max")
 		{
 			int max = 0;
-			for (WitnessPointerConst temp : *witnessSet)
+			for_each_witness(witnessSetRef, [&](const auto &temp) {
 				max = std::max(max, this->as_core().inv_implementation(
 										bag, WitnessAlias::as_witness(*temp)));
+			});
 			return max;
 		}
 
 		if (coreType == "Min")
 		{
 			int min = std::numeric_limits<int>::max();
-			for (WitnessPointerConst temp : *witnessSet)
+			for_each_witness(witnessSetRef, [&](const auto &temp) {
 				min = std::min(min, this->as_core().inv_implementation(
 										bag, WitnessAlias::as_witness(*temp)));
+			});
 			return min;
 		}
 
 		// If CoreType is not set to Max or Min, return the is final witness function
-		return this->as_core().is_final_witness_set(bag, witnessSet);	
-		 
+		return this->as_core().is_final_witness_set(bag, witnessSet);
+
 	}
 
 	// This method will never be called through a reference to this base class.

@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.10)
 
 # Fetch GoogleTest using FetchContent
 include(FetchContent)
+set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
+set(INSTALL_GMOCK OFF CACHE BOOL "" FORCE)
 FetchContent_Declare(
   googletest
   URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip
@@ -23,6 +25,14 @@ set(UNIT_TEST_SOURCES
     unit/test_bag_operations.cpp
     unit/test_core_support.cpp
     unit/test_kernel_components.cpp
+    unit/test_bag_state_fixes.cpp
+    unit/test_witnessset_kernel_fixes.cpp
+    unit/test_dp_cores.cpp
+    unit/test_bfs_multigraph.cpp
+    unit/test_dp_cores_correctness.cpp
+    unit/test_conjecture_bfs_correctness.cpp
+    unit/test_additional_cores.cpp
+    unit/test_benchmark_correctness.cpp
 )
 
 # Integration test sources
@@ -82,7 +92,9 @@ target_link_libraries(run_tests
 
 # Add tests to CTest
 include(GoogleTest)
-gtest_discover_tests(unit_tests)
+gtest_discover_tests(unit_tests
+    DISCOVERY_TIMEOUT 60
+)
 
 set(TREEWIDZARD_INTEGRATION_TEST_ENV
     "TREEWIDZARD_BUILD_DIR=${PROJECT_BINARY_DIR}"
@@ -90,7 +102,10 @@ set(TREEWIDZARD_INTEGRATION_TEST_ENV
     "TREEWIDZARD_SEARCHSTRATEGIES=${PROJECT_BINARY_DIR}/SearchStrategies"
 )
 gtest_discover_tests(integration_tests
+    DISCOVERY_TIMEOUT 60
     PROPERTIES
         ENVIRONMENT "${TREEWIDZARD_INTEGRATION_TEST_ENV}"
 )
-gtest_discover_tests(run_tests)
+gtest_discover_tests(run_tests
+    DISCOVERY_TIMEOUT 60
+)

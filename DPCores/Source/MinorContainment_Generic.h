@@ -21,16 +21,12 @@ struct MinorGeneric_Witness : WitnessWrapper<MinorGeneric_Witness>
     std::set<std::pair<int,int>> ok_edges;     // realized H edges (a<b)
     std::set<int> placed;                      // pattern vertices that appeared
 
-    static unsigned find_root(const std::map<unsigned,unsigned>& parent, unsigned x) {
+    static unsigned find_root(std::map<unsigned,unsigned>& parent, unsigned x) {
         auto it = parent.find(x);
-        if (it==parent.end()) return x;
-        unsigned r = it->second;
-        while (true) {
-            auto jt = parent.find(r);
-            if (jt==parent.end()) return r;
-            if (jt->second == r) return r;
-            r = jt->second;
-        }
+        if (it == parent.end() || it->second == x) return x;
+        unsigned root = find_root(parent, it->second);
+        it->second = root;  // path compression
+        return root;
     }
 
     friend bool is_equal_implementation(const WitnessAlias &l, const WitnessAlias &r) {
@@ -84,7 +80,7 @@ struct MinorContainment_Generic_Core : CoreWrapper<MinorContainment_Generic_Core
 
     static std::map<std::string, std::string> metadata() {
         return {
-            {"CoreName","MinorGeneric"},
+            {"CoreName","MinorContainment_Generic"},
             {"CoreType","Decision"},
             {"ParameterType","MultiParameter"}
         };
@@ -145,14 +141,14 @@ struct MinorContainment_Generic_Core : CoreWrapper<MinorContainment_Generic_Core
 
     void intro_e_implementation(unsigned i, unsigned j, const Bag &, const WitnessAlias &w, WitnessSet &ws) {
         auto a = w.clone();
-        unsigned ri = MinorGeneric_Witness::find_root(a->parent,i);
-        unsigned rj = MinorGeneric_Witness::find_root(a->parent,j);
+        unsigned ri = MinorGeneric_Witness::find_root(a->parent, i);
+        unsigned rj = MinorGeneric_Witness::find_root(a->parent, j);
         if (ri!=rj) a->parent[ri]=rj;
         // Update ok_edges: for any pair of labels mapped to endpoints of an H edge that are now connected
         // Build map from root to set of pattern labels at that root
         std::map<unsigned, std::vector<int>> root_labels;
         for (auto [u,x] : a->tau) if (x>=0) {
-            unsigned r = MinorGeneric_Witness::find_root(a->parent,u);
+            unsigned r = MinorGeneric_Witness::find_root(a->parent, u);
             root_labels[r].push_back(x);
         }
         for (auto &[r,vec] : root_labels) {
@@ -179,11 +175,12 @@ struct MinorContainment_Generic_Core : CoreWrapper<MinorContainment_Generic_Core
         }
         auto a = w1.clone();
         // Merge parent unions on interface using w2
+        auto w2_parent = w2.parent;  // clone for mutable find_root calls
         for (auto [u,p] : w2.parent) {
             if (!bag.get_elements().count(u)) continue;
-            unsigned r2 = MinorGeneric_Witness::find_root(w2.parent,u);
-            unsigned r1u = MinorGeneric_Witness::find_root(a->parent,u);
-            unsigned r1r2 = MinorGeneric_Witness::find_root(a->parent,r2);
+            unsigned r2 = MinorGeneric_Witness::find_root(w2_parent, u);
+            unsigned r1u = MinorGeneric_Witness::find_root(a->parent, u);
+            unsigned r1r2 = MinorGeneric_Witness::find_root(a->parent, r2);
             if (r1u!=r1r2) a->parent[r1u]=r1r2;
         }
         // Merge tau: prefer existing, otherwise take w2's
@@ -196,7 +193,7 @@ struct MinorContainment_Generic_Core : CoreWrapper<MinorContainment_Generic_Core
         // Update ok_edges for any new connections created by merged unions
         std::map<unsigned, std::vector<int>> root_labels;
         for (auto [u,x] : a->tau) if (x>=0) {
-            unsigned r = MinorGeneric_Witness::find_root(a->parent,u);
+            unsigned r = MinorGeneric_Witness::find_root(a->parent, u);
             root_labels[r].push_back(x);
         }
         for (auto &[r,vec] : root_labels) {

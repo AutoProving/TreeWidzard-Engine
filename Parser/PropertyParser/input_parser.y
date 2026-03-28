@@ -27,7 +27,7 @@
     extern int input_lineno;
     
     // Global variable for sub_formula tracking
-    std::map<char*,ConjectureNode*> sub_formula_variables;
+    std::map<std::string,ConjectureNode*> sub_formula_variables;
 }
 // %locations -- Removed to avoid YYLTYPE conflict
 %union{
@@ -122,12 +122,13 @@ PARAMETER	: NAME {$$ = $1;}
 //		| ATMOST{$$=$1;}
 //		| LESS {$$=$1;}
 VARIABLES_SUBFORMULA_ASSIGNMENTS : EXP VARIABLE SEPERATOR SUB_FORMULA  VARIABLES_SUBFORMULA_ASSIGNMENTS
-								{if(varToProperty.count($2)){
+								{const std::string alias_name($2);
+                                                                  if(varToProperty.count($2)){
                                                                     std::cout<< "variable " << $2 << " declared at least two times" <<std::endl; YYERROR;}
-                                                                  if(sub_formula_variables.count($2)){
+                                                                  if(sub_formula_variables.count(alias_name)){
                                                                     std::cout<< "variable " << $2 << " declared at least two times" <<std::endl; YYERROR;
                                                                   }
-                                                                  sub_formula_variables.insert(std::make_pair($2, $4));
+                                                                  sub_formula_variables.insert(std::make_pair(alias_name, $4));
                                                                   }
 				  | /* empty */
 				  ;
@@ -149,7 +150,7 @@ SUB_FORMULA : SUB_FORMULA AND SUB_FORMULA {$$= new ConjectureNode(OPERATOR,"and"
             | VARIABLE {if(varToProperty.count($1) and !sub_formula_variables.count($1) ){
                     $$ = new ConjectureNode(CORE_VARIABLE, $1);
                 }else if(sub_formula_variables.count($1) and !varToProperty.count($1) ) {
-                    $$ = sub_formula_variables[$1];
+                    $$ = sub_formula_variables.at($1);
                 }else{
                     std::cout<<" variable "<< $1 << " is not valid"<< std::endl; YYERROR;
                 }
@@ -239,7 +240,7 @@ FORMULA_TERMINAL : BOOL_TRUE    {$$ = new ConjectureNode(NUMBER,1); }
                   | VARIABLE     { if(varToProperty.count($1) and !sub_formula_variables.count($1) ){
                                    $$ = new ConjectureNode(CORE_VARIABLE, $1);
                                   }else if(sub_formula_variables.count($1) and !varToProperty.count($1) ) {
-                                    $$ = sub_formula_variables[$1];
+                                    $$ = sub_formula_variables.at($1);
                                   }else{
                                     std::cout<<" variable "<< $1 << " is not valid"<< std::endl; YYERROR;
                                   }
@@ -267,6 +268,5 @@ void input_error(Conjecture &/*conj*/, int &/*result*/,std::map<std::string,Dyna
   std::cerr << "\033[1;31m"<<msg <<"\033[0m"<< std::endl;
 
 }
-
 
 
