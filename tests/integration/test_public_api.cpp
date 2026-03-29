@@ -162,7 +162,7 @@ TEST(PublicApi, EngineShorthandEqualityMatchesFullDefinition) {
 
 TEST(PublicApi, EngineMatchesSharedInputControllerSetup) {
   auto input_controller = InputController::fromSourceText(
-      "x := ChromaticNumber(3)\nFormula\nx", make_tree_width(3),
+      "x := ChromaticNumber_AtMost(3)\nFormula\nx", make_tree_width(3),
       InputController::default_paths(), InputControllerErrorMode::Throw);
   Flags flags;
   const bool expected =
@@ -182,7 +182,7 @@ TEST(PublicApi, EngineMatchesSharedInputControllerSetup) {
 
 TEST(PublicApi, InputControllerBuildsExpectedKernelAndMappings) {
   auto input_controller = InputController::fromSourceText(
-      "x := ChromaticNumber(3)\ny := VertexCount()\nFormula\nx",
+      "x := ChromaticNumber_AtMost(3)\ny := VertexCount()\nFormula\nx",
       make_tree_width(2), InputController::default_paths(),
       InputControllerErrorMode::Throw);
 
@@ -207,7 +207,7 @@ TEST(PublicApi, InputControllerBuildsExpectedKernelAndMappings) {
 
 TEST(PublicApi, InputControllerFromSourceUsesMemoryLabel) {
   auto input_controller = InputController::fromSourceText(
-      "x := ChromaticNumber(3)\nFormula\nx", make_tree_width(2),
+      "x := ChromaticNumber_AtMost(3)\nFormula\nx", make_tree_width(2),
       InputController::default_paths(), InputControllerErrorMode::Throw);
 
   EXPECT_EQ(input_controller->getInputPath(), "<memory>");

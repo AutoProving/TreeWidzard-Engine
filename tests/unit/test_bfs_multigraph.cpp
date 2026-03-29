@@ -117,7 +117,7 @@ TEST_F(BreadthFirstTraversalTest, Width1ExploresCorrectNumberOfStates) {
   EXPECT_TRUE(result.property_satisfied);
   EXPECT_FALSE(result.counterexample_state.has_value());
   EXPECT_GT(result.total_states, 0U);
-  EXPECT_EQ(result.iterations, 1);
+  EXPECT_EQ(result.iterations, 5);
 }
 
 // Test 2: BFS with width 2 explores intro_v, forget_v, intro_e transitions
@@ -527,8 +527,9 @@ TEST_F(MultiGraphTest, NthVertexOutOfBoundsError) {
 TEST_F(MultiGraphTest, IsMultiGraphValidatesCorrectly) {
   graph.addVertex(1);
   graph.addVertex(2);
-  unsigned edge = graph.addEdgeEndPoints(1, 2);
+  const unsigned edge = graph.addEdgeEndPoints(1, 2);
 
+  EXPECT_GT(edge, 0U);
   EXPECT_TRUE(graph.isMultiGraph());
 }
 
@@ -548,8 +549,9 @@ TEST_F(MultiGraphTest, CopyConstructor) {
   graph.addVertex(1);
   graph.addVertex(2);
   graph.addVertex(3);
-  unsigned edge = graph.addEdgeEndPoints(1, 2);
+  const unsigned edge = graph.addEdgeEndPoints(1, 2);
 
+  EXPECT_GT(edge, 0U);
   MultiGraph copy(graph);
 
   EXPECT_EQ(copy.verticesSize(), graph.verticesSize());

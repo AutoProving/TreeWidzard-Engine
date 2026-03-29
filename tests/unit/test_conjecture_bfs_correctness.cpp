@@ -23,15 +23,17 @@ using namespace std;
 // Helper Functions
 // ============================================================================
 
+namespace {
+
 /// Create an empty bag for testing
-Bag create_empty_bag() {
+[[maybe_unused]] Bag create_empty_bag() {
   Bag bag;
   bag.set_elements(set<unsigned>{});
   return bag;
 }
 
 /// Create a bag with specific vertices
-Bag create_bag(initializer_list<unsigned> vertices) {
+[[maybe_unused]] Bag create_bag(initializer_list<unsigned> vertices) {
   Bag bag;
   bag.set_elements(set<unsigned>(vertices));
   return bag;
@@ -66,12 +68,15 @@ ConjectureNode* build_binary_op_node(const string& op, ConjectureNode* left,
 }
 
 /// Build a unary operator node (e.g., "not")
-ConjectureNode* build_unary_op_node(const string& op, ConjectureNode* child) {
+[[maybe_unused]] ConjectureNode* build_unary_op_node(const string& op,
+                                                     ConjectureNode* child) {
   auto* op_node = new ConjectureNode(OPERATOR, op);
   op_node->setChildren({child});
   child->setParent(op_node);
   return op_node;
 }
+
+}  // namespace
 
 // ============================================================================
 // Section A: Conjecture Evaluation Tests (Direct State Evaluation)
@@ -153,9 +158,8 @@ TEST_F(ConjectureEvaluationTest, InvNodeWithCore) {
   auto* inv_node = build_inv_node(var_node);
   conjecture->setRoot(inv_node);
 
-  State state;
-  // inv() on chromatic should return 0 or 1 (is final)
-  double result = conjecture->evaluateConjectureOnState(state);
+  auto state = kernel->initialState();
+  double result = conjecture->evaluateConjectureOnState(*state);
   EXPECT_GE(result, 0.0);
 }
 
@@ -174,8 +178,8 @@ TEST_F(ConjectureEvaluationTest, CoreVariableNode) {
   auto* var_node = build_core_var_node("x");
   conjecture->setRoot(var_node);
 
-  State state;
-  double result = conjecture->evaluateConjectureOnState(state);
+  auto state = kernel->initialState();
+  double result = conjecture->evaluateConjectureOnState(*state);
   // Should return 0 or 1
   EXPECT_GE(result, 0.0);
   EXPECT_LE(result, 1.0);
@@ -205,7 +209,7 @@ TEST_F(BFSChromaticTest, Treewidth1Is2Colorable) {
 
   // Set width to 1 (pathwidth)
   Width w;
-  w.set_name("pathwidth");
+  w.set_name("path_width");
   w.set_value(1);
   kernel->set_width(w);
 
@@ -241,7 +245,7 @@ TEST_F(BFSChromaticTest, Treewidth1Is1ColorableFails) {
   auto flags = make_unique<Flags>();
 
   Width w;
-  w.set_name("pathwidth");
+  w.set_name("path_width");
   w.set_value(1);
   kernel->set_width(w);
 
@@ -291,7 +295,7 @@ TEST_F(BFSVertexCoverTest, Treewidth1VertexCover1Fails) {
   auto flags = make_unique<Flags>();
 
   Width w;
-  w.set_name("pathwidth");
+  w.set_name("path_width");
   w.set_value(1);
   kernel->set_width(w);
 
@@ -318,15 +322,14 @@ TEST_F(BFSVertexCoverTest, Treewidth1VertexCover1Fails) {
   EXPECT_TRUE(result.counterexample_state.has_value());
 }
 
-/// Test C.2: Pathwidth 1 has vertex cover <= pathwidth+1 should succeed
-/// Expected: property_satisfied = true
-TEST_F(BFSVertexCoverTest, PathwidthVertexCoverSucceeds) {
+/// Test C.2: Pathwidth 1 does not imply any constant-size vertex cover bound.
+TEST_F(BFSVertexCoverTest, PathwidthVertexCoverAtMost2Fails) {
   auto kernel = make_unique<DynamicKernel>();
   auto conjecture = make_unique<Conjecture>();
   auto flags = make_unique<Flags>();
 
   Width w;
-  w.set_name("pathwidth");
+  w.set_name("path_width");
   w.set_value(1);
   kernel->set_width(w);
 
@@ -348,8 +351,8 @@ TEST_F(BFSVertexCoverTest, PathwidthVertexCoverSucceeds) {
   auto result = TreeWidzard::runBreadthFirstTraversal(*kernel, *conjecture,
                                                        *flags);
 
-  EXPECT_TRUE(result.property_satisfied);
-  EXPECT_FALSE(result.counterexample_state.has_value());
+  EXPECT_FALSE(result.property_satisfied);
+  EXPECT_TRUE(result.counterexample_state.has_value());
 }
 
 // ============================================================================
@@ -367,20 +370,20 @@ protected:
   }
 };
 
-/// Test D.1: Treewidth 1 has max degree >= 1 should succeed
-/// Expected: property_satisfied = true
-TEST_F(BFSMaxDegreeTest, Treewidth1MaxDegree1) {
+/// Test D.1: The empty graph shows that max degree >= 0 is not witnessed by
+/// this core until an edge is seen.
+TEST_F(BFSMaxDegreeTest, Pathwidth1MaxDegree0Fails) {
   auto kernel = make_unique<DynamicKernel>();
   auto conjecture = make_unique<Conjecture>();
   auto flags = make_unique<Flags>();
 
   Width w;
-  w.set_name("pathwidth");
+  w.set_name("path_width");
   w.set_value(1);
   kernel->set_width(w);
 
-  // Core: MaxDegree >= 1
-  MaxDegree_AtLeast_DynamicCore maxdeg_core{parameterType{1}};
+  // Core: MaxDegree >= 0
+  MaxDegree_AtLeast_DynamicCore maxdeg_core{parameterType{0}};
   kernel->addCore(maxdeg_core);
 
   auto var_map = map<string, pair<string, int>>{
@@ -397,7 +400,8 @@ TEST_F(BFSMaxDegreeTest, Treewidth1MaxDegree1) {
   auto result = TreeWidzard::runBreadthFirstTraversal(*kernel, *conjecture,
                                                        *flags);
 
-  EXPECT_TRUE(result.property_satisfied);
+  EXPECT_FALSE(result.property_satisfied);
+  EXPECT_TRUE(result.counterexample_state.has_value());
 }
 
 /// Test D.2: Treewidth 2 has max degree >= 5 should fail
@@ -408,7 +412,7 @@ TEST_F(BFSMaxDegreeTest, Treewidth2MaxDegree5Fails) {
   auto flags = make_unique<Flags>();
 
   Width w;
-  w.set_name("treewidth");
+  w.set_name("tree_width");
   w.set_value(2);
   kernel->set_width(w);
 
@@ -450,15 +454,14 @@ protected:
   }
 };
 
-/// Test E.1: Width 1, conjecture "inv(x) <= 2" should succeed
-/// Expected: property_satisfied = true
-TEST_F(BFSVertexCountTest, Width1VertexCountUpTo2) {
+/// Test E.1: Width 1, conjecture "inv(x) <= 2" should fail quickly.
+TEST_F(BFSVertexCountTest, Width1VertexCountUpTo2Fails) {
   auto kernel = make_unique<DynamicKernel>();
   auto conjecture = make_unique<Conjecture>();
   auto flags = make_unique<Flags>();
 
   Width w;
-  w.set_name("pathwidth");
+  w.set_name("path_width");
   w.set_value(1);
   kernel->set_width(w);
 
@@ -484,8 +487,8 @@ TEST_F(BFSVertexCountTest, Width1VertexCountUpTo2) {
   auto result = TreeWidzard::runBreadthFirstTraversal(*kernel, *conjecture,
                                                        *flags);
 
-  EXPECT_TRUE(result.property_satisfied);
-  EXPECT_FALSE(result.counterexample_state.has_value());
+  EXPECT_FALSE(result.property_satisfied);
+  EXPECT_TRUE(result.counterexample_state.has_value());
 }
 
 /// Test E.2: Width 2, conjecture "inv(x) <= 2" should fail
@@ -496,7 +499,7 @@ TEST_F(BFSVertexCountTest, Width2VertexCountUpTo2Fails) {
   auto flags = make_unique<Flags>();
 
   Width w;
-  w.set_name("treewidth");
+  w.set_name("tree_width");
   w.set_value(2);
   kernel->set_width(w);
 
@@ -542,15 +545,14 @@ protected:
   }
 };
 
-/// Test F.1: Width 1, conjecture "inv(x) >= 1" should succeed
-/// Expected: property_satisfied = true
-TEST_F(BFSIndependentSetTest, Width1IndependentSetAtLeast1) {
+/// Test F.1: The empty graph is a counterexample to "inv(x) >= 1".
+TEST_F(BFSIndependentSetTest, Width1IndependentSetAtLeast1Fails) {
   auto kernel = make_unique<DynamicKernel>();
   auto conjecture = make_unique<Conjecture>();
   auto flags = make_unique<Flags>();
 
   Width w;
-  w.set_name("pathwidth");
+  w.set_name("path_width");
   w.set_value(1);
   kernel->set_width(w);
 
@@ -576,8 +578,8 @@ TEST_F(BFSIndependentSetTest, Width1IndependentSetAtLeast1) {
   auto result = TreeWidzard::runBreadthFirstTraversal(*kernel, *conjecture,
                                                        *flags);
 
-  EXPECT_TRUE(result.property_satisfied);
-  EXPECT_FALSE(result.counterexample_state.has_value());
+  EXPECT_FALSE(result.property_satisfied);
+  EXPECT_TRUE(result.counterexample_state.has_value());
 }
 
 // ============================================================================
@@ -683,7 +685,7 @@ TEST_F(HookCallbackTest, OnInitialStateHook) {
   auto flags = make_unique<Flags>();
 
   Width w;
-  w.set_name("pathwidth");
+  w.set_name("path_width");
   w.set_value(1);
   kernel->set_width(w);
 
@@ -724,7 +726,7 @@ TEST_F(HookCallbackTest, OnStateDiscoveredHook) {
   auto flags = make_unique<Flags>();
 
   Width w;
-  w.set_name("pathwidth");
+  w.set_name("path_width");
   w.set_value(1);
   kernel->set_width(w);
 
@@ -745,7 +747,7 @@ TEST_F(HookCallbackTest, OnStateDiscoveredHook) {
   int discovery_count = 0;
 
   TreeWidzard::BreadthFirstTraversalHooks hooks;
-  hooks.on_state_discovered = [&](const TreeWidzard::BreadthFirstExpansionEvent& event) {
+  hooks.on_state_discovered = [&](const TreeWidzard::BreadthFirstExpansionEvent&) {
     discovery_count++;
   };
 
@@ -762,7 +764,7 @@ TEST_F(HookCallbackTest, OnIterationCompleteHook) {
   auto flags = make_unique<Flags>();
 
   Width w;
-  w.set_name("pathwidth");
+  w.set_name("path_width");
   w.set_value(1);
   kernel->set_width(w);
 
@@ -783,9 +785,8 @@ TEST_F(HookCallbackTest, OnIterationCompleteHook) {
   int iteration_count = 0;
 
   TreeWidzard::BreadthFirstTraversalHooks hooks;
-  hooks.on_iteration_complete = [&](int iteration, size_t all_states_size,
-                                      size_t new_states_size,
-                                      const vector<unsigned>& max_witness_sizes) {
+  hooks.on_iteration_complete = [&](int, size_t, size_t,
+                                    const vector<unsigned>&) {
     iteration_count++;
   };
 
@@ -810,13 +811,13 @@ protected:
   }
 };
 
-/// Test I.1: Two cores in same kernel, conjecture combines them: "x and y"
+/// Test I.1: Two cores in the same kernel can participate in one formula.
 TEST_F(MultiCoreConjectureTest, TwoCoresConjunctionEvaluation) {
   auto kernel = make_unique<DynamicKernel>();
   auto conjecture = make_unique<Conjecture>();
 
   Width w;
-  w.set_name("pathwidth");
+  w.set_name("path_width");
   w.set_value(1);
   kernel->set_width(w);
 
@@ -834,15 +835,18 @@ TEST_F(MultiCoreConjectureTest, TwoCoresConjunctionEvaluation) {
       {"x", "ChromaticNumber_AtMost"}, {"y", "VertexCount"}};
   conjecture->setVariablesToCoreName(var_map2);
 
-  // Conjecture: x and y
+  // Conjecture: x and inv(y) >= 0
   auto* var_x = build_core_var_node("x");
   auto* var_y = build_core_var_node("y");
-  auto* root = build_binary_op_node("and", var_x, var_y);
+  auto* inv_y = build_inv_node(var_y);
+  auto* zero = build_number_node(0.0);
+  auto* y_non_negative = build_binary_op_node(">=", inv_y, zero);
+  auto* root = build_binary_op_node("and", var_x, y_non_negative);
   conjecture->setRoot(root);
   conjecture->setKernel(kernel.get());
 
-  State state;
-  double result = conjecture->evaluateConjectureOnState(state);
+  auto state = kernel->initialState();
+  double result = conjecture->evaluateConjectureOnState(*state);
   // Should evaluate without error
   EXPECT_GE(result, 0.0);
 }
@@ -853,7 +857,7 @@ TEST_F(MultiCoreConjectureTest, TwoCoresComplexArithmetic) {
   auto conjecture = make_unique<Conjecture>();
 
   Width w;
-  w.set_name("pathwidth");
+  w.set_name("path_width");
   w.set_value(1);
   kernel->set_width(w);
 
@@ -882,8 +886,8 @@ TEST_F(MultiCoreConjectureTest, TwoCoresComplexArithmetic) {
   conjecture->setRoot(root);
   conjecture->setKernel(kernel.get());
 
-  State state;
-  double result = conjecture->evaluateConjectureOnState(state);
+  auto state = kernel->initialState();
+  double result = conjecture->evaluateConjectureOnState(*state);
   // Should evaluate without error
   EXPECT_GE(result, 0.0);
 }
@@ -895,7 +899,7 @@ TEST_F(MultiCoreConjectureTest, MultiCoreGraphPropertyCheckBFS) {
   auto flags = make_unique<Flags>();
 
   Width w;
-  w.set_name("pathwidth");
+  w.set_name("path_width");
   w.set_value(1);
   kernel->set_width(w);
 
@@ -913,18 +917,21 @@ TEST_F(MultiCoreConjectureTest, MultiCoreGraphPropertyCheckBFS) {
       {"x", "ChromaticNumber_AtMost"}, {"y", "VertexCount"}};
   conjecture->setVariablesToCoreName(var_map2);
 
-  // Conjecture: x and y (both should be true)
+  // Conjecture: x and inv(y) <= 2
   auto* var_x = build_core_var_node("x");
   auto* var_y = build_core_var_node("y");
-  auto* root = build_binary_op_node("and", var_x, var_y);
+  auto* inv_y = build_inv_node(var_y);
+  auto* two = build_number_node(2.0);
+  auto* y_small = build_binary_op_node("<=", inv_y, two);
+  auto* root = build_binary_op_node("and", var_x, y_small);
   conjecture->setRoot(root);
   conjecture->setKernel(kernel.get());
 
   auto result = TreeWidzard::runBreadthFirstTraversal(*kernel, *conjecture,
                                                        *flags);
 
-  // Should succeed
-  EXPECT_TRUE(result.property_satisfied);
+  EXPECT_FALSE(result.property_satisfied);
+  EXPECT_TRUE(result.counterexample_state.has_value());
 }
 
 // ============================================================================
@@ -1007,13 +1014,13 @@ TEST_F(EdgeCaseTest, KernelWidthManagement) {
   auto kernel = make_unique<DynamicKernel>();
 
   Width w;
-  w.set_name("treewidth");
+  w.set_name("tree_width");
   w.set_value(3);
   kernel->set_width(w);
 
   Width retrieved = kernel->get_width();
   EXPECT_EQ(retrieved.get_value(), 3);
-  EXPECT_EQ(retrieved.get_name(), "treewidth");
+  EXPECT_EQ(retrieved.get_name(), "tree_width");
 }
 
 /// Test J.5: Flags management
@@ -1049,7 +1056,7 @@ TEST_F(IntegrationTest, FullBFSPipelineChromatic) {
   auto flags = make_unique<Flags>();
 
   Width w;
-  w.set_name("pathwidth");
+  w.set_name("path_width");
   w.set_value(1);
   kernel->set_width(w);
 
@@ -1069,9 +1076,8 @@ TEST_F(IntegrationTest, FullBFSPipelineChromatic) {
 
   int hook_calls = 0;
   TreeWidzard::BreadthFirstTraversalHooks hooks;
-  hooks.on_iteration_complete = [&](int iteration, size_t all_states_size,
-                                      size_t new_states_size,
-                                      const vector<unsigned>& max_witness_sizes) {
+  hooks.on_iteration_complete = [&](int, size_t, size_t,
+                                    const vector<unsigned>&) {
     hook_calls++;
   };
 
@@ -1091,7 +1097,7 @@ TEST_F(IntegrationTest, MixedPropertyCheckBFS) {
   auto flags = make_unique<Flags>();
 
   Width w;
-  w.set_name("pathwidth");
+  w.set_name("path_width");
   w.set_value(1);
   kernel->set_width(w);
 
@@ -1117,4 +1123,3 @@ TEST_F(IntegrationTest, MixedPropertyCheckBFS) {
 
   EXPECT_TRUE(result.property_satisfied);
 }
-

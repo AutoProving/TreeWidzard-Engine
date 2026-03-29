@@ -77,12 +77,16 @@ void report(const string &label, double us) {
 // Helpers
 // =============================================================================
 
+namespace {
+
 Bag make_bag(set<unsigned> elems, unsigned ei = 0, unsigned ej = 0) {
   Bag b;
   b.set_elements(elems);
   if (ei && ej) b.set_edge(ei, ej);
   return b;
 }
+
+}  // namespace
 
 // Helper to run a full pipeline: init -> [intro_v for all vertices] ->
 // [intro_e for all edges] -> [forget_v for all vertices]
@@ -569,8 +573,9 @@ TEST_F(BFSBenchmark, VertexCover_Width1_AtMost2) {
   report("BFS pathwidth-1 VC ≤ 1 (counterexample)", t.elapsed_us);
 }
 
-TEST_F(BFSBenchmark, VertexCover_Width1_AtMost2_Satisfied) {
-  // Every pathwidth-1 graph has vertex cover ≤ 2
+TEST_F(BFSBenchmark, VertexCover_Width1_AtMost2_Fails) {
+  // Pathwidth-1 graphs can have arbitrarily large vertex cover (for example,
+  // long paths), so VC ≤ 2 must eventually fail.
   parameterType params_r2{2};
   VertexCover_AtMost_Core core(params_r2);
   DynamicKernel kernel;
@@ -581,12 +586,14 @@ TEST_F(BFSBenchmark, VertexCover_Width1_AtMost2_Satisfied) {
   size_t total_states = 0;
   auto t = timed([&] {
     auto result = TreeWidzard::runBreadthFirstTraversal(kernel, conj, flags);
-    EXPECT_TRUE(result.property_satisfied)
-        << "All pathwidth-1 graphs should have VC ≤ 2";
+    EXPECT_FALSE(result.property_satisfied)
+        << "A bounded vertex-cover threshold of 2 is too small for all "
+           "pathwidth-1 graphs.";
     total_states = result.total_states;
   });
 
-  report("BFS pathwidth-1 VC ≤ 2 (" + to_string(total_states) + " states)",
+  report("BFS pathwidth-1 VC ≤ 2 (counterexample after " +
+             to_string(total_states) + " states)",
          t.elapsed_us);
 }
 

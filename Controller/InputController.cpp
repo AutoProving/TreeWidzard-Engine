@@ -261,6 +261,12 @@ InputController::InputController(std::string inputPath,
 					  std::move(dynamicPluginPaths), std::move(width),
 					  errorMode, false) {}
 
+InputController::~InputController() {
+	// Destroy dynamically loaded core instances before unloading the handler
+	// libraries stored in coreList.
+	ownedCores.clear();
+}
+
 auto InputController::default_paths() -> std::vector<std::string> {
 	return TreeWidzard::default_plugin_paths(
 		"TREEWIDZARD_DPCORES", TREEWIDZARD_DPCORES_DEFAULT, "DPCores");

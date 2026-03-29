@@ -1,4 +1,4 @@
-#include "CliqueNumberSimpleGraphs_AtLeast.h"
+#include "CliqueNumber_AtLeast.h"
 
 extern "C" {
 std::map<std::string, std::string> *metadata() {

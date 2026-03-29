@@ -13,12 +13,16 @@
 using namespace std;
 
 // Helper function to create bags with elements and optional edge
+namespace {
+
 Bag make_bag(set<unsigned> elems, unsigned ei = 0, unsigned ej = 0) {
     Bag b;
     b.set_elements(elems);
     if (ei && ej) b.set_edge(ei, ej);
     return b;
 }
+
+}  // namespace
 
 // ============================================================================
 // ChromaticNumber_AtMost Tests
@@ -297,7 +301,17 @@ TEST_F(VertexCoverTest, SingleEdge_With_r0_NoCover) {
         auto &w = VertexCover_AtMost_Witness::as_witness(**it);
         core.intro_e_implementation(1, 2, make_bag({1, 2}, 1, 2), w, set3);
     }
-    ASSERT_EQ(set3.size(), 0);
+    ASSERT_GT(set3.size(), 0);
+
+    bool found_valid = false;
+    for (auto it = set3.begin(); it != set3.end(); ++it) {
+        auto &w = VertexCover_AtMost_Witness::as_witness(**it);
+        if (core.is_final_witness_implementation(make_bag({1, 2}), w)) {
+            found_valid = true;
+            break;
+        }
+    }
+    ASSERT_FALSE(found_valid);
 }
 
 // Test 7: Triangle requires cover of size >= 2

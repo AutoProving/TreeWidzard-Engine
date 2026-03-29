@@ -96,6 +96,7 @@ public:
                   std::vector<std::string> dynamicPluginPath, Width width,
                   InputControllerErrorMode errorMode =
                       InputControllerErrorMode::Exit);
+  ~InputController();
 
   const std::string &getInputPath() const;
   DynamicKernel &getDynamicKernel();

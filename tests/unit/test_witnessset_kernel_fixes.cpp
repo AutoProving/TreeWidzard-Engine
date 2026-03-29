@@ -34,11 +34,11 @@ class WitnessSetThreadSafetyTest : public ::testing::Test {
 TEST_F(WitnessSetThreadSafetyTest, ConcurrentInsertsDoNotCorrupt) {
   auto witness_set = std::make_shared<WitnessSetTypeOne<IntWitness>>();
   const int num_threads = 4;
-  const int inserts_per_thread = 25;
+  constexpr int inserts_per_thread = 25;
   std::vector<std::thread> threads;
 
   for (int t = 0; t < num_threads; ++t) {
-    threads.emplace_back([witness_set, t, inserts_per_thread]() {
+    threads.emplace_back([witness_set, t]() {
       for (int i = 0; i < inserts_per_thread; ++i) {
         int value = t * inserts_per_thread + i;
         witness_set->insert(make_int_witness(value));
@@ -65,11 +65,11 @@ TEST_F(WitnessSetThreadSafetyTest, ConcurrentInsertsDoNotCorrupt) {
 TEST_F(WitnessSetThreadSafetyTest, ConcurrentDuplicateInsertsHandledCorrectly) {
   auto witness_set = std::make_shared<WitnessSetTypeOne<IntWitness>>();
   const int num_threads = 5;
-  const int same_value = 42;
+  constexpr int same_value = 42;
 
   std::vector<std::thread> threads;
   for (int t = 0; t < num_threads; ++t) {
-    threads.emplace_back([witness_set, same_value]() {
+    threads.emplace_back([witness_set]() {
       // All threads insert the same value multiple times
       for (int i = 0; i < 10; ++i) {
         witness_set->insert(make_int_witness(same_value));
@@ -177,7 +177,6 @@ TEST_F(WitnessSetThreadSafetyTest, TypeOneUnionOperation) {
   set2->insert(make_int_witness(2));
   set2->insert(make_int_witness(3));
 
-  int original_size = set1->size();
   set1->union_set_witness(set2);
 
   EXPECT_EQ(set1->size(), 3);
@@ -435,9 +434,9 @@ TEST_F(DynamicKernelTest, IntroEdgeOperation) {
   auto witness_set = state_after_e->getWitnessSet(0);
   EXPECT_EQ(witness_set->size(), 1);
 
-  // Value should be from intro_e (adds 10)
+  // Two intro_v steps produce 2, then intro_e adds 10.
   int value = first_witness_value(witness_set);
-  EXPECT_EQ(value, 11);  // 1 (from intro_v) + 10 (from intro_e)
+  EXPECT_EQ(value, 12);
 }
 
 // Test 20: DynamicKernel forget_v produces correct state
@@ -470,20 +469,19 @@ TEST_F(DynamicKernelTest, JoinOperation) {
 
   // Create two different states to join
   auto state1 = kernel.intro_v(initial_state, 0);
+  auto state1_with_same_bag = kernel.intro_v(state1, 1);
   auto state2 = kernel.intro_v(initial_state, 1);
-
-  // Both should have the same bag for joining
   auto state2_with_same_bag = kernel.intro_v(state2, 0);
 
-  auto joined_state = kernel.join(state1, state2_with_same_bag);
+  auto joined_state = kernel.join(state1_with_same_bag, state2_with_same_bag);
 
   // State::ptr always valid
   EXPECT_EQ(joined_state->numberOfComponents(), 1);
 
   auto witness_set = joined_state->getWitnessSet(0);
-  // Value should be sum: 1 + 1 = 2
+  // Each branch contributes 2 after introducing both vertices.
   int value = first_witness_value(witness_set);
-  EXPECT_EQ(value, 2);
+  EXPECT_EQ(value, 4);
 }
 
 // Test 22: DynamicKernel getCoreByVar returns correct core

@@ -16,6 +16,8 @@ using namespace std;
 // Helper Functions for Creating Test Data
 // ============================================================================
 
+namespace {
+
 Bag create_empty_bag() {
   Bag bag;
   bag.set_elements(set<unsigned>{});
@@ -28,12 +30,15 @@ Bag create_bag(initializer_list<unsigned> vertices) {
   return bag;
 }
 
-Bag create_bag_with_edge(initializer_list<unsigned> vertices, unsigned u, unsigned v) {
+[[maybe_unused]] Bag create_bag_with_edge(initializer_list<unsigned> vertices,
+                                          unsigned u, unsigned v) {
   Bag bag;
   bag.set_elements(set<unsigned>(vertices));
   bag.set_edge(u, v);
   return bag;
 }
+
+}  // namespace
 
 // ============================================================================
 // VertexCover_AtMost_Core Tests
@@ -189,7 +194,6 @@ TEST_F(VertexCoverAtMostTest, JoinIdenticalSSumsS) {
 TEST_F(VertexCoverAtMostTest, IsFinalWitnessRespectsBudget) {
   auto w = make_shared<VertexCover_AtMost_Witness>();
   w->S.insert(1);
-  w->S.insert(2);
   w->s = 1;
 
   EXPECT_TRUE(core_r2.is_final_witness_implementation(empty_bag, *w));
@@ -750,7 +754,7 @@ TEST_F(FeedbackVertexSetTest, IsFinalWitnessRespectsBudget) {
   w_valid->comp.clear();
 
   auto w_invalid = make_shared<FeedbackVertexSet_Witness>();
-  w_invalid->removed = 2;
+  w_invalid->removed = 3;
   w_invalid->comp.clear();
 
   EXPECT_TRUE(core_k2.is_final_witness_implementation(empty_bag, *w_valid));
@@ -813,12 +817,12 @@ TEST_F(FeedbackVertexSetTest, JoinRequiresSameKeptVertices) {
 TEST_F(FeedbackVertexSetTest, JoinIdenticalKeptVertices) {
   auto w1 = make_shared<FeedbackVertexSet_Witness>();
   w1->comp[1] = 1;
-  w1->comp[2] = 1;
+  w1->comp[2] = 2;
   w1->removed = 1;
 
   auto w2 = make_shared<FeedbackVertexSet_Witness>();
   w2->comp[1] = 1;
-  w2->comp[2] = 1;
+  w2->comp[2] = 2;
   w2->removed = 0;
 
   WitnessSetTypeTwo<FeedbackVertexSet_Witness> output_set;
