@@ -1,7 +1,6 @@
 #include "DecompositionTree.h"
 
 DecompositionNode::DecompositionNode() {
-	parent = std::shared_ptr<DecompositionNode>(nullptr);
 }
 
 std::set<unsigned> DecompositionNode::getVertices() { return this->vertices; }
@@ -17,7 +16,7 @@ void DecompositionNode::setParent(std::shared_ptr<DecompositionNode> node) {
 }
 
 std::shared_ptr<DecompositionNode> DecompositionNode::getParent() {
-	return this->parent;
+	return this->parent.lock();
 }
 
 std::vector<std::shared_ptr<DecompositionNode>>
@@ -35,7 +34,6 @@ void DecompositionNode::setChildren(
 }
 
 Decomposition::Decomposition() {
-	root = std::shared_ptr<DecompositionNode>(nullptr);
 }
 
 void Decomposition::setRoot(std::shared_ptr<DecompositionNode> node) {

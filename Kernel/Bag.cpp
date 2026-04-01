@@ -85,25 +85,15 @@ std::string Bag::bagInformation() const {
 }
 
 bool Bag::operator<(const Bag &rhs) const {
-	if (elements < rhs.elements) {
-		return true;
-	} else if (rhs.elements < elements) {
-		return false;
-	} else if (this->get_edge() < rhs.get_edge()) {
-		return true;
-	} else {
-		return false;
-	}
+	return elements < rhs.elements;
 }
 
 bool Bag::operator==(const Bag &rhs) const {
-	return elements == rhs.elements and this->get_edge() == rhs.get_edge();
+	return elements == rhs.elements;
 }
 
 void Bag::hash(Hasher &h) const {
 	for (unsigned elem : elements) h << elem;
-	h << edge_i;
-	h << edge_j;
 }
 
 bool Bag::vertex_introducible(unsigned i) const {

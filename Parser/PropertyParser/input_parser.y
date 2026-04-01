@@ -75,7 +75,7 @@
 %%
 
 START            :COMMENTS VARIABLES_CORES_ASSIGNMENT FORMULA_NAME VARIABLES_SUBFORMULA_ASSIGNMENTS  FORMULA COMMENTS
-                    {conj.setRoot($5); result = 0;}
+                    {conj.setOwnedRoot($5); result = 0;}
                  ;
 VARIABLES_CORES_ASSIGNMENT	: VARIABLES_CORES_ASSIGNMENT VARIABLE_CORE_ASSIGNMENT COMMENTS {}
 				| /* empty */
@@ -90,6 +90,7 @@ VARIABLE_CORE_ASSIGNMENT	: VARIABLE SEPERATOR ATOMIC_PREDICATE LEFTP PARAMETERS 
 				// $$->setParameter($5);
 				varToProperty[$1] = $$; varToCoreName[$1] = $3;
 				$$->setParametersVec(*$5);
+				delete $5;
 				}
 				;
 //NUMBER_DOUBLES	: NUMBER_DOUBLES COMMA NUMBER_DOUBLE {$$ = new std::vector<int>; $$ = $1; $$->push_back(strtod($3,NULL));}
@@ -150,7 +151,7 @@ SUB_FORMULA : SUB_FORMULA AND SUB_FORMULA {$$= new ConjectureNode(OPERATOR,"and"
             | VARIABLE {if(varToProperty.count($1) and !sub_formula_variables.count($1) ){
                     $$ = new ConjectureNode(CORE_VARIABLE, $1);
                 }else if(sub_formula_variables.count($1) and !varToProperty.count($1) ) {
-                    $$ = sub_formula_variables.at($1);
+                    $$ = sub_formula_variables.at($1)->cloneSubtree();
                 }else{
                     std::cout<<" variable "<< $1 << " is not valid"<< std::endl; YYERROR;
                 }
@@ -240,7 +241,7 @@ FORMULA_TERMINAL : BOOL_TRUE    {$$ = new ConjectureNode(NUMBER,1); }
                   | VARIABLE     { if(varToProperty.count($1) and !sub_formula_variables.count($1) ){
                                    $$ = new ConjectureNode(CORE_VARIABLE, $1);
                                   }else if(sub_formula_variables.count($1) and !varToProperty.count($1) ) {
-                                    $$ = sub_formula_variables.at($1);
+                                    $$ = sub_formula_variables.at($1)->cloneSubtree();
                                   }else{
                                     std::cout<<" variable "<< $1 << " is not valid"<< std::endl; YYERROR;
                                   }
@@ -268,5 +269,3 @@ void input_error(Conjecture &/*conj*/, int &/*result*/,std::map<std::string,Dyna
   std::cerr << "\033[1;31m"<<msg <<"\033[0m"<< std::endl;
 
 }
-
-

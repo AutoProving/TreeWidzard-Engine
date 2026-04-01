@@ -80,11 +80,13 @@ State::ptr DynamicKernel::join(State::ptr q1, State::ptr q2) {
 	const Bag &right_bag = q2->get_bag();
 	if (left_bag.joinable(right_bag)) {
 		auto aux = State::createPooled();
-		Bag b = left_bag;
-		// in join the new state should not have an edge
+		Bag b;
+		b.set_elements(left_bag.get_elements());
+		// In join the bag is defined only by the shared labels, so the
+		// transient edge marker must be cleared.
 		for (size_t r = 0; r < cores.size(); r++) {
 			aux->addWitnessSet(
-				cores[r]->join(b, q1->getWitnessSet(static_cast<int>(r)), q2->getWitnessSet(static_cast<int>(r))));
+					cores[r]->join(b, q1->getWitnessSet(static_cast<int>(r)), q2->getWitnessSet(static_cast<int>(r))));
 		}
 		aux->set_bag(b);
 		return aux;

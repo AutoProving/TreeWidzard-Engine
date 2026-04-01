@@ -1201,7 +1201,7 @@ yyreduce:
     {
   case 2: /* START: COMMENTS VARIABLES_CORES_ASSIGNMENT FORMULA_NAME VARIABLES_SUBFORMULA_ASSIGNMENTS FORMULA COMMENTS  */
 #line 78 "Parser/PropertyParser/input_parser.y"
-                    {conj.setRoot((yyvsp[-1].conjectureNode)); result = 0;}
+                    {conj.setOwnedRoot((yyvsp[-1].conjectureNode)); result = 0;}
 #line 1206 "Parser/PropertyParser/input_parser.cpp"
     break;
 
@@ -1222,6 +1222,7 @@ yyreduce:
 				// $$->setParameter($5);
 				varToProperty[(yyvsp[-5].string)] = (yyval.property); varToCoreName[(yyvsp[-5].string)] = (yyvsp[-3].string);
 				(yyval.property)->setParametersVec(*(yyvsp[-1].vec));
+				delete (yyvsp[-1].vec);
 				}
 #line 1227 "Parser/PropertyParser/input_parser.cpp"
     break;
@@ -1326,7 +1327,7 @@ yyreduce:
                        {if(varToProperty.count((yyvsp[0].string)) and !sub_formula_variables.count((yyvsp[0].string)) ){
                     (yyval.conjectureNode) = new ConjectureNode(CORE_VARIABLE, (yyvsp[0].string));
                 }else if(sub_formula_variables.count((yyvsp[0].string)) and !varToProperty.count((yyvsp[0].string)) ) {
-                    (yyval.conjectureNode) = sub_formula_variables.at((yyvsp[0].string));
+                    (yyval.conjectureNode) = sub_formula_variables.at((yyvsp[0].string))->cloneSubtree();
                 }else{
                     std::cout<<" variable "<< (yyvsp[0].string) << " is not valid"<< std::endl; YYERROR;
                 }
@@ -1515,7 +1516,7 @@ yyreduce:
                                  { if(varToProperty.count((yyvsp[0].string)) and !sub_formula_variables.count((yyvsp[0].string)) ){
                                    (yyval.conjectureNode) = new ConjectureNode(CORE_VARIABLE, (yyvsp[0].string));
                                   }else if(sub_formula_variables.count((yyvsp[0].string)) and !varToProperty.count((yyvsp[0].string)) ) {
-                                    (yyval.conjectureNode) = sub_formula_variables.at((yyvsp[0].string));
+                                    (yyval.conjectureNode) = sub_formula_variables.at((yyvsp[0].string))->cloneSubtree();
                                   }else{
                                     std::cout<<" variable "<< (yyvsp[0].string) << " is not valid"<< std::endl; YYERROR;
                                   }

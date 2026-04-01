@@ -34,12 +34,14 @@ SearchController::SearchController(std::string inputPath,
 			TREEWIDZARD_SEARCHSTRATEGIES_DEFAULT, "SearchStrategies");
 	}
 
-	inputController = new InputController(
+	inputController = std::make_unique<InputController>(
 		std::move(inputPath), InputController::default_paths(), width);
 }
 
 void SearchController::check_search() {
 	try {
+		searchList.clear();
+		searchNamesToFiles.clear();
 		for (const auto &searchPluginPath : searchPluginPaths) {
 			std::error_code ec;
 			if (!std::filesystem::exists(searchPluginPath, ec) ||
@@ -51,15 +53,14 @@ void SearchController::check_search() {
 				if (ec) {
 					break;
 				}
-				std::string s = entry.path().string();
+				const std::string s = entry.path().string();
 				// for linux .so, and windows .dll
 				if (s.find(DYNAMIC_LIB_EXTENSION) != std::string::npos) {
-					char *lib_path = const_cast<char *>(s.c_str());
-					SearchStrategyHandler factory(lib_path);
+					SearchStrategyHandler factory(s);
 					const std::map<std::string, std::string> &attributes =
 						factory.get_metadata();
 					searchNamesToFiles.emplace(attributes.at("SearchName"),
-											   lib_path);
+											   s);
 					searchList.emplace(attributes.at("SearchName"), attributes);
 				}
 			}
@@ -91,19 +92,17 @@ void SearchController::action() {
 	std::cout << "Premise flag: " << (flags.get("Premise") ? "ACTIVATED" : "NOT ACTIVATED") << std::endl;
 	check_search();
 	auto it = searchList.find(searchStrategyName);
-	SearchStrategyHandler *searchStrategyHandler;
 	if (it != searchList.end()) {
 		std::string libPath = searchNamesToFiles[searchStrategyName];
-		searchStrategyHandler = new SearchStrategyHandler(libPath.c_str());
+		SearchStrategyHandler searchStrategyHandler(libPath);
 
 		// std::cerr << "found matching search strategy at path: " << libPath
 		// 		  << '\n';
 
-		std::unique_ptr<SearchStrategy> search = searchStrategyHandler->create(
+		std::unique_ptr<SearchStrategy> search = searchStrategyHandler.create(
 			&inputController->getDynamicKernel(),
 			&inputController->getConjecture(), &flags);
-		SearchStrategy *searchStrategy = search.release();
-		searchStrategy->setPropertyFilePath(inputController->getInputPath());
+		search->setPropertyFilePath(inputController->getInputPath());
 		std::string output_file_path =
 			std::filesystem::path(inputController->getInputPath())
 				.parent_path()
@@ -125,9 +124,9 @@ void SearchController::action() {
 				"_" + searchStrategyName + "_" + width.get_name() + "_" +
 				std::to_string(width.get_value());
 		}
-		searchStrategy->setOutputsPath(output_file_path);
+		search->setOutputsPath(output_file_path);
 		std::cout << "\nSearch process:" << std::endl;
-		searchStrategy->search();
+		search->search();
 		std::cout << "-----------------------------------------" << std::endl;
 	} else {
 		std::cout << "Error: Search method " << searchStrategyName

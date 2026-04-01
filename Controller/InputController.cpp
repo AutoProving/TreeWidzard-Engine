@@ -123,19 +123,35 @@ void InputController::parse_input() {
 
 	input_in = input_file.get();
 	int parse_status = 0;
-	sub_formula_variables.clear();
+		auto cleanup_sub_formula_variables = []() {
+			for (auto &[name, node] : sub_formula_variables) {
+				(void)name;
+				ConjectureNode::deleteSubtree(node);
+			}
+			sub_formula_variables.clear();
+		};
+	cleanup_sub_formula_variables();
 	try {
 		parse_status =
 			input_parse(conjecture, result, coreList, varToCoreName,
 						varToProperty); // Parser function from Parser.hpp
 	} catch (const std::exception &e) {
 		input_in = nullptr;
+		cleanup_sub_formula_variables();
 		fail(std::string("Error while parsing input: ") + e.what());
 	} catch (...) {
 		input_in = nullptr;
+		cleanup_sub_formula_variables();
 		fail("Error while parsing input.");
 	}
 	input_in = nullptr;
+	cleanup_sub_formula_variables();
+	ownedProperties.clear();
+	ownedProperties.reserve(varToProperty.size());
+	for (const auto &[name, property] : varToProperty) {
+		(void)name;
+		ownedProperties.emplace_back(property);
+	}
 
 	// check for successful parsing
 	if (parse_status != 0 || result != 0) {
@@ -265,6 +281,7 @@ InputController::~InputController() {
 	// Destroy dynamically loaded core instances before unloading the handler
 	// libraries stored in coreList.
 	ownedCores.clear();
+	ownedProperties.clear();
 }
 
 auto InputController::default_paths() -> std::vector<std::string> {

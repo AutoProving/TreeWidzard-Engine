@@ -26,6 +26,11 @@ public:
     ConjectureNode(TokenType type, const std::string &val);
     ConjectureNode(TokenType type, double x);
     ConjectureNode(TokenType type, const std::string &val, double x);
+    ~ConjectureNode();
+    ConjectureNode(const ConjectureNode &) = delete;
+    ConjectureNode &operator=(const ConjectureNode &) = delete;
+    ConjectureNode(ConjectureNode &&) = delete;
+    ConjectureNode &operator=(ConjectureNode &&) = delete;
     TokenType getType() const;
     void setType(TokenType type);
     const std::string &getVal() const;
@@ -39,6 +44,8 @@ public:
     void printWithNumbers(unsigned &label);
     void printInfix();
     void print();
+    ConjectureNode *cloneSubtree() const;
+    static void deleteSubtree(ConjectureNode *node);
 };
 class Conjecture {
 private:
@@ -46,12 +53,19 @@ private:
     std::map<std::string, Function_Binary> functions_binary;
     std::map<std::string, Function_Unary> functions_unary;
     ConjectureNode *root = nullptr;
+    bool ownsRoot = false;
     DynamicKernel *kernel = nullptr;
     std::map<std::string, PropertyAssignment *> varToProperty; // map from var to Property
 public:
     Conjecture();
+    ~Conjecture();
+    Conjecture(const Conjecture &other);
+    Conjecture &operator=(const Conjecture &other);
+    Conjecture(Conjecture &&other) noexcept;
+    Conjecture &operator=(Conjecture &&other) noexcept;
     ConjectureNode *getRoot() const;
     void setRoot(ConjectureNode *root);
+    void setOwnedRoot(ConjectureNode *root);
     // evaluate the conjectureNode for a given state
     double evaluateConjectureNodeOnState(const State &q, const ConjectureNode *node);
     // evaluate the conjecture for a given state

@@ -15,6 +15,12 @@ class PropertyAssignment {
 	std::string type; // Bool, Min, Max
   std::vector<std::variant<char*,int, bool>> parametersVec;
   public:
+    PropertyAssignment() = default;
+    ~PropertyAssignment();
+    PropertyAssignment(const PropertyAssignment &other);
+    PropertyAssignment &operator=(const PropertyAssignment &other);
+    PropertyAssignment(PropertyAssignment &&other) noexcept;
+    PropertyAssignment &operator=(PropertyAssignment &&other) noexcept;
     const std::string &getName() const;
     void setName(const std::string &name);
     const std::string &getOp() const;

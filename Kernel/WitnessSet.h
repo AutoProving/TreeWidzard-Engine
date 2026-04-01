@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <map>
 #include <memory>
+#include <mutex>
 #include <set>
 #include <unordered_set>
 #include <vector>
@@ -135,14 +136,51 @@ public:
     void unlock() {}
     bool try_lock() { return true; }
   };
-  static NoOpMutex witnessMutex;
+  using MutexType = NoOpMutex;
 #else
-  static std::mutex witnessMutex;
+  using MutexType = std::mutex;
 #endif
+  static MutexType witnessMutex;
+  mutable MutexType setMutex;
   std::vector<uint8_t> mask;
   int cardinality = 0;
   mutable bool hashCacheValid = false;
   mutable uint64_t hashCache = 0;
+  WitnessSetTypeOne() = default;
+  WitnessSetTypeOne(const WitnessSetTypeOne &other) {
+    std::lock_guard<MutexType> lock(other.setMutex);
+    mask = other.mask;
+    cardinality = other.cardinality;
+  }
+  WitnessSetTypeOne &operator=(const WitnessSetTypeOne &other) {
+    if (this == &other) {
+      return *this;
+    }
+    std::scoped_lock lock(setMutex, other.setMutex);
+    mask = other.mask;
+    cardinality = other.cardinality;
+    invalidateHashCache();
+    return *this;
+  }
+  WitnessSetTypeOne(WitnessSetTypeOne &&other) noexcept {
+    std::lock_guard<MutexType> lock(other.setMutex);
+    mask = std::move(other.mask);
+    cardinality = other.cardinality;
+    other.cardinality = 0;
+    other.invalidateHashCache();
+  }
+  WitnessSetTypeOne &operator=(WitnessSetTypeOne &&other) noexcept {
+    if (this == &other) {
+      return *this;
+    }
+    std::scoped_lock lock(setMutex, other.setMutex);
+    mask = std::move(other.mask);
+    cardinality = other.cardinality;
+    invalidateHashCache();
+    other.cardinality = 0;
+    other.invalidateHashCache();
+    return *this;
+  }
   class WitnessSetTypeOneIterator : public AbstractIterator {
   private:
     const WitnessSetTypeOne<T> *self;
@@ -197,6 +235,7 @@ public:
 
   // Direct access: returns indices of set bits for direct iteration
   std::vector<int> direct_indices() const {
+    std::lock_guard<MutexType> lock(setMutex);
     std::vector<int> indices;
     indices.reserve(cardinality);
     const int limit = static_cast<int>(8 * mask.size());
@@ -367,7 +406,7 @@ template <class T>
 void WitnessSetTypeOne<T>::insert(std::shared_ptr<Witness> ws) {
   int idx = -1;
   {
-    std::lock_guard<std::mutex> lock(witnessMutex);
+    std::lock_guard<MutexType> lock(witnessMutex);
     auto it = allWitnesses.find(ws);
     if (it != allWitnesses.end()) {
       idx = it->second;
@@ -379,17 +418,20 @@ void WitnessSetTypeOne<T>::insert(std::shared_ptr<Witness> ws) {
     }
   }
 
-  if (idx >= static_cast<int>(8 * mask.size())) {
-    const std::size_t needed = static_cast<std::size_t>(idx / 8) + 1;
-    mask.resize(std::max(needed, mask.size() * 2), 0);
-  }
+  {
+    std::lock_guard<MutexType> lock(setMutex);
+    if (idx >= static_cast<int>(8 * mask.size())) {
+      const std::size_t needed = static_cast<std::size_t>(idx / 8) + 1;
+      mask.resize(std::max(needed, mask.size() * 2), 0);
+    }
 
-  const std::size_t byte_index = static_cast<std::size_t>(idx / 8);
-  const uint8_t bit = static_cast<uint8_t>(1u << (idx % 8));
-  if ((mask[byte_index] & bit) == 0) {
-    mask[byte_index] |= bit;
-    ++cardinality;
-    invalidateHashCache();
+    const std::size_t byte_index = static_cast<std::size_t>(idx / 8);
+    const uint8_t bit = static_cast<uint8_t>(1u << (idx % 8));
+    if ((mask[byte_index] & bit) == 0) {
+      mask[byte_index] |= bit;
+      ++cardinality;
+      invalidateHashCache();
+    }
   }
 }
 template <class T>
@@ -397,6 +439,10 @@ void WitnessSetTypeOne<T>::union_set_witness(
     std::shared_ptr<WitnessSet> witnessSet) {
   if (WitnessSetTypeOne<T> *e =
           dynamic_cast<WitnessSetTypeOne<T> *>(&*witnessSet)) {
+    if (e == this) {
+      return;
+    }
+    std::scoped_lock lock(setMutex, e->setMutex);
     bool changed = false;
     for (std::size_t i = 0; i < e->mask.size(); ++i) {
       if (i == mask.size())
@@ -430,6 +476,7 @@ template <class T> std::string WitnessSetTypeOne<T>::witnessSetInformation() {
 }
 
 template <class T> void WitnessSetTypeOne<T>::hash(Hasher &h) const {
+  std::lock_guard<MutexType> lock(setMutex);
   if (!hashCacheValid) {
     Hasher inner(0);
     inner << static_cast<unsigned>(mask.size());
@@ -444,9 +491,13 @@ template <class T> void WitnessSetTypeOne<T>::hash(Hasher &h) const {
 
 template <class T> bool WitnessSetTypeOne<T>::isLess(WitnessSet &rhs) {
   if (WitnessSetTypeOne<T> *e = dynamic_cast<WitnessSetTypeOne<T> *>(&rhs)) {
-    if (size() < e->size()) {
+    if (e == this) {
+      return false;
+    }
+    std::scoped_lock lock(setMutex, e->setMutex);
+    if (cardinality < e->cardinality) {
       return true;
-    } else if (e->size() < size()) {
+    } else if (e->cardinality < cardinality) {
       return false;
     } else {
       auto it = e->begin();
@@ -467,6 +518,10 @@ template <class T> bool WitnessSetTypeOne<T>::isLess(WitnessSet &rhs) {
 
 template <class T> bool WitnessSetTypeOne<T>::isEqual(WitnessSet &rhs) {
   if (WitnessSetTypeOne<T> *e = dynamic_cast<WitnessSetTypeOne<T> *>(&rhs)) {
+    if (e == this) {
+      return true;
+    }
+    std::scoped_lock lock(setMutex, e->setMutex);
     return mask == e->mask;
   }
   std::cerr << "Error: In isEqual, WitnessSet type cast error." << std::endl;
@@ -495,7 +550,10 @@ bool WitnessSetTypeOne::operator!=(WitnessSet &rhs) {
 
 }*/
 
-template <class T> int WitnessSetTypeOne<T>::size() { return cardinality; }
+template <class T> int WitnessSetTypeOne<T>::size() {
+  std::lock_guard<MutexType> lock(setMutex);
+  return cardinality;
+}
 
 template <class T>
 void WitnessSetTypeOne<T>::setEqual(const WitnessSet &other) {

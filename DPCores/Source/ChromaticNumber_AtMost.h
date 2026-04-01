@@ -182,6 +182,8 @@ struct ChromaticNumber_AtMost_Core
           // Remove the empty cell from the vector
           witness->partialColoring.erase(witness->partialColoring.begin() + static_cast<ptrdiff_t>(idx));
         }
+        std::sort(witness->partialColoring.begin(),
+                  witness->partialColoring.end());
         witnessSet.insert(std::move(witness));
         break;
       }

@@ -1,5 +1,7 @@
 #include "Conjecture.h"
 
+#include <utility>
+
 // To Do: implement getCoreWitnessSetByVar
 double Conjecture::evaluateConjectureNodeOnState(const State &q, const ConjectureNode *node) {
 	double result;
@@ -259,7 +261,27 @@ double Conjecture::evaluateConjectureOnState(const State &q) {
 
 ConjectureNode *Conjecture::getRoot() const { return root; }
 
-void Conjecture::setRoot(ConjectureNode *root_) { root = root_; }
+void Conjecture::setRoot(ConjectureNode *root_) {
+	if (root == root_) {
+		return;
+	}
+	if (ownsRoot) {
+		ConjectureNode::deleteSubtree(root);
+	}
+	root = root_;
+	ownsRoot = false;
+}
+
+void Conjecture::setOwnedRoot(ConjectureNode *root_) {
+	if (root == root_ && ownsRoot) {
+		return;
+	}
+	if (ownsRoot) {
+		ConjectureNode::deleteSubtree(root);
+	}
+	root = root_;
+	ownsRoot = true;
+}
 
 DynamicKernel *Conjecture::getKernel() const { return kernel; }
 
@@ -326,20 +348,8 @@ void Conjecture::setVariablesToCoreName(
 }
 
 int Conjecture::evaluatePremiseOnState(const State &q) {
-	if (root->getType() == OPERATOR and root->getVal() == "implies") {
-		if (root->getChildren().size() != 2) {
-			std::cerr
-				<< "ERROR: In ConjectureNode::evaluateState, IMPLIES operator "
-				   "does not have 2 children";
-			exit(20);
-		} else {
-			bool result =
-				evaluateConjectureNodeOnState(q, root->getChildren()[0]);
-			// cout<< result << " ";
-			// root->getChildren()[0]->printInfix();
-			// cout<<endl;
-			return result;
-		}
+	if (root->getVal() == "implies") {
+		return evaluateConjectureNodeOnState(q, root->getChildren()[0]);
 	} else {
 		std::cout
 			<< "ERROR: could not determine the premise. The conjecture is not "
@@ -372,8 +382,79 @@ Conjecture::Conjecture() {
 	functions_unary.insert(std::make_pair("tan", (Function_Unary)tan));
 }
 
+Conjecture::~Conjecture() {
+	if (ownsRoot) {
+		ConjectureNode::deleteSubtree(root);
+	}
+}
+
+Conjecture::Conjecture(const Conjecture &other)
+	: variablesToCoreName(other.variablesToCoreName),
+	  functions_binary(other.functions_binary),
+	  functions_unary(other.functions_unary),
+	  root(other.root != nullptr ? other.root->cloneSubtree() : nullptr),
+	  ownsRoot(other.root != nullptr),
+	  kernel(other.kernel),
+	  varToProperty(other.varToProperty) {}
+
+Conjecture &Conjecture::operator=(const Conjecture &other) {
+	if (this == &other) {
+		return *this;
+	}
+
+	ConjectureNode *new_root =
+		other.root != nullptr ? other.root->cloneSubtree() : nullptr;
+	if (ownsRoot) {
+		ConjectureNode::deleteSubtree(root);
+	}
+	variablesToCoreName = other.variablesToCoreName;
+	functions_binary = other.functions_binary;
+	functions_unary = other.functions_unary;
+	root = new_root;
+	ownsRoot = other.root != nullptr;
+	kernel = other.kernel;
+	varToProperty = other.varToProperty;
+	return *this;
+}
+
+Conjecture::Conjecture(Conjecture &&other) noexcept
+	: variablesToCoreName(std::move(other.variablesToCoreName)),
+	  functions_binary(std::move(other.functions_binary)),
+	  functions_unary(std::move(other.functions_unary)),
+	  root(other.root),
+	  ownsRoot(other.ownsRoot),
+	  kernel(other.kernel),
+	  varToProperty(std::move(other.varToProperty)) {
+	other.root = nullptr;
+	other.ownsRoot = false;
+	other.kernel = nullptr;
+}
+
+Conjecture &Conjecture::operator=(Conjecture &&other) noexcept {
+	if (this == &other) {
+		return *this;
+	}
+
+	if (ownsRoot) {
+		ConjectureNode::deleteSubtree(root);
+	}
+	variablesToCoreName = std::move(other.variablesToCoreName);
+	functions_binary = std::move(other.functions_binary);
+	functions_unary = std::move(other.functions_unary);
+	root = other.root;
+	ownsRoot = other.ownsRoot;
+	kernel = other.kernel;
+	varToProperty = std::move(other.varToProperty);
+	other.root = nullptr;
+	other.ownsRoot = false;
+	other.kernel = nullptr;
+	return *this;
+}
+
 ConjectureNode::ConjectureNode(TokenType type, const std::string &val, double x)
 	: type(type), val(val), x(x) {}
+
+ConjectureNode::~ConjectureNode() = default;
 
 TokenType ConjectureNode::getType() const { return type; }
 
@@ -436,6 +517,31 @@ void ConjectureNode::print() {
 			std::cout << val;
 			break;
 	}
+}
+
+ConjectureNode *ConjectureNode::cloneSubtree() const {
+	auto *copy = new ConjectureNode(type, val, x);
+	std::vector<ConjectureNode *> cloned_children;
+	cloned_children.reserve(children.size());
+	for (const ConjectureNode *child : children) {
+		ConjectureNode *cloned_child = child->cloneSubtree();
+		cloned_child->setParent(copy);
+		cloned_children.push_back(cloned_child);
+	}
+	copy->setChildren(cloned_children);
+	return copy;
+}
+
+void ConjectureNode::deleteSubtree(ConjectureNode *node) {
+	if (node == nullptr) {
+		return;
+	}
+
+	std::vector<ConjectureNode *> children = node->getChildren();
+	for (ConjectureNode *child : children) {
+		deleteSubtree(child);
+	}
+	delete node;
 }
 
 void ConjectureNode::printInfix() {

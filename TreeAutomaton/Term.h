@@ -30,7 +30,7 @@ class TermNode{
 private:
     TermNodeContent nodeContent;
     std::vector<std::shared_ptr<TermNode<TermNodeContent> > > children;
-    std::shared_ptr<TermNode<TermNodeContent> > parent;
+    std::weak_ptr<TermNode<TermNodeContent> > parent;
 public:
     TermNode();
 
@@ -49,8 +49,8 @@ public:
     void setChildren(const std::vector<std::shared_ptr<TermNode<TermNodeContent>>> &children) {
         TermNode::children = children;
     }
-    const std::shared_ptr<TermNode<TermNodeContent>> &getParent() const {
-        return parent;
+    std::shared_ptr<TermNode<TermNodeContent>> getParent() const {
+        return parent.lock();
     }
 
     void setParent(const std::shared_ptr<TermNode<TermNodeContent>> &parent) {
@@ -60,9 +60,11 @@ public:
         children.push_back(child);
     }
     bool operator==(const TermNode &rhs) const {
+        const auto lhs_parent = parent.lock();
+        const auto rhs_parent = rhs.parent.lock();
         return nodeContent == rhs.nodeContent &&
                children == rhs.children &&
-               parent == rhs.parent;
+               lhs_parent == rhs_parent;
     }
 
     bool operator!=(const TermNode &rhs) const {

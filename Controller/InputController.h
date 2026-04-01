@@ -70,6 +70,7 @@ private:
   Width width;
   Conjecture conjecture;
   std::vector<std::unique_ptr<DynamicCore>> ownedCores; // Owns cores created during construction
+  std::vector<std::unique_ptr<PropertyAssignment>> ownedProperties;
   bool inputIsInlineSource = false;
   bool quiet = false;
   InputControllerErrorMode errorMode = InputControllerErrorMode::Exit;

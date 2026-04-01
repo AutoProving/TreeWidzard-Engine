@@ -59,7 +59,7 @@ State::ptr StateTreeNode::get_S() { return this->S; }
 std::string StateTreeNode::get_nodeType() { return this->nodeType; }
 
 std::shared_ptr<StateTreeNode> StateTreeNode::get_parent() {
-	return this->parent;
+	return this->parent.lock();
 }
 
 std::vector<std::shared_ptr<StateTreeNode> > StateTreeNode::get_children() {

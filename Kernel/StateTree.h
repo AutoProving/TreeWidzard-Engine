@@ -15,7 +15,7 @@ class StateTreeNode : public std::enable_shared_from_this<StateTreeNode> {
   protected:
 	std::string nodeType;							 // Default: "Empty"
 	State::ptr S;									 // Default: Empty State
-	std::shared_ptr<StateTreeNode> parent = nullptr; // Default Value
+	std::weak_ptr<StateTreeNode> parent;			 // Non-owning back-reference
 	std::vector<std::shared_ptr<StateTreeNode>> children; // Default: no child
 	std::shared_ptr<DynamicKernel> kernel;
 

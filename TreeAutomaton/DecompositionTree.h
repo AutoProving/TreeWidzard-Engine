@@ -14,7 +14,7 @@ class DecompositionNode {
 
     private:
         std::set<unsigned> vertices;
-        std::shared_ptr<DecompositionNode> parent;
+        std::weak_ptr<DecompositionNode> parent;
         std::vector<std::shared_ptr<DecompositionNode>> children;
     public:
         DecompositionNode();
