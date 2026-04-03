@@ -147,6 +147,28 @@ TEST_F(ConjectureTest, ConjectureStructureValidation) {
   EXPECT_TRUE(isValid);
 }
 
+TEST_F(ConjectureTest, ConjectureStructureValidationRejectsBinaryOperatorWithOneChild) {
+  auto root = new ConjectureNode(OPERATOR, "+", 0);
+  std::vector<ConjectureNode *> children;
+  children.push_back(new ConjectureNode(NUMBER, "", 5.0));
+  root->setChildren(children);
+
+  conjecture->setRoot(root);
+
+  EXPECT_FALSE(conjecture->checkConjectureStructure(root));
+}
+
+TEST_F(ConjectureTest, ConjectureStructureValidationRejectsUnknownUnaryFunction) {
+  auto root = new ConjectureNode(FUNCTION_UNARY, "mystery", 0);
+  std::vector<ConjectureNode *> children;
+  children.push_back(new ConjectureNode(NUMBER, "", 5.0));
+  root->setChildren(children);
+
+  conjecture->setRoot(root);
+
+  EXPECT_FALSE(conjecture->checkConjectureStructure(root));
+}
+
 TEST_F(ConjectureTest, EmptyConjectureHandling) {
   // Test handling of empty conjecture
   State state;
@@ -228,4 +250,22 @@ TEST_F(ConjectureIntegrationTest, VariableToPropertyMapping) {
 
   auto retrieved_mapping = conjecture->getVariablesToCoreName();
   EXPECT_EQ(retrieved_mapping.at("x"), "ChromaticNumber_AtMost");
+}
+
+TEST_F(ConjectureIntegrationTest, CopiedConjectureKeepsIndependentPropertyAssignments) {
+  auto property = std::make_unique<PropertyAssignment>();
+  property->setName("ChromaticNumber_AtMost");
+  property->setParametersVec({3});
+
+  std::map<std::string, PropertyAssignment *> properties;
+  properties["x"] = property.get();
+  conjecture->setvarToProperty(properties);
+
+  Conjecture copied = *conjecture;
+  property.reset();
+
+  ASSERT_NE(copied.getPropertyAssignment("x"), nullptr);
+  EXPECT_EQ(copied.getPropertyAssignment("x")->getName(),
+            "ChromaticNumber_AtMost");
+  EXPECT_EQ(copied.getPropertyAssignment("x")->getParametersVec().size(), 1U);
 }

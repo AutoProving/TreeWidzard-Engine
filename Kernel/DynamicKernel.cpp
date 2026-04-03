@@ -101,7 +101,7 @@ State::ptr DynamicKernel::join(State::ptr q1, State::ptr q2) {
 // Change Name of this function from core_index to pointerToCoreNumber
 DynamicCore* DynamicKernel::pointerToCoreNumber(unsigned i) {
 	size_t j = i;
-	if (cores.size() - 1 < j) {
+	if (j >= cores.size()) {
 		std::cerr << "ERROR: In DynamicKernel::pointerToCoreNumber, asked index "
 				"bigger than the size of cores"
 			 << std::endl;

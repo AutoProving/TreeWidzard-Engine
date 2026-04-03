@@ -1,6 +1,39 @@
 #include "Conjecture.h"
 
+#include <memory>
 #include <utility>
+
+namespace {
+
+auto is_binary_operator(const std::string &op) -> bool {
+	return op == "+" || op == "-" || op == "/" || op == "*" || op == ">" ||
+		   op == ">=" || op == "<" || op == "<=" || op == "==" ||
+		   op == "and" || op == "or" || op == "implies" || op == "iff";
+}
+
+auto is_unary_operator(const std::string &op) -> bool {
+	return op == "not";
+}
+
+void clone_property_assignments(
+	const std::map<std::string, PropertyAssignment *> &source,
+	std::vector<std::unique_ptr<PropertyAssignment>> &owned,
+	std::map<std::string, PropertyAssignment *> &mapped) {
+	owned.clear();
+	mapped.clear();
+
+	owned.reserve(source.size());
+	for (const auto &[name, property] : source) {
+		if (property == nullptr) {
+			mapped[name] = nullptr;
+			continue;
+		}
+		owned.push_back(std::make_unique<PropertyAssignment>(*property));
+		mapped[name] = owned.back().get();
+	}
+}
+
+} // namespace
 
 // To Do: implement getCoreWitnessSetByVar
 double Conjecture::evaluateConjectureNodeOnState(const State &q, const ConjectureNode *node) {
@@ -294,40 +327,84 @@ void Conjecture::print() {
 }
 
 bool Conjecture::checkConjectureStructure(ConjectureNode *node) {
+	if (node == nullptr) {
+		std::cout << "Conjecture root is null" << std::endl;
+		return false;
+	}
+
 	switch (node->getType()) {
 		case NUMBER:
-			if (node->getChildren().size() != 0) {
+		case CORE_VARIABLE:
+		case EXP_VARIABLE:
+			if (!node->getChildren().empty()) {
 				std::cout << node->getVal() << " is number and has children "
 						  << std::endl;
 				return false;
 			}
 			break;
 		case OPERATOR: {
-			std::string op = node->getVal();
-			if (op == "and" or op == "or" or op == "implies" or op == "iff" or
-				op == ">" or op == "<" or op == ">" or op == ">=" or
-				op == "<=") {
+			const std::string &op = node->getVal();
+			if (is_binary_operator(op)) {
 				if (node->getChildren().size() != 2) {
-					std::cout << node->getVal() << "has invalid children"
+					std::cout << node->getVal() << " has invalid children"
 							  << std::endl;
 					return false;
 				}
-			} else if (op == "not") {
+			} else if (is_unary_operator(op)) {
 				if (node->getChildren().size() != 1) {
-					std::cout << node->getVal() << "has invalid children"
+					std::cout << node->getVal() << " has invalid children"
 							  << std::endl;
 					return false;
 				}
+			} else {
+				std::cout << node->getVal() << " is not a supported operator"
+						  << std::endl;
+				return false;
 			}
+			break;
 		}
-			//        case CORE_VARIABLE:
-			//            return true;
-			//        case EXP_VARIABLE:
-			//            return true;
-			//        case FUNC:
-			//            return true;
+		case FUNCTION_BINARY:
+			if (node->getChildren().size() != 2) {
+				std::cout << node->getVal() << " has invalid children"
+						  << std::endl;
+				return false;
+			}
+			if (!functions_binary.count(node->getVal())) {
+				std::cout << node->getVal() << " is not a supported binary function"
+						  << std::endl;
+				return false;
+			}
+			break;
+		case FUNCTION_UNARY:
+			if (node->getChildren().size() != 1) {
+				std::cout << node->getVal() << " has invalid children"
+						  << std::endl;
+				return false;
+			}
+			if (!functions_unary.count(node->getVal())) {
+				std::cout << node->getVal() << " is not a supported unary function"
+						  << std::endl;
+				return false;
+			}
+			break;
+		case INV:
+			if (node->getChildren().size() != 1) {
+				std::cout << node->getVal() << " has invalid children"
+						  << std::endl;
+				return false;
+			}
+			if (node->getChildren()[0] == nullptr ||
+				node->getChildren()[0]->getType() != CORE_VARIABLE) {
+				std::cout << node->getVal()
+						  << " requires a single core variable child"
+						  << std::endl;
+				return false;
+			}
+			break;
 		default:
-			break; // TODO?
+			std::cout << node->getVal() << " has unsupported node type"
+					  << std::endl;
+			return false;
 	}
 	for (auto child : node->getChildren()) {
 		if (!checkConjectureStructure(child)) {
@@ -394,8 +471,10 @@ Conjecture::Conjecture(const Conjecture &other)
 	  functions_unary(other.functions_unary),
 	  root(other.root != nullptr ? other.root->cloneSubtree() : nullptr),
 	  ownsRoot(other.root != nullptr),
-	  kernel(other.kernel),
-	  varToProperty(other.varToProperty) {}
+	  kernel(other.kernel) {
+	clone_property_assignments(other.varToProperty, ownedPropertyAssignments,
+							   varToProperty);
+}
 
 Conjecture &Conjecture::operator=(const Conjecture &other) {
 	if (this == &other) {
@@ -413,7 +492,8 @@ Conjecture &Conjecture::operator=(const Conjecture &other) {
 	root = new_root;
 	ownsRoot = other.root != nullptr;
 	kernel = other.kernel;
-	varToProperty = other.varToProperty;
+	clone_property_assignments(other.varToProperty, ownedPropertyAssignments,
+							   varToProperty);
 	return *this;
 }
 
@@ -424,10 +504,12 @@ Conjecture::Conjecture(Conjecture &&other) noexcept
 	  root(other.root),
 	  ownsRoot(other.ownsRoot),
 	  kernel(other.kernel),
+	  ownedPropertyAssignments(std::move(other.ownedPropertyAssignments)),
 	  varToProperty(std::move(other.varToProperty)) {
 	other.root = nullptr;
 	other.ownsRoot = false;
 	other.kernel = nullptr;
+	other.varToProperty.clear();
 }
 
 Conjecture &Conjecture::operator=(Conjecture &&other) noexcept {
@@ -444,10 +526,12 @@ Conjecture &Conjecture::operator=(Conjecture &&other) noexcept {
 	root = other.root;
 	ownsRoot = other.ownsRoot;
 	kernel = other.kernel;
+	ownedPropertyAssignments = std::move(other.ownedPropertyAssignments);
 	varToProperty = std::move(other.varToProperty);
 	other.root = nullptr;
 	other.ownsRoot = false;
 	other.kernel = nullptr;
+	other.varToProperty.clear();
 	return *this;
 }
 
@@ -729,5 +813,6 @@ void Conjecture::printValues(const State &q, const ConjectureNode *node) {
 
 void Conjecture::setvarToProperty(
 	const std::map<std::string, PropertyAssignment *> &varToProperty_) {
-	varToProperty = varToProperty_;
+	clone_property_assignments(varToProperty_, ownedPropertyAssignments,
+							   varToProperty);
 }

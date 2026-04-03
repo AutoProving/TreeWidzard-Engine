@@ -55,6 +55,7 @@ private:
     ConjectureNode *root = nullptr;
     bool ownsRoot = false;
     DynamicKernel *kernel = nullptr;
+    std::vector<std::unique_ptr<PropertyAssignment>> ownedPropertyAssignments;
     std::map<std::string, PropertyAssignment *> varToProperty; // map from var to Property
 public:
     Conjecture();

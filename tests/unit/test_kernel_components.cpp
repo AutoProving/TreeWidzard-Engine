@@ -252,6 +252,17 @@ TEST(KernelComponents, DynamicKernelOperationsAndMappings) {
   EXPECT_EQ(first_witness_value(joined->getWitnessSet(0)), 14);
 }
 
+TEST(KernelComponents, DynamicKernelPointerLookupRejectsEmptyKernel) {
+  DynamicKernel kernel;
+
+  EXPECT_EXIT(
+      {
+        (void)kernel.pointerToCoreNumber(0);
+        std::exit(0);
+      },
+      ::testing::ExitedWithCode(20), "bigger than the size of cores");
+}
+
 TEST(KernelComponents, DynamicKernelUsesPooledStateConstruction) {
   State::clearPool();
   State::initializePool(4);
