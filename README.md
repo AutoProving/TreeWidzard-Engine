@@ -1,30 +1,39 @@
 # TreeWidzard
 
-## Quick Start
+TreeWidzard is a C++ tool for model checking, computing graph invariants, and automated theorem proving on bounded treewidth or pathwidth graph classes. It loads dynamic DP cores and search strategies, then searches for counterexamples to conjectures or verifies properties on tree decompositions.
 
-For most users, the simplest path is a release archive.
+## Requirements
 
-1. Download the archive for your platform from the repository's GitHub Releases page.
-2. Unpack it.
-3. Run the launcher in `treewidzard/bin/`.
+To build TreeWidzard from source, you need:
 
-Launcher paths:
+- CMake 3.18 or newer
+- A C++20 compiler
+- A build tool such as `make` or `ninja`
 
-- Linux/macOS: `treewidzard/bin/treewidzard`
-- Windows: `treewidzard\\bin\\treewidzard.bat`
+Optional:
+
+- Git for cloning or updating the repository
+- Bison 3.0+ and Flex 2.6+ if you want to regenerate the property parser
+
+You can check whether your machine already has the required tools by running:
+
+- Linux/macOS: `./check_requirements.sh`
+- Windows: `check_requirements.bat`
 
 ## Installation (Build from Source)
 
 Building from source is mainly for developers.
 
-1. Clone the repository:
+1. Download the source code or clone the repository.
+
+Download the repository as an archive from GitHub, or clone it with:
 
 ```bash
 git clone https://github.com/farhad-vadiee/TreeWidzard.git
 cd TreeWidzard
 ```
 
-2. Check whether the current machine already has the required build tools.
+2. Check whether the current machine already has the required build tools. If something is missing, go to [Install Requirements](#install-requirements), install the missing tools for your platform, and then run the checker again.
 
 On Linux or macOS:
 
@@ -38,7 +47,7 @@ On Windows:
 check_requirements.bat
 ```
 
-3. If the checker passes:
+3. Build the project.
 
 On Linux or macOS:
 
@@ -58,7 +67,120 @@ cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release
 ninja
 ```
 
-4. If the checker fails, install the missing requirements for your system and run the checker again.
+You do not need this command unless you want to regenerate the property parser. In that case, use:
+
+```bash
+cmake -S . -B build -DTREEWIDZARD_REGENERATE_PROPERTY_PARSER=ON
+```
+
+This requires Bison 3.0+ and Flex 2.6+.
+
+## Running TreeWidzard
+
+To check that the installation worked:
+
+Linux/macOS:
+
+```bash
+./treewidzard.sh --help
+```
+
+Windows:
+
+```bat
+./treewidzard.bat --help
+```
+
+To run a search on one of the example conjectures:
+
+Linux/macOS:
+
+```bash
+./treewidzard.sh -atp tw=4 -pl ParallelBreadthFirstSearch examples/system_paper/atp/five_colorable.txt
+```
+
+Windows:
+
+```bat
+./treewidzard.bat -atp tw=4 -pl ParallelBreadthFirstSearch examples/system_paper/atp/five_colorable.txt
+```
+
+## ATP Command Structure
+
+ATP command pattern:
+
+```bash
+./treewidzard.sh -atp <width type>=<width value> [flags] <search method> <property file>
+```
+
+Example:
+
+```bash
+./treewidzard.sh -atp tw=4 -pl ParallelBreadthFirstSearch examples/system_paper/atp/five_colorable.txt
+```
+
+Terms:
+
+- `<search method>`: the search strategy used to explore graphs, such as `BreadthFirstSearch` or `ParallelBreadthFirstSearch`
+- `<width type>`: the width parameter to use, such as `tw` or `pw`
+- `<width value>`: the width bound to test
+- `<property file>`: a text file that defines the DP cores and the formula/conjecture to check. Example: [examples/system_paper/atp/five_colorable.txt](/Users/farhad/Documents/uib/github/TreeWidzard/examples/system_paper/atp/five_colorable.txt)
+
+Available search methods:
+
+- `BreadthFirstSearch`
+- `IsomorphismBreadthFirstSearch`
+- `ParallelBreadthFirstSearch`
+- `ParallelIsomorphismBreadthFirstSearch`
+
+## Model Checking Command Structure
+
+PACE format:
+
+```bash
+./treewidzard.sh -modelcheck PACE [flags] <property file> <graph file> <tree decomposition file>
+```
+
+Example:
+
+```bash
+./treewidzard.sh -modelcheck PACE examples/system_paper/model_checking/three_colorable.txt examples/system_paper/model_checking/diamond.gr examples/system_paper/model_checking/diamond.td
+```
+
+Terms:
+
+- `<property file>`: a text file that defines the DP cores and the formula/conjecture to check. Example: [examples/system_paper/model_checking/three_colorable.txt](/Users/farhad/Documents/uib/github/TreeWidzard/examples/system_paper/model_checking/three_colorable.txt)
+- `<graph file>`: an input graph in PACE graph format. Example: [examples/system_paper/model_checking/diamond.gr](/Users/farhad/Documents/uib/github/TreeWidzard/examples/system_paper/model_checking/diamond.gr)
+- `<tree decomposition file>`: a tree decomposition of the input graph in PACE decomposition format. Example: [examples/system_paper/model_checking/diamond.td](/Users/farhad/Documents/uib/github/TreeWidzard/examples/system_paper/model_checking/diamond.td)
+
+ITD format:
+
+```bash
+./treewidzard.sh -modelcheck ITD [flags] <property file> <instructive tree decomposition file>
+```
+
+Example:
+
+```bash
+./treewidzard.sh -modelcheck ITD examples/system_paper/model_checking/three_colorable.txt examples/system_paper/model_checking/diamond.itd
+```
+
+Terms:
+
+- `<property file>`: a text file that defines the DP cores and the formula/conjecture to check. Example: [examples/system_paper/model_checking/three_colorable.txt](/Users/farhad/Documents/uib/github/TreeWidzard/examples/system_paper/model_checking/three_colorable.txt)
+- `<instructive tree decomposition file>`: an instructive tree decomposition input used by TreeWidzard for model checking. Example: [examples/system_paper/model_checking/diamond.itd](/Users/farhad/Documents/uib/github/TreeWidzard/examples/system_paper/model_checking/diamond.itd)
+
+## Flags
+
+| Flag | ATP | Model checking | Meaning |
+| --- | --- | --- | --- |
+| `-pl` | Yes | No | Print loop progress |
+| `-ps` | Yes | No | Print discovered states |
+| `-st` | Yes | No | Print the state tree for BreadthFirstSearch variants |
+| `-nthreads N` | Yes | No | Set the thread count for `ParallelBreadthFirstSearch` and `ParallelIsomorphismBreadthFirstSearch` |
+| `-files` | Yes | Yes | Write generated artifacts to files |
+
+## Install Requirements
 
 Linux (Ubuntu/Debian):
 
@@ -90,152 +212,4 @@ pacman -S --needed \
   mingw-w64-x86_64-toolchain \
   mingw-w64-x86_64-cmake \
   mingw-w64-x86_64-ninja
-```
-
-The checked-in parser sources are used by default, so most source builds do not require Bison or Flex.
-
-### Optional: Regenerate the Parser
-
-The repository already includes generated parser files:
-
-- `Parser/PropertyParser/input_parser.cpp`
-- `Parser/PropertyParser/input_parser.hpp`
-- `Parser/PropertyParser/input_lexer.cpp`
-
-You only need Bison 3.0+ and Flex 2.6+ if you edit:
-
-- `Parser/PropertyParser/input_parser.y`
-- `Parser/PropertyParser/input_lexer.l`
-
-To regenerate those files during configuration:
-
-```bash
-cmake -S . -B build -DTREEWIDZARD_REGENERATE_PROPERTY_PARSER=ON
-```
-
-### Install To a Self-Contained Prefix
-
-On Linux or macOS:
-
-```bash
-cmake -S . -B build-install -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PWD/install"
-cmake --build build-install -j
-cmake --install build-install
-./install/bin/treewidzard --help
-```
-
-On Windows, run these from the `MSYS2 MinGW 64-bit` terminal:
-
-```bash
-cmake -S . -B build-install -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PWD/install"
-cmake --build build-install -j
-cmake --install build-install
-./install/bin/treewidzard.bat --help
-```
-
-### Updating
-
-Download new changes:
-
-```bash
-git pull
-```
-
-Rebuild:
-
-```bash
-cmake --build build
-```
-
-## Running TreeWidzard
-
-To print usage from the build tree on Linux or macOS:
-
-```bash
-./treewidzard.sh --help
-```
-
-To print usage from the build tree on Windows:
-
-```bash
-./treewidzard.bat --help
-```
-
-To run the installed binary from the optional install prefix on Linux or macOS:
-
-```bash
-./install/bin/treewidzard --help
-```
-
-To run the installed binary from the optional install prefix on Windows:
-
-```bash
-./install/bin/treewidzard.bat --help
-```
-
-## Minimal Conjecture Example
-
-Example conjecture file:
-
-```text
-x := MaxDegree(4)
-y := ChromaticNumber(4)
-Formula
-x IMPLIES y
-```
-
-Example ATP run from the build tree on Linux or macOS:
-
-```bash
-./treewidzard.sh -atp tw=2 BreadthFirstSearch examples/conjectures/simple_implies.txt
-```
-
-On Windows:
-
-```bash
-./treewidzard.bat -atp tw=2 BreadthFirstSearch examples/conjectures/simple_implies.txt
-```
-
-## Testing
-
-Run the test suite from the repo root:
-
-```bash
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build -j
-ctest --test-dir build --output-on-failure -j
-```
-
-Run only certificate tests:
-
-```bash
-ctest --test-dir build --output-on-failure -R '^Certificates\\.'
-```
-
-## 📚 Using as a Library
-
-TreeWidzard can now be linked as a shared or static library in your own C++ projects.
-
-### C++ API (`libtreewidzard`)
-Link against `TreeWidzard-Core` and include the public header:
-
-```cpp
-#include <treewidzard/TreeWidzard.h>
-
-int main() {
-    TreeWidzard::Engine engine;
-    
-    // 1. Load a dynamic core (plugin)
-    engine.loadCore("ChromaticNumber", 3);
-    
-    // 2. Set Width
-    engine.setWidth(2);
-    
-    // 3. Define Conjecture over the loaded core(s)
-    engine.setConjecture("x");
-    
-    // 4. Solve
-    bool result = engine.solve();
-    return 0;
-}
 ```
