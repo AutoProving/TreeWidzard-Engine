@@ -134,32 +134,13 @@ struct IndependentSet_Max_Core: CoreWrapper<IndependentSet_Max_Core, Independent
                                     }),
                         witnesses.end());
 
-        // Step 4: Dominance pruning — if witness A has used ⊇ B.used and A.size >= B.size,
-        // then B is dominated and can be dropped. Sort by decreasing size for greedy pruning.
-        std::sort(witnesses.begin(), witnesses.end(),
-            [](const auto &a, const auto &b) { return a->size > b->size; });
-
-        std::vector<std::shared_ptr<WitnessAlias>> pruned;
-        pruned.reserve(witnesses.size());
-        for (auto &w : witnesses) {
-            bool dominated = false;
-            for (const auto &kept : pruned) {
-                // Check if kept dominates w: kept.size >= w.size (guaranteed by sort order)
-                // and w.used ⊆ kept.used
-                if (std::includes(kept->used.begin(), kept->used.end(),
-                                  w->used.begin(), w->used.end())) {
-                    dominated = true;
-                    break;
-                }
-            }
-            if (!dominated) {
-                pruned.push_back(std::move(w));
-            }
-        }
-
-        // Step 5: Replace the original witness set with the cleaned one
+        // Step 4: Replace the original witness set with the cleaned one.
+        // For this core, witnesses with different `used` sets are not
+        // interchangeable: a superset of currently selected bag vertices is
+        // more constrained by future edge introductions and joins, not less.
+        // Keep all distinct `used` patterns and only drop exact duplicates.
         witnessSet = WitnessSet();
-        for (auto &w : pruned)
+        for (auto &w : witnesses)
             witnessSet.insert(std::move(w));
     }
 
