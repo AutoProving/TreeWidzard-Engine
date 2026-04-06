@@ -73,6 +73,7 @@ target_link_libraries(integration_tests
 add_dependencies(integration_tests
     treewidzard
     ChromaticNumber_AtMost
+    IndependentSet_Max
     MaxDegree_AtLeast
     VertexCount
     BreadthFirstSearch

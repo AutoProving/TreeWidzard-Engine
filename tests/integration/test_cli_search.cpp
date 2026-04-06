@@ -461,6 +461,29 @@ TEST(CliSearch, RejectsDisconnectedTreeDecompositions) {
   EXPECT_NE(result.output.find("valid tree decomposition"), std::string::npos);
 }
 
+TEST(CliSearch, ModelCheckIndependentSetInvariantOnDiamondGraph) {
+  const fs::path root = find_repo_root();
+  const auto tmp = make_temp_dir();
+  const fs::path property = copy_property(
+      root / "examples/system_paper/invariants/independence_number.txt",
+      tmp.path);
+  const fs::path graph = copy_property(
+      root / "examples/system_paper/model_checking/diamond.gr", tmp.path);
+  const fs::path td = copy_property(
+      root / "examples/system_paper/model_checking/diamond.td", tmp.path);
+
+  const auto result = run_capture(
+      launcher_command(root) + " -modelcheck PACE " +
+          shell_quote(property.string()) + " " + shell_quote(graph.string()) +
+          " " + shell_quote(td.string()),
+      tmp.path / "diamond_independent_set.txt");
+
+  EXPECT_EQ(result.exit_code, 0);
+  EXPECT_EQ(parse_verdict(result.output), SolverVerdict::Satisfied);
+  EXPECT_NE(result.output.find("Invariant value: INV(x)=2"),
+            std::string::npos);
+}
+
 TEST(CliSearch, DefaultCounterexampleSearchDoesNotWriteFiles) {
   const fs::path root = find_repo_root();
   const auto tmp = make_temp_dir();

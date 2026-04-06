@@ -378,6 +378,39 @@ TEST_F(IndependentSetMaxTest, InvImplementationReturnsSize) {
   EXPECT_EQ(result, 5);
 }
 
+TEST_F(IndependentSetMaxTest, CleanKeepsMoreFlexibleSubsetWitnesses) {
+  WitnessSetTypeTwo<IndependentSet_Max_Witness> witness_set;
+
+  auto subset = make_shared<IndependentSet_Max_Witness>();
+  subset->size = 1;
+  subset->used.insert(1);
+  witness_set.insert(subset);
+
+  auto superset = make_shared<IndependentSet_Max_Witness>();
+  superset->size = 2;
+  superset->used.insert(1);
+  superset->used.insert(2);
+  witness_set.insert(superset);
+
+  core.clean_implementation(witness_set);
+
+  bool saw_subset = false;
+  bool saw_superset = false;
+  for (const auto& witness_ptr : witness_set) {
+    const auto& witness =
+        IndependentSet_Max_Witness::as_witness(*witness_ptr);
+    if (witness.size == 1 && witness.used == set<unsigned>({1})) {
+      saw_subset = true;
+    }
+    if (witness.size == 2 && witness.used == set<unsigned>({1, 2})) {
+      saw_superset = true;
+    }
+  }
+
+  EXPECT_TRUE(saw_subset);
+  EXPECT_TRUE(saw_superset);
+}
+
 TEST_F(IndependentSetMaxTest, CompleteGraphK3MaxIndependentSetSize1) {
   WitnessSetTypeTwo<IndependentSet_Max_Witness> current;
   core.initialize_leaf(current);
