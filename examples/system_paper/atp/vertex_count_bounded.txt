@@ -1,0 +1,3 @@
+z := VertexCount()
+Formula
+(INV(z) <= 20) IMPLIES (1 == 1)

@@ -1,0 +1,3 @@
+x := IndependentSet_Max()
+Formula
+INV(x) == 2
