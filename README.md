@@ -183,6 +183,25 @@ Terms:
 | `-nthreads N` | Yes | No | Set the thread count for `ParallelBreadthFirstSearch` and `ParallelIsomorphismBreadthFirstSearch` |
 | `-files` | Yes | Yes | Write generated artifacts to files |
 
+## Available DP-Cores
+
+| DP-core | Name in property file | Example |
+| --- | --- | --- |
+| Chromatic number at most | `ChromaticNumber_AtMost` | `x := ChromaticNumber_AtMost(3)` |
+| Clique number at least | `CliqueNumber_AtLeast` | `x := CliqueNumber_AtLeast(4)` |
+| Clique number at least (simple graphs) | `CliqueNumberSimpleGraphs_AtLeast` | `x := CliqueNumberSimpleGraphs_AtLeast(4)` |
+| Feedback vertex set at most | `FeedbackVertexSet_AtMost` | `x := FeedbackVertexSet_AtMost(2)` |
+| Hamiltonian cycle | `HamiltonianCycle` | `x := HamiltonianCycle()` |
+| Hamiltonian path | `HamiltonianPath` | `x := HamiltonianPath()` |
+| Multiple-edge detection | `HasMultipleEdges` | `x := HasMultipleEdges()` |
+| Maximum independent set | `IndependentSet_Max` | `x := IndependentSet_Max()` |
+| Maximum degree at least | `MaxDegree_AtLeast` | `x := MaxDegree_AtLeast(4)` |
+| Minor containment for `K2` | `MinorContainment_K2` | `x := MinorContainment_K2()` |
+| Generic minor containment | `MinorContainment_Generic` | `x := MinorContainment_Generic(3, "0 1 1 2 0 2")` |
+| Perfect matching | `PerfectMatching` | `x := PerfectMatching()` |
+| Vertex count | `VertexCount` | `x := VertexCount()` |
+| Vertex cover at most | `VertexCover_AtMost` | `x := VertexCover_AtMost(2)` |
+
 ## Install Requirements
 
 Linux (Ubuntu/Debian):
