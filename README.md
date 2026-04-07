@@ -183,6 +183,17 @@ Terms:
 | `-nthreads N` | Yes | No | Set the thread count for `ParallelBreadthFirstSearch` and `ParallelIsomorphismBreadthFirstSearch` |
 | `-files` | Yes | Yes | Write generated artifacts to files |
 
+## Supported Formula Operations
+
+| Kind | Supported operations |
+| --- | --- |
+| Boolean operators | `AND`, `OR`, `NOT`, `IMPLIES`, `IFF` |
+| Comparisons | `==`, `>=`, `<=`, `>`, `<` |
+| Arithmetic operators | `+`, `-`, `*`, `/` |
+| Binary functions | `max(a, b)`, `min(a, b)`, `pow(a, b)` |
+| Unary functions | `abs(x)`, `acos(x)`, `asin(x)`, `atan(x)`, `cos(x)`, `exp(x)`, `floor(x)`, `ln(x)`, `log(x)`, `sin(x)`, `sqrt(x)`, `tan(x)` |
+| Invariants | `INV(x)` where `x` is a DP-core variable |
+
 ## Available DP-Cores
 
 | DP-core | Name in property file | Example |
@@ -201,6 +212,15 @@ Terms:
 | Perfect matching | `PerfectMatching` | `x := PerfectMatching()` |
 | Vertex count | `VertexCount` | `x := VertexCount()` |
 | Vertex cover at most | `VertexCover_AtMost` | `x := VertexCover_AtMost(2)` |
+
+Example property file:
+
+```text
+x := ChromaticNumber_AtMost(3)
+y := IndependentSet_Max()
+Formula
+x AND (INV(y) >= 2)
+```
 
 ## Install Requirements
 
@@ -235,3 +255,7 @@ pacman -S --needed \
   mingw-w64-x86_64-cmake \
   mingw-w64-x86_64-ninja
 ```
+
+## License
+
+TreeWidzard is released under the MIT License. See [LICENSE](/Users/farhad/Documents/uib/github/TreeWidzard/LICENSE) for details.
