@@ -47,7 +47,7 @@ set -e
 echo "Exit code: $EXIT_CODE"
 
 # Check if usage text is present
-if echo "$OUTPUT" | grep -q "Searching for a Counterexample"; then
+if echo "$OUTPUT" | grep -q "Usage:"; then
     echo "Help text verification: PASSED"
 else
     echo "Help text verification: FAILED"

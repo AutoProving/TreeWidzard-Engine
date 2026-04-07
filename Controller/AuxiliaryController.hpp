@@ -17,34 +17,37 @@ inline void show_manual() {
 	the -pl flag is on.
 	*/
 
-	std::cout << R"___(    Searching for a Counterexample:
-        ./treewidzard -atp [Width] [Flag Options] <search method> <property file>
+	std::cout << R"___(TreeWidzard
 
-    [Width]: tw|pw = number
-                example: tw = 2 (The program will search graphs with tree-width at most 2)
-                example: pw = 2 (The program will search graphs with path-width at most 2)
-	    Flag Options:
-	        -pl          print loop
-	        -ps          print states
-	        -st          print state tree decomposition if a counterexample is found (BreadthFirstSearch variants)
-	        -pdbgn       write directed bipartite graph in NAUTY format
-	        -no-bfs-dag  disable creation of the bfs dag, to speed up the search (NOT WORKING IN THIS VERSION)
-	        -nthreads    number of threads to use in parallel
-	        -files       write the counterexample artifacts into files
+Usage:
+  ./treewidzard --help
+  ./treewidzard -atp <tw|pw>=<k> [flags] <search method> <property file>
+  ./treewidzard -modelcheck PACE [flags] <property file> <graph file> <tree decomposition file>
+  ./treewidzard -modelcheck ITD [flags] <property file> <instructive tree decomposition file>
 
-	    Certificates (ATP mode):
-	        -cert <file> emit a replayable certificate (.twzcert text format)
-	        -checkcert <property file> <certificate file>
-	                    verify a certificate using the configured DP-core plugins
-	        Note: `-premise` certificates assume the premise is subgraph-closed; the checker treats it as “only successors satisfying the premise must be present”.
+Search methods:
+  BreadthFirstSearch
+  IsomorphismBreadthFirstSearch
+  ParallelBreadthFirstSearch
+  ParallelIsomorphismBreadthFirstSearch
 
-    Parsing a Tree Decomposition:
-        1- For PACE Format
-            ./treewidzard -modelcheck PACE [Flag Options] <property file> <graph file> <tree decomposition file>
-        2- For ITD Decomposition Verify
-            ./treewidzard -modelcheck ITD [Flag Options] <property file> <instructive tree decomposition file>
-     Flag Options:
-            -files     write the counter example into files. Files: ITD and Augmented ITD, RunTree, Graph File, Graph in GML Format, Graph in PACE Format, Tree Decomposition
+ATP flags:
+  -pl              print loop progress
+  -ps              print discovered states
+  -st              print the counterexample state tree (BreadthFirstSearch variants)
+  -premise         enable premise pruning
+  -pdbgn           write the directed bipartite graph in NAUTY format
+  -no-bfs-dag      disable BFS DAG creation
+  -nthreads <N>    set the number of threads for parallel search methods only
+  -files           write counterexample artifacts to files
+
+Model checking flags:
+  -files           write generated artifacts to files
+
+Examples:
+  ./treewidzard -atp tw=4 -pl ParallelBreadthFirstSearch examples/system_paper/atp/five_colorable.txt
+  ./treewidzard -modelcheck PACE examples/system_paper/model_checking/three_colorable.txt examples/system_paper/model_checking/diamond.gr examples/system_paper/model_checking/diamond.td
+  ./treewidzard -modelcheck ITD examples/system_paper/model_checking/three_colorable.txt examples/system_paper/model_checking/diamond.itd
 )___";
 	exit(0);
 }

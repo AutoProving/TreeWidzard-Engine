@@ -177,6 +177,9 @@ Terms:
 | `-pl` | Yes | No | Print loop progress |
 | `-ps` | Yes | No | Print discovered states |
 | `-st` | Yes | No | Print the state tree for BreadthFirstSearch variants |
+| `-premise` | Yes | No | Enable premise pruning. Use this only for properties of the form `A IMPLIES B`, where `A` is subgraph-closed |
+| `-pdbgn` | Yes | Yes | Write the graph in directed bipartite NAUTY format |
+| `-no-bfs-dag` | Yes | No | Disable BFS DAG construction during search. This can reduce overhead, but may prevent full counterexample reconstruction |
 | `-nthreads N` | Yes | No | Set the thread count for `ParallelBreadthFirstSearch` and `ParallelIsomorphismBreadthFirstSearch` |
 | `-files` | Yes | Yes | Write generated artifacts to files |
 
