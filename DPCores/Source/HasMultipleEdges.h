@@ -147,6 +147,7 @@ struct HasMultipleEdges_DynamicCore
     static std::map<std::string, std::string> metadata()
     {
         return {
+            // Canonical public name: boolean structural property.
             {"CoreName", "HasMultipleEdges"},
             {"CoreType", "Bool"},
             {"ParameterType", "ParameterLess"},

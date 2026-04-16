@@ -57,7 +57,8 @@ struct IndependentSet_Max_Core: CoreWrapper<IndependentSet_Max_Core, Independent
     */
     static std::map<std::string, std::string> metadata() {
         return {
-            {"CoreName", "IndependentSet_Max"},
+            // Canonical public name: numeric invariant for independence number.
+            {"CoreName", "IndependenceNumber"},
             {"CoreType", "Max"},
             {"ParameterType", "None"},
         };

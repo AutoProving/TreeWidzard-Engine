@@ -63,7 +63,7 @@ x IMPLIES y)";
 
 // Test: Conjecture file parsing
 TEST_F(ATPIntegrationTest, ConjectureFileParsing) {
-  std::string conjecture = R"(x := MaxDegree_AtLeast(4)
+  std::string conjecture = R"(x := MaximumDegree_AtLeast(4)
 y := ChromaticNumber_AtMost(4)
 Formula
 x IMPLIES y)";
@@ -77,7 +77,7 @@ x IMPLIES y)";
   std::string content((std::istreambuf_iterator<char>(file)),
                       std::istreambuf_iterator<char>());
 
-  EXPECT_TRUE(content.find("MaxDegree_AtLeast") != std::string::npos);
+  EXPECT_TRUE(content.find("MaximumDegree_AtLeast") != std::string::npos);
   EXPECT_TRUE(content.find("ChromaticNumber_AtMost") != std::string::npos);
   EXPECT_TRUE(content.find("IMPLIES") != std::string::npos);
 }
@@ -117,9 +117,9 @@ TEST_F(ATPIntegrationTest, FlagsConfiguration) {
 // Test: Multiple conjectures
 TEST_F(ATPIntegrationTest, MultipleConjectures) {
   std::vector<std::string> conjectures = {
-      "x := MaxDegree_AtLeast(3)\ny := ChromaticNumber_AtMost(3)\nFormula\nx IMPLIES y",
-      "x := MaxDegree_AtLeast(4)\ny := ChromaticNumber_AtMost(4)\nFormula\nx IMPLIES y",
-      "x := MaxDegree_AtLeast(5)\ny := ChromaticNumber_AtMost(5)\nFormula\nx IMPLIES y"};
+      "x := MaximumDegree_AtLeast(3)\ny := ChromaticNumber_AtMost(3)\nFormula\nx IMPLIES y",
+      "x := MaximumDegree_AtLeast(4)\ny := ChromaticNumber_AtMost(4)\nFormula\nx IMPLIES y",
+      "x := MaximumDegree_AtLeast(5)\ny := ChromaticNumber_AtMost(5)\nFormula\nx IMPLIES y"};
 
   for (size_t i = 0; i < conjectures.size(); i++) {
     std::string filepath =

@@ -1,6 +1,6 @@
 
 clique := CliqueNumber_AtLeast(3)
-independence := IndependentSet_Max()
+independence := IndependenceNumber()
 vertices := VertexCount()
 Formula
 clique AND (INV(independence) * 3 >= INV(vertices))

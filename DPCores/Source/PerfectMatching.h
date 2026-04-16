@@ -81,7 +81,8 @@ struct PerfectMatching_Core : CoreWrapper<PerfectMatching_Core, PerfectMatching_
 
     static std::map<std::string, std::string> metadata() {
         return {
-            {"CoreName","PerfectMatching"},
+            // Canonical public name: boolean structural property.
+            {"CoreName","HasPerfectMatching"},
             {"CoreType","Bool"},
             {"ParameterType","None"}
         };

@@ -1,6 +1,6 @@
 
-high_degree := MaxDegree_AtLeast(5)
-medium_degree := MaxDegree_AtLeast(3)
+high_degree := MaximumDegree_AtLeast(5)
+medium_degree := MaximumDegree_AtLeast(3)
 very_colorable := ChromaticNumber_AtMost(6)
 moderately_colorable := ChromaticNumber_AtMost(4)
 

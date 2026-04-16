@@ -66,7 +66,8 @@ struct FeedbackVertexSet_Core : CoreWrapper<FeedbackVertexSet_Core, FeedbackVert
 
     static std::map<std::string, std::string> metadata() {
         return {
-            {"CoreName", "FeedbackVertexSet_AtMost"},
+            // Canonical public name: boolean threshold for feedback vertex set number.
+            {"CoreName", "FeedbackVertexSetNumber_AtMost"},
             {"CoreType", "Bool"},
             {"ParameterType", "UnsignedInt"},
         };

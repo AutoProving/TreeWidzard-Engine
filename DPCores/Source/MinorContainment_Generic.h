@@ -80,7 +80,8 @@ struct MinorContainment_Generic_Core : CoreWrapper<MinorContainment_Generic_Core
 
     static std::map<std::string, std::string> metadata() {
         return {
-            {"CoreName","MinorContainment_Generic"},
+            // Canonical public name: boolean structural property.
+            {"CoreName","ContainsMinor"},
             {"CoreType","Decision"},
             {"ParameterType","MultiParameter"}
         };

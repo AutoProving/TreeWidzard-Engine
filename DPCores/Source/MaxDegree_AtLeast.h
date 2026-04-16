@@ -137,7 +137,8 @@ struct MaxDegree_AtLeast_DynamicCore
     static std::map<std::string, std::string> metadata()
     {
         return {
-            {"CoreName", "MaxDegree_AtLeast"},
+            // Canonical public name: boolean threshold for maximum degree.
+            {"CoreName", "MaximumDegree_AtLeast"},
             {"CoreType", "Bool"},
             {"ParameterType", "UnsignedInt"},
             // {"PrimaryOperator", "AtLeast"},

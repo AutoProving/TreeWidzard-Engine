@@ -1,5 +1,5 @@
 
 vertices := VertexCount()
-independence := IndependentSet_Max()
+independence := IndependenceNumber()
 Formula
 INV(independence) * 3 >= INV(vertices)

@@ -100,6 +100,7 @@ struct ChromaticNumber_AtMost_Core
 
   static std::map<std::string, std::string> metadata() {
     return {
+        // Canonical public name: boolean threshold for chromatic number.
         {"CoreName", "ChromaticNumber_AtMost"},
         {"CoreType", "Bool"},
         {"ParameterType", "UnsignedInt"},

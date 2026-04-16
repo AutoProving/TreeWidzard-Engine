@@ -200,24 +200,24 @@ Terms:
 | --- | --- | --- |
 | Chromatic number at most | `ChromaticNumber_AtMost` | `x := ChromaticNumber_AtMost(3)` |
 | Clique number at least | `CliqueNumber_AtLeast` | `x := CliqueNumber_AtLeast(4)` |
-| Clique number at least (simple graphs) | `CliqueNumberSimpleGraphs_AtLeast` | `x := CliqueNumberSimpleGraphs_AtLeast(4)` |
-| Feedback vertex set at most | `FeedbackVertexSet_AtMost` | `x := FeedbackVertexSet_AtMost(2)` |
-| Hamiltonian cycle | `HamiltonianCycle` | `x := HamiltonianCycle()` |
-| Hamiltonian path | `HamiltonianPath` | `x := HamiltonianPath()` |
+| Clique number at least (simple graphs) | `SimpleCliqueNumber_AtLeast` | `x := SimpleCliqueNumber_AtLeast(4)` |
+| Feedback vertex set number at most | `FeedbackVertexSetNumber_AtMost` | `x := FeedbackVertexSetNumber_AtMost(2)` |
+| Hamiltonian cycle | `HasHamiltonianCycle` | `x := HasHamiltonianCycle()` |
+| Hamiltonian path | `HasHamiltonianPath` | `x := HasHamiltonianPath()` |
 | Multiple-edge detection | `HasMultipleEdges` | `x := HasMultipleEdges()` |
-| Maximum independent set | `IndependentSet_Max` | `x := IndependentSet_Max()` |
-| Maximum degree at least | `MaxDegree_AtLeast` | `x := MaxDegree_AtLeast(4)` |
-| Minor containment for `K2` | `MinorContainment_K2` | `x := MinorContainment_K2()` |
-| Generic minor containment | `MinorContainment_Generic` | `x := MinorContainment_Generic(3, "0 1 1 2 0 2")` |
-| Perfect matching | `PerfectMatching` | `x := PerfectMatching()` |
+| Independence number | `IndependenceNumber` | `x := IndependenceNumber()` |
+| Maximum degree at least | `MaximumDegree_AtLeast` | `x := MaximumDegree_AtLeast(4)` |
+| Minor containment for `K2` | `ContainsK2Minor` | `x := ContainsK2Minor()` |
+| Generic minor containment | `ContainsMinor` | `x := ContainsMinor(3, "0 1 1 2 0 2")` |
+| Perfect matching | `HasPerfectMatching` | `x := HasPerfectMatching()` |
 | Vertex count | `VertexCount` | `x := VertexCount()` |
-| Vertex cover at most | `VertexCover_AtMost` | `x := VertexCover_AtMost(2)` |
+| Vertex cover number at most | `VertexCoverNumber_AtMost` | `x := VertexCoverNumber_AtMost(2)` |
 
 Example property file:
 
 ```text
 x := ChromaticNumber_AtMost(3)
-y := IndependentSet_Max()
+y := IndependenceNumber()
 Formula
 x AND (INV(y) >= 2)
 ```

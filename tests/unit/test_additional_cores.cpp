@@ -41,7 +41,7 @@ Bag create_bag(initializer_list<unsigned> vertices) {
 }  // namespace
 
 // ============================================================================
-// VertexCover_AtMost_Core Tests
+// VertexCoverNumber_AtMost tests (VertexCover_AtMost_Core implementation)
 // ============================================================================
 
 class VertexCoverAtMostTest : public ::testing::Test {
@@ -233,7 +233,7 @@ TEST_F(VertexCoverAtMostTest, PathGraphP2VertexCoverSize1) {
 }
 
 // ============================================================================
-// IndependentSet_Max_Core Tests
+// IndependenceNumber tests (IndependentSet_Max_Core implementation)
 // ============================================================================
 
 class IndependentSetMaxTest : public ::testing::Test {

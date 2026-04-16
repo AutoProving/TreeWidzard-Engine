@@ -1,4 +1,4 @@
 x := ChromaticNumber_AtMost(3)
-y := IndependentSet_Max()
+y := IndependenceNumber()
 Formula
 x AND (INV(y) >= 2)

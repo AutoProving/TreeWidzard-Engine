@@ -314,7 +314,7 @@ TEST_F(ChromaticNumberAtMostTest, ThreeColorClassesWhenKEquals3) {
 }
 
 // ============================================================================
-// MaxDegree_AtLeast Tests
+// MaximumDegree_AtLeast tests (MaxDegree_AtLeast_DynamicCore implementation)
 // ============================================================================
 
 class MaxDegreeAtLeastTest : public ::testing::Test {

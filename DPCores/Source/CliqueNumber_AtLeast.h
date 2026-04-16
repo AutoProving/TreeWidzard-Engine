@@ -112,6 +112,7 @@ struct CliqueNumberSimpleGraphs_AtLeast_Core
 
 	static std::map<std::string, std::string> metadata() {
 		return {
+			// Canonical public name: boolean threshold for clique number.
 			{"CoreName", "CliqueNumber_AtLeast"},
 			{"CoreType", "Bool"},
 			{"ParameterType", "UnsignedInt"},

@@ -1,7 +1,7 @@
 
 vertices := VertexCount()
 has_triangle := CliqueNumber_AtLeast(3)
-very_independent := IndependentSet_Max()
+very_independent := IndependenceNumber()
 
 Formula
 (INV(vertices) <= 6) AND 

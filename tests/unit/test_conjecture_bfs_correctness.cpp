@@ -304,10 +304,10 @@ TEST_F(BFSVertexCoverTest, Treewidth1VertexCover1Fails) {
   kernel->addCore(vc_core);
 
   auto var_map = map<string, pair<string, int>>{
-      {"x", {"VertexCover_AtMost", 0}}};
+      {"x", {"VertexCoverNumber_AtMost", 0}}};
   kernel->setVarToNameAndIndex(var_map);
 
-  auto var_map2 = map<string, string>{{"x", "VertexCover_AtMost"}};
+  auto var_map2 = map<string, string>{{"x", "VertexCoverNumber_AtMost"}};
   conjecture->setVariablesToCoreName(var_map2);
 
   auto* var_node = build_core_var_node("x");
@@ -338,10 +338,10 @@ TEST_F(BFSVertexCoverTest, PathwidthVertexCoverAtMost2Fails) {
   kernel->addCore(vc_core);
 
   auto var_map = map<string, pair<string, int>>{
-      {"x", {"VertexCover_AtMost", 0}}};
+      {"x", {"VertexCoverNumber_AtMost", 0}}};
   kernel->setVarToNameAndIndex(var_map);
 
-  auto var_map2 = map<string, string>{{"x", "VertexCover_AtMost"}};
+  auto var_map2 = map<string, string>{{"x", "VertexCoverNumber_AtMost"}};
   conjecture->setVariablesToCoreName(var_map2);
 
   auto* var_node = build_core_var_node("x");
@@ -387,10 +387,10 @@ TEST_F(BFSMaxDegreeTest, Pathwidth1MaxDegree0Fails) {
   kernel->addCore(maxdeg_core);
 
   auto var_map = map<string, pair<string, int>>{
-      {"x", {"MaxDegree_AtLeast", 0}}};
+      {"x", {"MaximumDegree_AtLeast", 0}}};
   kernel->setVarToNameAndIndex(var_map);
 
-  auto var_map2 = map<string, string>{{"x", "MaxDegree_AtLeast"}};
+  auto var_map2 = map<string, string>{{"x", "MaximumDegree_AtLeast"}};
   conjecture->setVariablesToCoreName(var_map2);
 
   auto* var_node = build_core_var_node("x");
@@ -421,10 +421,10 @@ TEST_F(BFSMaxDegreeTest, Treewidth2MaxDegree5Fails) {
   kernel->addCore(maxdeg_core);
 
   auto var_map = map<string, pair<string, int>>{
-      {"x", {"MaxDegree_AtLeast", 0}}};
+      {"x", {"MaximumDegree_AtLeast", 0}}};
   kernel->setVarToNameAndIndex(var_map);
 
-  auto var_map2 = map<string, string>{{"x", "MaxDegree_AtLeast"}};
+  auto var_map2 = map<string, string>{{"x", "MaximumDegree_AtLeast"}};
   conjecture->setVariablesToCoreName(var_map2);
 
   auto* var_node = build_core_var_node("x");
@@ -531,7 +531,7 @@ TEST_F(BFSVertexCountTest, Width2VertexCountUpTo2Fails) {
 }
 
 // ============================================================================
-// Section F: BFS with IndependentSet_Max
+// Section F: BFS with IndependenceNumber
 // ============================================================================
 
 class BFSIndependentSetTest : public ::testing::Test {
@@ -556,15 +556,15 @@ TEST_F(BFSIndependentSetTest, Width1IndependentSetAtLeast1Fails) {
   w.set_value(1);
   kernel->set_width(w);
 
-  // Core: IndependentSet_Max
+  // Public core: IndependenceNumber
   IndependentSet_Max_Core is_core{parameterType{}};
   kernel->addCore(is_core);
 
   auto var_map = map<string, pair<string, int>>{
-      {"x", {"IndependentSet_Max", 0}}};
+      {"x", {"IndependenceNumber", 0}}};
   kernel->setVarToNameAndIndex(var_map);
 
-  auto var_map2 = map<string, string>{{"x", "IndependentSet_Max"}};
+  auto var_map2 = map<string, string>{{"x", "IndependenceNumber"}};
   conjecture->setVariablesToCoreName(var_map2);
 
   // Conjecture: inv(x) >= 1
@@ -868,11 +868,11 @@ TEST_F(MultiCoreConjectureTest, TwoCoresComplexArithmetic) {
   kernel->addCore(is_core);
 
   auto var_map = map<string, pair<string, int>>{
-      {"x", {"VertexCount", 0}}, {"y", {"IndependentSet_Max", 1}}};
+      {"x", {"VertexCount", 0}}, {"y", {"IndependenceNumber", 1}}};
   kernel->setVarToNameAndIndex(var_map);
 
   auto var_map2 = map<string, string>{
-      {"x", "VertexCount"}, {"y", "IndependentSet_Max"}};
+      {"x", "VertexCount"}, {"y", "IndependenceNumber"}};
   conjecture->setVariablesToCoreName(var_map2);
 
   // Conjecture: inv(x) + inv(y) <= 5

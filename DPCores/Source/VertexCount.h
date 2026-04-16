@@ -36,6 +36,7 @@ struct VertexCount_Core
     : CoreWrapper<VertexCount_Core, VertexCount_Witness, WitnessSetTypeTwo> {
   static std::map<std::string, std::string> metadata() {
     return {
+        // Canonical public name: numeric invariant for the number of vertices.
         {"CoreName", "VertexCount"},
         {"CoreType", "Min"},
         {"ParameterType", "None"},

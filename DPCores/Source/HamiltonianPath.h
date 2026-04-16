@@ -97,7 +97,11 @@ struct HP_Witness : WitnessWrapper<HP_Witness>
 struct HP_Core : CoreWrapper<HP_Core, HP_Witness, WitnessSetTypeTwo>
 {
     static std::map<std::string, std::string> metadata() {
-        return {{"CoreName","HamiltonianPath"}, {"CoreType","Bool"}, {"ParameterType","None"}};
+        return {
+            // Canonical public name: boolean structural property.
+            {"CoreName","HasHamiltonianPath"},
+            {"CoreType","Bool"},
+            {"ParameterType","None"}};
     }
 
     static bool partner_of(const std::map<unsigned,unsigned> &M, unsigned a, unsigned &partner) {

@@ -59,7 +59,8 @@ struct VertexCover_AtMost_Core : CoreWrapper<VertexCover_AtMost_Core, VertexCove
     static std::map<std::string, std::string> metadata()
     {
         return {
-            {"CoreName", "VertexCover_AtMost"},
+            // Canonical public name: boolean threshold for vertex cover number.
+            {"CoreName", "VertexCoverNumber_AtMost"},
             {"CoreType", "Bool"},
             {"ParameterType", "UnsignedInt"},
         };
