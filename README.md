@@ -77,6 +77,8 @@ This requires Bison 3.0+ and Flex 2.6+.
 
 ## Running TreeWidzard
 
+Run the commands below from the repository root, not from the `build/` directory. The wrapper scripts look for the compiled executable under `build/`, so `build/` must exist and be up to date, but it should not be your working directory when using paths such as `examples/...`.
+
 To check that the installation worked:
 
 Linux/macOS:
