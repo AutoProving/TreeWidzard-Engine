@@ -1,0 +1,3 @@
+x := VertexCount()
+Formula
+INV(x) == 4

@@ -105,6 +105,8 @@ Windows:
 ./treewidzard.bat -atp tw=4 -pl ParallelBreadthFirstSearch examples/system_paper/atp/five_colorable.txt
 ```
 
+For a compact presentation script with correct and incorrect ATP and model-checking commands, see [example.md](example.md).
+
 ## ATP Command Structure
 
 ATP command pattern:
@@ -207,8 +209,6 @@ Terms:
 | Multiple-edge detection | `HasMultipleEdges` | `x := HasMultipleEdges()` |
 | Independence number | `IndependenceNumber` | `x := IndependenceNumber()` |
 | Maximum degree at least | `MaximumDegree_AtLeast` | `x := MaximumDegree_AtLeast(4)` |
-| Minor containment for `K2` | `ContainsK2Minor` | `x := ContainsK2Minor()` |
-| Generic minor containment | `ContainsMinor` | `x := ContainsMinor(3, "0 1 1 2 0 2")` |
 | Perfect matching | `HasPerfectMatching` | `x := HasPerfectMatching()` |
 | Vertex count | `VertexCount` | `x := VertexCount()` |
 | Vertex cover number at most | `VertexCoverNumber_AtMost` | `x := VertexCoverNumber_AtMost(2)` |

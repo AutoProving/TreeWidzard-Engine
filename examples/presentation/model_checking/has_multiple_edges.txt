@@ -1,0 +1,3 @@
+x := HasMultipleEdges()
+Formula
+x
