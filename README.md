@@ -52,25 +52,23 @@ check_requirements.bat
 On Linux or macOS:
 
 ```bash
-mkdir -p build
-cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release
-make
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=OFF
+cmake --build build -j 8
 ```
 
 On Windows, run these from the `MSYS2 MinGW 64-bit` terminal:
 
 ```bash
-mkdir build
-cd build
-cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release
-ninja
+cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=OFF
+cmake --build build
 ```
+
+The tests are not needed for normal use. If you are developing TreeWidzard and want to run the test suite, configure with `-DBUILD_TESTS=ON` and then run `ctest --test-dir build --output-on-failure`.
 
 You do not need this command unless you want to regenerate the property parser. In that case, use:
 
 ```bash
-cmake -S . -B build -DTREEWIDZARD_REGENERATE_PROPERTY_PARSER=ON
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=OFF -DTREEWIDZARD_REGENERATE_PROPERTY_PARSER=ON
 ```
 
 This requires Bison 3.0+ and Flex 2.6+.
