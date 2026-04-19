@@ -484,6 +484,23 @@ TEST_F(DynamicKernelTest, JoinOperation) {
   EXPECT_EQ(value, 4);
 }
 
+TEST_F(DynamicKernelTest, JoinClearsTransientEdgeFromBag) {
+  DynamicKernel kernel;
+  PassthroughCore core;
+  kernel.addCore(core);
+
+  auto initial_state = kernel.initialState();
+  auto with_v0 = kernel.intro_v(initial_state, 0);
+  auto with_both = kernel.intro_v(with_v0, 1);
+  auto with_edge = kernel.intro_e(with_both, 0, 1);
+
+  auto joined_state = kernel.join(with_edge, with_both);
+
+  EXPECT_EQ(joined_state->get_bag().get_elements(),
+            with_both->get_bag().get_elements());
+  EXPECT_EQ(joined_state->get_bag().get_edge(), std::make_pair(0U, 0U));
+}
+
 // Test 22: DynamicKernel getCoreByVar returns correct core
 TEST_F(DynamicKernelTest, GetCoreByVar) {
   DynamicKernel kernel;

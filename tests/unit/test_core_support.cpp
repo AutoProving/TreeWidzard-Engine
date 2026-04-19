@@ -133,12 +133,34 @@ TEST(CoreSupport, PropertyAssignmentCoversGettersSettersAndPrinting) {
   EXPECT_EQ(assignment.getType(), "Bool");
   EXPECT_EQ(assignment.getParameter(), 7);
   ASSERT_EQ(assignment.getParametersVec().size(), 3U);
+  ASSERT_TRUE(std::holds_alternative<char *>(assignment.getParametersVec()[0]));
   EXPECT_EQ(std::get<int>(assignment.getParametersVec()[1]), 7);
   EXPECT_TRUE(std::get<bool>(assignment.getParametersVec()[2]));
+  EXPECT_EQ(std::string(std::get<char *>(assignment.getParametersVec()[0])),
+            "abc");
 
   testing::internal::CaptureStdout();
   assignment.printParameters();
   EXPECT_EQ(testing::internal::GetCapturedStdout(), "\"abc\", 7, true");
+}
+
+TEST(CoreSupport, PropertyAssignmentCopiesStringParametersByValue) {
+  PropertyAssignment assignment;
+  char mutable_label[] = "abc";
+  assignment.setParametersVec({mutable_label, 7, true});
+
+  mutable_label[0] = 'z';
+
+  ASSERT_TRUE(std::holds_alternative<char *>(assignment.getParametersVec()[0]));
+  EXPECT_EQ(std::string(std::get<char *>(assignment.getParametersVec()[0])),
+            "abc");
+
+  PropertyAssignment copied = assignment;
+  ASSERT_TRUE(std::holds_alternative<char *>(copied.getParametersVec()[0]));
+  EXPECT_EQ(std::string(std::get<char *>(copied.getParametersVec()[0])),
+            "abc");
+  EXPECT_NE(std::get<char *>(copied.getParametersVec()[0]),
+            std::get<char *>(assignment.getParametersVec()[0]));
 }
 
 TEST(CoreSupport, StatePoolLifecycleAndBasicAccessors) {

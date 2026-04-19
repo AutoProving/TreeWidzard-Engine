@@ -1,0 +1,6 @@
+me   := HasMultipleEdges()
+tri  := SimpleCliqueNumber_AtLeast(3)
+deg3 := MaximumDegree_AtLeast(3)
+col2 := ChromaticNumber_AtMost(2)
+Formula
+(NOT me AND NOT tri AND NOT deg3) IMPLIES col2

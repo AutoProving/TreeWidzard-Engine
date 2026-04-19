@@ -119,6 +119,29 @@ auto make_premise_conjecture(DynamicKernel &kernel, ConjectureHarness &h)
   return conjecture;
 }
 
+auto make_nested_implication_conjecture(DynamicKernel &kernel,
+                                        ConjectureHarness &h) -> Conjecture {
+  Conjecture conjecture;
+  conjecture.setKernel(&kernel);
+  conjecture.setVariablesToCoreName({{"x", "CountingCore"}});
+
+  auto *variable = h.make(CORE_VARIABLE, "x");
+  auto *inv = h.make(INV, "inv");
+  auto *zero = h.make(NUMBER, 0.0);
+  auto *always_true = h.make(NUMBER, 1.0);
+  auto *premise = h.make(OPERATOR, "==");
+  auto *conclusion = h.make(NUMBER, 1.0);
+  auto *inner = h.make(OPERATOR, "implies");
+  auto *root = h.make(OPERATOR, "implies");
+
+  ConjectureHarness::attach(inv, {variable});
+  ConjectureHarness::attach(premise, {inv, zero});
+  ConjectureHarness::attach(inner, {premise, conclusion});
+  ConjectureHarness::attach(root, {always_true, inner});
+  conjecture.setRoot(root);
+  return conjecture;
+}
+
 } // namespace
 
 TEST(KernelTraversal, BreadthFirstTraversalCoversAllExpansionHooks) {
@@ -213,6 +236,30 @@ TEST(KernelTraversal, BreadthFirstTraversalFiltersStatesByPremise) {
   EXPECT_EQ(result.total_states, 1U);
   EXPECT_EQ(result.iterations, 1);
   EXPECT_EQ(discovered, 0U);
+}
+
+TEST(KernelTraversal, BreadthFirstTraversalUsesOnlyTopLevelPremise) {
+  DynamicKernel kernel;
+  BoundedCountingCore core;
+  configure_kernel(kernel, core);
+  ConjectureHarness harness;
+  Conjecture conjecture = make_nested_implication_conjecture(kernel, harness);
+  Flags flags;
+  flags.add_flag("Premise", 1);
+
+  size_t discovered = 0;
+  TreeWidzard::BreadthFirstTraversalHooks hooks;
+  hooks.on_state_discovered =
+      [&](const TreeWidzard::BreadthFirstExpansionEvent &) { ++discovered; };
+
+  const auto result = TreeWidzard::runBreadthFirstTraversal(kernel, conjecture,
+                                                            flags, hooks);
+
+  EXPECT_TRUE(result.property_satisfied);
+  EXPECT_FALSE(result.counterexample_state.has_value());
+  EXPECT_GT(result.total_states, 1U);
+  EXPECT_GT(result.iterations, 1);
+  EXPECT_GT(discovered, 0U);
 }
 
 TEST(KernelTraversal, BreadthFirstTraversalStopsAtCounterexample) {

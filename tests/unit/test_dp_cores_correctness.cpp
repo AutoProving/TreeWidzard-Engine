@@ -220,7 +220,7 @@ TEST_F(ChromaticNumberTest, PathP3_With_k1_NotColorable) {
 }
 
 // ============================================================================
-// VertexCover_AtMost Tests
+// VertexCoverNumber_AtMost tests (VertexCover_AtMost_Core implementation)
 // ============================================================================
 
 class VertexCoverTest : public ::testing::Test {
@@ -435,7 +435,7 @@ TEST_F(VertexCoverTest, Triangle_K3_With_r1_NoValidCover) {
 }
 
 // ============================================================================
-// MaxDegree_AtLeast Tests
+// MaximumDegree_AtLeast tests (MaxDegree_AtLeast_DynamicCore implementation)
 // ============================================================================
 
 class MaxDegreeTest : public ::testing::Test {
@@ -818,7 +818,7 @@ TEST_F(VertexCountTest, CountWithJoin) {
 }
 
 // ============================================================================
-// IndependentSet_Max Tests
+// IndependenceNumber tests (IndependentSet_Max_Core implementation)
 // ============================================================================
 
 class IndependentSetTest : public ::testing::Test {};
@@ -1178,6 +1178,23 @@ TEST_F(ChromaticNumberTest, ForgetOperation) {
         }
         ASSERT_FALSE(contains_3);
     }
+}
+
+TEST_F(ChromaticNumberTest, ForgetOperationCanonicalizesCellOrder) {
+    ChromaticNumber_AtMost_Core core(make_params(3));
+
+    auto w = make_shared<ChromaticNumber_AtMost_Witness>();
+    w->partialColoring.push_back({1, 3});
+    w->partialColoring.push_back({2});
+
+    WitnessSetTypeTwo<ChromaticNumber_AtMost_Witness> output;
+    core.forget_v_implementation(1, make_bag({2, 3}), *w, output);
+
+    ASSERT_EQ(output.size(), 1);
+    auto &w_out = ChromaticNumber_AtMost_Witness::as_witness(**output.begin());
+    ASSERT_EQ(w_out.partialColoring.size(), 2U);
+    EXPECT_EQ(w_out.partialColoring[0], std::set<unsigned>({2}));
+    EXPECT_EQ(w_out.partialColoring[1], std::set<unsigned>({3}));
 }
 
 // Test 30: Complex scenario with multiple operations

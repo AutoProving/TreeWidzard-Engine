@@ -44,136 +44,124 @@ class BagStateFixesTest : public ::testing::Test {
 };
 
 // ============================================================================
-// BAG OPERATOR== TESTS (FIX #1: Edge comparison)
+// BAG IDENTITY TESTS
 // ============================================================================
 
-TEST_F(BagStateFixesTest, OperatorEqualBagsWithSameVerticesButDifferentEdges) {
-  // Two bags with same vertices but different edges should NOT be equal
+TEST_F(BagStateFixesTest, OperatorEqualIgnoresTransientEdgeMarker) {
   Bag bag1 = createBagWithEdge({1, 2, 3}, 1, 2);
   Bag bag2 = createBagWithEdge({1, 2, 3}, 2, 3);
 
-  EXPECT_FALSE(bag1 == bag2) << "Bags with different edges should not be equal";
-  EXPECT_TRUE(bag1 != bag2) << "Bags with different edges should be not-equal";
+  EXPECT_TRUE(bag1 == bag2)
+      << "Search-state identity should depend only on bag vertices";
+  EXPECT_FALSE(bag1 != bag2);
 }
 
 TEST_F(BagStateFixesTest, OperatorEqualBagsWithSameVerticesAndEdges) {
-  // Two bags with same vertices and same edge should be equal
   Bag bag1 = createBagWithEdge({1, 2, 3}, 1, 2);
   Bag bag2 = createBagWithEdge({1, 2, 3}, 1, 2);
 
-  EXPECT_TRUE(bag1 == bag2) << "Bags with same vertices and edges should be equal";
+  EXPECT_TRUE(bag1 == bag2);
 }
 
 TEST_F(BagStateFixesTest, OperatorEqualBagsWithNoEdges) {
-  // Two bags with same vertices and no edges should be equal
   Bag bag1 = createBag({1, 2, 3});
   Bag bag2 = createBag({1, 2, 3});
 
-  EXPECT_TRUE(bag1 == bag2) << "Bags with same vertices and no edges should be equal";
+  EXPECT_TRUE(bag1 == bag2);
 }
 
 TEST_F(BagStateFixesTest, OperatorEqualBagsOneWithEdgeOneWithout) {
-  // Bag with edge should not equal bag without edge
   Bag bag1 = createBagWithEdge({1, 2, 3}, 1, 2);
   Bag bag2 = createBag({1, 2, 3});
 
-  EXPECT_FALSE(bag1 == bag2) << "Bag with edge should not equal bag without edge";
+  EXPECT_TRUE(bag1 == bag2)
+      << "The edge marker should not create a distinct search bag";
 }
 
 TEST_F(BagStateFixesTest, OperatorEqualSameEdgeDifferentOrder) {
-  // Edges are normalized: edge (i,j) is stored with i < j
-  // So edge (2,1) should be same as edge (1,2)
   Bag bag1 = createBagWithEdge({1, 2, 3}, 1, 2);
   Bag bag2 = createBagWithEdge({1, 2, 3}, 2, 1);
 
-  EXPECT_TRUE(bag1 == bag2) << "Edges should be normalized (i < j)";
+  EXPECT_TRUE(bag1 == bag2);
 }
 
 // ============================================================================
-// BAG OPERATOR< TESTS (FIX #2: Edge comparison in ordering)
+// BAG OPERATOR< TESTS
 // ============================================================================
 
 TEST_F(BagStateFixesTest, OperatorLessBagsWithDifferentVertices) {
-  // Primary comparison: vertices
   Bag bag1 = createBag({1, 2});
   Bag bag2 = createBag({1, 2, 3});
 
-  EXPECT_TRUE(bag1 < bag2) << "Bag with fewer vertices should be less";
+  EXPECT_TRUE(bag1 < bag2);
 }
 
-TEST_F(BagStateFixesTest, OperatorLessBagsWithSameVerticesDifferentEdges) {
-  // When vertices are equal, compare edges
+TEST_F(BagStateFixesTest, OperatorLessIgnoresEdgeMarker) {
   Bag bag1 = createBagWithEdge({1, 2, 3}, 1, 2);
   Bag bag2 = createBagWithEdge({1, 2, 3}, 2, 3);
 
-  EXPECT_TRUE(bag1 < bag2) << "Bag with edge (1,2) should be less than edge (2,3)";
-  EXPECT_FALSE(bag2 < bag1) << "Bag with edge (2,3) should not be less than edge (1,2)";
+  EXPECT_FALSE(bag1 < bag2);
+  EXPECT_FALSE(bag2 < bag1);
 }
 
 TEST_F(BagStateFixesTest, OperatorLessBagsWithSameVerticesNoEdges) {
-  // When vertices and edges (both empty) are equal
   Bag bag1 = createBag({1, 2, 3});
   Bag bag2 = createBag({1, 2, 3});
 
-  EXPECT_FALSE(bag1 < bag2) << "Equal bags should not be less than each other";
-  EXPECT_FALSE(bag2 < bag1) << "Equal bags should not be less than each other";
+  EXPECT_FALSE(bag1 < bag2);
+  EXPECT_FALSE(bag2 < bag1);
 }
 
 TEST_F(BagStateFixesTest, OperatorLessBagWithEdgeVsWithout) {
-  // Bag without edge (0,0) vs bag with edge
   Bag bag1 = createBag({1, 2, 3});
   Bag bag2 = createBagWithEdge({1, 2, 3}, 1, 2);
 
-  // (0,0) < (1,2), so bag1 should be less than bag2
-  EXPECT_TRUE(bag1 < bag2) << "Bag with no edge (0,0) should be less than bag with edge";
+  EXPECT_FALSE(bag1 < bag2);
+  EXPECT_FALSE(bag2 < bag1);
 }
 
-TEST_F(BagStateFixesTest, OperatorLessEdgeOrdering) {
-  // Test edge ordering: (1,2) < (1,3) < (2,3)
+TEST_F(BagStateFixesTest, OperatorLessEdgeOrderingDoesNotAffectIdentity) {
   Bag bag12 = createBagWithEdge({1, 2, 3}, 1, 2);
   Bag bag13 = createBagWithEdge({1, 2, 3}, 1, 3);
   Bag bag23 = createBagWithEdge({1, 2, 3}, 2, 3);
 
-  EXPECT_TRUE(bag12 < bag13);
-  EXPECT_TRUE(bag13 < bag23);
-  EXPECT_TRUE(bag12 < bag23);
+  EXPECT_FALSE(bag12 < bag13);
+  EXPECT_FALSE(bag13 < bag23);
+  EXPECT_FALSE(bag12 < bag23);
 }
 
 // ============================================================================
-// BAG HASH TESTS (FIX #3: Hash includes edge fields i and j)
+// BAG HASH TESTS
 // ============================================================================
 
-TEST_F(BagStateFixesTest, HashDifferentForBagsWithDifferentEdges) {
-  // Bags with same vertices but different edges should have different hashes
+TEST_F(BagStateFixesTest, HashIgnoresTransientEdgeMarker) {
   Bag bag1 = createBagWithEdge({1, 2, 3}, 1, 2);
   Bag bag2 = createBagWithEdge({1, 2, 3}, 2, 3);
 
   uint64_t hash1 = bagHash(bag1);
   uint64_t hash2 = bagHash(bag2);
 
-  EXPECT_NE(hash1, hash2) << "Bags with different edges should have different hashes";
+  EXPECT_EQ(hash1, hash2);
 }
 
 TEST_F(BagStateFixesTest, HashSameForBagsWithSameVerticesAndEdges) {
-  // Bags with same vertices and edges should have same hash
   Bag bag1 = createBagWithEdge({1, 2, 3}, 1, 2);
   Bag bag2 = createBagWithEdge({1, 2, 3}, 1, 2);
 
   uint64_t hash1 = bagHash(bag1);
   uint64_t hash2 = bagHash(bag2);
 
-  EXPECT_EQ(hash1, hash2) << "Bags with same vertices and edges should have same hash";
+  EXPECT_EQ(hash1, hash2);
 }
 
-TEST_F(BagStateFixesTest, HashDifferentForBagsWithAndWithoutEdges) {
-  // Bag with edge vs bag without edge should have different hashes
+TEST_F(BagStateFixesTest, HashSameForBagsWithAndWithoutEdges) {
   Bag bag1 = createBag({1, 2, 3});
   Bag bag2 = createBagWithEdge({1, 2, 3}, 1, 2);
 
   uint64_t hash1 = bagHash(bag1);
   uint64_t hash2 = bagHash(bag2);
 
-  EXPECT_NE(hash1, hash2) << "Bag with edge should have different hash than bag without edge";
+  EXPECT_EQ(hash1, hash2);
 }
 
 TEST_F(BagStateFixesTest, HashConsistentWithEquality) {
@@ -433,7 +421,8 @@ TEST_F(BagStateFixesTest, HashValueOnConstStateReference) {
   // This should compile and work because hashCache is mutable
   uint64_t hash = const_state.hashValue();
 
-  EXPECT_NE(hash, 0) << "hashValue() should work on const references";
+  EXPECT_EQ(hash, const_state.hashValue())
+      << "hashValue() should work consistently on const references";
 }
 
 TEST_F(BagStateFixesTest, HashValueConsistentOnConstState) {
@@ -489,7 +478,6 @@ TEST_F(BagStateFixesTest, BagOperationChaining) {
 }
 
 TEST_F(BagStateFixesTest, ComplexRelabelingScenario) {
-  // Complex relabeling with edges
   Bag bag1 = createBagWithEdge({2, 5, 8}, 2, 5);
   Bag bag2 = createBagWithEdge({2, 5, 8}, 5, 8);
 
@@ -498,10 +486,8 @@ TEST_F(BagStateFixesTest, ComplexRelabelingScenario) {
   Bag result1 = bag1.relabel(relabel);
   Bag result2 = bag2.relabel(relabel);
 
-  // They should not be equal
-  EXPECT_FALSE(result1 == result2);
-
-  // But they should maintain edge properties
+  EXPECT_TRUE(result1 == result2);
+  EXPECT_EQ(bagHash(result1), bagHash(result2));
   EXPECT_EQ(result1.get_edge().first, 1);
   EXPECT_EQ(result1.get_edge().second, 2);
   EXPECT_EQ(result2.get_edge().first, 2);
@@ -517,6 +503,19 @@ TEST_F(BagStateFixesTest, StateHashingWithComplexBags) {
 
   uint64_t hash1 = state1->hashValue();
   EXPECT_NE(hash1, 0);
+}
+
+TEST_F(BagStateFixesTest, StateIdentityIgnoresTransientBagEdge) {
+  auto state1 = TreeWidzardTest::make_state({1, 2, 3}, {100});
+  auto state2 = TreeWidzardTest::make_state({1, 2, 3}, {100});
+
+  state1.getMutableState()->set_bag(createBagWithEdge({1, 2, 3}, 1, 2));
+  state2.getMutableState()->set_bag(createBagWithEdge({1, 2, 3}, 2, 3));
+
+  EXPECT_TRUE(*state1 == *state2);
+  EXPECT_FALSE(*state1 < *state2);
+  EXPECT_FALSE(*state2 < *state1);
+  EXPECT_EQ(state1->hashValue(), state2->hashValue());
 }
 
 TEST_F(BagStateFixesTest, EdgeCaseEmptyBag) {

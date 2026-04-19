@@ -41,6 +41,7 @@ set(INTEGRATION_TEST_SOURCES
     integration/test_cli_search.cpp
     integration/test_certificates.cpp
     integration/test_kernel_traversal.cpp
+    integration/test_temp_reed.cpp
     integration/test_public_api.cpp
 )
 
