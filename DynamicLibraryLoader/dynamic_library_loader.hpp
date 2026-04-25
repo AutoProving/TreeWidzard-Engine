@@ -20,6 +20,20 @@
 
 #include "ct_string.hpp"
 
+#ifndef TREEWIDZARD_KEEP_DYNAMIC_LIBRARIES_LOADED
+#if defined(__SANITIZE_ADDRESS__) || defined(__SANITIZE_THREAD__)
+#define TREEWIDZARD_KEEP_DYNAMIC_LIBRARIES_LOADED 1
+#elif defined(__has_feature)
+#if __has_feature(address_sanitizer) || __has_feature(thread_sanitizer)
+#define TREEWIDZARD_KEEP_DYNAMIC_LIBRARIES_LOADED 1
+#endif
+#endif
+#endif
+
+#ifndef TREEWIDZARD_KEEP_DYNAMIC_LIBRARIES_LOADED
+#define TREEWIDZARD_KEEP_DYNAMIC_LIBRARIES_LOADED 0
+#endif
+
 template <CTString name, class Signature>
 struct NamedFunctionSignature {};
 
@@ -47,10 +61,16 @@ class DynamicLibraryLoader {
 	struct DynamicLibraryCloser {
 		void operator()(std::remove_pointer_t<native_handle> *handle) const {
 			if (!handle) return;
+#if TREEWIDZARD_KEEP_DYNAMIC_LIBRARIES_LOADED
+			// Sanitizer runtimes do not reliably support unloading and reloading
+			// instrumented plugins in one process.
+			(void)handle;
+#else
 #ifdef _WIN32
 			FreeLibrary(handle);
 #else
 			dlclose(handle);
+#endif
 #endif
 		}
 	};
@@ -157,6 +177,7 @@ class DynamicLibraryLoader {
 		std::cerr << "\033[33;1mMoved " << so_path << " from " << &other
 				  << " to " << this << "\033[m\n";
 		// */
+		return *this;
 	}
 
 	DynamicLibraryLoader(const DynamicLibraryLoader &) = delete;

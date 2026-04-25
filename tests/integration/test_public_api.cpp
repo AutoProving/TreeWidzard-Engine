@@ -5,11 +5,14 @@
 #include "Kernel/BreadthFirstTraversal.h"
 #include "Kernel/Width.h"
 
+#include <atomic>
 #include <cstdlib>
 #include <filesystem>
+#include <mutex>
 #include <optional>
 #include <stdexcept>
 #include <string>
+#include <thread>
 #include <vector>
 
 #include <gtest/gtest.h>
@@ -166,6 +169,58 @@ TEST(PublicApi, InputControllerClonesExpAliasesForRepeatedUse) {
   EXPECT_EQ(root->getChildren()[1]->getType(), NUMBER);
   EXPECT_DOUBLE_EQ(root->getChildren()[0]->getX(), 1.0);
   EXPECT_DOUBLE_EQ(root->getChildren()[1]->getX(), 1.0);
+}
+
+TEST(PublicApi, InputControllerSerializesConcurrentInlineParses) {
+  constexpr int kThreadCount = 4;
+  constexpr int kIterations = 6;
+
+  std::atomic<int> ready_count{0};
+  std::atomic<bool> start{false};
+  std::mutex failures_mutex;
+  std::vector<std::string> failures;
+  std::vector<std::thread> threads;
+  threads.reserve(kThreadCount);
+
+  for (int thread_index = 0; thread_index < kThreadCount; ++thread_index) {
+    threads.emplace_back([&] {
+      ready_count.fetch_add(1, std::memory_order_release);
+      while (!start.load(std::memory_order_acquire)) {
+        std::this_thread::yield();
+      }
+
+      for (int iteration = 0; iteration < kIterations; ++iteration) {
+        try {
+          auto input_controller = InputController::fromSourceText(
+              "Formula\nEXP alias := TRUE\nalias AND alias",
+              make_tree_width(2), InputController::default_paths(),
+              InputControllerErrorMode::Throw);
+          ConjectureNode *root = input_controller->getConjecture().getRoot();
+          if (root == nullptr || root->getVal() != "and") {
+            throw std::runtime_error("unexpected parsed formula root");
+          }
+        } catch (const std::exception &e) {
+          std::lock_guard<std::mutex> lock(failures_mutex);
+          failures.push_back(e.what());
+        } catch (...) {
+          std::lock_guard<std::mutex> lock(failures_mutex);
+          failures.push_back("unknown parse failure");
+        }
+      }
+    });
+  }
+
+  while (ready_count.load(std::memory_order_acquire) != kThreadCount) {
+    std::this_thread::yield();
+  }
+  start.store(true, std::memory_order_release);
+
+  for (auto &thread : threads) {
+    thread.join();
+  }
+
+  EXPECT_TRUE(failures.empty())
+      << (failures.empty() ? "" : failures.front());
 }
 
 TEST(PublicApi, EngineShorthandEqualityMatchesFullDefinition) {

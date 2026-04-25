@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <filesystem>
 #include <memory>
+#include <mutex>
 #include <stdexcept>
 #include <unordered_map>
 
@@ -17,6 +18,15 @@
 #endif
 
 extern std::map<std::string, ConjectureNode *> sub_formula_variables;
+
+namespace {
+
+auto parser_mutex() -> std::mutex & {
+	static std::mutex mutex;
+	return mutex;
+}
+
+} // namespace
 
 [[noreturn]] void InputController::fail(const std::string &message) const {
 	if (errorMode == InputControllerErrorMode::Throw) {
@@ -121,15 +131,16 @@ void InputController::parse_input() {
 		std::endl(std::cout);
 	}
 
+	std::lock_guard<std::mutex> parse_lock(parser_mutex());
 	input_in = input_file.get();
 	int parse_status = 0;
-		auto cleanup_sub_formula_variables = []() {
-			for (auto &[name, node] : sub_formula_variables) {
-				(void)name;
-				ConjectureNode::deleteSubtree(node);
-			}
-			sub_formula_variables.clear();
-		};
+	auto cleanup_sub_formula_variables = []() {
+		for (auto &[name, node] : sub_formula_variables) {
+			(void)name;
+			ConjectureNode::deleteSubtree(node);
+		}
+		sub_formula_variables.clear();
+	};
 	cleanup_sub_formula_variables();
 	try {
 		parse_status =
