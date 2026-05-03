@@ -1,3 +1,0 @@
-x := ChromaticNumber_AtMost(2)
-Formula
-x

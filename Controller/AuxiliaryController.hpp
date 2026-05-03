@@ -48,9 +48,9 @@ Model checking flags:
   -files           write generated artifacts to files
 
 Examples:
-  ./treewidzard -atp tw=4 -pl ParallelBreadthFirstSearch examples/system_paper/atp/five_colorable.txt
-  ./treewidzard -modelcheck PACE examples/system_paper/model_checking/three_colorable.txt examples/system_paper/model_checking/diamond.gr examples/system_paper/model_checking/diamond.td
-  ./treewidzard -modelcheck ITD examples/system_paper/model_checking/three_colorable.txt examples/system_paper/model_checking/diamond.itd
+  ./treewidzard -atp tw=4 -pl ParallelBreadthFirstSearch examples/conjectures/five_colorable.txt
+  ./treewidzard -modelcheck PACE examples/conjectures/three_colorable.txt examples/graph/diamond.gr examples/graph/diamond.td
+  ./treewidzard -modelcheck ITD examples/conjectures/three_colorable.txt examples/itd/diamond.itd
 )___";
 	exit(0);
 }

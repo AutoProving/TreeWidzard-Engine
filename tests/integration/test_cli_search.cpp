@@ -468,12 +468,12 @@ TEST(CliSearch, ModelCheckIndependentSetInvariantOnDiamondGraph) {
   const fs::path root = find_repo_root();
   const auto tmp = make_temp_dir();
   const fs::path property = copy_property(
-      root / "examples/system_paper/invariants/independence_number.txt",
+      root / "examples/conjectures/independence_number.txt",
       tmp.path);
   const fs::path graph = copy_property(
-      root / "examples/system_paper/model_checking/diamond.gr", tmp.path);
+      root / "examples/graph/diamond.gr", tmp.path);
   const fs::path td = copy_property(
-      root / "examples/system_paper/model_checking/diamond.td", tmp.path);
+      root / "examples/graph/diamond.td", tmp.path);
 
   const auto result = run_capture(
       launcher_command(root) + " -modelcheck PACE " +

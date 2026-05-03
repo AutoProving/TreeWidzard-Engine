@@ -96,13 +96,13 @@ To run a search on one of the example conjectures:
 Linux/macOS:
 
 ```bash
-./treewidzard.sh -atp tw=4 -pl ParallelBreadthFirstSearch examples/system_paper/atp/five_colorable.txt
+./treewidzard.sh -atp tw=4 -pl ParallelBreadthFirstSearch examples/conjectures/five_colorable.txt
 ```
 
 Windows:
 
 ```bat
-./treewidzard.bat -atp tw=4 -pl ParallelBreadthFirstSearch examples/system_paper/atp/five_colorable.txt
+./treewidzard.bat -atp tw=4 -pl ParallelBreadthFirstSearch examples/conjectures/five_colorable.txt
 ```
 
 For a compact presentation script with correct and incorrect ATP and model-checking commands, see [examples.md](examples.md).
@@ -118,7 +118,7 @@ ATP command pattern:
 Example:
 
 ```bash
-./treewidzard.sh -atp tw=4 -pl ParallelBreadthFirstSearch examples/system_paper/atp/five_colorable.txt
+./treewidzard.sh -atp tw=4 -pl ParallelBreadthFirstSearch examples/conjectures/five_colorable.txt
 ```
 
 Terms:
@@ -126,7 +126,7 @@ Terms:
 - `<search method>`: the search strategy used to explore graphs, such as `BreadthFirstSearch` or `ParallelBreadthFirstSearch`
 - `<width type>`: the width parameter to use, such as `tw` or `pw`
 - `<width value>`: the width bound to test
-- `<property file>`: a text file that defines the DP cores and the formula/conjecture to check. Example: [examples/system_paper/atp/five_colorable.txt](examples/system_paper/atp/five_colorable.txt)
+- `<property file>`: a text file that defines the DP cores and the formula/conjecture to check. Example: [examples/conjectures/five_colorable.txt](examples/conjectures/five_colorable.txt)
 
 Available search methods:
 
@@ -188,14 +188,14 @@ PACE format:
 Example:
 
 ```bash
-./treewidzard.sh -modelcheck PACE examples/system_paper/model_checking/three_colorable.txt examples/system_paper/model_checking/diamond.gr examples/system_paper/model_checking/diamond.td
+./treewidzard.sh -modelcheck PACE examples/conjectures/three_colorable.txt examples/graph/diamond.gr examples/graph/diamond.td
 ```
 
 Terms:
 
-- `<property file>`: a text file that defines the DP cores and the formula/conjecture to check. Example: [examples/system_paper/model_checking/three_colorable.txt](examples/system_paper/model_checking/three_colorable.txt)
-- `<graph file>`: an input graph in PACE graph format. Example: [examples/system_paper/model_checking/diamond.gr](examples/system_paper/model_checking/diamond.gr)
-- `<tree decomposition file>`: a tree decomposition of the input graph in PACE decomposition format. Example: [examples/system_paper/model_checking/diamond.td](examples/system_paper/model_checking/diamond.td)
+- `<property file>`: a text file that defines the DP cores and the formula/conjecture to check. Example: [examples/conjectures/three_colorable.txt](examples/conjectures/three_colorable.txt)
+- `<graph file>`: an input graph in PACE graph format. Example: [examples/graph/diamond.gr](examples/graph/diamond.gr)
+- `<tree decomposition file>`: a tree decomposition of the input graph in PACE decomposition format. Example: [examples/graph/diamond.td](examples/graph/diamond.td)
 
 ITD format:
 
@@ -206,13 +206,13 @@ ITD format:
 Example:
 
 ```bash
-./treewidzard.sh -modelcheck ITD examples/system_paper/model_checking/three_colorable.txt examples/system_paper/model_checking/diamond.itd
+./treewidzard.sh -modelcheck ITD examples/conjectures/three_colorable.txt examples/itd/diamond.itd
 ```
 
 Terms:
 
-- `<property file>`: a text file that defines the DP cores and the formula/conjecture to check. Example: [examples/system_paper/model_checking/three_colorable.txt](examples/system_paper/model_checking/three_colorable.txt)
-- `<instructive tree decomposition file>`: an instructive tree decomposition input used by TreeWidzard for model checking. Example: [examples/system_paper/model_checking/diamond.itd](examples/system_paper/model_checking/diamond.itd)
+- `<property file>`: a text file that defines the DP cores and the formula/conjecture to check. Example: [examples/conjectures/three_colorable.txt](examples/conjectures/three_colorable.txt)
+- `<instructive tree decomposition file>`: an instructive tree decomposition input used by TreeWidzard for model checking. Example: [examples/itd/diamond.itd](examples/itd/diamond.itd)
 
 ## Flags
 
