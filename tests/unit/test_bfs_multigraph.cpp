@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #include <gtest/gtest.h>
 #include "../utils/test_helpers.h"
 #include "../utils/kernel_test_doubles.h"

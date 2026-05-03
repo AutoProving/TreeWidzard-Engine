@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #include "../Conjecture/Conjecture.h"
 #include "../Conjecture/PropertyAssignment.h"
 #include "../Kernel/DynamicKernel.h"

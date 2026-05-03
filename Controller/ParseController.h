@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #ifndef TREEWIDZARD_PARSECONTROLLER_H
 #define TREEWIDZARD_PARSECONTROLLER_H
 // #include <experimental/filesystem>

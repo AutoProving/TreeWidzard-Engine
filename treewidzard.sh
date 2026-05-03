@@ -1,4 +1,7 @@
 #!/bin/bash
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 # TreeWidzard wrapper script - makes it easier to use TreeWidzard
 
 set -euo pipefail

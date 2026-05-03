@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #ifndef TREEWIDZARD_CLI_TEST_SUPPORT_H
 #define TREEWIDZARD_CLI_TEST_SUPPORT_H
 

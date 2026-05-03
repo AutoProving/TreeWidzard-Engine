@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 # cmake_minimum_required(VERSION 3.0.0)
 # set(CMAKE_CXX_STANDARD 20)
 # # link_libraries(-lstdc++fs)

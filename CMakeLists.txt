@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 # Root CMakeLists.txt
 cmake_minimum_required(VERSION 3.18)
 project(treewidzard LANGUAGES CXX)

@@ -1,4 +1,7 @@
 @echo off
+:: SPDX-License-Identifier: MIT
+:: Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 setlocal EnableExtensions EnableDelayedExpansion
 
 set "FAILURES=0"

@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #ifndef TREEWIDZARD_AUXILIARYCONTROLLER_HPP
 #define TREEWIDZARD_AUXILIARYCONTROLLER_HPP
 #include <fstream>
