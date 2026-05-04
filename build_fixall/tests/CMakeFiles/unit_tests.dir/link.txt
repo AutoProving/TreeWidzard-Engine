@@ -1,0 +1,1 @@
+/usr/bin/c++ -O2 -g -DNDEBUG -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/unit_tests.dir/unit/test_bag_operations.cpp.o CMakeFiles/unit_tests.dir/unit/test_core_support.cpp.o CMakeFiles/unit_tests.dir/unit/test_kernel_components.cpp.o -o unit_tests  ../libTreeWidzard-Core.a ../lib/libgtest_main.a ../lib/libgtest.a

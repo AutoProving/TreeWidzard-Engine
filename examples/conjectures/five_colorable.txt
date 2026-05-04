@@ -1,0 +1,3 @@
+x := ChromaticNumber_AtMost(5)
+Formula
+x

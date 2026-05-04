@@ -1,0 +1,7 @@
+KernelTraversal.BreadthFirstTraversalCoversAllExpansionHooks 1 0.00393737
+KernelTraversal.BreadthFirstTraversalFiltersStatesByPremise 1 0.00300054
+KernelTraversal.BreadthFirstTraversalStopsAtCounterexample 1 0.00311858
+KernelTraversal.BreadthFirstTraversalChecksInitialStateBeforeExpansion 1 0.00337975
+KernelTraversal.DynamicCoreHandlerLoadsCompiledCorePlugin 1 0.446865
+KernelTraversal.SearchStrategyHandlerLoadsCompiledSearchPlugin 1 0.274922
+---

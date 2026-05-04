@@ -1,0 +1,2974 @@
+Start testing: Mar 19 20:06 CET
+----------------------------------------------------------
+35/96 Testing: CliSearch.TreeWidthHappyPathReportsSatisfied
+35/96 Test: CliSearch.TreeWidthHappyPathReportsSatisfied
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=CliSearch.TreeWidthHappyPathReportsSatisfied" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"CliSearch.TreeWidthHappyPathReportsSatisfied" start time: Mar 19 20:06 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = CliSearch.TreeWidthHappyPathReportsSatisfied
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CliSearch
+[ RUN      ] CliSearch.TreeWidthHappyPathReportsSatisfied
+[       OK ] CliSearch.TreeWidthHappyPathReportsSatisfied (3520 ms)
+[----------] 1 test from CliSearch (3520 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (3520 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   7.73 sec
+----------------------------------------------------------
+Test Passed.
+"CliSearch.TreeWidthHappyPathReportsSatisfied" end time: Mar 19 20:07 CET
+"CliSearch.TreeWidthHappyPathReportsSatisfied" time elapsed: 00:00:07
+----------------------------------------------------------
+
+40/96 Testing: CliSearch.MissingSearchPathEntryDoesNotBreakDiscovery
+40/96 Test: CliSearch.MissingSearchPathEntryDoesNotBreakDiscovery
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=CliSearch.MissingSearchPathEntryDoesNotBreakDiscovery" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"CliSearch.MissingSearchPathEntryDoesNotBreakDiscovery" start time: Mar 19 20:06 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = CliSearch.MissingSearchPathEntryDoesNotBreakDiscovery
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CliSearch
+[ RUN      ] CliSearch.MissingSearchPathEntryDoesNotBreakDiscovery
+[       OK ] CliSearch.MissingSearchPathEntryDoesNotBreakDiscovery (3515 ms)
+[----------] 1 test from CliSearch (3515 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (3515 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   7.73 sec
+----------------------------------------------------------
+Test Passed.
+"CliSearch.MissingSearchPathEntryDoesNotBreakDiscovery" end time: Mar 19 20:07 CET
+"CliSearch.MissingSearchPathEntryDoesNotBreakDiscovery" time elapsed: 00:00:07
+----------------------------------------------------------
+
+46/96 Testing: CliSearch.SearchStrategiesAgreeOnUnsatisfiedPropertyAndCertificates
+46/96 Test: CliSearch.SearchStrategiesAgreeOnUnsatisfiedPropertyAndCertificates
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=CliSearch.SearchStrategiesAgreeOnUnsatisfiedPropertyAndCertificates" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"CliSearch.SearchStrategiesAgreeOnUnsatisfiedPropertyAndCertificates" start time: Mar 19 20:06 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = CliSearch.SearchStrategiesAgreeOnUnsatisfiedPropertyAndCertificates
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CliSearch
+[ RUN      ] CliSearch.SearchStrategiesAgreeOnUnsatisfiedPropertyAndCertificates
+[       OK ] CliSearch.SearchStrategiesAgreeOnUnsatisfiedPropertyAndCertificates (3499 ms)
+[----------] 1 test from CliSearch (3499 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (3499 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   7.74 sec
+----------------------------------------------------------
+Test Passed.
+"CliSearch.SearchStrategiesAgreeOnUnsatisfiedPropertyAndCertificates" end time: Mar 19 20:07 CET
+"CliSearch.SearchStrategiesAgreeOnUnsatisfiedPropertyAndCertificates" time elapsed: 00:00:07
+----------------------------------------------------------
+
+37/96 Testing: CliSearch.PremiseFlagHappyPathReportsActivated
+37/96 Test: CliSearch.PremiseFlagHappyPathReportsActivated
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=CliSearch.PremiseFlagHappyPathReportsActivated" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"CliSearch.PremiseFlagHappyPathReportsActivated" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = CliSearch.PremiseFlagHappyPathReportsActivated
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CliSearch
+[ RUN      ] CliSearch.PremiseFlagHappyPathReportsActivated
+[       OK ] CliSearch.PremiseFlagHappyPathReportsActivated (47 ms)
+[----------] 1 test from CliSearch (47 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (47 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"CliSearch.PremiseFlagHappyPathReportsActivated" end time: Mar 19 20:07 CET
+"CliSearch.PremiseFlagHappyPathReportsActivated" time elapsed: 00:00:00
+----------------------------------------------------------
+
+36/96 Testing: CliSearch.PathWidthHappyPathReportsSatisfied
+36/96 Test: CliSearch.PathWidthHappyPathReportsSatisfied
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=CliSearch.PathWidthHappyPathReportsSatisfied" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"CliSearch.PathWidthHappyPathReportsSatisfied" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = CliSearch.PathWidthHappyPathReportsSatisfied
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CliSearch
+[ RUN      ] CliSearch.PathWidthHappyPathReportsSatisfied
+[       OK ] CliSearch.PathWidthHappyPathReportsSatisfied (95 ms)
+[----------] 1 test from CliSearch (95 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (95 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.10 sec
+----------------------------------------------------------
+Test Passed.
+"CliSearch.PathWidthHappyPathReportsSatisfied" end time: Mar 19 20:07 CET
+"CliSearch.PathWidthHappyPathReportsSatisfied" time elapsed: 00:00:00
+----------------------------------------------------------
+
+47/96 Testing: Certificates.BFS_SAT_GeneratesAndChecks
+47/96 Test: Certificates.BFS_SAT_GeneratesAndChecks
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=Certificates.BFS_SAT_GeneratesAndChecks" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"Certificates.BFS_SAT_GeneratesAndChecks" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = Certificates.BFS_SAT_GeneratesAndChecks
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Certificates
+[ RUN      ] Certificates.BFS_SAT_GeneratesAndChecks
+--------------- TreeWidzard Dynamic Cores LOADING INFORAMATION --------------- 
+Duplicate core name 'CliqueNumberSimpleGraphs'. Keeping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumberSimpleGraphs_AtLeast.dylib and skipping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumber_AtLeast.dylib
+Loaded DP-Cores to TreeWidzard:ChromaticNumber - CliqueNumberSimpleGraphs - FeedbackVertexSet - HC - HP - HasMultipleEdges - IndependentSet - MaxDegree - MinorGeneric - MinorK2 - PerfectMatching - VertexCount - VertexCover - 
+----------------------------------------------------------
+Property information:
+
+Formula: (x implies y)
+
+x := MaxDegree(4)
+Core type: Bool
+y := ChromaticNumber(4)
+Core type: Bool
+
+Search information:
+
+Width parameter: tree_width = 2
+Search method: BreadthFirstSearch
+Premise flag: NOT ACTIVATED
+
+Search process:
+Iteration                ALLSTATES                NEWSTATES                Max WITNESSSET SIZE
+
+Result: PROPERTY SATISFIED
+-----------------------------------------
+--------------- TreeWidzard Dynamic Cores LOADING INFORAMATION --------------- 
+Duplicate core name 'CliqueNumberSimpleGraphs'. Keeping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumberSimpleGraphs_AtLeast.dylib and skipping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumber_AtLeast.dylib
+Loaded DP-Cores to TreeWidzard:ChromaticNumber - CliqueNumberSimpleGraphs - FeedbackVertexSet - HC - HP - HasMultipleEdges - IndependentSet - MaxDegree - MinorGeneric - MinorK2 - PerfectMatching - VertexCount - VertexCover - 
+----------------------------------------------------------
+Certificate ACCEPTED: PROPERTY SATISFIED
+[       OK ] Certificates.BFS_SAT_GeneratesAndChecks (2668 ms)
+[----------] 1 test from Certificates (2668 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (2668 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   2.69 sec
+----------------------------------------------------------
+Test Passed.
+"Certificates.BFS_SAT_GeneratesAndChecks" end time: Mar 19 20:07 CET
+"Certificates.BFS_SAT_GeneratesAndChecks" time elapsed: 00:00:02
+----------------------------------------------------------
+
+50/96 Testing: Certificates.PISO_SAT_GeneratesAndChecks
+50/96 Test: Certificates.PISO_SAT_GeneratesAndChecks
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=Certificates.PISO_SAT_GeneratesAndChecks" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"Certificates.PISO_SAT_GeneratesAndChecks" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = Certificates.PISO_SAT_GeneratesAndChecks
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Certificates
+[ RUN      ] Certificates.PISO_SAT_GeneratesAndChecks
+--------------- TreeWidzard Dynamic Cores LOADING INFORAMATION --------------- 
+Duplicate core name 'CliqueNumberSimpleGraphs'. Keeping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumberSimpleGraphs_AtLeast.dylib and skipping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumber_AtLeast.dylib
+Loaded DP-Cores to TreeWidzard:ChromaticNumber - CliqueNumberSimpleGraphs - FeedbackVertexSet - HC - HP - HasMultipleEdges - IndependentSet - MaxDegree - MinorGeneric - MinorK2 - PerfectMatching - VertexCount - VertexCover - 
+----------------------------------------------------------
+Property information:
+
+Formula: (x implies y)
+
+x := MaxDegree(4)
+Core type: Bool
+y := ChromaticNumber(4)
+Core type: Bool
+
+Search information:
+
+Width parameter: tree_width = 2
+Search method: ParallelIsomorphismBreadthFirstSearch
+Premise flag: NOT ACTIVATED
+
+Search process:
+Iteration                ALLSTATES                NEWSTATES                Max WITNESSSET SIZE
+
+Result: PROPERTY SATISFIED
+
+-----------------------------------------
+--------------- TreeWidzard Dynamic Cores LOADING INFORAMATION --------------- 
+Duplicate core name 'CliqueNumberSimpleGraphs'. Keeping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumberSimpleGraphs_AtLeast.dylib and skipping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumber_AtLeast.dylib
+Loaded DP-Cores to TreeWidzard:ChromaticNumber - CliqueNumberSimpleGraphs - FeedbackVertexSet - HC - HP - HasMultipleEdges - IndependentSet - MaxDegree - MinorGeneric - MinorK2 - PerfectMatching - VertexCount - VertexCover - 
+----------------------------------------------------------
+Certificate ACCEPTED: PROPERTY SATISFIED
+[       OK ] Certificates.PISO_SAT_GeneratesAndChecks (3228 ms)
+[----------] 1 test from Certificates (3228 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (3228 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   3.24 sec
+----------------------------------------------------------
+Test Passed.
+"Certificates.PISO_SAT_GeneratesAndChecks" end time: Mar 19 20:07 CET
+"Certificates.PISO_SAT_GeneratesAndChecks" time elapsed: 00:00:03
+----------------------------------------------------------
+
+45/96 Testing: CliSearch.SearchStrategiesAgreeOnSatisfiedProperty
+45/96 Test: CliSearch.SearchStrategiesAgreeOnSatisfiedProperty
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=CliSearch.SearchStrategiesAgreeOnSatisfiedProperty" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"CliSearch.SearchStrategiesAgreeOnSatisfiedProperty" start time: Mar 19 20:06 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = CliSearch.SearchStrategiesAgreeOnSatisfiedProperty
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CliSearch
+[ RUN      ] CliSearch.SearchStrategiesAgreeOnSatisfiedProperty
+[       OK ] CliSearch.SearchStrategiesAgreeOnSatisfiedProperty (7292 ms)
+[----------] 1 test from CliSearch (7292 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (7292 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =  11.54 sec
+----------------------------------------------------------
+Test Passed.
+"CliSearch.SearchStrategiesAgreeOnSatisfiedProperty" end time: Mar 19 20:07 CET
+"CliSearch.SearchStrategiesAgreeOnSatisfiedProperty" time elapsed: 00:00:11
+----------------------------------------------------------
+
+48/96 Testing: Certificates.ISO_SAT_GeneratesAndChecks
+48/96 Test: Certificates.ISO_SAT_GeneratesAndChecks
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=Certificates.ISO_SAT_GeneratesAndChecks" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"Certificates.ISO_SAT_GeneratesAndChecks" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = Certificates.ISO_SAT_GeneratesAndChecks
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Certificates
+[ RUN      ] Certificates.ISO_SAT_GeneratesAndChecks
+--------------- TreeWidzard Dynamic Cores LOADING INFORAMATION --------------- 
+Duplicate core name 'CliqueNumberSimpleGraphs'. Keeping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumberSimpleGraphs_AtLeast.dylib and skipping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumber_AtLeast.dylib
+Loaded DP-Cores to TreeWidzard:ChromaticNumber - CliqueNumberSimpleGraphs - FeedbackVertexSet - HC - HP - HasMultipleEdges - IndependentSet - MaxDegree - MinorGeneric - MinorK2 - PerfectMatching - VertexCount - VertexCover - 
+----------------------------------------------------------
+Property information:
+
+Formula: (x implies y)
+
+x := MaxDegree(4)
+Core type: Bool
+y := ChromaticNumber(4)
+Core type: Bool
+
+Search information:
+
+Width parameter: tree_width = 2
+Search method: IsomorphismBreadthFirstSearch
+Premise flag: NOT ACTIVATED
+
+Search process:
+Iteration                ALLSTATES                NEWSTATES                Max WITNESSSET SIZE
+
+Result: PROPERTY SATISFIED
+
+-----------------------------------------
+--------------- TreeWidzard Dynamic Cores LOADING INFORAMATION --------------- 
+Duplicate core name 'CliqueNumberSimpleGraphs'. Keeping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumberSimpleGraphs_AtLeast.dylib and skipping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumber_AtLeast.dylib
+Loaded DP-Cores to TreeWidzard:ChromaticNumber - CliqueNumberSimpleGraphs - FeedbackVertexSet - HC - HP - HasMultipleEdges - IndependentSet - MaxDegree - MinorGeneric - MinorK2 - PerfectMatching - VertexCount - VertexCover - 
+----------------------------------------------------------
+Certificate ACCEPTED: PROPERTY SATISFIED
+[       OK ] Certificates.ISO_SAT_GeneratesAndChecks (4556 ms)
+[----------] 1 test from Certificates (4556 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (4556 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   4.56 sec
+----------------------------------------------------------
+Test Passed.
+"Certificates.ISO_SAT_GeneratesAndChecks" end time: Mar 19 20:07 CET
+"Certificates.ISO_SAT_GeneratesAndChecks" time elapsed: 00:00:04
+----------------------------------------------------------
+
+54/96 Testing: Certificates.Negative_WrongPropertyRejected
+54/96 Test: Certificates.Negative_WrongPropertyRejected
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=Certificates.Negative_WrongPropertyRejected" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"Certificates.Negative_WrongPropertyRejected" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = Certificates.Negative_WrongPropertyRejected
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Certificates
+[ RUN      ] Certificates.Negative_WrongPropertyRejected
+--------------- TreeWidzard Dynamic Cores LOADING INFORAMATION --------------- 
+Duplicate core name 'CliqueNumberSimpleGraphs'. Keeping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumberSimpleGraphs_AtLeast.dylib and skipping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumber_AtLeast.dylib
+Loaded DP-Cores to TreeWidzard:ChromaticNumber - CliqueNumberSimpleGraphs - FeedbackVertexSet - HC - HP - HasMultipleEdges - IndependentSet - MaxDegree - MinorGeneric - MinorK2 - PerfectMatching - VertexCount - VertexCover - 
+----------------------------------------------------------
+Property information:
+
+Formula: (x implies y)
+
+x := MaxDegree(4)
+Core type: Bool
+y := ChromaticNumber(4)
+Core type: Bool
+
+Search information:
+
+Width parameter: tree_width = 2
+Search method: BreadthFirstSearch
+Premise flag: NOT ACTIVATED
+
+Search process:
+Iteration                ALLSTATES                NEWSTATES                Max WITNESSSET SIZE
+
+Result: PROPERTY SATISFIED
+-----------------------------------------
+Error: property file hash mismatch (wrong property file?)
+[       OK ] Certificates.Negative_WrongPropertyRejected (12624 ms)
+[----------] 1 test from Certificates (12624 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (12624 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =  12.67 sec
+----------------------------------------------------------
+Test Passed.
+"Certificates.Negative_WrongPropertyRejected" end time: Mar 19 20:07 CET
+"Certificates.Negative_WrongPropertyRejected" time elapsed: 00:00:12
+----------------------------------------------------------
+
+53/96 Testing: Certificates.Negative_TruncatedSATRejected
+53/96 Test: Certificates.Negative_TruncatedSATRejected
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=Certificates.Negative_TruncatedSATRejected" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"Certificates.Negative_TruncatedSATRejected" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = Certificates.Negative_TruncatedSATRejected
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Certificates
+[ RUN      ] Certificates.Negative_TruncatedSATRejected
+--------------- TreeWidzard Dynamic Cores LOADING INFORAMATION --------------- 
+Duplicate core name 'CliqueNumberSimpleGraphs'. Keeping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumberSimpleGraphs_AtLeast.dylib and skipping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumber_AtLeast.dylib
+Loaded DP-Cores to TreeWidzard:ChromaticNumber - CliqueNumberSimpleGraphs - FeedbackVertexSet - HC - HP - HasMultipleEdges - IndependentSet - MaxDegree - MinorGeneric - MinorK2 - PerfectMatching - VertexCount - VertexCover - 
+----------------------------------------------------------
+Property information:
+
+Formula: (x implies y)
+
+x := MaxDegree(4)
+Core type: Bool
+y := ChromaticNumber(4)
+Core type: Bool
+
+Search information:
+
+Width parameter: tree_width = 2
+Search method: BreadthFirstSearch
+Premise flag: NOT ACTIVATED
+
+Search process:
+Iteration                ALLSTATES                NEWSTATES                Max WITNESSSET SIZE
+
+Result: PROPERTY SATISFIED
+-----------------------------------------
+--------------- TreeWidzard Dynamic Cores LOADING INFORAMATION --------------- 
+Duplicate core name 'CliqueNumberSimpleGraphs'. Keeping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumberSimpleGraphs_AtLeast.dylib and skipping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumber_AtLeast.dylib
+Loaded DP-Cores to TreeWidzard:ChromaticNumber - CliqueNumberSimpleGraphs - FeedbackVertexSet - HC - HP - HasMultipleEdges - IndependentSet - MaxDegree - MinorGeneric - MinorK2 - PerfectMatching - VertexCount - VertexCover - 
+----------------------------------------------------------
+Certificate rejected: closure violation (missing successor)
+[       OK ] Certificates.Negative_TruncatedSATRejected (13149 ms)
+[----------] 1 test from Certificates (13149 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (13149 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =  13.19 sec
+----------------------------------------------------------
+Test Passed.
+"Certificates.Negative_TruncatedSATRejected" end time: Mar 19 20:07 CET
+"Certificates.Negative_TruncatedSATRejected" time elapsed: 00:00:13
+----------------------------------------------------------
+
+38/96 Testing: CliSearch.HelpReturnsSuccess
+38/96 Test: CliSearch.HelpReturnsSuccess
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=CliSearch.HelpReturnsSuccess" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"CliSearch.HelpReturnsSuccess" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = CliSearch.HelpReturnsSuccess
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CliSearch
+[ RUN      ] CliSearch.HelpReturnsSuccess
+[       OK ] CliSearch.HelpReturnsSuccess (76 ms)
+[----------] 1 test from CliSearch (76 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (76 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.08 sec
+----------------------------------------------------------
+Test Passed.
+"CliSearch.HelpReturnsSuccess" end time: Mar 19 20:07 CET
+"CliSearch.HelpReturnsSuccess" time elapsed: 00:00:00
+----------------------------------------------------------
+
+49/96 Testing: Certificates.PBFS_SAT_GeneratesAndChecks
+49/96 Test: Certificates.PBFS_SAT_GeneratesAndChecks
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=Certificates.PBFS_SAT_GeneratesAndChecks" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"Certificates.PBFS_SAT_GeneratesAndChecks" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = Certificates.PBFS_SAT_GeneratesAndChecks
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Certificates
+[ RUN      ] Certificates.PBFS_SAT_GeneratesAndChecks
+--------------- TreeWidzard Dynamic Cores LOADING INFORAMATION --------------- 
+Duplicate core name 'CliqueNumberSimpleGraphs'. Keeping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumberSimpleGraphs_AtLeast.dylib and skipping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumber_AtLeast.dylib
+Loaded DP-Cores to TreeWidzard:ChromaticNumber - CliqueNumberSimpleGraphs - FeedbackVertexSet - HC - HP - HasMultipleEdges - IndependentSet - MaxDegree - MinorGeneric - MinorK2 - PerfectMatching - VertexCount - VertexCover - 
+----------------------------------------------------------
+Property information:
+
+Formula: (x implies y)
+
+x := MaxDegree(4)
+Core type: Bool
+y := ChromaticNumber(4)
+Core type: Bool
+
+Search information:
+
+Width parameter: tree_width = 2
+Search method: ParallelBreadthFirstSearch
+Premise flag: NOT ACTIVATED
+
+Search process:
+Iteration                ALLSTATES                NEWSTATES                Max WITNESSSET SIZE
+
+Result: PROPERTY SATISFIED
+-----------------------------------------
+--------------- TreeWidzard Dynamic Cores LOADING INFORAMATION --------------- 
+Duplicate core name 'CliqueNumberSimpleGraphs'. Keeping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumberSimpleGraphs_AtLeast.dylib and skipping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumber_AtLeast.dylib
+Loaded DP-Cores to TreeWidzard:ChromaticNumber - CliqueNumberSimpleGraphs - FeedbackVertexSet - HC - HP - HasMultipleEdges - IndependentSet - MaxDegree - MinorGeneric - MinorK2 - PerfectMatching - VertexCount - VertexCover - 
+----------------------------------------------------------
+Certificate ACCEPTED: PROPERTY SATISFIED
+[       OK ] Certificates.PBFS_SAT_GeneratesAndChecks (983 ms)
+[----------] 1 test from Certificates (983 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (983 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.99 sec
+----------------------------------------------------------
+Test Passed.
+"Certificates.PBFS_SAT_GeneratesAndChecks" end time: Mar 19 20:07 CET
+"Certificates.PBFS_SAT_GeneratesAndChecks" time elapsed: 00:00:00
+----------------------------------------------------------
+
+57/96 Testing: Certificates.Negative_InvalidOpRejected
+57/96 Test: Certificates.Negative_InvalidOpRejected
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=Certificates.Negative_InvalidOpRejected" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"Certificates.Negative_InvalidOpRejected" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = Certificates.Negative_InvalidOpRejected
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Certificates
+[ RUN      ] Certificates.Negative_InvalidOpRejected
+--------------- TreeWidzard Dynamic Cores LOADING INFORAMATION --------------- 
+Duplicate core name 'CliqueNumberSimpleGraphs'. Keeping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumberSimpleGraphs_AtLeast.dylib and skipping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumber_AtLeast.dylib
+Loaded DP-Cores to TreeWidzard:ChromaticNumber - CliqueNumberSimpleGraphs - FeedbackVertexSet - HC - HP - HasMultipleEdges - IndependentSet - MaxDegree - MinorGeneric - MinorK2 - PerfectMatching - VertexCount - VertexCover - 
+----------------------------------------------------------
+Property information:
+
+Formula: (x implies y)
+
+x := MaxDegree(4)
+Core type: Bool
+y := ChromaticNumber(4)
+Core type: Bool
+
+Search information:
+
+Width parameter: tree_width = 2
+Search method: BreadthFirstSearch
+Premise flag: NOT ACTIVATED
+
+Search process:
+Iteration                ALLSTATES                NEWSTATES                Max WITNESSSET SIZE
+
+Result: PROPERTY SATISFIED
+-----------------------------------------
+--------------- TreeWidzard Dynamic Cores LOADING INFORAMATION --------------- 
+Duplicate core name 'CliqueNumberSimpleGraphs'. Keeping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumberSimpleGraphs_AtLeast.dylib and skipping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumber_AtLeast.dylib
+Loaded DP-Cores to TreeWidzard:ChromaticNumber - CliqueNumberSimpleGraphs - FeedbackVertexSet - HC - HP - HasMultipleEdges - IndependentSet - MaxDegree - MinorGeneric - MinorK2 - PerfectMatching - VertexCount - VertexCover - 
+----------------------------------------------------------
+Error: INTRO_V label out of range: 4
+[       OK ] Certificates.Negative_InvalidOpRejected (13242 ms)
+[----------] 1 test from Certificates (13242 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (13242 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =  13.56 sec
+----------------------------------------------------------
+Test Passed.
+"Certificates.Negative_InvalidOpRejected" end time: Mar 19 20:07 CET
+"Certificates.Negative_InvalidOpRejected" time elapsed: 00:00:13
+----------------------------------------------------------
+
+58/96 Testing: Certificates.Negative_InvalidJoinMapRejected
+58/96 Test: Certificates.Negative_InvalidJoinMapRejected
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=Certificates.Negative_InvalidJoinMapRejected" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"Certificates.Negative_InvalidJoinMapRejected" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = Certificates.Negative_InvalidJoinMapRejected
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Certificates
+[ RUN      ] Certificates.Negative_InvalidJoinMapRejected
+--------------- TreeWidzard Dynamic Cores LOADING INFORAMATION --------------- 
+Duplicate core name 'CliqueNumberSimpleGraphs'. Keeping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumberSimpleGraphs_AtLeast.dylib and skipping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumber_AtLeast.dylib
+Loaded DP-Cores to TreeWidzard:ChromaticNumber - CliqueNumberSimpleGraphs - FeedbackVertexSet - HC - HP - HasMultipleEdges - IndependentSet - MaxDegree - MinorGeneric - MinorK2 - PerfectMatching - VertexCount - VertexCover - 
+----------------------------------------------------------
+Property information:
+
+Formula: (x implies y)
+
+x := MaxDegree(4)
+Core type: Bool
+y := ChromaticNumber(4)
+Core type: Bool
+
+Search information:
+
+Width parameter: tree_width = 2
+Search method: IsomorphismBreadthFirstSearch
+Premise flag: NOT ACTIVATED
+
+Search process:
+Iteration                ALLSTATES                NEWSTATES                Max WITNESSSET SIZE
+
+Result: PROPERTY SATISFIED
+
+-----------------------------------------
+--------------- TreeWidzard Dynamic Cores LOADING INFORAMATION --------------- 
+Duplicate core name 'CliqueNumberSimpleGraphs'. Keeping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumberSimpleGraphs_AtLeast.dylib and skipping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumber_AtLeast.dylib
+Loaded DP-Cores to TreeWidzard:ChromaticNumber - CliqueNumberSimpleGraphs - FeedbackVertexSet - HC - HP - HasMultipleEdges - IndependentSet - MaxDegree - MinorGeneric - MinorK2 - PerfectMatching - VertexCount - VertexCover - 
+----------------------------------------------------------
+Error: JOIN MAP values do not match bag elements
+[       OK ] Certificates.Negative_InvalidJoinMapRejected (9056 ms)
+[----------] 1 test from Certificates (9056 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (9056 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =  12.87 sec
+----------------------------------------------------------
+Test Passed.
+"Certificates.Negative_InvalidJoinMapRejected" end time: Mar 19 20:07 CET
+"Certificates.Negative_InvalidJoinMapRejected" time elapsed: 00:00:12
+----------------------------------------------------------
+
+55/96 Testing: Certificates.Negative_TamperedHeaderRejected
+55/96 Test: Certificates.Negative_TamperedHeaderRejected
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=Certificates.Negative_TamperedHeaderRejected" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"Certificates.Negative_TamperedHeaderRejected" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = Certificates.Negative_TamperedHeaderRejected
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Certificates
+[ RUN      ] Certificates.Negative_TamperedHeaderRejected
+--------------- TreeWidzard Dynamic Cores LOADING INFORAMATION --------------- 
+Duplicate core name 'CliqueNumberSimpleGraphs'. Keeping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumberSimpleGraphs_AtLeast.dylib and skipping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumber_AtLeast.dylib
+Loaded DP-Cores to TreeWidzard:ChromaticNumber - CliqueNumberSimpleGraphs - FeedbackVertexSet - HC - HP - HasMultipleEdges - IndependentSet - MaxDegree - MinorGeneric - MinorK2 - PerfectMatching - VertexCount - VertexCover - 
+----------------------------------------------------------
+Property information:
+
+Formula: (x implies y)
+
+x := MaxDegree(4)
+Core type: Bool
+y := ChromaticNumber(4)
+Core type: Bool
+
+Search information:
+
+Width parameter: tree_width = 2
+Search method: BreadthFirstSearch
+Premise flag: NOT ACTIVATED
+
+Search process:
+Iteration                ALLSTATES                NEWSTATES                Max WITNESSSET SIZE
+
+Result: PROPERTY SATISFIED
+-----------------------------------------
+Error: DP-core fingerprint mismatch (wrong plugins?)
+[       OK ] Certificates.Negative_TamperedHeaderRejected (1492 ms)
+[----------] 1 test from Certificates (1492 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (1492 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   1.50 sec
+----------------------------------------------------------
+Test Passed.
+"Certificates.Negative_TamperedHeaderRejected" end time: Mar 19 20:07 CET
+"Certificates.Negative_TamperedHeaderRejected" time elapsed: 00:00:01
+----------------------------------------------------------
+
+52/96 Testing: Certificates.BFS_NO_GeneratesAndChecks
+52/96 Test: Certificates.BFS_NO_GeneratesAndChecks
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=Certificates.BFS_NO_GeneratesAndChecks" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"Certificates.BFS_NO_GeneratesAndChecks" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = Certificates.BFS_NO_GeneratesAndChecks
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Certificates
+[ RUN      ] Certificates.BFS_NO_GeneratesAndChecks
+--------------- TreeWidzard Dynamic Cores LOADING INFORAMATION --------------- 
+Duplicate core name 'CliqueNumberSimpleGraphs'. Keeping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumberSimpleGraphs_AtLeast.dylib and skipping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumber_AtLeast.dylib
+Loaded DP-Cores to TreeWidzard:ChromaticNumber - CliqueNumberSimpleGraphs - FeedbackVertexSet - HC - HP - HasMultipleEdges - IndependentSet - MaxDegree - MinorGeneric - MinorK2 - PerfectMatching - VertexCount - VertexCover - 
+----------------------------------------------------------
+Property information:
+
+Formula: x
+
+x := ChromaticNumber(3)
+Core type: Bool
+
+Search information:
+
+Width parameter: tree_width = 3
+Search method: BreadthFirstSearch
+Premise flag: NOT ACTIVATED
+
+Search process:
+Iteration                ALLSTATES                NEWSTATES                Max WITNESSSET SIZE
+
+Result: PROPERTY NOT SATISFIED
+
+Counterexample found:
+The assignment that makes the formula false:
+x=0
+Vertices:
+1
+2
+3
+4
+Edges:
+1	1	3	
+2	1	4	
+3	2	4	
+4	1	2	
+5	1	3	
+6	1	4	
+7	3	4	
+8	2	3	
+-----------------------------------------
+--------------- TreeWidzard Dynamic Cores LOADING INFORAMATION --------------- 
+Duplicate core name 'CliqueNumberSimpleGraphs'. Keeping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumberSimpleGraphs_AtLeast.dylib and skipping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumber_AtLeast.dylib
+Loaded DP-Cores to TreeWidzard:ChromaticNumber - CliqueNumberSimpleGraphs - FeedbackVertexSet - HC - HP - HasMultipleEdges - IndependentSet - MaxDegree - MinorGeneric - MinorK2 - PerfectMatching - VertexCount - VertexCover - 
+----------------------------------------------------------
+Certificate ACCEPTED: PROPERTY NOT SATISFIED
+[       OK ] Certificates.BFS_NO_GeneratesAndChecks (381 ms)
+[----------] 1 test from Certificates (381 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (381 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.40 sec
+----------------------------------------------------------
+Test Passed.
+"Certificates.BFS_NO_GeneratesAndChecks" end time: Mar 19 20:07 CET
+"Certificates.BFS_NO_GeneratesAndChecks" time elapsed: 00:00:00
+----------------------------------------------------------
+
+51/96 Testing: Certificates.Premise_BFS_SAT_GeneratesAndChecks
+51/96 Test: Certificates.Premise_BFS_SAT_GeneratesAndChecks
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=Certificates.Premise_BFS_SAT_GeneratesAndChecks" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"Certificates.Premise_BFS_SAT_GeneratesAndChecks" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = Certificates.Premise_BFS_SAT_GeneratesAndChecks
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Certificates
+[ RUN      ] Certificates.Premise_BFS_SAT_GeneratesAndChecks
+--------------- TreeWidzard Dynamic Cores LOADING INFORAMATION --------------- 
+Duplicate core name 'CliqueNumberSimpleGraphs'. Keeping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumberSimpleGraphs_AtLeast.dylib and skipping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumber_AtLeast.dylib
+Loaded DP-Cores to TreeWidzard:ChromaticNumber - CliqueNumberSimpleGraphs - FeedbackVertexSet - HC - HP - HasMultipleEdges - IndependentSet - MaxDegree - MinorGeneric - MinorK2 - PerfectMatching - VertexCount - VertexCover - 
+----------------------------------------------------------
+Property information:
+
+Formula: (x implies y)
+
+x := MaxDegree(4)
+Core type: Bool
+y := ChromaticNumber(4)
+Core type: Bool
+
+Search information:
+
+Width parameter: tree_width = 2
+Search method: BreadthFirstSearch
+Premise flag: ACTIVATED
+
+Search process:
+Iteration                ALLSTATES                NEWSTATES                Max WITNESSSET SIZE
+
+Result: PROPERTY SATISFIED
+-----------------------------------------
+--------------- TreeWidzard Dynamic Cores LOADING INFORAMATION --------------- 
+Duplicate core name 'CliqueNumberSimpleGraphs'. Keeping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumberSimpleGraphs_AtLeast.dylib and skipping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumber_AtLeast.dylib
+Loaded DP-Cores to TreeWidzard:ChromaticNumber - CliqueNumberSimpleGraphs - FeedbackVertexSet - HC - HP - HasMultipleEdges - IndependentSet - MaxDegree - MinorGeneric - MinorK2 - PerfectMatching - VertexCount - VertexCover - 
+----------------------------------------------------------
+Certificate ACCEPTED: PROPERTY SATISFIED
+[       OK ] Certificates.Premise_BFS_SAT_GeneratesAndChecks (173 ms)
+[----------] 1 test from Certificates (173 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (173 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.18 sec
+----------------------------------------------------------
+Test Passed.
+"Certificates.Premise_BFS_SAT_GeneratesAndChecks" end time: Mar 19 20:07 CET
+"Certificates.Premise_BFS_SAT_GeneratesAndChecks" time elapsed: 00:00:00
+----------------------------------------------------------
+
+72/96 Testing: PublicApi.EngineFormulaShorthandReturnsFalse
+72/96 Test: PublicApi.EngineFormulaShorthandReturnsFalse
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=PublicApi.EngineFormulaShorthandReturnsFalse" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"PublicApi.EngineFormulaShorthandReturnsFalse" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = PublicApi.EngineFormulaShorthandReturnsFalse
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PublicApi
+[ RUN      ] PublicApi.EngineFormulaShorthandReturnsFalse
+[       OK ] PublicApi.EngineFormulaShorthandReturnsFalse (116 ms)
+[----------] 1 test from PublicApi (116 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (116 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.14 sec
+----------------------------------------------------------
+Test Passed.
+"PublicApi.EngineFormulaShorthandReturnsFalse" end time: Mar 19 20:07 CET
+"PublicApi.EngineFormulaShorthandReturnsFalse" time elapsed: 00:00:00
+----------------------------------------------------------
+
+44/96 Testing: CliSearch.NoBfsDagAvoidsCounterexampleFilesButKeepsVerdict
+44/96 Test: CliSearch.NoBfsDagAvoidsCounterexampleFilesButKeepsVerdict
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=CliSearch.NoBfsDagAvoidsCounterexampleFilesButKeepsVerdict" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"CliSearch.NoBfsDagAvoidsCounterexampleFilesButKeepsVerdict" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = CliSearch.NoBfsDagAvoidsCounterexampleFilesButKeepsVerdict
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CliSearch
+[ RUN      ] CliSearch.NoBfsDagAvoidsCounterexampleFilesButKeepsVerdict
+[       OK ] CliSearch.NoBfsDagAvoidsCounterexampleFilesButKeepsVerdict (239 ms)
+[----------] 1 test from CliSearch (239 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (239 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.25 sec
+----------------------------------------------------------
+Test Passed.
+"CliSearch.NoBfsDagAvoidsCounterexampleFilesButKeepsVerdict" end time: Mar 19 20:07 CET
+"CliSearch.NoBfsDagAvoidsCounterexampleFilesButKeepsVerdict" time elapsed: 00:00:00
+----------------------------------------------------------
+
+43/96 Testing: CliSearch.BreadthFirstSearchWritesCounterexampleFiles
+43/96 Test: CliSearch.BreadthFirstSearchWritesCounterexampleFiles
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=CliSearch.BreadthFirstSearchWritesCounterexampleFiles" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"CliSearch.BreadthFirstSearchWritesCounterexampleFiles" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = CliSearch.BreadthFirstSearchWritesCounterexampleFiles
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CliSearch
+[ RUN      ] CliSearch.BreadthFirstSearchWritesCounterexampleFiles
+[       OK ] CliSearch.BreadthFirstSearchWritesCounterexampleFiles (297 ms)
+[----------] 1 test from CliSearch (297 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (297 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.31 sec
+----------------------------------------------------------
+Test Passed.
+"CliSearch.BreadthFirstSearchWritesCounterexampleFiles" end time: Mar 19 20:07 CET
+"CliSearch.BreadthFirstSearchWritesCounterexampleFiles" time elapsed: 00:00:00
+----------------------------------------------------------
+
+56/96 Testing: Certificates.Negative_PremiseRequiresImplication
+56/96 Test: Certificates.Negative_PremiseRequiresImplication
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=Certificates.Negative_PremiseRequiresImplication" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"Certificates.Negative_PremiseRequiresImplication" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = Certificates.Negative_PremiseRequiresImplication
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from Certificates
+[ RUN      ] Certificates.Negative_PremiseRequiresImplication
+--------------- TreeWidzard Dynamic Cores LOADING INFORAMATION --------------- 
+Duplicate core name 'CliqueNumberSimpleGraphs'. Keeping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumberSimpleGraphs_AtLeast.dylib and skipping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumber_AtLeast.dylib
+Loaded DP-Cores to TreeWidzard:ChromaticNumber - CliqueNumberSimpleGraphs - FeedbackVertexSet - HC - HP - HasMultipleEdges - IndependentSet - MaxDegree - MinorGeneric - MinorK2 - PerfectMatching - VertexCount - VertexCover - 
+----------------------------------------------------------
+Property information:
+
+Formula: x
+
+x := ChromaticNumber(3)
+Core type: Bool
+
+Search information:
+
+Width parameter: tree_width = 3
+Search method: BreadthFirstSearch
+Premise flag: NOT ACTIVATED
+
+Search process:
+Iteration                ALLSTATES                NEWSTATES                Max WITNESSSET SIZE
+
+Result: PROPERTY NOT SATISFIED
+
+Counterexample found:
+The assignment that makes the formula false:
+x=0
+Vertices:
+1
+2
+3
+4
+Edges:
+1	1	3	
+2	1	4	
+3	2	4	
+4	1	2	
+5	1	3	
+6	1	4	
+7	3	4	
+8	2	3	
+-----------------------------------------
+--------------- TreeWidzard Dynamic Cores LOADING INFORAMATION --------------- 
+Duplicate core name 'CliqueNumberSimpleGraphs'. Keeping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumberSimpleGraphs_AtLeast.dylib and skipping /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/DPCores/CliqueNumber_AtLeast.dylib
+Loaded DP-Cores to TreeWidzard:ChromaticNumber - CliqueNumberSimpleGraphs - FeedbackVertexSet - HC - HP - HasMultipleEdges - IndependentSet - MaxDegree - MinorGeneric - MinorK2 - PerfectMatching - VertexCount - VertexCover - 
+----------------------------------------------------------
+Error: certificate has PREMISE=1 but the property is not an implication
+[       OK ] Certificates.Negative_PremiseRequiresImplication (389 ms)
+[----------] 1 test from Certificates (389 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (389 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.44 sec
+----------------------------------------------------------
+Test Passed.
+"Certificates.Negative_PremiseRequiresImplication" end time: Mar 19 20:07 CET
+"Certificates.Negative_PremiseRequiresImplication" time elapsed: 00:00:00
+----------------------------------------------------------
+
+71/96 Testing: PublicApi.EngineFormulaShorthandReturnsTrue
+71/96 Test: PublicApi.EngineFormulaShorthandReturnsTrue
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=PublicApi.EngineFormulaShorthandReturnsTrue" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"PublicApi.EngineFormulaShorthandReturnsTrue" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = PublicApi.EngineFormulaShorthandReturnsTrue
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PublicApi
+[ RUN      ] PublicApi.EngineFormulaShorthandReturnsTrue
+[       OK ] PublicApi.EngineFormulaShorthandReturnsTrue (18 ms)
+[----------] 1 test from PublicApi (18 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (18 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"PublicApi.EngineFormulaShorthandReturnsTrue" end time: Mar 19 20:07 CET
+"PublicApi.EngineFormulaShorthandReturnsTrue" time elapsed: 00:00:00
+----------------------------------------------------------
+
+29/96 Testing: ATPIntegrationTest.ConjectureFileParsing
+29/96 Test: ATPIntegrationTest.ConjectureFileParsing
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=ATPIntegrationTest.ConjectureFileParsing" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"ATPIntegrationTest.ConjectureFileParsing" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = ATPIntegrationTest.ConjectureFileParsing
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ATPIntegrationTest
+[ RUN      ] ATPIntegrationTest.ConjectureFileParsing
+[       OK ] ATPIntegrationTest.ConjectureFileParsing (17 ms)
+[----------] 1 test from ATPIntegrationTest (17 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (17 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"ATPIntegrationTest.ConjectureFileParsing" end time: Mar 19 20:07 CET
+"ATPIntegrationTest.ConjectureFileParsing" time elapsed: 00:00:00
+----------------------------------------------------------
+
+78/96 Testing: PublicApi.InputControllerFromSourceUsesMemoryLabel
+78/96 Test: PublicApi.InputControllerFromSourceUsesMemoryLabel
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=PublicApi.InputControllerFromSourceUsesMemoryLabel" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"PublicApi.InputControllerFromSourceUsesMemoryLabel" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = PublicApi.InputControllerFromSourceUsesMemoryLabel
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PublicApi
+[ RUN      ] PublicApi.InputControllerFromSourceUsesMemoryLabel
+[       OK ] PublicApi.InputControllerFromSourceUsesMemoryLabel (11 ms)
+[----------] 1 test from PublicApi (11 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (11 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"PublicApi.InputControllerFromSourceUsesMemoryLabel" end time: Mar 19 20:07 CET
+"PublicApi.InputControllerFromSourceUsesMemoryLabel" time elapsed: 00:00:00
+----------------------------------------------------------
+
+32/96 Testing: ATPIntegrationTest.MultipleConjectures
+32/96 Test: ATPIntegrationTest.MultipleConjectures
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=ATPIntegrationTest.MultipleConjectures" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"ATPIntegrationTest.MultipleConjectures" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = ATPIntegrationTest.MultipleConjectures
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ATPIntegrationTest
+[ RUN      ] ATPIntegrationTest.MultipleConjectures
+[       OK ] ATPIntegrationTest.MultipleConjectures (33 ms)
+[----------] 1 test from ATPIntegrationTest (33 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (33 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"ATPIntegrationTest.MultipleConjectures" end time: Mar 19 20:07 CET
+"ATPIntegrationTest.MultipleConjectures" time elapsed: 00:00:00
+----------------------------------------------------------
+
+84/96 Testing: PublicApi.InvalidCliInvocationReturnsNonZero
+84/96 Test: PublicApi.InvalidCliInvocationReturnsNonZero
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=PublicApi.InvalidCliInvocationReturnsNonZero" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"PublicApi.InvalidCliInvocationReturnsNonZero" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = PublicApi.InvalidCliInvocationReturnsNonZero
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PublicApi
+[ RUN      ] PublicApi.InvalidCliInvocationReturnsNonZero
+Wrong number of inputs. Please execute treewidzard --help for more information.
+[       OK ] PublicApi.InvalidCliInvocationReturnsNonZero (61 ms)
+[----------] 1 test from PublicApi (61 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (61 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.08 sec
+----------------------------------------------------------
+Test Passed.
+"PublicApi.InvalidCliInvocationReturnsNonZero" end time: Mar 19 20:07 CET
+"PublicApi.InvalidCliInvocationReturnsNonZero" time elapsed: 00:00:00
+----------------------------------------------------------
+
+31/96 Testing: ATPIntegrationTest.FlagsConfiguration
+31/96 Test: ATPIntegrationTest.FlagsConfiguration
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=ATPIntegrationTest.FlagsConfiguration" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"ATPIntegrationTest.FlagsConfiguration" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = ATPIntegrationTest.FlagsConfiguration
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ATPIntegrationTest
+[ RUN      ] ATPIntegrationTest.FlagsConfiguration
+[       OK ] ATPIntegrationTest.FlagsConfiguration (1 ms)
+[----------] 1 test from ATPIntegrationTest (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (1 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"ATPIntegrationTest.FlagsConfiguration" end time: Mar 19 20:07 CET
+"ATPIntegrationTest.FlagsConfiguration" time elapsed: 00:00:00
+----------------------------------------------------------
+
+17/96 Testing: KernelComponents.DynamicCoreBaseMetadataAndDefaultClean
+17/96 Test: KernelComponents.DynamicCoreBaseMetadataAndDefaultClean
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=KernelComponents.DynamicCoreBaseMetadataAndDefaultClean" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"KernelComponents.DynamicCoreBaseMetadataAndDefaultClean" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelComponents.DynamicCoreBaseMetadataAndDefaultClean
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelComponents
+[ RUN      ] KernelComponents.DynamicCoreBaseMetadataAndDefaultClean
+[       OK ] KernelComponents.DynamicCoreBaseMetadataAndDefaultClean (0 ms)
+[----------] 1 test from KernelComponents (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"KernelComponents.DynamicCoreBaseMetadataAndDefaultClean" end time: Mar 19 20:07 CET
+"KernelComponents.DynamicCoreBaseMetadataAndDefaultClean" time elapsed: 00:00:00
+----------------------------------------------------------
+
+23/96 Testing: KernelComponents.StateTreeNodeOperationsAndTreeOutput
+23/96 Test: KernelComponents.StateTreeNodeOperationsAndTreeOutput
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=KernelComponents.StateTreeNodeOperationsAndTreeOutput" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"KernelComponents.StateTreeNodeOperationsAndTreeOutput" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelComponents.StateTreeNodeOperationsAndTreeOutput
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelComponents
+[ RUN      ] KernelComponents.StateTreeNodeOperationsAndTreeOutput
+[       OK ] KernelComponents.StateTreeNodeOperationsAndTreeOutput (16 ms)
+[----------] 1 test from KernelComponents (16 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (17 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"KernelComponents.StateTreeNodeOperationsAndTreeOutput" end time: Mar 19 20:07 CET
+"KernelComponents.StateTreeNodeOperationsAndTreeOutput" time elapsed: 00:00:00
+----------------------------------------------------------
+
+76/96 Testing: PublicApi.EngineMatchesSharedInputControllerSetup
+76/96 Test: PublicApi.EngineMatchesSharedInputControllerSetup
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=PublicApi.EngineMatchesSharedInputControllerSetup" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"PublicApi.EngineMatchesSharedInputControllerSetup" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = PublicApi.EngineMatchesSharedInputControllerSetup
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PublicApi
+[ RUN      ] PublicApi.EngineMatchesSharedInputControllerSetup
+[       OK ] PublicApi.EngineMatchesSharedInputControllerSetup (185 ms)
+[----------] 1 test from PublicApi (185 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (185 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.20 sec
+----------------------------------------------------------
+Test Passed.
+"PublicApi.EngineMatchesSharedInputControllerSetup" end time: Mar 19 20:07 CET
+"PublicApi.EngineMatchesSharedInputControllerSetup" time elapsed: 00:00:00
+----------------------------------------------------------
+
+86/96 Testing: ConjectureTest.SimpleArithmeticEvaluation
+86/96 Test: ConjectureTest.SimpleArithmeticEvaluation
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/run_tests" "--gtest_filter=ConjectureTest.SimpleArithmeticEvaluation" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"ConjectureTest.SimpleArithmeticEvaluation" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = ConjectureTest.SimpleArithmeticEvaluation
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ConjectureTest
+[ RUN      ] ConjectureTest.SimpleArithmeticEvaluation
+[       OK ] ConjectureTest.SimpleArithmeticEvaluation (0 ms)
+[----------] 1 test from ConjectureTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"ConjectureTest.SimpleArithmeticEvaluation" end time: Mar 19 20:07 CET
+"ConjectureTest.SimpleArithmeticEvaluation" time elapsed: 00:00:00
+----------------------------------------------------------
+
+26/96 Testing: KernelComponents.CertificateWriterWritesExpectedTranscript
+26/96 Test: KernelComponents.CertificateWriterWritesExpectedTranscript
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=KernelComponents.CertificateWriterWritesExpectedTranscript" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"KernelComponents.CertificateWriterWritesExpectedTranscript" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelComponents.CertificateWriterWritesExpectedTranscript
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelComponents
+[ RUN      ] KernelComponents.CertificateWriterWritesExpectedTranscript
+[       OK ] KernelComponents.CertificateWriterWritesExpectedTranscript (0 ms)
+[----------] 1 test from KernelComponents (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"KernelComponents.CertificateWriterWritesExpectedTranscript" end time: Mar 19 20:07 CET
+"KernelComponents.CertificateWriterWritesExpectedTranscript" time elapsed: 00:00:00
+----------------------------------------------------------
+
+27/96 Testing: KernelComponents.CertificateUtilsCoverHashingAndDiscoveryHelpers
+27/96 Test: KernelComponents.CertificateUtilsCoverHashingAndDiscoveryHelpers
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=KernelComponents.CertificateUtilsCoverHashingAndDiscoveryHelpers" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"KernelComponents.CertificateUtilsCoverHashingAndDiscoveryHelpers" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelComponents.CertificateUtilsCoverHashingAndDiscoveryHelpers
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelComponents
+[ RUN      ] KernelComponents.CertificateUtilsCoverHashingAndDiscoveryHelpers
+[       OK ] KernelComponents.CertificateUtilsCoverHashingAndDiscoveryHelpers (20 ms)
+[----------] 1 test from KernelComponents (20 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (20 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"KernelComponents.CertificateUtilsCoverHashingAndDiscoveryHelpers" end time: Mar 19 20:07 CET
+"KernelComponents.CertificateUtilsCoverHashingAndDiscoveryHelpers" time elapsed: 00:00:00
+----------------------------------------------------------
+
+28/96 Testing: ATPIntegrationTest.ConjectureFileCreation
+28/96 Test: ATPIntegrationTest.ConjectureFileCreation
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=ATPIntegrationTest.ConjectureFileCreation" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"ATPIntegrationTest.ConjectureFileCreation" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = ATPIntegrationTest.ConjectureFileCreation
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ATPIntegrationTest
+[ RUN      ] ATPIntegrationTest.ConjectureFileCreation
+[       OK ] ATPIntegrationTest.ConjectureFileCreation (2 ms)
+[----------] 1 test from ATPIntegrationTest (2 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (2 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"ATPIntegrationTest.ConjectureFileCreation" end time: Mar 19 20:07 CET
+"ATPIntegrationTest.ConjectureFileCreation" time elapsed: 00:00:00
+----------------------------------------------------------
+
+42/96 Testing: CliSearch.RejectsDisconnectedTreeDecompositions
+42/96 Test: CliSearch.RejectsDisconnectedTreeDecompositions
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=CliSearch.RejectsDisconnectedTreeDecompositions" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"CliSearch.RejectsDisconnectedTreeDecompositions" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = CliSearch.RejectsDisconnectedTreeDecompositions
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CliSearch
+[ RUN      ] CliSearch.RejectsDisconnectedTreeDecompositions
+[       OK ] CliSearch.RejectsDisconnectedTreeDecompositions (102 ms)
+[----------] 1 test from CliSearch (102 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (102 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.12 sec
+----------------------------------------------------------
+Test Passed.
+"CliSearch.RejectsDisconnectedTreeDecompositions" end time: Mar 19 20:07 CET
+"CliSearch.RejectsDisconnectedTreeDecompositions" time elapsed: 00:00:00
+----------------------------------------------------------
+
+34/96 Testing: ATPIntegrationTest.WidthComparison
+34/96 Test: ATPIntegrationTest.WidthComparison
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=ATPIntegrationTest.WidthComparison" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"ATPIntegrationTest.WidthComparison" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = ATPIntegrationTest.WidthComparison
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ATPIntegrationTest
+[ RUN      ] ATPIntegrationTest.WidthComparison
+[       OK ] ATPIntegrationTest.WidthComparison (1 ms)
+[----------] 1 test from ATPIntegrationTest (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (1 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"ATPIntegrationTest.WidthComparison" end time: Mar 19 20:07 CET
+"ATPIntegrationTest.WidthComparison" time elapsed: 00:00:00
+----------------------------------------------------------
+
+85/96 Testing: ConjectureTest.BasicConjectureCreation
+85/96 Test: ConjectureTest.BasicConjectureCreation
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/run_tests" "--gtest_filter=ConjectureTest.BasicConjectureCreation" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"ConjectureTest.BasicConjectureCreation" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = ConjectureTest.BasicConjectureCreation
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ConjectureTest
+[ RUN      ] ConjectureTest.BasicConjectureCreation
+[       OK ] ConjectureTest.BasicConjectureCreation (0 ms)
+[----------] 1 test from ConjectureTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"ConjectureTest.BasicConjectureCreation" end time: Mar 19 20:07 CET
+"ConjectureTest.BasicConjectureCreation" time elapsed: 00:00:00
+----------------------------------------------------------
+
+66/96 Testing: PublicApi.EngineLoadCoreRejectsNegativeParameter
+66/96 Test: PublicApi.EngineLoadCoreRejectsNegativeParameter
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=PublicApi.EngineLoadCoreRejectsNegativeParameter" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"PublicApi.EngineLoadCoreRejectsNegativeParameter" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = PublicApi.EngineLoadCoreRejectsNegativeParameter
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PublicApi
+[ RUN      ] PublicApi.EngineLoadCoreRejectsNegativeParameter
+[       OK ] PublicApi.EngineLoadCoreRejectsNegativeParameter (3 ms)
+[----------] 1 test from PublicApi (3 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (3 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"PublicApi.EngineLoadCoreRejectsNegativeParameter" end time: Mar 19 20:07 CET
+"PublicApi.EngineLoadCoreRejectsNegativeParameter" time elapsed: 00:00:00
+----------------------------------------------------------
+
+87/96 Testing: ConjectureTest.BooleanOperations
+87/96 Test: ConjectureTest.BooleanOperations
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/run_tests" "--gtest_filter=ConjectureTest.BooleanOperations" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"ConjectureTest.BooleanOperations" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = ConjectureTest.BooleanOperations
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ConjectureTest
+[ RUN      ] ConjectureTest.BooleanOperations
+[       OK ] ConjectureTest.BooleanOperations (0 ms)
+[----------] 1 test from ConjectureTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"ConjectureTest.BooleanOperations" end time: Mar 19 20:07 CET
+"ConjectureTest.BooleanOperations" time elapsed: 00:00:00
+----------------------------------------------------------
+
+69/96 Testing: PublicApi.EngineSolveRequiresWidth
+69/96 Test: PublicApi.EngineSolveRequiresWidth
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=PublicApi.EngineSolveRequiresWidth" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"PublicApi.EngineSolveRequiresWidth" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = PublicApi.EngineSolveRequiresWidth
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PublicApi
+[ RUN      ] PublicApi.EngineSolveRequiresWidth
+[       OK ] PublicApi.EngineSolveRequiresWidth (0 ms)
+[----------] 1 test from PublicApi (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"PublicApi.EngineSolveRequiresWidth" end time: Mar 19 20:07 CET
+"PublicApi.EngineSolveRequiresWidth" time elapsed: 00:00:00
+----------------------------------------------------------
+
+63/96 Testing: KernelTraversal.DynamicCoreHandlerLoadsCompiledCorePlugin
+63/96 Test: KernelTraversal.DynamicCoreHandlerLoadsCompiledCorePlugin
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=KernelTraversal.DynamicCoreHandlerLoadsCompiledCorePlugin" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"KernelTraversal.DynamicCoreHandlerLoadsCompiledCorePlugin" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelTraversal.DynamicCoreHandlerLoadsCompiledCorePlugin
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelTraversal
+[ RUN      ] KernelTraversal.DynamicCoreHandlerLoadsCompiledCorePlugin
+[       OK ] KernelTraversal.DynamicCoreHandlerLoadsCompiledCorePlugin (0 ms)
+[----------] 1 test from KernelTraversal (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"KernelTraversal.DynamicCoreHandlerLoadsCompiledCorePlugin" end time: Mar 19 20:07 CET
+"KernelTraversal.DynamicCoreHandlerLoadsCompiledCorePlugin" time elapsed: 00:00:00
+----------------------------------------------------------
+
+74/96 Testing: PublicApi.EngineSupportsExpAliasesInFullConjectures
+74/96 Test: PublicApi.EngineSupportsExpAliasesInFullConjectures
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=PublicApi.EngineSupportsExpAliasesInFullConjectures" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"PublicApi.EngineSupportsExpAliasesInFullConjectures" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = PublicApi.EngineSupportsExpAliasesInFullConjectures
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PublicApi
+[ RUN      ] PublicApi.EngineSupportsExpAliasesInFullConjectures
+[       OK ] PublicApi.EngineSupportsExpAliasesInFullConjectures (28 ms)
+[----------] 1 test from PublicApi (28 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (28 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"PublicApi.EngineSupportsExpAliasesInFullConjectures" end time: Mar 19 20:07 CET
+"PublicApi.EngineSupportsExpAliasesInFullConjectures" time elapsed: 00:00:00
+----------------------------------------------------------
+
+70/96 Testing: PublicApi.EngineSolveRequiresConjecture
+70/96 Test: PublicApi.EngineSolveRequiresConjecture
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=PublicApi.EngineSolveRequiresConjecture" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"PublicApi.EngineSolveRequiresConjecture" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = PublicApi.EngineSolveRequiresConjecture
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PublicApi
+[ RUN      ] PublicApi.EngineSolveRequiresConjecture
+[       OK ] PublicApi.EngineSolveRequiresConjecture (0 ms)
+[----------] 1 test from PublicApi (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"PublicApi.EngineSolveRequiresConjecture" end time: Mar 19 20:07 CET
+"PublicApi.EngineSolveRequiresConjecture" time elapsed: 00:00:00
+----------------------------------------------------------
+
+75/96 Testing: PublicApi.EngineShorthandEqualityMatchesFullDefinition
+75/96 Test: PublicApi.EngineShorthandEqualityMatchesFullDefinition
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=PublicApi.EngineShorthandEqualityMatchesFullDefinition" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"PublicApi.EngineShorthandEqualityMatchesFullDefinition" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = PublicApi.EngineShorthandEqualityMatchesFullDefinition
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PublicApi
+[ RUN      ] PublicApi.EngineShorthandEqualityMatchesFullDefinition
+[       OK ] PublicApi.EngineShorthandEqualityMatchesFullDefinition (34 ms)
+[----------] 1 test from PublicApi (34 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (34 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"PublicApi.EngineShorthandEqualityMatchesFullDefinition" end time: Mar 19 20:07 CET
+"PublicApi.EngineShorthandEqualityMatchesFullDefinition" time elapsed: 00:00:00
+----------------------------------------------------------
+
+89/96 Testing: ConjectureTest.NestedExpressions
+89/96 Test: ConjectureTest.NestedExpressions
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/run_tests" "--gtest_filter=ConjectureTest.NestedExpressions" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"ConjectureTest.NestedExpressions" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = ConjectureTest.NestedExpressions
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ConjectureTest
+[ RUN      ] ConjectureTest.NestedExpressions
+[       OK ] ConjectureTest.NestedExpressions (0 ms)
+[----------] 1 test from ConjectureTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"ConjectureTest.NestedExpressions" end time: Mar 19 20:07 CET
+"ConjectureTest.NestedExpressions" time elapsed: 00:00:00
+----------------------------------------------------------
+
+88/96 Testing: ConjectureTest.ComparisonOperations
+88/96 Test: ConjectureTest.ComparisonOperations
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/run_tests" "--gtest_filter=ConjectureTest.ComparisonOperations" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"ConjectureTest.ComparisonOperations" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = ConjectureTest.ComparisonOperations
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ConjectureTest
+[ RUN      ] ConjectureTest.ComparisonOperations
+[       OK ] ConjectureTest.ComparisonOperations (0 ms)
+[----------] 1 test from ConjectureTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"ConjectureTest.ComparisonOperations" end time: Mar 19 20:07 CET
+"ConjectureTest.ComparisonOperations" time elapsed: 00:00:00
+----------------------------------------------------------
+
+83/96 Testing: PublicApi.EngineRejectsUnexpectedParameterForParameterlessCore
+83/96 Test: PublicApi.EngineRejectsUnexpectedParameterForParameterlessCore
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=PublicApi.EngineRejectsUnexpectedParameterForParameterlessCore" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"PublicApi.EngineRejectsUnexpectedParameterForParameterlessCore" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = PublicApi.EngineRejectsUnexpectedParameterForParameterlessCore
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PublicApi
+[ RUN      ] PublicApi.EngineRejectsUnexpectedParameterForParameterlessCore
+[       OK ] PublicApi.EngineRejectsUnexpectedParameterForParameterlessCore (10 ms)
+[----------] 1 test from PublicApi (10 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (10 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"PublicApi.EngineRejectsUnexpectedParameterForParameterlessCore" end time: Mar 19 20:07 CET
+"PublicApi.EngineRejectsUnexpectedParameterForParameterlessCore" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/96 Testing: BagTest.CreateAndAccessElements
+1/96 Test: BagTest.CreateAndAccessElements
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=BagTest.CreateAndAccessElements" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"BagTest.CreateAndAccessElements" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = BagTest.CreateAndAccessElements
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from BagTest
+[ RUN      ] BagTest.CreateAndAccessElements
+[       OK ] BagTest.CreateAndAccessElements (0 ms)
+[----------] 1 test from BagTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"BagTest.CreateAndAccessElements" end time: Mar 19 20:07 CET
+"BagTest.CreateAndAccessElements" time elapsed: 00:00:00
+----------------------------------------------------------
+
+77/96 Testing: PublicApi.InputControllerBuildsExpectedKernelAndMappings
+77/96 Test: PublicApi.InputControllerBuildsExpectedKernelAndMappings
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=PublicApi.InputControllerBuildsExpectedKernelAndMappings" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"PublicApi.InputControllerBuildsExpectedKernelAndMappings" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = PublicApi.InputControllerBuildsExpectedKernelAndMappings
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PublicApi
+[ RUN      ] PublicApi.InputControllerBuildsExpectedKernelAndMappings
+[       OK ] PublicApi.InputControllerBuildsExpectedKernelAndMappings (21 ms)
+[----------] 1 test from PublicApi (21 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (21 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"PublicApi.InputControllerBuildsExpectedKernelAndMappings" end time: Mar 19 20:07 CET
+"PublicApi.InputControllerBuildsExpectedKernelAndMappings" time elapsed: 00:00:00
+----------------------------------------------------------
+
+73/96 Testing: PublicApi.EngineAcceptsFullConjectureDefinition
+73/96 Test: PublicApi.EngineAcceptsFullConjectureDefinition
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=PublicApi.EngineAcceptsFullConjectureDefinition" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"PublicApi.EngineAcceptsFullConjectureDefinition" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = PublicApi.EngineAcceptsFullConjectureDefinition
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PublicApi
+[ RUN      ] PublicApi.EngineAcceptsFullConjectureDefinition
+[       OK ] PublicApi.EngineAcceptsFullConjectureDefinition (27 ms)
+[----------] 1 test from PublicApi (27 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (27 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"PublicApi.EngineAcceptsFullConjectureDefinition" end time: Mar 19 20:07 CET
+"PublicApi.EngineAcceptsFullConjectureDefinition" time elapsed: 00:00:00
+----------------------------------------------------------
+
+21/96 Testing: KernelComponents.SearchStrategyBaseStoresConfiguration
+21/96 Test: KernelComponents.SearchStrategyBaseStoresConfiguration
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=KernelComponents.SearchStrategyBaseStoresConfiguration" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"KernelComponents.SearchStrategyBaseStoresConfiguration" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelComponents.SearchStrategyBaseStoresConfiguration
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelComponents
+[ RUN      ] KernelComponents.SearchStrategyBaseStoresConfiguration
+[       OK ] KernelComponents.SearchStrategyBaseStoresConfiguration (0 ms)
+[----------] 1 test from KernelComponents (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"KernelComponents.SearchStrategyBaseStoresConfiguration" end time: Mar 19 20:07 CET
+"KernelComponents.SearchStrategyBaseStoresConfiguration" time elapsed: 00:00:00
+----------------------------------------------------------
+
+81/96 Testing: PublicApi.InputControllerFromSourceThrowsOnInvalidCore
+81/96 Test: PublicApi.InputControllerFromSourceThrowsOnInvalidCore
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=PublicApi.InputControllerFromSourceThrowsOnInvalidCore" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"PublicApi.InputControllerFromSourceThrowsOnInvalidCore" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = PublicApi.InputControllerFromSourceThrowsOnInvalidCore
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PublicApi
+[ RUN      ] PublicApi.InputControllerFromSourceThrowsOnInvalidCore
+core name "TotallyMissingCore" is not exist
+[       OK ] PublicApi.InputControllerFromSourceThrowsOnInvalidCore (23 ms)
+[----------] 1 test from PublicApi (23 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (23 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"PublicApi.InputControllerFromSourceThrowsOnInvalidCore" end time: Mar 19 20:07 CET
+"PublicApi.InputControllerFromSourceThrowsOnInvalidCore" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/96 Testing: BagTest.BagPrintingAndInformation
+7/96 Test: BagTest.BagPrintingAndInformation
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=BagTest.BagPrintingAndInformation" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"BagTest.BagPrintingAndInformation" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = BagTest.BagPrintingAndInformation
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from BagTest
+[ RUN      ] BagTest.BagPrintingAndInformation
+[       OK ] BagTest.BagPrintingAndInformation (5 ms)
+[----------] 1 test from BagTest (5 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (5 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"BagTest.BagPrintingAndInformation" end time: Mar 19 20:07 CET
+"BagTest.BagPrintingAndInformation" time elapsed: 00:00:00
+----------------------------------------------------------
+
+90/96 Testing: ConjectureTest.InvalidOperatorHandling
+90/96 Test: ConjectureTest.InvalidOperatorHandling
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/run_tests" "--gtest_filter=ConjectureTest.InvalidOperatorHandling" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"ConjectureTest.InvalidOperatorHandling" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = ConjectureTest.InvalidOperatorHandling
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ConjectureTest
+[ RUN      ] ConjectureTest.InvalidOperatorHandling
+[       OK ] ConjectureTest.InvalidOperatorHandling (0 ms)
+[----------] 1 test from ConjectureTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"ConjectureTest.InvalidOperatorHandling" end time: Mar 19 20:07 CET
+"ConjectureTest.InvalidOperatorHandling" time elapsed: 00:00:00
+----------------------------------------------------------
+
+30/96 Testing: ATPIntegrationTest.WidthParameters
+30/96 Test: ATPIntegrationTest.WidthParameters
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=ATPIntegrationTest.WidthParameters" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"ATPIntegrationTest.WidthParameters" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = ATPIntegrationTest.WidthParameters
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ATPIntegrationTest
+[ RUN      ] ATPIntegrationTest.WidthParameters
+[       OK ] ATPIntegrationTest.WidthParameters (7 ms)
+[----------] 1 test from ATPIntegrationTest (7 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (7 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"ATPIntegrationTest.WidthParameters" end time: Mar 19 20:07 CET
+"ATPIntegrationTest.WidthParameters" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/96 Testing: BagTest.BagOrdering
+4/96 Test: BagTest.BagOrdering
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=BagTest.BagOrdering" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"BagTest.BagOrdering" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = BagTest.BagOrdering
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from BagTest
+[ RUN      ] BagTest.BagOrdering
+[       OK ] BagTest.BagOrdering (0 ms)
+[----------] 1 test from BagTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"BagTest.BagOrdering" end time: Mar 19 20:07 CET
+"BagTest.BagOrdering" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/96 Testing: BagTest.BagEquality
+3/96 Test: BagTest.BagEquality
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=BagTest.BagEquality" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"BagTest.BagEquality" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = BagTest.BagEquality
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from BagTest
+[ RUN      ] BagTest.BagEquality
+[       OK ] BagTest.BagEquality (0 ms)
+[----------] 1 test from BagTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"BagTest.BagEquality" end time: Mar 19 20:07 CET
+"BagTest.BagEquality" time elapsed: 00:00:00
+----------------------------------------------------------
+
+79/96 Testing: PublicApi.InputControllerDiscoversKnownCores
+79/96 Test: PublicApi.InputControllerDiscoversKnownCores
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=PublicApi.InputControllerDiscoversKnownCores" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"PublicApi.InputControllerDiscoversKnownCores" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = PublicApi.InputControllerDiscoversKnownCores
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PublicApi
+[ RUN      ] PublicApi.InputControllerDiscoversKnownCores
+[       OK ] PublicApi.InputControllerDiscoversKnownCores (14 ms)
+[----------] 1 test from PublicApi (14 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (14 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"PublicApi.InputControllerDiscoversKnownCores" end time: Mar 19 20:07 CET
+"PublicApi.InputControllerDiscoversKnownCores" time elapsed: 00:00:00
+----------------------------------------------------------
+
+19/96 Testing: KernelComponents.WitnessSetTypeTwoOperations
+19/96 Test: KernelComponents.WitnessSetTypeTwoOperations
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=KernelComponents.WitnessSetTypeTwoOperations" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"KernelComponents.WitnessSetTypeTwoOperations" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelComponents.WitnessSetTypeTwoOperations
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelComponents
+[ RUN      ] KernelComponents.WitnessSetTypeTwoOperations
+[       OK ] KernelComponents.WitnessSetTypeTwoOperations (0 ms)
+[----------] 1 test from KernelComponents (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"KernelComponents.WitnessSetTypeTwoOperations" end time: Mar 19 20:07 CET
+"KernelComponents.WitnessSetTypeTwoOperations" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/96 Testing: BagTest.BagSize
+2/96 Test: BagTest.BagSize
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=BagTest.BagSize" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"BagTest.BagSize" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = BagTest.BagSize
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from BagTest
+[ RUN      ] BagTest.BagSize
+[       OK ] BagTest.BagSize (0 ms)
+[----------] 1 test from BagTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"BagTest.BagSize" end time: Mar 19 20:07 CET
+"BagTest.BagSize" time elapsed: 00:00:00
+----------------------------------------------------------
+
+16/96 Testing: CoreSupport.StateComparisonHashRelabelAndInformation
+16/96 Test: CoreSupport.StateComparisonHashRelabelAndInformation
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=CoreSupport.StateComparisonHashRelabelAndInformation" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"CoreSupport.StateComparisonHashRelabelAndInformation" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = CoreSupport.StateComparisonHashRelabelAndInformation
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CoreSupport
+[ RUN      ] CoreSupport.StateComparisonHashRelabelAndInformation
+[       OK ] CoreSupport.StateComparisonHashRelabelAndInformation (22 ms)
+[----------] 1 test from CoreSupport (22 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (22 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"CoreSupport.StateComparisonHashRelabelAndInformation" end time: Mar 19 20:07 CET
+"CoreSupport.StateComparisonHashRelabelAndInformation" time elapsed: 00:00:00
+----------------------------------------------------------
+
+65/96 Testing: PublicApi.EngineLoadCoreRejectsEmptyName
+65/96 Test: PublicApi.EngineLoadCoreRejectsEmptyName
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=PublicApi.EngineLoadCoreRejectsEmptyName" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"PublicApi.EngineLoadCoreRejectsEmptyName" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = PublicApi.EngineLoadCoreRejectsEmptyName
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PublicApi
+[ RUN      ] PublicApi.EngineLoadCoreRejectsEmptyName
+[       OK ] PublicApi.EngineLoadCoreRejectsEmptyName (0 ms)
+[----------] 1 test from PublicApi (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"PublicApi.EngineLoadCoreRejectsEmptyName" end time: Mar 19 20:07 CET
+"PublicApi.EngineLoadCoreRejectsEmptyName" time elapsed: 00:00:00
+----------------------------------------------------------
+
+82/96 Testing: PublicApi.EngineRejectsUnsupportedShorthandInequality
+82/96 Test: PublicApi.EngineRejectsUnsupportedShorthandInequality
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=PublicApi.EngineRejectsUnsupportedShorthandInequality" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"PublicApi.EngineRejectsUnsupportedShorthandInequality" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = PublicApi.EngineRejectsUnsupportedShorthandInequality
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PublicApi
+[ RUN      ] PublicApi.EngineRejectsUnsupportedShorthandInequality
+[       OK ] PublicApi.EngineRejectsUnsupportedShorthandInequality (19 ms)
+[----------] 1 test from PublicApi (19 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (19 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"PublicApi.EngineRejectsUnsupportedShorthandInequality" end time: Mar 19 20:07 CET
+"PublicApi.EngineRejectsUnsupportedShorthandInequality" time elapsed: 00:00:00
+----------------------------------------------------------
+
+9/96 Testing: BagTest.DuplicateElements
+9/96 Test: BagTest.DuplicateElements
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=BagTest.DuplicateElements" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"BagTest.DuplicateElements" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = BagTest.DuplicateElements
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from BagTest
+[ RUN      ] BagTest.DuplicateElements
+[       OK ] BagTest.DuplicateElements (0 ms)
+[----------] 1 test from BagTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"BagTest.DuplicateElements" end time: Mar 19 20:07 CET
+"BagTest.DuplicateElements" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/96 Testing: CoreSupport.WidthAssignmentComparisonAndPrint
+12/96 Test: CoreSupport.WidthAssignmentComparisonAndPrint
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=CoreSupport.WidthAssignmentComparisonAndPrint" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"CoreSupport.WidthAssignmentComparisonAndPrint" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = CoreSupport.WidthAssignmentComparisonAndPrint
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CoreSupport
+[ RUN      ] CoreSupport.WidthAssignmentComparisonAndPrint
+[       OK ] CoreSupport.WidthAssignmentComparisonAndPrint (25 ms)
+[----------] 1 test from CoreSupport (25 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (25 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"CoreSupport.WidthAssignmentComparisonAndPrint" end time: Mar 19 20:07 CET
+"CoreSupport.WidthAssignmentComparisonAndPrint" time elapsed: 00:00:00
+----------------------------------------------------------
+
+15/96 Testing: CoreSupport.StatePoolLifecycleAndBasicAccessors
+15/96 Test: CoreSupport.StatePoolLifecycleAndBasicAccessors
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=CoreSupport.StatePoolLifecycleAndBasicAccessors" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"CoreSupport.StatePoolLifecycleAndBasicAccessors" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = CoreSupport.StatePoolLifecycleAndBasicAccessors
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CoreSupport
+[ RUN      ] CoreSupport.StatePoolLifecycleAndBasicAccessors
+[       OK ] CoreSupport.StatePoolLifecycleAndBasicAccessors (0 ms)
+[----------] 1 test from CoreSupport (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"CoreSupport.StatePoolLifecycleAndBasicAccessors" end time: Mar 19 20:07 CET
+"CoreSupport.StatePoolLifecycleAndBasicAccessors" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/96 Testing: BagTest.BagHashing
+11/96 Test: BagTest.BagHashing
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=BagTest.BagHashing" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"BagTest.BagHashing" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = BagTest.BagHashing
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from BagTest
+[ RUN      ] BagTest.BagHashing
+[       OK ] BagTest.BagHashing (0 ms)
+[----------] 1 test from BagTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"BagTest.BagHashing" end time: Mar 19 20:07 CET
+"BagTest.BagHashing" time elapsed: 00:00:00
+----------------------------------------------------------
+
+10/96 Testing: BagTest.LargeBag
+10/96 Test: BagTest.LargeBag
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=BagTest.LargeBag" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"BagTest.LargeBag" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = BagTest.LargeBag
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from BagTest
+[ RUN      ] BagTest.LargeBag
+[       OK ] BagTest.LargeBag (0 ms)
+[----------] 1 test from BagTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"BagTest.LargeBag" end time: Mar 19 20:07 CET
+"BagTest.LargeBag" time elapsed: 00:00:00
+----------------------------------------------------------
+
+22/96 Testing: KernelComponents.SearchStrategyBaseSearchExits
+22/96 Test: KernelComponents.SearchStrategyBaseSearchExits
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=KernelComponents.SearchStrategyBaseSearchExits" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"KernelComponents.SearchStrategyBaseSearchExits" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelComponents.SearchStrategyBaseSearchExits
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelComponents
+[ RUN      ] KernelComponents.SearchStrategyBaseSearchExits
+ERROR: Based class search function called!
+[       OK ] KernelComponents.SearchStrategyBaseSearchExits (32 ms)
+[----------] 1 test from KernelComponents (32 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (32 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"KernelComponents.SearchStrategyBaseSearchExits" end time: Mar 19 20:07 CET
+"KernelComponents.SearchStrategyBaseSearchExits" time elapsed: 00:00:00
+----------------------------------------------------------
+
+64/96 Testing: KernelTraversal.SearchStrategyHandlerLoadsCompiledSearchPlugin
+64/96 Test: KernelTraversal.SearchStrategyHandlerLoadsCompiledSearchPlugin
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=KernelTraversal.SearchStrategyHandlerLoadsCompiledSearchPlugin" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"KernelTraversal.SearchStrategyHandlerLoadsCompiledSearchPlugin" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelTraversal.SearchStrategyHandlerLoadsCompiledSearchPlugin
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelTraversal
+[ RUN      ] KernelTraversal.SearchStrategyHandlerLoadsCompiledSearchPlugin
+[       OK ] KernelTraversal.SearchStrategyHandlerLoadsCompiledSearchPlugin (19 ms)
+[----------] 1 test from KernelTraversal (19 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (19 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"KernelTraversal.SearchStrategyHandlerLoadsCompiledSearchPlugin" end time: Mar 19 20:07 CET
+"KernelTraversal.SearchStrategyHandlerLoadsCompiledSearchPlugin" time elapsed: 00:00:00
+----------------------------------------------------------
+
+18/96 Testing: KernelComponents.WitnessWrapperAndWitnessSetTypeOneOperations
+18/96 Test: KernelComponents.WitnessWrapperAndWitnessSetTypeOneOperations
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=KernelComponents.WitnessWrapperAndWitnessSetTypeOneOperations" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"KernelComponents.WitnessWrapperAndWitnessSetTypeOneOperations" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelComponents.WitnessWrapperAndWitnessSetTypeOneOperations
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelComponents
+[ RUN      ] KernelComponents.WitnessWrapperAndWitnessSetTypeOneOperations
+[       OK ] KernelComponents.WitnessWrapperAndWitnessSetTypeOneOperations (0 ms)
+[----------] 1 test from KernelComponents (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"KernelComponents.WitnessWrapperAndWitnessSetTypeOneOperations" end time: Mar 19 20:07 CET
+"KernelComponents.WitnessWrapperAndWitnessSetTypeOneOperations" time elapsed: 00:00:00
+----------------------------------------------------------
+
+20/96 Testing: KernelComponents.DynamicKernelOperationsAndMappings
+20/96 Test: KernelComponents.DynamicKernelOperationsAndMappings
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=KernelComponents.DynamicKernelOperationsAndMappings" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"KernelComponents.DynamicKernelOperationsAndMappings" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelComponents.DynamicKernelOperationsAndMappings
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelComponents
+[ RUN      ] KernelComponents.DynamicKernelOperationsAndMappings
+[       OK ] KernelComponents.DynamicKernelOperationsAndMappings (0 ms)
+[----------] 1 test from KernelComponents (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"KernelComponents.DynamicKernelOperationsAndMappings" end time: Mar 19 20:07 CET
+"KernelComponents.DynamicKernelOperationsAndMappings" time elapsed: 00:00:00
+----------------------------------------------------------
+
+39/96 Testing: CliSearch.RejectsNonIntegralWidthValues
+39/96 Test: CliSearch.RejectsNonIntegralWidthValues
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=CliSearch.RejectsNonIntegralWidthValues" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"CliSearch.RejectsNonIntegralWidthValues" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = CliSearch.RejectsNonIntegralWidthValues
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CliSearch
+[ RUN      ] CliSearch.RejectsNonIntegralWidthValues
+[       OK ] CliSearch.RejectsNonIntegralWidthValues (167 ms)
+[----------] 1 test from CliSearch (167 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (167 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.18 sec
+----------------------------------------------------------
+Test Passed.
+"CliSearch.RejectsNonIntegralWidthValues" end time: Mar 19 20:07 CET
+"CliSearch.RejectsNonIntegralWidthValues" time elapsed: 00:00:00
+----------------------------------------------------------
+
+95/96 Testing: ConjectureIntegrationTest.KernelIntegration
+95/96 Test: ConjectureIntegrationTest.KernelIntegration
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/run_tests" "--gtest_filter=ConjectureIntegrationTest.KernelIntegration" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"ConjectureIntegrationTest.KernelIntegration" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = ConjectureIntegrationTest.KernelIntegration
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ConjectureIntegrationTest
+[ RUN      ] ConjectureIntegrationTest.KernelIntegration
+[       OK ] ConjectureIntegrationTest.KernelIntegration (0 ms)
+[----------] 1 test from ConjectureIntegrationTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"ConjectureIntegrationTest.KernelIntegration" end time: Mar 19 20:07 CET
+"ConjectureIntegrationTest.KernelIntegration" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/96 Testing: BagTest.EdgeOperations
+6/96 Test: BagTest.EdgeOperations
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=BagTest.EdgeOperations" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"BagTest.EdgeOperations" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = BagTest.EdgeOperations
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from BagTest
+[ RUN      ] BagTest.EdgeOperations
+[       OK ] BagTest.EdgeOperations (0 ms)
+[----------] 1 test from BagTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"BagTest.EdgeOperations" end time: Mar 19 20:07 CET
+"BagTest.EdgeOperations" time elapsed: 00:00:00
+----------------------------------------------------------
+
+41/96 Testing: CliSearch.GenericTermParserAcceptsSerializedTerms
+41/96 Test: CliSearch.GenericTermParserAcceptsSerializedTerms
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=CliSearch.GenericTermParserAcceptsSerializedTerms" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"CliSearch.GenericTermParserAcceptsSerializedTerms" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = CliSearch.GenericTermParserAcceptsSerializedTerms
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CliSearch
+[ RUN      ] CliSearch.GenericTermParserAcceptsSerializedTerms
+[       OK ] CliSearch.GenericTermParserAcceptsSerializedTerms (163 ms)
+[----------] 1 test from CliSearch (163 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (163 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.18 sec
+----------------------------------------------------------
+Test Passed.
+"CliSearch.GenericTermParserAcceptsSerializedTerms" end time: Mar 19 20:07 CET
+"CliSearch.GenericTermParserAcceptsSerializedTerms" time elapsed: 00:00:00
+----------------------------------------------------------
+
+96/96 Testing: ConjectureIntegrationTest.VariableToPropertyMapping
+96/96 Test: ConjectureIntegrationTest.VariableToPropertyMapping
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/run_tests" "--gtest_filter=ConjectureIntegrationTest.VariableToPropertyMapping" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"ConjectureIntegrationTest.VariableToPropertyMapping" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = ConjectureIntegrationTest.VariableToPropertyMapping
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ConjectureIntegrationTest
+[ RUN      ] ConjectureIntegrationTest.VariableToPropertyMapping
+[       OK ] ConjectureIntegrationTest.VariableToPropertyMapping (0 ms)
+[----------] 1 test from ConjectureIntegrationTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"ConjectureIntegrationTest.VariableToPropertyMapping" end time: Mar 19 20:07 CET
+"ConjectureIntegrationTest.VariableToPropertyMapping" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/96 Testing: BagTest.IntroduceForgetAndRelabelOperations
+8/96 Test: BagTest.IntroduceForgetAndRelabelOperations
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=BagTest.IntroduceForgetAndRelabelOperations" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"BagTest.IntroduceForgetAndRelabelOperations" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = BagTest.IntroduceForgetAndRelabelOperations
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from BagTest
+[ RUN      ] BagTest.IntroduceForgetAndRelabelOperations
+[       OK ] BagTest.IntroduceForgetAndRelabelOperations (0 ms)
+[----------] 1 test from BagTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"BagTest.IntroduceForgetAndRelabelOperations" end time: Mar 19 20:07 CET
+"BagTest.IntroduceForgetAndRelabelOperations" time elapsed: 00:00:00
+----------------------------------------------------------
+
+61/96 Testing: KernelTraversal.BreadthFirstTraversalStopsAtCounterexample
+61/96 Test: KernelTraversal.BreadthFirstTraversalStopsAtCounterexample
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=KernelTraversal.BreadthFirstTraversalStopsAtCounterexample" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"KernelTraversal.BreadthFirstTraversalStopsAtCounterexample" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelTraversal.BreadthFirstTraversalStopsAtCounterexample
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelTraversal
+[ RUN      ] KernelTraversal.BreadthFirstTraversalStopsAtCounterexample
+[       OK ] KernelTraversal.BreadthFirstTraversalStopsAtCounterexample (0 ms)
+[----------] 1 test from KernelTraversal (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"KernelTraversal.BreadthFirstTraversalStopsAtCounterexample" end time: Mar 19 20:07 CET
+"KernelTraversal.BreadthFirstTraversalStopsAtCounterexample" time elapsed: 00:00:00
+----------------------------------------------------------
+
+33/96 Testing: ATPIntegrationTest.SearchStrategyAvailability
+33/96 Test: ATPIntegrationTest.SearchStrategyAvailability
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=ATPIntegrationTest.SearchStrategyAvailability" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"ATPIntegrationTest.SearchStrategyAvailability" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = ATPIntegrationTest.SearchStrategyAvailability
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ATPIntegrationTest
+[ RUN      ] ATPIntegrationTest.SearchStrategyAvailability
+[       OK ] ATPIntegrationTest.SearchStrategyAvailability (5 ms)
+[----------] 1 test from ATPIntegrationTest (5 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (5 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"ATPIntegrationTest.SearchStrategyAvailability" end time: Mar 19 20:07 CET
+"ATPIntegrationTest.SearchStrategyAvailability" time elapsed: 00:00:00
+----------------------------------------------------------
+
+60/96 Testing: KernelTraversal.BreadthFirstTraversalFiltersStatesByPremise
+60/96 Test: KernelTraversal.BreadthFirstTraversalFiltersStatesByPremise
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=KernelTraversal.BreadthFirstTraversalFiltersStatesByPremise" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"KernelTraversal.BreadthFirstTraversalFiltersStatesByPremise" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelTraversal.BreadthFirstTraversalFiltersStatesByPremise
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelTraversal
+[ RUN      ] KernelTraversal.BreadthFirstTraversalFiltersStatesByPremise
+[       OK ] KernelTraversal.BreadthFirstTraversalFiltersStatesByPremise (0 ms)
+[----------] 1 test from KernelTraversal (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"KernelTraversal.BreadthFirstTraversalFiltersStatesByPremise" end time: Mar 19 20:07 CET
+"KernelTraversal.BreadthFirstTraversalFiltersStatesByPremise" time elapsed: 00:00:00
+----------------------------------------------------------
+
+92/96 Testing: ConjectureTest.EmptyConjectureHandling
+92/96 Test: ConjectureTest.EmptyConjectureHandling
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/run_tests" "--gtest_filter=ConjectureTest.EmptyConjectureHandling" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"ConjectureTest.EmptyConjectureHandling" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = ConjectureTest.EmptyConjectureHandling
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ConjectureTest
+[ RUN      ] ConjectureTest.EmptyConjectureHandling
+[       OK ] ConjectureTest.EmptyConjectureHandling (0 ms)
+[----------] 1 test from ConjectureTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"ConjectureTest.EmptyConjectureHandling" end time: Mar 19 20:07 CET
+"ConjectureTest.EmptyConjectureHandling" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/96 Testing: BagTest.SetElements
+5/96 Test: BagTest.SetElements
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=BagTest.SetElements" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"BagTest.SetElements" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = BagTest.SetElements
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from BagTest
+[ RUN      ] BagTest.SetElements
+[       OK ] BagTest.SetElements (0 ms)
+[----------] 1 test from BagTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"BagTest.SetElements" end time: Mar 19 20:07 CET
+"BagTest.SetElements" time elapsed: 00:00:00
+----------------------------------------------------------
+
+24/96 Testing: KernelComponents.StateTreeExtractMultiGraphExitsUntilImplemented
+24/96 Test: KernelComponents.StateTreeExtractMultiGraphExitsUntilImplemented
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=KernelComponents.StateTreeExtractMultiGraphExitsUntilImplemented" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"KernelComponents.StateTreeExtractMultiGraphExitsUntilImplemented" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelComponents.StateTreeExtractMultiGraphExitsUntilImplemented
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelComponents
+[ RUN      ] KernelComponents.StateTreeExtractMultiGraphExitsUntilImplemented
+StateTree::extractMultiGraph is not implemented
+[       OK ] KernelComponents.StateTreeExtractMultiGraphExitsUntilImplemented (7 ms)
+[----------] 1 test from KernelComponents (7 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (7 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"KernelComponents.StateTreeExtractMultiGraphExitsUntilImplemented" end time: Mar 19 20:07 CET
+"KernelComponents.StateTreeExtractMultiGraphExitsUntilImplemented" time elapsed: 00:00:00
+----------------------------------------------------------
+
+59/96 Testing: KernelTraversal.BreadthFirstTraversalCoversAllExpansionHooks
+59/96 Test: KernelTraversal.BreadthFirstTraversalCoversAllExpansionHooks
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=KernelTraversal.BreadthFirstTraversalCoversAllExpansionHooks" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"KernelTraversal.BreadthFirstTraversalCoversAllExpansionHooks" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelTraversal.BreadthFirstTraversalCoversAllExpansionHooks
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelTraversal
+[ RUN      ] KernelTraversal.BreadthFirstTraversalCoversAllExpansionHooks
+[       OK ] KernelTraversal.BreadthFirstTraversalCoversAllExpansionHooks (2 ms)
+[----------] 1 test from KernelTraversal (2 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (2 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"KernelTraversal.BreadthFirstTraversalCoversAllExpansionHooks" end time: Mar 19 20:07 CET
+"KernelTraversal.BreadthFirstTraversalCoversAllExpansionHooks" time elapsed: 00:00:00
+----------------------------------------------------------
+
+14/96 Testing: CoreSupport.PropertyAssignmentCoversGettersSettersAndPrinting
+14/96 Test: CoreSupport.PropertyAssignmentCoversGettersSettersAndPrinting
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=CoreSupport.PropertyAssignmentCoversGettersSettersAndPrinting" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"CoreSupport.PropertyAssignmentCoversGettersSettersAndPrinting" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = CoreSupport.PropertyAssignmentCoversGettersSettersAndPrinting
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CoreSupport
+[ RUN      ] CoreSupport.PropertyAssignmentCoversGettersSettersAndPrinting
+[       OK ] CoreSupport.PropertyAssignmentCoversGettersSettersAndPrinting (12 ms)
+[----------] 1 test from CoreSupport (12 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (12 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"CoreSupport.PropertyAssignmentCoversGettersSettersAndPrinting" end time: Mar 19 20:07 CET
+"CoreSupport.PropertyAssignmentCoversGettersSettersAndPrinting" time elapsed: 00:00:00
+----------------------------------------------------------
+
+91/96 Testing: ConjectureTest.ConjectureStructureValidation
+91/96 Test: ConjectureTest.ConjectureStructureValidation
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/run_tests" "--gtest_filter=ConjectureTest.ConjectureStructureValidation" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"ConjectureTest.ConjectureStructureValidation" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = ConjectureTest.ConjectureStructureValidation
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ConjectureTest
+[ RUN      ] ConjectureTest.ConjectureStructureValidation
+[       OK ] ConjectureTest.ConjectureStructureValidation (0 ms)
+[----------] 1 test from ConjectureTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"ConjectureTest.ConjectureStructureValidation" end time: Mar 19 20:07 CET
+"ConjectureTest.ConjectureStructureValidation" time elapsed: 00:00:00
+----------------------------------------------------------
+
+68/96 Testing: PublicApi.EngineSetWidthRejectsNegativeWidth
+68/96 Test: PublicApi.EngineSetWidthRejectsNegativeWidth
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=PublicApi.EngineSetWidthRejectsNegativeWidth" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"PublicApi.EngineSetWidthRejectsNegativeWidth" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = PublicApi.EngineSetWidthRejectsNegativeWidth
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PublicApi
+[ RUN      ] PublicApi.EngineSetWidthRejectsNegativeWidth
+[       OK ] PublicApi.EngineSetWidthRejectsNegativeWidth (0 ms)
+[----------] 1 test from PublicApi (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"PublicApi.EngineSetWidthRejectsNegativeWidth" end time: Mar 19 20:07 CET
+"PublicApi.EngineSetWidthRejectsNegativeWidth" time elapsed: 00:00:00
+----------------------------------------------------------
+
+13/96 Testing: CoreSupport.FlagsDefaultAndOverrideBehavior
+13/96 Test: CoreSupport.FlagsDefaultAndOverrideBehavior
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=CoreSupport.FlagsDefaultAndOverrideBehavior" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"CoreSupport.FlagsDefaultAndOverrideBehavior" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = CoreSupport.FlagsDefaultAndOverrideBehavior
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from CoreSupport
+[ RUN      ] CoreSupport.FlagsDefaultAndOverrideBehavior
+[       OK ] CoreSupport.FlagsDefaultAndOverrideBehavior (0 ms)
+[----------] 1 test from CoreSupport (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"CoreSupport.FlagsDefaultAndOverrideBehavior" end time: Mar 19 20:07 CET
+"CoreSupport.FlagsDefaultAndOverrideBehavior" time elapsed: 00:00:00
+----------------------------------------------------------
+
+93/96 Testing: PropertyAssignmentTest.BasicPropertyAssignment
+93/96 Test: PropertyAssignmentTest.BasicPropertyAssignment
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/run_tests" "--gtest_filter=PropertyAssignmentTest.BasicPropertyAssignment" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"PropertyAssignmentTest.BasicPropertyAssignment" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = PropertyAssignmentTest.BasicPropertyAssignment
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PropertyAssignmentTest
+[ RUN      ] PropertyAssignmentTest.BasicPropertyAssignment
+[       OK ] PropertyAssignmentTest.BasicPropertyAssignment (0 ms)
+[----------] 1 test from PropertyAssignmentTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"PropertyAssignmentTest.BasicPropertyAssignment" end time: Mar 19 20:07 CET
+"PropertyAssignmentTest.BasicPropertyAssignment" time elapsed: 00:00:00
+----------------------------------------------------------
+
+67/96 Testing: PublicApi.EngineSetConjectureRejectsEmptyString
+67/96 Test: PublicApi.EngineSetConjectureRejectsEmptyString
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=PublicApi.EngineSetConjectureRejectsEmptyString" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"PublicApi.EngineSetConjectureRejectsEmptyString" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = PublicApi.EngineSetConjectureRejectsEmptyString
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PublicApi
+[ RUN      ] PublicApi.EngineSetConjectureRejectsEmptyString
+[       OK ] PublicApi.EngineSetConjectureRejectsEmptyString (0 ms)
+[----------] 1 test from PublicApi (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"PublicApi.EngineSetConjectureRejectsEmptyString" end time: Mar 19 20:07 CET
+"PublicApi.EngineSetConjectureRejectsEmptyString" time elapsed: 00:00:00
+----------------------------------------------------------
+
+25/96 Testing: KernelComponents.MultiGraphPrintAndReadRoundTrip
+25/96 Test: KernelComponents.MultiGraphPrintAndReadRoundTrip
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/unit_tests" "--gtest_filter=KernelComponents.MultiGraphPrintAndReadRoundTrip" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"KernelComponents.MultiGraphPrintAndReadRoundTrip" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelComponents.MultiGraphPrintAndReadRoundTrip
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelComponents
+[ RUN      ] KernelComponents.MultiGraphPrintAndReadRoundTrip
+[       OK ] KernelComponents.MultiGraphPrintAndReadRoundTrip (3 ms)
+[----------] 1 test from KernelComponents (3 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (4 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"KernelComponents.MultiGraphPrintAndReadRoundTrip" end time: Mar 19 20:07 CET
+"KernelComponents.MultiGraphPrintAndReadRoundTrip" time elapsed: 00:00:00
+----------------------------------------------------------
+
+94/96 Testing: PropertyAssignmentTest.ParameterHandling
+94/96 Test: PropertyAssignmentTest.ParameterHandling
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/run_tests" "--gtest_filter=PropertyAssignmentTest.ParameterHandling" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"PropertyAssignmentTest.ParameterHandling" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = PropertyAssignmentTest.ParameterHandling
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PropertyAssignmentTest
+[ RUN      ] PropertyAssignmentTest.ParameterHandling
+[       OK ] PropertyAssignmentTest.ParameterHandling (0 ms)
+[----------] 1 test from PropertyAssignmentTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"PropertyAssignmentTest.ParameterHandling" end time: Mar 19 20:07 CET
+"PropertyAssignmentTest.ParameterHandling" time elapsed: 00:00:00
+----------------------------------------------------------
+
+80/96 Testing: PublicApi.InputControllerDefaultPathsUsesPlatformSeparator
+80/96 Test: PublicApi.InputControllerDefaultPathsUsesPlatformSeparator
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=PublicApi.InputControllerDefaultPathsUsesPlatformSeparator" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"PublicApi.InputControllerDefaultPathsUsesPlatformSeparator" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = PublicApi.InputControllerDefaultPathsUsesPlatformSeparator
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from PublicApi
+[ RUN      ] PublicApi.InputControllerDefaultPathsUsesPlatformSeparator
+[       OK ] PublicApi.InputControllerDefaultPathsUsesPlatformSeparator (0 ms)
+[----------] 1 test from PublicApi (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"PublicApi.InputControllerDefaultPathsUsesPlatformSeparator" end time: Mar 19 20:07 CET
+"PublicApi.InputControllerDefaultPathsUsesPlatformSeparator" time elapsed: 00:00:00
+----------------------------------------------------------
+
+62/96 Testing: KernelTraversal.BreadthFirstTraversalChecksInitialStateBeforeExpansion
+62/96 Test: KernelTraversal.BreadthFirstTraversalChecksInitialStateBeforeExpansion
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests/integration_tests" "--gtest_filter=KernelTraversal.BreadthFirstTraversalChecksInitialStateBeforeExpansion" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/tests
+"KernelTraversal.BreadthFirstTraversalChecksInitialStateBeforeExpansion" start time: Mar 19 20:07 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_fixall/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelTraversal.BreadthFirstTraversalChecksInitialStateBeforeExpansion
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelTraversal
+[ RUN      ] KernelTraversal.BreadthFirstTraversalChecksInitialStateBeforeExpansion
+[       OK ] KernelTraversal.BreadthFirstTraversalChecksInitialStateBeforeExpansion (0 ms)
+[----------] 1 test from KernelTraversal (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"KernelTraversal.BreadthFirstTraversalChecksInitialStateBeforeExpansion" end time: Mar 19 20:07 CET
+"KernelTraversal.BreadthFirstTraversalChecksInitialStateBeforeExpansion" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Mar 19 20:07 CET

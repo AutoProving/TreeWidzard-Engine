@@ -1,0 +1,4 @@
+x := ChromaticNumber_AtMost(3)
+y := IndependenceNumber()
+Formula
+x AND (INV(y) >= 2)

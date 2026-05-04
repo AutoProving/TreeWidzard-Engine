@@ -1,0 +1,3 @@
+x := VertexCoverNumber_AtMost(2)
+Formula
+x

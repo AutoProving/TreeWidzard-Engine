@@ -1,0 +1,1 @@
+/usr/bin/c++  -arch arm64 -dynamiclib -Wl,-headerpad_max_install_names -current_version 1.14.0 -o ../../../lib/libgmock.1.14.0.dylib -install_name @rpath/libgmock.1.14.0.dylib "CMakeFiles/gmock.dir/src/gmock-all.cc.o"  -Wl,-rpath,/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review_pkg/lib ../../../lib/libgtest.1.14.0.dylib

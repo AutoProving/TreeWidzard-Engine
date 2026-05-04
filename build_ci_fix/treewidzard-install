@@ -1,0 +1,16 @@
+#!/bin/bash
+# Installed TreeWidzard launcher
+
+set -euo pipefail
+
+TREEWIDZARD_RUNTIME_DIR="/usr/local/libexec/treewidzard"
+TREEWIDZARD_BIN="$TREEWIDZARD_RUNTIME_DIR/treewidzard"
+export TREEWIDZARD_DPCORES="/usr/local/libexec/treewidzard/DPCores"
+export TREEWIDZARD_SEARCHSTRATEGIES="/usr/local/libexec/treewidzard/SearchStrategies"
+
+if [ ! -x "$TREEWIDZARD_BIN" ]; then
+    echo "Error: installed treewidzard executable not found at $TREEWIDZARD_BIN" >&2
+    exit 1
+fi
+
+exec "$TREEWIDZARD_BIN" "$@"

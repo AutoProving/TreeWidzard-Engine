@@ -1,0 +1,1 @@
+/usr/bin/c++ -fsanitize=thread -fno-omit-frame-pointer -g -arch arm64 -dynamiclib -Wl,-headerpad_max_install_names -fsanitize=thread -o ChromaticNumber_AtMost.dylib -install_name @rpath/ChromaticNumber_AtMost.dylib CMakeFiles/ChromaticNumber_AtMost.dir/Source/ChromaticNumber_AtMost.cpp.o  ../libTreeWidzard-Core.a

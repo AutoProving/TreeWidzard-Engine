@@ -1,0 +1,1 @@
+/usr/bin/c++ -O3 -DNDEBUG -arch arm64 -dynamiclib -Wl,-headerpad_max_install_names -o PerfectMatching.dylib -install_name @rpath/PerfectMatching.dylib CMakeFiles/PerfectMatching.dir/Source/PerfectMatching.cpp.o  ../libTreeWidzard-Core.a

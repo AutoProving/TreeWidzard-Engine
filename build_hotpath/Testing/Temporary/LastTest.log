@@ -1,0 +1,165 @@
+Start testing: Mar 19 20:36 CET
+----------------------------------------------------------
+33/70 Testing: KernelTraversal.BreadthFirstTraversalCoversAllExpansionHooks
+33/70 Test: KernelTraversal.BreadthFirstTraversalCoversAllExpansionHooks
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_hotpath/tests/integration_tests" "--gtest_filter=KernelTraversal.BreadthFirstTraversalCoversAllExpansionHooks" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_hotpath/tests
+"KernelTraversal.BreadthFirstTraversalCoversAllExpansionHooks" start time: Mar 19 20:36 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_hotpath/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelTraversal.BreadthFirstTraversalCoversAllExpansionHooks
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelTraversal
+[ RUN      ] KernelTraversal.BreadthFirstTraversalCoversAllExpansionHooks
+[       OK ] KernelTraversal.BreadthFirstTraversalCoversAllExpansionHooks (0 ms)
+[----------] 1 test from KernelTraversal (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"KernelTraversal.BreadthFirstTraversalCoversAllExpansionHooks" end time: Mar 19 20:36 CET
+"KernelTraversal.BreadthFirstTraversalCoversAllExpansionHooks" time elapsed: 00:00:00
+----------------------------------------------------------
+
+34/70 Testing: KernelTraversal.BreadthFirstTraversalFiltersStatesByPremise
+34/70 Test: KernelTraversal.BreadthFirstTraversalFiltersStatesByPremise
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_hotpath/tests/integration_tests" "--gtest_filter=KernelTraversal.BreadthFirstTraversalFiltersStatesByPremise" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_hotpath/tests
+"KernelTraversal.BreadthFirstTraversalFiltersStatesByPremise" start time: Mar 19 20:36 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_hotpath/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelTraversal.BreadthFirstTraversalFiltersStatesByPremise
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelTraversal
+[ RUN      ] KernelTraversal.BreadthFirstTraversalFiltersStatesByPremise
+[       OK ] KernelTraversal.BreadthFirstTraversalFiltersStatesByPremise (0 ms)
+[----------] 1 test from KernelTraversal (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"KernelTraversal.BreadthFirstTraversalFiltersStatesByPremise" end time: Mar 19 20:36 CET
+"KernelTraversal.BreadthFirstTraversalFiltersStatesByPremise" time elapsed: 00:00:00
+----------------------------------------------------------
+
+35/70 Testing: KernelTraversal.BreadthFirstTraversalStopsAtCounterexample
+35/70 Test: KernelTraversal.BreadthFirstTraversalStopsAtCounterexample
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_hotpath/tests/integration_tests" "--gtest_filter=KernelTraversal.BreadthFirstTraversalStopsAtCounterexample" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_hotpath/tests
+"KernelTraversal.BreadthFirstTraversalStopsAtCounterexample" start time: Mar 19 20:36 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_hotpath/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelTraversal.BreadthFirstTraversalStopsAtCounterexample
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelTraversal
+[ RUN      ] KernelTraversal.BreadthFirstTraversalStopsAtCounterexample
+[       OK ] KernelTraversal.BreadthFirstTraversalStopsAtCounterexample (0 ms)
+[----------] 1 test from KernelTraversal (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"KernelTraversal.BreadthFirstTraversalStopsAtCounterexample" end time: Mar 19 20:36 CET
+"KernelTraversal.BreadthFirstTraversalStopsAtCounterexample" time elapsed: 00:00:00
+----------------------------------------------------------
+
+36/70 Testing: KernelTraversal.BreadthFirstTraversalChecksInitialStateBeforeExpansion
+36/70 Test: KernelTraversal.BreadthFirstTraversalChecksInitialStateBeforeExpansion
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_hotpath/tests/integration_tests" "--gtest_filter=KernelTraversal.BreadthFirstTraversalChecksInitialStateBeforeExpansion" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_hotpath/tests
+"KernelTraversal.BreadthFirstTraversalChecksInitialStateBeforeExpansion" start time: Mar 19 20:36 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_hotpath/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelTraversal.BreadthFirstTraversalChecksInitialStateBeforeExpansion
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelTraversal
+[ RUN      ] KernelTraversal.BreadthFirstTraversalChecksInitialStateBeforeExpansion
+[       OK ] KernelTraversal.BreadthFirstTraversalChecksInitialStateBeforeExpansion (0 ms)
+[----------] 1 test from KernelTraversal (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"KernelTraversal.BreadthFirstTraversalChecksInitialStateBeforeExpansion" end time: Mar 19 20:36 CET
+"KernelTraversal.BreadthFirstTraversalChecksInitialStateBeforeExpansion" time elapsed: 00:00:00
+----------------------------------------------------------
+
+37/70 Testing: KernelTraversal.DynamicCoreHandlerLoadsCompiledCorePlugin
+37/70 Test: KernelTraversal.DynamicCoreHandlerLoadsCompiledCorePlugin
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_hotpath/tests/integration_tests" "--gtest_filter=KernelTraversal.DynamicCoreHandlerLoadsCompiledCorePlugin" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_hotpath/tests
+"KernelTraversal.DynamicCoreHandlerLoadsCompiledCorePlugin" start time: Mar 19 20:36 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_hotpath/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelTraversal.DynamicCoreHandlerLoadsCompiledCorePlugin
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelTraversal
+[ RUN      ] KernelTraversal.DynamicCoreHandlerLoadsCompiledCorePlugin
+[       OK ] KernelTraversal.DynamicCoreHandlerLoadsCompiledCorePlugin (443 ms)
+[----------] 1 test from KernelTraversal (443 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (443 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.45 sec
+----------------------------------------------------------
+Test Passed.
+"KernelTraversal.DynamicCoreHandlerLoadsCompiledCorePlugin" end time: Mar 19 20:36 CET
+"KernelTraversal.DynamicCoreHandlerLoadsCompiledCorePlugin" time elapsed: 00:00:00
+----------------------------------------------------------
+
+38/70 Testing: KernelTraversal.SearchStrategyHandlerLoadsCompiledSearchPlugin
+38/70 Test: KernelTraversal.SearchStrategyHandlerLoadsCompiledSearchPlugin
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_hotpath/tests/integration_tests" "--gtest_filter=KernelTraversal.SearchStrategyHandlerLoadsCompiledSearchPlugin" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_hotpath/tests
+"KernelTraversal.SearchStrategyHandlerLoadsCompiledSearchPlugin" start time: Mar 19 20:36 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_hotpath/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelTraversal.SearchStrategyHandlerLoadsCompiledSearchPlugin
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelTraversal
+[ RUN      ] KernelTraversal.SearchStrategyHandlerLoadsCompiledSearchPlugin
+[       OK ] KernelTraversal.SearchStrategyHandlerLoadsCompiledSearchPlugin (268 ms)
+[----------] 1 test from KernelTraversal (268 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (268 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.27 sec
+----------------------------------------------------------
+Test Passed.
+"KernelTraversal.SearchStrategyHandlerLoadsCompiledSearchPlugin" end time: Mar 19 20:36 CET
+"KernelTraversal.SearchStrategyHandlerLoadsCompiledSearchPlugin" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Mar 19 20:36 CET

@@ -1,0 +1,1 @@
+/usr/bin/c++ -Werror -g -arch arm64 -dynamiclib -Wl,-headerpad_max_install_names -o HamiltonianCycle.dylib -install_name @rpath/HamiltonianCycle.dylib CMakeFiles/HamiltonianCycle.dir/Source/HamiltonianCycle.cpp.o  ../libTreeWidzard-Core.a

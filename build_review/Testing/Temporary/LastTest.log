@@ -1,0 +1,275 @@
+Start testing: Mar 19 20:34 CET
+----------------------------------------------------------
+17/88 Testing: KernelComponents.DynamicCoreBaseMetadataAndDefaultClean
+17/88 Test: KernelComponents.DynamicCoreBaseMetadataAndDefaultClean
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/tests/unit_tests" "--gtest_filter=KernelComponents.DynamicCoreBaseMetadataAndDefaultClean" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/tests
+"KernelComponents.DynamicCoreBaseMetadataAndDefaultClean" start time: Mar 19 20:34 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelComponents.DynamicCoreBaseMetadataAndDefaultClean
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelComponents
+[ RUN      ] KernelComponents.DynamicCoreBaseMetadataAndDefaultClean
+[       OK ] KernelComponents.DynamicCoreBaseMetadataAndDefaultClean (0 ms)
+[----------] 1 test from KernelComponents (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"KernelComponents.DynamicCoreBaseMetadataAndDefaultClean" end time: Mar 19 20:34 CET
+"KernelComponents.DynamicCoreBaseMetadataAndDefaultClean" time elapsed: 00:00:00
+----------------------------------------------------------
+
+18/88 Testing: KernelComponents.WitnessWrapperAndWitnessSetTypeOneOperations
+18/88 Test: KernelComponents.WitnessWrapperAndWitnessSetTypeOneOperations
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/tests/unit_tests" "--gtest_filter=KernelComponents.WitnessWrapperAndWitnessSetTypeOneOperations" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/tests
+"KernelComponents.WitnessWrapperAndWitnessSetTypeOneOperations" start time: Mar 19 20:34 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelComponents.WitnessWrapperAndWitnessSetTypeOneOperations
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelComponents
+[ RUN      ] KernelComponents.WitnessWrapperAndWitnessSetTypeOneOperations
+[       OK ] KernelComponents.WitnessWrapperAndWitnessSetTypeOneOperations (0 ms)
+[----------] 1 test from KernelComponents (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"KernelComponents.WitnessWrapperAndWitnessSetTypeOneOperations" end time: Mar 19 20:34 CET
+"KernelComponents.WitnessWrapperAndWitnessSetTypeOneOperations" time elapsed: 00:00:00
+----------------------------------------------------------
+
+19/88 Testing: KernelComponents.WitnessSetTypeTwoOperations
+19/88 Test: KernelComponents.WitnessSetTypeTwoOperations
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/tests/unit_tests" "--gtest_filter=KernelComponents.WitnessSetTypeTwoOperations" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/tests
+"KernelComponents.WitnessSetTypeTwoOperations" start time: Mar 19 20:34 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelComponents.WitnessSetTypeTwoOperations
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelComponents
+[ RUN      ] KernelComponents.WitnessSetTypeTwoOperations
+[       OK ] KernelComponents.WitnessSetTypeTwoOperations (0 ms)
+[----------] 1 test from KernelComponents (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"KernelComponents.WitnessSetTypeTwoOperations" end time: Mar 19 20:34 CET
+"KernelComponents.WitnessSetTypeTwoOperations" time elapsed: 00:00:00
+----------------------------------------------------------
+
+20/88 Testing: KernelComponents.DynamicKernelOperationsAndMappings
+20/88 Test: KernelComponents.DynamicKernelOperationsAndMappings
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/tests/unit_tests" "--gtest_filter=KernelComponents.DynamicKernelOperationsAndMappings" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/tests
+"KernelComponents.DynamicKernelOperationsAndMappings" start time: Mar 19 20:34 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelComponents.DynamicKernelOperationsAndMappings
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelComponents
+[ RUN      ] KernelComponents.DynamicKernelOperationsAndMappings
+[       OK ] KernelComponents.DynamicKernelOperationsAndMappings (0 ms)
+[----------] 1 test from KernelComponents (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"KernelComponents.DynamicKernelOperationsAndMappings" end time: Mar 19 20:34 CET
+"KernelComponents.DynamicKernelOperationsAndMappings" time elapsed: 00:00:00
+----------------------------------------------------------
+
+21/88 Testing: KernelComponents.SearchStrategyBaseStoresConfiguration
+21/88 Test: KernelComponents.SearchStrategyBaseStoresConfiguration
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/tests/unit_tests" "--gtest_filter=KernelComponents.SearchStrategyBaseStoresConfiguration" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/tests
+"KernelComponents.SearchStrategyBaseStoresConfiguration" start time: Mar 19 20:34 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelComponents.SearchStrategyBaseStoresConfiguration
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelComponents
+[ RUN      ] KernelComponents.SearchStrategyBaseStoresConfiguration
+[       OK ] KernelComponents.SearchStrategyBaseStoresConfiguration (0 ms)
+[----------] 1 test from KernelComponents (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"KernelComponents.SearchStrategyBaseStoresConfiguration" end time: Mar 19 20:34 CET
+"KernelComponents.SearchStrategyBaseStoresConfiguration" time elapsed: 00:00:00
+----------------------------------------------------------
+
+22/88 Testing: KernelComponents.SearchStrategyBaseSearchExits
+22/88 Test: KernelComponents.SearchStrategyBaseSearchExits
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/tests/unit_tests" "--gtest_filter=KernelComponents.SearchStrategyBaseSearchExits" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/tests
+"KernelComponents.SearchStrategyBaseSearchExits" start time: Mar 19 20:34 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelComponents.SearchStrategyBaseSearchExits
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelComponents
+[ RUN      ] KernelComponents.SearchStrategyBaseSearchExits
+ERROR: Based class search function called!
+[       OK ] KernelComponents.SearchStrategyBaseSearchExits (1 ms)
+[----------] 1 test from KernelComponents (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (1 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"KernelComponents.SearchStrategyBaseSearchExits" end time: Mar 19 20:34 CET
+"KernelComponents.SearchStrategyBaseSearchExits" time elapsed: 00:00:00
+----------------------------------------------------------
+
+23/88 Testing: KernelComponents.StateTreeNodeOperationsAndTreeOutput
+23/88 Test: KernelComponents.StateTreeNodeOperationsAndTreeOutput
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/tests/unit_tests" "--gtest_filter=KernelComponents.StateTreeNodeOperationsAndTreeOutput" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/tests
+"KernelComponents.StateTreeNodeOperationsAndTreeOutput" start time: Mar 19 20:34 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelComponents.StateTreeNodeOperationsAndTreeOutput
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelComponents
+[ RUN      ] KernelComponents.StateTreeNodeOperationsAndTreeOutput
+[       OK ] KernelComponents.StateTreeNodeOperationsAndTreeOutput (9 ms)
+[----------] 1 test from KernelComponents (9 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (9 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"KernelComponents.StateTreeNodeOperationsAndTreeOutput" end time: Mar 19 20:34 CET
+"KernelComponents.StateTreeNodeOperationsAndTreeOutput" time elapsed: 00:00:00
+----------------------------------------------------------
+
+24/88 Testing: KernelComponents.StateTreeExtractMultiGraphExitsUntilImplemented
+24/88 Test: KernelComponents.StateTreeExtractMultiGraphExitsUntilImplemented
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/tests/unit_tests" "--gtest_filter=KernelComponents.StateTreeExtractMultiGraphExitsUntilImplemented" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/tests
+"KernelComponents.StateTreeExtractMultiGraphExitsUntilImplemented" start time: Mar 19 20:34 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelComponents.StateTreeExtractMultiGraphExitsUntilImplemented
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelComponents
+[ RUN      ] KernelComponents.StateTreeExtractMultiGraphExitsUntilImplemented
+StateTree::extractMultiGraph is not implemented
+[       OK ] KernelComponents.StateTreeExtractMultiGraphExitsUntilImplemented (1 ms)
+[----------] 1 test from KernelComponents (1 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (1 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"KernelComponents.StateTreeExtractMultiGraphExitsUntilImplemented" end time: Mar 19 20:34 CET
+"KernelComponents.StateTreeExtractMultiGraphExitsUntilImplemented" time elapsed: 00:00:00
+----------------------------------------------------------
+
+25/88 Testing: KernelComponents.CertificateWriterWritesExpectedTranscript
+25/88 Test: KernelComponents.CertificateWriterWritesExpectedTranscript
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/tests/unit_tests" "--gtest_filter=KernelComponents.CertificateWriterWritesExpectedTranscript" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/tests
+"KernelComponents.CertificateWriterWritesExpectedTranscript" start time: Mar 19 20:34 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelComponents.CertificateWriterWritesExpectedTranscript
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelComponents
+[ RUN      ] KernelComponents.CertificateWriterWritesExpectedTranscript
+[       OK ] KernelComponents.CertificateWriterWritesExpectedTranscript (3 ms)
+[----------] 1 test from KernelComponents (3 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (3 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"KernelComponents.CertificateWriterWritesExpectedTranscript" end time: Mar 19 20:34 CET
+"KernelComponents.CertificateWriterWritesExpectedTranscript" time elapsed: 00:00:00
+----------------------------------------------------------
+
+26/88 Testing: KernelComponents.CertificateUtilsCoverHashingAndDiscoveryHelpers
+26/88 Test: KernelComponents.CertificateUtilsCoverHashingAndDiscoveryHelpers
+Command: "/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/tests/unit_tests" "--gtest_filter=KernelComponents.CertificateUtilsCoverHashingAndDiscoveryHelpers" "--gtest_also_run_disabled_tests"
+Directory: /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/tests
+"KernelComponents.CertificateUtilsCoverHashingAndDiscoveryHelpers" start time: Mar 19 20:34 CET
+Output:
+----------------------------------------------------------
+Running main() from /Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = KernelComponents.CertificateUtilsCoverHashingAndDiscoveryHelpers
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from KernelComponents
+[ RUN      ] KernelComponents.CertificateUtilsCoverHashingAndDiscoveryHelpers
+[       OK ] KernelComponents.CertificateUtilsCoverHashingAndDiscoveryHelpers (5 ms)
+[----------] 1 test from KernelComponents (5 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (5 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"KernelComponents.CertificateUtilsCoverHashingAndDiscoveryHelpers" end time: Mar 19 20:34 CET
+"KernelComponents.CertificateUtilsCoverHashingAndDiscoveryHelpers" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Mar 19 20:34 CET

@@ -1,0 +1,3 @@
+x := IndependenceNumber()
+Formula
+INV(x) == 2

@@ -1,0 +1,4 @@
+max_degree := MaximumDegree_AtLeast(4)
+chromatic_number := ChromaticNumber_AtMost(4)
+Formula
+max_degree IMPLIES chromatic_number

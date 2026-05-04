@@ -1,0 +1,1 @@
+/usr/bin/c++  -arch arm64 -dynamiclib -Wl,-headerpad_max_install_names -o BreadthFirstSearch.dylib -install_name @rpath/BreadthFirstSearch.dylib CMakeFiles/BreadthFirstSearch.dir/Source/BreadthFirstSearch.cpp.o  -Wl,-rpath,/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review_pkg ../libTreeWidzard-Core.0.1.0.dylib

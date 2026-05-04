@@ -1,0 +1,4 @@
+x := MaximumDegree_AtLeast(4)
+y := ChromaticNumber_AtMost(3)
+Formula
+NOT x IMPLIES y
