@@ -1,0 +1,1 @@
+/usr/bin/c++ -O3 -DNDEBUG -arch arm64 -dynamiclib -Wl,-headerpad_max_install_names -o CliqueNumber_AtLeast.dylib -install_name @rpath/CliqueNumber_AtLeast.dylib CMakeFiles/CliqueNumber_AtLeast.dir/Source/CliqueNumber_AtLeast.cpp.o  -Wl,-rpath,/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_install_local ../libTreeWidzard-Core.0.1.0.dylib

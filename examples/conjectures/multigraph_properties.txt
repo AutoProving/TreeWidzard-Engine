@@ -1,0 +1,7 @@
+
+multi_edges := HasMultipleEdges()
+colorable := ChromaticNumber_AtMost(3)
+max_deg := MaximumDegree_AtLeast(4)
+
+Formula
+multi_edges IMPLIES (colorable AND max_deg)

@@ -1,0 +1,3 @@
+x := FeedbackVertexSetNumber_AtMost(0)
+Formula
+x

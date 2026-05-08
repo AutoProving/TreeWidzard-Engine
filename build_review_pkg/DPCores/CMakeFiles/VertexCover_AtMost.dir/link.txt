@@ -1,0 +1,1 @@
+/usr/bin/c++  -arch arm64 -dynamiclib -Wl,-headerpad_max_install_names -o VertexCover_AtMost.dylib -install_name @rpath/VertexCover_AtMost.dylib CMakeFiles/VertexCover_AtMost.dir/Source/VertexCover_AtMost.cpp.o  -Wl,-rpath,/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_review_pkg ../libTreeWidzard-Core.0.1.0.dylib

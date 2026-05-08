@@ -1,0 +1,13 @@
+{
+	"InstallScripts" : 
+	[
+		"/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_gcc15_warn/cmake_install.cmake",
+		"/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_gcc15_warn/DPCores/cmake_install.cmake",
+		"/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_gcc15_warn/SearchStrategies/cmake_install.cmake",
+		"/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_gcc15_warn/tests/cmake_install.cmake",
+		"/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_gcc15_warn/_deps/googletest-build/cmake_install.cmake",
+		"/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_gcc15_warn/_deps/googletest-build/googlemock/cmake_install.cmake",
+		"/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_gcc15_warn/_deps/googletest-build/googletest/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

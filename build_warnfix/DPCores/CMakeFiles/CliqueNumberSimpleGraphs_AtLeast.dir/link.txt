@@ -1,0 +1,1 @@
+/usr/bin/c++ -Werror -g -arch arm64 -dynamiclib -Wl,-headerpad_max_install_names -o CliqueNumberSimpleGraphs_AtLeast.dylib -install_name @rpath/CliqueNumberSimpleGraphs_AtLeast.dylib CMakeFiles/CliqueNumberSimpleGraphs_AtLeast.dir/Source/CliqueNumberSimpleGraphs_AtLeast.cpp.o  ../libTreeWidzard-Core.a

@@ -1,0 +1,1 @@
+/opt/homebrew/bin/g++-15 -Werror -g -arch arm64 -dynamiclib -Wl,-headerpad_max_install_names -o BreadthFirstSearch.dylib -install_name @rpath/BreadthFirstSearch.dylib CMakeFiles/BreadthFirstSearch.dir/Source/BreadthFirstSearch.cpp.o  ../libTreeWidzard-Core.a
