@@ -14,9 +14,12 @@
 #include <filesystem>
 #include <fstream>
 #include <sstream>
+#include <system_error>
 #include <vector>
 
 namespace {
+
+namespace fs = std::filesystem;
 
 using TreeWidzardTest::BoundedCountingCore;
 using TreeWidzardTest::first_witness_value;
@@ -600,8 +603,8 @@ TEST_F(MultiGraphTest, PACEFormatRoundtrip) {
   graph.addEdgeEndPoints(1, 2);
   graph.addEdgeEndPoints(2, 3);
 
-  std::string temp_file = "/tmp/test_pace_graph.txt";
-  graph.printToFilePACEFormat(temp_file);
+  const fs::path temp_file = fs::temp_directory_path() / "test_pace_graph.txt";
+  graph.printToFilePACEFormat(temp_file.string());
 
   std::ifstream file(temp_file);
   EXPECT_TRUE(file.good());
@@ -617,8 +620,8 @@ TEST_F(MultiGraphTest, PACEFormatRoundtrip) {
 
   EXPECT_EQ(line_count, 2);
 
-  // Cleanup
-  std::remove(temp_file.c_str());
+  std::error_code ec;
+  fs::remove(temp_file, ec);
 }
 
 // Test 30: GML format conversion
@@ -627,8 +630,8 @@ TEST_F(MultiGraphTest, GMLFormatConversion) {
   graph.addVertex(2);
   graph.addEdgeEndPoints(1, 2);
 
-  std::string temp_file = "/tmp/test_gml_graph.gml";
-  bool success = graph.convertToGML(temp_file);
+  const fs::path temp_file = fs::temp_directory_path() / "test_gml_graph.gml";
+  bool success = graph.convertToGML(temp_file.string());
 
   EXPECT_TRUE(success);
 
@@ -643,8 +646,8 @@ TEST_F(MultiGraphTest, GMLFormatConversion) {
   EXPECT_TRUE(content.find("node") != std::string::npos);
   EXPECT_TRUE(content.find("edge") != std::string::npos);
 
-  // Cleanup
-  std::remove(temp_file.c_str());
+  std::error_code ec;
+  fs::remove(temp_file, ec);
 }
 
 // Test 31: Empty graph operations
