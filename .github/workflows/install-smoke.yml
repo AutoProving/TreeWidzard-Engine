@@ -111,8 +111,8 @@ jobs:
           SMOKE_DIR="$PWD/out/install-smoke-data"
           mkdir -p "$SMOKE_DIR"
           cat > "$SMOKE_DIR/simple_implies.txt" <<'EOF'
-          x := MaxDegree(4)
-          y := ChromaticNumber(4)
+          x := MaximumDegree_AtLeast(4)
+          y := ChromaticNumber_AtMost(4)
           Formula
           x IMPLIES y
           EOF
@@ -129,8 +129,8 @@ jobs:
           $smokeDir = Join-Path $env:GITHUB_WORKSPACE 'out\install-smoke-data'
           New-Item -ItemType Directory -Force -Path $smokeDir | Out-Null
           @(
-            'x := MaxDegree(4)',
-            'y := ChromaticNumber(4)',
+            'x := MaximumDegree_AtLeast(4)',
+            'y := ChromaticNumber_AtMost(4)',
             'Formula',
             'x IMPLIES y'
           ) | Set-Content (Join-Path $smokeDir 'simple_implies.txt')
