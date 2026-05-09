@@ -8,6 +8,7 @@
 #include "Kernel/SearchStrategyHandler.h"
 #include "tests/utils/kernel_test_doubles.h"
 
+#include <cstdlib>
 #include <filesystem>
 #include <stdexcept>
 #include <string>
@@ -52,10 +53,25 @@ private:
 };
 
 auto make_artifact_path(const fs::path &relative_path) -> fs::path {
+  if (const char *build_dir = std::getenv("TREEWIDZARD_BUILD_DIR")) {
+    const fs::path artifact_path = fs::path(build_dir) / relative_path;
+    if (fs::exists(artifact_path)) {
+      return artifact_path;
+    }
+  }
+
   fs::path current = fs::current_path();
   for (int depth = 0; depth < 10; ++depth) {
     if (fs::exists(current / relative_path)) {
       return current / relative_path;
+    }
+    for (const auto &build_name :
+         {"default", "release", "debug", "ci", "install"}) {
+      const fs::path artifact_path =
+          current / "out" / "build" / build_name / relative_path;
+      if (fs::exists(artifact_path)) {
+        return artifact_path;
+      }
     }
     if (fs::exists(current / "build" / relative_path)) {
       return current / "build" / relative_path;

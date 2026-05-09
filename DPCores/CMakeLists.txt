@@ -2,7 +2,7 @@
 # Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
 
 # DPCores/CMakeLists.txt
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.18)
 project(TreeWidzard-DPCores LANGUAGES CXX)
 
 # Set C++ standard to C++20

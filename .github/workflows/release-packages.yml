@@ -58,49 +58,49 @@ jobs:
       - name: Configure package build (Unix)
         if: runner.os != 'Windows'
         run: |
-          cmake -S . -B build-release \
+          cmake -S . -B out/build/release-package \
             -DBUILD_TESTS=OFF \
             -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_INSTALL_PREFIX="$PWD/treewidzard"
+            -DCMAKE_INSTALL_PREFIX="$PWD/out/package-root/treewidzard"
 
       - name: Configure package build (Windows)
         if: runner.os == 'Windows'
         shell: msys2 {0}
         run: |
-          cmake -S . -B build-release -G Ninja \
+          cmake -S . -B out/build/release-package -G Ninja \
             -DBUILD_TESTS=OFF \
             -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_INSTALL_PREFIX="$PWD/treewidzard"
+            -DCMAKE_INSTALL_PREFIX="$PWD/out/package-root/treewidzard"
 
       - name: Build package artifacts (Unix)
         if: runner.os != 'Windows'
         run: |
-          cmake --build build-release -j "$(nproc 2>/dev/null || sysctl -n hw.ncpu)"
+          cmake --build out/build/release-package -j "$(nproc 2>/dev/null || sysctl -n hw.ncpu)"
 
       - name: Build package artifacts (Windows)
         if: runner.os == 'Windows'
         shell: msys2 {0}
         run: |
-          cmake --build build-release -j "$(nproc)"
+          cmake --build out/build/release-package -j "$(nproc)"
 
       - name: Install package tree (Unix)
         if: runner.os != 'Windows'
         run: |
-          cmake --install build-release
+          cmake --install out/build/release-package
 
       - name: Install package tree (Windows)
         if: runner.os == 'Windows'
         shell: msys2 {0}
         run: |
-          cmake --install build-release
+          cmake --install out/build/release-package
 
       - name: Bundle Windows runtime DLLs
         if: runner.os == 'Windows'
         shell: msys2 {0}
         run: |
           set -euo pipefail
-          runtime_dir="$PWD/treewidzard/libexec/treewidzard"
-          deps_file="$PWD/windows-runtime-deps.txt"
+          runtime_dir="$PWD/out/package-root/treewidzard/libexec/treewidzard"
+          deps_file="$PWD/out/windows-runtime-deps.txt"
           : > "$deps_file"
 
           ldd "$runtime_dir/treewidzard.exe" | awk '/=> \// { print $3 }' >> "$deps_file"
@@ -118,22 +118,24 @@ jobs:
       - name: Create archive (Unix)
         if: runner.os != 'Windows'
         run: |
-          tar -czf "${{ matrix.archive_name }}" treewidzard
+          mkdir -p out/packages
+          tar -C out/package-root -czf "out/packages/${{ matrix.archive_name }}" treewidzard
 
       - name: Create archive (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          Compress-Archive -Path treewidzard -DestinationPath "${{ matrix.archive_name }}" -Force
+          New-Item -ItemType Directory -Force -Path out\packages | Out-Null
+          Compress-Archive -Path out\package-root\treewidzard -DestinationPath "out\packages\${{ matrix.archive_name }}" -Force
 
       - name: Upload package artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.platform }}-package
-          path: ${{ matrix.archive_name }}
+          path: out/packages/${{ matrix.archive_name }}
 
       - name: Upload release asset
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ matrix.archive_name }}
+          files: out/packages/${{ matrix.archive_name }}

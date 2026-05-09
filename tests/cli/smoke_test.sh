@@ -17,6 +17,10 @@ resolve_executable() {
 
     local candidates=(
         "./treewidzard"
+        "./out/build/default/treewidzard"
+        "./out/build/release/treewidzard"
+        "./out/build/debug/treewidzard"
+        ./out/build/*/treewidzard
         "./build/treewidzard"
         "./Build/treewidzard"
         ./build*/treewidzard

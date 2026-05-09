@@ -5,7 +5,8 @@ These commands are intended for a short live demo from the repository root.
 Build first if needed:
 
 ```bash
-cmake --build build -j 8
+cmake -S . -B out/build/default -DCMAKE_BUILD_TYPE=Release
+cmake --build out/build/default -j 8
 ```
 
 ## Automated theorem proving

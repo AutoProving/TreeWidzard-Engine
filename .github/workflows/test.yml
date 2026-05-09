@@ -46,26 +46,26 @@ jobs:
 
     - name: Configure CMake (Unix)
       if: runner.os != 'Windows'
-      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+      run: cmake -S . -B out/build/ci -DCMAKE_BUILD_TYPE=Release
 
     - name: Configure CMake (Windows)
       if: runner.os == 'Windows'
       shell: msys2 {0}
-      run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+      run: cmake -S . -B out/build/ci -G Ninja -DCMAKE_BUILD_TYPE=Release
 
     - name: Build TreeWidzard (Unix)
       if: runner.os != 'Windows'
-      run: cmake --build build -j $(nproc 2>/dev/null || sysctl -n hw.ncpu)
+      run: cmake --build out/build/ci -j $(nproc 2>/dev/null || sysctl -n hw.ncpu)
 
     - name: Build TreeWidzard (Windows)
       if: runner.os == 'Windows'
       shell: msys2 {0}
-      run: cmake --build build -j "$(nproc)"
+      run: cmake --build out/build/ci -j "$(nproc)"
 
     - name: Run CTest (Unix)
       if: runner.os != 'Windows'
       run: |
-        ctest --test-dir build --output-on-failure \
+        ctest --test-dir out/build/ci --output-on-failure \
           -j "$(nproc 2>/dev/null || sysctl -n hw.ncpu)" \
           --output-junit ctest_results.xml
 
@@ -73,47 +73,47 @@ jobs:
       if: runner.os == 'Windows'
       shell: msys2 {0}
       run: |
-        ctest --test-dir build --output-on-failure \
+        ctest --test-dir out/build/ci --output-on-failure \
           -j "$(nproc)" \
           --output-junit ctest_results.xml
 
     - name: Configure shared install smoke build (Unix)
       if: runner.os != 'Windows'
-      run: cmake -S . -B build_install -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_TESTS=OFF
+      run: cmake -S . -B out/build/install -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_TESTS=OFF
 
     - name: Configure shared install smoke build (Windows)
       if: runner.os == 'Windows'
       shell: msys2 {0}
-      run: cmake -S . -B build_install -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_TESTS=OFF
+      run: cmake -S . -B out/build/install -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_TESTS=OFF
 
     - name: Build shared install smoke tree (Unix)
       if: runner.os != 'Windows'
-      run: cmake --build build_install -j "$(nproc 2>/dev/null || sysctl -n hw.ncpu)"
+      run: cmake --build out/build/install -j "$(nproc 2>/dev/null || sysctl -n hw.ncpu)"
 
     - name: Build shared install smoke tree (Windows)
       if: runner.os == 'Windows'
       shell: msys2 {0}
-      run: cmake --build build_install -j "$(nproc)"
+      run: cmake --build out/build/install -j "$(nproc)"
 
     - name: Install and relocate TreeWidzard (Unix)
       if: runner.os != 'Windows'
       run: |
-        rm -rf install_tree relocated_tree smoke_build
-        cmake --install build_install --prefix install_tree
-        mv install_tree relocated_tree
+        rm -rf out/install_tree out/relocated_tree out/smoke_build
+        cmake --install out/build/install --prefix out/install_tree
+        mv out/install_tree out/relocated_tree
 
     - name: Install and relocate TreeWidzard (Windows)
       if: runner.os == 'Windows'
       shell: msys2 {0}
       run: |
-        rm -rf install_tree relocated_tree smoke_build
-        cmake --install build_install --prefix install_tree
-        mv install_tree relocated_tree
+        rm -rf out/install_tree out/relocated_tree out/smoke_build
+        cmake --install out/build/install --prefix out/install_tree
+        mv out/install_tree out/relocated_tree
 
     - name: Smoke test relocated launcher (Unix)
       if: runner.os != 'Windows'
       run: |
-        relocated_root="$PWD/relocated_tree"
+        relocated_root="$PWD/out/relocated_tree"
         output="$("$relocated_root/bin/treewidzard" -atp tw=2 BreadthFirstSearch "$PWD/examples/conjectures/simple_implies.txt")"
         echo "$output"
         grep -q "PROPERTY SATISFIED" <<< "$output"
@@ -122,7 +122,7 @@ jobs:
       if: runner.os == 'Windows'
       shell: pwsh
       run: |
-        $root = Join-Path $pwd 'relocated_tree'
+        $root = Join-Path $pwd 'out/relocated_tree'
         $property = Join-Path $pwd 'examples/conjectures/simple_implies.txt'
         $output = & (Join-Path $root 'bin/treewidzard.bat') -atp tw=2 BreadthFirstSearch $property 2>&1 | Out-String
         Write-Host $output
@@ -133,27 +133,27 @@ jobs:
     - name: Build install smoke consumer (Unix)
       if: runner.os != 'Windows'
       run: |
-        cmake -S tests/install_smoke -B smoke_build -DTREEWIDZARD_INSTALL_PREFIX="$PWD/relocated_tree"
-        cmake --build smoke_build -j "$(nproc 2>/dev/null || sysctl -n hw.ncpu)"
+        cmake -S tests/install_smoke -B out/smoke_build -DTREEWIDZARD_INSTALL_PREFIX="$PWD/out/relocated_tree"
+        cmake --build out/smoke_build -j "$(nproc 2>/dev/null || sysctl -n hw.ncpu)"
 
     - name: Build install smoke consumer (Windows)
       if: runner.os == 'Windows'
       shell: msys2 {0}
       run: |
-        cmake -S tests/install_smoke -B smoke_build -G Ninja -DTREEWIDZARD_INSTALL_PREFIX="$PWD/relocated_tree"
-        cmake --build smoke_build -j "$(nproc)"
+        cmake -S tests/install_smoke -B out/smoke_build -G Ninja -DTREEWIDZARD_INSTALL_PREFIX="$PWD/out/relocated_tree"
+        cmake --build out/smoke_build -j "$(nproc)"
 
     - name: Run install smoke consumer (Unix)
       if: runner.os != 'Windows'
-      run: ./smoke_build/treewidzard_install_smoke
+      run: ./out/smoke_build/treewidzard_install_smoke
 
     - name: Run install smoke consumer (Windows)
       if: runner.os == 'Windows'
       shell: pwsh
       run: |
-        $root = Join-Path $pwd 'relocated_tree'
+        $root = Join-Path $pwd 'out/relocated_tree'
         $env:PATH = (Join-Path $root 'bin') + ';' + $env:PATH
-        & (Join-Path $pwd 'smoke_build/treewidzard_install_smoke.exe')
+        & (Join-Path $pwd 'out/smoke_build/treewidzard_install_smoke.exe')
         if ($LASTEXITCODE -ne 0) {
           exit $LASTEXITCODE
         }
@@ -164,15 +164,15 @@ jobs:
       with:
         name: test-results-${{ matrix.os }}
         path: |
-          build/ctest_results.xml
-          build/Testing/**
+          out/build/ci/ctest_results.xml
+          out/build/ci/Testing/**
     
     - name: Test Summary (Unix)
       if: always() && runner.os != 'Windows'
       run: |
         echo "## Test Results" >> $GITHUB_STEP_SUMMARY
         echo "Build completed on ${{ matrix.os }}" >> $GITHUB_STEP_SUMMARY
-        if [ -f build/ctest_results.xml ]; then
+        if [ -f out/build/ci/ctest_results.xml ]; then
           echo "✅ ctest completed and produced JUnit output" >> $GITHUB_STEP_SUMMARY
         else
           echo "❌ ctest did not produce JUnit output" >> $GITHUB_STEP_SUMMARY
@@ -184,7 +184,7 @@ jobs:
       run: |
         Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "## Test Results"
         Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "Build completed on ${{ matrix.os }}"
-        if (Test-Path 'build/ctest_results.xml') {
+        if (Test-Path 'out/build/ci/ctest_results.xml') {
           Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "ctest completed and produced JUnit output"
         } else {
           Add-Content -Path $env:GITHUB_STEP_SUMMARY -Value "ctest did not produce JUnit output"
@@ -206,10 +206,10 @@ jobs:
     - name: Check for compilation warnings
       run: |
         set -o pipefail
-        cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-Werror"
-        cmake --build build -j "$(nproc)" 2>&1 | tee build_output.txt
+        cmake -S . -B out/build/warnings -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-Werror"
+        cmake --build out/build/warnings -j "$(nproc)" 2>&1 | tee out/build_output.txt
 
-        warning_count=$(grep -c "warning:" build_output.txt || true)
+        warning_count=$(grep -c "warning:" out/build_output.txt || true)
         echo "Found $warning_count warnings"
         echo "## Build Warnings: $warning_count" >> $GITHUB_STEP_SUMMARY
         if [ "$warning_count" -ne 0 ]; then
