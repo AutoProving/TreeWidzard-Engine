@@ -1,1 +1,0 @@
-/usr/bin/c++ -O2 -g -DNDEBUG -arch arm64 -dynamiclib -Wl,-headerpad_max_install_names -o ParallelIsomorphismBreadthFirstSearch.dylib -install_name @rpath/ParallelIsomorphismBreadthFirstSearch.dylib CMakeFiles/ParallelIsomorphismBreadthFirstSearch.dir/Source/ParallelIsomorphismBreadthFirstSearch.cpp.o  ../libTreeWidzard-Core.a

@@ -1,9 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_install/cmake_install.cmake",
-		"/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_install/DPCores/cmake_install.cmake",
-		"/Users/farhad.vadiee/Documents/github/system_paper/TreeWidzard-development/build_install/SearchStrategies/cmake_install.cmake"
-	],
-	"Parallel" : false
-}

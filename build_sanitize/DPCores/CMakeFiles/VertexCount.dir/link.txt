@@ -1,1 +1,0 @@
-/usr/bin/c++ -fsanitize=address,undefined -fno-omit-frame-pointer -g -arch arm64 -dynamiclib -Wl,-headerpad_max_install_names -fsanitize=address,undefined -o VertexCount.dylib -install_name @rpath/VertexCount.dylib CMakeFiles/VertexCount.dir/Source/VertexCount.cpp.o  ../libTreeWidzard-Core.a

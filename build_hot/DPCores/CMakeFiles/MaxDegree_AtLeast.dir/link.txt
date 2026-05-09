@@ -1,1 +1,0 @@
-/usr/bin/c++  -arch arm64 -dynamiclib -Wl,-headerpad_max_install_names -o MaxDegree_AtLeast.dylib -install_name @rpath/MaxDegree_AtLeast.dylib CMakeFiles/MaxDegree_AtLeast.dir/Source/MaxDegree_AtLeast.cpp.o  ../libTreeWidzard-Core.a

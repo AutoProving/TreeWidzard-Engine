@@ -1,1 +1,0 @@
-/usr/bin/c++ -fsanitize=address,undefined -fno-omit-frame-pointer -O2 -g -DNDEBUG -arch arm64 -dynamiclib -Wl,-headerpad_max_install_names -fsanitize=address,undefined -o MaxDegree_AtLeast.dylib -install_name @rpath/MaxDegree_AtLeast.dylib CMakeFiles/MaxDegree_AtLeast.dir/Source/MaxDegree_AtLeast.cpp.o  ../libTreeWidzard-Core.a

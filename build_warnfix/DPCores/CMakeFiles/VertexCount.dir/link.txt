@@ -1,1 +1,0 @@
-/usr/bin/c++ -Werror -g -arch arm64 -dynamiclib -Wl,-headerpad_max_install_names -o VertexCount.dylib -install_name @rpath/VertexCount.dylib CMakeFiles/VertexCount.dir/Source/VertexCount.cpp.o  ../libTreeWidzard-Core.a
