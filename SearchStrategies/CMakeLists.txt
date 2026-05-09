@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.18)
 set(CMAKE_CXX_STANDARD 20)
 link_libraries(-lstdc++fs)
 
@@ -27,4 +27,3 @@ foreach(file ${files})
   add_library(${search_strategy_name} SHARED ${file})
   target_include_directories(${search_strategy_name} PRIVATE $ENV{TREEWIDZARD})
 endforeach()
-

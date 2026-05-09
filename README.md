@@ -9,7 +9,7 @@ The following software are assumed to be installed on your machine:
 
 1- A C++20 compiler (tested with GCC/11.2.0, should also work with any later version)
 
-2- CMake/3.0.0 or a later version
+2- CMake/3.18 or a later version
 
 ### First Installation
 
@@ -23,14 +23,14 @@ Move into the TreeWidzard directory:
 cd TreeWidzard-Engine
 ```
 
-Configure build directory using CMake (here with the build directory named `Build`):
+Configure the build directory under `out/`, which is ignored by Git:
 ```commandline
-cmake -BBuild
+cmake -S . -B out/build/default -DCMAKE_BUILD_TYPE=Release
 ```
 
 Compile the program:
 ```commandline
-cmake --build Build
+cmake --build out/build/default
 ```
 
 ### Updating
@@ -41,11 +41,11 @@ git pull
 
 For recompiling, run this again:
 ```commandline
-cmake --build Build
+cmake --build out/build/default
 ```
 
 ## Running TreeWidzard
 To print usage:
 ```
-./Build/treewidzard --help
+./out/build/default/treewidzard --help
 ```

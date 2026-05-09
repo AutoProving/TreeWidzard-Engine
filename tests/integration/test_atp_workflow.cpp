@@ -5,8 +5,10 @@
 #include "Kernel/Flags.h"
 #include "Kernel/Width.h"
 #include <chrono>
+#include <cstdlib>
 #include <filesystem>
 #include <fstream>
+#include <vector>
 #include <gtest/gtest.h>
 
 using namespace TreeWidzard::Testing;
@@ -138,18 +140,32 @@ TEST_F(ATPIntegrationTest, SearchStrategyAvailability) {
       "BreadthFirstSearch", "ParallelBreadthFirstSearch",
       "IsomorphismBreadthFirstSearch", "ParallelIsomorphismBreadthFirstSearch"};
 
-  std::string search_dir = "build/SearchStrategies";
-  if (std::filesystem::exists(search_dir)) {
+  std::vector<std::filesystem::path> search_dirs;
+  if (const char *env_dir = std::getenv("TREEWIDZARD_SEARCHSTRATEGIES")) {
+    search_dirs.emplace_back(env_dir);
+  }
+  search_dirs.emplace_back("out/build/default/SearchStrategies");
+  search_dirs.emplace_back("out/build/release/SearchStrategies");
+  search_dirs.emplace_back("out/build/debug/SearchStrategies");
+  search_dirs.emplace_back("out/build/ci/SearchStrategies");
+  search_dirs.emplace_back("build/SearchStrategies");
+
+  for (const auto &search_dir : search_dirs) {
+    if (!std::filesystem::exists(search_dir)) {
+      continue;
+    }
+
     int found_count = 0;
     for (const auto &strategy : strategies) {
-      std::string library_path =
-          search_dir + "/" + strategy + dynamic_library_extension();
+      const auto library_path =
+          search_dir / (strategy + dynamic_library_extension());
       if (std::filesystem::exists(library_path)) {
         found_count++;
       }
     }
     // At least some strategies should be built
     EXPECT_GT(found_count, 0);
+    return;
   }
 }
 

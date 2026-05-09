@@ -26,10 +26,8 @@ if "%FAILURES%"=="0" (
     echo Result: this system meets the default Windows source-build requirements.
     echo.
     echo Next steps:
-    echo   mkdir build
-    echo   cd build
-    echo   cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release
-    echo   ninja
+    echo   cmake -S . -B out\build\default -G Ninja -DCMAKE_BUILD_TYPE=Release
+    echo   cmake --build out\build\default
     exit /b 0
 )
 

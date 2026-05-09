@@ -17,6 +17,11 @@ resolve_build_dir() {
     fi
 
     local candidates=(
+        "$SCRIPT_DIR/out/build/default"
+        "$SCRIPT_DIR/out/build/release"
+        "$SCRIPT_DIR/out/build/debug"
+        "$SCRIPT_DIR/out/build/ci"
+        "$SCRIPT_DIR"/out/build/*
         "$SCRIPT_DIR/build"
         "$SCRIPT_DIR/Build"
         "$SCRIPT_DIR/build_port"
@@ -35,7 +40,7 @@ resolve_build_dir() {
 
 if ! BUILD_DIR="$(resolve_build_dir)"; then
     echo "Error: treewidzard executable not found in any known build directory." >&2
-    echo "Set TREEWIDZARD_BUILD_DIR or build the project with: cmake -S . -B build && cmake --build build" >&2
+    echo "Set TREEWIDZARD_BUILD_DIR or build the project with: cmake -S . -B out/build/default && cmake --build out/build/default" >&2
     exit 1
 fi
 

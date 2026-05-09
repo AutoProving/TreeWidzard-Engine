@@ -201,10 +201,8 @@ print_hint() {
 print_next_steps() {
     note ""
     note "Next steps:"
-    note "  mkdir -p build"
-    note "  cd build"
-    note "  cmake .. -DCMAKE_BUILD_TYPE=Release"
-    note "  make"
+    note "  cmake -S . -B out/build/default -DCMAKE_BUILD_TYPE=Release"
+    note "  cmake --build out/build/default"
 }
 
 os_name="$(uname -s)"

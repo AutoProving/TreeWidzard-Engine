@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.18)
 set(CMAKE_CXX_STANDARD 20)
 link_libraries(-lstdc++fs)
 
@@ -155,4 +155,3 @@ target_link_libraries(treewidzard ${CMAKE_DL_LIBS})
 set(ENV{TREEWIDZARD} ${PROJECT_SOURCE_DIR})
 add_subdirectory("DPCores")
 add_subdirectory("SearchStrategies")
-
