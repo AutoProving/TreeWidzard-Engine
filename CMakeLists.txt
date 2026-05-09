@@ -297,44 +297,8 @@ add_executable(treewidzard
     Controller/CertificateChecker.h
     Controller/AuxiliaryController.hpp
     main.cpp
-    # Kernel files 
-    Kernel/CoreWrapper.h
-    Kernel/Witness.cpp
-    Kernel/Witness.h
-    Kernel/WitnessSet.cpp
-    Kernel/WitnessSet.h
-    Kernel/WitnessWrapper.h
-    Kernel/PropertyAssignment.cpp
-    Kernel/PropertyAssignment.h
-    Kernel/Bag.cpp
-    Kernel/Bag.h
-    Kernel/DynamicCore.cpp
-    Kernel/DynamicCore.h
-    Kernel/DynamicKernel.cpp
-    Kernel/DynamicKernel.h
-    Kernel/Flags.cpp
-    Kernel/Flags.h
-    Kernel/SearchStrategy.cpp
-    Kernel/SearchStrategy.h
-    Kernel/State.cpp
-    Kernel/State.h
-    Kernel/Width.h
-    Kernel/Width.cpp
-    Kernel/StateTree.cpp
-    Kernel/StateTree.h
-    Kernel/DynamicCoreHandler.cpp
-    Kernel/DynamicCoreHandler.h
-    Kernel/SearchStrategyHandler.cpp
-    Kernel/SearchStrategyHandler.h
-    # Multigraph files
-    Multigraph/MultiGraph.cpp
-    Multigraph/MultiGraph.h
-    # Conjecture
-    Conjecture/Conjecture.cpp
-    Conjecture/Conjecture.h
-    Conjecture/PropertyAssignment.cpp
-    Conjecture/PropertyAssignment.h
-    # Parser files (generated ones are in Core lib)
+    # CLI parser and import/export sources. Core sources come from
+    # TreeWidzard-Core to avoid duplicate definitions in shared builds.
     Controller/Parser/command_parser.hpp
     Controller/Parser/command_parser.cpp
     Controller/Parser/command_lexer.cpp
@@ -355,19 +319,6 @@ add_executable(treewidzard
     Translation/PACE/Parser/atd_parser.hpp
     Translation/TreeAutomaton/term_parser.cpp
     Translation/TreeAutomaton/term_lexer.cpp
-    # TreeAutomaton
-    TreeAutomaton/TreeAutomaton.h
-    TreeAutomaton/TreeAutomaton.cpp
-    TreeAutomaton/Term.h
-    TreeAutomaton/Term.cpp
-    TreeAutomaton/InstructiveTreeDecomposition.h
-    TreeAutomaton/InstructiveTreeDecomposition.cpp
-    TreeAutomaton/RunTree.cpp
-    TreeAutomaton/RunTree.h
-    TreeAutomaton/ConcreteTreeDecomposition.cpp
-    TreeAutomaton/ConcreteTreeDecomposition.h
-    TreeAutomaton/DecompositionTree.h
-    TreeAutomaton/DecompositionTree.cpp
 )
 
 # Link the executable against the core library and Threads
