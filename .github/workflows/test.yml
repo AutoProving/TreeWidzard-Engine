@@ -110,6 +110,29 @@ jobs:
         cmake --install out/build/install --prefix out/install_tree
         mv out/install_tree out/relocated_tree
 
+    - name: Bundle Windows runtime DLLs for relocated smoke
+      if: runner.os == 'Windows'
+      shell: msys2 {0}
+      run: |
+        set -euo pipefail
+        install_bin="$PWD/out/relocated_tree/bin"
+        runtime_dir="$PWD/out/relocated_tree/libexec/treewidzard"
+        deps_file="$PWD/out/windows-runtime-deps.txt"
+        : > "$deps_file"
+
+        export PATH="$install_bin:$runtime_dir:$PATH"
+        ldd "$runtime_dir/treewidzard.exe" | awk '/=> \// { print $3 }' >> "$deps_file"
+        find "$runtime_dir/DPCores" "$runtime_dir/SearchStrategies" -name '*.dll' -print0 |
+        while IFS= read -r -d '' dll; do
+          ldd "$dll" | awk '/=> \// { print $3 }' >> "$deps_file"
+        done
+
+        sort -u "$deps_file" | while IFS= read -r dep; do
+          if [ -n "$dep" ]; then
+            cp -f "$dep" "$runtime_dir/"
+          fi
+        done
+
     - name: Smoke test relocated launcher (Unix)
       if: runner.os != 'Windows'
       run: |
