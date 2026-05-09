@@ -175,7 +175,8 @@ jobs:
       shell: pwsh
       run: |
         $root = Join-Path $pwd 'out/relocated_tree'
-        $env:PATH = (Join-Path $root 'bin') + ';' + $env:PATH
+        $runtime = Join-Path $root 'libexec/treewidzard'
+        $env:PATH = (Join-Path $root 'bin') + ';' + $runtime + ';' + $env:PATH
         & (Join-Path $pwd 'out/smoke_build/treewidzard_install_smoke.exe')
         if ($LASTEXITCODE -ne 0) {
           exit $LASTEXITCODE
