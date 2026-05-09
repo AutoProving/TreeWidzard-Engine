@@ -1,6 +1,10 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #ifndef CURRENT_BREADTHFIRSTSEARCH_H
 #define CURRENT_BREADTHFIRSTSEARCH_H
 #include <cmath>
+#include <unordered_map>
 
 #include "Kernel/SearchStrategy.h"
 #include "Kernel/StateTree.h"
@@ -13,32 +17,29 @@ using namespace std::chrono;
 
 class BreadthFirstSearch : public SearchStrategy {
   private:
-	TreeAutomaton<State::ptr, InstructiveTreeDecompositionNodeContent>
-		bfsDAG; // Constructs a DAG corresponding to the BFS.
+	std::unordered_map<
+		State::ptr,
+		Transition<State::ptr, InstructiveTreeDecompositionNodeContent>,
+		State::ptr::Hash,
+		State::ptr::Equal>
+		counterexampleTrace;
 	set<State::ptr> allStatesSet;
 	set<State::ptr> intermediateStatesSet;
 	set<State::ptr> newStatesSet;
-	vector<State::ptr>
-		newStatesVector; // This will make it easier to do parallel search
+	vector<State::ptr> newStatesVector; // This will make it easier to do parallel search
 	bool noBFSDAG = false;
 
   public:
 	BreadthFirstSearch();
-	BreadthFirstSearch(DynamicKernel *dynamicKernel, Conjecture *conjecture,
-					   Flags *flags);
+	BreadthFirstSearch(DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags);
 	~BreadthFirstSearch(){};
 	InstructiveTreeDecomposition extractCounterExampleTerm(State::ptr state);
 	////Extract State Tree//////////
-	void extractCounterExampleStateTreeNode(State::ptr state,
-											shared_ptr<StateTreeNode>);
+	void extractCounterExampleStateTreeNode(State::ptr state, shared_ptr<StateTreeNode>);
 	StateTree extractCounterExampleStateTree(State::ptr state);
 	///////////////////////////////
 	////Extract Run Tree///////////
-	void extractCounterExampleRunNode(
-		State::ptr state,
-		shared_ptr<TermNode<
-			RunNodeContent<State::ptr, InstructiveTreeDecompositionNodeContent>>>
-			node);
+	void extractCounterExampleRunNode(State::ptr state, shared_ptr<TermNode<RunNodeContent<State::ptr, InstructiveTreeDecompositionNodeContent>>> node);
 	RunTree<State::ptr, InstructiveTreeDecompositionNodeContent>
 	extractCounterExampleRun(State::ptr state);
 	void search();

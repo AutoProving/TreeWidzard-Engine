@@ -1,6 +1,10 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #ifndef TREEWIDZARD_PARSECONTROLLER_H
 #define TREEWIDZARD_PARSECONTROLLER_H
-#include <experimental/filesystem>
+// #include <experimental/filesystem>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <memory>
@@ -12,6 +16,7 @@
 #include "../Translation/PACE/Parser/td_parser.hpp"
 #include "../Translation/PACE/TreeDecompositionPACE.h"
 #include "../Translation/PACE/WitnessTreePACE.h"
+#include "../Translation/TreeAutomaton/term_parser.hpp"
 #include "../TreeAutomaton/InstructiveTreeDecomposition.h"
 #include "../TreeAutomaton/TreeAutomaton.h"
 #include "InputController.h"
@@ -22,7 +27,9 @@ extern std::FILE *atd_in;
 class ParseController {
   private:
 	Flags flag;
+	std::string inputPath;
 	std::unique_ptr<InputController> inputController;
+	void ensureInputController();
 
   public:
 	// constructor

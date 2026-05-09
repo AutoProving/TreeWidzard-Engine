@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #ifndef WITNESS_H
 #define WITNESS_H
 #include <algorithm>
@@ -17,8 +20,7 @@ class Witness {
 	virtual Witness &set_equal(const Witness &witness) = 0;
 
   public:
-	virtual std::shared_ptr<Witness> relabel(
-		const std::map<unsigned, unsigned> &relabelingMap) const;
+	virtual std::shared_ptr<Witness> relabel(const std::map<unsigned, unsigned> &relabelingMap) const;
 	virtual void print() const;
 	virtual std::string witnessInformation() const;
 	virtual ~Witness();

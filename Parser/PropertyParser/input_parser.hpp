@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_INPUT_INPUT_PARSER_HPP_INCLUDED
-# define YY_INPUT_INPUT_PARSER_HPP_INCLUDED
+#ifndef YY_INPUT_PARSER_PROPERTYPARSER_INPUT_PARSER_HPP_INCLUDED
+# define YY_INPUT_PARSER_PROPERTYPARSER_INPUT_PARSER_HPP_INCLUDED
 /* Debug traces.  */
 #ifndef INPUT_DEBUG
 # if defined YYDEBUG
@@ -53,20 +53,26 @@
 extern int input_debug;
 #endif
 /* "%code requires" blocks.  */
-#line 5 "input_parser.y"
+#line 6 "Parser/PropertyParser/input_parser.y"
 
+    #include <iostream>
+    #include <string.h>
+    #include <cmath>
+    #include <vector>
+    #include <map>
+    #include <string.h>
+    #include <utility>
+    #include <variant>
     #include "../../Conjecture/Conjecture.h"
     #include "../../Kernel/Width.h"
     #include "../../Kernel/DynamicCoreHandler.h"
-    #include <iostream>
-    #include <vector>
-    #include <map>
-    #include <stdio.h>
-    #include <stdlib.h>
-    #include <utility>
-    #include <variant>
+    #include <algorithm>
 
-#line 70 "input_parser.hpp"
+    // Prototypes explicitly here to ensure visibility
+    int input_lex();
+    void input_error(Conjecture &conj, int &result,std::map<std::string,DynamicCoreHandler> &coreList, std::map<std::string,std::string> &varToCoreName, std::map<std::string, PropertyAssignment*> varToProperty, char const* msg);
+
+#line 76 "Parser/PropertyParser/input_parser.hpp"
 
 /* Token kinds.  */
 #ifndef INPUT_TOKENTYPE
@@ -82,28 +88,27 @@ extern int input_debug;
     LEFTP = 260,                   /* LEFTP  */
     RIGHTP = 261,                  /* RIGHTP  */
     NAME = 262,                    /* NAME  */
-    NEWLINE = 263,                 /* NEWLINE  */
-    AND = 264,                     /* AND  */
-    OR = 265,                      /* OR  */
-    IFF = 266,                     /* IFF  */
-    IMPLIES = 267,                 /* IMPLIES  */
-    NOT = 268,                     /* NOT  */
-    TRUE = 269,                    /* TRUE  */
-    FALSE = 270,                   /* FALSE  */
-    COMMENT = 271,                 /* COMMENT  */
-    NUMBER_DOUBLE = 272,           /* NUMBER_DOUBLE  */
-    COMMA = 273,                   /* COMMA  */
-    FORMULA_NAME = 274,            /* FORMULA_NAME  */
-    EXP = 275,                     /* EXP  */
-    ATLEAST = 276,                 /* ATLEAST  */
-    ATMOST = 277,                  /* ATMOST  */
-    LESS = 278,                    /* LESS  */
-    BIGGER = 279,                  /* BIGGER  */
-    BINARY_ARITHMETIC_OPERATOR = 280, /* BINARY_ARITHMETIC_OPERATOR  */
-    BINARY_FUNCTION = 281,         /* BINARY_FUNCTION  */
-    UNARY_FUNCTION = 282,          /* UNARY_FUNCTION  */
-    INV_ = 283,                    /* INV_  */
-    EQUAL = 284                    /* EQUAL  */
+    AND = 263,                     /* AND  */
+    OR = 264,                      /* OR  */
+    IFF = 265,                     /* IFF  */
+    IMPLIES = 266,                 /* IMPLIES  */
+    NOT = 267,                     /* NOT  */
+    BOOL_TRUE = 268,               /* BOOL_TRUE  */
+    BOOL_FALSE = 269,              /* BOOL_FALSE  */
+    COMMENT = 270,                 /* COMMENT  */
+    NUMBER_DOUBLE = 271,           /* NUMBER_DOUBLE  */
+    COMMA = 272,                   /* COMMA  */
+    FORMULA_NAME = 273,            /* FORMULA_NAME  */
+    EXP = 274,                     /* EXP  */
+    ATLEAST = 275,                 /* ATLEAST  */
+    ATMOST = 276,                  /* ATMOST  */
+    LESS = 277,                    /* LESS  */
+    BIGGER = 278,                  /* BIGGER  */
+    BINARY_ARITHMETIC_OPERATOR = 279, /* BINARY_ARITHMETIC_OPERATOR  */
+    BINARY_FUNCTION = 280,         /* BINARY_FUNCTION  */
+    UNARY_FUNCTION = 281,          /* UNARY_FUNCTION  */
+    INV_ = 282,                    /* INV_  */
+    EQUAL = 283                    /* EQUAL  */
   };
   typedef enum input_tokentype input_token_kind_t;
 #endif
@@ -112,7 +117,7 @@ extern int input_debug;
 #if ! defined INPUT_STYPE && ! defined INPUT_STYPE_IS_DECLARED
 union INPUT_STYPE
 {
-#line 40 "input_parser.y"
+#line 33 "Parser/PropertyParser/input_parser.y"
 
      ConjectureNode *conjectureNode;
      int number;
@@ -120,7 +125,7 @@ union INPUT_STYPE
      std::vector<std::variant<char*,int, bool>> *vec;
      PropertyAssignment *property;
 
-#line 124 "input_parser.hpp"
+#line 129 "Parser/PropertyParser/input_parser.hpp"
 
 };
 typedef union INPUT_STYPE INPUT_STYPE;
@@ -128,25 +133,11 @@ typedef union INPUT_STYPE INPUT_STYPE;
 # define INPUT_STYPE_IS_DECLARED 1
 #endif
 
-/* Location type.  */
-#if ! defined INPUT_LTYPE && ! defined INPUT_LTYPE_IS_DECLARED
-typedef struct INPUT_LTYPE INPUT_LTYPE;
-struct INPUT_LTYPE
-{
-  int first_line;
-  int first_column;
-  int last_line;
-  int last_column;
-};
-# define INPUT_LTYPE_IS_DECLARED 1
-# define INPUT_LTYPE_IS_TRIVIAL 1
-#endif
-
 
 extern INPUT_STYPE input_lval;
-extern INPUT_LTYPE input_lloc;
+
 
 int input_parse (Conjecture &conj, int &result, std::map<std::string,DynamicCoreHandler> &coreList, std::map<std::string,std::string> &varToCoreName, std::map<std::string, PropertyAssignment*> &varToProperty);
 
 
-#endif /* !YY_INPUT_INPUT_PARSER_HPP_INCLUDED  */
+#endif /* !YY_INPUT_PARSER_PROPERTYPARSER_INPUT_PARSER_HPP_INCLUDED  */

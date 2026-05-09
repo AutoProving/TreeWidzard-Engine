@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 
 #include "InstructiveTreeDecomposition.h"
 InstructiveTreeDecompositionNodeContent::
@@ -168,7 +171,7 @@ InstructiveTreeDecomposition::constructCTDNode(
 				exit(20);
 			} else {
 				b = children[0]->getNodeContent().getBag();
-				b.intro_v(numbersInString[0]);
+				b = b.intro_v(static_cast<unsigned>(numbersInString[0]));
 				concrete.setBag(b);
 				ctdNode->setNodeContent(concrete);
 			}
@@ -181,7 +184,7 @@ InstructiveTreeDecomposition::constructCTDNode(
 				exit(20);
 			} else {
 				b = children[0]->getNodeContent().getBag();
-				b.forget_v(numbersInString[0]);
+				b = b.forget_v(static_cast<unsigned>(numbersInString[0]));
 				concrete.setBag(b);
 				ctdNode->setNodeContent(concrete);
 			}
@@ -194,7 +197,8 @@ InstructiveTreeDecomposition::constructCTDNode(
 				exit(20);
 			} else {
 				b = children[0]->getNodeContent().getBag();
-				b.intro_e(numbersInString[0], numbersInString[1]);
+				b = b.intro_e(static_cast<unsigned>(numbersInString[0]),
+							 static_cast<unsigned>(numbersInString[1]));
 				concrete.setBag(b);
 				ctdNode->setNodeContent(concrete);
 			}

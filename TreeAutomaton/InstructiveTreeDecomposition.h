@@ -1,8 +1,13 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #ifndef TREEWIDZARD_INSTRUCTIVETREEDECOMPOSITION_H
 #define TREEWIDZARD_INSTRUCTIVETREEDECOMPOSITION_H
 #include <algorithm>
 #include <cstring>
-#include <experimental/filesystem>
+// #include <experimental/filesystem>
+#include <filesystem>
+
 #include <iostream>
 #include <sstream>
 #include "../Multigraph/MultiGraph.h"

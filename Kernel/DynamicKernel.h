@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #ifndef DYNAMIC_KERNEL_H
 #define DYNAMIC_KERNEL_H
 #include <list>
@@ -12,6 +15,7 @@ class DynamicKernel : public std::enable_shared_from_this<DynamicKernel> {
   private:
 	Width width;
 	// vector<PropertyAssignment> properties;
+	// Non-owning pointers to cores; lifetime managed by InputController::ownedCores
 	std::vector<DynamicCore *> cores;
 	std::map<std::string, std::pair<std::string, int>> varToNameAndIndex;
 
@@ -35,9 +39,9 @@ class DynamicKernel : public std::enable_shared_from_this<DynamicKernel> {
 		const std::map<std::string, std::pair<std::string, int>>
 			&varToNameAndIndex);
 
-	DynamicCore *getCoreByVar(std::string var);
-	bool isVarExists(std::string var);
-	int getIndexByVar(std::string var);
+	DynamicCore *getCoreByVar(const std::string &var);
+	bool isVarExists(const std::string &var);
+	int getIndexByVar(const std::string &var);
 	// void addProperty(PropertyAssignment &);
 	// const vector<PropertyAssignment> &get_properties() const;
 

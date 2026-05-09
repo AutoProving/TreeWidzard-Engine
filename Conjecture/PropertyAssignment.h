@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #ifndef PROPERTYASSIGNMENT_H
 #define PROPERTYASSIGNMENT_H
 
@@ -13,8 +16,14 @@ class PropertyAssignment {
 	std::vector<int> parameters; // Designated for multi parameters cores.
 	std::string parameterType;	 // NoParameter, UnSignedInt, InputFile, and MultiParameter
 	std::string type; // Bool, Min, Max
-    std::vector<std::variant<char*,int, bool>> parametersVec;
+  std::vector<std::variant<char*,int, bool>> parametersVec;
   public:
+    PropertyAssignment() = default;
+    ~PropertyAssignment();
+    PropertyAssignment(const PropertyAssignment &other);
+    PropertyAssignment &operator=(const PropertyAssignment &other);
+    PropertyAssignment(PropertyAssignment &&other) noexcept;
+    PropertyAssignment &operator=(PropertyAssignment &&other) noexcept;
     const std::string &getName() const;
     void setName(const std::string &name);
     const std::string &getOp() const;
@@ -31,6 +40,7 @@ class PropertyAssignment {
     const std::vector<std::variant<char *, int, bool>> &getParametersVec() const;
 
     void setParametersVec(const std::vector<std::variant<char *, int, bool>> &parametersVec);
+    void printParameters();
 };
 
 

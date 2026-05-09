@@ -1,6 +1,11 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #ifndef TREEDECOMPOSITIONPACE_H
 #define TREEDECOMPOSITIONPACE_H
 
+#include <algorithm>
+#include <cstring>
 #include <iostream>
 #include <set>
 #include <vector>
@@ -26,6 +31,7 @@ class RawInstructiveTreeDecomposition {
 
 class TreeDecompositionPACE {
   private:
+	std::vector<std::vector<unsigned>> adjacency;
   public:
 	std::vector<vertex_t> bags;
 	std::set<std::pair<unsigned, unsigned>> edges;
@@ -79,13 +85,14 @@ class TreeDecompositionPACE {
 			&visited_edges); // add introEdge nodes to a tree decomposition
 	bool colorNode(
 		std::shared_ptr<RawInstructiveTreeDecomposition> node,
-		std::vector<unsigned> &color_vertex,
-		std::vector<unsigned> &vertex_color); // sub function of colorTree
+		std::vector<unsigned> color_vertex,
+		std::vector<unsigned> vertex_color); // sub function of colorTree
 	bool colorTree(); // Colors a tree decomposition with tree-width+1 colors
 	bool updateInnerNodeTD(
 		std::shared_ptr<RawInstructiveTreeDecomposition> node, unsigned &number,
 		unsigned parentno);
 	bool updateTD();
+	bool validateParsedInput() const;
 	void construct();
 	bool validateTree(std::shared_ptr<RawInstructiveTreeDecomposition> node);
 	void createCTDNode(std::shared_ptr<TermNode<ConcreteNode>> cnode,

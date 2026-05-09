@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #ifndef WITNESS_WRAPPER_H
 #define WITNESS_WRAPPER_H
 
@@ -66,7 +69,7 @@ class WitnessWrapper : public Witness {
 	std::shared_ptr<Witness> relabel(
 		const std::map<unsigned, unsigned> &relabelingMap) const override {
 		return std::make_shared<WitnessAlias>(
-			((const WitnessAlias *)this)
+			static_cast<const WitnessAlias *>(this)
 				->relabel_implementation(relabelingMap));
 	}
 
@@ -79,7 +82,7 @@ class WitnessWrapper : public Witness {
 	}
 
 	Witness &set_equal(const Witness &witness) override {
-		*this = as_witness(witness);
+		this->as_witness() = as_witness(witness);
 		return *this;
 	}
 };

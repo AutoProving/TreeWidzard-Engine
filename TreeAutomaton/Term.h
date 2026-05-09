@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 
 #ifndef TREEWIDZARD_TERM_H
 #define TREEWIDZARD_TERM_H
@@ -5,6 +8,7 @@
 #include <vector>
 #include <iostream>
 #include <set>
+#include <type_traits>
 
 class TermNodeContentType{
 public:
@@ -29,7 +33,7 @@ class TermNode{
 private:
     TermNodeContent nodeContent;
     std::vector<std::shared_ptr<TermNode<TermNodeContent> > > children;
-    std::shared_ptr<TermNode<TermNodeContent> > parent;
+    std::weak_ptr<TermNode<TermNodeContent> > parent;
 public:
     TermNode();
 
@@ -48,8 +52,8 @@ public:
     void setChildren(const std::vector<std::shared_ptr<TermNode<TermNodeContent>>> &children) {
         TermNode::children = children;
     }
-    const std::shared_ptr<TermNode<TermNodeContent>> &getParent() const {
-        return parent;
+    std::shared_ptr<TermNode<TermNodeContent>> getParent() const {
+        return parent.lock();
     }
 
     void setParent(const std::shared_ptr<TermNode<TermNodeContent>> &parent) {
@@ -59,9 +63,11 @@ public:
         children.push_back(child);
     }
     bool operator==(const TermNode &rhs) const {
+        const auto lhs_parent = parent.lock();
+        const auto rhs_parent = rhs.parent.lock();
         return nodeContent == rhs.nodeContent &&
                children == rhs.children &&
-               parent == rhs.parent;
+               lhs_parent == rhs_parent;
     }
 
     bool operator!=(const TermNode &rhs) const {
@@ -110,7 +116,11 @@ void TermNode<TermNodeContent>::printTermNode(unsigned &label) {
     }
     label++;
     std::cout<<label <<"  ";
-    nodeContent.print() ;
+    if constexpr (std::is_same_v<TermNodeContent, std::string>) {
+        std::cout << nodeContent;
+    } else {
+        nodeContent.print();
+    }
     if(childrenLabel.size()){
         std::cout<<"(";
         for(auto childNo:childrenLabel){
@@ -140,7 +150,14 @@ std::string TermNode<TermNodeContent>::nodeInformation(unsigned int &label) {
     }
     label++;
 
-    std::string t = std::to_string(label) + " "+ nodeContent.nodeInformation();
+    std::string content_information;
+    if constexpr (std::is_same_v<TermNodeContent, std::string>) {
+        content_information = nodeContent;
+    } else {
+        content_information = nodeContent.nodeInformation();
+    }
+
+    std::string t = std::to_string(label) + " "+ content_information;
     if(childrenLabel.size()){
         t+= "(";
         for(auto childNo:childrenLabel){

@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #ifndef WIDTH_H
 #define WIDTH_H
 
@@ -13,7 +16,7 @@ class Width {
 	Width() {}
 	Width(const Width &other) : name(other.name), value(other.value) {}
 
-	std::string get_name();
+	std::string get_name() const;
 	void set_name(std::string s);
 	unsigned int get_value() const;
 	void set_value(unsigned int value);

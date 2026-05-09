@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #include "Flags.h"
 Flags::Flags() {
 	content.insert({"PrintStates", 0});		// print all states
@@ -6,6 +9,8 @@ Flags::Flags() {
 	content.insert({"StateSize", 0});		// prints size of state
 	content.insert({"Premise", 0});
 	content.insert({"NoBFSDAG", 0});
+	content.insert({"StateTree", 0});
+	content.insert({"PrintDirectedBipartiteGraphNAUTY", 0});
 	content.insert({"WriteToFiles", 0});
 }
 

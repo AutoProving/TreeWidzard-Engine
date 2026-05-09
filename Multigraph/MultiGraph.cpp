@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #include "MultiGraph.h"
 
 MultiGraph::MultiGraph() {}
@@ -77,12 +80,12 @@ std::set<unsigned> MultiGraph::edgesBetweenVertices(unsigned i, unsigned j) {
 }
 
 void MultiGraph::printGraph() {
-	std::cout << "vertices:" << std::endl;
+	std::cout << "Vertices:" << std::endl;
 	for (std::set<unsigned>::iterator it = this->vertices.begin();
 		 it != this->vertices.end(); ++it) {
 		std::cout << *it << std::endl;
 	}
-	std::cout << "Edges" << std::endl;
+	std::cout << "Edges:" << std::endl;
 	for (std::set<unsigned>::iterator itr = this->edges.begin();
 		 itr != this->edges.end(); ++itr) {
 		std::cout << *itr << "\t";
@@ -101,9 +104,10 @@ void MultiGraph::readFromFile(std::ifstream &file) {
 	unsigned edgeC = 0;
 	unsigned edgeNo = 1;
 	while (file >> str) {
-		if (str == "vertices") {
+		if (str == "vertices" || str == "vertices:") {
 			isVertex = true;
-		} else if (str == "edges") {
+			isEdge = false;
+		} else if (str == "edges" || str == "Edges" || str == "Edges:") {
 			isVertex = false;
 			isEdge = true;
 		} else if (isVertex) {
@@ -151,12 +155,12 @@ void MultiGraph::printToFile(std::string fileName) {
 	// "Counterexample_Graph_"+multigraph_fs::path(fileName).filename().string();
 	std::ofstream multiGraphFile(fileName);
 	if (multiGraphFile.is_open()) {
-		multiGraphFile << "vertices:" << std::endl;
+		multiGraphFile << "vertices" << std::endl;
 		for (std::set<unsigned>::iterator it = this->vertices.begin();
 			 it != this->vertices.end(); ++it) {
 			multiGraphFile << *it << std::endl;
 		}
-		multiGraphFile << "Edges" << std::endl;
+		multiGraphFile << "edges" << std::endl;
 		for (std::set<unsigned>::iterator itr = this->edges.begin();
 			 itr != this->edges.end(); ++itr) {
 			multiGraphFile << *itr << "\t";
@@ -259,6 +263,12 @@ unsigned MultiGraph::verticesSize() { return vertices.size(); }
 unsigned MultiGraph::edgesSize() { return edges.size(); }
 
 unsigned MultiGraph::nthVertex(unsigned n) {
+	if (n >= vertices.size()) {
+		std::cerr << "ERROR: MultiGraph::nthVertex(" << n
+				  << ") out of bounds (size=" << vertices.size() << ")"
+				  << std::endl;
+		exit(20);
+	}
 	auto it = vertices.begin();
 	advance(it, n);
 	return *it;

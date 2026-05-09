@@ -1,6 +1,6 @@
-#line 2 "term_lexer.cpp"
+#line 1 "Translation/TreeAutomaton/term_lexer.cpp"
 
-#line 4 "term_lexer.cpp"
+#line 3 "Translation/TreeAutomaton/term_lexer.cpp"
 
 #define  YY_INT_ALIGNED short int
 
@@ -293,7 +293,7 @@
 #if defined (__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
 
 /* C99 says to define __STDC_LIMIT_MACROS before including stdint.h,
- * if you want the limit (max/min) macros for int types. 
+ * if you want the limit (max/min) macros for int types.
  */
 #ifndef __STDC_LIMIT_MACROS
 #define __STDC_LIMIT_MACROS 1
@@ -310,7 +310,7 @@ typedef uint32_t flex_uint32_t;
 typedef signed char flex_int8_t;
 typedef short int flex_int16_t;
 typedef int flex_int32_t;
-typedef unsigned char flex_uint8_t; 
+typedef unsigned char flex_uint8_t;
 typedef unsigned short int flex_uint16_t;
 typedef unsigned int flex_uint32_t;
 
@@ -421,7 +421,7 @@ extern FILE *yyin, *yyout;
 #define EOB_ACT_CONTINUE_SCAN 0
 #define EOB_ACT_END_OF_FILE 1
 #define EOB_ACT_LAST_MATCH 2
-    
+
     /* Note: We specifically omit the test for yy_rule_can_match_eol because it requires
      *       access to the local variable yy_act. Since yyless() is a macro, it would break
      *       existing scanners that call yyless() from OUTSIDE yylex.
@@ -443,7 +443,7 @@ extern FILE *yyin, *yyout;
                     if ( *p == '\n' )\
                         --yylineno;\
             }while(0)
-    
+
 /* Return all but the first "n" matched characters back to the input stream. */
 #define yyless(n) \
 	do \
@@ -633,8 +633,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 7
-#define YY_END_OF_BUFFER 8
+#define YY_NUM_RULES 9
+#define YY_END_OF_BUFFER 10
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -642,10 +642,10 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static const flex_int16_t yy_accept[18] =
+static const flex_int16_t yy_accept[19] =
     {   0,
-        0,    0,    8,    7,    6,    5,    7,    2,    1,    4,
-        6,    0,    2,    4,    0,    3,    0
+        0,    0,   10,    9,    8,    7,    1,    2,    3,    9,
+        4,    6,    8,    5,    4,    6,    5,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -653,17 +653,17 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1,    1,    1,    1,    2,    3,
         1,    1,    2,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    2,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    4,    5,    5,    5,
-        5,    5,    5,    5,    5,    5,    5,    6,    1,    1,
-        1,    1,    1,    1,    7,    7,    7,    7,    7,    7,
-        7,    7,    7,    7,    7,    7,    7,    7,    7,    7,
-        7,    7,    7,    7,    7,    7,    7,    7,    7,    7,
-        1,    1,    1,    1,    1,    1,    7,    7,    7,    7,
+        1,    2,    1,    1,    1,    1,    1,    1,    1,    4,
+        5,    1,    1,    6,    1,    1,    7,    8,    8,    8,
+        8,    8,    8,    8,    8,    8,    8,    1,    1,    1,
+        1,    1,    1,    1,    9,    9,    9,    9,    9,    9,
+        9,    9,    9,    9,    9,    9,    9,    9,    9,    9,
+        9,    9,    9,    9,    9,    9,    9,    9,    9,    9,
+        1,    1,    1,    1,    9,    1,    9,    9,    9,    9,
 
-        7,    7,    7,    7,    7,    7,    7,    7,    7,    7,
-        7,    7,    7,    7,    7,    7,    7,    7,    7,    7,
-        7,    7,    1,    1,    1,    1,    1,    1,    1,    1,
+        9,    9,    9,    9,    9,    9,    9,    9,    9,    9,
+        9,    9,    9,    9,    9,    9,    9,    9,    9,    9,
+        9,    9,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -680,41 +680,41 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static const YY_CHAR yy_meta[8] =
+static const YY_CHAR yy_meta[10] =
     {   0,
-        1,    1,    1,    1,    1,    1,    1
+        1,    1,    2,    1,    1,    1,    1,    3,    3
     } ;
 
-static const flex_int16_t yy_base[19] =
+static const flex_int16_t yy_base[21] =
     {   0,
-        0,    0,   18,   19,   15,   19,   12,   10,   19,    7,
-       11,    9,    6,    3,    6,   19,   19,    7
+        0,    0,   18,   19,   15,   19,   19,   19,   19,    9,
+        7,    0,   12,    0,    5,    0,    0,   19,    8,    9
     } ;
 
-static const flex_int16_t yy_def[19] =
+static const flex_int16_t yy_def[21] =
     {   0,
-       17,    1,   17,   17,   17,   17,   17,   17,   17,   17,
-       17,   18,   17,   17,   18,   17,    0,   17
+       18,    1,   18,   18,   18,   18,   18,   18,   18,   18,
+       18,   19,   18,   20,   18,   19,   20,    0,   18,   18
     } ;
 
-static const flex_int16_t yy_nxt[27] =
+static const flex_int16_t yy_nxt[29] =
     {   0,
-        4,    5,    6,    7,    8,    9,   10,   15,   16,   14,
-       13,   16,   11,   14,   13,   12,   11,   17,    3,   17,
-       17,   17,   17,   17,   17,   17
+        4,    5,    6,    7,    8,    9,   10,   11,   12,   17,
+       16,   17,   15,   13,   15,   14,   13,   18,    3,   18,
+       18,   18,   18,   18,   18,   18,   18,   18
     } ;
 
-static const flex_int16_t yy_chk[27] =
+static const flex_int16_t yy_chk[29] =
     {   0,
-        1,    1,    1,    1,    1,    1,    1,   18,   15,   14,
-       13,   12,   11,   10,    8,    7,    5,    3,   17,   17,
-       17,   17,   17,   17,   17,   17
+        1,    1,    1,    1,    1,    1,    1,    1,    1,   20,
+       19,   20,   15,   13,   11,   10,    5,    3,   18,   18,
+       18,   18,   18,   18,   18,   18,   18,   18
     } ;
 
 /* Table of booleans, true if rule could match eol. */
-static const flex_int32_t yy_rule_can_match_eol[8] =
+static const flex_int32_t yy_rule_can_match_eol[10] =
     {   0,
-0, 0, 1, 0, 1, 0, 0,     };
+0, 0, 0, 0, 0, 0, 1, 0, 0,     };
 
 static yy_state_type yy_last_accepting_state;
 static char *yy_last_accepting_cpos;
@@ -730,8 +730,8 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "term_lexer.l"
-#line 4 "term_lexer.l"
+#line 1 "Translation/TreeAutomaton/term_lexer.l"
+#line 4 "Translation/TreeAutomaton/term_lexer.l"
     #include <cstdlib>
     #include <vector>
     #include "../../TreeAutomaton/TreeAutomaton.h"
@@ -739,8 +739,8 @@ char *yytext;
     #define yylval term_lval
     template<class S>
     extern int yyparse(Term<S> &term, int &result);
-#line 743 "term_lexer.cpp"
-#line 744 "term_lexer.cpp"
+#line 742 "Translation/TreeAutomaton/term_lexer.cpp"
+#line 743 "Translation/TreeAutomaton/term_lexer.cpp"
 
 #define INITIAL 0
 
@@ -800,9 +800,9 @@ extern int yywrap ( void );
 #endif
 
 #ifndef YY_NO_UNPUT
-    
+
     static void yyunput ( int c, char *buf_ptr  );
-    
+
 #endif
 
 #ifndef yytext_ptr
@@ -929,7 +929,7 @@ YY_DECL
 	yy_state_type yy_current_state;
 	char *yy_cp, *yy_bp;
 	int yy_act;
-    
+
 	if ( !(yy_init) )
 		{
 		(yy_init) = 1;
@@ -957,9 +957,9 @@ YY_DECL
 		}
 
 	{
-#line 15 "term_lexer.l"
+#line 15 "Translation/TreeAutomaton/term_lexer.l"
 
-#line 963 "term_lexer.cpp"
+#line 962 "Translation/TreeAutomaton/term_lexer.cpp"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -986,7 +986,7 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 18 )
+				if ( yy_current_state >= 19 )
 					yy_c = yy_meta[yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
@@ -1010,7 +1010,7 @@ yy_find_action:
 			int yyl;
 			for ( yyl = 0; yyl < yyleng; ++yyl )
 				if ( yytext[yyl] == '\n' )
-					
+
     yylineno++;
 ;
 			}
@@ -1028,42 +1028,51 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 16 "term_lexer.l"
-yylval.string = strdup(yytext); return TR_SEPARATOR;
+#line 16 "Translation/TreeAutomaton/term_lexer.l"
+yylval.string = strdup(yytext); return TR_LEFTP;
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 17 "term_lexer.l"
-yylval.number = atoi(yytext); return TR_NODE_NUM;
+#line 17 "Translation/TreeAutomaton/term_lexer.l"
+yylval.string = strdup(yytext); return TR_RIGHTP;
 	YY_BREAK
 case 3:
-/* rule 3 can match eol */
 YY_RULE_SETUP
-#line 18 "term_lexer.l"
-yylval.string = strdup(yytext); return TR_COMMENT;
+#line 18 "Translation/TreeAutomaton/term_lexer.l"
+yylval.string = strdup(yytext); return TR_COMMA;
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 19 "term_lexer.l"
-yylval.string = strdup(yytext); return TR_NODE_SYMBOL;
+#line 19 "Translation/TreeAutomaton/term_lexer.l"
+yylval.number = atoi(yytext); return TR_NODE_NUM;
 	YY_BREAK
 case 5:
-/* rule 5 can match eol */
 YY_RULE_SETUP
-#line 20 "term_lexer.l"
-yylval.string= strdup(yytext);  return TR_NEWLINE;
+#line 20 "Translation/TreeAutomaton/term_lexer.l"
+yylval.string = strdup(yytext); return TR_COMMENT;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 21 "term_lexer.l"
-;
+#line 21 "Translation/TreeAutomaton/term_lexer.l"
+yylval.string = strdup(yytext); return TR_NODE_SYMBOL;
 	YY_BREAK
 case 7:
+/* rule 7 can match eol */
 YY_RULE_SETUP
-#line 22 "term_lexer.l"
+#line 22 "Translation/TreeAutomaton/term_lexer.l"
+yylval.string = strdup(yytext); return TR_NEWLINE;
+	YY_BREAK
+case 8:
+YY_RULE_SETUP
+#line 23 "Translation/TreeAutomaton/term_lexer.l"
+;
+	YY_BREAK
+case 9:
+YY_RULE_SETUP
+#line 24 "Translation/TreeAutomaton/term_lexer.l"
 ECHO;
 	YY_BREAK
-#line 1067 "term_lexer.cpp"
+#line 1075 "Translation/TreeAutomaton/term_lexer.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1346,7 +1355,7 @@ static int yy_get_next_buffer (void)
 {
 	yy_state_type yy_current_state;
 	char *yy_cp;
-    
+
 	yy_current_state = (yy_start);
 
 	for ( yy_cp = (yytext_ptr) + YY_MORE_ADJ; yy_cp < (yy_c_buf_p); ++yy_cp )
@@ -1360,7 +1369,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 18 )
+			if ( yy_current_state >= 19 )
 				yy_c = yy_meta[yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
@@ -1388,11 +1397,11 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 18 )
+		if ( yy_current_state >= 19 )
 			yy_c = yy_meta[yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
-	yy_is_jam = (yy_current_state == 17);
+	yy_is_jam = (yy_current_state == 18);
 
 		return yy_is_jam ? 0 : yy_current_state;
 }
@@ -1402,7 +1411,7 @@ static int yy_get_next_buffer (void)
     static void yyunput (int c, char * yy_bp )
 {
 	char *yy_cp;
-    
+
     yy_cp = (yy_c_buf_p);
 
 	/* undo effects of setting up yytext */
@@ -1451,7 +1460,7 @@ static int yy_get_next_buffer (void)
 
 {
 	int c;
-    
+
 	*(yy_c_buf_p) = (yy_hold_char);
 
 	if ( *(yy_c_buf_p) == YY_END_OF_BUFFER_CHAR )
@@ -1513,7 +1522,7 @@ static int yy_get_next_buffer (void)
 	(yy_hold_char) = *++(yy_c_buf_p);
 
 	if ( c == '\n' )
-		
+
     yylineno++;
 ;
 
@@ -1523,12 +1532,12 @@ static int yy_get_next_buffer (void)
 
 /** Immediately switch to a different input stream.
  * @param input_file A readable stream.
- * 
+ *
  * @note This function does not reset the start condition to @c INITIAL .
  */
     void yyrestart  (FILE * input_file )
 {
-    
+
 	if ( ! YY_CURRENT_BUFFER ){
         yyensure_buffer_stack ();
 		YY_CURRENT_BUFFER_LVALUE =
@@ -1541,11 +1550,11 @@ static int yy_get_next_buffer (void)
 
 /** Switch to a different input buffer.
  * @param new_buffer The new input buffer.
- * 
+ *
  */
     void yy_switch_to_buffer  (YY_BUFFER_STATE  new_buffer )
 {
-    
+
 	/* TODO. We should be able to replace this entire function body
 	 * with
 	 *		yypop_buffer_state();
@@ -1585,13 +1594,13 @@ static void yy_load_buffer_state  (void)
 /** Allocate and initialize an input buffer state.
  * @param file A readable stream.
  * @param size The character buffer size in bytes. When in doubt, use @c YY_BUF_SIZE.
- * 
+ *
  * @return the allocated buffer state.
  */
     YY_BUFFER_STATE yy_create_buffer  (FILE * file, int  size )
 {
 	YY_BUFFER_STATE b;
-    
+
 	b = (YY_BUFFER_STATE) yyalloc( sizeof( struct yy_buffer_state )  );
 	if ( ! b )
 		YY_FATAL_ERROR( "out of dynamic memory in yy_create_buffer()" );
@@ -1614,11 +1623,11 @@ static void yy_load_buffer_state  (void)
 
 /** Destroy the buffer.
  * @param b a buffer created with yy_create_buffer()
- * 
+ *
  */
     void yy_delete_buffer (YY_BUFFER_STATE  b )
 {
-    
+
 	if ( ! b )
 		return;
 
@@ -1639,7 +1648,7 @@ static void yy_load_buffer_state  (void)
 
 {
 	int oerrno = errno;
-    
+
 	yy_flush_buffer( b );
 
 	b->yy_input_file = file;
@@ -1655,13 +1664,13 @@ static void yy_load_buffer_state  (void)
     }
 
         b->yy_is_interactive = file ? (isatty( fileno(file) ) > 0) : 0;
-    
+
 	errno = oerrno;
 }
 
 /** Discard all buffered characters. On the next scan, YY_INPUT will be called.
  * @param b the buffer state to be flushed, usually @c YY_CURRENT_BUFFER.
- * 
+ *
  */
     void yy_flush_buffer (YY_BUFFER_STATE  b )
 {
@@ -1690,7 +1699,7 @@ static void yy_load_buffer_state  (void)
  *  the current state. This function will allocate the stack
  *  if necessary.
  *  @param new_buffer The new state.
- *  
+ *
  */
 void yypush_buffer_state (YY_BUFFER_STATE new_buffer )
 {
@@ -1720,7 +1729,7 @@ void yypush_buffer_state (YY_BUFFER_STATE new_buffer )
 
 /** Removes and deletes the top of the stack, if present.
  *  The next element becomes the new top.
- *  
+ *
  */
 void yypop_buffer_state (void)
 {
@@ -1744,7 +1753,7 @@ void yypop_buffer_state (void)
 static void yyensure_buffer_stack (void)
 {
 	yy_size_t num_to_alloc;
-    
+
 	if (!(yy_buffer_stack)) {
 
 		/* First allocation is just for 2 elements, since we don't know if this
@@ -1787,13 +1796,13 @@ static void yyensure_buffer_stack (void)
 /** Setup the input buffer state to scan directly from a user-specified character buffer.
  * @param base the character buffer
  * @param size the size in bytes of the character buffer
- * 
+ *
  * @return the newly allocated buffer state object.
  */
 YY_BUFFER_STATE yy_scan_buffer  (char * base, yy_size_t  size )
 {
 	YY_BUFFER_STATE b;
-    
+
 	if ( size < 2 ||
 	     base[size-2] != YY_END_OF_BUFFER_CHAR ||
 	     base[size-1] != YY_END_OF_BUFFER_CHAR )
@@ -1822,14 +1831,14 @@ YY_BUFFER_STATE yy_scan_buffer  (char * base, yy_size_t  size )
 /** Setup the input buffer state to scan a string. The next call to yylex() will
  * scan from a @e copy of @a str.
  * @param yystr a NUL-terminated string to scan
- * 
+ *
  * @return the newly allocated buffer state object.
  * @note If you want to scan bytes that may contain NUL values, then use
  *       yy_scan_bytes() instead.
  */
 YY_BUFFER_STATE yy_scan_string (const char * yystr )
 {
-    
+
 	return yy_scan_bytes( yystr, (int) strlen(yystr) );
 }
 
@@ -1837,7 +1846,7 @@ YY_BUFFER_STATE yy_scan_string (const char * yystr )
  * scan from a @e copy of @a bytes.
  * @param yybytes the byte buffer to scan
  * @param _yybytes_len the number of bytes in the buffer pointed to by @a bytes.
- * 
+ *
  * @return the newly allocated buffer state object.
  */
 YY_BUFFER_STATE yy_scan_bytes  (const char * yybytes, int  _yybytes_len )
@@ -1846,7 +1855,7 @@ YY_BUFFER_STATE yy_scan_bytes  (const char * yybytes, int  _yybytes_len )
 	char *buf;
 	yy_size_t n;
 	int i;
-    
+
 	/* Get memory for full buffer, including space for trailing EOB's. */
 	n = (yy_size_t) (_yybytes_len + 2);
 	buf = (char *) yyalloc( n  );
@@ -1900,16 +1909,16 @@ static void yynoreturn yy_fatal_error (const char* msg )
 /* Accessor  methods (get/set functions) to struct members. */
 
 /** Get the current line number.
- * 
+ *
  */
 int yyget_lineno  (void)
 {
-    
+
     return yylineno;
 }
 
 /** Get the input stream.
- * 
+ *
  */
 FILE *yyget_in  (void)
 {
@@ -1917,7 +1926,7 @@ FILE *yyget_in  (void)
 }
 
 /** Get the output stream.
- * 
+ *
  */
 FILE *yyget_out  (void)
 {
@@ -1925,7 +1934,7 @@ FILE *yyget_out  (void)
 }
 
 /** Get the length of the current token.
- * 
+ *
  */
 int yyget_leng  (void)
 {
@@ -1933,7 +1942,7 @@ int yyget_leng  (void)
 }
 
 /** Get the current token.
- * 
+ *
  */
 
 char *yyget_text  (void)
@@ -1943,18 +1952,18 @@ char *yyget_text  (void)
 
 /** Set the current line number.
  * @param _line_number line number
- * 
+ *
  */
 void yyset_lineno (int  _line_number )
 {
-    
+
     yylineno = _line_number;
 }
 
 /** Set the input stream. This does not discard the current
  * input buffer.
  * @param _in_str A readable stream.
- * 
+ *
  * @see yy_switch_to_buffer
  */
 void yyset_in (FILE *  _in_str )
@@ -1985,7 +1994,7 @@ static int yy_init_globals (void)
 
     /* We do not touch yylineno unless the option is enabled. */
     yylineno =  1;
-    
+
     (yy_buffer_stack) = NULL;
     (yy_buffer_stack_top) = 0;
     (yy_buffer_stack_max) = 0;
@@ -2011,7 +2020,7 @@ static int yy_init_globals (void)
 /* yylex_destroy is for both reentrant and non-reentrant scanners. */
 int yylex_destroy  (void)
 {
-    
+
     /* Pop the buffer stack, destroying each element. */
 	while(YY_CURRENT_BUFFER){
 		yy_delete_buffer( YY_CURRENT_BUFFER  );
@@ -2037,7 +2046,7 @@ int yylex_destroy  (void)
 #ifndef yytext_ptr
 static void yy_flex_strncpy (char* s1, const char * s2, int n )
 {
-		
+
 	int i;
 	for ( i = 0; i < n; ++i )
 		s1[i] = s2[i];
@@ -2062,7 +2071,7 @@ void *yyalloc (yy_size_t  size )
 
 void *yyrealloc  (void * ptr, yy_size_t  size )
 {
-		
+
 	/* The cast to (char *) in the following accommodates both
 	 * implementations that use char* generic pointers, and those
 	 * that use void* generic pointers.  It works with the latter
@@ -2080,7 +2089,6 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 22 "term_lexer.l"
-
+#line 24 "Translation/TreeAutomaton/term_lexer.l"
 
 

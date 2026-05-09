@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+ */
+
 %option noyywrap
 %option prefix="command_"
 %{
@@ -15,7 +20,7 @@
 -atp                        yylval.string = strdup(yytext); return command_search_signature;
 tw                          yylval.string = strdup(yytext); return command_tw;
 pw                          yylval.string = strdup(yytext); return command_pw;
-=                           yylval.string = strdup(yytext);  return command_equal;
+([ \t]*=[ \t]*|=)           yylval.string = strdup("=");  return command_equal;
 -modelcheck                 yylval.string = strdup(yytext); return command_parse_signature;
 -ps                         yylval.string = strdup(yytext); return command_print_state_flag;
 -pl                         yylval.string = strdup(yytext); return command_print_loop_flag;
@@ -31,7 +36,7 @@ pw                          yylval.string = strdup(yytext); return command_pw;
 PACE                        yylval.string = strdup(yytext); return command_parse_pace;
 ITD                    yylval.string = strdup(yytext); return command_parse_itd;
 ;                           yylval.string = strdup(yytext); return command_end;
-[0-9\.]+                    yylval.number = std::stof(yytext);   return command_number;
+[0-9]+(\.[0-9]+)?           yylval.number = std::stof(yytext);   return command_number;
 .+                          yylval.string = strdup(yytext); return command_string;
 [\n \t \r]                  ;
 %%
