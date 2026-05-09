@@ -123,11 +123,10 @@ inline std::vector<DPCoreFileEntry> list_dp_core_files() {
 		if (dir.empty()) continue;
 		if (!std::filesystem::exists(dir)) continue;
 		for (const auto &entry : std::filesystem::directory_iterator(dir)) {
-			const std::string path = entry.path().string();
-			if (path.find(TREEWIDZARD_DYNAMIC_LIB_EXTENSION) ==
-				std::string::npos) {
+			if (entry.path().extension() != TREEWIDZARD_DYNAMIC_LIB_EXTENSION) {
 				continue;
 			}
+			const std::string path = entry.path().string();
 			const std::filesystem::path p(path);
 			entries.push_back(
 				DPCoreFileEntry{p.filename().string(), fnv1a64_file(p)});

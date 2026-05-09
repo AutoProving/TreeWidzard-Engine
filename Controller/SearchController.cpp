@@ -56,9 +56,8 @@ void SearchController::check_search() {
 				if (ec) {
 					break;
 				}
-				const std::string s = entry.path().string();
-				// for linux .so, and windows .dll
-				if (s.find(DYNAMIC_LIB_EXTENSION) != std::string::npos) {
+				if (entry.path().extension() == DYNAMIC_LIB_EXTENSION) {
+					const std::string s = entry.path().string();
 					SearchStrategyHandler factory(s);
 					const std::map<std::string, std::string> &attributes =
 						factory.get_metadata();

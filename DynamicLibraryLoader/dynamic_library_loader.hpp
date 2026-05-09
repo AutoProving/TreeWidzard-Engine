@@ -34,7 +34,10 @@
 #endif
 
 #ifndef TREEWIDZARD_KEEP_DYNAMIC_LIBRARIES_LOADED
-#define TREEWIDZARD_KEEP_DYNAMIC_LIBRARIES_LOADED 0
+// TreeWidzard plugins are C++ shared objects that exchange STL-owned metadata
+// and polymorphic objects with the host process. Keeping plugin images loaded
+// avoids platform-specific teardown hazards from repeated dlopen/dlclose cycles.
+#define TREEWIDZARD_KEEP_DYNAMIC_LIBRARIES_LOADED 1
 #endif
 
 template <CTString name, class Signature>

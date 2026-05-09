@@ -56,10 +56,10 @@ auto InputController::discover_core_handlers(
 			if (ec) {
 				break;
 			}
-			const std::string library_path = entry.path().string();
-			if (library_path.find(DYNAMIC_LIB_EXTENSION) == std::string::npos) {
+			if (entry.path().extension() != DYNAMIC_LIB_EXTENSION) {
 				continue;
 			}
+			const std::string library_path = entry.path().string();
 			try {
 				auto factory = DynamicCoreHandler(library_path);
 				const std::string &name = factory.get_metadata().at("CoreName");
