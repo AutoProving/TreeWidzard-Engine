@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #ifndef SEARCHSTRATEGY_H
 #define SEARCHSTRATEGY_H
 
@@ -26,7 +29,7 @@ class SearchStrategy {
 	SearchStrategy(DynamicKernel *dynamicKernel, Conjecture *conjecture,
 				   Flags *flags);
 	SearchStrategy();
-  virtual ~SearchStrategy() = default;
+	virtual ~SearchStrategy();
 
 	const std::string &getPropertyFilePath() const;
 	void setPropertyFilePath(const std::string &propertyFilePath);

@@ -1,10 +1,20 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #pragma once
 
-#include <optional>
+// Core kernel headers — these transitively include most STL headers needed by DP cores
+// (algorithm, cassert, iterator, map, memory, set, string, utility, vector)
 #include "Kernel/Bag.h"
 #include "Kernel/CoreWrapper.h"
 #include "Kernel/WitnessSet.h"
 #include "Kernel/WitnessWrapper.h"
+#include "Kernel/DynamicCore.h"
+
+// Additional STL headers not guaranteed by kernel includes
+#include <optional>
+#include <unordered_map>
+#include <iostream>
 
 namespace detail {
 
@@ -26,12 +36,6 @@ auto try_unpack_typed_args_impl(std::tuple<Ts...> &result, const auto &vec)
 
 } // namespace detail
 
-/// Given a vector of variants,
-/// try to unpack them into a tuple
-/// that is no longer variant (i.e. typed).
-///
-/// Returns nullopt if the vector is not of the right size,
-/// or if any of the variants are not of the right type.
 template <class... Ts>
 auto try_unpack_typed_args(const auto &vec)
 	-> std::optional<std::tuple<Ts...>> {
@@ -45,12 +49,6 @@ auto try_unpack_typed_args(const auto &vec)
 	return result;
 }
 
-/// Given a vector of variants,
-/// try to unpack them into a tuple
-/// that is no longer variant (i.e. typed).
-///
-/// Throws if the vector is not of the right size,
-/// or if any of the variants are not of the right type.
 template <class... Ts>
 auto unpack_typed_args(const auto &vec) -> std::tuple<Ts...> {
 	if (auto result = try_unpack_typed_args<Ts...>(vec))

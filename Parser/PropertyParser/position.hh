@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 // A Bison parser, made by GNU Bison 3.8.2.
 
 // Starting with Bison 3.2, this file is useless: the structure it

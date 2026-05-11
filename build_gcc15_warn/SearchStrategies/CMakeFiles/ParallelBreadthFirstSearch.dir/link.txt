@@ -1,1 +1,0 @@
-/opt/homebrew/bin/g++-15 -Werror -g -arch arm64 -dynamiclib -Wl,-headerpad_max_install_names -o ParallelBreadthFirstSearch.dylib -install_name @rpath/ParallelBreadthFirstSearch.dylib CMakeFiles/ParallelBreadthFirstSearch.dir/Source/ParallelBreadthFirstSearch.cpp.o  ../libTreeWidzard-Core.a

@@ -1,1 +1,0 @@
-/usr/bin/c++ -O3 -DNDEBUG -arch arm64 -dynamiclib -Wl,-headerpad_max_install_names -o HasMultipleEdges.dylib -install_name @rpath/HasMultipleEdges.dylib CMakeFiles/HasMultipleEdges.dir/Source/HasMultipleEdges.cpp.o  ../libTreeWidzard-Core.a

@@ -1,12 +1,14 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #ifndef SEARCHSTRATEGYHANDLER_H
 #define SEARCHSTRATEGYHANDLER_H
 
-#include <dlfcn.h>
 #include <algorithm>
 #include <iostream>
 #include <memory>
-#include "../DynamicLibraryLoader/dynamic_library_loader.hpp"
 #include "SearchStrategy.h"
+#include "../DynamicLibraryLoader/dynamic_library_loader.hpp"
 
 class SearchStrategyHandler {
   public:

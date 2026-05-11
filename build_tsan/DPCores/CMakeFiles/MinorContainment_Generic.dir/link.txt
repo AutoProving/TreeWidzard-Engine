@@ -1,1 +1,0 @@
-/usr/bin/c++ -fsanitize=thread -fno-omit-frame-pointer -g -arch arm64 -dynamiclib -Wl,-headerpad_max_install_names -fsanitize=thread -o MinorContainment_Generic.dylib -install_name @rpath/MinorContainment_Generic.dylib CMakeFiles/MinorContainment_Generic.dir/Source/MinorContainment_Generic.cpp.o  ../libTreeWidzard-Core.a

@@ -1,6 +1,13 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #ifndef STATE_H
 #define STATE_H
 #include <cassert>
+#include <cstdint>
+#include <deque>
+#include <memory>
+#include <mutex>
 #include <vector>
 #include "Bag.h"
 #include "WitnessSet.h"
@@ -9,15 +16,47 @@ class State : private std::enable_shared_from_this<State> {
   private:
 	Bag bag;
 	std::vector<std::shared_ptr<WitnessSet>> witnessSetVector;
-
+	mutable bool hashCacheValid = false;
+	mutable uint64_t hashCache = 0;
+	
+	// Simple memory pool for State objects
+	struct StateMemoryPool {
+		std::deque<std::unique_ptr<State>> available;
+		std::mutex pool_mutex;
+		size_t active_allocations = 0;
+		
+		State* allocate();
+		void deallocate(State* ptr);
+		void clear();
+		size_t getActiveAllocations() const { return active_allocations; }
+	};
+	
+	static StateMemoryPool pool_;
   public:
+	// Pool management methods
+	static void initializePool(size_t initialSize = 10000);
+	static void clearPool();
+	static size_t getPoolStats();
+	
+	// Custom allocation using memory pool
+	static std::shared_ptr<State> createPooled();
+	
 	class ptr {
 	  private:
 		std::shared_ptr<const State> pointer;
-
 	  public:
-		ptr() { pointer = std::make_shared<State>(); }
+		ptr() { 
+			auto mutable_state = State::createPooled();
+			pointer = mutable_state;
+		}
 		ptr(std::shared_ptr<const State> pointer_) : pointer(pointer_) {}
+		ptr(std::shared_ptr<State> pointer_) : pointer(pointer_) {}
+		
+		// Allow access to mutable state during construction
+		std::shared_ptr<State> getMutableState() const {
+			return std::const_pointer_cast<State>(pointer);
+		}
+		
 		const State &operator*() const { return *pointer; }
 		const State *operator->() const { return &*pointer; }
 		bool operator<(const ptr &rhs) const { return **this < *rhs; }
@@ -32,14 +71,11 @@ class State : private std::enable_shared_from_this<State> {
 		}
 
 		struct Hash {
-			const uint64_t seed_ = 0;
 			uint64_t operator()(const State::ptr &ptr) const {
-				Hasher h(seed_);
-				ptr->hash(h);
-				return h.get();
+				return ptr->hashValue();
 			}
 		};
-
+		
 		struct Equal {
 			bool operator()(const State::ptr &l, const State::ptr &r) const {
 				return *l == *r;
@@ -49,12 +85,15 @@ class State : private std::enable_shared_from_this<State> {
 
 	ptr get_ptr() const { return ptr(this->shared_from_this()); }
 
-	Bag get_bag() const;
+	const Bag &get_bag() const;
+	Bag get_bag_copy() const;
 
 	void set_bag(const Bag &bag);
 
 	void setWitnessSetVector(
 		const std::vector<std::shared_ptr<WitnessSet>> &witnessSetVector);
+	void setWitnessSetVector(
+		std::vector<std::shared_ptr<WitnessSet>> &&witnessSetVector);
 
 	void addWitnessSet(std::shared_ptr<WitnessSet>);
 
@@ -76,7 +115,8 @@ class State : private std::enable_shared_from_this<State> {
 
 	std::string stateInformation() const;
 
-	std::shared_ptr<WitnessSet> getWitnessSet(int) const;
+	const std::shared_ptr<WitnessSet> &getWitnessSet(int) const;
+	std::shared_ptr<WitnessSet> getWitnessSetCopy(int) const;
 
 	size_t numberOfComponents() const;
 
@@ -86,6 +126,11 @@ class State : private std::enable_shared_from_this<State> {
 			   // relabel function propagates this relabeling to a State
 
 	void hash(Hasher &h) const;
+	uint64_t hashValue() const;
+
+  private:
+	void invalidateHashCache();
+	uint64_t computeHashValue() const;
 };
 
 #endif

@@ -1,6 +1,9 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #include "Width.h"
 
-std::string Width::get_name() { return name; }
+std::string Width::get_name() const { return name; }
 
 void Width::set_name(std::string s) { name = s; }
 

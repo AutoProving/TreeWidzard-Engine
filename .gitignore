@@ -1,25 +1,113 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
 /.DS_Store
 .DS_Store
-.idea
-/build/*
-*/build/*
-*/Build/*
-/Build/*
-build/*
-build/*
-Build/*
-Build/*
+.idea/
+.vscode/
+
+# Keep local CMake output under one generated tree.
+/out/
+
+# Legacy/ad hoc local build directories.
+/build*/
+/Build*/
+build/
+Build/
+build_*/
+cmake-build-*/
+*/build/
+*/Build/
+*/build_*/
+*/cmake-build-*/
+*/simple_build/
+*/test_build/
+
+# CMake generated files in case someone configures in-place.
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+DartConfiguration.tcl
+Makefile
+compile_commands.json
+build_output.txt
 
 *swp
 *swo
 *un~
 *~
-.idea/*
-*/cmake-build-debug/*
-cmake-build-debug/*
-*.so
-/*/*.so
-.vscode/*
-/small-test/*
 /small-test/
 tags
+
+/test_conjectures
+
+# Build artifacts
+*.o
+*.so
+*.dylib
+*.a
+*/*build*/
+
+# GPU executables and benchmarks
+atp_pathwidth*_benchmark
+pathwidth*_test
+*_benchmark
+*_demo
+simple_mps_test
+
+# Generated outputs
+*CounterExample*
+*RunTree*
+*_tree_width_*
+*_path_width_*
+
+# Editor files
+*~
+*.bak
+*.orig
+.vscode/
+.idea/
+
+# Backup files
+backup-*.tar.gz
+
+# Documentation archives
+docs/archive/
+
+# Performance reports
+performance_report.txt
+memory_usage.log
+*.data
+
+__pycache__/

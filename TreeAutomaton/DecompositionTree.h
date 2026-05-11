@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #ifndef TREEWIDZARD_DECOMPOSITIONTREE_H
 #define TREEWIDZARD_DECOMPOSITIONTREE_H
 #include <algorithm>
@@ -14,7 +17,7 @@ class DecompositionNode {
 
     private:
         std::set<unsigned> vertices;
-        std::shared_ptr<DecompositionNode> parent;
+        std::weak_ptr<DecompositionNode> parent;
         std::vector<std::shared_ptr<DecompositionNode>> children;
     public:
         DecompositionNode();

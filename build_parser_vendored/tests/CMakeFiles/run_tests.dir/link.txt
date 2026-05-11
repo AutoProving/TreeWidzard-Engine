@@ -1,1 +1,0 @@
-/usr/bin/c++ -O3 -DNDEBUG -arch arm64 -Wl,-search_paths_first -Wl,-headerpad_max_install_names -rdynamic CMakeFiles/run_tests.dir/test_conjecture.cpp.o -o run_tests  ../libTreeWidzard-Core.a ../lib/libgtest_main.a ../lib/libgtest.a

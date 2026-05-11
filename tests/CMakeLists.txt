@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
 
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.18)
 
 # Fetch GoogleTest using FetchContent
 include(FetchContent)

@@ -1,1 +1,0 @@
-/usr/bin/c++ -fsanitize=thread -fno-omit-frame-pointer -g -arch arm64 -dynamiclib -Wl,-headerpad_max_install_names -fsanitize=thread -o VertexCover_AtMost.dylib -install_name @rpath/VertexCover_AtMost.dylib CMakeFiles/VertexCover_AtMost.dir/Source/VertexCover_AtMost.cpp.o  ../libTreeWidzard-Core.a

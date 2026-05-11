@@ -1,23 +1,72 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #include "IsomorphismBreadthFirstSearch.h"
 
-extern "C" {
-std::map<std::string, std::string> *metadata() {
-	return new std::map<std::string, std::string>(
-		IsomorphismBreadthFirstSearch().getAttributes());
-}
-IsomorphismBreadthFirstSearch *create(DynamicKernel *dynamicKernel,
-									  Conjecture *conjecture, Flags *flags) {
-	return new IsomorphismBreadthFirstSearch(dynamicKernel, conjecture, flags);
-}
+#include <cstdlib>
+#include <memory>
+#include <unordered_map>
+
+#include "Kernel/CertificateUtils.h"
+#include "Kernel/CertificateWriter.h"
+
+namespace {
+
+struct BagSignature {
+	vector<unsigned> elements;
+
+	bool operator==(const BagSignature &rhs) const { return elements == rhs.elements; }
+};
+
+struct BagSignatureHash {
+	auto operator()(const BagSignature &signature) const -> size_t {
+		Hasher h(0);
+		h << static_cast<unsigned>(signature.elements.size());
+		for (unsigned element : signature.elements)
+		{
+			h << element;
+		}
+		return h.get();
+	}
+};
+
+auto make_bag_signature(const set<unsigned> &elements) -> BagSignature
+{
+	BagSignature signature;
+	signature.elements.assign(elements.begin(), elements.end());
+	return signature;
 }
 
-IsomorphismBreadthFirstSearch::IsomorphismBreadthFirstSearch() {
+auto make_bag_signature(const Bag &bag) -> BagSignature
+{
+	return make_bag_signature(bag.get_elements());
+}
+
+} // namespace
+
+extern "C"
+{
+	std::map<std::string, std::string> *metadata()
+	{
+		return new std::map<std::string, std::string>(
+			IsomorphismBreadthFirstSearch().getAttributes());
+	}
+	IsomorphismBreadthFirstSearch *create(DynamicKernel *dynamicKernel,
+										  Conjecture *conjecture, Flags *flags)
+	{
+		return new IsomorphismBreadthFirstSearch(dynamicKernel, conjecture, flags);
+	}
+}
+
+IsomorphismBreadthFirstSearch::IsomorphismBreadthFirstSearch()
+{
 	addAttribute("SearchName", "IsomorphismBreadthFirstSearch");
 }
 
 IsomorphismBreadthFirstSearch::IsomorphismBreadthFirstSearch(
 	DynamicKernel *dynamicKernel, Conjecture *conjecture, Flags *flags)
-	: SearchStrategy(dynamicKernel, conjecture, flags) {
+	: SearchStrategy(dynamicKernel, conjecture, flags)
+{
 	this->kernel = kernel;
 	this->conjecture = conjecture;
 	this->flags = flags;
@@ -25,18 +74,46 @@ IsomorphismBreadthFirstSearch::IsomorphismBreadthFirstSearch(
 	this->noBFSDAG = flags->get("NoBFSDAG");
 }
 
-void IsomorphismBreadthFirstSearch::search() {
-	if (flags->get("Premise")) {
-		cout << " Premise is ACTIVATED" << endl;
-	} else {
-		cout << "Premise is NOT ACTIVATED" << endl;
-	}
+void IsomorphismBreadthFirstSearch::search()
+{
+	// if (flags->get("Premise"))
+	// {
+	// 	cout << "Premise is ACTIVATED" << endl;
+	// }
+	// else
+	// {
+	// 	cout << "Premise is NOT ACTIVATED" << endl;
+	// }
 	bool printStateFlag = flags->get("PrintStates");
 
 	State::ptr initialState = kernel->initialState();
+
+	std::unique_ptr<TreeWidzard::Certificates::CertificateWriter> cert;
+	std::unordered_map<State::ptr, int, State::ptr::Hash, State::ptr::Equal>
+		cert_ids;
+	int next_cert_id = 1;
+	if (const char *cert_path = std::getenv("TREEWIDZARD_CERT_PATH"))
+	{
+		if (std::string(cert_path).size() > 0)
+		{
+			cert = std::make_unique<TreeWidzard::Certificates::CertificateWriter>(
+				cert_path);
+			const uint64_t prop_hash =
+				TreeWidzard::Certificates::fnv1a64_file(getPropertyFilePath());
+			const uint64_t dpcores_hash =
+				TreeWidzard::Certificates::dp_cores_fingerprint();
+			cert->writeHeader(kernel->get_width(), getAttributeValue("SearchName"),
+							  TreeWidzard::Certificates::CanonMode::BAG_MIN,
+							  static_cast<bool>(flags->get("Premise")), prop_hash,
+							  getPropertyFilePath(), dpcores_hash);
+			cert_ids.emplace(initialState, 0);
+			cert->writeLeaf(0);
+		}
+	}
 	allStatesSet.insert(initialState);
 	newStatesSet.insert(initialState);
-	if (!noBFSDAG) {
+	if (!noBFSDAG)
+	{
 		// Initialize the DAG
 		bfsDAG.addState(initialState);
 		InstructiveTreeDecompositionNodeContent initialTransitionContent(
@@ -56,18 +133,28 @@ void IsomorphismBreadthFirstSearch::search() {
 	cout << left << setw(25) << "Iteration" << setw(25) << "ALLSTATES"
 		 << setw(25) << "NEWSTATES"
 		 << "Max WITNESSSET SIZE" << endl;
-	while (!newStatesSet.empty()) {
+	const bool enable_joins = kernel->get_width().get_name() == "tree_width";
+	std::unordered_map<BagSignature, set<State::ptr>, BagSignatureHash>
+		states_by_bag;
+	if (enable_joins)
+	{
+		states_by_bag[make_bag_signature(initialState->get_bag())].insert(
+			initialState);
+	}
+	while (!newStatesSet.empty())
+	{
 		iterationNumber++;
 		////////////////////////////////////////////////////////////////////////////////////
-		newStatesVector.clear(); // clear newStatesVector to add states in
-								 // newStatesSet in it
+		newStatesVector.clear();					 // clear newStatesVector to add states in
+													 // newStatesSet in it
 		newStatesVector.resize(newStatesSet.size()); //
 		std::copy(newStatesSet.begin(), newStatesSet.end(),
 				  newStatesVector.begin());
 		newStatesSet.clear(); // clear newStatesSet to add new states that are
 							  // generated in this loop
 		// This loop is suitable for parallelization
-		for (size_t l = 0; l < newStatesVector.size(); l++) {
+		for (size_t l = 0; l < newStatesVector.size(); l++)
+		{
 			State::ptr statePointer = newStatesVector[l];
 			Bag bag = statePointer->get_bag();
 			set<unsigned> bagElement = bag.get_elements();
@@ -77,8 +164,10 @@ void IsomorphismBreadthFirstSearch::search() {
 			// the +1 below comes from the fact that treewidth is
 			// size of the bag minus one. So the loop iterates
 			// from 1 to number of elements inteh bag.
-			for (size_t i = 1; i <= width + 1; i++) {
-				if (bag.vertex_introducible(i)) {
+			for (size_t i = 1; i <= width + 1; i++)
+			{
+				if (bag.vertex_introducible(i))
+				{
 					State::ptr newStatePointer =
 						kernel->intro_v(statePointer, i);
 					State::ptr relabeledNewStatePointer = canonicalState(
@@ -86,17 +175,28 @@ void IsomorphismBreadthFirstSearch::search() {
 										  // derived from newStatePointer.
 					bool premiseFlag = flags->get("Premise");
 					bool satisfiesPremise = false;
-					if (premiseFlag) {
+					if (premiseFlag)
+					{
 						satisfiesPremise = conjecture->evaluatePremiseOnState(
 							*relabeledNewStatePointer);
 					}
-					if (!premiseFlag or (premiseFlag and satisfiesPremise)) {
+					if (!premiseFlag or (premiseFlag and satisfiesPremise))
+					{
 						if (!allStatesSet.count(relabeledNewStatePointer) and
-							!newStatesSet.count(relabeledNewStatePointer)) {
+							!newStatesSet.count(relabeledNewStatePointer))
+						{
 							newStatesSet.insert(relabeledNewStatePointer);
+							if (cert)
+							{
+								const int parent_id = cert_ids.at(statePointer);
+								const int new_id = next_cert_id++;
+								cert_ids.emplace(relabeledNewStatePointer, new_id);
+								cert->writeIntroVertex(new_id, parent_id, i);
+							}
 							State::ptr consequentState =
 								relabeledNewStatePointer;
-							if (!noBFSDAG) {
+							if (!noBFSDAG)
+							{
 								bfsDAG.addState(consequentState);
 								InstructiveTreeDecompositionNodeContent
 									transitionContent("IntroVertex_" +
@@ -111,7 +211,8 @@ void IsomorphismBreadthFirstSearch::search() {
 											   antecedentStates);
 								bfsDAG.addTransition(transition);
 							}
-							if (printStateFlag) {
+							if (printStateFlag)
+							{
 								cout << endl;
 								cout << "======================================"
 										"================"
@@ -141,7 +242,8 @@ void IsomorphismBreadthFirstSearch::search() {
 							// size of witnessSets
 							for (size_t component = 0;
 								 component < numberOfWitnesses.size();
-								 ++component) {
+								 ++component)
+							{
 								numberOfWitnesses[component] =
 									max(numberOfWitnesses[component],
 										(unsigned)consequentState
@@ -155,7 +257,8 @@ void IsomorphismBreadthFirstSearch::search() {
 			///////////////////////////////////////////////////////
 			//////////////////// Forget Vertex ////////////////////
 			///////////////////////////////////////////////////////
-			for (auto it = bagElement.begin(); it != bagElement.end(); it++) {
+			for (auto it = bagElement.begin(); it != bagElement.end(); it++)
+			{
 				State::ptr newStatePointer =
 					kernel->forget_v(statePointer, *it);
 				State::ptr relabeledNewStatePointer = canonicalState(
@@ -163,16 +266,27 @@ void IsomorphismBreadthFirstSearch::search() {
 									  // derived from newStatePointer.
 				bool premiseFlag = flags->get("Premise");
 				bool satisfiesPremise = false;
-				if (premiseFlag) {
+				if (premiseFlag)
+				{
 					satisfiesPremise = conjecture->evaluatePremiseOnState(
 						*relabeledNewStatePointer);
 				}
-				if (!premiseFlag or (premiseFlag and satisfiesPremise)) {
+				if (!premiseFlag or (premiseFlag and satisfiesPremise))
+				{
 					if (!allStatesSet.count(relabeledNewStatePointer) and
-						!newStatesSet.count(relabeledNewStatePointer)) {
+						!newStatesSet.count(relabeledNewStatePointer))
+					{
 						newStatesSet.insert(relabeledNewStatePointer);
+						if (cert)
+						{
+							const int parent_id = cert_ids.at(statePointer);
+							const int new_id = next_cert_id++;
+							cert_ids.emplace(relabeledNewStatePointer, new_id);
+							cert->writeForgetVertex(new_id, parent_id, *it);
+						}
 						State::ptr consequentState = relabeledNewStatePointer;
-						if (!noBFSDAG) {
+						if (!noBFSDAG)
+						{
 							InstructiveTreeDecompositionNodeContent
 								transitionContent("ForgetVertex_" +
 												  to_string(*it));
@@ -185,7 +299,8 @@ void IsomorphismBreadthFirstSearch::search() {
 										   antecedentStates);
 							bfsDAG.addTransition(transition);
 						}
-						if (printStateFlag) {
+						if (printStateFlag)
+						{
 							cout << endl;
 							cout << "=========================================="
 									"=============="
@@ -215,7 +330,8 @@ void IsomorphismBreadthFirstSearch::search() {
 						// size of witnessSets
 						for (size_t component = 0;
 							 component < numberOfWitnesses.size();
-							 ++component) {
+							 ++component)
+						{
 							numberOfWitnesses[component] =
 								max(numberOfWitnesses[component],
 									(unsigned)consequentState
@@ -226,14 +342,18 @@ void IsomorphismBreadthFirstSearch::search() {
 				}
 			}
 			// Introduce Edge
-			if (bag.get_elements().size() > 1) {
+			if (bag.get_elements().size() > 1)
+			{
 				for (auto it = bagElement.begin(); it != bagElement.end();
-					 it++) {
+					 it++)
+				{
 					auto itX = it;
 					itX++; // TODO write this more elegantly
-					if (itX != bagElement.end()) {
+					if (itX != bagElement.end())
+					{
 						for (auto itPrime = itX; itPrime != bagElement.end();
-							 itPrime++) {
+							 itPrime++)
+						{
 							State::ptr newStatePointer =
 								kernel->intro_e(statePointer, *it, *itPrime);
 							State::ptr relabeledNewStatePointer =
@@ -243,22 +363,36 @@ void IsomorphismBreadthFirstSearch::search() {
 													  // newStatePointer.
 							bool premiseFlag = flags->get("Premise");
 							bool satisfiesPremise = false;
-							if (premiseFlag) {
+							if (premiseFlag)
+							{
 								satisfiesPremise =
 									conjecture->evaluatePremiseOnState(
 										*relabeledNewStatePointer);
 							}
 							if (!premiseFlag or
-								(premiseFlag and satisfiesPremise)) {
+								(premiseFlag and satisfiesPremise))
+							{
 								if (!allStatesSet.count(
 										relabeledNewStatePointer) and
 									!newStatesSet.count(
-										relabeledNewStatePointer)) {
+										relabeledNewStatePointer))
+								{
 									newStatesSet.insert(
 										relabeledNewStatePointer);
+									if (cert)
+									{
+										const int parent_id =
+											cert_ids.at(statePointer);
+										const int new_id = next_cert_id++;
+										cert_ids.emplace(relabeledNewStatePointer,
+														 new_id);
+										cert->writeIntroEdge(new_id, parent_id,
+															 *it, *itPrime);
+									}
 									State::ptr consequentState =
 										relabeledNewStatePointer;
-									if (!noBFSDAG) {
+									if (!noBFSDAG)
+									{
 										InstructiveTreeDecompositionNodeContent
 											transitionContent(
 												"IntroEdge_" + to_string(*it) +
@@ -275,7 +409,8 @@ void IsomorphismBreadthFirstSearch::search() {
 													   antecedentStates);
 										bfsDAG.addTransition(transition);
 									}
-									if (printStateFlag) {
+									if (printStateFlag)
+									{
 										cout << endl;
 										cout << "=============================="
 												"===================="
@@ -308,7 +443,8 @@ void IsomorphismBreadthFirstSearch::search() {
 									// size of witnessSets
 									for (size_t component = 0;
 										 component < numberOfWitnesses.size();
-										 ++component) {
+										 ++component)
+									{
 										numberOfWitnesses[component] =
 											max(numberOfWitnesses[component],
 												(unsigned)consequentState
@@ -323,15 +459,19 @@ void IsomorphismBreadthFirstSearch::search() {
 			}
 
 			// join
-			if (kernel->get_width().get_name() == "tree_width") {
-				// join
-				for (auto it = allStatesSet.begin(); it != allStatesSet.end();
-					 it++) {
-					if (statePointer->get_bag().joinable((*it)->get_bag())) {
+			if (enable_joins)
+			{
+				const auto bucket_it = states_by_bag.find(
+					make_bag_signature(statePointer->get_bag()));
+				if (bucket_it != states_by_bag.end())
+				{
+					for (const auto &joinState : bucket_it->second)
+					{
 						map<unsigned, unsigned> m =
 							identityMap(statePointer->get_bag().get_elements());
-						do {
-							State::ptr relabeledState = (*it)->relabel(m);
+						do
+						{
+							State::ptr relabeledState = joinState->relabel(m);
 							State::ptr newStatePointer =
 								kernel->join(statePointer, relabeledState);
 							State::ptr relabeledNewStatePointer =
@@ -341,29 +481,46 @@ void IsomorphismBreadthFirstSearch::search() {
 													  // newStatePointer.
 							bool premiseFlag = flags->get("Premise");
 							bool satisfiesPremise = false;
-							if (premiseFlag) {
+							if (premiseFlag)
+							{
 								satisfiesPremise =
 									conjecture->evaluatePremiseOnState(
 										*relabeledNewStatePointer);
 							}
 							if (!premiseFlag or
-								(premiseFlag and satisfiesPremise)) {
+								(premiseFlag and satisfiesPremise))
+							{
 								if (!allStatesSet.count(
 										relabeledNewStatePointer) and
 									!newStatesSet.count(
-										relabeledNewStatePointer)) {
+										relabeledNewStatePointer))
+								{
 									newStatesSet.insert(
 										relabeledNewStatePointer);
+									if (cert)
+									{
+										const int left_id =
+											cert_ids.at(statePointer);
+										const int right_id =
+											cert_ids.at(joinState);
+										const int new_id = next_cert_id++;
+										cert_ids.emplace(relabeledNewStatePointer,
+														 new_id);
+										cert->writeJoin(
+											new_id, left_id, right_id,
+											std::make_optional(m));
+									}
 									State::ptr consequentState =
 										relabeledNewStatePointer;
-									if (!noBFSDAG) {
+									if (!noBFSDAG)
+									{
 										InstructiveTreeDecompositionNodeContent
 											transitionContent("Join");
 										bfsDAG.addState(consequentState);
 										vector<State::ptr> antecedentStates;
 										antecedentStates.push_back(
 											statePointer);
-										antecedentStates.push_back(*it);
+										antecedentStates.push_back(joinState);
 										Transition<
 											State::ptr,
 											InstructiveTreeDecompositionNodeContent>
@@ -372,7 +529,8 @@ void IsomorphismBreadthFirstSearch::search() {
 													   antecedentStates);
 										bfsDAG.addTransition(transition);
 									}
-									if (printStateFlag) {
+									if (printStateFlag)
+									{
 										cout << endl;
 										cout << "=============================="
 												"===================="
@@ -410,7 +568,8 @@ void IsomorphismBreadthFirstSearch::search() {
 									// size of witnessSets
 									for (size_t component = 0;
 										 component < numberOfWitnesses.size();
-										 ++component) {
+										 ++component)
+									{
 										numberOfWitnesses[component] =
 											max(numberOfWitnesses[component],
 												(unsigned)consequentState
@@ -424,11 +583,25 @@ void IsomorphismBreadthFirstSearch::search() {
 				}
 			}
 		}
-		for (auto it = newStatesSet.begin(); it != newStatesSet.end(); it++) {
-			if (!conjecture->evaluateConjectureOnState(**it)) {
-				cout << "Conjecture: Not Satisfied" << endl;
+		for (auto it = newStatesSet.begin(); it != newStatesSet.end(); it++)
+		{
+				if (!conjecture->evaluateConjectureOnState(**it))
+				{
+					const bool printStateTreeFlag = flags->get("StateTree");
+					const bool writeFilesFlag = flags->get("WriteToFiles");
+					const bool printDirectedBipartiteGraphFlag =
+						flags->get("PrintDirectedBipartiteGraphNAUTY");
+					std::cout << "\nResult: ";
+					std::cout << "PROPERTY NOT SATISFIED\n"
+							  << std::endl;
+				if (cert)
+				{
+					cert->writeResultNotSatisfied(cert_ids.at(*it));
+				}
+				std::cout << "Counterexample found:" << std::endl;
 
-				if (noBFSDAG) {
+				if (noBFSDAG)
+				{
 					std::cerr << "Rerun without -no-bfs-dag to construct a "
 								 "counter example."
 							  << std::endl;
@@ -436,68 +609,101 @@ void IsomorphismBreadthFirstSearch::search() {
 				}
 
 				State::ptr badState = *it;
-				bfsDAG.addFinalState(badState);
-				string file = this->getOutputsPath();
-				if (flags->get("Premise")) {
-					file += "_Premise";
-				}
-				file += "_CounterExample";
+				/* printing the conjectures and values of the variables */
+					std::cout << "The assignment that makes the formula false:"
+							  << std::endl;
+					conjecture->printValues(*badState, conjecture->getRoot());
+					std::cout << std::endl;
 
-				RunTree<State::ptr, InstructiveTreeDecompositionNodeContent>
-					runTree = extractRunTree(*it);
+					if (printStateTreeFlag)
+					{
+						std::cout
+							<< "State tree output is not supported for "
+							<< getAttributeValue("SearchName") << "." << std::endl;
+					}
 
-				///=======INSTRUCTIVE TREE=========///
-				Term<InstructiveTreeDecompositionNodeContent> *term =
-					new InstructiveTreeDecomposition;
-				*term = runTree.convertRunToTerm(runTree);
-				InstructiveTreeDecomposition *atd =
-					static_cast<InstructiveTreeDecomposition *>(term);
-				///=======Concrete TREE=========///
-				ConcreteTreeDecomposition ctd =
-					atd->convertToConcreteTreeDecomposition();
-				MultiGraph multiGraph = ctd.extractMultiGraph();
-				multiGraph.printGraph();
+					string file = this->getOutputsPath();
+					if (flags->get("Premise"))
+					{
+						file += "_Premise";
+					}
+					file += "_CounterExample";
 
-				runTree.writeToFile(file + "_RunTree.txt");
-				atd->writeToFile(file + "_InstructiveDecomposition.txt");
-				ctd.writeToFile(file + "_ConcreteDecomposition.txt");
-				multiGraph.printToFile(file + "_Graph.txt");
-				multiGraph.convertToGML(file + "_GMLGraph.gml");
-				multiGraph.printToFilePACEFormat(file + "_GraphPaceFormat.gr");
+					if (writeFilesFlag || printDirectedBipartiteGraphFlag)
+					{
+						bfsDAG.addFinalState(badState);
+						RunTree<State::ptr, InstructiveTreeDecompositionNodeContent>
+							runTree = extractRunTree(*it);
 
-				if (flags->get("PrintDirectedBipartiteGraphNAUTY")) {
-					multiGraph.printToFileDirectedBipartiteGraphNAUTY(
-						file + "_DirectedBipartiteGraphNAUTY.txt");
-				}
+						///=======INSTRUCTIVE TREE=========///
+						Term<InstructiveTreeDecompositionNodeContent> *term =
+							new InstructiveTreeDecomposition;
+						*term = runTree.convertRunToTerm(runTree);
+						InstructiveTreeDecomposition *atd =
+							static_cast<InstructiveTreeDecomposition *>(term);
+						///=======Concrete TREE=========///
+						ConcreteTreeDecomposition ctd =
+							atd->convertToConcreteTreeDecomposition();
+						MultiGraph multiGraph = ctd.extractMultiGraph();
+						multiGraph.printGraph();
 
-				return;
+						if (writeFilesFlag)
+						{
+							runTree.writeToFile(file + "_RunTree.txt");
+							atd->writeToFile(file + "_InstructiveDecomposition.txt");
+							ctd.writeToFile(file + "_ConcreteDecomposition.txt");
+							multiGraph.printToFile(file + "_Graph.txt");
+							multiGraph.convertToGML(file + "_GMLGraph.gml");
+							multiGraph.printToFilePACEFormat(file + "_GraphPaceFormat.gr");
+						}
+
+						if (printDirectedBipartiteGraphFlag)
+						{
+							multiGraph.printToFileDirectedBipartiteGraphNAUTY(
+								file + "_DirectedBipartiteGraphNAUTY.txt");
+						}
+					}
+
+					return;
 			}
 		}
-		set<State::ptr> setUnion;
-		set_union(allStatesSet.begin(), allStatesSet.end(),
-				  newStatesSet.begin(), newStatesSet.end(),
-				  inserter(setUnion, setUnion.begin()));
-		allStatesSet = setUnion;
-		setUnion.clear();
-		if (flags->get("LoopTime") == 1) {
+		for (const auto &state : newStatesSet)
+		{
+			if (allStatesSet.insert(state).second && enable_joins)
+			{
+				states_by_bag[make_bag_signature(state->get_bag())].insert(state);
+			}
+		}
+		if (flags->get("LoopTime") == 1)
+		{
 			cout << left << setw(25) << iterationNumber << setw(25)
 				 << allStatesSet.size() << setw(25) << newStatesSet.size();
 			for (size_t component = 0; component < numberOfWitnesses.size();
-				 ++component) {
+				 ++component)
+			{
 				cout << numberOfWitnesses[component];
-				if (component != numberOfWitnesses.size() - 1) cout << ",";
+				if (component != numberOfWitnesses.size() - 1)
+					cout << ",";
 			}
 			cout << endl;
 		}
 	}
-	cout << "Conjecture: Satisfied" << endl;
+	std::cout << "\nResult: ";
+	std::cout << "PROPERTY SATISFIED\n"
+			  << std::endl;
+	if (cert)
+	{
+		cert->writeResultSatisfied();
+	}
 }
 
 map<unsigned, unsigned> IsomorphismBreadthFirstSearch::relabeledMapGenerator(
-	set<unsigned int> bagElements) {
+	set<unsigned int> bagElements)
+{
 	map<unsigned int, unsigned int> map;
 	unsigned i = 1;
-	for (auto v : bagElements) {
+	for (auto v : bagElements)
+	{
 		map.insert(make_pair(v, i));
 		i++;
 	}
@@ -505,37 +711,47 @@ map<unsigned, unsigned> IsomorphismBreadthFirstSearch::relabeledMapGenerator(
 }
 
 map<unsigned int, unsigned int> IsomorphismBreadthFirstSearch::identityMap(
-	unsigned int k) {
+	unsigned int k)
+{
 	map<unsigned, unsigned> m;
-	for (unsigned index = 1; index <= k; index++) {
+	for (unsigned index = 1; index <= k; index++)
+	{
 		m.insert(make_pair(index, index));
 	}
 	return m;
 }
 
 map<unsigned int, unsigned int> IsomorphismBreadthFirstSearch::identityMap(
-	set<unsigned int> bagSet) {
+	set<unsigned int> bagSet)
+{
 	map<unsigned, unsigned> m;
-	for (auto item : bagSet) {
+	for (auto item : bagSet)
+	{
 		m.insert(make_pair(item, item));
 	}
 	return m;
 }
 
 bool IsomorphismBreadthFirstSearch::nextPermutation(
-	map<unsigned int, unsigned int> &permutation) {
+	map<unsigned int, unsigned int> &permutation)
+{
 	vector<unsigned> indexToValue;
 	indexToValue.resize(permutation.size());
 	unsigned counter = 0;
-	for (auto item : permutation) {
+	for (auto item : permutation)
+	{
 		indexToValue[counter] = item.second;
 		counter++;
 	}
-	if (!next_permutation(indexToValue.begin(), indexToValue.end())) {
+	if (!next_permutation(indexToValue.begin(), indexToValue.end()))
+	{
 		return false;
-	} else {
+	}
+	else
+	{
 		unsigned index = 0;
-		for (auto &item : permutation) {
+		for (auto &item : permutation)
+		{
 			item.second = indexToValue[index];
 			index++;
 		}
@@ -543,7 +759,8 @@ bool IsomorphismBreadthFirstSearch::nextPermutation(
 	}
 }
 
-State::ptr IsomorphismBreadthFirstSearch::canonicalState(State::ptr state) {
+State::ptr IsomorphismBreadthFirstSearch::canonicalState(State::ptr state)
+{
 	// Assume that the bag.elements is equal to {1,...,k} for some k.
 	State::ptr canonicalState = state;
 	// map<unsigned ,unsigned > m =
@@ -551,13 +768,16 @@ State::ptr IsomorphismBreadthFirstSearch::canonicalState(State::ptr state) {
 	map<unsigned, unsigned> m;
 	set<unsigned> bagElements = state->get_bag().get_elements();
 	unsigned i = 1;
-	for (auto v : bagElements) {
+	for (auto v : bagElements)
+	{
 		m.insert(make_pair(v, i));
 		i++;
 	}
-	do {
+	do
+	{
 		State::ptr relabeledState = state->relabel(m);
-		if (relabeledState < canonicalState) {
+		if (relabeledState < canonicalState)
+		{
 			canonicalState = relabeledState;
 		}
 
@@ -580,7 +800,8 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
 	shared_ptr<TermNode<
 		RunNodeContent<State::ptr, InstructiveTreeDecompositionNodeContent>>>
 		correctedRunNode,
-	map<unsigned int, unsigned int> &m) {
+	map<unsigned int, unsigned int> &m)
+{
 	string wrongSymbol =
 		wrongRunNode->getNodeContent().getRunNodeContent().getSymbol();
 	///////////////////////////////////////////////////////
@@ -594,20 +815,25 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
 	//    wrongRunNode->getNodeContent().getState().print();
 	//    cout<<endl;
 	//////////////////////////////////////////////////////
-	if (strstr(wrongSymbol.c_str(), "Leaf")) {
-		if (m.empty()) {
+	if (strstr(wrongSymbol.c_str(), "Leaf"))
+	{
+		if (m.empty())
+		{
 			State::ptr correctedState =
 				wrongRunNode->getNodeContent().getState();
 			InstructiveTreeDecompositionNodeContent abs("Leaf");
 			RunNodeContent<State::ptr, InstructiveTreeDecompositionNodeContent>
 				correctedRunNodeContent(abs, correctedState);
 			correctedRunNode->setNodeContent(correctedRunNodeContent);
-
-		} else {
+		}
+		else
+		{
 			cout << "Error: In Empty node, map is not valid. " << endl;
 			exit(20);
 		}
-	} else if (strstr(wrongSymbol.c_str(), "IntroVertex")) {
+	}
+	else if (strstr(wrongSymbol.c_str(), "IntroVertex"))
+	{
 		State::ptr correctedState =
 			wrongRunNode->getNodeContent().getState()->relabel(m);
 		/////////////////////////////////////////////////////////////////////
@@ -622,7 +848,8 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
 		unsigned introducedVertex = 0;
 		map<unsigned, unsigned> childMap;
 		bool breakFor = false; // If true then vertex and map have been found
-		for (auto v : setElements) {
+		for (auto v : setElements)
+		{
 			set<unsigned> childDomain = setElements;
 			childDomain.erase(v);
 			//            map<unsigned ,unsigned > initialChildMap = m;
@@ -635,20 +862,28 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
 
 			map<unsigned, unsigned> initialChildMap;
 			bool afterV = false;
-			for (auto item : m) {
-				if (item.second != v and afterV) {
+			for (auto item : m)
+			{
+				if (item.second != v and afterV)
+				{
 					initialChildMap.insert(
 						make_pair(item.first - 1, item.second));
-				} else if (item.second == v) {
+				}
+				else if (item.second == v)
+				{
 					afterV = true;
-				} else {
+				}
+				else
+				{
 					initialChildMap.insert(make_pair(item.first, item.second));
 				}
 			}
 			map<unsigned, unsigned> testMap = identityMap(childDomain);
-			do {
+			do
+			{
 				map<unsigned, unsigned> compositionMap;
-				for (auto item : initialChildMap) {
+				for (auto item : initialChildMap)
+				{
 					compositionMap.insert(
 						make_pair(item.first, testMap[item.second]));
 				}
@@ -657,19 +892,22 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
 											.getState()
 											->relabel(compositionMap);
 				State::ptr testState = kernel->intro_v(childState, v);
-				if (testState == correctedState) {
+				if (testState == correctedState)
+				{
 					introducedVertex = v;
 					childMap = compositionMap;
 					breakFor = true;
 					break;
 				}
 			} while (nextPermutation(testMap));
-			if (breakFor) {
+			if (breakFor)
+			{
 				break;
 			}
 		}
 		// Discover the child's label and which vertex was introduced.
-		if (introducedVertex == 0) {
+		if (introducedVertex == 0)
+		{
 			cout
 				<< "Error: child state is not consistent with the current state"
 				<< endl;
@@ -693,8 +931,9 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
 		children.push_back(child);
 		correctedRunNode->setChildren(children);
 		extractRunTreeNode(wrongRunNode->getChildren()[0], child, childMap);
-
-	} else if (strstr(wrongSymbol.c_str(), "ForgetVertex")) {
+	}
+	else if (strstr(wrongSymbol.c_str(), "ForgetVertex"))
+	{
 		State::ptr correctedState =
 			wrongRunNode->getNodeContent().getState()->relabel(m);
 		/////////////////////////////////////////////////////////////////////
@@ -710,7 +949,8 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
 		map<unsigned, unsigned> childMap;
 		bool breakFor = false; // If true then vertex and map have been found
 		set<unsigned> allVertices;
-		for (unsigned i = 1; i <= kernel->get_width().get_value() + 1; i++) {
+		for (unsigned i = 1; i <= kernel->get_width().get_value() + 1; i++)
+		{
 			allVertices.insert(i);
 		}
 		set<unsigned> availableVertices;
@@ -718,7 +958,8 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
 					   setElements.begin(), setElements.end(),
 					   inserter(availableVertices, availableVertices.begin()));
 
-		for (auto v : availableVertices) {
+		for (auto v : availableVertices)
+		{
 			set<unsigned> childDomain = setElements;
 			childDomain.insert(v);
 			map<unsigned, unsigned> initialChildMap = m;
@@ -726,9 +967,11 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
 			initialChildMap.insert(make_pair(m.size() + 1, v));
 
 			map<unsigned, unsigned> testMap = identityMap(childDomain);
-			do {
+			do
+			{
 				map<unsigned, unsigned> compositionMap;
-				for (auto item : initialChildMap) {
+				for (auto item : initialChildMap)
+				{
 					compositionMap.insert(
 						make_pair(item.first, testMap[item.second]));
 				}
@@ -737,7 +980,8 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
 											.getState()
 											->relabel(compositionMap);
 				State::ptr testState = kernel->forget_v(childState, v);
-				if (testState == correctedState) {
+				if (testState == correctedState)
+				{
 					//                    cout<<"child state"<<endl;
 					//                    childState.print();
 					//                    cout<<endl;
@@ -757,7 +1001,8 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
 					break;
 				}
 			} while (nextPermutation(testMap));
-			if (breakFor) {
+			if (breakFor)
+			{
 				break;
 			}
 		}
@@ -777,7 +1022,9 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
 		children.push_back(child);
 		correctedRunNode->setChildren(children);
 		extractRunTreeNode(wrongRunNode->getChildren()[0], child, childMap);
-	} else if (strstr(wrongSymbol.c_str(), "IntroEdge")) {
+	}
+	else if (strstr(wrongSymbol.c_str(), "IntroEdge"))
+	{
 		State::ptr correctedState =
 			wrongRunNode->getNodeContent().getState()->relabel(m);
 		// discovers IntroducedEdge and child's map;
@@ -786,16 +1033,20 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
 		unsigned e_j = 0;
 		map<unsigned, unsigned> childMap;
 		bool breakFor = false; // If true then vertex and map have been found
-		for (auto it = setElements.begin(); it != setElements.end(); it++) {
+		for (auto it = setElements.begin(); it != setElements.end(); it++)
+		{
 			auto itr = it;
 			itr++;
-			while (itr != setElements.end()) {
+			while (itr != setElements.end())
+			{
 				set<unsigned> childDomain = setElements;
 				map<unsigned, unsigned> initialChildMap = m;
 				map<unsigned, unsigned> testMap = identityMap(childDomain);
-				do {
+				do
+				{
 					map<unsigned, unsigned> compositionMap;
-					for (auto item : initialChildMap) {
+					for (auto item : initialChildMap)
+					{
 						compositionMap.insert(
 							make_pair(item.first, testMap[item.second]));
 					}
@@ -805,7 +1056,8 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
 												->relabel(compositionMap);
 					State::ptr testState =
 						kernel->intro_e(childState, *it, *itr);
-					if (testState == correctedState) {
+					if (testState == correctedState)
+					{
 						e_i = *it;
 						e_j = *itr;
 						childMap = compositionMap;
@@ -813,16 +1065,19 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
 						break;
 					}
 				} while (nextPermutation(testMap));
-				if (breakFor) {
+				if (breakFor)
+				{
 					break;
 				}
 				itr++;
 			}
-			if (breakFor) {
+			if (breakFor)
+			{
 				break;
 			}
 		}
-		if (!breakFor) {
+		if (!breakFor)
+		{
 			cout << "Error: in IntroEdge, there is not a consistent state"
 				 << endl;
 			exit(20);
@@ -843,8 +1098,9 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
 		children.push_back(child);
 		correctedRunNode->setChildren(children);
 		extractRunTreeNode(wrongRunNode->getChildren()[0], child, childMap);
-
-	} else if (strstr(wrongSymbol.c_str(), "Join")) {
+	}
+	else if (strstr(wrongSymbol.c_str(), "Join"))
+	{
 		State::ptr correctedState =
 			wrongRunNode->getNodeContent().getState()->relabel(m);
 		set<unsigned> setElements = correctedState->get_bag().get_elements();
@@ -863,9 +1119,11 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
 		map<unsigned, unsigned> childMap1;
 		map<unsigned, unsigned> childMap2;
 		bool checkContinue = false;
-		do {
+		do
+		{
 			map<unsigned, unsigned> compositionMap1;
-			for (auto item : initialChildMap1) {
+			for (auto item : initialChildMap1)
+			{
 				compositionMap1.insert(
 					make_pair(item.first, testMap1[item.second]));
 			}
@@ -877,9 +1135,11 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
 			map<unsigned, unsigned> initialChildMap2 = m;
 			set<unsigned> childDomain2 = setElements;
 			map<unsigned, unsigned> testMap2 = identityMap(childDomain2);
-			do {
+			do
+			{
 				map<unsigned, unsigned> compositionMap2;
-				for (auto item : initialChildMap2) {
+				for (auto item : initialChildMap2)
+				{
 					compositionMap2.insert(
 						make_pair(item.first, testMap2[item.second]));
 				}
@@ -888,14 +1148,16 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
 											 .getState()
 											 ->relabel(compositionMap2);
 				State::ptr testState = kernel->join(childState1, childState2);
-				if (correctedState == testState) {
+				if (correctedState == testState)
+				{
 					childMap1 = compositionMap1;
 					childMap2 = compositionMap2;
 					checkContinue = true;
 					break;
 				}
 			} while (nextPermutation(testMap2));
-			if (checkContinue) {
+			if (checkContinue)
+			{
 				break;
 			}
 		} while (nextPermutation(testMap1));
@@ -916,14 +1178,17 @@ void IsomorphismBreadthFirstSearch::extractRunTreeNode(
 		children.push_back(child2);
 		extractRunTreeNode(wrongRunNode->getChildren()[1], child2, childMap2);
 		correctedRunNode->setChildren(children);
-	} else {
+	}
+	else
+	{
 		cout << "Error: Node Type is not valid." << endl;
 		exit(20);
 	}
 }
 
 RunTree<State::ptr, InstructiveTreeDecompositionNodeContent>
-IsomorphismBreadthFirstSearch::extractRunTree(State::ptr state) {
+IsomorphismBreadthFirstSearch::extractRunTree(State::ptr state)
+{
 	RunTree<State::ptr, InstructiveTreeDecompositionNodeContent> wrongRunTree =
 		bfsDAG.retrieveRunAcyclicAutomaton(state);
 	RunTree<State::ptr, InstructiveTreeDecompositionNodeContent>

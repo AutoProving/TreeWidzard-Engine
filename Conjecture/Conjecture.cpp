@@ -1,15 +1,50 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #include "Conjecture.h"
 
+#include <memory>
+#include <utility>
+
+namespace {
+
+auto is_binary_operator(const std::string &op) -> bool {
+	return op == "+" || op == "-" || op == "/" || op == "*" || op == ">" ||
+		   op == ">=" || op == "<" || op == "<=" || op == "==" ||
+		   op == "and" || op == "or" || op == "implies" || op == "iff";
+}
+
+auto is_unary_operator(const std::string &op) -> bool {
+	return op == "not";
+}
+
+void clone_property_assignments(
+	const std::map<std::string, PropertyAssignment *> &source,
+	std::vector<std::unique_ptr<PropertyAssignment>> &owned,
+	std::map<std::string, PropertyAssignment *> &mapped) {
+	owned.clear();
+	mapped.clear();
+
+	owned.reserve(source.size());
+	for (const auto &[name, property] : source) {
+		if (property == nullptr) {
+			mapped[name] = nullptr;
+			continue;
+		}
+		owned.push_back(std::make_unique<PropertyAssignment>(*property));
+		mapped[name] = owned.back().get();
+	}
+}
+
+} // namespace
+
 // To Do: implement getCoreWitnessSetByVar
-double Conjecture::evaluateConjectureNodeOnState(const State &q,
-												 const ConjectureNode *node) {
+double Conjecture::evaluateConjectureNodeOnState(const State &q, const ConjectureNode *node) {
 	double result;
 	// evaluate a node based on its type
-
 	// TODO:
 	// should only compute invariant and is_final_set at most once
 	// double -> int (because double - bool conversions are scary)
-
 	// if you give ownership -> shared_ptr or unique_ptr
 	// if you let someone borrow -> reference
 
@@ -18,32 +53,31 @@ double Conjecture::evaluateConjectureNodeOnState(const State &q,
 	// f(const shared_ptr<const Witness> w)
 	//
 
-	switch (node->getType()) {
-		case CORE_VARIABLE:
-			if (variablesToCoreName.count(node->getVal())) {
-				std::string coreType = kernel->getCoreByVar(node->getVal())
-										   ->getAttributeValue("CoreType");
-				Bag bag = q.get_bag();
-				result = kernel->getCoreByVar(node->getVal())
-							 ->is_final_witness_set(
-								 bag, q.getWitnessSet(kernel->getIndexByVar(
-										  node->getVal())));
-				break;
-			} else {
+		switch (node->getType()) {
+			case CORE_VARIABLE:
+				if (variablesToCoreName.count(node->getVal())) {
+					auto *core = kernel->getCoreByVar(node->getVal());
+					const int index = kernel->getIndexByVar(node->getVal());
+					const Bag &bag = q.get_bag();
+					result = core->is_final_witness_set(bag, q.getWitnessSet(index));
+					break;
+				} else {
 				// error
 				std::cout
 					<< "Error in Conjecture::evaluateConjectureNodeOnState.";
 				exit(20);
 			}
-		case INV:
-			if (node->getChildren().size() == 1) {
-				if (node->getChildren()[0]->getType() == CORE_VARIABLE) {
-					Bag bag = q.get_bag();
-          auto core = kernel->getCoreByVar(node->getChildren()[0]->getVal());
-					result = core->inv(bag, q.getWitnessSet(kernel->getIndexByVar(
-										   node->getChildren()[0]->getVal())));
-					break;
-				} else {
+			case INV:
+				if (node->getChildren().size() == 1) {
+					if (node->getChildren()[0]->getType() == CORE_VARIABLE) {
+						const std::string &variable =
+							node->getChildren()[0]->getVal();
+						auto *core = kernel->getCoreByVar(variable);
+						const int index = kernel->getIndexByVar(variable);
+						const Bag &bag = q.get_bag();
+						result = core->inv(bag, q.getWitnessSet(index));
+						break;
+					} else {
 					std::cout << "Error in "
 								 "Conjecture::evaluateConjectureNodeOnState: "
 								 "INV is not in a valid form. A core variable "
@@ -263,7 +297,27 @@ double Conjecture::evaluateConjectureOnState(const State &q) {
 
 ConjectureNode *Conjecture::getRoot() const { return root; }
 
-void Conjecture::setRoot(ConjectureNode *root_) { root = root_; }
+void Conjecture::setRoot(ConjectureNode *root_) {
+	if (root == root_) {
+		return;
+	}
+	if (ownsRoot) {
+		ConjectureNode::deleteSubtree(root);
+	}
+	root = root_;
+	ownsRoot = false;
+}
+
+void Conjecture::setOwnedRoot(ConjectureNode *root_) {
+	if (root == root_ && ownsRoot) {
+		return;
+	}
+	if (ownsRoot) {
+		ConjectureNode::deleteSubtree(root);
+	}
+	root = root_;
+	ownsRoot = true;
+}
 
 DynamicKernel *Conjecture::getKernel() const { return kernel; }
 
@@ -276,40 +330,84 @@ void Conjecture::print() {
 }
 
 bool Conjecture::checkConjectureStructure(ConjectureNode *node) {
+	if (node == nullptr) {
+		std::cout << "Conjecture root is null" << std::endl;
+		return false;
+	}
+
 	switch (node->getType()) {
 		case NUMBER:
-			if (node->getChildren().size() != 0) {
+		case CORE_VARIABLE:
+		case EXP_VARIABLE:
+			if (!node->getChildren().empty()) {
 				std::cout << node->getVal() << " is number and has children "
 						  << std::endl;
 				return false;
 			}
 			break;
 		case OPERATOR: {
-			std::string op = node->getVal();
-			if (op == "and" or op == "or" or op == "implies" or op == "iff" or
-				op == ">" or op == "<" or op == ">" or op == ">=" or
-				op == "<=") {
+			const std::string &op = node->getVal();
+			if (is_binary_operator(op)) {
 				if (node->getChildren().size() != 2) {
-					std::cout << node->getVal() << "has invalid children"
+					std::cout << node->getVal() << " has invalid children"
 							  << std::endl;
 					return false;
 				}
-			} else if (op == "not") {
+			} else if (is_unary_operator(op)) {
 				if (node->getChildren().size() != 1) {
-					std::cout << node->getVal() << "has invalid children"
+					std::cout << node->getVal() << " has invalid children"
 							  << std::endl;
 					return false;
 				}
+			} else {
+				std::cout << node->getVal() << " is not a supported operator"
+						  << std::endl;
+				return false;
 			}
+			break;
 		}
-			//        case CORE_VARIABLE:
-			//            return true;
-			//        case EXP_VARIABLE:
-			//            return true;
-			//        case FUNC:
-			//            return true;
+		case FUNCTION_BINARY:
+			if (node->getChildren().size() != 2) {
+				std::cout << node->getVal() << " has invalid children"
+						  << std::endl;
+				return false;
+			}
+			if (!functions_binary.count(node->getVal())) {
+				std::cout << node->getVal() << " is not a supported binary function"
+						  << std::endl;
+				return false;
+			}
+			break;
+		case FUNCTION_UNARY:
+			if (node->getChildren().size() != 1) {
+				std::cout << node->getVal() << " has invalid children"
+						  << std::endl;
+				return false;
+			}
+			if (!functions_unary.count(node->getVal())) {
+				std::cout << node->getVal() << " is not a supported unary function"
+						  << std::endl;
+				return false;
+			}
+			break;
+		case INV:
+			if (node->getChildren().size() != 1) {
+				std::cout << node->getVal() << " has invalid children"
+						  << std::endl;
+				return false;
+			}
+			if (node->getChildren()[0] == nullptr ||
+				node->getChildren()[0]->getType() != CORE_VARIABLE) {
+				std::cout << node->getVal()
+						  << " requires a single core variable child"
+						  << std::endl;
+				return false;
+			}
+			break;
 		default:
-			break; // TODO?
+			std::cout << node->getVal() << " has unsupported node type"
+					  << std::endl;
+			return false;
 	}
 	for (auto child : node->getChildren()) {
 		if (!checkConjectureStructure(child)) {
@@ -330,20 +428,8 @@ void Conjecture::setVariablesToCoreName(
 }
 
 int Conjecture::evaluatePremiseOnState(const State &q) {
-	if (root->getType() == OPERATOR and root->getVal() == "implies") {
-		if (root->getChildren().size() != 2) {
-			std::cerr
-				<< "ERROR: In ConjectureNode::evaluateState, IMPLIES operator "
-				   "does not have 2 children";
-			exit(20);
-		} else {
-			bool result =
-				evaluateConjectureNodeOnState(q, root->getChildren()[0]);
-			// cout<< result << " ";
-			// root->getChildren()[0]->printInfix();
-			// cout<<endl;
-			return result;
-		}
+	if (root->getVal() == "implies") {
+		return evaluateConjectureNodeOnState(q, root->getChildren()[0]);
 	} else {
 		std::cout
 			<< "ERROR: could not determine the premise. The conjecture is not "
@@ -376,8 +462,86 @@ Conjecture::Conjecture() {
 	functions_unary.insert(std::make_pair("tan", (Function_Unary)tan));
 }
 
+Conjecture::~Conjecture() {
+	if (ownsRoot) {
+		ConjectureNode::deleteSubtree(root);
+	}
+}
+
+Conjecture::Conjecture(const Conjecture &other)
+	: variablesToCoreName(other.variablesToCoreName),
+	  functions_binary(other.functions_binary),
+	  functions_unary(other.functions_unary),
+	  root(other.root != nullptr ? other.root->cloneSubtree() : nullptr),
+	  ownsRoot(other.root != nullptr),
+	  kernel(other.kernel) {
+	clone_property_assignments(other.varToProperty, ownedPropertyAssignments,
+							   varToProperty);
+}
+
+Conjecture &Conjecture::operator=(const Conjecture &other) {
+	if (this == &other) {
+		return *this;
+	}
+
+	ConjectureNode *new_root =
+		other.root != nullptr ? other.root->cloneSubtree() : nullptr;
+	if (ownsRoot) {
+		ConjectureNode::deleteSubtree(root);
+	}
+	variablesToCoreName = other.variablesToCoreName;
+	functions_binary = other.functions_binary;
+	functions_unary = other.functions_unary;
+	root = new_root;
+	ownsRoot = other.root != nullptr;
+	kernel = other.kernel;
+	clone_property_assignments(other.varToProperty, ownedPropertyAssignments,
+							   varToProperty);
+	return *this;
+}
+
+Conjecture::Conjecture(Conjecture &&other) noexcept
+	: variablesToCoreName(std::move(other.variablesToCoreName)),
+	  functions_binary(std::move(other.functions_binary)),
+	  functions_unary(std::move(other.functions_unary)),
+	  root(other.root),
+	  ownsRoot(other.ownsRoot),
+	  kernel(other.kernel),
+	  ownedPropertyAssignments(std::move(other.ownedPropertyAssignments)),
+	  varToProperty(std::move(other.varToProperty)) {
+	other.root = nullptr;
+	other.ownsRoot = false;
+	other.kernel = nullptr;
+	other.varToProperty.clear();
+}
+
+Conjecture &Conjecture::operator=(Conjecture &&other) noexcept {
+	if (this == &other) {
+		return *this;
+	}
+
+	if (ownsRoot) {
+		ConjectureNode::deleteSubtree(root);
+	}
+	variablesToCoreName = std::move(other.variablesToCoreName);
+	functions_binary = std::move(other.functions_binary);
+	functions_unary = std::move(other.functions_unary);
+	root = other.root;
+	ownsRoot = other.ownsRoot;
+	kernel = other.kernel;
+	ownedPropertyAssignments = std::move(other.ownedPropertyAssignments);
+	varToProperty = std::move(other.varToProperty);
+	other.root = nullptr;
+	other.ownsRoot = false;
+	other.kernel = nullptr;
+	other.varToProperty.clear();
+	return *this;
+}
+
 ConjectureNode::ConjectureNode(TokenType type, const std::string &val, double x)
 	: type(type), val(val), x(x) {}
+
+ConjectureNode::~ConjectureNode() = default;
 
 TokenType ConjectureNode::getType() const { return type; }
 
@@ -440,6 +604,31 @@ void ConjectureNode::print() {
 			std::cout << val;
 			break;
 	}
+}
+
+ConjectureNode *ConjectureNode::cloneSubtree() const {
+	auto *copy = new ConjectureNode(type, val, x);
+	std::vector<ConjectureNode *> cloned_children;
+	cloned_children.reserve(children.size());
+	for (const ConjectureNode *child : children) {
+		ConjectureNode *cloned_child = child->cloneSubtree();
+		cloned_child->setParent(copy);
+		cloned_children.push_back(cloned_child);
+	}
+	copy->setChildren(cloned_children);
+	return copy;
+}
+
+void ConjectureNode::deleteSubtree(ConjectureNode *node) {
+	if (node == nullptr) {
+		return;
+	}
+
+	std::vector<ConjectureNode *> children = node->getChildren();
+	for (ConjectureNode *child : children) {
+		deleteSubtree(child);
+	}
+	delete node;
 }
 
 void ConjectureNode::printInfix() {
@@ -553,7 +742,7 @@ void Conjecture::printValues(const State &q, const ConjectureNode *node) {
 			std::cout << " " << node->getVal() << "(";
 			printValues(q, node->getChildren()[0]);
 			std::cout << ",";
-			printValues(q, node->getChildren()[0]);
+			printValues(q, node->getChildren()[1]);
 			std::cout << ")";
 			return;
 
@@ -623,4 +812,10 @@ void Conjecture::printValues(const State &q, const ConjectureNode *node) {
 					  << node->getVal() << " not defined " << std::endl;
 			exit(20);
 	}
+}
+
+void Conjecture::setvarToProperty(
+	const std::map<std::string, PropertyAssignment *> &varToProperty_) {
+	clone_property_assignments(varToProperty_, ownedPropertyAssignments,
+							   varToProperty);
 }

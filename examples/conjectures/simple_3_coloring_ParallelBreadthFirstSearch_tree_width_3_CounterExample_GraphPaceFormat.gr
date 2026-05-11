@@ -1,8 +1,0 @@
-c This is the counter example for examples/conjectures/simple_3_coloring_ParallelBreadthFirstSearch_tree_width_3_CounterExample_GraphPaceFormat.gr
-p tw 4 6
-1 2
-1 4
-1 3
-2 4
-3 4
-2 3

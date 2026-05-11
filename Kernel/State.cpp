@@ -1,27 +1,129 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #include "State.h"
 
-Bag State::get_bag() const { return State::bag; }
+#include <utility>
 
-void State::set_bag(const Bag &bag) { State::bag = bag; }
+// Static memory pool instance
+State::StateMemoryPool State::pool_;
+
+State* State::StateMemoryPool::allocate() {
+	std::lock_guard<std::mutex> lock(pool_mutex);
+	
+	if (!available.empty()) {
+		auto state = std::move(available.back());
+		available.pop_back();
+		active_allocations++;
+		return state.release();
+	}
+	
+	// Create new state if pool is empty
+	active_allocations++;
+	return new State();
+}
+
+void State::StateMemoryPool::deallocate(State* ptr) {
+	std::lock_guard<std::mutex> lock(pool_mutex);
+	
+	if (ptr) {
+		// Reset state to clean condition
+		ptr->witnessSetVector.clear();
+		ptr->bag = Bag();
+		ptr->hashCacheValid = false;
+		ptr->hashCache = 0;
+		
+		available.emplace_back(ptr);
+		active_allocations--;
+	}
+}
+
+void State::StateMemoryPool::clear() {
+	std::lock_guard<std::mutex> lock(pool_mutex);
+	available.clear();
+	active_allocations = 0;
+}
+
+void State::initializePool(size_t initialSize) {
+	std::lock_guard<std::mutex> lock(pool_.pool_mutex);
+	
+	// Pre-allocate states for the pool
+	for (size_t i = 0; i < initialSize; ++i) {
+		pool_.available.emplace_back(std::make_unique<State>());
+	}
+}
+
+void State::clearPool() {
+	pool_.clear();
+}
+
+size_t State::getPoolStats() {
+	return pool_.getActiveAllocations();
+}
+
+std::shared_ptr<State> State::createPooled() {
+	// Use pool allocator with custom deleter that returns to pool
+	return std::shared_ptr<State>(
+		pool_.allocate(),
+		[](State* ptr) { pool_.deallocate(ptr); }
+	);
+}
+
+const Bag &State::get_bag() const { return State::bag; }
+
+Bag State::get_bag_copy() const { return State::bag; }
+
+void State::set_bag(const Bag &new_bag) {
+	bag = new_bag;
+	hashCache = computeHashValue();
+	hashCacheValid = true;
+}
 
 void State::setWitnessSetVector(
-	const std::vector<std::shared_ptr<WitnessSet>> &witnessSetVector) {
-	State::witnessSetVector = witnessSetVector;
+	const std::vector<std::shared_ptr<WitnessSet>> &newWitnessSetVector) {
+	witnessSetVector = newWitnessSetVector;
+	invalidateHashCache();
+}
+
+void State::setWitnessSetVector(
+	std::vector<std::shared_ptr<WitnessSet>> &&newWitnessSetVector) {
+	witnessSetVector = std::move(newWitnessSetVector);
+	invalidateHashCache();
 }
 
 void State::addWitnessSet(std::shared_ptr<WitnessSet> ws) {
-	witnessSetVector.push_back(ws);
+	witnessSetVector.push_back(std::move(ws));
+	invalidateHashCache();
+}
+
+void State::invalidateHashCache() {
+	hashCacheValid = false;
+	hashCache = 0;
+}
+
+uint64_t State::computeHashValue() const {
+	Hasher h(0);
+	bag.hash(h);
+	for (const auto &witnessSet : witnessSetVector) {
+		h << -3u;
+		witnessSet->hash(h);
+	}
+	return h.get();
 }
 
 bool State::operator==(const State &rhs) const {
-	if (this->get_bag() == rhs.get_bag()) {
-		if (numberOfComponents() != rhs.numberOfComponents()) {
+	const Bag &lhs_bag = bag;
+	const Bag &rhs_bag = rhs.bag;
+	if (lhs_bag == rhs_bag) {
+		const auto lhs_components = witnessSetVector.size();
+		const auto rhs_components = rhs.witnessSetVector.size();
+		if (lhs_components != rhs_components) {
 			std::cout << "ERROR: In State::operator== sizes are different! "
 					  << std::endl;
 			exit(20);
 		} else {
-			for (size_t j = 0; j < numberOfComponents(); j++) {
-				if (!(*(rhs.getWitnessSet(j)) == *(getWitnessSet(j)))) {
+			for (size_t j = 0; j < lhs_components; j++) {
+				if (!(*rhs.witnessSetVector[j] == *witnessSetVector[j])) {
 					return false;
 				}
 			}
@@ -33,36 +135,44 @@ bool State::operator==(const State &rhs) const {
 }
 
 void State::hash(Hasher &h) const {
-	this->get_bag().hash(h);
-	for (unsigned j = 0; j < numberOfComponents(); j++) {
-		h << -3u;
-		getWitnessSet(j)->hash(h);
+	h << hashValue();
+}
+
+uint64_t State::hashValue() const {
+	if (!hashCacheValid) {
+		hashCache = computeHashValue();
+		hashCacheValid = true;
 	}
+	return hashCache;
 }
 
 bool State::operator!=(const State &rhs) const { return !(rhs == *this); }
 
 bool State::operator<(const State &rhs) const {
-	if (this->get_bag() < rhs.get_bag()) {
+	const Bag &lhs_bag = bag;
+	const Bag &rhs_bag = rhs.bag;
+	if (lhs_bag < rhs_bag) {
 		return true;
-	} else if (numberOfComponents() != rhs.numberOfComponents()) {
+	}
+	if (rhs_bag < lhs_bag) {
+		return false;
+	}
+	// Bags are equal — compare witness sets lexicographically
+	if (witnessSetVector.size() != rhs.witnessSetVector.size()) {
 		std::cout << "ERROR: In State::operator< sizes are different! "
 				  << std::endl;
 		exit(20);
-	} else if (this->get_bag() == rhs.get_bag()) {
-		for (unsigned j = 0; j < numberOfComponents(); j++) {
-			std::shared_ptr<WitnessSet> temp1 = getWitnessSet(j);
-			std::shared_ptr<WitnessSet> temp2 = rhs.getWitnessSet(j);
-			if (*temp1 < *temp2) {
-				return true;
-			} else if (*temp2 < *temp1) {
-				return false;
-			}
-		}
-		return false;
-	} else {
-		return false;
 	}
+	for (size_t j = 0; j < witnessSetVector.size(); j++) {
+		const std::shared_ptr<WitnessSet> &temp1 = witnessSetVector[j];
+		const std::shared_ptr<WitnessSet> &temp2 = rhs.witnessSetVector[j];
+		if (*temp1 < *temp2) {
+			return true;
+		} else if (*temp2 < *temp1) {
+			return false;
+		}
+	}
+	return false;
 }
 
 bool State::operator>(const State &rhs) const { return rhs < *this; }
@@ -70,22 +180,9 @@ bool State::operator>(const State &rhs) const { return rhs < *this; }
 bool State::operator<=(const State &rhs) const { return !(rhs < *this); }
 
 bool State::operator>=(const State &rhs) const { return !(*this < rhs); }
-/// Implementation of this function should change regard to WitnessSet and
-/// Witness
+/// Hash functor for State objects used in unordered containers.
 size_t State::operator()(const State &b) const {
-	std::string s;
-	std::set<unsigned> bagSet = b.get_bag().get_elements();
-	for (auto element : bagSet) {
-		s = s + (char)element;
-	}
-	s = s + 'a';
-	if (b.get_bag().get_edge().first != 0 and
-		b.get_bag().get_edge().second != 0) {
-		s = s + (char)b.get_bag().get_edge().first +
-			(char)b.get_bag().get_edge().second + 'a';
-	}
-	std::size_t str_hash = std::hash<std::string>{}(s);
-	return str_hash;
+	return b.hashValue();
 }
 
 void State::print() const {
@@ -112,21 +209,25 @@ std::string State::stateInformation() const {
 	return info;
 }
 
-std::shared_ptr<WitnessSet> State::getWitnessSet(int i) const {
-	return witnessSetVector[i];
+const std::shared_ptr<WitnessSet> &State::getWitnessSet(int i) const {
+	return witnessSetVector[static_cast<size_t>(i)];
+}
+
+std::shared_ptr<WitnessSet> State::getWitnessSetCopy(int i) const {
+	return witnessSetVector[static_cast<size_t>(i)];
 }
 
 size_t State::numberOfComponents() const { return witnessSetVector.size(); }
 
 std::shared_ptr<const State> State::relabel(
 	std::map<unsigned int, unsigned int> relabelingMap) const {
-	std::shared_ptr<State> state(new State);
+	std::shared_ptr<State> state = State::createPooled();
 	std::vector<std::shared_ptr<WitnessSet>> witnessSetVec;
 	witnessSetVec.resize(witnessSetVector.size());
 	for (size_t i = 0; i < witnessSetVector.size(); i++) {
 		witnessSetVec[i] = witnessSetVector[i]->relabel(relabelingMap);
 	}
-	state->setWitnessSetVector(witnessSetVec);
+	state->setWitnessSetVector(std::move(witnessSetVec));
 	Bag b = bag.relabel(relabelingMap);
 	state->set_bag(b);
 	return state;

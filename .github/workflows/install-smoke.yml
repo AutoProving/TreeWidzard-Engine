@@ -48,49 +48,49 @@ jobs:
       - name: Configure install smoke build (Unix)
         if: runner.os != 'Windows'
         run: |
-          cmake -S . -B build-install \
+          cmake -S . -B out/build/install-smoke \
             -DBUILD_TESTS=OFF \
             -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_INSTALL_PREFIX="$PWD/install-root"
+            -DCMAKE_INSTALL_PREFIX="$PWD/out/install-root"
 
       - name: Configure install smoke build (Windows)
         if: runner.os == 'Windows'
         shell: msys2 {0}
         run: |
-          cmake -S . -B build-install -G Ninja \
+          cmake -S . -B out/build/install-smoke -G Ninja \
             -DBUILD_TESTS=OFF \
             -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_INSTALL_PREFIX="$PWD/install-root"
+            -DCMAKE_INSTALL_PREFIX="$PWD/out/install-root"
 
       - name: Build install smoke artifacts (Unix)
         if: runner.os != 'Windows'
         run: |
-          cmake --build build-install -j "$(nproc 2>/dev/null || sysctl -n hw.ncpu)"
+          cmake --build out/build/install-smoke -j "$(nproc 2>/dev/null || sysctl -n hw.ncpu)"
 
       - name: Build install smoke artifacts (Windows)
         if: runner.os == 'Windows'
         shell: msys2 {0}
         run: |
-          cmake --build build-install -j "$(nproc)"
+          cmake --build out/build/install-smoke -j "$(nproc)"
 
       - name: Install (Unix)
         if: runner.os != 'Windows'
         run: |
-          cmake --install build-install
+          cmake --install out/build/install-smoke
 
       - name: Install (Windows)
         if: runner.os == 'Windows'
         shell: msys2 {0}
         run: |
-          cmake --install build-install
+          cmake --install out/build/install-smoke
 
       - name: Bundle Windows runtime DLLs
         if: runner.os == 'Windows'
         shell: msys2 {0}
         run: |
           set -euo pipefail
-          runtime_dir="$PWD/install-root/libexec/treewidzard"
-          deps_file="$PWD/windows-runtime-deps.txt"
+          runtime_dir="$PWD/out/install-root/libexec/treewidzard"
+          deps_file="$PWD/out/windows-runtime-deps.txt"
           : > "$deps_file"
 
           ldd "$runtime_dir/treewidzard.exe" | awk '/=> \// { print $3 }' >> "$deps_file"
@@ -108,34 +108,34 @@ jobs:
       - name: Run installed smoke test (Unix)
         if: runner.os != 'Windows'
         run: |
-          SMOKE_DIR="$PWD/install-smoke-data"
+          SMOKE_DIR="$PWD/out/install-smoke-data"
           mkdir -p "$SMOKE_DIR"
           cat > "$SMOKE_DIR/simple_implies.txt" <<'EOF'
-          x := MaxDegree(4)
-          y := ChromaticNumber(4)
+          x := MaximumDegree_AtLeast(4)
+          y := ChromaticNumber_AtMost(4)
           Formula
           x IMPLIES y
           EOF
 
           (
             cd "$SMOKE_DIR"
-            "$PWD/../install-root/bin/treewidzard" -atp tw=2 BreadthFirstSearch "$SMOKE_DIR/simple_implies.txt"
+            "$GITHUB_WORKSPACE/out/install-root/bin/treewidzard" -atp tw=2 BreadthFirstSearch "$SMOKE_DIR/simple_implies.txt"
           )
 
       - name: Run installed smoke test (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          $smokeDir = Join-Path $env:GITHUB_WORKSPACE 'install-smoke-data'
+          $smokeDir = Join-Path $env:GITHUB_WORKSPACE 'out\install-smoke-data'
           New-Item -ItemType Directory -Force -Path $smokeDir | Out-Null
           @(
-            'x := MaxDegree(4)',
-            'y := ChromaticNumber(4)',
+            'x := MaximumDegree_AtLeast(4)',
+            'y := ChromaticNumber_AtMost(4)',
             'Formula',
             'x IMPLIES y'
           ) | Set-Content (Join-Path $smokeDir 'simple_implies.txt')
 
-          $launcher = Join-Path $env:GITHUB_WORKSPACE 'install-root\bin\treewidzard.bat'
+          $launcher = Join-Path $env:GITHUB_WORKSPACE 'out\install-root\bin\treewidzard.bat'
           Push-Location $smokeDir
           & $launcher -atp tw=2 BreadthFirstSearch (Join-Path $smokeDir 'simple_implies.txt')
           Pop-Location

@@ -1,25 +1,33 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #ifndef CURRENT_BREADTHFIRSTSEARCH_H
 #define CURRENT_BREADTHFIRSTSEARCH_H
 #include <cmath>
+#include <mutex>
 #include <set>
+#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 #include "Kernel/SearchStrategy.h"
 #include "Kernel/StateTree.h"
-#include "LockedSet/locked_set.hpp"
 #include "TreeAutomaton/InstructiveTreeDecomposition.h"
 #include "TreeAutomaton/ConcreteTreeDecomposition.h"
 #include "TreeAutomaton/TreeAutomaton.h"
-#include "parallel_hashmap/phmap.h"
 
 class ParallelBreadthFirstSearch : public SearchStrategy {
   private:
-	using pset = phmap::parallel_flat_hash_set<
-		State::ptr, State::ptr::Hash, State::ptr::Equal,
-		phmap::priv::Allocator<State::ptr>, 4UL, std::mutex>;
+	using pset =
+		std::unordered_set<State::ptr, State::ptr::Hash, State::ptr::Equal>;
 
-	TreeAutomaton<State::ptr, InstructiveTreeDecompositionNodeContent>
-		bfsDAG; // Constructs a DAG corresponding to the BFS.
+	std::unordered_map<
+		State::ptr,
+		Transition<State::ptr, InstructiveTreeDecompositionNodeContent>,
+		State::ptr::Hash,
+		State::ptr::Equal>
+		counterexampleTrace;
+	std::mutex stateSetsLock;
 	pset allStatesSet;
 	pset intermediateStatesSet;
 	pset newStatesSet;

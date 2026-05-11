@@ -1,14 +1,16 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2020-2026 Sam Urmian, Mateus de Oliveira Oliveira, and contributors.
+
 #ifndef DYNAMICCOREHANDLER_H
 #define DYNAMICCOREHANDLER_H
 
-#include <dlfcn.h>
 #include <iostream>
 #include <memory>
 #include <stdexcept>
 #include <string>
-#include "../DynamicLibraryLoader/dynamic_library_loader.hpp"
 #include "../Multigraph/MultiGraph.h"
 #include "DynamicCore.h"
+#include "../DynamicLibraryLoader/dynamic_library_loader.hpp"
 
 class DynamicCoreHandler {
 	DynamicLibraryLoader<

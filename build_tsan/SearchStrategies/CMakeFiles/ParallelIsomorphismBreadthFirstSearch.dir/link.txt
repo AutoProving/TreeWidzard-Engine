@@ -1,1 +1,0 @@
-/usr/bin/c++ -fsanitize=thread -fno-omit-frame-pointer -g -arch arm64 -dynamiclib -Wl,-headerpad_max_install_names -fsanitize=thread -o ParallelIsomorphismBreadthFirstSearch.dylib -install_name @rpath/ParallelIsomorphismBreadthFirstSearch.dylib CMakeFiles/ParallelIsomorphismBreadthFirstSearch.dir/Source/ParallelIsomorphismBreadthFirstSearch.cpp.o  ../libTreeWidzard-Core.a

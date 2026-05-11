@@ -1,1 +1,0 @@
-/opt/homebrew/bin/g++-15 -Werror -g -arch arm64 -dynamiclib -Wl,-headerpad_max_install_names -o IndependentSet_Max.dylib -install_name @rpath/IndependentSet_Max.dylib CMakeFiles/IndependentSet_Max.dir/Source/IndependentSet_Max.cpp.o  ../libTreeWidzard-Core.a
